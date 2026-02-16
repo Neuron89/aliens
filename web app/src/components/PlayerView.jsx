@@ -1,16 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGame } from '../context/GameContext';
 import { skillNames, skillAttributes } from '../data/characters';
 
+function IncomingAlert({ message, onDismiss }) {
+  useEffect(() => {
+    const timer = setTimeout(onDismiss, 12000);
+    return () => clearTimeout(timer);
+  }, [onDismiss]);
+
+  const isMuthur = message.from === 'MUTHUR';
+  const borderColor = isMuthur ? 'var(--accent)' : '#60a0c0';
+
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+      background: 'rgba(0,0,0,0.85)', zIndex: 9999,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '1rem', animation: 'fadeIn 0.3s ease-out',
+    }} onClick={onDismiss}>
+      <div style={{
+        maxWidth: '500px', width: '100%', border: `2px solid ${borderColor}`,
+        background: 'var(--bg-panel)', padding: '1.5rem',
+        boxShadow: `0 0 30px ${borderColor}40, inset 0 0 15px ${borderColor}10`,
+        animation: 'slideDown 0.4s ease-out',
+      }} onClick={e => e.stopPropagation()}>
+        <div style={{
+          color: borderColor, fontSize: '0.7rem', letterSpacing: '0.2em',
+          textAlign: 'center', marginBottom: '0.75rem', paddingBottom: '0.5rem',
+          borderBottom: `1px solid ${borderColor}`,
+        }}>
+          {isMuthur ? '▓▓▓▓ INCOMING MU/TH/UR TRANSMISSION ▓▓▓▓' : `▓▓▓▓ MESSAGE FROM ${message.from.toUpperCase()} ▓▓▓▓`}
+          <br />
+          <span style={{ fontSize: '0.6rem', opacity: 0.7 }}>
+            PRIORITY: {message.priority} &nbsp;|&nbsp; {new Date(message.timestamp).toLocaleTimeString()}
+          </span>
+        </div>
+
+        <div style={{
+          color: 'var(--text)', fontSize: '1rem', lineHeight: '1.6',
+          textAlign: 'center', padding: '1rem 0',
+        }}>
+          {message.text}
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+          <button onClick={onDismiss} style={{
+            padding: '0.5rem 2rem', background: 'transparent',
+            border: `1px solid ${borderColor}`, color: borderColor,
+            fontFamily: "'Share Tech Mono', monospace", fontSize: '0.75rem',
+            letterSpacing: '0.1em', cursor: 'pointer',
+          }}>
+            ACKNOWLEDGE
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function PlayerView() {
-  const { myPlayer, messages, sendPlayerMessage, leaveGame, unreadCount, clearUnread, gameCode } = useGame();
+  const { myPlayer, messages, sendPlayerMessage, sendPlayerToPlayer, leaveGame, unreadCount, clearUnread, gameCode, connectedPlayers } = useGame();
   const [tab, setTab] = useState('status');
   const [msgText, setMsgText] = useState('');
+  const [alertQueue, setAlertQueue] = useState([]);
+  const lastMsgCount = useRef(0);
+  const [p2pTarget, setP2pTarget] = useState('dm');
+  const [p2pText, setP2pText] = useState('');
 
   const c = myPlayer?.character;
   const playerMessages = messages.filter(m =>
     m.toId === myPlayer?.id || m.fromId === myPlayer?.id || m.toId === 'broadcast'
   );
+
+  // Trigger alert for new incoming messages
+  useEffect(() => {
+    if (messages.length > lastMsgCount.current) {
+      const newMsgs = messages.slice(lastMsgCount.current);
+      const incoming = newMsgs.filter(m =>
+        (m.toId === myPlayer?.id || m.toId === 'broadcast') && m.fromId !== myPlayer?.id
+      );
+      if (incoming.length > 0) {
+        setAlertQueue(prev => [...prev, ...incoming]);
+      }
+    }
+    lastMsgCount.current = messages.length;
+  }, [messages, myPlayer?.id]);
+
+  const dismissAlert = () => {
+    setAlertQueue(prev => prev.slice(1));
+  };
 
   const handleSend = (e) => {
     e.preventDefault();
@@ -18,6 +96,19 @@ export default function PlayerView() {
     sendPlayerMessage(msgText);
     setMsgText('');
   };
+
+  const handleP2P = (e) => {
+    e.preventDefault();
+    if (!p2pText.trim()) return;
+    if (p2pTarget === 'dm') {
+      sendPlayerMessage(p2pText);
+    } else {
+      sendPlayerToPlayer(p2pTarget, p2pText);
+    }
+    setP2pText('');
+  };
+
+  const otherPlayers = (connectedPlayers || []).filter(p => p.id !== myPlayer?.id);
 
   /* Waiting screen — no character assigned yet */
   if (!c) {
@@ -70,6 +161,12 @@ export default function PlayerView() {
   return (
     <div className="app">
       <div className="crt-overlay" />
+
+      {/* Full-screen incoming message alert */}
+      {alertQueue.length > 0 && (
+        <IncomingAlert message={alertQueue[0]} onDismiss={dismissAlert} />
+      )}
+
       <div style={{ padding: '1rem', maxWidth: '700px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
@@ -211,40 +308,60 @@ export default function PlayerView() {
                   No transmissions received.
                 </p>
               ) : (
-                [...playerMessages].reverse().map(m => (
-                  <div key={m.id} style={{
-                    padding: '0.75rem', marginBottom: '0.5rem',
-                    border: `1px solid ${m.from === 'MUTHUR' ? 'var(--accent)' : 'var(--border)'}`,
-                    background: m.from === 'MUTHUR' ? 'rgba(0,212,170,0.05)' : 'transparent',
-                  }}>
-                    {m.from === 'MUTHUR' && (
-                      <div style={{ color: 'var(--accent)', fontSize: '0.65rem', letterSpacing: '0.15em', marginBottom: '0.35rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.25rem' }}>
-                        ════ INCOMING TRANSMISSION ════
-                        <br />FROM: MU/TH/UR 6000 &nbsp;|&nbsp; PRIORITY: {m.priority}
-                      </div>
-                    )}
-                    {m.from !== 'MUTHUR' && (
-                      <div style={{ color: 'var(--text-dim)', fontSize: '0.65rem', marginBottom: '0.25rem' }}>
-                        SENT — {new Date(m.timestamp).toLocaleTimeString()}
-                      </div>
-                    )}
-                    <div style={{ color: 'var(--text)', fontSize: '0.85rem', lineHeight: '1.5' }}>{m.text}</div>
-                    {m.from === 'MUTHUR' && (
-                      <div style={{ color: 'var(--accent)', fontSize: '0.6rem', letterSpacing: '0.1em', marginTop: '0.35rem', borderTop: '1px solid var(--border)', paddingTop: '0.25rem' }}>
-                        ═══════════════════════════
-                      </div>
-                    )}
-                  </div>
-                ))
+                [...playerMessages].reverse().map(m => {
+                  const isMuthur = m.from === 'MUTHUR';
+                  const isP2P = m.type === 'p2p';
+                  const isSent = m.fromId === myPlayer?.id;
+                  const borderCol = isMuthur ? 'var(--accent)' : isP2P ? '#60a0c0' : 'var(--border)';
+
+                  return (
+                    <div key={m.id} style={{
+                      padding: '0.75rem', marginBottom: '0.5rem',
+                      border: `1px solid ${borderCol}`,
+                      background: isMuthur ? 'rgba(0,212,170,0.05)' : isP2P ? 'rgba(96,160,192,0.05)' : 'transparent',
+                    }}>
+                      {isMuthur && (
+                        <div style={{ color: 'var(--accent)', fontSize: '0.65rem', letterSpacing: '0.15em', marginBottom: '0.35rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.25rem' }}>
+                          ════ INCOMING TRANSMISSION ════
+                          <br />FROM: MU/TH/UR 6000 &nbsp;|&nbsp; PRIORITY: {m.priority}
+                        </div>
+                      )}
+                      {isP2P && (
+                        <div style={{ color: '#60a0c0', fontSize: '0.65rem', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>
+                          {isSent ? `TO: ${m.to}` : `FROM: ${m.from}`} &nbsp;|&nbsp; ENCRYPTED CREW CHANNEL &nbsp;|&nbsp; {new Date(m.timestamp).toLocaleTimeString()}
+                        </div>
+                      )}
+                      {!isMuthur && !isP2P && (
+                        <div style={{ color: 'var(--text-dim)', fontSize: '0.65rem', marginBottom: '0.25rem' }}>
+                          {isSent ? 'SENT TO MUTHUR' : `FROM: ${m.from}`} — {new Date(m.timestamp).toLocaleTimeString()}
+                        </div>
+                      )}
+                      <div style={{ color: 'var(--text)', fontSize: '0.85rem', lineHeight: '1.5' }}>{m.text}</div>
+                      {isMuthur && (
+                        <div style={{ color: 'var(--accent)', fontSize: '0.6rem', letterSpacing: '0.1em', marginTop: '0.35rem', borderTop: '1px solid var(--border)', paddingTop: '0.25rem' }}>
+                          ═══════════════════════════
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
               )}
             </div>
 
-            <form onSubmit={handleSend} className="panel">
-              <label style={labelStyle}>TRANSMIT TO MUTHUR</label>
+            <form onSubmit={handleP2P} className="panel">
+              <label style={labelStyle}>TRANSMIT</label>
+              <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
+                <select value={p2pTarget} onChange={e => setP2pTarget(e.target.value)} style={{ ...inputStyle, flex: '0 0 auto', minWidth: '120px' }}>
+                  <option value="dm">MU/TH/UR (DM)</option>
+                  {otherPlayers.map(p => (
+                    <option key={p.id} value={p.id}>{p.name} (Secret)</option>
+                  ))}
+                </select>
+              </div>
               <div style={{ display: 'flex', gap: '0.25rem' }}>
-                <input value={msgText} onChange={e => setMsgText(e.target.value)}
+                <input value={p2pText} onChange={e => setP2pText(e.target.value)}
                   placeholder="Type message..." style={{ ...inputStyle, flex: 1 }} />
-                <button type="submit" disabled={!msgText.trim()} style={tabBtn}>SEND</button>
+                <button type="submit" disabled={!p2pText.trim()} style={tabBtn}>SEND</button>
               </div>
             </form>
           </div>
