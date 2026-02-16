@@ -313,4 +313,201 @@ End briefing.`,
     ],
     characters: ['exec-vance', 'dr-shaw-ii', 'tech-kowalski', 'marine-cross', 'synth-bishop-ii'],
   },
+
+  /* ═══════════════════════════════════════════════════════
+     COLONIAL MARINES OPERATIONS MANUAL — CAMPAIGN MISSIONS
+     ═══════════════════════════════════════════════════════ */
+  {
+    id: 'acm-campaign',
+    title: 'The Marine Campaign',
+    tagline: 'USS Tamb\'Itam — Conestoga Class Starship. Home of the 33rd MAU "Gunfighters."',
+    players: '3–5',
+    playtime: 'Campaign',
+    difficulty: 'Colonial Marines Campaign',
+    type: 'Campaign',
+    briefing: {
+      from: 'MU/TH/UR 9000 MAINFRAME',
+      to: 'KILO COMPANY, 2ND PLATOON — USS TAMB\'ITAM',
+      classification: 'OPERATIONAL BRIEFING — FRONTIER WAR',
+      text: `ATTENTION MARINES. You are part of the 33rd Marine Assault Unit — the "Gunfighters" — operating out of the Conestoga Frigate USS Tamb'Itam. A reinforced battalion of 2,200 troops standing ready in the Outer Veil.
+
+The Frontier War has erupted. The colony on Ariarcus has fallen to UPP forces. Your unit was forward deployed to Orbital Fort Nebraska when the crisis began. The situation is fluid, hostile, and evolving.
+
+This campaign will take you across multiple operations on the war-torn Frontier. Expect hostile contacts, unreliable intel, and hard choices. The Corps takes care of its own — but out here, you're a long way from home.
+
+Semper Fi, Marines.`,
+    },
+    acts: [],
+    maps: [
+      { name: 'USS Tamb\'Itam — Deck Plans', src: '/maps/acm/uss-tambitam-decks.png' },
+    ],
+  },
+  {
+    id: 'acm-blaze-of-glory',
+    title: 'Operation Blaze of Glory',
+    tagline: 'A crashed UPP ship in hostile jungle. Recover the flight recorder. Trust no one.',
+    players: '3–5',
+    playtime: '4–6 hours',
+    difficulty: 'Hard',
+    type: 'Campaign Mission',
+    briefing: {
+      from: 'MU/TH/UR 9000',
+      to: 'KILO COMPANY, 2ND PLATOON',
+      classification: 'MISSION BRIEFING — OPERATION BLAZE OF GLORY',
+      text: `MISSION OBJECTIVE: A UPP vessel, the SSV Glory of the Proletariat, has crash-landed on O'Bannon's Moon. Intel suggests it is a medical frigate that was operating in the area during the initial stages of the Frontier War.
+
+Your platoon is to locate the wreck, recover the ship's flight recorder, and investigate the vessel for intelligence value. Be advised: local settlers are hostile to military presence. UPP commando forces may also be operating in the area.
+
+Rules of engagement: weapons free on confirmed hostile contacts. Civilian casualties are to be minimized. The flight recorder is priority one.`,
+    },
+    acts: [],
+    maps: [
+      { name: 'Site of the Crashed Starship', src: '/maps/acm/crashed-starship-site.png' },
+      { name: 'SSV Glory of the Proletariat — Medical Frigate', src: '/maps/acm/glory-of-proletariat.png' },
+    ],
+  },
+  {
+    id: 'acm-arcturian-apocalypse',
+    title: 'Operation Arcturian Apocalypse',
+    tagline: 'A fanatical cult. Ancient Engineer ruins. Nerve gas and alien temples beneath the surface.',
+    players: '3–5',
+    playtime: '4–6 hours',
+    difficulty: 'Hard',
+    type: 'Campaign Mission',
+    briefing: {
+      from: 'MU/TH/UR 9000',
+      to: 'KILO COMPANY, 2ND PLATOON',
+      classification: 'MISSION BRIEFING — OPERATION ARCTURIAN APOCALYPSE',
+      text: `MISSION OBJECTIVE: The Children of the Two Divines — a fanatical cult — have seized the Grand Kivas on Arcturus and taken civilian hostages. Intelligence suggests they have deployed CN-20 nerve agent throughout the area.
+
+Your platoon will insert via APC through the Guardian Belt. Neutralize the cult threat, rescue hostages, and secure the Grand Kivas complex. Be advised: the cult is heavily armed and willing to die for their cause.
+
+Additional intelligence suggests Engineer ruins — the Arctura Tunnels — exist beneath the Kivas. If encountered, document and report. Do not attempt to explore without authorization.`,
+    },
+    acts: [],
+    maps: [
+      { name: 'The Guardian Belt — Area Map', src: '/maps/acm/guardian-belt.png' },
+      { name: 'The Grand Kivas', src: '/maps/acm/grand-kivas.png' },
+      { name: 'The Center Kivas — Interior', src: '/maps/acm/center-kivas.png' },
+      { name: 'Temple of the Engineers', src: '/maps/acm/temple-of-engineers.png' },
+    ],
+  },
+  {
+    id: 'acm-quiet-catch',
+    title: 'Operation Quiet Catch',
+    tagline: 'A weapons test facility gone dark. Whatever they were building, it got loose.',
+    players: '3–5',
+    playtime: '4–6 hours',
+    difficulty: 'Hard',
+    type: 'Campaign Mission',
+    briefing: {
+      from: 'MU/TH/UR 9000',
+      to: 'KILO COMPANY, 2ND PLATOON',
+      classification: 'MISSION BRIEFING — OPERATION QUIET CATCH',
+      text: `MISSION OBJECTIVE: The Ouragan Test Facility has gone silent. This Weyland-Yutani weapons testing installation was conducting classified research when all communications ceased 72 hours ago.
+
+Your platoon is tasked with investigating the facility, securing any surviving personnel, and determining the cause of the communications blackout. The facility includes conventional weapons testing pits, workshops, and a fortified perimeter.
+
+Be advised: the nature of the research conducted at Ouragan is classified. Expect unconventional threats. Exercise extreme caution.`,
+    },
+    acts: [],
+    maps: [
+      { name: 'Ouragan Test Facility', src: '/maps/acm/ouragan-test-facility.png' },
+    ],
+  },
+  {
+    id: 'acm-go-fish',
+    title: 'Operation Go Fish',
+    tagline: 'A frontier spaceport. Evacuees, smugglers, and something hunting in the shadows.',
+    players: '3–5',
+    playtime: '4–6 hours',
+    difficulty: 'Hard',
+    type: 'Campaign Mission',
+    briefing: {
+      from: 'MU/TH/UR 9000',
+      to: 'KILO COMPANY, 2ND PLATOON',
+      classification: 'MISSION BRIEFING — OPERATION GO FISH',
+      text: `MISSION OBJECTIVE: Morgan Bluff Spaceport has become an evacuation point for frontier colonists fleeing the war zone. Intelligence reports indicate a Marine Special Ops unit and Blackguard operatives are conducting covert operations in the area.
+
+Your platoon is to secure the spaceport, assist with evacuation operations, and investigate reports of xenoanthropologist disappearances. The Mariculture Complex and surrounding facilities require thorough sweep.
+
+Warning: hostile elements may be embedded among the evacuee population.`,
+    },
+    acts: [],
+    maps: [
+      { name: 'Morgan Bluff Spaceport', src: '/maps/acm/morgan-bluff-spaceport.png' },
+    ],
+  },
+  {
+    id: 'acm-dreamcatcher',
+    title: 'Operation Dreamcatcher',
+    tagline: 'A remote relay station. A skeleton crew. And signals that should not exist.',
+    players: '3–5',
+    playtime: '4–6 hours',
+    difficulty: 'Hard',
+    type: 'Campaign Mission',
+    briefing: {
+      from: 'MU/TH/UR 9000',
+      to: 'KILO COMPANY, 2ND PLATOON',
+      classification: 'MISSION BRIEFING — OPERATION DREAMCATCHER',
+      text: `MISSION OBJECTIVE: Talos Station — a Weyland-Yutani CN-Class Network Relay Station — has been transmitting anomalous signals. The 12-person crew has missed two scheduled check-ins.
+
+Your platoon will dock with Talos Station, assess the situation, and restore communications capability. The station consists of multiple decks connected by a central hub, with two massive communications dishes.
+
+Be advised: Talos Station operates with an Apollo-class mainframe. Trust the data, not the machine.`,
+    },
+    acts: [],
+    maps: [
+      { name: 'Talos Station — All Decks', src: '/maps/acm/talos-station.png' },
+    ],
+  },
+  {
+    id: 'acm-deep-shaft',
+    title: 'Operation Deep Shaft',
+    tagline: 'A mining operation that dug too deep. Black goo. Infected workers. No way out but down.',
+    players: '3–5',
+    playtime: '4–6 hours',
+    difficulty: 'Extreme',
+    type: 'Campaign Mission',
+    briefing: {
+      from: 'MU/TH/UR 9000',
+      to: 'KILO COMPANY, 2ND PLATOON',
+      classification: 'MISSION BRIEFING — OPERATION DEEP SHAFT',
+      text: `MISSION OBJECTIVE: Sonderdatch Mine has broadcast an SOS. The mining operation, secretly controlled by Weyland-Yutani's Deep Void division, broke through to a pressure pocket filled with black accelerant — Engineer biological material.
+
+Over a dozen workers are infected. At least three have become Anathemas. 37 miners are MIA in the tunnels below. A Blackguard team is already on site with their own agenda.
+
+Your platoon will evacuate survivors to the quarantine hospital ship. Expect Anathemas at multiple infection stages, hostile Blackguard operatives, and Children of the Two Divines cultists. The mine is unstable and flooding with black goo.`,
+    },
+    acts: [],
+    maps: [
+      { name: 'Sonderdatch Mine — Elevation & Surface', src: '/maps/acm/sonderdatch-mine.png' },
+    ],
+  },
+  {
+    id: 'acm-octopus-garden',
+    title: 'Operation Octopus Garden',
+    tagline: 'Darwin Island. A bioweapon research facility. Xenomorphs, Praetorians, and a rogue general.',
+    players: '3–5',
+    playtime: '6–8 hours',
+    difficulty: 'Extreme',
+    type: 'Campaign Mission',
+    briefing: {
+      from: 'MU/TH/UR 9000',
+      to: 'KILO COMPANY, 2ND PLATOON',
+      classification: 'MISSION BRIEFING — OPERATION OCTOPUS GARDEN',
+      text: `MISSION OBJECTIVE: Darwin Island is the home of Deep Void's Project Life Force — a bioweapon research facility where Weyland-Yutani has been cultivating Xenomorph hives and developing the Biodrone program. General Vaughn has gone rogue and is preparing to evacuate with critical research assets.
+
+Your platoon will assault the island, neutralize Vaughn's forces, and secure all biological specimens and research data. The Colonial Rig — an 80-meter cube suspended over a volcanic caldera — is the primary objective.
+
+EXTREME THREAT WARNING: Multiple Xenomorph variants confirmed on site including Soldiers, Scouts, a Praetorian, and Gorebursters. Blackguard commandos. Armed Bearcat Strikeships. This is a full combat operation.
+
+The Tamb'Itam stands ready to nuke the site from orbit if the mission fails. Do not fail.`,
+    },
+    acts: [],
+    maps: [
+      { name: 'Darwin Island — Overview', src: '/maps/acm/darwin-island-overview.png' },
+      { name: 'Darwin Island — Colonial Rig (All Levels)', src: '/maps/acm/darwin-island-colonial-rig.png' },
+    ],
+  },
 ];

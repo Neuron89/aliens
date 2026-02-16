@@ -112,6 +112,30 @@ function ScenarioDetail({ scenario, onBack, tts }) {
         );
       })}
 
+      {scenario.maps && scenario.maps.length > 0 && (
+        <div className="panel">
+          <h2>MAPS</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {scenario.maps.map((m, i) => (
+              <div key={i}>
+                <h3 style={{ fontSize: '0.85rem', color: 'var(--accent)', marginBottom: '0.5rem', letterSpacing: '0.08em' }}>
+                  {m.name}
+                </h3>
+                <div style={{ border: '1px solid var(--border)', borderRadius: '4px', overflow: 'hidden', background: '#080c10' }}>
+                  <img
+                    src={m.src}
+                    alt={m.name}
+                    style={{ width: '100%', height: 'auto', display: 'block', cursor: 'pointer' }}
+                    onClick={() => window.open(m.src, '_blank')}
+                    title="Click to open full size"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {scenario.keyLocations && (
         <div className="panel">
           <h2>KEY LOCATIONS</h2>
@@ -137,6 +161,27 @@ export default function Scenarios({ tts }) {
     return <ScenarioDetail scenario={scenario} onBack={() => setSelected(null)} tts={tts} />;
   }
 
+  const cinematicScenarios = scenarios.filter(s => s.type === 'Cinematic');
+  const campaignScenarios = scenarios.filter(s => s.type !== 'Cinematic');
+
+  const renderCard = (s) => (
+    <div key={s.id} className="scenario-card" onClick={() => setSelected(s.id)}>
+      <div className="card-type">{s.type}</div>
+      <div className="card-title">{s.title}</div>
+      <div className="card-tagline">{s.tagline}</div>
+      <div className="card-meta">
+        <span>{s.players} Players</span>
+        <span>{s.playtime}</span>
+        <span>{s.difficulty}</span>
+      </div>
+      {s.maps && s.maps.length > 0 && (
+        <div style={{ marginTop: '0.5rem', fontSize: '0.7rem', color: 'var(--accent)', opacity: 0.7 }}>
+          {s.maps.length} MAP{s.maps.length > 1 ? 'S' : ''} AVAILABLE
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div>
       <div className="panel">
@@ -147,19 +192,23 @@ export default function Scenarios({ tts }) {
         </p>
       </div>
       <div className="scenario-grid">
-        {scenarios.map(s => (
-          <div key={s.id} className="scenario-card" onClick={() => setSelected(s.id)}>
-            <div className="card-type">{s.type}</div>
-            <div className="card-title">{s.title}</div>
-            <div className="card-tagline">{s.tagline}</div>
-            <div className="card-meta">
-              <span>{s.players} Players</span>
-              <span>{s.playtime}</span>
-              <span>{s.difficulty}</span>
-            </div>
-          </div>
-        ))}
+        {cinematicScenarios.map(renderCard)}
       </div>
+
+      {campaignScenarios.length > 0 && (
+        <>
+          <div className="panel" style={{ marginTop: '2rem' }}>
+            <h2>COLONIAL MARINES — CAMPAIGN OPERATIONS</h2>
+            <p style={{ color: 'var(--text-dim)', marginBottom: '1rem', fontSize: '0.85rem' }}>
+              Operations from the Colonial Marines Operations Manual. Each mission includes tactical maps
+              extracted from the official sourcebook.
+            </p>
+          </div>
+          <div className="scenario-grid">
+            {campaignScenarios.map(renderCard)}
+          </div>
+        </>
+      )}
     </div>
   );
 }
