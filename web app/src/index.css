@@ -1009,6 +1009,17 @@ ul.plain li {
 .filter-bar button:hover { border-color: var(--accent-dim); color: var(--text); }
 .filter-bar button.active { border-color: var(--accent); color: var(--accent); }
 
+/* ── Alert Animations ────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
 /* ── Scrollbar ────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-dark); }

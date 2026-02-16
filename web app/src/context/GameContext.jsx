@@ -13,6 +13,7 @@ export function GameProvider({ children }) {
   const [myPlayer, setMyPlayer] = useState(null);    // Player sees own data
   const [messages, setMessages] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [connectedPlayers, setConnectedPlayers] = useState([]);
 
   /* ─── Socket Connection ──────────────────────────── */
   useEffect(() => {
@@ -66,6 +67,19 @@ export function GameProvider({ children }) {
 
     socket.on('message-confirmed', ({ message }) => {
       setMessages(prev => [...prev, message]);
+    });
+
+    socket.on('p2p-message', ({ message }) => {
+      setMessages(prev => [...prev, message]);
+      setUnreadCount(prev => prev + 1);
+    });
+
+    socket.on('p2p-confirmed', ({ message }) => {
+      setMessages(prev => [...prev, message]);
+    });
+
+    socket.on('player-list', ({ players: plist }) => {
+      setConnectedPlayers(plist);
     });
 
     socket.on('character-died', () => {
@@ -139,6 +153,10 @@ export function GameProvider({ children }) {
     socketRef.current?.emit('player-message', { gameCode, text });
   }, [gameCode]);
 
+  const sendPlayerToPlayer = useCallback((targetId, text) => {
+    socketRef.current?.emit('player-to-player', { gameCode, targetId, text });
+  }, [gameCode]);
+
   const clearUnread = useCallback(() => setUnreadCount(0), []);
 
   /* ─── Leave / End Game ───────────────────────────── */
@@ -172,6 +190,8 @@ export function GameProvider({ children }) {
     // Player
     joinGame,
     sendPlayerMessage,
+    sendPlayerToPlayer,
+    connectedPlayers,
     // Shared
     leaveGame,
   };

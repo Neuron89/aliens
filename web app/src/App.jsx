@@ -7,6 +7,8 @@ import Characters from './components/Characters';
 import Maps from './components/Maps';
 import DiceRoller from './components/DiceRoller';
 import CheatSheets from './components/CheatSheets';
+import Weapons from './components/Weapons';
+import Vehicles from './components/Vehicles';
 import Xenomorphs from './components/Xenomorphs';
 import SessionScreen from './components/SessionScreen';
 import DMDashboard from './components/DMDashboard';
@@ -63,16 +65,24 @@ function AppContent() {
           <Maps />
         </section>
 
+        <section className={`section${activeSection === 'weapons' ? ' active' : ''}`}>
+          <Weapons />
+        </section>
+
+        <section className={`section${activeSection === 'vehicles' ? ' active' : ''}`}>
+          <Vehicles />
+        </section>
+
+        <section className={`section${activeSection === 'aliens' ? ' active' : ''}`}>
+          <Xenomorphs />
+        </section>
+
         <section className={`section${activeSection === 'dice' ? ' active' : ''}`}>
           <DiceRoller />
         </section>
 
         <section className={`section${activeSection === 'cheats' ? ' active' : ''}`}>
           <CheatSheets />
-        </section>
-
-        <section className={`section${activeSection === 'aliens' ? ' active' : ''}`}>
-          <Xenomorphs />
         </section>
       </div>
 

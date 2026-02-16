@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { scenarios } from '../data/scenarios';
+import ScenarioPlayer from './ScenarioPlayer';
+import { playthroughs } from '../data/playthroughs';
 
 function TTSControls({ tts, paragraphs }) {
   const { isSpeaking, isPaused, speak, pause, resume, stop, skipBack, skipForward, voices, selectedVoice, setSelectedVoice, rate, setRate } = tts;
@@ -41,11 +43,18 @@ function TTSControls({ tts, paragraphs }) {
 
 function ScenarioDetail({ scenario, onBack, tts }) {
   const [showGmNotes, setShowGmNotes] = useState({});
+  const [playMode, setPlayMode] = useState(false);
   const { currentIndex, isSpeaking } = tts;
 
   const toggleGm = (actIdx) => {
     setShowGmNotes(prev => ({ ...prev, [actIdx]: !prev[actIdx] }));
   };
+
+  const hasPlaythrough = !!playthroughs[scenario.id];
+
+  if (playMode) {
+    return <ScenarioPlayer scenarioId={scenario.id} onExit={() => setPlayMode(false)} />;
+  }
 
   let globalParagraphIndex = 0;
 
@@ -54,8 +63,30 @@ function ScenarioDetail({ scenario, onBack, tts }) {
       <button className="back-btn" onClick={onBack}>← BACK TO SCENARIOS</button>
 
       <div className="panel">
-        <h2>{scenario.title}</h2>
-        <p style={{ color: 'var(--text-dim)', fontStyle: 'italic', marginBottom: '0.5rem' }}>{scenario.tagline}</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div>
+            <h2>{scenario.title}</h2>
+            <p style={{ color: 'var(--text-dim)', fontStyle: 'italic', marginBottom: '0.5rem' }}>{scenario.tagline}</p>
+          </div>
+          <button
+            onClick={() => setPlayMode(true)}
+            style={{
+              padding: '0.5rem 1rem',
+              background: hasPlaythrough ? 'rgba(0,212,170,0.15)' : 'transparent',
+              border: `1px solid ${hasPlaythrough ? 'var(--accent)' : 'var(--border)'}`,
+              color: hasPlaythrough ? 'var(--accent)' : 'var(--text-dim)',
+              fontFamily: "'Orbitron', sans-serif",
+              fontSize: '0.75rem',
+              letterSpacing: '0.12em',
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: '0.5rem',
+              boxShadow: hasPlaythrough ? '0 0 10px rgba(0,212,170,0.2)' : 'none',
+            }}
+          >
+            <span style={{ fontSize: '1rem' }}>▶</span>
+            PLAY SCENARIO
+          </button>
+        </div>
         <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.8rem', color: 'var(--text-dim)' }}>
           <span>Players: <span style={{ color: 'var(--accent)' }}>{scenario.players}</span></span>
           <span>Playtime: <span style={{ color: 'var(--accent)' }}>{scenario.playtime}</span></span>
@@ -164,23 +195,37 @@ export default function Scenarios({ tts }) {
   const cinematicScenarios = scenarios.filter(s => s.type === 'Cinematic');
   const campaignScenarios = scenarios.filter(s => s.type !== 'Cinematic');
 
-  const renderCard = (s) => (
-    <div key={s.id} className="scenario-card" onClick={() => setSelected(s.id)}>
-      <div className="card-type">{s.type}</div>
-      <div className="card-title">{s.title}</div>
-      <div className="card-tagline">{s.tagline}</div>
-      <div className="card-meta">
-        <span>{s.players} Players</span>
-        <span>{s.playtime}</span>
-        <span>{s.difficulty}</span>
-      </div>
-      {s.maps && s.maps.length > 0 && (
-        <div style={{ marginTop: '0.5rem', fontSize: '0.7rem', color: 'var(--accent)', opacity: 0.7 }}>
-          {s.maps.length} MAP{s.maps.length > 1 ? 'S' : ''} AVAILABLE
+  const renderCard = (s) => {
+    const hasPlay = !!playthroughs[s.id];
+    return (
+      <div key={s.id} className="scenario-card" onClick={() => setSelected(s.id)}>
+        <div className="card-type">{s.type}</div>
+        <div className="card-title">{s.title}</div>
+        <div className="card-tagline">{s.tagline}</div>
+        <div className="card-meta">
+          <span>{s.players} Players</span>
+          <span>{s.playtime}</span>
+          <span>{s.difficulty}</span>
         </div>
-      )}
-    </div>
-  );
+        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+          {s.maps && s.maps.length > 0 && (
+            <span style={{ fontSize: '0.65rem', color: 'var(--accent)', opacity: 0.7 }}>
+              {s.maps.length} MAP{s.maps.length > 1 ? 'S' : ''}
+            </span>
+          )}
+          {hasPlay && (
+            <span style={{
+              fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.08em',
+              border: '1px solid var(--accent)', padding: '0.1rem 0.4rem',
+              opacity: 0.9,
+            }}>
+              ▶ PLAYTHROUGH
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div>

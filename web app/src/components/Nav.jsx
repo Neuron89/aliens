@@ -5,9 +5,11 @@ const sections = [
   { id: 'scenarios', label: 'Scenarios' },
   { id: 'characters', label: 'Characters' },
   { id: 'maps', label: 'Maps' },
+  { id: 'weapons', label: 'Weapons' },
+  { id: 'vehicles', label: 'Vehicles' },
+  { id: 'aliens', label: 'Xenomorphs' },
   { id: 'dice', label: 'Dice Roller' },
   { id: 'cheats', label: 'Cheat Sheets' },
-  { id: 'aliens', label: 'Xenomorphs' },
 ];
 
 export default function Nav({ active, onChange, isDM }) {

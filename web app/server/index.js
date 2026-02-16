@@ -81,6 +81,16 @@ function getPlayerData(player) {
    SOCKET.IO EVENT HANDLERS
    ═══════════════════════════════════════════════════════════════ */
 
+function broadcastPlayerList(game) {
+  const playerList = [];
+  for (const [id, p] of game.players) {
+    playerList.push({ id, name: p.name, characterName: p.character?.name || null });
+  }
+  for (const [pid] of game.players) {
+    io.to(pid).emit('player-list', { players: playerList });
+  }
+}
+
 io.on('connection', (socket) => {
   console.log(`[MUTHUR] Connection: ${socket.id}`);
 
@@ -122,6 +132,9 @@ io.on('connection', (socket) => {
       player: getPlayerData(player),
       players: serializePlayers(game),
     });
+
+    // Broadcast player list to all players in the game
+    broadcastPlayerList(game);
   });
 
   /* ─── DM: Assign Character to Player ───────────── */
@@ -238,6 +251,40 @@ io.on('connection', (socket) => {
     socket.emit('message-confirmed', { message });
   });
 
+  /* ─── Player: Send Message to Another Player ───── */
+  socket.on('player-to-player', ({ gameCode: gc, targetId, text }) => {
+    const game = games.get(gc);
+    if (!game) return;
+
+    const sender = game.players.get(socket.id);
+    const target = game.players.get(targetId);
+    if (!sender || !target) return;
+
+    const message = {
+      id: Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+      from: sender.name,
+      fromId: socket.id,
+      to: target.name,
+      toId: targetId,
+      text,
+      type: 'p2p',
+      priority: 'ENCRYPTED',
+      timestamp: Date.now(),
+      read: false,
+    };
+
+    game.messages.push(message);
+
+    // Send to the target player
+    io.to(targetId).emit('p2p-message', { message });
+
+    // Confirm to sender
+    socket.emit('p2p-confirmed', { message });
+
+    // DM always sees all player-to-player messages
+    io.to(game.dmId).emit('player-message-received', { message: { ...message, dmNote: `[P2P] ${sender.name} → ${target.name}` } });
+  });
+
   /* ─── DM: Kill Character ───────────────────────── */
   socket.on('kill-character', ({ gameCode, playerId }) => {
     const game = games.get(gameCode);
@@ -311,6 +358,7 @@ io.on('connection', (socket) => {
         playerName: player?.name,
         players: serializePlayers(game),
       });
+      broadcastPlayerList(game);
     }
 
     if (role === 'dm') {
@@ -329,7 +377,7 @@ io.on('connection', (socket) => {
    SERVER STARTUP
    ═══════════════════════════════════════════════════════════════ */
 
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3000;
 
 // In production, serve the built Vite app
 const distPath = join(__dirname, '..', 'dist');
