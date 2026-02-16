@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Vite cache
+.vite/
+
+# Environment
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# PDF source books (copyrighted material — do NOT commit)
+alien documents/*.pdf
+alien documents/**/*.pdf
+scenarios/**/*.pdf
+
+# Cursor IDE project files
+.cursor/
