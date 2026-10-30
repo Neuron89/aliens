@@ -1,0 +1,180 @@
+{
+  "packVersion": 1,
+  "id": "acm-arcturian-apocalypse",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Operation Arcturian Apocalypse",
+    "tagline": "A fanatical cult. Ancient Engineer ruins. Nerve gas and alien temples beneath the surface.",
+    "type": "Campaign",
+    "players": "3–5",
+    "playtime": "4–6 hours",
+    "difficulty": "Hard",
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "MU/TH/UR 9000",
+    "to": "KILO COMPANY, 2ND PLATOON",
+    "classification": "MISSION BRIEFING — OPERATION ARCTURIAN APOCALYPSE",
+    "text": "MISSION OBJECTIVE: The Children of the Two Divines — a fanatical cult — have seized the Grand Kivas on Arcturus and taken civilian hostages. Intelligence suggests they have deployed CN-20 nerve agent throughout the area.\n\nYour platoon will insert via APC through the Guardian Belt. Neutralize the cult threat, rescue hostages, and secure the Grand Kivas complex. Be advised: the cult is heavily armed and willing to die for their cause.\n\nAdditional intelligence suggests Engineer ruins — the Arctura Tunnels — exist beneath the Kivas. If encountered, document and report. Do not attempt to explore without authorization."
+  },
+  "acts": [
+    {
+      "title": "OPERATION",
+      "subtitle": "MISSION BRIEFING",
+      "summary": "A fanatical cult. Ancient Engineer ruins. Nerve gas and alien temples beneath the surface.",
+      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "THE GUARDIAN BELT — APC Insertion Point",
+      "description": "Designated landing zone for armored personnel carrier."
+    },
+    {
+      "name": "THE GUARDIAN BELT — The Guardian Belt",
+      "description": "Natural rock formations providing cover and concealment. CN-20 nerve agent risk."
+    },
+    {
+      "name": "THE GUARDIAN BELT — Grand Kivas Approach",
+      "description": "Route to the cult-held complex. Multiple ambush points."
+    },
+    {
+      "name": "THE GRAND KIVAS — Main Kiva",
+      "description": "Central ceremonial structure. Cult leadership present. Hostage location."
+    },
+    {
+      "name": "THE GRAND KIVAS — Secondary Kivas",
+      "description": "Surrounding structures used as barracks and storage by the cult."
+    },
+    {
+      "name": "THE GRAND KIVAS — Tunnel Access",
+      "description": "Hidden entrance to the Arctura Tunnels and Engineer ruins below."
+    },
+    {
+      "name": "THE CENTER KIVAS — INTERIOR — Upper Level",
+      "description": "Cult observation posts and defensive positions."
+    },
+    {
+      "name": "THE CENTER KIVAS — INTERIOR — Main Chamber",
+      "description": "Central gathering space. Ritual markings. Hostage holding area."
+    },
+    {
+      "name": "THE CENTER KIVAS — INTERIOR — Lower Access",
+      "description": "Descending passages toward the Arctura Tunnels."
+    },
+    {
+      "name": "TEMPLE OF THE ENGINEERS — Entry Chamber",
+      "description": "Transition from natural tunnels to engineered stone. Engineer glyphs cover the walls."
+    },
+    {
+      "name": "TEMPLE OF THE ENGINEERS — Central Temple",
+      "description": "Massive vaulted chamber with alien technology. Ampules and urns line the walls."
+    },
+    {
+      "name": "TEMPLE OF THE ENGINEERS — Inner Sanctum",
+      "description": "Deepest chamber. Unknown purpose. Extreme biological hazard."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "MISSION BRIEFING — OPERATION ARCTURIAN APOCALYPSE",
+      "from": "MU/TH/UR 9000",
+      "to": "KILO COMPANY, 2ND PLATOON",
+      "priority": "PRIORITY",
+      "text": "MISSION OBJECTIVE: The Children of the Two Divines — a fanatical cult — have seized the Grand Kivas on Arcturus and taken civilian hostages. Intelligence suggests they have deployed CN-20 nerve agent throughout the area.\n\nYour platoon will insert via APC through the Guardian Belt. Neutralize the cult threat, rescue hostages, and secure the Grand Kivas complex. Be advised: the cult is heavily armed and willing to die for their cause.\n\nAdditional intelligence suggests Engineer ruins — the Arctura Tunnels — exist beneath the Kivas. If encountered, document and report. Do not attempt to explore without authorization.",
+      "when": "Start of the session, before Act I"
+    }
+  ],
+  "maps": [
+    {
+      "id": "guardian-belt",
+      "title": "THE GUARDIAN BELT",
+      "subtitle": "Area Map — Arcturus",
+      "description": "Tactical overview of the Guardian Belt region. Approach vector for APC insertion to the Grand Kivas complex.",
+      "kind": "image",
+      "src": "/maps/acm/guardian-belt.webp",
+      "rooms": [
+        {
+          "name": "APC Insertion Point",
+          "note": "Designated landing zone for armored personnel carrier."
+        },
+        {
+          "name": "The Guardian Belt",
+          "note": "Natural rock formations providing cover and concealment. CN-20 nerve agent risk."
+        },
+        {
+          "name": "Grand Kivas Approach",
+          "note": "Route to the cult-held complex. Multiple ambush points."
+        }
+      ]
+    },
+    {
+      "id": "grand-kivas",
+      "title": "THE GRAND KIVAS",
+      "subtitle": "Cult Stronghold — Arcturus",
+      "description": "The Grand Kivas complex seized by the Children of the Two Divines. Hostages are held within. Nerve agent deployed.",
+      "kind": "image",
+      "src": "/maps/acm/grand-kivas.webp",
+      "rooms": [
+        {
+          "name": "Main Kiva",
+          "note": "Central ceremonial structure. Cult leadership present. Hostage location."
+        },
+        {
+          "name": "Secondary Kivas",
+          "note": "Surrounding structures used as barracks and storage by the cult."
+        },
+        {
+          "name": "Tunnel Access",
+          "note": "Hidden entrance to the Arctura Tunnels and Engineer ruins below."
+        }
+      ]
+    },
+    {
+      "id": "center-kivas",
+      "title": "THE CENTER KIVAS — INTERIOR",
+      "subtitle": "Interior Layout — Arcturus",
+      "description": "Detailed interior layout of the Center Kivas. Multiple levels, narrow corridors, and cult fortifications.",
+      "kind": "image",
+      "src": "/maps/acm/center-kivas.webp",
+      "rooms": [
+        {
+          "name": "Upper Level",
+          "note": "Cult observation posts and defensive positions."
+        },
+        {
+          "name": "Main Chamber",
+          "note": "Central gathering space. Ritual markings. Hostage holding area."
+        },
+        {
+          "name": "Lower Access",
+          "note": "Descending passages toward the Arctura Tunnels."
+        }
+      ]
+    },
+    {
+      "id": "temple-of-engineers",
+      "title": "TEMPLE OF THE ENGINEERS",
+      "subtitle": "Ancient Ruins — Below the Kivas",
+      "description": "Pre-human Engineer ruins discovered beneath the Kivas. Ancient architecture, alien technology, and unknown biological hazards.",
+      "kind": "image",
+      "src": "/maps/acm/temple-of-engineers.webp",
+      "rooms": [
+        {
+          "name": "Entry Chamber",
+          "note": "Transition from natural tunnels to engineered stone. Engineer glyphs cover the walls."
+        },
+        {
+          "name": "Central Temple",
+          "note": "Massive vaulted chamber with alien technology. Ampules and urns line the walls."
+        },
+        {
+          "name": "Inner Sanctum",
+          "note": "Deepest chamber. Unknown purpose. Extreme biological hazard."
+        }
+      ]
+    }
+  ]
+}

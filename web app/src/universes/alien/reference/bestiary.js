@@ -1,0 +1,261 @@
+/* ALIEN RPG bestiary — xenomorph and alien species reference.
+   Each entry has an id that content packs can reference from threats[].ref. */
+
+export const bestiary = [
+  {
+    id: 'ovomorph-egg',
+
+    name: 'Ovomorph (Egg)',
+    stage: 'Stage I',
+    source: 'XX121',
+    art: '/art/xenomorphs/cropped/ovomorph.webp',
+    stats: { speed: 0, health: 3, armor: '2 (0 vs fire)' },
+    description: 'Leathery organic eggs approximately 0.8 meters tall. The ovomorph opens when it detects a suitable host nearby, releasing the facehugger within. Can remain dormant for centuries.',
+    signature: null,
+    special: 'Proximity sensor — opens when host approaches within SHORT range.',
+  },
+  {
+    id: 'facehugger',
+
+    name: 'Facehugger',
+    stage: 'Stage II',
+    source: 'XX121',
+    art: '/art/xenomorphs/cropped/facehugger.webp',
+    stats: { speed: 3, health: 1, armor: '2 (0 vs fire)', acid: 6 },
+    description: 'Parasitoid arachnid form. Attaches to host\'s face, implants embryo, and keeps host alive via direct oxygenation. Acid blood protects it from removal. Dies after implantation.',
+    signature: 'D6: 1–3 Leap to face (grab); 4–5 Tail choke (Dmg 1, tighten); 6 Implant (attach, begin implantation).',
+    special: 'Grab: Removal causes Acid Splash 6. Successful grab → face attachment → embryo implanted in D6 hours.',
+  },
+  {
+    id: 'chestburster',
+
+    name: 'Chestburster',
+    stage: 'Stage III',
+    source: 'XX121',
+    art: '/art/xenomorphs/cropped/chestburster.webp',
+    stats: { speed: 3, health: 1, armor: '3 (0 vs fire)' },
+    description: 'The larval stage erupts from the host\'s chest cavity, killing the host instantly. Small, fast, and instinctively driven to flee and hide while it matures. Grows to full adult within hours.',
+    signature: 'D6: 1–4 Escape (flee 2 zones, stealth); 5–6 Tail whip (4 Base Dice, Dmg 1).',
+    special: 'Eruption kills host instantly. Will not fight — always tries to escape.',
+  },
+  {
+    id: 'stalker',
+
+    name: 'Stalker',
+    stage: 'Stage IV',
+    source: 'XX121',
+    art: '/art/xenomorphs/cropped/stalker.webp',
+    stats: { speed: 2, health: 6, armor: '10 (5 vs fire)', acid: 8, mobility: 8, observation: 6 },
+    description: 'Feral variant. Hunts alone. Extremely aggressive with heavily armored carapace. Its Feral Hunger drives it to attack relentlessly.',
+    signature: 'D6: 1 Hypnotizing gaze (+1 Stress + Panic); 2 Playing with prey (knock prone, +1 Stress); 3 Deadly grab (10 Dmg 1, drag, prone); 4 Ready to kill (grabbed → next turn HEADBITE); 5 Capture for hive (venom → unconscious); 6 Headbite (9 Dice, Dmg 2, crit #64 — death).',
+    special: 'Feral Hunger — if attack causes damage, immediate second attack (8 Base Dice, Dmg 1).',
+  },
+  {
+    id: 'scout',
+
+    name: 'Scout',
+    stage: 'Stage IV',
+    source: 'XX121',
+    art: '/art/xenomorphs/cropped/scout.webp',
+    stats: { speed: 3, health: 5, armor: '8 (4 vs fire)', acid: 8, mobility: 8, observation: 10 },
+    description: 'Reconnaissance variant. Faster than other Stage IV forms, with superior sensory capabilities. Scouts map territory for the hive and identify threats.',
+    signature: 'Same as Stalker signature attack table.',
+    special: 'Enhanced senses — Observation 10. Fastest Stage IV variant.',
+  },
+  {
+    id: 'drone',
+
+    name: 'Drone',
+    stage: 'Stage IV',
+    source: 'XX121',
+    art: '/art/xenomorphs/cropped/drone.webp',
+    stats: { speed: 2, health: 7, armor: '8 (4 vs fire)', acid: 8, mobility: 10, observation: 8 },
+    description: 'The hive builder. Captures hosts and tends the queen. Most intelligent Stage IV variant. Can use its environment creatively — cutting through walls, bypassing obstacles.',
+    signature: 'Same as Stalker signature attack table.',
+    special: 'Silent Assassin — targets get −2 Observation to detect when in same zone.',
+  },
+  {
+    id: 'soldier',
+
+    name: 'Soldier',
+    stage: 'Stage V',
+    source: 'XX121',
+    art: '/art/xenomorphs/cropped/soldier.webp',
+    stats: { speed: 2, health: 8, armor: '10 (5 vs fire)', acid: 10, mobility: 8, observation: 6 },
+    description: 'The warrior caste. Larger and more aggressive than Stage IV forms. Heavily armored. Deployed by the hive to eliminate major threats.',
+    signature: 'D6: 1 Tail sweep (8 Dmg 1, prone); 2 Tail impale (10 Dmg 2, AP); 3 Inner jaw (12 Dmg 2); 4 Deadly grab (10 Dmg 1 → HEADBITE next turn); 5 Acid spit (8 Dmg 1, AP, MEDIUM range); 6 Headbite (12 Dice, Dmg 3, crit #64 — instant death).',
+    special: 'Berserker — enters frenzy if hive is threatened. +2 to all attack rolls.',
+  },
+  {
+    id: 'praetorian',
+
+    name: 'Praetorian',
+    stage: 'Stage VI',
+    source: 'XX121',
+    art: '/art/xenomorphs/cropped/praetorian.webp',
+    stats: { speed: 2, health: 14, armor: '12 (6 vs fire)', acid: 12, mobility: 8, observation: 8 },
+    description: 'Royal guard. Massive xeno that protects the Queen and critical areas of the hive. Tower over other xenomorphs. Can evolve into a Queen if the current one dies.',
+    signature: 'D6: 1 Terrifying shriek (Panic, all in zone); 2 Tail sweep (12 Dmg 2, prone, all ENGAGED); 3 Charge (move + 12 Dmg 2); 4 Crushing grab (12 Dmg 2 → headbite next turn); 5 Acid spray (10 Dmg 2, MEDIUM range, all in zone); 6 Headbite (14 Dice, Dmg 4, crit #64 — instant death).',
+    special: 'Can evolve into Queen. Terrifying presence — all who see it: immediate Panic Roll.',
+  },
+  {
+    id: 'queen',
+
+    name: 'Queen',
+    stage: 'Stage VI',
+    source: 'XX121',
+    art: '/art/xenomorphs/cropped/queen.webp',
+    stats: { speed: 1, health: 20, armor: '14 (8 vs fire)', acid: 14, mobility: 6, observation: 10 },
+    description: 'The matriarch. Center of the hive. Enormous — over 4 meters tall with a massive crested head. Produces eggs and commands all xenos through pheromone communication. Supremely intelligent.',
+    signature: 'D6: 1 Commanding shriek (all xenos in area act immediately); 2 Tail impale (14 Dmg 3, AP); 3 Crushing claws (14 Dmg 3, grab); 4 Charge (move + 14 Dmg 3, prone all in path); 5 Acid spray (12 Dmg 3, all in zone); 6 Headbite (16 Dice, Dmg 5, instant kill).',
+    special: 'Commands all xenomorphs. Egg-layer. Intelligence comparable to humans. Will sacrifice other xenos to protect herself.',
+  },
+  {
+    id: 'neomorphic-egg-sacs',
+
+    name: 'Neomorphic Egg Sacs',
+    stage: 'Stage I',
+    source: 'Neomorph',
+    art: '/art/xenomorphs/cropped/neomorph-egg.webp',
+    stats: { speed: 0, health: 1, armor: '0' },
+    description: 'Fungal growths produced by the accelerant pathogen. When disturbed, release microscopic motes that infect hosts through inhalation or skin contact.',
+    signature: null,
+    special: 'Release motes when disturbed. Infection is airborne.',
+  },
+  {
+    id: 'bloodburster',
+
+    name: 'Bloodburster',
+    stage: 'Stage III',
+    source: 'Neomorph',
+    art: '/art/xenomorphs/cropped/bloodburster.webp',
+    stats: { speed: 3, health: 2, armor: '3 (0 vs fire)', mobility: 9, observation: 6 },
+    description: 'Erupts from the host\'s back or throat rather than the chest. Pale, translucent, and extremely fast. Immediately hostile upon emergence.',
+    signature: 'D6: 1–3 Escape (flee 2 zones, stealth); 4 Terrifying hiss (Panic Roll); 5 Leg bite (6 Dice, Dmg 2 + crit #53); 6 Throat bite (8 Dice, Dmg 1 + crit #61 — death).',
+    special: null,
+  },
+  {
+    id: 'neophyte-juvenile-neomorph',
+
+    name: 'Neophyte (Juvenile Neomorph)',
+    stage: 'Stage IV',
+    source: 'Neomorph',
+    art: '/art/xenomorphs/cropped/neophyte.webp',
+    stats: { speed: 3, health: 4, armor: '4 (2 vs fire)', mobility: 10, observation: 6 },
+    description: 'Rapidly growing juvenile stage. Pale white, eyeless, with a translucent quality. Moves with unnatural speed and aggression.',
+    signature: 'Increasingly aggressive attacks as it matures.',
+    special: 'Sprint — slow action = 2 zones or into ENGAGED.',
+  },
+  {
+    id: 'adult-neomorph',
+
+    name: 'Adult Neomorph',
+    stage: 'Stage V',
+    source: 'Neomorph',
+    art: '/art/xenomorphs/cropped/adult-neomorph.webp',
+    stats: { speed: 2, health: 6, armor: '6 (3 vs fire)', mobility: 9, observation: 8 },
+    description: 'Fully grown neomorph. Pale white, muscular, with a smooth featureless head. No acid blood. Aggressive and territorial. Short lifespan of approximately 24 hours.',
+    signature: 'D6: 1 Hiss + Panic; 2 Tail slash (10 Dice, Dmg 2 AP); 3 Deadly grab (8 Dmg 1, drag, prone); 4 Leaping attack (8 Dmg 1 + 10 Dmg 2); 5 Throat bite (8 Dmg 1 + crit #61); 6 Tail spike (7 Dmg 1 AP + crit #66 — kill).',
+    special: 'Sprint. Short lifespan (~24 hours). No acid blood.',
+  },
+
+  /* ═══ OTHER SPECIES ═══ */
+  {
+    id: 'the-swarm',
+
+    name: 'The Swarm',
+    stage: '–',
+    source: 'Other',
+    art: '/art/xenomorphs/cropped/swarm.webp',
+    stats: { speed: 2, health: '1 per swarm unit', armor: '0' },
+    description: 'Insect-like alien lifeforms that operate as a collective. Individually small and weak, but in swarms they can overwhelm and devour anything. Found on several Frontier worlds.',
+    signature: 'Envelop and devour. Damage based on swarm size.',
+    special: 'Area attack — damages all in zone. Fire is most effective.',
+  },
+  {
+    id: 'harvesters',
+
+    name: 'Harvesters',
+    stage: '–',
+    source: 'Other',
+    art: '/art/xenomorphs/cropped/harvesters.webp',
+    stats: { speed: 1, health: 10, armor: '8 (4 vs fire)' },
+    description: 'Enormous arthropod predators found on frontier worlds. Ambush hunters that burrow underground and erupt to seize prey. Armored carapace resists most small arms.',
+    signature: 'D6: 1–2 Burrow and ambush; 3–4 Crushing mandibles (10 Dmg 3); 5–6 Impaling limbs (12 Dmg 2, grab).',
+    special: 'Burrowing — can ambush from underground. Armored carapace.',
+  },
+  {
+    id: 'lion-worms',
+
+    name: 'Lion Worms',
+    stage: '–',
+    source: 'Other',
+    art: '/art/xenomorphs/cropped/lion-worms.webp',
+    stats: { speed: 1, health: 8, armor: '4' },
+    description: 'Massive carnivorous worms found on desert worlds. Attracted by vibration. Can grow to enormous sizes. Territorial and aggressive.',
+    signature: 'D6: 1–3 Emerge and strike (8 Dmg 2); 4–6 Swallow (10 Dmg 3, grab — swallowed next turn).',
+    special: 'Vibration sense — detects movement through ground. Burrowing.',
+  },
+  {
+    id: 'tanakan-scorpionids',
+
+    name: 'Tanakan Scorpionids',
+    stage: '–',
+    source: 'Other',
+    art: '/art/xenomorphs/cropped/tanakan-scorpionids.webp',
+    stats: { speed: 2, health: 5, armor: '6' },
+    description: 'Arachnid predators native to Tanaka 5. Venomous stinger and crushing pincers. Hunt in packs. Some colonists have attempted to domesticate juveniles with predictable results.',
+    signature: 'D6: 1–2 Pincer crush (8 Dmg 2); 3–4 Stinger (6 Dmg 1 + venom); 5–6 Leaping strike (10 Dmg 2, grab).',
+    special: 'Venom — STAMINA roll or paralyzed for D6 Rounds. Pack hunters.',
+  },
+
+  /* ═══ ACM ABERRANT TYPES ═══ */
+  {
+    id: 'vitiate-afflicted',
+
+    name: 'Vitiate "Afflicted"',
+    stage: 'Aberrant Stage I',
+    source: 'ACM Aberrant',
+    art: '/art/xenomorphs/cropped/vitiate.webp',
+    stats: { speed: 1, health: 'Varies', armor: '0' },
+    description: 'Humans infected by the 26 Draconis Strain bioweapon. The accelerant fights the xenomorph embryo, causing fever, delirium, and physical deterioration. The host is aware but losing control.',
+    signature: 'Unpredictable behavior. May attack allies.',
+    special: 'Can potentially be saved if treated early enough. Progressive deterioration.',
+  },
+  {
+    id: 'ague-febrile',
+
+    name: 'Ague "Febrile"',
+    stage: 'Aberrant Stage II',
+    source: 'ACM Aberrant',
+    art: '/art/xenomorphs/cropped/ague.webp',
+    stats: { speed: 2, health: 6, armor: '4' },
+    description: 'The host\'s body chemistry has been radically altered. Skin hardens, features distort. The human personality fractures as alien instincts emerge. Dangerously unpredictable.',
+    signature: 'D6: 1–2 Feral attack (8 Dmg 1); 3–4 Acid vomit (6 Dmg 1, SHORT range); 5–6 Berserk charge (10 Dmg 2).',
+    special: 'Human-alien hybrid. May retain fragments of human memory and speech.',
+  },
+  {
+    id: 'lusus-freak',
+
+    name: 'Lusus "Freak"',
+    stage: 'Aberrant Stage III',
+    source: 'ACM Aberrant',
+    art: '/art/xenomorphs/cropped/lusus.webp',
+    stats: { speed: 2, health: 8, armor: '6 (3 vs fire)' },
+    description: 'Fully transformed. The host\'s body has been rebuilt into something between human and xenomorph. Grotesque, powerful, and driven by alien instinct. No trace of the original person remains.',
+    signature: 'D6: 1–2 Claw strike (10 Dmg 2); 3–4 Acid spit (8 Dmg 1, MEDIUM); 5–6 Berserker frenzy (12 Dmg 2, attacks all ENGAGED).',
+    special: 'Terrifying appearance — Panic Roll for all who see it for the first time.',
+  },
+  {
+    id: 'nocuous-terminal',
+
+    name: 'Nocuous "Terminal"',
+    stage: 'Aberrant Stage IV',
+    source: 'ACM Aberrant',
+    art: '/art/xenomorphs/cropped/nocuous.webp',
+    stats: { speed: 3, health: 12, armor: '8 (4 vs fire)', acid: 10 },
+    description: 'Final stage. A monstrous fusion of human and xenomorph biology. Massive, fast, acid-blooded. Retains enough intelligence to use tools and set ambushes. A nightmare given form.',
+    signature: 'D6: 1 Terrifying shriek (Panic all in zone); 2–3 Crushing charge (12 Dmg 3); 4–5 Acid spray (10 Dmg 2, all in zone); 6 Headbite variant (14 Dmg 4, crit #64).',
+    special: 'Retains tool use. Can set ambushes. Acid blood splash 10.',
+  },
+];

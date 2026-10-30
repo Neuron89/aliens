@@ -1,31 +1,51 @@
 import React, { useState } from 'react';
-import Header from './components/Header';
-import Nav from './components/Nav';
-import AudioPanel from './components/AudioPanel';
-import Scenarios from './components/Scenarios';
-import Characters from './components/Characters';
-import Maps from './components/Maps';
-import DiceRoller from './components/DiceRoller';
-import CheatSheets from './components/CheatSheets';
-import Weapons from './components/Weapons';
-import Vehicles from './components/Vehicles';
-import Xenomorphs from './components/Xenomorphs';
-import SessionScreen from './components/SessionScreen';
-import DMDashboard from './components/DMDashboard';
-import PlayerView from './components/PlayerView';
-import { GameProvider, useGame } from './context/GameContext';
-import { useAmbientAudio } from './hooks/useAmbientAudio';
-import { useTTS } from './hooks/useTTS';
+import Header from './engine/components/Header';
+import Nav from './engine/components/Nav';
+import AudioPanel from './engine/components/AudioPanel';
+import ScenarioLibrary from './engine/components/ScenarioLibrary';
+import Characters from './engine/components/Characters';
+import Maps from './engine/components/Maps';
+import DiceRoller from './engine/components/DiceRoller';
+import SessionScreen from './engine/components/SessionScreen';
+import DMDashboard from './engine/components/DMDashboard';
+import PlayerView from './engine/components/PlayerView';
+import BoardView from './engine/components/BoardView';
+import MapController from './engine/components/MapController';
+import UniverseSelect, { BootOverlay } from './engine/components/UniverseSelect';
+import { UniverseProvider, useUniverse } from './engine/UniverseContext';
+import { ContentProvider } from './engine/ContentContext';
+import { GameProvider, useGame, boardCodeForTab } from './engine/GameContext';
+import { useAmbientAudio } from './engine/hooks/useAmbientAudio';
+import { useTTS } from './engine/hooks/useTTS';
+
+function Section({ id, active, children }) {
+  return <section className={`section${active === id ? ' active' : ''}`}>{children}</section>;
+}
+
+const hasJoinLink = () => typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('join');
 
 function AppContent() {
   const [activeSection, setActiveSection] = useState('scenarios');
   const audio = useAmbientAudio();
   const tts = useTTS();
   const { role } = useGame();
+  const { universe, chosen } = useUniverse();
+  const [boardTab] = useState(() => !!boardCodeForTab());
+
+  // Table board (TV): ?board=CODE — full screen map, no chrome
+  if (role === 'board' || boardTab) {
+    return <BoardView />;
+  }
 
   // Players see ONLY their character view
   if (role === 'player') {
     return <PlayerView />;
+  }
+
+  // Fresh load: universe landing first (join links skip it; the server's
+  // join response picks the universe).
+  if (!chosen && !hasJoinLink()) {
+    return <UniverseSelect />;
   }
 
   // No session yet — show session screen
@@ -49,41 +69,15 @@ function AppContent() {
         <Header />
         <Nav active={activeSection} onChange={setActiveSection} isDM />
 
-        <section className={`section${activeSection === 'session' ? ' active' : ''}`}>
-          <DMDashboard />
-        </section>
-
-        <section className={`section${activeSection === 'scenarios' ? ' active' : ''}`}>
-          <Scenarios tts={tts} />
-        </section>
-
-        <section className={`section${activeSection === 'characters' ? ' active' : ''}`}>
-          <Characters />
-        </section>
-
-        <section className={`section${activeSection === 'maps' ? ' active' : ''}`}>
-          <Maps />
-        </section>
-
-        <section className={`section${activeSection === 'weapons' ? ' active' : ''}`}>
-          <Weapons />
-        </section>
-
-        <section className={`section${activeSection === 'vehicles' ? ' active' : ''}`}>
-          <Vehicles />
-        </section>
-
-        <section className={`section${activeSection === 'aliens' ? ' active' : ''}`}>
-          <Xenomorphs />
-        </section>
-
-        <section className={`section${activeSection === 'dice' ? ' active' : ''}`}>
-          <DiceRoller />
-        </section>
-
-        <section className={`section${activeSection === 'cheats' ? ' active' : ''}`}>
-          <CheatSheets />
-        </section>
+        <Section id="session" active={activeSection}><DMDashboard /></Section>
+        <Section id="board" active={activeSection}><MapController /></Section>
+        <Section id="scenarios" active={activeSection}><ScenarioLibrary tts={tts} /></Section>
+        <Section id="characters" active={activeSection}><Characters /></Section>
+        <Section id="maps" active={activeSection}><Maps /></Section>
+        <Section id="dice" active={activeSection}><DiceRoller /></Section>
+        {(universe.navSections || []).map(({ id, Component }) => (
+          <Section key={`${universe.id}:${id}`} id={id} active={activeSection}><Component /></Section>
+        ))}
       </div>
 
       <AudioPanel audio={audio} />
@@ -93,8 +87,13 @@ function AppContent() {
 
 export default function App() {
   return (
-    <GameProvider>
-      <AppContent />
-    </GameProvider>
+    <UniverseProvider>
+      <ContentProvider>
+        <GameProvider>
+          <AppContent />
+          <BootOverlay />
+        </GameProvider>
+      </ContentProvider>
+    </UniverseProvider>
   );
 }

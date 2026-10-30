@@ -1,0 +1,128 @@
+{
+  "packVersion": 1,
+  "id": "acm-blaze-of-glory",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Operation Blaze of Glory",
+    "tagline": "A crashed UPP ship in hostile jungle. Recover the flight recorder. Trust no one.",
+    "type": "Campaign",
+    "players": "3–5",
+    "playtime": "4–6 hours",
+    "difficulty": "Hard",
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "MU/TH/UR 9000",
+    "to": "KILO COMPANY, 2ND PLATOON",
+    "classification": "MISSION BRIEFING — OPERATION BLAZE OF GLORY",
+    "text": "MISSION OBJECTIVE: A UPP vessel, the SSV Glory of the Proletariat, has crash-landed on O'Bannon's Moon. Intel suggests it is a medical frigate that was operating in the area during the initial stages of the Frontier War.\n\nYour platoon is to locate the wreck, recover the ship's flight recorder, and investigate the vessel for intelligence value. Be advised: local settlers are hostile to military presence. UPP commando forces may also be operating in the area.\n\nRules of engagement: weapons free on confirmed hostile contacts. Civilian casualties are to be minimized. The flight recorder is priority one."
+  },
+  "acts": [
+    {
+      "title": "OPERATION",
+      "subtitle": "MISSION BRIEFING",
+      "summary": "A crashed UPP ship in hostile jungle. Recover the flight recorder. Trust no one.",
+      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "SITE OF THE CRASHED STARSHIP — Crash Site Perimeter",
+      "description": "Impact zone surrounded by dense jungle. Debris scattered across the area."
+    },
+    {
+      "name": "SITE OF THE CRASHED STARSHIP — Wreck — Forward Section",
+      "description": "Partially intact bow of the vessel. Bridge and crew quarters accessible."
+    },
+    {
+      "name": "SITE OF THE CRASHED STARSHIP — Wreck — Aft Section",
+      "description": "Engineering and cargo areas. Heavily damaged. Flight recorder location."
+    },
+    {
+      "name": "SSV GLORY OF THE PROLETARIAT — Bridge",
+      "description": "UPP command center. Emergency systems may still be active."
+    },
+    {
+      "name": "SSV GLORY OF THE PROLETARIAT — Medical Bays",
+      "description": "Extensive medical facilities. Evidence of biological research and containment."
+    },
+    {
+      "name": "SSV GLORY OF THE PROLETARIAT — Crew Quarters",
+      "description": "UPP crew housing. Personal effects may contain intelligence value."
+    },
+    {
+      "name": "SSV GLORY OF THE PROLETARIAT — Engineering",
+      "description": "Reactor and drive systems. Unstable. Structural collapse risk."
+    },
+    {
+      "name": "SSV GLORY OF THE PROLETARIAT — Cargo Hold",
+      "description": "Cargo storage. Flight recorder and classified materials stored here."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "MISSION BRIEFING — OPERATION BLAZE OF GLORY",
+      "from": "MU/TH/UR 9000",
+      "to": "KILO COMPANY, 2ND PLATOON",
+      "priority": "PRIORITY",
+      "text": "MISSION OBJECTIVE: A UPP vessel, the SSV Glory of the Proletariat, has crash-landed on O'Bannon's Moon. Intel suggests it is a medical frigate that was operating in the area during the initial stages of the Frontier War.\n\nYour platoon is to locate the wreck, recover the ship's flight recorder, and investigate the vessel for intelligence value. Be advised: local settlers are hostile to military presence. UPP commando forces may also be operating in the area.\n\nRules of engagement: weapons free on confirmed hostile contacts. Civilian casualties are to be minimized. The flight recorder is priority one.",
+      "when": "Start of the session, before Act I"
+    }
+  ],
+  "maps": [
+    {
+      "id": "crashed-starship-site",
+      "title": "SITE OF THE CRASHED STARSHIP",
+      "subtitle": "O'Bannon's Moon — Crash Site",
+      "description": "The crash site of the UPP vessel SSV Glory of the Proletariat on O'Bannon's Moon. Hostile jungle terrain with potential UPP commando activity.",
+      "kind": "image",
+      "src": "/maps/acm/crashed-starship-site.webp",
+      "rooms": [
+        {
+          "name": "Crash Site Perimeter",
+          "note": "Impact zone surrounded by dense jungle. Debris scattered across the area."
+        },
+        {
+          "name": "Wreck — Forward Section",
+          "note": "Partially intact bow of the vessel. Bridge and crew quarters accessible."
+        },
+        {
+          "name": "Wreck — Aft Section",
+          "note": "Engineering and cargo areas. Heavily damaged. Flight recorder location."
+        }
+      ]
+    },
+    {
+      "id": "glory-of-proletariat",
+      "title": "SSV GLORY OF THE PROLETARIAT",
+      "subtitle": "UPP Medical Frigate — Interior",
+      "description": "Interior deck plans of the crashed UPP medical frigate. Corridors are dark and unstable. The flight recorder is priority one.",
+      "kind": "image",
+      "src": "/maps/acm/glory-of-proletariat.webp",
+      "rooms": [
+        {
+          "name": "Bridge",
+          "note": "UPP command center. Emergency systems may still be active."
+        },
+        {
+          "name": "Medical Bays",
+          "note": "Extensive medical facilities. Evidence of biological research and containment."
+        },
+        {
+          "name": "Crew Quarters",
+          "note": "UPP crew housing. Personal effects may contain intelligence value."
+        },
+        {
+          "name": "Engineering",
+          "note": "Reactor and drive systems. Unstable. Structural collapse risk."
+        },
+        {
+          "name": "Cargo Hold",
+          "note": "Cargo storage. Flight recorder and classified materials stored here."
+        }
+      ]
+    }
+  ]
+}

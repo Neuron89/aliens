@@ -1,0 +1,293 @@
+[
+  {
+    "id": "m3-personnel-armor",
+    "name": "M3 Personnel Armor",
+    "source": "CRB",
+    "page": 127,
+    "rating": 6,
+    "weight": 1,
+    "cost": 1200,
+    "tags": [
+      "body-armor",
+      "comm-unit",
+      "pdt"
+    ],
+    "notes": "USCMC vest, abdomen pad and greaves with a built-in comm unit, PDT, webbing and vitals telemetry.",
+    "effects": [],
+    "airSupply": null,
+    "art": "/art/weapons/cropped/m3-personnel-armor.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "irc-mk50-compression",
+    "name": "IRC Mk.50 Compression Suit",
+    "source": "CRB",
+    "page": 127,
+    "rating": 2,
+    "weight": 1,
+    "cost": 15000,
+    "tags": [
+      "space-suit",
+      "comm-unit",
+      "helmet-cam"
+    ],
+    "notes": "Decades-old but trusted vacuum suit with HUD, head lamp and wireless helmet cam. The table lists AGILITY -1 for this suit (see fidelity notes).",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "attr:agi",
+        "value": -1,
+        "text": "AGILITY -1 while worn (per table)."
+      }
+    ],
+    "airSupply": 5,
+    "art": "/art/weapons/cropped/irc-mk50-compression.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "irc-mk35-pressure",
+    "name": "IRC Mk.35 Pressure Suit",
+    "source": "CRB",
+    "page": 127,
+    "rating": 5,
+    "weight": 2,
+    "cost": 2000,
+    "tags": [
+      "space-suit",
+      "heavy"
+    ],
+    "notes": "Cheap, bulky USCMC combat pressure suit; joints stiffen under strain and it needs decompression time after EVA. Heavy item.",
+    "effects": [],
+    "airSupply": 4,
+    "art": "/art/weapons/cropped/irc-mk35-pressure.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "eco-all-world-suit",
+    "name": "Eco All-World Systems Survival Suit",
+    "source": "CRB",
+    "page": 127,
+    "rating": 4,
+    "weight": 2,
+    "cost": 30000,
+    "tags": [
+      "space-suit",
+      "thrusters",
+      "heavy"
+    ],
+    "notes": "Articulated EVA hardsuit with HUD and maneuvering thrusters; its comm array is unshielded. Heavy item.",
+    "effects": [],
+    "airSupply": 6,
+    "art": "/art/weapons/cropped/eco-all-world-suit.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "wy-apesuit",
+    "name": "Weyland-Yutani APEsuit",
+    "source": "CRB",
+    "page": 127,
+    "rating": 3,
+    "weight": 1,
+    "cost": 5000,
+    "tags": [
+      "environment-suit",
+      "acid-proof"
+    ],
+    "notes": "Armored all-purpose environment suit with filtered air; resists temperature extremes and caustics but is not vacuum-rated.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:survival",
+        "text": "+3 SURVIVAL while worn.",
+        "value": 3
+      }
+    ],
+    "airSupply": 4,
+    "art": "/art/weapons/cropped/wy-apesuit.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "p5000-power-loader",
+    "name": "Caterpillar P-5000 Powered Work Loader",
+    "source": "CRB",
+    "page": 127,
+    "rating": 3,
+    "weight": null,
+    "cost": 50000,
+    "tags": [
+      "exoskeleton",
+      "vehicle-like"
+    ],
+    "notes": "Cargo exoskeleton with hydraulic claws and roll cage. Requires HEAVY MACHINERY 2+ to operate. Close combat attacks with it deal base Damage 3. Cannot be carried.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:heavyMachinery",
+        "text": "+3 HEAVY MACHINERY while operating.",
+        "value": 3
+      },
+      {
+        "kind": "buff",
+        "target": "skill:closeCombat",
+        "text": "+3 CLOSE COMBAT, base Damage 3.",
+        "value": 3
+      }
+    ],
+    "airSupply": null,
+    "art": "/art/weapons/cropped/p5000-power-loader.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "m10-ballistic-helmet",
+    "name": "M10 Ballistic Helmet",
+    "source": "ACM",
+    "page": 78,
+    "rating": null,
+    "weight": 0,
+    "cost": null,
+    "tags": [
+      "helmet",
+      "camera",
+      "iff"
+    ],
+    "notes": "Part of the M3 armor set: tactical camera feed, passive IR sight and an IFF transmitter that keeps sentry guns off you. No separate rating or price.",
+    "effects": [],
+    "airSupply": null,
+    "art": "/art/weapons/cropped/m10-ballistic-helmet.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "kevlar-riot-vest",
+    "name": "Kevlar Riot Vest",
+    "source": "ACM",
+    "page": 78,
+    "rating": 4,
+    "weight": 1,
+    "cost": 600,
+    "tags": [
+      "body-armor",
+      "comm-unit"
+    ],
+    "notes": "Light woven vest worn by colonial police and security.",
+    "effects": [],
+    "airSupply": null,
+    "art": null
+  },
+  {
+    "id": "armat-cm4-riot-shield",
+    "name": "Armat CM4 Plastisteel Riot Shield",
+    "source": "ACM",
+    "page": 78,
+    "rating": 5,
+    "weight": 1,
+    "cost": 300,
+    "tags": [
+      "shield",
+      "cover"
+    ],
+    "notes": "Takes a slow action to set; then counts as cover with Armor Rating 5 on top of body armor. Moving loses the cover.",
+    "effects": [],
+    "airSupply": null,
+    "art": null
+  },
+  {
+    "id": "6b90-combat-armor",
+    "name": "6B90 Combat Armor",
+    "source": "ACM",
+    "page": 78,
+    "rating": 6,
+    "weight": 2,
+    "cost": 1000,
+    "tags": [
+      "body-armor",
+      "comm-unit",
+      "camera"
+    ],
+    "notes": "Heavy UPP infantry armor with comm unit and tactical camera.",
+    "effects": [],
+    "airSupply": null,
+    "art": null
+  },
+  {
+    "id": "ccc5-combat-compression-suit",
+    "name": "CCC5 Combat Compression Suit",
+    "source": "ACM",
+    "page": 78,
+    "rating": 2,
+    "weight": 2,
+    "cost": 15500,
+    "tags": [
+      "space-suit",
+      "built-in-weapon"
+    ],
+    "notes": "UPP armored vacuum suit with a narrow visor; comes with an AK-104s suit gun.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:observation",
+        "value": -1,
+        "text": "OBSERVATION -1 (small viewport)."
+      }
+    ],
+    "airSupply": 5,
+    "includes": [
+      "norcomm-ak104s-suit-gun"
+    ],
+    "art": null
+  },
+  {
+    "id": "military-hazmat-suit",
+    "name": "Military Grade HAZMAT Suit",
+    "source": "ACM",
+    "page": 77,
+    "rating": 1,
+    "weight": 2,
+    "cost": 1000,
+    "tags": [
+      "hazmat",
+      "comm-unit"
+    ],
+    "notes": "Full chemical/biological protection while unbreached. Against each Radiation Point roll six Base Dice; any success means the suit absorbs it. Not vacuum-rated. Listed under protective gear.",
+    "effects": [],
+    "airSupply": 2,
+    "art": null
+  },
+  {
+    "id": "mox-exowarrior-suit",
+    "name": "MOX Mark 1 Mobile Offensive Exowarrior Suit",
+    "source": "ACM",
+    "page": 169,
+    "rating": 10,
+    "weight": 0,
+    "cost": null,
+    "tags": [
+      "exoskeleton",
+      "acid-proof",
+      "hazmat",
+      "space-suit",
+      "black-project"
+    ],
+    "notes": "Project Berserker cyber-exosuit with integrated 25mm gatling, M240 incinerator, stun baton, U1 launcher, U4 launcher with QTC rounds and a Damage 2 claw. Does not encumber; immune to acid. Wearer cannot use EMPATHY-based skills. Not for sale.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:rangedCombat",
+        "text": "+3 RANGED COMBAT.",
+        "value": 3
+      },
+      {
+        "kind": "buff",
+        "target": "attr:str",
+        "text": "+3 to all STRENGTH-based skill rolls.",
+        "value": 3
+      },
+      {
+        "kind": "debuff",
+        "target": "attr:emp",
+        "text": "Cannot use EMPATHY-based skills."
+      }
+    ],
+    "airSupply": 8,
+    "art": null
+  }
+]

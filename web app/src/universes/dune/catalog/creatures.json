@@ -1,0 +1,560 @@
+[
+  {
+    "id": "sandworm-small",
+    "name": "Sandworm — Young (under 50 m)",
+    "type": "desert",
+    "stage": "vehicle",
+    "source": "custom",
+    "stats": {
+      "evade": 2,
+      "stress": 4,
+      "threat": 2,
+      "scale": "vehicle",
+      "test": "MOVE + FAITH or JUSTICE"
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-10",
+        "name": "Circling",
+        "text": "Surfaces nearby. Everyone on sand: MOVE (D2) or 2 Stress as the ground heaves."
+      },
+      {
+        "roll": "11-17",
+        "name": "Strike from Below",
+        "text": "Takes the loudest target or vehicle: MOVE (D3) to leap clear or be swallowed."
+      },
+      {
+        "roll": "18-20",
+        "name": "Lost Interest",
+        "text": "Dives and leaves, unless something keeps drumming."
+      }
+    ],
+    "special": "A young worm still curious about every rhythm on the sand. Fast and easily drawn by machinery.",
+    "tactics": "Circles once, then strikes from below at the loudest target.",
+    "tags": [
+      "worm"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/sandworm-small.webp",
+    "notes": "Can be ridden by experts with maker hooks. A thumper turns it aside for a few minutes."
+  },
+  {
+    "id": "sandworm-grown",
+    "name": "Sandworm — Grown (100–200 m)",
+    "type": "desert",
+    "stage": "vehicle",
+    "source": "custom",
+    "stats": {
+      "evade": 3,
+      "stress": 6,
+      "threat": 3,
+      "scale": "vehicle",
+      "test": "MOVE + any drive"
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-12",
+        "name": "The Mouth Opens",
+        "text": "Everything in one zone is engulfed. Survivors need MOVE (D3)."
+      },
+      {
+        "roll": "13-20",
+        "name": "Sand Wave",
+        "text": "Every zone suffers 3 Stress as dunes collapse."
+      }
+    ],
+    "special": "The size of a harvester’s shadow. It surfaces under whatever made the noise and swallows it whole.",
+    "tactics": "Cannot be fought, only avoided. It arrives a set number of rounds after worm sign.",
+    "tags": [
+      "worm"
+    ],
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Shields on open sand halve the time before it arrives"
+      }
+    ],
+    "art": "/art/dune/creatures/sandworm-grown.webp",
+    "notes": "A crawler takes about ten minutes to be eaten; plan the carryall lift accordingly."
+  },
+  {
+    "id": "sandworm-ancient",
+    "name": "Sandworm — Old Man of the Desert (400 m+)",
+    "type": "desert",
+    "stage": "environment",
+    "source": "custom",
+    "stats": {
+      "evade": 5,
+      "stress": 8,
+      "threat": 5,
+      "scale": "environment",
+      "test": "MOVE + FAITH"
+    },
+    "signatureAttacks": [],
+    "special": "A worm so large the Fremen give it a name. Its passage is felt as a tremor for kilometres.",
+    "tactics": "Treat as an environmental event: every zone becomes hazardous.",
+    "tags": [
+      "worm",
+      "omen"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/sandworm-ancient.webp",
+    "notes": "Its appearance is a scene in itself. Fremen characters may treat it as an omen worth any risk."
+  },
+  {
+    "id": "sardaukar-squad",
+    "name": "Sardaukar Squad",
+    "type": "soldiers",
+    "stage": "squad",
+    "source": "custom",
+    "stats": {
+      "evade": 4,
+      "stress": 5,
+      "threat": 3,
+      "scale": "squad",
+      "test": "BATTLE or MOVE + DUTY"
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-10",
+        "name": "Lasgun Volley",
+        "text": "5 Stress to one target at long range (never fired near shields)."
+      },
+      {
+        "roll": "11-20",
+        "name": "Blade Line",
+        "text": "5 Stress to every character in their zone; they do not break."
+      }
+    ],
+    "special": "Six to eight terror troopers working as one body. They do not retreat, bargain, or take prisoners unless ordered.",
+    "tactics": "Pin with lasguns, close with blades, never break formation.",
+    "tags": [
+      "imperial"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/sardaukar-squad.webp",
+    "notes": "Treat as a single adversary that inflicts Stress on everyone it engages. Only trickery, terrain or rank stops them."
+  },
+  {
+    "id": "harkonnen-troopers",
+    "name": "Harkonnen Troopers",
+    "type": "soldiers",
+    "stage": "squad",
+    "source": "custom",
+    "stats": {
+      "evade": 2,
+      "stress": 3,
+      "threat": 2,
+      "scale": "squad",
+      "test": "BATTLE + DUTY"
+    },
+    "signatureAttacks": [],
+    "special": "Industrial soldiers paid by the head. Brutal and numerous but quick to break when their officer falls.",
+    "tactics": "Flood a zone; burn anything that hides.",
+    "tags": [
+      "harkonnen"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/harkonnen-troopers.webp",
+    "notes": "Spend 1 Threat to add another squad at the edge of the scene."
+  },
+  {
+    "id": "harkonnen-assassin",
+    "name": "Harkonnen Assassin",
+    "type": "agents",
+    "stage": "personal",
+    "source": "custom",
+    "stats": {
+      "evade": 3,
+      "stress": 4,
+      "threat": 2,
+      "scale": "personal",
+      "test": "UNDERSTAND + TRUTH to spot; BATTLE + DUTY to stop"
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-10",
+        "name": "Poisoned Cup",
+        "text": "DISCIPLINE (D2) or POISONED."
+      },
+      {
+        "roll": "11-20",
+        "name": "Shigawire",
+        "text": "4 Stress, +2 if the victim was unaware."
+      }
+    ],
+    "special": "Patient, paid, and usually already inside the household as a servant, guard or guest.",
+    "tactics": "Poison first, shigawire second, a blade only if cornered.",
+    "tags": [
+      "harkonnen",
+      "hidden"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/harkonnen-assassin.webp",
+    "notes": "If exposed, would rather die than talk."
+  },
+  {
+    "id": "hunter-seeker",
+    "name": "Hunter-Seeker",
+    "type": "devices",
+    "stage": "personal",
+    "source": "custom",
+    "stats": {
+      "evade": 3,
+      "stress": 5,
+      "threat": 2,
+      "scale": "personal",
+      "test": "DISCIPLINE + FAITH (stay still) or BATTLE + DUTY (snatch it)"
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-20",
+        "name": "Strike",
+        "text": "Hits the moving target nearest the operator’s focus: 5 Stress and POISONED."
+      }
+    ],
+    "special": "A needle-thin poisoned drone steered from nearby by an operator who watches through its eye.",
+    "tactics": "Waits for movement, then strikes the throat.",
+    "tags": [
+      "device"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/hunter-seeker.webp",
+    "notes": "Freezing in place buys time; finding the operator ends the threat. Shields slow it but do not stop it."
+  },
+  {
+    "id": "spice-blow",
+    "name": "Spice Blow",
+    "type": "desert",
+    "stage": "environment",
+    "source": "custom",
+    "stats": {
+      "evade": 2,
+      "stress": 3,
+      "threat": 1,
+      "scale": "environment",
+      "test": "UNDERSTAND + TRUTH to predict; MOVE + JUSTICE to escape"
+    },
+    "signatureAttacks": [],
+    "special": "A pre-spice mass erupts from below in a fountain of sand and orange dust. Fortune and danger in one breath.",
+    "tactics": "Erupts, then calls the worms.",
+    "tags": [
+      "spice"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/spice-blow.webp",
+    "notes": "Leaves a rich spice field — and calls every worm within reach. Harvesters race the clock."
+  },
+  {
+    "id": "sandstorm",
+    "name": "Coriolis Storm",
+    "type": "desert",
+    "stage": "environment",
+    "source": "custom",
+    "stats": {
+      "evade": 4,
+      "stress": 6,
+      "threat": 3,
+      "scale": "environment",
+      "test": "MOVE + FAITH to find shelter; DISCIPLINE to endure"
+    },
+    "signatureAttacks": [],
+    "special": "A wall of wind and grit that can strip paint, flesh and ornithopters from the sky.",
+    "tactics": "Every round in the open inflicts Stress; communications fail.",
+    "tags": [
+      "weather"
+    ],
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Radio and sensors fail for the duration"
+      }
+    ],
+    "art": "/art/dune/creatures/sandstorm.webp",
+    "notes": "Anyone caught in the open gains the exposed condition."
+  },
+  {
+    "id": "fremen-fedaykin",
+    "name": "Fremen Fedaykin",
+    "type": "soldiers",
+    "stage": "personal",
+    "source": "custom",
+    "stats": {
+      "evade": 4,
+      "stress": 4,
+      "threat": 3,
+      "scale": "personal",
+      "test": "BATTLE + DUTY or COMMUNICATE + FAITH to parley"
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-10",
+        "name": "Out of the Sand",
+        "text": "Ambush: +1 Difficulty to the first defense."
+      },
+      {
+        "roll": "11-20",
+        "name": "Crysknife",
+        "text": "4 Stress, slips through shields."
+      }
+    ],
+    "special": "Death commandos of a sietch. They move unseen across open sand and strike before you know they are there.",
+    "tactics": "Ambush from the sand, strike, vanish.",
+    "tags": [
+      "fremen"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/fremen-fedaykin.webp",
+    "notes": "Will honor a properly made challenge or a water bond."
+  },
+  {
+    "id": "bene-gesserit-sister",
+    "name": "Bene Gesserit Sister",
+    "type": "agents",
+    "stage": "personal",
+    "source": "custom",
+    "stats": {
+      "evade": 4,
+      "stress": 3,
+      "threat": 3,
+      "scale": "personal",
+      "test": "DISCIPLINE + FAITH to resist; COMMUNICATE + TRUTH to deceive"
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-10",
+        "name": "Voice",
+        "text": "One untrained target obeys a single command."
+      },
+      {
+        "roll": "11-20",
+        "name": "Weirding Strike",
+        "text": "3 Stress and the target is SHAKEN."
+      }
+    ],
+    "special": "A Sister on the order’s business. She sees through most lies and can command with a word.",
+    "tactics": "Voice, then misdirection, then terrifying close combat.",
+    "tags": [
+      "bene-gesserit"
+    ],
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Characters without training who hear her Voice must pass DISCIPLINE (D2) or obey one command"
+      }
+    ],
+    "art": "/art/dune/creatures/bene-gesserit-sister.webp",
+    "notes": "Her goals are the order’s, not her host’s."
+  },
+  {
+    "id": "mentat-assassin",
+    "name": "Twisted Mentat",
+    "type": "agents",
+    "stage": "personal",
+    "source": "custom",
+    "stats": {
+      "evade": 3,
+      "stress": 3,
+      "threat": 3,
+      "scale": "personal",
+      "test": "UNDERSTAND + TRUTH to outthink"
+    },
+    "signatureAttacks": [],
+    "special": "A Mentat whose conditioning has been bent toward murder and plots within plots.",
+    "tactics": "Never attacks directly; arranges for others to.",
+    "tags": [
+      "mentat"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/mentat-assassin.webp",
+    "notes": "Every scene he is active, the Narrator may spend 1 Threat to reveal a prepared trap."
+  },
+  {
+    "id": "guild-agent",
+    "name": "Guild Agent",
+    "type": "agents",
+    "stage": "personal",
+    "source": "custom",
+    "stats": {
+      "evade": 4,
+      "stress": 2,
+      "threat": 2,
+      "scale": "personal",
+      "test": "COMMUNICATE + POWER"
+    },
+    "signatureAttacks": [],
+    "special": "A quiet representative of the Spacing Guild. Never violent — never needs to be.",
+    "tactics": "Raises prices, delays ships, withdraws passage.",
+    "tags": [
+      "guild"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/guild-agent.webp",
+    "notes": "Opposing the Guild costs the House rather than the character: spend Threat to cut off transport."
+  },
+  {
+    "id": "face-dancer",
+    "name": "Face Dancer",
+    "type": "agents",
+    "stage": "personal",
+    "source": "custom",
+    "stats": {
+      "evade": 4,
+      "stress": 4,
+      "threat": 4,
+      "scale": "personal",
+      "test": "UNDERSTAND + TRUTH (D4) to unmask"
+    },
+    "signatureAttacks": [],
+    "special": "A shapeshifting infiltrator who can wear anyone’s face and voice.",
+    "tactics": "Replaces a trusted NPC, then waits.",
+    "tags": [
+      "tleilaxu",
+      "hidden"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/face-dancer.webp",
+    "notes": "Truthsayers and dogs sometimes sense the wrongness."
+  },
+  {
+    "id": "laza-tiger",
+    "name": "Laza Tiger",
+    "type": "beasts",
+    "stage": "personal",
+    "source": "custom",
+    "stats": {
+      "evade": 3,
+      "stress": 4,
+      "threat": 2,
+      "scale": "personal",
+      "test": "MOVE + JUSTICE to escape; BATTLE + DUTY to fight"
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-12",
+        "name": "Pounce",
+        "text": "4 Stress and the target is knocked prone."
+      },
+      {
+        "roll": "13-20",
+        "name": "Maul",
+        "text": "4 Stress and WOUNDED."
+      }
+    ],
+    "special": "A lean striped predator bred for hunting people. Often starved before release.",
+    "tactics": "Hunts in pairs; goes for the weakest.",
+    "tags": [
+      "beast"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/laza-tiger.webp",
+    "notes": "A handler with a control pad may be nearby."
+  },
+  {
+    "id": "salusan-bull",
+    "name": "Salusan Bull",
+    "type": "beasts",
+    "stage": "personal",
+    "source": "custom",
+    "stats": {
+      "evade": 3,
+      "stress": 5,
+      "threat": 2,
+      "scale": "personal",
+      "test": "MOVE + FAITH to dodge"
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-14",
+        "name": "Charge",
+        "text": "5 Stress to one target in its line."
+      },
+      {
+        "roll": "15-20",
+        "name": "Trample",
+        "text": "3 Stress to everyone in its zone."
+      }
+    ],
+    "special": "A huge, horned bull from a prison world. Kept for the arena and for ceremonies of strength.",
+    "tactics": "Charges in straight lines; turning it is the trick.",
+    "tags": [
+      "beast",
+      "arena"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/salusan-bull.webp",
+    "notes": "Killing one in the arena earns enormous honor."
+  },
+  {
+    "id": "sandtrout",
+    "name": "Sandtrout Swarm",
+    "type": "desert",
+    "stage": "environment",
+    "source": "custom",
+    "stats": {
+      "evade": 1,
+      "stress": 2,
+      "threat": 1,
+      "scale": "environment",
+      "test": "UNDERSTAND + TRUTH"
+    },
+    "signatureAttacks": [],
+    "special": "Leathery creatures that wrap around water and seal it away underground.",
+    "tactics": "Smothers any open water within reach.",
+    "tags": [
+      "worm"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/sandtrout.webp",
+    "notes": "Children of the sietch catch them as a game. A sealed cache may be lost to them."
+  },
+  {
+    "id": "desert-bandits",
+    "name": "Desert Raiders",
+    "type": "soldiers",
+    "stage": "squad",
+    "source": "custom",
+    "stats": {
+      "evade": 2,
+      "stress": 3,
+      "threat": 1,
+      "scale": "squad",
+      "test": "BATTLE + DUTY or COMMUNICATE + POWER"
+    },
+    "signatureAttacks": [],
+    "special": "Desperate outcasts who prey on prospectors and caravans for water and spice.",
+    "tactics": "Hit and run from rock ridges.",
+    "tags": [
+      "outlaw"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/desert-bandits.webp",
+    "notes": "They can be bought off with water."
+  },
+  {
+    "id": "smuggler-crew",
+    "name": "Smuggler Crew",
+    "type": "agents",
+    "stage": "squad",
+    "source": "custom",
+    "stats": {
+      "evade": 2,
+      "stress": 2,
+      "threat": 1,
+      "scale": "squad",
+      "test": "COMMUNICATE + POWER"
+    },
+    "signatureAttacks": [],
+    "special": "A crawler crew running spice past the tariff lines.",
+    "tactics": "Avoids fights; trades information for safe passage.",
+    "tags": [
+      "outlaw"
+    ],
+    "effects": [],
+    "art": "/art/dune/creatures/smuggler-crew.webp",
+    "notes": "Useful allies, unreliable friends."
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://muthur.local/schema/generator-params.schema.json",
+  "title": "Generator parameters",
+  "description": "Body.params for POST /api/generate and the scripts/generate-pack.mjs CLI.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["players", "playtime"],
+  "properties": {
+    "players": { "description": "Number of players / pre-generated characters.", "type": "integer", "minimum": 1, "maximum": 8 },
+    "playerNames": {
+      "description": "Optional real player names; count must equal players. Each character gets an assignment hint.",
+      "type": "array", "maxItems": 8,
+      "items": { "type": "string", "minLength": 1, "maxLength": 40 }
+    },
+    "playtime": { "enum": ["one-shot 2-3h", "session 3-5h", "long 5-8h"] },
+    "type": { "enum": ["Cinematic", "One-Shot", "Campaign"], "default": "Cinematic" },
+    "tone": {
+      "description": "Tone keywords (universe hints or free text).",
+      "type": "array", "maxItems": 8, "default": [],
+      "items": { "type": "string", "minLength": 1, "maxLength": 60 }
+    },
+    "setting": { "type": "string", "maxLength": 2000, "default": "" },
+    "threat": { "type": "string", "maxLength": 1000, "default": "surprise me" },
+    "difficulty": { "enum": ["Introductory", "Standard", "Brutal"], "default": "Standard" },
+    "themes": { "type": "string", "maxLength": 1000, "default": "" },
+    "avoid": { "type": "string", "maxLength": 1000, "default": "" },
+    "includeMaps": { "type": "boolean", "default": true },
+    "seedTitle": { "type": "string", "maxLength": 80 },
+    "lethality": { "enum": ["low", "medium", "high"], "default": "medium" }
+  }
+}

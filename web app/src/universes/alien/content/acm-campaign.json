@@ -1,0 +1,102 @@
+{
+  "packVersion": 1,
+  "id": "acm-campaign",
+  "universe": "alien",
+  "kind": "campaign",
+  "meta": {
+    "title": "The Marine Campaign",
+    "tagline": "USS Tamb'Itam — Conestoga Class Starship. Home of the 33rd MAU \"Gunfighters.\"",
+    "type": "Campaign",
+    "players": "3–5",
+    "playtime": "Campaign",
+    "difficulty": "Colonial Marines Campaign",
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "MU/TH/UR 9000 MAINFRAME",
+    "to": "KILO COMPANY, 2ND PLATOON — USS TAMB'ITAM",
+    "classification": "OPERATIONAL BRIEFING — FRONTIER WAR",
+    "text": "ATTENTION MARINES. You are part of the 33rd Marine Assault Unit — the \"Gunfighters\" — operating out of the Conestoga Frigate USS Tamb'Itam. A reinforced battalion of 2,200 troops standing ready in the Outer Veil.\n\nThe Frontier War has erupted. The colony on Ariarcus has fallen to UPP forces. Your unit was forward deployed to Orbital Fort Nebraska when the crisis began. The situation is fluid, hostile, and evolving.\n\nThis campaign will take you across multiple operations on the war-torn Frontier. Expect hostile contacts, unreliable intel, and hard choices. The Corps takes care of its own — but out here, you're a long way from home.\n\nSemper Fi, Marines."
+  },
+  "acts": [
+    {
+      "title": "CAMPAIGN",
+      "subtitle": "THE FRONTIER WAR",
+      "summary": "USS Tamb'Itam — Conestoga Class Starship. Home of the 33rd MAU \"Gunfighters.\"",
+      "gmNotes": "Campaign frame for the Colonial Marines Operations Manual. Use this pack to brief the platoon aboard the USS Tamb'Itam between operations; each operation has its own pack. Full rules and mission details are in the sourcebook."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "USS TAMB'ITAM — Bridge",
+      "description": "Ship command and control. Navigation, tactical displays, communications."
+    },
+    {
+      "name": "USS TAMB'ITAM — Marine Barrack Section",
+      "description": "Housing for Marine personnel. Barracks, mess, recreation facilities."
+    },
+    {
+      "name": "USS TAMB'ITAM — Dropship Launch Hangar",
+      "description": "Hangar bay for UD-4L Cheyenne Dropships. Launch and recovery operations."
+    },
+    {
+      "name": "USS TAMB'ITAM — Armory",
+      "description": "Weapons storage, ammunition, and equipment distribution."
+    },
+    {
+      "name": "USS TAMB'ITAM — Medical Bay",
+      "description": "Ship medical facility. Surgical suites, recovery wards, medpod units."
+    },
+    {
+      "name": "USS TAMB'ITAM — Engineering",
+      "description": "Reactor core, drive systems, and maintenance access."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "OPERATIONAL BRIEFING — FRONTIER WAR",
+      "from": "MU/TH/UR 9000 MAINFRAME",
+      "to": "KILO COMPANY, 2ND PLATOON — USS TAMB'ITAM",
+      "priority": "PRIORITY",
+      "text": "ATTENTION MARINES. You are part of the 33rd Marine Assault Unit — the \"Gunfighters\" — operating out of the Conestoga Frigate USS Tamb'Itam. A reinforced battalion of 2,200 troops standing ready in the Outer Veil.\n\nThe Frontier War has erupted. The colony on Ariarcus has fallen to UPP forces. Your unit was forward deployed to Orbital Fort Nebraska when the crisis began. The situation is fluid, hostile, and evolving.\n\nThis campaign will take you across multiple operations on the war-torn Frontier. Expect hostile contacts, unreliable intel, and hard choices. The Corps takes care of its own — but out here, you're a long way from home.\n\nSemper Fi, Marines.",
+      "when": "Start of the session, before Act I"
+    }
+  ],
+  "maps": [
+    {
+      "id": "uss-tambitam",
+      "title": "USS TAMB'ITAM",
+      "subtitle": "Conestoga-Class Frigate — 33rd MAU \"Gunfighters\"",
+      "description": "Home of the 33rd Marine Assault Unit. A reinforced battalion of 2,200 troops operating in the Outer Veil during the Frontier War.",
+      "kind": "image",
+      "src": "/maps/acm/uss-tambitam-decks.webp",
+      "rooms": [
+        {
+          "name": "Bridge",
+          "note": "Ship command and control. Navigation, tactical displays, communications."
+        },
+        {
+          "name": "Marine Barrack Section",
+          "note": "Housing for Marine personnel. Barracks, mess, recreation facilities."
+        },
+        {
+          "name": "Dropship Launch Hangar",
+          "note": "Hangar bay for UD-4L Cheyenne Dropships. Launch and recovery operations."
+        },
+        {
+          "name": "Armory",
+          "note": "Weapons storage, ammunition, and equipment distribution."
+        },
+        {
+          "name": "Medical Bay",
+          "note": "Ship medical facility. Surgical suites, recovery wards, medpod units."
+        },
+        {
+          "name": "Engineering",
+          "note": "Reactor core, drive systems, and maintenance access."
+        }
+      ]
+    }
+  ]
+}

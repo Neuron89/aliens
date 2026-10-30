@@ -1,0 +1,513 @@
+[
+  {
+    "id": "starving",
+    "name": "Starving",
+    "source": "CRB",
+    "page": 106,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "moderate",
+    "text": "After a day without enough food. You cannot heal or shed Stress. Roll STAMINA each day: failure costs 1 Health and +1 Stress. If Broken while Starving, make a Death Roll every day; MEDICAL AID cannot help, only food.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot recover Health or relieve Stress."
+      },
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "Daily STAMINA roll; failure = 1 damage.",
+        "value": -1
+      },
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "Daily failed STAMINA roll = +1 Stress.",
+        "value": 1
+      }
+    ],
+    "healBy": "Eat something; the effects fade within one Shift."
+  },
+  {
+    "id": "dehydrated",
+    "name": "Dehydrated",
+    "source": "CRB",
+    "page": 106,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "After a day without enough water. You cannot heal or shed Stress. Every Shift you take 1 damage and +1 Stress. If Broken while Dehydrated, make a Death Roll every Shift without fluids; MEDICAL AID cannot help.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot recover Health or relieve Stress."
+      },
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "1 damage every Shift.",
+        "value": -1
+      },
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress every Shift.",
+        "value": 1
+      }
+    ],
+    "healBy": "Drink; the effects fade within one Shift."
+  },
+  {
+    "id": "exhausted",
+    "name": "Exhausted",
+    "source": "CRB",
+    "page": 106,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "moderate",
+    "text": "After a day without at least a Shift of sleep. You cannot relieve Stress. Once per day (GM's timing) roll STAMINA with a penalty equal to the days without proper sleep; failure means you collapse and sleep for a Shift.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "Cannot relieve Stress."
+      },
+      {
+        "kind": "debuff",
+        "target": "skill:stamina",
+        "text": "Daily STAMINA roll at -1 per sleepless day; failure = collapse asleep for a Shift."
+      }
+    ],
+    "healBy": "Sleep for at least one Shift."
+  },
+  {
+    "id": "freezing",
+    "name": "Freezing",
+    "source": "CRB",
+    "page": 107,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "Without enough clothing or shelter in the cold. You cannot heal or shed Stress. Roll STAMINA at intervals: daily above freezing, every Shift below zero, every Turn in deep space cold. Failure: 1 damage and +1 Stress. If Broken while Freezing, make a Death Roll at the next cold check.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot recover Health or relieve Stress."
+      },
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "Failed cold STAMINA roll = 1 damage.",
+        "value": -1
+      },
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "Failed cold STAMINA roll = +1 Stress.",
+        "value": 1
+      }
+    ],
+    "healBy": "Get warm; rolling stops and recovery works normally again."
+  },
+  {
+    "id": "sick",
+    "name": "Sick (Disease)",
+    "source": "CRB",
+    "page": 109,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "moderate",
+    "text": "Failed a Sickness Roll (opposed STAMINA vs the disease's Virulence, typically 3). One Shift after infection you take 1 damage; you cannot heal while sick; at the start of each Shift roll again, each failure = 1 more damage. If Broken while sick, a failed Sickness Roll each Shift is fatal. A carer may roll MEDICAL AID vs Virulence instead.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot recover Health."
+      },
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "1 damage per failed Sickness Roll (each Shift).",
+        "value": -1
+      }
+    ],
+    "healBy": "Succeed at one Sickness Roll (STAMINA or a carer's MEDICAL AID vs Virulence).",
+    "virulence": 3
+  },
+  {
+    "id": "irradiated",
+    "name": "Irradiated",
+    "source": "CRB",
+    "page": 110,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "Each time you gain a Rad, roll dice equal to your total Rads; each success is 1 damage. Weak radiation gives 1 Rad per Shift, strong 1 per Turn, extreme 1 per Round. Broken by radiation: Death Roll at every new Rad. No healing while in the hotspot.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "Roll dice equal to current Rads at each new Rad; 1 damage per success."
+      }
+    ],
+    "healBy": "Leave the area; heal 1 Rad per Shift. Each time a Rad would heal, roll a Stress Die: a facehugger result makes that Rad permanent."
+  },
+  {
+    "id": "broken",
+    "name": "Broken",
+    "source": "CRB",
+    "page": 98,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "critical",
+    "text": "At zero Health. Roll a critical injury immediately. You can only crawl and mumble: no other actions or skill rolls. Each further damaging attack inflicts another critical injury.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "No actions or skill rolls except crawling."
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Each further damaging hit = another critical injury."
+      }
+    ],
+    "healBy": "First aid (MEDICAL AID, slow action) restores Health equal to successes, or on your own you regain 1 Health after a Turn."
+  },
+  {
+    "id": "burning",
+    "name": "On Fire",
+    "source": "CRB",
+    "page": 108,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "If fire damages you, you keep burning: another attack at the start of each Round with Intensity +1 each time, until an attack deals no damage. Broken by fire: Death Roll every Round until dead or saved by MEDICAL AID.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "Fire attack each Round, Intensity rising by 1."
+      }
+    ],
+    "healBy": "A MOBILITY roll (slow action) by you or someone ENGAGED puts it out; or it dies when a fire attack deals no damage."
+  },
+  {
+    "id": "acid-burn",
+    "name": "Acid Burn",
+    "source": "CRB",
+    "page": 298,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "Hit by a Xenomorph's acid splash. At the start of each Round you suffer another acid attack with half the previous dice (round down) until a roll deals no damage. Each success also strips 1 from the armor's rating. Broken by acid: Death Roll every Round until dead or saved by MEDICAL AID.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "Repeat acid attack each Round at half dice."
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Each success on acid dice reduces worn Armor Rating by 1."
+      }
+    ],
+    "healBy": "Burns out when an acid roll deals no damage."
+  },
+  {
+    "id": "suffocating",
+    "name": "Suffocating",
+    "source": "CRB",
+    "page": 110,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "critical",
+    "text": "Out of air: roll STAMINA every Turn and after strenuous action, the first roll unmodified, then -1, -2 and so on. Failure drops you to 0 Health with a Death Roll every Round (no critical injury).",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:stamina",
+        "text": "Cumulative -1 per STAMINA roll."
+      }
+    ],
+    "healBy": "Reach a pressurized area or a fresh air supply."
+  },
+  {
+    "id": "vacuum",
+    "name": "Exposed to Vacuum",
+    "source": "CRB",
+    "page": 107,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "critical",
+    "text": "Unprotected in space: roll STAMINA every Round before acting (not an action), unmodified the first Round then -1, -2 and so on. Failure drops you to 0 Health with a Death Roll every Round (no critical injury). Pulling on a suit fast is a slow action needing MOBILITY.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:stamina",
+        "text": "Cumulative -1 per Round."
+      }
+    ],
+    "healBy": "Get into a pressurized area or a suit."
+  },
+  {
+    "id": "drowning",
+    "name": "Drowning",
+    "source": "CRB",
+    "page": 110,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "Underwater: roll STAMINA every Round before acting (not an action); failure = 1 damage. Broken while drowning: Death Roll every Turn until dead or saved by MEDICAL AID.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "Failed STAMINA = 1 damage per Round.",
+        "value": -1
+      }
+    ],
+    "healBy": "Surface or be pulled out."
+  },
+  {
+    "id": "stunned",
+    "name": "Stunned",
+    "source": "CRB",
+    "page": 125,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "minor",
+    "text": "Electroshock, stun weapons and some creature attacks: you lose your actions for one Round.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Lose actions for one Round."
+      }
+    ],
+    "healBy": "Wears off after one Round."
+  },
+  {
+    "id": "over-encumbered",
+    "name": "Over-Encumbered",
+    "source": "CRB",
+    "page": 34,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "minor",
+    "text": "Carrying more than STRENGTH x2 items (up to STRENGTH x4). To run or crawl in combat you must pass MOBILITY or drop the load / stay put.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:mobility",
+        "text": "MOBILITY roll required to run or crawl in combat."
+      }
+    ],
+    "healBy": "Drop items until at or below STRENGTH x2."
+  },
+  {
+    "id": "paralyzed-venom",
+    "name": "Paralyzed (Xenomorph Venom)",
+    "source": "CRB",
+    "page": 309,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "Stung by a Capture for the Hive attack: roll STAMINA; you stay up one Round per success, then fall unconscious for a Shift.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Unconscious for one Shift after (STAMINA successes) Rounds."
+      }
+    ],
+    "healBy": "A shot of adrenaline: MEDICAL AID roll using a medkit."
+  },
+  {
+    "id": "facehugged",
+    "name": "Facehugged / Implanted",
+    "source": "CRB",
+    "page": 302,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "critical",
+    "text": "Unconscious with a facehugger attached. Within a Shift it drops off dead and you wake hungry; one Shift later a chestburster is born and kills you. Removing a hugger by force usually kills the host.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Unconscious; chestburster birth (death) two Shifts after the attack."
+      }
+    ],
+    "healBy": "No standard cure; hypersleep/stasis halts the gestation (GM discretion)."
+  },
+  {
+    "id": "nerve-agent",
+    "name": "Nerve Agent Exposure",
+    "source": "ACM",
+    "page": 74,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "critical",
+    "text": "In a CN-20 zone without a hazmat suit: STAMINA at -3 each Round before acting; failure = 1 damage and +1 Stress, repeating every Round even after leaving the zone. Broken: Death Roll every Round.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "1 damage per Round.",
+        "value": -1
+      },
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress per Round.",
+        "value": 1
+      }
+    ],
+    "healBy": "Only a hard (-2) MEDICAL AID roll saves a Broken victim."
+  },
+  {
+    "id": "anathema-infection",
+    "name": "Anathema Infection (Black Goo)",
+    "source": "ACM",
+    "page": 179,
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "critical",
+    "text": "Failed a Sickness Roll vs Virulence 8 after exposure to the black goo. You become a Stage I Vitiate within a Shift, then must keep rolling vs Virulence 8 each Shift; failure advances to Stage II, then Stage III or IV. Success only delays it. Stage III+ PCs become NPCs.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "Stage I/II symptoms each add +1 Stress.",
+        "value": 1
+      }
+    ],
+    "healBy": "No known cure.",
+    "virulence": 8
+  },
+  {
+    "id": "phobia",
+    "name": "Phobia",
+    "source": "CRB",
+    "page": 101,
+    "kind": "debuff",
+    "group": "mental-trauma",
+    "severity": "moderate",
+    "text": "You fear something tied to the panic's cause (GM picks). +1 Stress when within SHORT range of it; staying near it longer than a Round forces a Panic Roll.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress within SHORT range of the phobia.",
+        "value": 1
+      }
+    ],
+    "healBy": "Permanent.",
+    "roll": "1"
+  },
+  {
+    "id": "alcoholism",
+    "name": "Alcoholism",
+    "source": "CRB",
+    "page": 101,
+    "kind": "debuff",
+    "group": "mental-trauma",
+    "severity": "moderate",
+    "text": "You must drink every Shift or gain +1 Stress, and you cannot relieve stress without alcohol.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress per Shift without a drink.",
+        "value": 1
+      }
+    ],
+    "healBy": "Permanent.",
+    "roll": "2"
+  },
+  {
+    "id": "nightmares",
+    "name": "Nightmares",
+    "source": "CRB",
+    "page": 101,
+    "kind": "debuff",
+    "group": "mental-trauma",
+    "severity": "moderate",
+    "text": "Roll EMPATHY when you sleep; on a success you have a nightmare: +1 Stress and no stress relief for a full day.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress on a nightmare.",
+        "value": 1
+      }
+    ],
+    "healBy": "Permanent.",
+    "roll": "3"
+  },
+  {
+    "id": "depression",
+    "name": "Depression",
+    "source": "CRB",
+    "page": 101,
+    "kind": "debuff",
+    "group": "mental-trauma",
+    "severity": "moderate",
+    "text": "Roll EMPATHY every day; failure means a bad day: +1 Stress and no stress relief until the next day.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress on a bad day.",
+        "value": 1
+      }
+    ],
+    "healBy": "Permanent.",
+    "roll": "4"
+  },
+  {
+    "id": "drug-use",
+    "name": "Drug Use",
+    "source": "CRB",
+    "page": 101,
+    "kind": "debuff",
+    "group": "mental-trauma",
+    "severity": "moderate",
+    "text": "You need a recreational drug every Shift or gain +1 Stress, and cannot relieve stress without it.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress per Shift without the drug.",
+        "value": 1
+      }
+    ],
+    "healBy": "Permanent.",
+    "roll": "5"
+  },
+  {
+    "id": "amnesia",
+    "name": "Amnesia",
+    "source": "CRB",
+    "page": 101,
+    "kind": "debuff",
+    "group": "mental-trauma",
+    "severity": "moderate",
+    "text": "You no longer remember who you or the other characters are; roleplay it.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Memory wiped (roleplay)."
+      }
+    ],
+    "healBy": "Permanent.",
+    "roll": "6"
+  }
+]

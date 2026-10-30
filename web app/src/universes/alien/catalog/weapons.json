@@ -1,0 +1,1388 @@
+[
+  {
+    "id": "m4a3-service-pistol",
+    "name": "M4A3 Service Pistol",
+    "source": "CRB",
+    "page": 119,
+    "category": "pistol",
+    "stats": {
+      "bonus": 2,
+      "damage": 1,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 200
+    },
+    "tags": [],
+    "notes": "Cheap 9mm USCMC sidearm; the classic backup gun.",
+    "effects": [],
+    "art": "/art/weapons/cropped/m4a3-service-pistol.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-123.webp"
+  },
+  {
+    "id": "357-magnum-revolver",
+    "name": ".357 Magnum Revolver",
+    "source": "CRB",
+    "page": 119,
+    "category": "pistol",
+    "stats": {
+      "bonus": 1,
+      "damage": 2,
+      "range": "medium",
+      "weight": 1,
+      "cost": 300
+    },
+    "tags": [],
+    "notes": "Heavy-calibre revolver favored by marshals and crooks alike.",
+    "effects": [],
+    "art": "/art/weapons/cropped/357-magnum-revolver.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-123.webp"
+  },
+  {
+    "id": "rexim-rxf-m5-eva-pistol",
+    "name": "Rexim RXF-M5 EVA Pistol",
+    "source": "CRB",
+    "page": 119,
+    "category": "pistol",
+    "stats": {
+      "bonus": 1,
+      "damage": 1,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 400
+    },
+    "tags": [
+      "armor-piercing",
+      "laser"
+    ],
+    "notes": "A laser welder turned self-defense sidearm, standard on W-Y commercial ships.",
+    "effects": [],
+    "art": "/art/weapons/cropped/rexim-rxf-m5-eva-pistol.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-123.webp"
+  },
+  {
+    "id": "watatsumi-dv303-bolt-gun",
+    "name": "Watatsumi DV-303 Bolt Gun",
+    "source": "CRB",
+    "page": 119,
+    "category": "pistol",
+    "stats": {
+      "bonus": 0,
+      "damage": 3,
+      "range": "short",
+      "weight": 1,
+      "cost": 400
+    },
+    "tags": [
+      "armor-piercing",
+      "single-shot",
+      "tool"
+    ],
+    "notes": "Hull-repair bolt driver pressed into service as a one-shot weapon; reload (slow action) after every shot. Tools table lists it at $400 with HEAVY MACHINERY +2 (CRB p135).",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:heavyMachinery",
+        "text": "+2 HEAVY MACHINERY when used as a repair tool.",
+        "value": 2,
+        "when": "used as a tool"
+      }
+    ],
+    "art": "/art/weapons/cropped/watatsumi-dv303-bolt-gun.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-123.webp"
+  },
+  {
+    "id": "m41a-pulse-rifle",
+    "name": "Armat M41A Pulse Rifle",
+    "source": "CRB",
+    "page": 120,
+    "category": "rifle",
+    "stats": {
+      "bonus": 1,
+      "damage": 2,
+      "range": "long",
+      "weight": 1,
+      "cost": 800
+    },
+    "tags": [
+      "armor-piercing",
+      "full-auto",
+      "grenade-launcher"
+    ],
+    "notes": "USCMC standard 10mm caseless pulse rifle with an underslung U1 30mm grenade launcher. Can jam when fully loaded. (The illustration box on p122 lists $1,200 including the launcher; the table says $800.)",
+    "effects": [],
+    "art": "/art/weapons/cropped/m41a-pulse-rifle.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-124.webp"
+  },
+  {
+    "id": "ak4047-pulse-assault-rifle",
+    "name": "Norcomm AK-4047 Pulse Assault Rifle",
+    "source": "CRB",
+    "page": 120,
+    "category": "rifle",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "long",
+      "weight": 1,
+      "cost": 500
+    },
+    "tags": [
+      "full-auto"
+    ],
+    "notes": "Cheap, nearly indestructible UPP counterpart to the M41A. Restated in ACM p68-69 with the same stats.",
+    "effects": [],
+    "art": "/art/weapons/cropped/ak4047-pulse-assault-rifle.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-124.webp"
+  },
+  {
+    "id": "m42a-scope-rifle",
+    "name": "M42A Scope Rifle",
+    "source": "CRB",
+    "page": 120,
+    "category": "rifle",
+    "stats": {
+      "bonus": 2,
+      "damage": 2,
+      "range": "extreme",
+      "weight": 1,
+      "cost": 1000
+    },
+    "tags": [
+      "armor-piercing"
+    ],
+    "notes": "USCMC semi-automatic pulse sniper rifle with bipod and flash suppressor.",
+    "effects": [],
+    "art": "/art/weapons/cropped/m42a-scope-rifle.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-124.webp"
+  },
+  {
+    "id": "armat-37a2-shotgun",
+    "name": "Armat Model 37A2 12 Gauge Pump Action",
+    "source": "CRB",
+    "page": 120,
+    "category": "rifle",
+    "stats": {
+      "bonus": 2,
+      "damage": 3,
+      "range": "short",
+      "weight": 1,
+      "cost": 500
+    },
+    "tags": [
+      "armor-doubled"
+    ],
+    "notes": "Reliable pump shotgun for close encounters.",
+    "effects": [],
+    "art": "/art/weapons/cropped/armat-37a2-shotgun.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-124.webp"
+  },
+  {
+    "id": "asso400-harpoon",
+    "name": "SpaceSub ASSO-400 Harpoon Grappling Gun",
+    "source": "CRB",
+    "page": 120,
+    "category": "rifle",
+    "stats": {
+      "bonus": 0,
+      "damage": 1,
+      "range": "medium",
+      "weight": 1,
+      "cost": 300
+    },
+    "tags": [
+      "armor-doubled",
+      "single-shot"
+    ],
+    "notes": "Tethered grappling harpoon. On a hit the hook sticks: if the target is heavier you can reel yourself from MEDIUM to ENGAGED (slow action); if you are heavier you can drag it to you (opposed STRENGTH if it resists).",
+    "effects": [],
+    "art": "/art/weapons/cropped/asso400-harpoon.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-124.webp"
+  },
+  {
+    "id": "xm99a-plasma-rifle",
+    "name": "Armat XM99A Phased Plasma Pulse Rifle",
+    "source": "CRB",
+    "page": 120,
+    "category": "rifle",
+    "stats": {
+      "bonus": 0,
+      "damage": 4,
+      "range": "extreme",
+      "weight": 2,
+      "cost": 20000,
+      "powerSupply": 5
+    },
+    "tags": [
+      "armor-piercing",
+      "power-supply",
+      "aim-required"
+    ],
+    "notes": "Prototype plasma rifle. Must be aimed (fast action) before each shot; Power Supply roll after every shot.",
+    "effects": [],
+    "art": "/art/weapons/cropped/xm99a-plasma-rifle.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-124.webp"
+  },
+  {
+    "id": "u1-grenade-launcher",
+    "name": "Armat U1 Grenade Launcher",
+    "source": "CRB",
+    "page": 124,
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": null,
+      "range": "long",
+      "weight": 0.5,
+      "cost": 600,
+      "blastPower": 9
+    },
+    "tags": [
+      "blast",
+      "grenade-launcher"
+    ],
+    "notes": "30mm pump launcher (usually under an M41A). Frag: the target takes Blast 9 plus 1 extra damage, everyone else in the zone takes the blast. Smoke blocks line of sight; flash forces a STAMINA roll or lose the next slow action. A miss lands in a random adjacent zone. Can fire other grenade types.",
+    "effects": [],
+    "art": "/art/weapons/cropped/u1-grenade-launcher.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-128.webp"
+  },
+  {
+    "id": "m41ae2-heavy-pulse",
+    "name": "Armat M41AE2 Heavy Pulse Rifle",
+    "source": "CRB",
+    "page": 124,
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 3,
+      "range": "extreme",
+      "weight": 2,
+      "cost": 1500
+    },
+    "tags": [
+      "armor-piercing",
+      "full-auto"
+    ],
+    "notes": "Squad automatic version of the M41A with a long barrel instead of the launcher. (Illustration box p124 shows +2 / Damage 2 / $1,200; table values used.)",
+    "effects": [],
+    "art": "/art/weapons/cropped/m41ae2-heavy-pulse.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-128.webp"
+  },
+  {
+    "id": "m56a2-smart-gun",
+    "name": "M56A2 Smart Gun",
+    "source": "CRB",
+    "page": 124,
+    "category": "heavy",
+    "stats": {
+      "bonus": 3,
+      "damage": 3,
+      "range": "long",
+      "weight": 3,
+      "cost": 6000
+    },
+    "tags": [
+      "armor-piercing",
+      "full-auto"
+    ],
+    "notes": "Harness-mounted, IR-tracking squad support gun with a head-mounted sight.",
+    "effects": [],
+    "art": "/art/weapons/cropped/m56a2-smart-gun.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-128.webp"
+  },
+  {
+    "id": "m240-incinerator",
+    "name": "M240 Incinerator Unit",
+    "source": "CRB",
+    "page": 124,
+    "category": "heavy",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "medium",
+      "weight": 1,
+      "cost": 500,
+      "fireIntensity": 9
+    },
+    "tags": [
+      "fire"
+    ],
+    "notes": "Naphtha flamethrower. A target hit also catches fire (Intensity 9).",
+    "effects": [],
+    "art": "/art/weapons/cropped/m240-incinerator.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-128.webp"
+  },
+  {
+    "id": "ua571c-sentry",
+    "name": "UA 571-C Automated Sentry Gun",
+    "source": "CRB",
+    "page": 124,
+    "category": "heavy",
+    "stats": {
+      "bonus": 2,
+      "damage": 4,
+      "range": "extreme",
+      "weight": null,
+      "cost": 12000,
+      "skill": 8
+    },
+    "tags": [
+      "armor-piercing",
+      "full-auto",
+      "automated"
+    ],
+    "notes": "Tripod autocannon that is always on overwatch and fires with RANGED COMBAT 8 (no attribute). Can be remote-run via a Head-Mounted Sight. Too heavy to carry.",
+    "effects": [],
+    "art": "/art/weapons/cropped/ua571c-sentry.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-128.webp"
+  },
+  {
+    "id": "g2-electroshock-grenade",
+    "name": "G2 Electroshock Grenade",
+    "source": "CRB",
+    "page": 124,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 400
+    },
+    "tags": [
+      "stun",
+      "grenade"
+    ],
+    "notes": "Listed in the heavy weapons table. Medium range when thrown. Every human in the zone must pass a STAMINA roll at -2 (not an action) or be stunned for a Round.",
+    "effects": [],
+    "art": "/art/weapons/cropped/g2-electroshock-grenade.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/crb-weapons-128.webp"
+  },
+  {
+    "id": "unarmed-attack",
+    "name": "Unarmed Attack",
+    "source": "CRB",
+    "page": 126,
+    "category": "melee",
+    "stats": {
+      "bonus": 0,
+      "damage": 1,
+      "range": "engaged",
+      "weight": null,
+      "cost": null
+    },
+    "tags": [
+      "armor-doubled"
+    ],
+    "notes": "Fists, feet, headbutts.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "blunt-instrument",
+    "name": "Blunt Instrument",
+    "source": "CRB",
+    "page": 126,
+    "category": "melee",
+    "stats": {
+      "bonus": 1,
+      "damage": 1,
+      "range": "engaged",
+      "weight": 1,
+      "cost": null
+    },
+    "tags": [],
+    "notes": "Any improvised club: pipe, wrench, extinguisher.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "knife",
+    "name": "Knife",
+    "source": "CRB",
+    "page": 126,
+    "category": "melee",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "engaged",
+      "weight": 0.5,
+      "cost": 50
+    },
+    "tags": [],
+    "notes": "Also covers the 'combat knife' in ACM gear lists.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "stun-baton",
+    "name": "Stun Baton",
+    "source": "CRB",
+    "page": 126,
+    "category": "melee",
+    "stats": {
+      "bonus": 1,
+      "damage": 1,
+      "range": "engaged",
+      "weight": 0.5,
+      "cost": 80,
+      "powerSupply": 5
+    },
+    "tags": [
+      "stun",
+      "power-supply"
+    ],
+    "notes": "Cattle prod. A target that takes damage must pass STAMINA (not an action) or be stunned for a Round. Power Supply roll after each attack.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "cutting-torch",
+    "name": "Mechanical Cutting Torch",
+    "source": "CRB",
+    "page": 126,
+    "category": "melee",
+    "stats": {
+      "bonus": 0,
+      "damage": 3,
+      "range": "engaged",
+      "weight": 1,
+      "cost": 300,
+      "powerSupply": 5
+    },
+    "tags": [
+      "armor-piercing",
+      "power-supply",
+      "tool"
+    ],
+    "notes": "Welding/cutting blowtorch. Power Supply roll after every use. Tools table (CRB p135): HEAVY MACHINERY +2.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:heavyMachinery",
+        "text": "+2 HEAVY MACHINERY when used as a tool.",
+        "value": 2,
+        "when": "used as a tool"
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "bionational-tx9-air-pistol",
+    "name": "Bionational TX-9 Chemical and Biological Injection Air Pistol",
+    "source": "ACM",
+    "page": 67,
+    "category": "pistol",
+    "stats": {
+      "bonus": 1,
+      "damage": 1,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 300
+    },
+    "tags": [
+      "armor-doubled",
+      "payload"
+    ],
+    "notes": "Dart pistol that delivers drugs, toxins, bioweapons or tracers. Can never deal more than 1 damage, and must deal it to deliver the payload. Tracers last D6 days and can be found with a CBRN kit within 30 km.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-071.webp"
+  },
+  {
+    "id": "vp70ma6-pistol",
+    "name": "VP-70MA6 Semi-Automatic Pistol",
+    "source": "ACM",
+    "page": 67,
+    "category": "pistol",
+    "stats": {
+      "bonus": 2,
+      "damage": 1,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 250
+    },
+    "tags": [],
+    "notes": "Old officers' sidearm now replacing the M4A3 as the standard Marine pistol.",
+    "effects": [],
+    "art": "/art/weapons/cropped/vp70-pistol.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/acm-weapons-071.webp"
+  },
+  {
+    "id": "weyland-es4-pistol",
+    "name": "Weyland ES-4 Semi-Automatic Electrostatic Pistol",
+    "source": "ACM",
+    "page": 67,
+    "category": "pistol",
+    "stats": {
+      "bonus": 1,
+      "damage": 1,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 1000
+    },
+    "tags": [
+      "armor-piercing",
+      "stun"
+    ],
+    "notes": "A human target that takes damage must pass STAMINA at -2 or be stunned for a Round. Needs a Turn of cleaning daily; if dirty, 2+ facehugger results on Stress Dice can stun the shooter.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-071.webp"
+  },
+  {
+    "id": "norcomm-qsz203-pistol",
+    "name": "Norcomm QSZ-203 Semi-Automatic Pistol",
+    "source": "ACM",
+    "page": 67,
+    "category": "pistol",
+    "stats": {
+      "bonus": 1,
+      "damage": 1,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 400
+    },
+    "tags": [
+      "armor-piercing"
+    ],
+    "notes": "Rugged UPP standard sidearm firing 5.8mm rounds.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-071.webp"
+  },
+  {
+    "id": "armat-p9-sharp-rifle",
+    "name": "Armat P9 S.H.A.R.P. Rifle",
+    "source": "ACM",
+    "page": 69,
+    "category": "rifle",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": "long",
+      "weight": 2,
+      "cost": 15000,
+      "blastPower": 9
+    },
+    "tags": [
+      "blast",
+      "prototype"
+    ],
+    "notes": "Fires sticky explosive darts. Shooting a dart into a zone needs no roll; it blows (Blast 9) after one Round, or at once if anyone but a PDT-tagged Marine moves there. A direct hit (normal attack) detonates immediately: +2 damage and the target's armor is halved.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-073.webp"
+  },
+  {
+    "id": "norcomm-ak104s-suit-gun",
+    "name": "Norcomm AK-104s Pulse Action Suit Gun",
+    "source": "ACM",
+    "page": 69,
+    "category": "rifle",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "long",
+      "weight": null,
+      "cost": null
+    },
+    "tags": [
+      "armor-piercing",
+      "full-auto",
+      "built-in"
+    ],
+    "notes": "Wrist-mounted rifle built into the CCC5 Combat Compression Suit. Hitting its ammo pack (-2) sets off a Blast 9 explosion that wrecks gun and suit.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-073.webp"
+  },
+  {
+    "id": "rmc-f903we-assault-rifle",
+    "name": "RMC F903WE Automatic Assault Rifle",
+    "source": "ACM",
+    "page": 69,
+    "category": "rifle",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "long",
+      "weight": 2,
+      "cost": 500
+    },
+    "tags": [
+      "full-auto"
+    ],
+    "notes": "Century-old conventional rifle common with militias and mercenaries.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-073.webp"
+  },
+  {
+    "id": "nsg23-assault-rifle",
+    "name": "Weyland-Yutani NSG23 Automatic Assault Rifle",
+    "source": "ACM",
+    "page": 69,
+    "category": "rifle",
+    "stats": {
+      "bonus": 2,
+      "damage": 2,
+      "range": "long",
+      "weight": 1,
+      "cost": 1500
+    },
+    "tags": [
+      "full-auto"
+    ],
+    "notes": "3WE Royal Marine service rifle with a drum magazine; includes an ID23 underbarrel incinerator.",
+    "effects": [],
+    "art": "/art/weapons/cropped/nsg23-assault-rifle.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/acm-weapons-073.webp"
+  },
+  {
+    "id": "id23-underbarrel-incinerator",
+    "name": "Weyland-Yutani ID23 Underbarrel Incinerator Unit",
+    "source": "ACM",
+    "page": 69,
+    "category": "heavy",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "medium",
+      "weight": null,
+      "cost": 700,
+      "fireIntensity": 7
+    },
+    "tags": [
+      "fire",
+      "attachment"
+    ],
+    "notes": "Compact flamethrower that clips under a rifle (included with the NSG23). A target hit catches fire, Intensity 7.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-073.webp"
+  },
+  {
+    "id": "u4a2-grenade-launcher",
+    "name": "Armat U4A2 Repeating Grenade Launcher",
+    "source": "ACM",
+    "page": 72,
+    "category": "heavy",
+    "stats": {
+      "bonus": 2,
+      "damage": null,
+      "range": "long",
+      "weight": 2,
+      "cost": 1100
+    },
+    "tags": [
+      "grenade-launcher"
+    ],
+    "notes": "Rapid-fire dedicated launcher built for CBRN sterilization teams; usually loaded with U4 QTC firebombs. Damage depends on the grenade type.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-076.webp"
+  },
+  {
+    "id": "m5a3-rpg-launcher",
+    "name": "M5A3 RPG Launcher",
+    "source": "ACM",
+    "page": 72,
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 5,
+      "range": "extreme",
+      "weight": 2,
+      "cost": 1800
+    },
+    "tags": [
+      "armor-piercing",
+      "single-shot"
+    ],
+    "notes": "Shoulder-fired rocket launcher with telescopic sight. Listed as the 'M5 RPG' in Assault Marine gear.",
+    "effects": [],
+    "art": "/art/weapons/cropped/m5-rpg.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/acm-weapons-076.webp"
+  },
+  {
+    "id": "norcomm-rpg122",
+    "name": "Norcomm RPG122 Rocket Propelled Grenade Launcher",
+    "source": "ACM",
+    "page": 72,
+    "category": "heavy",
+    "stats": {
+      "bonus": 0,
+      "damage": 5,
+      "range": "extreme",
+      "weight": 2,
+      "cost": 1700
+    },
+    "tags": [
+      "armor-piercing",
+      "single-shot"
+    ],
+    "notes": "Bare-bones UPP launcher without a proper sight; reload after every shot.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-076.webp"
+  },
+  {
+    "id": "weyland-72a-lew",
+    "name": "Weyland 72A Light Energy Weapon",
+    "source": "ACM",
+    "page": 72,
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 6,
+      "range": "extreme",
+      "weight": 3,
+      "cost": 10500
+    },
+    "tags": [
+      "armor-piercing",
+      "energy",
+      "recharge"
+    ],
+    "notes": "Shoulder-mounted directed-energy cannon. Damage drops by 1 per range band beyond SHORT. Must recharge two Rounds after each shot (fires every other Round).",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-076.webp"
+  },
+  {
+    "id": "m78-pig",
+    "name": "M78 PIG Phased-Plasma Infantry Gun",
+    "source": "ACM",
+    "page": 72,
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 6,
+      "range": "extreme",
+      "weight": 3,
+      "cost": 9000
+    },
+    "tags": [
+      "armor-piercing",
+      "energy"
+    ],
+    "notes": "USCMC light energy weapon. Damage drops by 1 per range band beyond SHORT.",
+    "effects": [],
+    "art": "/art/weapons/cropped/m78-pig.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/acm-weapons-076.webp"
+  },
+  {
+    "id": "ua-102-20-phalanx",
+    "name": "UA-102-20 Independently Targeting Particle Beam Phalanx",
+    "source": "ACM",
+    "page": 72,
+    "category": "heavy",
+    "stats": {
+      "bonus": 2,
+      "damage": 4,
+      "range": "long",
+      "weight": null,
+      "cost": 25000,
+      "damageFocused": 7,
+      "rangeFocused": "extreme"
+    },
+    "tags": [
+      "armor-piercing",
+      "full-auto",
+      "energy",
+      "vehicle-scale"
+    ],
+    "notes": "Twenty-beam close-in weapon system. Focused mode: Damage 7, EXTREME range, no full auto. Needs two Rounds to recharge between cycles on battery/vehicle power; firing anyway risks a Blast 12 self-destruction (Stress Die facehugger) and costs the user Stress. Illegal for civilians.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-076.webp"
+  },
+  {
+    "id": "m40-hedp-grenade",
+    "name": "Armat M40 HEDP Grenade",
+    "source": "ACM",
+    "page": 74,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": "medium",
+      "weight": 0.25,
+      "cost": 60,
+      "blastPower": 9
+    },
+    "tags": [
+      "blast",
+      "grenade",
+      "launcher-ammo"
+    ],
+    "notes": "Launcher round for U1/U4 that can also be hand-thrown (MEDIUM range): pull the cap, press, three seconds.",
+    "effects": [],
+    "art": "/art/weapons/cropped/m40-hedp-grenade.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/acm-weapons-078.webp"
+  },
+  {
+    "id": "m72a1-starshell-flare",
+    "name": "M72A1 Starshell Flare",
+    "source": "ACM",
+    "page": 74,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": null,
+      "weight": 0.25,
+      "cost": 50
+    },
+    "tags": [
+      "launcher-ammo",
+      "illumination"
+    ],
+    "notes": "U1/U4 flare that lights one zone for D6 Rounds. A crit inflicted by firing it at a person is always #15.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-078.webp"
+  },
+  {
+    "id": "m230-baton-rounds",
+    "name": "M230 Baton Rounds",
+    "source": "ACM",
+    "page": 74,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": 3,
+      "range": null,
+      "weight": 0.25,
+      "cost": 30
+    },
+    "tags": [
+      "armor-doubled",
+      "launcher-ammo",
+      "less-lethal"
+    ],
+    "notes": "Rubber riot rounds for U1/U4. Any crit is #16, #24 or #33 (equal odds).",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-078.webp"
+  },
+  {
+    "id": "m108-buckshot-canister",
+    "name": "M108 Buckshot Canister",
+    "source": "ACM",
+    "page": 74,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": 3,
+      "range": "short",
+      "weight": 0.25,
+      "cost": 30
+    },
+    "tags": [
+      "armor-doubled",
+      "launcher-ammo"
+    ],
+    "notes": "Oversized shotgun shell for U1/U4; SHORT range.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-078.webp"
+  },
+  {
+    "id": "u4-qtc-firebomb",
+    "name": "U4 QTC Firebomb Ammunition",
+    "source": "ACM",
+    "page": 74,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": null,
+      "weight": 0.25,
+      "cost": 600,
+      "fireIntensity": 12
+    },
+    "tags": [
+      "fire",
+      "launcher-ammo"
+    ],
+    "notes": "Decontamination round that floods the target zone with Intensity 12 fire.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-078.webp"
+  },
+  {
+    "id": "type-4-breaching-charge",
+    "name": "Armat Type 4 Assault Breaching Charge",
+    "source": "ACM",
+    "page": 74,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": null,
+      "weight": 1,
+      "cost": 200,
+      "blastPower": 9
+    },
+    "tags": [
+      "blast",
+      "armor-piercing"
+    ],
+    "notes": "Adhesive door/wall charge on timer or remote. Against the object it is stuck to, damage +2 and armor piercing.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-078.webp"
+  },
+  {
+    "id": "m20-claymore",
+    "name": "Armat M20 Claymore Mine",
+    "source": "ACM",
+    "page": 74,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": "short",
+      "weight": 0.5,
+      "cost": 150,
+      "blastPower": 9
+    },
+    "tags": [
+      "blast",
+      "mine"
+    ],
+    "notes": "Laser-tripwire anti-personnel mine triggered at SHORT range; spotting it takes an OBSERVATION roll even when searching.",
+    "effects": [],
+    "art": "/art/weapons/cropped/m20-claymore.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/weapons/acm-weapons-078.webp"
+  },
+  {
+    "id": "m111-anti-vehicle-mine",
+    "name": "Armat M111 Anti-Vehicle Mine",
+    "source": "ACM",
+    "page": 74,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": "engaged",
+      "weight": 2,
+      "cost": 1000,
+      "blastPower": 12
+    },
+    "tags": [
+      "blast",
+      "mine",
+      "armor-piercing"
+    ],
+    "notes": "Pressure mine set off at ENGAGED range; against the triggering target damage +2 and armor piercing.",
+    "effects": [],
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-078.webp"
+  },
+  {
+    "id": "cn20-nerve-agent",
+    "name": "CN-20 Nerve Agent Canister",
+    "source": "ACM",
+    "page": 75,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": null,
+      "weight": 1,
+      "cost": 1000
+    },
+    "tags": [
+      "chemical"
+    ],
+    "notes": "Gas fills one zone; Stress Die each Round, a facehugger result means it disperses. Unprotected humans roll STAMINA at -3 each Round: failure = 1 damage and +1 Stress now and every following Round. Broken victims make Death Rolls every Round; only a MEDICAL AID roll at -2 saves them.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "qtc-accelerant",
+    "name": "QTC Quinitricetyline Explosive Accelerant",
+    "source": "ACM",
+    "page": 75,
+    "category": "explosive",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": null,
+      "weight": 1,
+      "cost": 200,
+      "fireIntensity": 15,
+      "costNote": "per liter"
+    },
+    "tags": [
+      "fire"
+    ],
+    "notes": "Gelled napalm-like accelerant (price per liter, sold in 200-liter drums). Only immersion stops it burning, and it reignites within a Turn of leaving the water.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "20mm-gatling-gun",
+    "name": "20mm Gatling Gun",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 3,
+      "damage": 3,
+      "range": "long",
+      "weight": null,
+      "cost": 7500
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing",
+      "full-auto"
+    ],
+    "notes": "",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "25mm-gatling-gun",
+    "name": "25mm Gatling Gun",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 3,
+      "damage": 3,
+      "range": "extreme",
+      "weight": null,
+      "cost": 9000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing",
+      "full-auto"
+    ],
+    "notes": "Also built into the MOX exowarrior suit.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "phased-plasma-pulse-cannon-turret",
+    "name": "Phased Plasma Pulse Cannon Turret",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 6,
+      "range": "extreme",
+      "weight": null,
+      "cost": 54000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing"
+    ],
+    "notes": "",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "multi-directional-flame-unit",
+    "name": "Multi-Directional Flame Unit",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 0,
+      "damage": 4,
+      "range": "medium",
+      "weight": null,
+      "cost": 4200
+    },
+    "tags": [
+      "vehicle-mounted",
+      "fire"
+    ],
+    "notes": "Fire Intensity 9.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "mk16-150mm-banshee-70-rocket-launcher",
+    "name": "Mk.16 150mm Banshee 70 Unguided Rocket Launcher",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 0,
+      "damage": 3,
+      "range": "long",
+      "weight": null,
+      "cost": 48000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "blast",
+      "full-auto"
+    ],
+    "notes": "Also triggers a Blast Power 12 explosion on top of direct damage.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "agm-220c-hellhound-ii-missile-launcher",
+    "name": "AGM-220C Hellhound II Tactical Missile Launcher",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 2,
+      "damage": 7,
+      "range": "extreme",
+      "weight": null,
+      "cost": 76000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing"
+    ],
+    "notes": "Ground vehicles and buildings only. Missiles $12,000 each.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "aim-90e-headlock-missile-launcher",
+    "name": "AIM-90E Headlock Air-to-Air Missile Launcher",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 3,
+      "damage": 5,
+      "range": "extreme",
+      "weight": null,
+      "cost": 64000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing"
+    ],
+    "notes": "Air vehicles only. Missiles $9,000 each.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "hellcat-light-missiles",
+    "name": "Hellcat Light Missiles",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 2,
+      "damage": 5,
+      "range": "long",
+      "weight": null,
+      "cost": 40000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing"
+    ],
+    "notes": "",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "50mm-double-barreled-cannon",
+    "name": "50mm Double-Barreled Cannon",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 3,
+      "damage": 4,
+      "range": "long",
+      "weight": null,
+      "cost": 30000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing",
+      "full-auto"
+    ],
+    "notes": "",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "20kw-phased-plasma-point-defense-gun",
+    "name": "20 kW Phased Plasma Point Defense Gun",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 2,
+      "damage": 5,
+      "range": "extreme",
+      "weight": null,
+      "cost": 55000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing"
+    ],
+    "notes": "",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "xr-500-particle-cannon",
+    "name": "XR-500 Long Range Particle Cannon",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 0,
+      "damage": 6,
+      "range": "extreme",
+      "weight": null,
+      "cost": 120000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing"
+    ],
+    "notes": "",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "3mp-dual-emp-blaster",
+    "name": "3MP Dual EMP Blaster",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 2,
+      "range": "long",
+      "weight": null,
+      "cost": 12000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "ignores-armor"
+    ],
+    "notes": "Armor has no effect; causes no component damage.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "85mm-rifled-cannon",
+    "name": "85mm Rifled Cannon",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 6,
+      "range": "extreme",
+      "weight": null,
+      "cost": 100000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing"
+    ],
+    "notes": "",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "115mm-rifled-cannon",
+    "name": "115mm Rifled Cannon",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 2,
+      "damage": 8,
+      "range": "extreme",
+      "weight": null,
+      "cost": 160000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "armor-piercing"
+    ],
+    "notes": "",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "sightline-beam-turrets",
+    "name": "Sightline Beam Turrets",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": "extreme",
+      "weight": null,
+      "cost": 5000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "targeting"
+    ],
+    "notes": "The pilot rolls OBSERVATION to help another vehicle's shot: +1 per success.",
+    "effects": [],
+    "art": null
+  },
+  {
+    "id": "small-laser-defense-turret",
+    "name": "Small Laser Defense Turret",
+    "source": "ACM",
+    "page": 96,
+    "category": "heavy",
+    "stats": {
+      "bonus": 0,
+      "damage": null,
+      "range": null,
+      "weight": null,
+      "cost": 10000
+    },
+    "tags": [
+      "vehicle-mounted",
+      "point-defense"
+    ],
+    "notes": "Once per Round, as a reaction, shoots at an incoming missile or rocket; a success destroys it.",
+    "effects": [],
+    "art": null
+  }
+]

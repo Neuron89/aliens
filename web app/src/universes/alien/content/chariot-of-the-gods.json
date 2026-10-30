@@ -1,0 +1,781 @@
+{
+  "packVersion": 1,
+  "id": "chariot-of-the-gods",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Chariot of the Gods",
+    "tagline": "The job was simple. The money was good. Then the signal changed everything.",
+    "synopsis": "The starfreighter USCSS Montero is diverted to investigate a distress signal from the USCSS Cronus — a science vessel missing for 75 years. Corporate treachery, alien organisms, and a secret android threaten every soul aboard.",
+    "type": "Cinematic",
+    "players": "3–5",
+    "playtime": "4–6 hours",
+    "difficulty": "Standard Cinematic",
+    "tone": [
+      "dread",
+      "paranoia",
+      "corporate betrayal"
+    ],
+    "contentWarnings": [
+      "body horror",
+      "character death",
+      "player-vs-player conflict"
+    ],
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "MU/TH/UR 6000 MAINFRAME",
+    "to": "CREW, USCSS MONTERO",
+    "classification": "PRIORITY ONE — COMPANY DIRECTIVE",
+    "text": "ATTENTION ALL CREW. AUTOMATED DISTRESS BEACON DETECTED.\n\nSignal origin: Sector 87-C, Outer Rim Territories. Beacon identification confirms source vessel as the USCSS CRONUS — a Weyland-Yutani science vessel reported lost seventy-three years ago during a deep-space biological survey mission. All hands were presumed dead. No wreckage was ever recovered.\n\nPer Interstellar Commerce Commission regulation ICC-2249/17, all commercial vessels within response range are legally required to investigate distress signals of human origin. Failure to comply will result in total forfeiture of shares, compensation, and may result in criminal prosecution.\n\nThe USCSS MONTERO has been diverted from its current heading. Course correction has been initiated. Estimated time to intercept: fourteen hours.\n\nAll crew members are to report to the bridge for emergency briefing. Personal effects should be secured. This is not a drill.\n\nAdditional data on the USCSS CRONUS has been classified by Weyland-Yutani Special Projects Division. Access restricted to Company personnel with Clearance Level 3 or above.\n\nMU/TH/UR out."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "HOPE",
+      "summary": "PANDORA'S BOX — PCs wake on the Montero, discover the Cronus, board it, find surviving crew in cryo, and witness the first alien emergence.",
+      "readAloud": [
+        "You've been in cryo for weeks — the deep, dreamless cold of hypersleep. The thaw cycle pulls you back to consciousness with the taste of copper in your mouth and ice crystals on your eyelashes. The lights in the cryo bay are dim, cycling through their wake-up sequence in slow amber pulses.",
+        "The Montero is a working ship. Not glamorous. Not comfortable. The corridors smell like recycled air and engine grease. You know every scratch on the bulkheads, every rattle in the ventilation. This is a ship that earns its keep hauling cargo across the Frontier — and you earn yours aboard it.",
+        "But something is different this time. MU/TH/UR has woken you early. The navigation display shows you're nowhere near Anchorpoint Station. Through the bridge viewports, you can see it — a dark shape against the stars, tumbling slowly in the void. A ship. Old design. No running lights.",
+        "The USCSS Cronus. Missing for seventy-three years. And someone — or something — aboard it is still broadcasting a distress signal.",
+        "Company regs are clear. You have to investigate. The Montero docks with a magnetic clang that resonates through the hull. The airlock pressurizes with a hiss. Beyond the inner door, the Cronus waits — dark, cold, and silent.",
+        "The motion tracker reads nothing. But the air coming through the seals smells wrong — organic, humid, alive. Like a greenhouse left to rot."
+      ],
+      "gmNotes": "This act is about building tension and establishing relationships between the PCs. Let them explore the Montero first, interact with each other, and feel the normalcy before it's shattered. The Cronus should feel WRONG from the moment they board — humid air, strange organic residue on the walls, systems half-alive. Drop hints but don't reveal the horror yet. Let the motion tracker stay quiet... for now.",
+      "agendaNotes": "Personal agendas are subtle. Wilson has Special Order 966. Lucas is observing.",
+      "scenes": [
+        {
+          "name": "Ping",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "MU/TH/UR 6500 reports an approaching ship on sensors. COMTECH roll reveals it's a sensor malfunction — but sets an uneasy tone.",
+          "checks": [
+            "COMTECH — diagnose sensor malfunction"
+          ],
+          "gmTip": "Use this to create early unease. The \"approaching ship\" is actually foreshadowing the Sotillo."
+        },
+        {
+          "name": "Nobody's Home",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Sutter's World doesn't respond to hails. COMTECH roll reveals the Montero is in deep space — nowhere near their destination.",
+          "checks": [
+            "COMTECH — confirm position via star charts"
+          ],
+          "gmTip": "This is the first \"something is wrong\" moment. Let it sink in."
+        },
+        {
+          "name": "New Orders",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "MU/TH/UR informs Captain Miller of a distress signal. Company regulations mandate investigation or crew forfeits all shares.",
+          "gmTip": "Frame this as \"you have no choice.\" The Company owns you."
+        },
+        {
+          "name": "Brace for Impact",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "The derelict ship is on a collision course. The pilot must take emergency evasive action.",
+          "checks": [
+            "PILOTING at −2 to avoid collision"
+          ],
+          "gmTip": "Failure cripples FTL drive and causes explosive decompression — 18 hours (3 Shifts) of repairs needed."
+        },
+        {
+          "name": "Ghost Ship",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The derelict is identified as the USCSS Cronus — a Weyland science vessel launched in 2110, missing 75 years. MU/TH/UR mandates salvage.",
+          "checks": [
+            "COMTECH — access Cronus records"
+          ],
+          "gmTip": "Give priorities: (1) Recover scientific data/samples, (2) Escort Cronus to W-Y facility, (3) Save crew. Players will note crew is last."
+        },
+        {
+          "name": "Boarding Party",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "PCs board the Cronus. The ship is dark, cold, and the air smells wrong — organic, humid, alive. Like a greenhouse left to rot.",
+          "checks": [
+            "PILOTING — match speed",
+            "MOBILITY — spacewalk",
+            "HEAVY MACHINERY — extend umbilical or cut open airlock"
+          ],
+          "gmTip": "Describe the sensory experience: ice on bulkheads, condensation, strange organic smell. Motion tracker reads nothing... yet."
+        },
+        {
+          "name": "The Headless Man",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "A headless body in a spacesuit floats in the corridor. The forearms appear elongated. A shotgun and one reload float nearby.",
+          "checks": [
+            "OBSERVATION — notice elongated forearms"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs present"
+          ],
+          "gmTip": "This is a Stage II Abomination who killed himself. The extended forearms are a clue about the 26 Draconis Strain."
+        },
+        {
+          "name": "I've Got Movement",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Motion trackers light up with contacts. Source could be damaged android Ava or a hibernating Neomorph.",
+          "stressTriggers": [
+            "STRESS +1 — all PCs present"
+          ],
+          "gmTip": "Don't resolve what the contacts are yet. Let paranoia build."
+        },
+        {
+          "name": "Egg Sacs Afoot",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Neomorphic Egg Sacs (release airborne Motes if disturbed without suits)",
+          "narration": "Neomorphic Egg Sacs found in showers, air scrubbers, or Science Lab 1. Safe while in compression suits — deadly if suits are off.",
+          "checks": [
+            "ANALYZE — identify the egg sacs"
+          ],
+          "gmTip": "If PCs have removed suits by now, this becomes very dangerous. Motes cause infection."
+        },
+        {
+          "name": "Mother Awakens",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "MU/TH/UR 2000 comes online. Reactor powers up, lights flicker to life, life support engages. The Cronus is waking up.",
+          "gmTip": "Temperature rises, air scrubbers activate but need filter repairs. The ship feels more alive — and more dangerous."
+        },
+        {
+          "name": "Sleep of Ages",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Five surviving Cronus crew wake from 75 years of hypersleep: Johns, Reid, Cooper, Flynn, and Clayton. All suffer amnesia and disorientation.",
+          "checks": [
+            "MEDICAL AID — treat each crew member"
+          ],
+          "gmTip": "Play each NPC distinctly. Cooper complains of worsening headaches. Clayton immediately starts asking questions about the Company."
+        },
+        {
+          "name": "Mother of All Migraines",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Bloodburster emerges → attacks nearest PC → flees into air ducts → returns as adult Neomorph within a few Turns",
+          "narration": "Dr. Cooper's headaches reach a crescendo. His skull splits open as a Bloodburster tears its way out of his brain. Graphic, horrific, and impossible to look away from.",
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all PCs present",
+            "All witnesses: STRESS +1"
+          ],
+          "gmTip": "This is the scenario's signature horror moment. Read the boxed text dramatically. The Bloodburster is small and fast — it should escape into the ducts to return later as a full threat."
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "BETRAYAL",
+      "summary": "THE LONG NIGHT — The Montero is destroyed. PCs must repair the Cronus while Cronus crew begin transforming into Abominations. Corporate agendas surface.",
+      "readAloud": [
+        "The deeper you go into the Cronus, the worse it gets. The corridors are slick with condensation — or something worse. Organic matter clings to the walls in patterns that almost look deliberate, like veins spreading through the ship's architecture. The emergency lighting casts everything in a sickly amber glow.",
+        "You find the crew logs. Fragmented. Corrupted. But enough survives to paint a picture of escalating terror. The Cronus found something out here — something the company wanted very badly. They brought specimens aboard. They ran experiments. And then the specimens got out.",
+        "The crew lasted eleven days.",
+        "Systems across the Cronus are failing. Life support is erratic — temperature fluctuations, atmospheric contamination warnings. The reactor is unstable. And something is moving in the ventilation ducts. You can hear it now — a wet, scraping sound that travels through the walls. The motion tracker pings once. Twice. Then a cascade of contacts, moving fast, converging on your position.",
+        "You are not alone on this ship. You never were.",
+        "And someone in your crew already knew that."
+      ],
+      "gmNotes": "This is where paranoia kicks in. Reveal that the Company Agent has secret orders. Let PCs discover partial truths — experiments, specimens, coverups. Run the first xenomorph encounter here. It should be terrifying and chaotic. NPCs should die. Systems should fail. Make the players feel trapped. Personal agendas start conflicting now.",
+      "agendaNotes": "Agendas begin conflicting. Wilson pushes to preserve specimens. Clayton schemes.",
+      "scenes": [
+        {
+          "name": "Partial Truths",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Johns explains the Cronus mission to LV-1113 — archaeological expedition. Clayton says they collected \"artifacts.\" Flynn suggests inoculating any exposed PCs.",
+          "gmTip": "NPCs tell half-truths. Clayton downplays danger. Flynn lies about cure safety. Sow seeds of distrust."
+        },
+        {
+          "name": "T-Minus Ten Minutes",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "MU/TH/UR 6500 triggers the Montero's self-destruct under Special Order 966. Ten-minute countdown. Cannot be stopped. The crew's ship is about to be obliterated.",
+          "checks": [
+            "PILOTING at −2 — set Montero course away from Cronus"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs"
+          ],
+          "gmTip": "This is a ticking clock. A PC must stay aboard the Montero to pilot it away or sacrifice themselves. Play the tension hard."
+        },
+        {
+          "name": "Change of Plans",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Stage IV Abomination on outer hull during comm repair. Stage IV Abomination in reactor control room during engine repair.",
+          "narration": "The Cronus needs repairs before it can go anywhere. Three critical systems: Comm Array (spacewalk + COMTECH), Engines (spacewalk + HEAVY MACHINERY), Air Scrubbers.",
+          "checks": [
+            "COMTECH — comm array repair (4 Turns, spacewalk)",
+            "HEAVY MACHINERY — engine repair (3 Turns, spacewalk)",
+            "HEAVY MACHINERY — air scrubber filters (1 Shift)"
+          ],
+          "gmTip": "Each repair is an opportunity for encounters. Don't hit them with everything at once — spread the danger."
+        },
+        {
+          "name": "Aggressive Tendencies",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Cronus NPCs transform into Stage II Abominations one at a time. 8 Base Dice, Damage 1.",
+          "narration": "Cronus crew begin transforming from the 26 Draconis Strain. They attack without warning — skin splitting, bones reshaping, violent rage.",
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — attacked PCs",
+            "STRESS +1 — witnesses"
+          ],
+          "gmTip": "Turn NPCs one at a time for maximum dramatic impact. Don't transform Clayton yet — she's needed for Act III."
+        },
+        {
+          "name": "Encountering Ava",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "PCs find the damaged android Ava wandering the ship. Head wound is repairable. Once fixed, she provides crucial information.",
+          "checks": [
+            "COMTECH — repair Ava's head wound"
+          ],
+          "gmTip": "Ava is an ally. Xenomorphs ignore her because she smells \"off.\" She knows the truth about the inoculations."
+        },
+        {
+          "name": "Infected",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Infected PCs eventually attack. Give player the \"Infected\" replacement agenda.",
+          "narration": "PCs who took the inoculation begin to change. Itching skin, headaches, rage. Sickness Roll vs Virulence 6. Failure = transformation begins.",
+          "checks": [
+            "Sickness Roll vs Virulence 6"
+          ],
+          "stressTriggers": [
+            "STRESS +1 per infected PC"
+          ],
+          "gmTip": "This is devastating for the group. The infected PC becomes an NPC after the initial attack. Offer the player a replacement character (Cronus NPC or Sotillo crew)."
+        },
+        {
+          "name": "The Truth",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Ava reveals the full truth: the inoculation IS the infection. Agent A0-3959X.91-15 is a biological weapon. The \"artifacts\" are deadly accelerant urns.",
+          "gmTip": "This reframes everything. The \"cure\" was the weapon. Let the betrayal sink in."
+        }
+      ]
+    },
+    {
+      "title": "ACT III",
+      "subtitle": "NEMESIS",
+      "summary": "DIVIDED WE FALL — Agendas collide. Corporate agents scheme, Lucas reveals himself, the Sotillo may arrive, and the Cronus becomes a deathtrap. Escape or die.",
+      "readAloud": [
+        "The Cronus is dying. Reactor containment alarms shriek through corridors now slick with blood and that impossible organic growth. Emergency bulkheads are slamming shut one by one, cutting off escape routes you mapped hours ago. The ship is a maze of locked doors and hunting shadows.",
+        "Whatever the Cronus's crew brought aboard has had seventy-three years to grow. To spread. To nest. The lower decks are completely overrun — the walls themselves seem to breathe, ribbed with that dark, resinous architecture. Biomechanical. Alien. Wrong in a way that your brain refuses to fully process.",
+        "The Montero is still docked. Your ship. Your way out. But the docking corridor is compromised — you'll have to fight through to reach it, or find another way. And the creatures are between you and the airlock.",
+        "The reactor countdown is ticking. When it goes, both ships go with it. You have minutes, not hours.",
+        "Whatever choices you've made, whatever alliances have held or broken — it comes down to this. Run. Fight. Survive. Get to the Montero. Blow the docking clamps. And pray that nothing followed you aboard.",
+        "In space, no one can hear you scream. But aboard the Cronus, you can hear everything else."
+      ],
+      "gmNotes": "Final act — pure survival horror. The reactor is going critical. Multiple xenomorphs are active. Betrayals come to a head. This should be a desperate scramble for the Montero. Kill PCs if they make bad choices — this is Cinematic mode. The final reveal is that the threat may have come aboard the Montero. End on a cliffhanger if possible. Let survivors wonder if they truly escaped.",
+      "agendaNotes": "Full betrayal. Every character has a reason to act against the group. PvP likely.",
+      "scenes": [
+        {
+          "name": "Going Home",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Engines online. But MU/TH/UR 2000 has locked course for Earth under Special Order 966. Cannot be overridden.",
+          "checks": [
+            "COMTECH — discover Special Order 966"
+          ],
+          "gmTip": "The ship is headed to Earth with a cargo of alien bioweapons. That's bad for everyone."
+        },
+        {
+          "name": "Mutiny!",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Clayton makes her move — bribery, persuasion, threats. She wants the specimens, the cash from the safe, and Dr. Flynn as her ticket to a promotion.",
+          "checks": [
+            "MANIPULATION — Clayton's bribery attempts",
+            "COMMAND — rally crew against mutiny"
+          ],
+          "gmTip": "Clayton is ruthless but calculating. She'll try diplomacy first. Violence is her last resort. She has safe codes and EEV escape pod codes."
+        },
+        {
+          "name": "Contamination Protocol",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Lucas: STR+3, AGI+3 when exposed. Will trigger reactor overload and freeze EEV locks if killed.",
+          "narration": "Lucas reveals himself — he's a Bionational android. His mission: stop W-Y from getting the 26 Draconis Strain by any means, including destroying the Cronus.",
+          "stressTriggers": [
+            "STRESS +1 — revelation of the secret android"
+          ],
+          "gmTip": "Lucas is the wildcard. If killed, he uploads to the mainframe and triggers self-destruct as a dead man's switch. The player controlling Lucas should get a replacement character."
+        },
+        {
+          "name": "Prepare to Be Boarded",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Sotillo crew: Bolaji (Captain), Pin (Mercenary), Bein (Pilot), Horton (12-year-old mechanic)",
+          "narration": "The pirate ship Sotillo docks. Armed marauders board without compression suits. They want the cargo — and they'll kill for it.",
+          "gmTip": "Only introduce this if you need another twist, want to extend play, or need replacement PCs for dead/turned players."
+        },
+        {
+          "name": "Run As Fast As You Can",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "The Cronus is going to explode. Escape via Emergency Evacuation Vehicle (auto-survive) or the Sotillo (PILOTING at −2). The clock is ticking.",
+          "checks": [
+            "PILOTING at −2 — escape on Sotillo",
+            "HEAVY MACHINERY — release EEV locks (1 Turn)"
+          ],
+          "gmTip": "This is the climax. Every second counts. If they escape on the Sotillo and fail the PILOTING check, FTL is destroyed and they're adrift."
+        },
+        {
+          "name": "It Isn't Over",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Hull-clinging Abominations. Must be dealt with or the Sotillo ends up adrift.",
+          "narration": "If they escaped on the Sotillo — fists slam the viewport from outside. Abominations clinging to the hull. A hairline crack appears in the glass.",
+          "stressTriggers": [
+            "STRESS +1 — all PCs"
+          ],
+          "gmTip": "One last scare. Classic Alien franchise \"it's not over\" moment."
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Johns",
+      "role": "Cronus Executive Officer",
+      "agenda": "Find a leader, save lives",
+      "behavior": "Submissive, follows strongest leader"
+    },
+    {
+      "name": "Sgt. Reid",
+      "role": "Cronus Security Chief",
+      "agenda": "Terminate all threats",
+      "behavior": "PTSD, underestimated, prosthetic arm. Combat-ready."
+    },
+    {
+      "name": "Dr. Flynn",
+      "role": "Cronus Chief Scientist",
+      "agenda": "Get out alive, will lie",
+      "behavior": "Knows cure is dangerous. Won't discuss LV-1113.",
+      "secret": "The \"inoculation\" she offers is the infection itself."
+    },
+    {
+      "name": "Dr. Cooper",
+      "role": "Cronus Science Officer",
+      "agenda": "Protect humanity",
+      "behavior": "Dies via Bloodburster in Act I (mandatory)."
+    },
+    {
+      "name": "Clayton",
+      "role": "Weyland-Yutani Representative",
+      "agenda": "Bring Flynn + samples to W-Y",
+      "behavior": "Ruthless. Has safe codes + EEV codes. Will kill."
+    },
+    {
+      "name": "Ava 6",
+      "role": "Damaged Cronus Android",
+      "agenda": "Help humans survive",
+      "behavior": "Damaged, repairable. Xenos ignore her."
+    },
+    {
+      "name": "Lucas",
+      "role": "Bionational Agent (secret android)",
+      "agenda": "Stop W-Y from getting specimens",
+      "behavior": "Mimics humans. Bionational agent. Will kill to prevent specimen recovery.",
+      "secret": "Lucas is a Bionational android sent to stop Weyland-Yutani from obtaining the 26 Draconis Strain. If killed he uploads to the mainframe and triggers self-destruct."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "USCSS Montero — Bridge",
+      "description": "The nerve center of your tow vessel. Navigation, comms, and MU/TH/UR access terminal."
+    },
+    {
+      "name": "USCSS Montero — Cargo Bay",
+      "description": "Cavernous hold where the tow coupling connects. Cold and echoing."
+    },
+    {
+      "name": "USCSS Cronus — Airlock",
+      "description": "The connection point. Atmosphere is breathable but humid and organic-smelling."
+    },
+    {
+      "name": "USCSS Cronus — Bridge",
+      "description": "Emergency power only. Crew logs stored in corrupted databanks. Signs of a last stand."
+    },
+    {
+      "name": "USCSS Cronus — Lab Module",
+      "description": "Where the experiments happened. Containment pods — most shattered from the inside."
+    },
+    {
+      "name": "USCSS Cronus — Lower Decks",
+      "description": "Completely overgrown with alien resin. The nest. Do not enter without extreme caution."
+    },
+    {
+      "name": "USCSS Cronus — Reactor",
+      "description": "Unstable. Containment failing. The countdown starts here."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "PRIORITY ONE — COMPANY DIRECTIVE",
+      "from": "MU/TH/UR 6000 MAINFRAME",
+      "to": "CREW, USCSS MONTERO",
+      "priority": "PRIORITY",
+      "text": "ATTENTION ALL CREW. AUTOMATED DISTRESS BEACON DETECTED.\n\nSignal origin: Sector 87-C, Outer Rim Territories. Beacon identification confirms source vessel as the USCSS CRONUS — a Weyland-Yutani science vessel reported lost seventy-three years ago during a deep-space biological survey mission. All hands were presumed dead. No wreckage was ever recovered.\n\nPer Interstellar Commerce Commission regulation ICC-2249/17, all commercial vessels within response range are legally required to investigate distress signals of human origin. Failure to comply will result in total forfeiture of shares, compensation, and may result in criminal prosecution.\n\nThe USCSS MONTERO has been diverted from its current heading. Course correction has been initiated. Estimated time to intercept: fourteen hours.\n\nAll crew members are to report to the bridge for emergency briefing. Personal effects should be secured. This is not a drill.\n\nAdditional data on the USCSS CRONUS has been classified by Weyland-Yutani Special Projects Division. Access restricted to Company personnel with Clearance Level 3 or above.\n\nMU/TH/UR out.",
+      "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "special-order-966",
+      "title": "SPECIAL ORDER 966",
+      "from": "MU/TH/UR 2000 — USCSS CRONUS",
+      "to": "SCIENCE OFFICER",
+      "priority": "EYES ONLY",
+      "text": "SPECIAL ORDER 966. PRIORITY ONE. ENSURE RETURN OF ORGANISM AND ALL ASSOCIATED SAMPLES FOR ANALYSIS. COURSE LOCKED: EARTH. ALL OTHER CONSIDERATIONS SECONDARY. CREW EXPENDABLE.",
+      "when": "Act III — when a PC accesses the Cronus mainframe (\"Going Home\")"
+    },
+    {
+      "id": "montero-self-destruct",
+      "title": "SELF-DESTRUCT SEQUENCE INITIATED",
+      "from": "MU/TH/UR 6500 — USCSS MONTERO",
+      "to": "ALL CREW",
+      "priority": "EMERGENCY",
+      "text": "WARNING. SELF-DESTRUCT SEQUENCE HAS BEEN INITIATED UNDER COMPANY AUTHORITY. THE OPTION TO OVERRIDE AUTOMATIC DETONATION HAS EXPIRED. THIS VESSEL WILL DETONATE IN T-MINUS TEN MINUTES.",
+      "when": "Act II — \"T-Minus Ten Minutes\""
+    }
+  ],
+  "maps": [
+    {
+      "id": "uscss-montero",
+      "title": "USCSS MONTERO",
+      "subtitle": "Lockmart CM-88B Bison-class Tow Vehicle",
+      "description": "Commercial towing vessel. Crew complement: 5. Currently hauling refinery module to Anchorpoint Station.",
+      "kind": "ascii",
+      "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║                    USCSS MONTERO — DECK PLAN                 ║\n    ║                 Lockmart CM-88B Bison M-Class                ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║   ┌─────────┐                                                 ║\n    ║   │ BRIDGE  │    ┌──────────────────────────────┐             ║\n    ║   │ [NAV]   ├────┤     MAIN CORRIDOR            │             ║\n    ║   │ [COMM]  │    │                              │             ║\n    ║   │ [MU/TH] │    │  ┌──────┐  ┌──────┐  ┌────┐│             ║\n    ║   └─────────┘    │  │GALLEY│  │MED   │  │ARM ││             ║\n    ║                  │  │      │  │BAY   │  │ORY ││             ║\n    ║   ┌─────────┐    │  └──────┘  └──────┘  └────┘│             ║\n    ║   │ CRYO    │    │                              │             ║\n    ║   │ CHAMBER │    │  ┌──────┐  ┌──────┐  ┌────┐│             ║\n    ║   │ 5 PODS  ├────┤  │CREW  │  │CREW  │  │STO ││             ║\n    ║   └─────────┘    │  │QTR 1 │  │QTR 2 │  │RGE ││             ║\n    ║                  │  └──────┘  └──────┘  └────┘│             ║\n    ║                  └──────────┬───────────────────┘             ║\n    ║                             │                                 ║\n    ║                  ┌──────────┴───────────────────┐             ║\n    ║                  │       ENGINE ROOM             │             ║\n    ║                  │    [REACTOR] [DRIVES]         │             ║\n    ║                  │    [MAINTENANCE ACCESS]       │             ║\n    ║                  └──────────┬───────────────────┘             ║\n    ║                             │                                 ║\n    ║                  ┌──────────┴───────────────────┐             ║\n    ║                  │       CARGO BAY              │             ║\n    ║                  │  [TOW COUPLING — EXTERNAL]   │             ║\n    ║                  │  [AIRLOCK — DOCKING PORT]    │             ║\n    ║                  └─────────────────────────────┘             ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
+      "engine": "uscss-montero",
+      "rooms": [
+        {
+          "name": "Bridge",
+          "note": "Navigation, communications, and MU/TH/UR mainframe access terminal. Captain's chair with command console. Viewports face forward."
+        },
+        {
+          "name": "Cryo Chamber",
+          "note": "Five hypersleep pods. Emergency wake procedure takes 20 minutes. Adjacent to medical for post-cryo checkups."
+        },
+        {
+          "name": "Main Corridor",
+          "note": "Central spine of the ship connecting all modules. Emergency lighting panels. Damage control stations every 10 meters."
+        },
+        {
+          "name": "Galley",
+          "note": "Mess hall and kitchen. Seats 8. Coffee machine that barely works. Bulletin board with crew notices and photos."
+        },
+        {
+          "name": "Med Bay",
+          "note": "Basic medical facility. Autodoc unit, surgical table, pharmaceutical storage. Can handle most traumas short of major surgery."
+        },
+        {
+          "name": "Armory",
+          "note": "Locked weapons locker. Captain's authorization required. Contains sidearms, flare guns, and emergency equipment."
+        },
+        {
+          "name": "Crew Quarters",
+          "note": "Two shared bunk rooms. Each houses 2-3 crew. Personal lockers, fold-out desks, privacy curtains."
+        },
+        {
+          "name": "Storage",
+          "note": "General supplies, spare parts, EVA suits, emergency rations. Organized chaos."
+        },
+        {
+          "name": "Engine Room",
+          "note": "Reactor core and drive systems. Noisy, hot, cramped. Rye's domain. Maintenance crawlways access the hull."
+        },
+        {
+          "name": "Cargo Bay",
+          "note": "Massive hold for tow coupling operations. Docking port for external connections. The airlock to the Cronus connects here."
+        }
+      ]
+    },
+    {
+      "id": "uscss-cronus",
+      "title": "USCSS CRONUS",
+      "subtitle": "Weyland-Yutani Science Vessel — Derelict",
+      "description": "Science vessel missing for 73 years. Interior compromised by alien biological growth. Systems running on emergency power.",
+      "kind": "ascii",
+      "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║               USCSS CRONUS — DECK PLAN (PARTIAL)             ║\n    ║              W-Y Science Vessel — Status: DERELICT            ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║   ┌──────────┐    ┌────────────────┐                         ║\n    ║   │ BRIDGE   │    │ SCIENCE LAB    │   ████ = BLOCKED        ║\n    ║   │ [DAMAGED]├────┤ [CONTAINMENT]  │   ░░░░ = ORGANIC        ║\n    ║   │ ░░░░░░░░ │    │ [SPECIMENS]    │         GROWTH          ║\n    ║   └──────────┘    │ ░░░░░░░░░░░░░░ │                         ║\n    ║                   └───────┬────────┘                         ║\n    ║   ┌──────────┐            │                                   ║\n    ║   │ CREW     │    ┌───────┴────────────────────┐             ║\n    ║   │ QUARTERS │    │    MAIN CORRIDOR           │             ║\n    ║   │ [SEALED] ├────┤    ░░░░░░░░░░░░░░░░        │             ║\n    ║   │ ████████ │    │                            │             ║\n    ║   └──────────┘    │  ┌────────┐  ┌───────────┐│             ║\n    ║                   │  │MEDICAL │  │CRYO BAY   ││             ║\n    ║   ┌──────────┐    │  │[WRECKED│  │[PODS OPEN]││             ║\n    ║   │ COMMS    │    │  │ ░░░░░░]│  │░░░░░░░░░░ ││             ║\n    ║   │ ARRAY    ├────┤  └────────┘  └───────────┘│             ║\n    ║   │ [ACTIVE] │    └──────────┬─────────────────┘             ║\n    ║   └──────────┘               │                               ║\n    ║                   ┌──────────┴─────────────────┐             ║\n    ║                   │    LOWER DECK ACCESS        │             ║\n    ║                   │    ████████████████████      │             ║\n    ║                   │    [SEALED BLAST DOOR]      │             ║\n    ║                   └──────────┬─────────────────┘             ║\n    ║                              │                               ║\n    ║           ┌──────────────────┴──────────────────┐            ║\n    ║           │          LOWER DECKS                 │            ║\n    ║           │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   │            ║\n    ║           │  ░░░░ THE NEST — EXTREME HAZARD ░░░░ │            ║\n    ║           │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   │            ║\n    ║           │         [REACTOR ACCESS]             │            ║\n    ║           └─────────────────────────────────────┘            ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
+      "rooms": [
+        {
+          "name": "Bridge",
+          "note": "Partially overgrown with organic resin. Emergency power only. Navigation logs may be recoverable from the damaged console. Signs of a violent last stand — bullet holes, acid scoring."
+        },
+        {
+          "name": "Science Lab / Containment",
+          "note": "Primary research area. Containment pods line the walls — most shattered from the inside. Lab equipment scattered. Research data terminals may still function. Heavy organic growth."
+        },
+        {
+          "name": "Crew Quarters",
+          "note": "SEALED. Someone welded the doors shut from the outside. Banging can sometimes be heard from within. Opening this is inadvisable."
+        },
+        {
+          "name": "Main Corridor",
+          "note": "The ship's central artery. Organic growth covers 60% of surfaces — dark, ribbed resin that glistens in the emergency lighting. Temperature and humidity are anomalously high."
+        },
+        {
+          "name": "Medical Bay",
+          "note": "Wrecked. Equipment overturned. Old bloodstains. Something happened here — fast and violent. Medical logs on a cracked terminal hint at crew autopsies that revealed impossible results."
+        },
+        {
+          "name": "Cryo Bay",
+          "note": "Hypersleep pods open and empty. Bio-readout screens still cycling. Some pods show signs of forced opening from inside. Residue inside pods is organic and unidentifiable."
+        },
+        {
+          "name": "Comms Array",
+          "note": "Still broadcasting the distress signal on loop. The only fully functional system on the ship. Someone kept it running. The question is: who? And why?"
+        },
+        {
+          "name": "Lower Deck Access",
+          "note": "Sealed blast door, heavily reinforced. Warning signs in multiple languages. The crew tried very hard to keep something contained below."
+        },
+        {
+          "name": "Lower Decks — The Nest",
+          "note": "EXTREME HAZARD. The lower decks have been completely transformed into alien architecture — resin walls, cocooned remains, egg clusters. The reactor is somewhere in this nightmare. This is where the creatures live."
+        }
+      ]
+    },
+    {
+      "id": "cronus-deck-a",
+      "title": "USCSS CRONUS — DECK A",
+      "subtitle": "Deck plan image",
+      "description": "Deck A of the derelict USCSS Cronus.",
+      "kind": "image",
+      "src": "/Deck A.jpg"
+    },
+    {
+      "id": "cronus-deck-b",
+      "title": "USCSS CRONUS — DECK B",
+      "subtitle": "Deck plan image",
+      "description": "Deck B of the derelict USCSS Cronus.",
+      "kind": "image",
+      "src": "/Deck B.jpg"
+    },
+    {
+      "id": "cronus-deck-c",
+      "title": "USCSS CRONUS — DECK C",
+      "subtitle": "Deck plan image",
+      "description": "Deck C of the derelict USCSS Cronus.",
+      "kind": "image",
+      "src": "/Deck C.jpg"
+    },
+    {
+      "id": "cronus-deck-d",
+      "title": "USCSS CRONUS — DECK D",
+      "subtitle": "Deck plan image",
+      "description": "Deck D of the derelict USCSS Cronus.",
+      "kind": "image",
+      "src": "/Deck D.jpg"
+    }
+  ],
+  "characters": [
+    {
+      "id": "cpt-miller",
+      "name": "Captain Lucas Miller",
+      "career": "Officer",
+      "appearance": "Tall, weathered face, graying temples. Command presence that fills a room. Tired eyes that have seen too many crew rosters change.",
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 5,
+        "emp": 4
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 2,
+        "closeCombat": 1,
+        "mobility": 1,
+        "piloting": 1,
+        "rangedCombat": 2,
+        "observation": 3,
+        "comtech": 1,
+        "survival": 2,
+        "manipulation": 3,
+        "medicalAid": 0,
+        "command": 4
+      },
+      "talent": "Field Commander — When you Command others in combat, they get +2 modification instead of +1.",
+      "gear": [
+        "M4A3 Service Pistol",
+        "Company Captain's ID",
+        "Personal Terminal",
+        "Coffee thermos (Signature Item)",
+        "Ship's master keys"
+      ],
+      "signatureItem": "Dented coffee thermos — been with him through every voyage.",
+      "personalAgenda": "Get the crew home alive. You've lost people before, and it haunts you. Whatever is on that derelict, your people come first.",
+      "buddy": "Wilson",
+      "rival": "Cham"
+    },
+    {
+      "id": "cham",
+      "name": "Ava Cham",
+      "career": "Company Agent",
+      "appearance": "Sharply dressed even in a jumpsuit. Cold, calculating eyes. Always carrying a data tablet. Smiles that never reach her eyes.",
+      "attributes": {
+        "str": 2,
+        "agi": 3,
+        "wit": 5,
+        "emp": 4
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 1,
+        "closeCombat": 0,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 1,
+        "observation": 3,
+        "comtech": 3,
+        "survival": 1,
+        "manipulation": 5,
+        "medicalAid": 0,
+        "command": 2
+      },
+      "talent": "Corporate Secrets — You have access to classified Company files and can attempt Comtech rolls to access restricted data terminals.",
+      "gear": [
+        "Encrypted Data Tablet",
+        "Weyland-Yutani Corporate ID (Level 3 Clearance)",
+        "Hidden Micro-Recorder",
+        "Seegson P-DAT (Signature Item)",
+        "Concealed hold-out pistol"
+      ],
+      "signatureItem": "Seegson personal data tablet — contains encrypted files she checks obsessively.",
+      "personalAgenda": "Recover the Cronus specimens for the Company. Crew expendable. This is the find of the century, and your career depends on bringing back results.",
+      "buddy": "Davis",
+      "rival": "Miller"
+    },
+    {
+      "id": "davis",
+      "name": "Jacob Davis",
+      "career": "Pilot",
+      "appearance": "Young, cocky grin, flight jacket covered in patches. Quick reflexes, quicker mouth. Hides fear behind humor.",
+      "attributes": {
+        "str": 3,
+        "agi": 5,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 1,
+        "stamina": 1,
+        "closeCombat": 1,
+        "mobility": 3,
+        "piloting": 5,
+        "rangedCombat": 2,
+        "observation": 2,
+        "comtech": 2,
+        "survival": 1,
+        "manipulation": 1,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "Nerves of Steel — Reduce Stress by 2 (instead of 1) when you successfully use your Signature Item.",
+      "gear": [
+        "Flight Suit",
+        "Pilot's Headset",
+        "Maintenance Tools",
+        "Lucky dice (Signature Item)",
+        "Personal sidearm"
+      ],
+      "signatureItem": "A pair of loaded dice — won them in a card game on Gateway Station.",
+      "personalAgenda": "The Montero is YOUR ship in every way that matters. If it comes down to saving the ship or saving the crew, the ship wins. You can always find new crew.",
+      "buddy": "Rye",
+      "rival": "Wilson"
+    },
+    {
+      "id": "rye",
+      "name": "Erin Rye",
+      "career": "Roughneck",
+      "appearance": "Stocky, oil-stained hands, buzz cut. Pragmatic and blunt. The Montero runs because Rye keeps it running.",
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 4,
+        "emp": 2
+      },
+      "skills": {
+        "heavyMachinery": 4,
+        "stamina": 3,
+        "closeCombat": 3,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 1,
+        "observation": 2,
+        "comtech": 3,
+        "survival": 2,
+        "manipulation": 0,
+        "medicalAid": 1,
+        "command": 0
+      },
+      "talent": "Mechanic — When you repair or jury-rig machinery (Heavy Machinery), you get an automatic extra success.",
+      "gear": [
+        "Heavy-duty tool kit",
+        "Cutting torch",
+        "Maintenance jack (Signature Item)",
+        "Work boots with magnetic soles",
+        "Duct tape (lots)"
+      ],
+      "signatureItem": "Maintenance jack — custom-modified, doubles as a weapon in a pinch.",
+      "personalAgenda": "Something on the Cronus is worth a fortune on the black market. Salvage rights are finders-keepers out here. Get rich or die trying.",
+      "buddy": "Davis",
+      "rival": "Cham"
+    },
+    {
+      "id": "wilson",
+      "name": "Dr. Elena Wilson",
+      "career": "Medic",
+      "appearance": "Mid-40s, reading glasses, steady hands. Calm under pressure. Carries the weight of every patient she's lost.",
+      "attributes": {
+        "str": 2,
+        "agi": 3,
+        "wit": 4,
+        "emp": 5
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 1,
+        "closeCombat": 0,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 1,
+        "observation": 3,
+        "comtech": 2,
+        "survival": 2,
+        "manipulation": 2,
+        "medicalAid": 5,
+        "command": 1
+      },
+      "talent": "Surgeon — When you perform Medical Aid to save a Broken patient, the patient heals 2 Health instead of 1.",
+      "gear": [
+        "Medical kit (advanced)",
+        "Surgical tools",
+        "Pharmaceutical supply",
+        "Father's stethoscope (Signature Item)",
+        "Personal data pad with medical journals"
+      ],
+      "signatureItem": "Father's stethoscope — analog, ancient, irreplaceable. A reminder of why she became a doctor.",
+      "personalAgenda": "The Cronus crew may still be alive — in cryo, in hiding, somewhere. You took an oath. Find survivors. Save them. Even if the rest of the crew wants to cut and run.",
+      "buddy": "Miller",
+      "rival": "Davis"
+    }
+  ],
+  "tips": [
+    "Run events sequentially as written — don't skip ahead.",
+    "Let PCs explore the Cronus before springing events. Build atmosphere first.",
+    "Four players is ideal given the PvP potential in later acts.",
+    "Warn players upfront: this features brutal violence and character death even when played optimally.",
+    "Prevent early access to MU/TH/UR 2000 — it deflates tension.",
+    "Make sure motion trackers are visible and functional."
+  ]
+}

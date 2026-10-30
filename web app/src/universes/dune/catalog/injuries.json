@@ -1,0 +1,361 @@
+[
+  {
+    "id": "bruised-ribs",
+    "table": "consequence",
+    "roll": "1-2",
+    "name": "Bruised Ribs",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "wound",
+    "severity": "minor",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:move",
+        "text": "+1 Difficulty on the next MOVE test",
+        "value": 1
+      }
+    ],
+    "healTime": "Ends after a scene of rest.",
+    "healBy": "Ends after a scene of rest.",
+    "text": "Painful, not dangerous.",
+    "notes": ""
+  },
+  {
+    "id": "deep-cut",
+    "table": "consequence",
+    "roll": "3-4",
+    "name": "Deep Cut",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "wound",
+    "severity": "moderate",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain WOUNDED"
+      }
+    ],
+    "healTime": "Medical care; Field Surgery clears it immediately.",
+    "healBy": "Medical care; Field Surgery clears it immediately.",
+    "text": "A blade has opened you up.",
+    "notes": ""
+  },
+  {
+    "id": "shield-burn",
+    "table": "consequence",
+    "roll": "5",
+    "name": "Shield Burn",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "wound",
+    "severity": "moderate",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:battle",
+        "text": "Gain WOUNDED; +1 Difficulty to BATTLE while shielded",
+        "value": 1
+      }
+    ],
+    "healTime": "A week of care.",
+    "healBy": "A week of care.",
+    "text": "A shield field feedback or a lasgun graze has seared your skin.",
+    "notes": ""
+  },
+  {
+    "id": "slow-poison",
+    "table": "consequence",
+    "roll": "6-7",
+    "name": "Slow Poison",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "poison",
+    "severity": "moderate",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain POISONED"
+      }
+    ],
+    "healTime": "Antidote kit or a Suk doctor.",
+    "healBy": "Antidote kit or a Suk doctor.",
+    "text": "A poison you did not notice is working on you.",
+    "notes": "",
+    "timeLimit": "one day"
+  },
+  {
+    "id": "residual-poison",
+    "table": "consequence",
+    "roll": "8",
+    "name": "Residual Poison",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "poison",
+    "severity": "severe",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain POISONED and INDEBTED to whoever holds the antidote"
+      }
+    ],
+    "healTime": "The one specific antidote, administered regularly.",
+    "healBy": "The one specific antidote, administered regularly.",
+    "text": "A poison that only kills if its antidote is withheld. Someone now controls your life.",
+    "notes": "A classic court leash."
+  },
+  {
+    "id": "cracked-stillsuit",
+    "table": "consequence",
+    "roll": "9",
+    "name": "Cracked Stillsuit",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "dehydration",
+    "severity": "moderate",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain DEHYDRATED at the end of the next scene unless repaired"
+      }
+    ],
+    "healTime": "Stillsuit repair kit or a sietch workshop.",
+    "healBy": "Stillsuit repair kit or a sietch workshop.",
+    "text": "Your suit is leaking water with every step.",
+    "notes": ""
+  },
+  {
+    "id": "water-loss",
+    "table": "consequence",
+    "roll": "10-11",
+    "name": "Severe Water Loss",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "dehydration",
+    "severity": "severe",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain DEHYDRATED; another dehydration consequence takes you out"
+      }
+    ],
+    "healTime": "Two litres of water and a day sealed in shade.",
+    "healBy": "Two litres of water and a day sealed in shade.",
+    "text": "You are drying out faster than you can drink.",
+    "notes": "",
+    "timeLimit": "one day"
+  },
+  {
+    "id": "sunstroke",
+    "table": "consequence",
+    "roll": "12",
+    "name": "Sunstroke",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "exposure",
+    "severity": "moderate",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain EXPOSED and SHAKEN"
+      }
+    ],
+    "healTime": "Shade, water and a night of rest.",
+    "healBy": "Shade, water and a night of rest.",
+    "text": "Heat has cooked your judgment.",
+    "notes": ""
+  },
+  {
+    "id": "sand-blasted",
+    "table": "consequence",
+    "roll": "13",
+    "name": "Sand-Blasted",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "exposure",
+    "severity": "moderate",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain SAND-BLIND"
+      }
+    ],
+    "healTime": "Clean water and a day out of the glare.",
+    "healBy": "Clean water and a day out of the glare.",
+    "text": "A storm has scoured your eyes and skin.",
+    "notes": ""
+  },
+  {
+    "id": "lost-in-the-deep-desert",
+    "table": "consequence",
+    "roll": "14",
+    "name": "Lost in the Deep Desert",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "exposure",
+    "severity": "severe",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain EXPOSED; each day without rescue adds a dehydration consequence"
+      }
+    ],
+    "healTime": "Find landmarks (UNDERSTAND D3) or be found.",
+    "healBy": "Find landmarks (UNDERSTAND D3) or be found.",
+    "text": "You no longer know where you are, and the water is running out.",
+    "notes": ""
+  },
+  {
+    "id": "public-humiliation",
+    "table": "consequence",
+    "roll": "15",
+    "name": "Public Humiliation",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "disgrace",
+    "severity": "moderate",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain DISGRACED"
+      }
+    ],
+    "healTime": "Public restitution.",
+    "healBy": "Public restitution.",
+    "text": "Your failure was seen by the wrong people.",
+    "notes": ""
+  },
+  {
+    "id": "exposed-secret",
+    "table": "consequence",
+    "roll": "16",
+    "name": "Exposed Secret",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "disgrace",
+    "severity": "severe",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain SUSPECTED; the Narrator gains 2 Threat"
+      }
+    ],
+    "healTime": "Retrieve or discredit the evidence.",
+    "healBy": "Retrieve or discredit the evidence.",
+    "text": "Something you hid is now known by a rival.",
+    "notes": ""
+  },
+  {
+    "id": "broken-oath",
+    "table": "consequence",
+    "roll": "17",
+    "name": "Broken Oath",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "disgrace",
+    "severity": "severe",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Gain DISGRACED and lose your Drive statement until you atone"
+      }
+    ],
+    "healTime": "A significant act of atonement chosen with the Narrator.",
+    "healBy": "A significant act of atonement chosen with the Narrator.",
+    "text": "You were forced to break your word. Your House or tribe has noticed.",
+    "notes": ""
+  },
+  {
+    "id": "maimed",
+    "table": "consequence",
+    "roll": "18",
+    "name": "Maimed",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "wound",
+    "severity": "critical",
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Permanently +1 Difficulty on tests using the lost part",
+        "value": 1
+      }
+    ],
+    "healTime": "Only an expensive prosthetic or Bene Tleilax regrowth.",
+    "healBy": "Only an expensive prosthetic or Bene Tleilax regrowth.",
+    "text": "A lasting injury: a hand, an eye, a crippled knee.",
+    "notes": ""
+  },
+  {
+    "id": "mortal-wound",
+    "table": "consequence",
+    "roll": "19",
+    "name": "Mortal Wound",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "wound",
+    "severity": "critical",
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Taken out; you die at the end of the scene without surgery"
+      }
+    ],
+    "healTime": "Surgery: UNDERSTAND (D3) by someone with a medical kit.",
+    "healBy": "Surgery: UNDERSTAND (D3) by someone with a medical kit.",
+    "text": "You are dying.",
+    "notes": "",
+    "timeLimit": "end of scene"
+  },
+  {
+    "id": "fatal-poison",
+    "table": "consequence",
+    "roll": "20",
+    "name": "Fatal Poison",
+    "source": "custom",
+    "kind": "debuff",
+    "category": "poison",
+    "severity": "critical",
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Taken out; you die in minutes unless the exact antidote is given"
+      }
+    ],
+    "healTime": "The exact antidote, or a Bene Gesserit transmuting the poison within.",
+    "healBy": "The exact antidote, or a Bene Gesserit transmuting the poison within.",
+    "text": "A poison that kills within minutes.",
+    "notes": "",
+    "timeLimit": "minutes"
+  }
+]

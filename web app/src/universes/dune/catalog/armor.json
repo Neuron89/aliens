@@ -1,0 +1,222 @@
+[
+  {
+    "id": "shield-belt-personal",
+    "name": "Personal Shield Belt",
+    "source": "custom",
+    "category": "shield",
+    "rating": 3,
+    "quality": 2,
+    "weight": 0.5,
+    "cost": 2000,
+    "tags": [
+      "shield",
+      "stops-fast-objects",
+      "attracts-worms"
+    ],
+    "notes": "Standard noble protection: a field that stops anything moving fast. Slow blades pass through.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Immune to projectiles; soak 3 Stress from fast attacks"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "No protection from slow-strike blade attacks (attacker spends 1 Momentum)"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "On open sand it drives worms into a frenzy"
+      }
+    ],
+    "airSupply": null,
+    "art": "/art/dune/gear/shield-belt-personal.webp"
+  },
+  {
+    "id": "shield-belt-dueling",
+    "name": "Dueling Shield",
+    "source": "custom",
+    "category": "shield",
+    "rating": 2,
+    "quality": 3,
+    "weight": 0.5,
+    "cost": 3500,
+    "tags": [
+      "shield",
+      "duel",
+      "half-shield"
+    ],
+    "notes": "A finely tuned dueling field that lets the wearer feel the edges of incoming attacks.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:battle",
+        "text": "+1 free d20 to parry in a duel",
+        "value": 1
+      }
+    ],
+    "airSupply": null,
+    "art": "/art/dune/gear/shield-belt-dueling.webp"
+  },
+  {
+    "id": "shield-belt-military",
+    "name": "Military Shield Generator",
+    "source": "custom",
+    "category": "shield",
+    "rating": 4,
+    "quality": 3,
+    "weight": 1,
+    "cost": 5000,
+    "tags": [
+      "shield",
+      "heavy",
+      "attracts-worms"
+    ],
+    "notes": "A bulky field with extra power cells, worn by House troops in assaults.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Soak 4 Stress from fast attacks"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "+1 Difficulty to MOVE tests requiring stealth"
+      }
+    ],
+    "airSupply": null,
+    "art": "/art/dune/gear/shield-belt-military.webp"
+  },
+  {
+    "id": "stillsuit",
+    "name": "Stillsuit",
+    "source": "custom",
+    "category": "suit",
+    "rating": 0,
+    "quality": 3,
+    "weight": 1,
+    "cost": 1000,
+    "tags": [
+      "survival",
+      "water-recycling",
+      "fremen"
+    ],
+    "notes": "A close-fitting body seal that reclaims sweat, breath and waste as drinkable water.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Delay dehydration: lose only a thimble of water per day while sealed"
+      },
+      {
+        "kind": "buff",
+        "target": "skill:move",
+        "text": "Desert MOVE tests for endurance -1 Difficulty",
+        "value": -1
+      }
+    ],
+    "airSupply": null,
+    "art": "/art/dune/gear/stillsuit.webp"
+  },
+  {
+    "id": "dueling-leathers",
+    "name": "Dueling Leathers",
+    "source": "custom",
+    "category": "armor",
+    "rating": 1,
+    "quality": 1,
+    "weight": 1,
+    "cost": 200,
+    "tags": [
+      "light",
+      "duel"
+    ],
+    "notes": "Padded jerkin and bracers. Little real protection, but they keep a training accident from becoming a funeral.",
+    "effects": [],
+    "airSupply": null,
+    "art": "/art/dune/gear/dueling-leathers.webp"
+  },
+  {
+    "id": "sardaukar-armor",
+    "name": "Sardaukar Armor",
+    "source": "custom",
+    "category": "armor",
+    "rating": 3,
+    "quality": 4,
+    "weight": 2,
+    "cost": 0,
+    "tags": [
+      "military",
+      "imperial",
+      "intimidating"
+    ],
+    "notes": "Dark plates over ballistic cloth. Seen on a battlefield, it ends arguments.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Soak 3 Stress from any attack"
+      },
+      {
+        "kind": "buff",
+        "target": "skill:communicate",
+        "text": "+1 free d20 on COMMUNICATE tests to intimidate",
+        "value": 1
+      }
+    ],
+    "airSupply": null,
+    "art": "/art/dune/gear/sardaukar-armor.webp"
+  },
+  {
+    "id": "harkonnen-armor",
+    "name": "Harkonnen Trooper Armor",
+    "source": "custom",
+    "category": "armor",
+    "rating": 2,
+    "quality": 2,
+    "weight": 2,
+    "cost": 1500,
+    "tags": [
+      "military",
+      "industrial"
+    ],
+    "notes": "Black, utilitarian plate built to a quota. Hot, heavy, and surprisingly hard to cut.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "+1 Difficulty on MOVE tests in the open desert by day"
+      }
+    ],
+    "airSupply": null,
+    "art": "/art/dune/gear/harkonnen-armor.webp"
+  },
+  {
+    "id": "desert-cloak",
+    "name": "Desert Cloak",
+    "source": "custom",
+    "category": "suit",
+    "rating": 0,
+    "quality": 1,
+    "weight": 0.5,
+    "cost": 60,
+    "tags": [
+      "survival",
+      "camouflage"
+    ],
+    "notes": "A heavy hooded cloak that sheds sand and hides its wearer against the dunes.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:move",
+        "text": "-1 Difficulty to hide in the desert",
+        "value": -1
+      }
+    ],
+    "airSupply": null,
+    "art": "/art/dune/gear/desert-cloak.webp"
+  }
+]

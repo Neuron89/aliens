@@ -1,0 +1,999 @@
+[
+  {
+    "id": "banter",
+    "name": "Banter",
+    "source": "CRB",
+    "page": 74,
+    "career": "colonial-marine",
+    "text": "During downtime, each Turn spent resting in a safe place lowers your Stress Level, and that of everyone within SHORT range, by two instead of one. Several Marines with Banter do not stack.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "Resting in a safe place removes 2 Stress per Turn (instead of 1) for you and allies within SHORT range.",
+        "value": -2
+      }
+    ]
+  },
+  {
+    "id": "overkill",
+    "name": "Overkill",
+    "source": "CRB",
+    "page": 74,
+    "career": "colonial-marine",
+    "text": "When a Panic Roll result is 11 or higher and enemies are in sight, you may replace it with the Overkill effect: you must attack the visible enemies and keep going until you or all of them are Broken. All other PCs within SHORT range must immediately make a Panic Roll.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "On a Panic Roll of 11+ with enemies in sight, swap the result for a relentless attack (allies in SHORT range roll for panic)."
+      }
+    ]
+  },
+  {
+    "id": "past-the-limit",
+    "name": "Past the Limit",
+    "source": "CRB",
+    "page": 74,
+    "career": "colonial-marine",
+    "text": "You may push any STRENGTH-based skill roll a second time. Each push raises your Stress Level by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "attr:str",
+        "text": "May push STRENGTH-based skill rolls twice (each push +1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "authority",
+    "name": "Authority",
+    "source": "CRB",
+    "page": 74,
+    "career": "colonial-marshal",
+    "text": "By invoking your marshal's authority you can roll COMMAND in place of MANIPULATION to make someone bend to your will.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:manipulation",
+        "text": "Use COMMAND instead of MANIPULATION when leaning on your authority."
+      }
+    ]
+  },
+  {
+    "id": "investigator",
+    "name": "Investigator",
+    "source": "CRB",
+    "page": 74,
+    "career": "colonial-marshal",
+    "text": "After spending a Turn in a room or similar spot, roll OBSERVATION (one attempt). Each success lets you ask the GM one of: what happened here; is anything hidden here and where; is anything here out of place or unusual. Answers must be true but may be vague.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:observation",
+        "text": "Each success after a Turn of searching buys one truthful answer from the GM."
+      }
+    ]
+  },
+  {
+    "id": "subdue",
+    "name": "Subdue",
+    "source": "CRB",
+    "page": 74,
+    "career": "colonial-marshal",
+    "text": "When attacking a humanoid in close combat you can declare a subdue attempt: +2 to the attack, but a hit deals no damage and instead puts the target in your grapple. Extra successes have no effect.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:closeCombat",
+        "text": "+2 to a close combat attack declared as a subdue (no damage, target grappled).",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "cunning",
+    "name": "Cunning",
+    "source": "CRB",
+    "page": 75,
+    "career": "company-agent",
+    "text": "You may push any WITS-based skill roll a second time. Each push raises your Stress Level by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "attr:wit",
+        "text": "May push WITS-based skill rolls twice (each push +1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "personal-safety",
+    "name": "Personal Safety",
+    "source": "CRB",
+    "page": 75,
+    "career": "company-agent",
+    "text": "When you are attacked or face lethal danger and another PC or friendly NPC is within SHORT range, you may make a straight MANIPULATION roll (not opposed, not an action). On a success that character suffers the attack or hazard instead of you. Each use raises your Stress Level by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "MANIPULATION roll to redirect an attack or hazard onto a nearby ally (+1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "take-control",
+    "name": "Take Control",
+    "source": "CRB",
+    "page": 75,
+    "career": "company-agent",
+    "text": "You may roll MANIPULATION using WITS instead of EMPATHY.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:manipulation",
+        "text": "Roll MANIPULATION with WITS in place of EMPATHY."
+      }
+    ]
+  },
+  {
+    "id": "beneath-notice",
+    "name": "Beneath Notice",
+    "source": "CRB",
+    "page": 75,
+    "career": "kid",
+    "text": "Whenever you roll a critical injury on yourself, you may re-roll the dice and keep whichever result you prefer.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Re-roll your own critical injury rolls and pick the result you prefer."
+      }
+    ]
+  },
+  {
+    "id": "dodge",
+    "name": "Dodge",
+    "source": "CRB",
+    "page": 75,
+    "career": "kid",
+    "text": "When attacked in close combat you can dodge. It works like blocking but uses MOBILITY instead of CLOSE COMBAT and can only reduce damage (no counterattack or disarm). You can even dodge a creature's signature attack.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:mobility",
+        "text": "Block close combat attacks (including signature attacks) with MOBILITY to reduce damage."
+      }
+    ]
+  },
+  {
+    "id": "nimble",
+    "name": "Nimble",
+    "source": "CRB",
+    "page": 75,
+    "career": "kid",
+    "text": "You may push any AGILITY-based skill roll a second time. Each push raises your Stress Level by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "attr:agi",
+        "text": "May push AGILITY-based skill rolls twice (each push +1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "calming-presence",
+    "name": "Calming Presence",
+    "source": "CRB",
+    "page": 75,
+    "career": "medic",
+    "text": "Once per Turn, while you and the target are in a relatively safe place, you may lower the Stress Level of another character within SHORT range by one, on top of normal stress recovery. Cannot target yourself.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "Once per Turn in a safe place: one other character in SHORT range loses 1 extra Stress.",
+        "value": -1
+      }
+    ]
+  },
+  {
+    "id": "compassion",
+    "name": "Compassion",
+    "source": "CRB",
+    "page": 75,
+    "career": "medic",
+    "text": "You may push any EMPATHY-based skill roll a second time. Each push raises your Stress Level by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "attr:emp",
+        "text": "May push EMPATHY-based skill rolls twice (each push +1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "field-surgeon",
+    "name": "Field Surgeon",
+    "source": "CRB",
+    "page": 75,
+    "career": "medic",
+    "text": "You get +2 to MEDICAL AID when treating someone who is about to die from a critical injury.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:medicalAid",
+        "text": "+2 MEDICAL AID to save someone from a fatal critical injury.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "field-commander",
+    "name": "Field Commander",
+    "source": "CRB",
+    "page": 76,
+    "career": "officer",
+    "text": "Giving orders in combat with COMMAND is a fast action for you instead of a slow one, so you can give orders twice in one Round.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:command",
+        "text": "Combat orders are a fast action (two orders per Round possible)."
+      }
+    ]
+  },
+  {
+    "id": "influence",
+    "name": "Influence",
+    "source": "CRB",
+    "page": 76,
+    "career": "officer",
+    "text": "You may push any EMPATHY-based skill roll a second time. Each push raises your Stress Level by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "attr:emp",
+        "text": "May push EMPATHY-based skill rolls twice (each push +1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "pull-rank",
+    "name": "Pull Rank",
+    "source": "CRB",
+    "page": 76,
+    "career": "officer",
+    "text": "You can order non-officer PCs and NPCs of your own organization to perform one specific action: roll COMMAND against the target's MANIPULATION. On a success they must obey, even into danger. Each use raises your Stress Level by one. Cannot stop actions forced by Panic Rolls.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:command",
+        "text": "Opposed COMMAND vs MANIPULATION forces a subordinate to carry out one order (+1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "full-throttle",
+    "name": "Full Throttle",
+    "source": "CRB",
+    "page": 76,
+    "career": "pilot",
+    "text": "When piloting a spacecraft you get +2 to PILOTING rolls for Accelerate and Decelerate actions.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:piloting",
+        "text": "+2 PILOTING on spacecraft Accelerate/Decelerate actions.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "like-the-back-of-your-hand",
+    "name": "Like the Back of Your Hand",
+    "source": "CRB",
+    "page": 76,
+    "career": "pilot",
+    "text": "Pick one specific vehicle or spacecraft (a single craft, not a model line). You get +2 to PILOTING with it. Can be taken several times, once per craft.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:piloting",
+        "text": "+2 PILOTING with one chosen, specific craft.",
+        "value": 2
+      }
+    ],
+    "repeatable": true
+  },
+  {
+    "id": "reckless",
+    "name": "Reckless",
+    "source": "CRB",
+    "page": 76,
+    "career": "pilot",
+    "text": "You may push any AGILITY-based skill roll a second time. Each push raises your Stress Level by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "attr:agi",
+        "text": "May push AGILITY-based skill rolls twice (each push +1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "resilient",
+    "name": "Resilient",
+    "source": "CRB",
+    "page": 76,
+    "career": "roughneck",
+    "text": "Whenever you take damage, roll STRENGTH (attribute only; cannot be pushed; not an action). Each success removes one point of that damage, possibly all of it.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "damage",
+        "text": "Roll STRENGTH when damaged; each success cancels 1 point of damage."
+      }
+    ]
+  },
+  {
+    "id": "the-long-haul",
+    "name": "The Long Haul",
+    "source": "CRB",
+    "page": 76,
+    "career": "roughneck",
+    "text": "Once per Act (Cinematic) or once per session (Campaign), you may ignore every facehugger result rolled on the Stress Dice of a single roll.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "Once per Act/session, ignore all panic-triggering results on the Stress Dice of one roll."
+      }
+    ]
+  },
+  {
+    "id": "true-grit",
+    "name": "True Grit",
+    "source": "CRB",
+    "page": 76,
+    "career": "roughneck",
+    "text": "You may push any STRENGTH-based skill roll a second time. Each push raises your Stress Level by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "attr:str",
+        "text": "May push STRENGTH-based skill rolls twice (each push +1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "analysis",
+    "name": "Analysis",
+    "source": "CRB",
+    "page": 77,
+    "career": "scientist",
+    "text": "After studying a strange or alien artifact or creature for at least a Turn, roll OBSERVATION. Each success lets you ask the GM one of: is it human or alien; dead or alive; how old is it; what is its purpose; how does it work; what problems could it cause. Answers are true but may be vague. A successful roll also lowers the Stress Level of all other PCs within SHORT range by one; a failed roll raises it by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:observation",
+        "text": "Each success buys one truthful answer about an alien object or creature."
+      },
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "Success: other PCs in SHORT range -1 Stress (failure: +1).",
+        "value": -1
+      }
+    ]
+  },
+  {
+    "id": "breakthrough",
+    "name": "Breakthrough",
+    "source": "CRB",
+    "page": 77,
+    "career": "scientist",
+    "text": "Once per game session you automatically pass an OBSERVATION roll of your choice without rolling. The GM may veto its use on a particular roll to avoid spoiling the scenario.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:observation",
+        "text": "Once per session, auto-succeed one OBSERVATION roll (GM may veto)."
+      }
+    ]
+  },
+  {
+    "id": "inquisitive",
+    "name": "Inquisitive",
+    "source": "CRB",
+    "page": 77,
+    "career": "scientist",
+    "text": "You may push any WITS-based skill roll a second time. Each push raises your Stress Level by one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "attr:wit",
+        "text": "May push WITS-based skill rolls twice (each push +1 Stress)."
+      }
+    ]
+  },
+  {
+    "id": "bodyguard",
+    "name": "Bodyguard",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "When someone within SHORT range is hit by an attack, you may dive in: roll MOBILITY (not an action, may be pushed). With at least one success you take the hit instead.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:mobility",
+        "text": "MOBILITY roll to take a hit meant for someone in SHORT range."
+      }
+    ]
+  },
+  {
+    "id": "calm-breather",
+    "name": "Calm Breather",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "When making an air Supply roll, roll two fewer dice than your Supply rating (minimum one).",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Air Supply rolls use 2 fewer dice (min 1).",
+        "value": -2
+      }
+    ]
+  },
+  {
+    "id": "counselor",
+    "name": "Counselor",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "Once per Turn you can use COMMAND to calm another character within SHORT range: each success removes one more point of Stress beyond the normal single step. Not on yourself.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:command",
+        "text": "Each COMMAND success removes 1 extra Stress from another character (once per Turn)."
+      }
+    ]
+  },
+  {
+    "id": "eva-specialist",
+    "name": "EVA Specialist",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "You get +2 to HEAVY MACHINERY and COMTECH rolls while spacewalking.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:heavyMachinery",
+        "text": "+2 while spacewalking.",
+        "value": 2
+      },
+      {
+        "kind": "buff",
+        "target": "skill:comtech",
+        "text": "+2 while spacewalking.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "fast-reflexes",
+    "name": "Fast Reflexes",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "Draw two initiative cards instead of one, keep the one you want and shuffle the other back before anyone else draws.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "initiative",
+        "text": "Draw 2 initiative cards, keep the best."
+      }
+    ]
+  },
+  {
+    "id": "flyweight",
+    "name": "Flyweight",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "You may block in close combat using AGILITY instead of STRENGTH.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:closeCombat",
+        "text": "Block with AGILITY instead of STRENGTH."
+      }
+    ]
+  },
+  {
+    "id": "hard-hitter",
+    "name": "Hard Hitter",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "Give up your fast action to get +2 to CLOSE COMBAT.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:closeCombat",
+        "text": "+2 when you sacrifice your fast action.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "healer",
+    "name": "Healer",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "Your critical injuries heal in half the normal time.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Critical injury healing time halved."
+      }
+    ]
+  },
+  {
+    "id": "hidden-stash",
+    "name": "Hidden Stash",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "Each session you start with one extra item you could plausibly own, hidden on you or stowed somewhere safe. The GM decides what is available and may let you reveal what it is at a dramatic moment.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "One bonus plausible item per session, can be revealed later."
+      }
+    ]
+  },
+  {
+    "id": "hothead",
+    "name": "Hothead",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "+2 to opposed MANIPULATION rolls when someone tries to order you around. Also works against the Officer talent Pull Rank.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:manipulation",
+        "text": "+2 to resist being given orders (incl. Pull Rank).",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "light-eater",
+    "name": "Light Eater",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "When making a food Supply roll, roll two fewer dice than your Supply rating (minimum one).",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Food Supply rolls use 2 fewer dice (min 1).",
+        "value": -2
+      }
+    ]
+  },
+  {
+    "id": "light-sleeper",
+    "name": "Light Sleeper",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "You only need one Shift of sleep every two days instead of every day.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Needs one Shift of sleep per two days."
+      }
+    ]
+  },
+  {
+    "id": "killer",
+    "name": "Killer",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "When an enemy suffers a critical injury you may swap the D66 dice (tens become ones and vice versa). Only works on humans.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "damage",
+        "text": "Swap the D66 digits on critical injuries you inflict on humans."
+      }
+    ]
+  },
+  {
+    "id": "machine-gunner",
+    "name": "Machine Gunner",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "Firing full auto does not raise your Stress Level.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "No Stress gain from full-auto fire."
+      }
+    ]
+  },
+  {
+    "id": "menacing",
+    "name": "Menacing",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "When threatening someone, you may roll MANIPULATION with STRENGTH instead of EMPATHY. On a success they cannot demand anything in return, though they may still attack you instead of complying.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:manipulation",
+        "text": "Intimidate using STRENGTH; target cannot ask for anything back."
+      }
+    ]
+  },
+  {
+    "id": "merciless",
+    "name": "Merciless",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "You can perform a coup de grace without the EMPATHY roll, and your Stress Level drops one step every time you Break an enemy.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "-1 Stress each time you Break an enemy; coup de grace needs no EMPATHY roll.",
+        "value": -1
+      }
+    ]
+  },
+  {
+    "id": "nerves-of-steel",
+    "name": "Nerves of Steel",
+    "source": "CRB",
+    "page": 78,
+    "career": "general",
+    "text": "You get -2 on all Panic Rolls.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "-2 to all Panic Rolls.",
+        "value": -2
+      }
+    ]
+  },
+  {
+    "id": "pack-mule",
+    "name": "Pack Mule",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "You can carry twice the normal number of items before becoming encumbered.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Encumbrance limit doubled (STRENGTH x4)."
+      }
+    ]
+  },
+  {
+    "id": "quick-draw",
+    "name": "Quick Draw",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "Drawing a weapon costs you no action.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Draw weapons for free."
+      }
+    ]
+  },
+  {
+    "id": "rapid-fire",
+    "name": "Rapid Fire",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "You may fire a pistol or rifle as a fast action instead of a slow one, at -2.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:rangedCombat",
+        "text": "Fire pistols/rifles as a fast action at -2.",
+        "value": -2
+      }
+    ]
+  },
+  {
+    "id": "rapid-reload",
+    "name": "Rapid Reload",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "Reloading is a fast action for you instead of a slow one.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Reload as a fast action."
+      }
+    ]
+  },
+  {
+    "id": "second-wind",
+    "name": "Second Wind",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "When Broken you can get back up without first aid: roll STAMINA and regain one Health per success. Once per Turn; does nothing against critical injuries.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:stamina",
+        "text": "When Broken, roll STAMINA to regain 1 Health per success (once per Turn)."
+      }
+    ]
+  },
+  {
+    "id": "spaceship-commander",
+    "name": "Spaceship Commander",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "As a ship's captain during space combat, draw two initiative cards instead of one and choose which to use.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "initiative",
+        "text": "Space combat: draw 2 initiative cards, keep one."
+      }
+    ]
+  },
+  {
+    "id": "spaceship-mechanic",
+    "name": "Spaceship Mechanic",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "+2 to HEAVY MACHINERY or COMTECH when repairing damage to a spacecraft.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:heavyMachinery",
+        "text": "+2 repairing spacecraft.",
+        "value": 2
+      },
+      {
+        "kind": "buff",
+        "target": "skill:comtech",
+        "text": "+2 repairing spacecraft.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "spaceship-gunner",
+    "name": "Spaceship Gunner",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "As a gunner during space combat you get +2 to RANGED COMBAT.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:rangedCombat",
+        "text": "+2 as a spaceship gunner.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "stealthy",
+    "name": "Stealthy",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "+2 to MOBILITY when moving undetected.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:mobility",
+        "text": "+2 to sneak.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "stoic",
+    "name": "Stoic",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "You may roll STAMINA using WITS instead of STRENGTH.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:stamina",
+        "text": "Roll STAMINA with WITS instead of STRENGTH."
+      }
+    ]
+  },
+  {
+    "id": "tough",
+    "name": "Tough",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "Your maximum Health is your STRENGTH +2.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "attr:str",
+        "text": "Max Health = STRENGTH + 2 (Health only, not the attribute).",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "watchful",
+    "name": "Watchful",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "+2 to OBSERVATION when trying to spot a sneak attack.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:observation",
+        "text": "+2 to spot sneak attacks.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "weapon-specialist",
+    "name": "Weapon Specialist",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "Choose one weapon model from the gear lists (or unarmed fighting). You get +2 when using it. Can be taken several times, once per weapon.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "+2 to attacks with one chosen weapon model.",
+        "value": 2
+      }
+    ],
+    "repeatable": true
+  },
+  {
+    "id": "zero-g-training",
+    "name": "Zero-G Training",
+    "source": "CRB",
+    "page": 79,
+    "career": "general",
+    "text": "+2 to MOBILITY rolls in zero gravity.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:mobility",
+        "text": "+2 in zero-G.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "all-terrain-driver",
+    "name": "All-Terrain Driver",
+    "source": "ACM",
+    "page": 60,
+    "career": "colonial-marine",
+    "text": "+2 to PILOTING when driving a wheeled or tracked vehicle built for off-road travel.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:piloting",
+        "text": "+2 driving wheeled/tracked off-road vehicles.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "bypass",
+    "name": "Bypass",
+    "source": "ACM",
+    "page": 60,
+    "career": "colonial-marine",
+    "text": "+2 to COMTECH when trying to unlock a locked door or entryway.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:comtech",
+        "text": "+2 to unlock entryways.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "heavy-weapons",
+    "name": "Heavy Weapons",
+    "source": "ACM",
+    "page": 60,
+    "career": "colonial-marine",
+    "text": "+2 to RANGED COMBAT when firing heavy weapons (plasma guns, missiles, tank guns and the like), and +2 to HEAVY MACHINERY to unjam or fix them.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:rangedCombat",
+        "text": "+2 firing heavy weapons.",
+        "value": 2
+      },
+      {
+        "kind": "buff",
+        "target": "skill:heavyMachinery",
+        "text": "+2 to unjam/repair heavy weapons.",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "hug-the-dirt",
+    "name": "Hug the Dirt",
+    "source": "ACM",
+    "page": 60,
+    "career": "colonial-marine",
+    "text": "While you are prone, ranged attackers at MEDIUM range or further get -2 against you; this stacks with cover. Dropping prone is free on your own turn; standing up is a fast action.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Ranged attacks at MEDIUM+ against you while prone get -2.",
+        "value": -2
+      }
+    ]
+  },
+  {
+    "id": "remote",
+    "name": "Remote",
+    "source": "ACM",
+    "page": 60,
+    "career": "colonial-marine",
+    "text": "You are trained to set up, control and repair sentry guns and other remote battlefield devices, and to remote-pilot vehicles and Pups (with the right gear, e.g. an uplink terminal): +2 to COMTECH for these tasks.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:comtech",
+        "text": "+2 to operate/repair remote devices and remote-pilot vehicles.",
+        "value": 2
+      }
+    ]
+  }
+]

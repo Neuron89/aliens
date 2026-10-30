@@ -1,0 +1,700 @@
+{
+  "packVersion": 1,
+  "id": "the-water-debt",
+  "universe": "dune",
+  "kind": "scenario",
+  "meta": {
+    "title": "The Water Debt",
+    "tagline": "A man has drowned in the desert. The Harkonnen Assessor arrives in three days. The spice is short, and the Fremen want their water.",
+    "synopsis": "House Tessarin holds a small spice concession at Qarrat on the edge of the Shield Wall, at the pleasure of House Harkonnen. Its water-seller, Hadi Moussan, is found drowned in the keep’s own cistern three days before a Harkonnen Quota Assessor arrives to audit a spice shipment that is forty percent short. The truth: Steward Ilse Marrow has been quietly trading spice through the smuggler Dunmore Kell to buy water from Sietch Hollow Wind, because Harkonnen water tariffs were killing the town. Moussan discovered the arrangement and meant to sell it. He was murdered by Kessa Tine, the chamberlain’s trusted servant and a Harkonnen sleeper, who staged a drowning to make it look like a Fremen ritual killing and took the proof for her masters. The agents must find the killer, decide what to do about the Steward’s crime, settle the House’s debt to the Fremen and survive a formal audience with the Assessor, where a duel, a forged ledger and a hunter-seeker all wait their turn.",
+    "type": "One-Shot",
+    "players": "3–5",
+    "playtime": "3–4 hours",
+    "difficulty": "Standard",
+    "tone": [
+      "intrigue",
+      "plans within plans",
+      "desert survival",
+      "divided loyalties"
+    ],
+    "contentWarnings": [
+      "murder",
+      "poison",
+      "political violence"
+    ],
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "MENTAT OF HOUSE TESSARIN",
+    "to": "AGENTS OF THE HOUSE — EYES OF LADY SENNA ONLY",
+    "classification": "SEALED",
+    "text": "COMPUTATION BEGINS.\n\nFact: at the second hour before dawn, the water-seller Hadi Moussan was found dead in the cistern vault beneath Qarrat Keep. Cause: drowning. Probability that a man drowns by accident in a sealed cistern on Arrakis: below one in ten thousand.\n\nFact: the quarterly spice consignment due to the Harkonnen Quota Office stands at sixty percent of contract. The shortfall is eleven hundred kilos. The ledger does not explain it.\n\nFact: Quota Assessor Vell Druze departs Carthag for Qarrat in three days, with an escort of unknown size.\n\nFact: a Fremen envoy waits at the outer gate. She will not enter. She asks, in front of the townsfolk, why the House wastes a man’s water.\n\nThese facts are connected. I compute a seventy-one percent probability that the murderer is inside the keep, and a near certainty that the Assessor will treat any weakness as an invitation.\n\nLady Senna instructs you: find the truth before the Assessor does. Bring it to her first.\n\nRISK ASSESSMENT: SEVERE. COMPUTATION PAUSED."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "THE DROWNED MAN",
+      "summary": "Investigate the murder in the keep, uncover the spice shortfall, and face the Fremen envoy at the gate.",
+      "readAloud": [
+        "Qarrat Keep was built to look richer than it is. The colonnade gleams; the conservatory breathes with date palms; the guest wing has real glass. Beneath it all, under the kitchens, lies the only wealth that matters here: forty-one thousand litres of water in a vault cut from the rock.",
+        "Hadi Moussan sold that water to the town for twenty years. This morning he floats face-down in it, his robes spread like a stain, his stillsuit unsealed. The servants will not go down the stair. The town already knows. On Arrakis, nothing travels faster than news of wasted water.",
+        "At the outer gate stands a Fremen woman in a sand-colored cloak. She has not come inside. She has not drawn a weapon. She is waiting, very patiently, for someone of the House to explain."
+      ],
+      "gmNotes": "Let the agents divide the keep between them. Every room on the Qarrat Keep map has a clue or a lie. The key clues: the body was drowned elsewhere and carried down (bruising on the wrists, sand in his boots, the servants’ stair door left unbarred); the guard roster has a forged entry covering the kitchen post; the spice ledger is precise but the scale records from the yard do not match it. The envoy Rhiya of Hollow Wind will speak only to someone who meets her outside, under the sky. Introduce Threat early: start with 1 per player.",
+      "agendaNotes": "Act I agendas are private and plausible. Encourage the Mentat and the Scion to clash over who presents conclusions to Lady Senna. Farrah should be visibly uncomfortable whenever the spice yard is mentioned.",
+      "scenes": [
+        {
+          "name": "The Cistern Vault",
+          "mandatory": true,
+          "narration": "Glowglobes drift low over black water. The air is wet — obscenely wet — and smells of stone and something sweeter underneath.",
+          "checks": [
+            "UNDERSTAND + TRUTH, Difficulty 1: the body was drowned elsewhere and carried down",
+            "DISCIPLINE + FAITH, Difficulty 1: notice the faint sweet smell is a Harkonnen sleeping drug, not decay",
+            "MOVE + JUSTICE, Difficulty 2: follow damp footprints to the servants’ stair"
+          ],
+          "events": [
+            "A servant, Bel, swears she saw a Fremen shape on the stair at midnight. She is lying because Kessa told her to say it."
+          ],
+          "stressTriggers": [
+            "Pulling a drowned man from drinking water: 1 Stress for anyone raised on Arrakis"
+          ],
+          "npcGuidance": "Chamberlain Rees Orlov hovers, wanting the body removed and the water drained and purified at once — destroying evidence through sincere piety.",
+          "gmTip": "If no one thinks to test the water, have Oren’s poison snooper chime faintly. Reward curiosity with Momentum spends for information.",
+          "outcomes": [
+            "Evidence the death was staged",
+            "Bel’s false testimony recorded",
+            "The water is condemned — the town’s reserve drops by a third"
+          ]
+        },
+        {
+          "name": "The Steward’s Counting Room",
+          "mandatory": true,
+          "narration": "Ledgers in neat columns, every figure in Steward Marrow’s tiny, perfect hand. Too perfect.",
+          "checks": [
+            "UNDERSTAND + TRUTH, Difficulty 2: the yard scale records disagree with the ledger by exactly the shortfall",
+            "UNDERSTAND + POWER, Difficulty 3: find the loose wall panel and the second ledger behind it"
+          ],
+          "events": [
+            "Steward Ilse Marrow arrives and offers, very calmly, to help explain the figures."
+          ],
+          "npcGuidance": "Marrow lies smoothly and well. Under Truthsense, her lies concern the spice, never the murder — she is genuinely horrified by Moussan’s death.",
+          "gmTip": "If the agents find the second ledger now, let them; it moves the game to Act II faster. If not, Kessa will steal it overnight, and it resurfaces in the Assessor’s hands in Act III.",
+          "outcomes": [
+            "The shortfall is proven deliberate",
+            "The second ledger shows payments in water, in a code that names \"Hollow Wind\""
+          ]
+        },
+        {
+          "name": "The Envoy at the Gate",
+          "mandatory": true,
+          "narration": "She stands in full sun as if it were a cool room. When you approach, she spits on the sand at your feet — and waits to see if you understand.",
+          "checks": [
+            "COMMUNICATE + JUSTICE, Difficulty 2: persuade Rhiya the House did not waste the man’s water by choice",
+            "UNDERSTAND + FAITH, Difficulty 1: recognize the spitting as respect, not insult"
+          ],
+          "events": [
+            "Rhiya demands Moussan’s body for the deathstill: his water belongs to the sietch, as part payment of \"the debt.\" She will not explain the debt to anyone but the Steward."
+          ],
+          "stressTriggers": [
+            "Townsfolk gather and mutter that the Fremen killed him"
+          ],
+          "npcGuidance": "Rhiya is proud, patient and insulted. If an agent treats her as a suspect, she leaves, and the sietch closes its doors in Act II.",
+          "gmTip": "Releasing the body to the Fremen is the right thing by Fremen law and a disaster in front of the Assessor. Let the agents argue.",
+          "outcomes": [
+            "Rhiya’s trust earned, lost, or merely postponed",
+            "The word \"debt\" enters the investigation"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "PLANS WITHIN PLANS",
+      "summary": "Follow the spice to the smugglers and the water to the sietch; survive the desert and an assassin.",
+      "readAloud": [
+        "Beyond the Shield Wall the sand runs in long gold ridges to the edge of the sky. Somewhere out there, eleven hundred kilos of spice became water — and water became a dead man.",
+        "The ornithopter shudders in the thermals. Below, the rock gives way to open dunes, and the dunes are never quite still."
+      ],
+      "gmNotes": "Two leads, in either order: the smuggler Dunmore Kell at an abandoned spice yard in the Funeral Rocks (he bought the spice) and Sietch Hollow Wind (which sold the water). The desert itself is an adversary — use the sandworm and spice-blow entries. Meanwhile, back at the keep, Kessa Tine moves: she sends a hunter-seeker after whoever holds the second ledger, or, if no one does, after Lady Senna.",
+      "agendaNotes": "New pressures: Cassius must decide whether to sell the next shipment to Kell; Farrah’s role in carrying the spice should come out here; Oren and Ameline should both realize the Steward’s crime kept the town alive.",
+      "scenes": [
+        {
+          "name": "Kell’s Yard",
+          "encounter": true,
+          "encounterDetail": "Dunmore Kell and six armed smugglers; a skirmish if negotiations collapse",
+          "narration": "A gutted harvester lies on its side like a dead beast. Inside, lamps, crates, and a dozen guns that all happen to be pointing your way.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 2: negotiate with Kell",
+            "UNDERSTAND + TRUTH, Difficulty 2: notice Kell’s crates carry Harkonnen Quota Office seals — he already sold some spice back to them"
+          ],
+          "events": [
+            "Kell reveals Cassius’s debt in front of everyone unless Cassius has already dealt with it",
+            "Kell confirms the Steward paid him in spice to carry water from the sietch"
+          ],
+          "npcGuidance": "Kell is cheerful, venal and frightened. He has been selling information to the Harkonnens on the side and fears being caught between both sides.",
+          "gmTip": "Spend Threat to have a worm sign appear on the horizon mid-conversation; nothing ends a negotiation faster.",
+          "outcomes": [
+            "Kell as witness, ally or corpse",
+            "Proof the Harkonnens knew about the shortfall before the audit — the audit is a trap"
+          ]
+        },
+        {
+          "name": "Crossing the Open Sand",
+          "encounter": true,
+          "encounterDetail": "A grown sandworm, possibly triggered by a spice blow",
+          "narration": "The thopter cannot land closer than the sietch’s outer rocks. Between you and them: two kilometres of open sand, and a faint vibration in your boot soles.",
+          "checks": [
+            "MOVE + FAITH, Difficulty 2 (Farrah’s talent applies): walk without rhythm",
+            "UNDERSTAND + TRUTH, Difficulty 1: read the spice blow before it erupts"
+          ],
+          "events": [
+            "A spice blow erupts behind the agents; worm sign follows within minutes"
+          ],
+          "stressTriggers": [
+            "Worm surfacing within sight: 2 Stress to non-Fremen",
+            "A companion going down into the sand"
+          ],
+          "gmTip": "This is a set piece, not a death trap. Let a thumper, a sacrifice of gear, or Momentum save them — at a cost.",
+          "outcomes": [
+            "Arrive at the sietch exhausted or exposed",
+            "Spice samples gathered from the blow (useful leverage in Act III)"
+          ]
+        },
+        {
+          "name": "Sietch Hollow Wind",
+          "mandatory": true,
+          "narration": "Inside the rock, the air is cool and smells of people, spice and leather. Eyes watch from every alcove. Somewhere water drips, slowly, into a basin you will not be shown.",
+          "checks": [
+            "COMMUNICATE + JUSTICE, Difficulty 3: convince Naib Haddar the House will honor the debt",
+            "DISCIPLINE + FAITH, Difficulty 2: endure the Sayyadina’s questioning without flinching"
+          ],
+          "events": [
+            "The Naib explains the debt: thirty thousand litres delivered over two years, against spice and a promise. The promise was a place on the Tessarin council for the sietch’s voice. The Steward made it without Lady Senna’s knowledge."
+          ],
+          "npcGuidance": "Naib Haddar is calm and absolute. He will help against the Harkonnens if the debt is honored and Moussan’s water returned. If refused, he will collect the debt himself — from the town cistern, by night.",
+          "gmTip": "This is where agents learn that the Steward did wrong for the right reasons. Let them feel the weight.",
+          "outcomes": [
+            "An alliance with the sietch — at a political price",
+            "Or a promise of war"
+          ]
+        },
+        {
+          "name": "The Hunter-Seeker",
+          "encounter": true,
+          "encounterDetail": "A hunter-seeker controlled by Kessa Tine from the servants’ stair",
+          "narration": "A whisper of air at the edge of hearing. Something silver and needle-thin hangs in the doorway, turning slowly toward the warmth of your face.",
+          "checks": [
+            "DISCIPLINE + FAITH, Difficulty 3: stay perfectly still",
+            "BATTLE + DUTY, Difficulty 3: snatch it from the air",
+            "UNDERSTAND + TRUTH, Difficulty 2: deduce the operator must be within sight of this room"
+          ],
+          "events": [
+            "If the agents trace the operator, they find the servants’ stair — and a dropped kitchen apron with a Harkonnen cipher card sewn into the hem."
+          ],
+          "stressTriggers": [
+            "Hunter-seeker in the room: 2 Stress to everyone present"
+          ],
+          "gmTip": "Run this back at the keep when the agents return, or interrupt a quiet scene. Teodor’s reaction to learning it was Kessa is the emotional peak of the act.",
+          "outcomes": [
+            "Kessa exposed or still hidden",
+            "Someone WOUNDED or POISONED"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT III",
+      "subtitle": "THE ASSESSOR’S AUDIENCE",
+      "summary": "Receive the Harkonnen Assessor in the Great Hall and decide the fate of the House.",
+      "readAloud": [
+        "They come at noon, when the sun is cruelest: three ornithopters in Harkonnen blue, and from the largest steps a soft, smiling man in grey, followed by a duelist in Ordrane russet and a dozen troopers who do not smile at all.",
+        "Quota Assessor Vell Druze takes the seat on the dais as though it were already his. He accepts water, sips it, and sets the cup down untouched thereafter. \"Shall we begin,\" he says, \"with the matter of eleven hundred kilos?\""
+      ],
+      "gmNotes": "Run the audience as an intrigue conflict. Druze’s goal is to force House Tessarin into vassalage: either confess the shortfall (and accept a Harkonnen \"administrator\") or be found in breach of contract and lose the concession. He holds the second ledger if Kessa still has it, and Kell’s testimony if Kell was not secured. His champion, Iver Ordrane, will demand a duel under the forms if any agent insults the Assessor. Threat spends here: produce a document, call a witness, have Kessa poison a cup. The agents can win by exposing that Druze knew of the shortfall in advance (an entrapment that the Landsraad would condemn), by exposing Kessa as a Harkonnen assassin operating under guest-right (a breach of the forms), or by producing the spice from the blow to cover the debt.",
+      "agendaNotes": "Act III is open conflict among the agents: Oren’s certification, Ameline’s priority of the unborn heir over the House, Farrah’s warning to her sietch, Cassius’s bid for leadership, Teodor’s duel.",
+      "scenes": [
+        {
+          "name": "The Audience",
+          "mandatory": true,
+          "narration": "The Great Hall smells of incense laid over fear. Townsfolk crowd the back wall. Lady Senna sits below the dais, which is an insult she bears without expression.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 3: hold the floor against Druze",
+            "UNDERSTAND + TRUTH, Difficulty 3: prove the audit was a trap set in advance",
+            "COMMUNICATE + JUSTICE, Difficulty 2: turn the townsfolk to the House’s side"
+          ],
+          "events": [
+            "Druze produces the second ledger (if Kessa kept it)",
+            "Druze asks the House Mentat to certify the accounts"
+          ],
+          "npcGuidance": "Druze never raises his voice. He offers mercy constantly — each offer a slightly tighter collar.",
+          "gmTip": "Use the Stress track as shame and doubt. An agent who fills it concedes the floor; another must pick up the argument.",
+          "outcomes": [
+            "The House keeps its seat, bends, or breaks"
+          ]
+        },
+        {
+          "name": "The Duel Under the Forms",
+          "encounter": true,
+          "encounterDetail": "Iver Ordrane, hired duelist, rapier and shield",
+          "narration": "Furniture is pushed back. Shields hum to life. The townsfolk go silent. Ordrane salutes with perfect courtesy and the faint boredom of a man who has never lost.",
+          "checks": [
+            "BATTLE + DUTY, Difficulty 3: the duel",
+            "UNDERSTAND + TRUTH, Difficulty 2: notice Ordrane’s blade is coated — a breach of the forms"
+          ],
+          "events": [
+            "If the poison is exposed, Ordrane’s contract is void by his own House’s code; he stops fighting and bows out"
+          ],
+          "stressTriggers": [
+            "A champion falling in the Great Hall"
+          ],
+          "gmTip": "Teodor is the obvious champion, but Cassius has the right to name one and may choose differently. A yielded duel can be as powerful as a won one.",
+          "outcomes": [
+            "Honor won, yielded or broken"
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Lady Senna Tessarin",
+      "role": "Head of House Tessarin",
+      "agenda": "Keep the House, the town and the concession alive, in that order — and hide her pregnancy until the House is safe.",
+      "behavior": "Composed, dry-witted, exhausted. Asks the agents for the truth and means it, even when it hurts.",
+      "secret": "She suspected the Steward’s arrangement months ago and chose not to ask."
+    },
+    {
+      "name": "Steward Ilse Marrow",
+      "role": "Steward of Qarrat Keep, Lady Senna’s cousin",
+      "agenda": "Keep the water flowing to the town; protect the arrangement with the sietch; take the blame alone if it comes to that.",
+      "behavior": "Calm, precise, unfailingly courteous. Lies only about the spice.",
+      "secret": "She promised the sietch a seat on the House council without authority to do so."
+    },
+    {
+      "name": "Kessa Tine",
+      "role": "Chamberlain’s servant; Harkonnen sleeper agent",
+      "agenda": "Deliver House Tessarin to the Harkonnens as a puppet, using the second ledger as proof of treason.",
+      "behavior": "Warm, helpful, always present with water or a cloth. Teodor taught her the knife; she is better than he knows.",
+      "secret": "She drugged and drowned Moussan, staged the Fremen sighting, and operates the hunter-seeker.",
+      "stats": {
+        "battle": 6,
+        "move": 7,
+        "threatToReveal": 2
+      }
+    },
+    {
+      "name": "Quota Assessor Vell Druze",
+      "role": "Harkonnen Quota Office envoy",
+      "agenda": "Bring Qarrat under a Harkonnen administrator without spending a single trooper.",
+      "behavior": "Soft-spoken, smiling, endlessly reasonable. Every concession he offers is a trap with velvet edges.",
+      "secret": "He received Kessa’s report before the shortfall was even logged; the audit is pre-arranged."
+    },
+    {
+      "name": "Rhiya of Hollow Wind",
+      "role": "Fremen envoy",
+      "agenda": "Recover Moussan’s water for the sietch and learn whether the House will honor its debt.",
+      "behavior": "Proud, patient, precise. Will not enter the keep until the debt is acknowledged."
+    },
+    {
+      "name": "Naib Haddar",
+      "role": "Leader of Sietch Hollow Wind",
+      "agenda": "Collect the debt — in water, in a council seat, or in blood.",
+      "behavior": "Quiet and absolute. Judges people by how they treat water and promises."
+    },
+    {
+      "name": "Dunmore Kell",
+      "role": "Smuggler captain",
+      "agenda": "Get paid, stay alive, and keep both the Harkonnens and the Tessarins thinking he works for them.",
+      "behavior": "Charming, venal, quick to laugh and quicker to run.",
+      "secret": "He sold part of the diverted spice back to the Harkonnen Quota Office."
+    },
+    {
+      "name": "Iver Ordrane",
+      "role": "Hired duelist of House Ordrane",
+      "agenda": "Fulfil his contract with honor.",
+      "behavior": "Courteous, bored, lethal. Despises cheating more than losing.",
+      "secret": "Druze had his blade poisoned without his knowledge.",
+      "stats": {
+        "battle": 8,
+        "move": 6
+      }
+    },
+    {
+      "name": "Chamberlain Rees Orlov",
+      "role": "Keeper of the household",
+      "agenda": "Restore order and purify the cistern before the Assessor arrives.",
+      "behavior": "Pious, fussy, honest. His haste destroys evidence."
+    }
+  ],
+  "threats": [
+    {
+      "name": "Hunter-Seeker",
+      "ref": "hunter-seeker",
+      "description": "Kessa’s device, launched from the servants’ stair.",
+      "stats": {
+        "evade": 3,
+        "stress": 5
+      },
+      "tactics": "Targets whoever holds the second ledger, otherwise Lady Senna."
+    },
+    {
+      "name": "Harkonnen Assassin (Kessa Tine)",
+      "ref": "harkonnen-assassin",
+      "description": "The sleeper in the household.",
+      "tactics": "Poison first, knife second, never in front of witnesses unless cornered."
+    },
+    {
+      "name": "Grown Sandworm",
+      "ref": "sandworm-grown",
+      "description": "Drawn by the spice blow during the crossing in Act II.",
+      "tactics": "Surfaces under rhythm; a thumper buys about five minutes."
+    },
+    {
+      "name": "Spice Blow",
+      "ref": "spice-blow",
+      "description": "Erupts behind the agents on the open sand.",
+      "tactics": "Warns of the worm; leaves a field of spice worth eleven hundred kilos to whoever can harvest it."
+    },
+    {
+      "name": "Smuggler Crew",
+      "description": "Kell’s six guns at the yard.",
+      "stats": {
+        "evade": 2,
+        "stress": 3
+      },
+      "tactics": "Fire from cover; flee if Kell falls."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "Qarrat Keep",
+      "description": "House Tessarin’s seat on the Shield Wall edge; its cistern holds the town’s water."
+    },
+    {
+      "name": "Qarrat Town",
+      "description": "Two thousand souls living on water bought from the keep at Harkonnen-tariffed prices."
+    },
+    {
+      "name": "Kell’s Yard, Funeral Rocks",
+      "description": "An abandoned harvester turned smugglers’ den, an hour by ornithopter into the desert."
+    },
+    {
+      "name": "Sietch Hollow Wind",
+      "description": "A Fremen sietch hidden in the rock beyond the open sand; the House’s secret creditor."
+    },
+    {
+      "name": "The Great Hall",
+      "description": "Where the Assessor’s audience is held and the House’s fate is decided."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "mentat-first-computation",
+      "title": "Mentat Computation: The Body",
+      "from": "MENTAT",
+      "to": "Agents of the House",
+      "priority": "URGENT",
+      "text": "DATA: bruising at both wrists, consistent with being carried. Sand in the boots — red sand, from the spice yard, not the keep. Faint residue of a sleeping compound common in Giedi Prime pharmacies. CONCLUSION: Moussan was drugged elsewhere, carried down the servants’ stair, and drowned in the cistern. The \"Fremen ritual\" is staged. PROBABILITY THE KILLER LIVES IN THE KEEP: 0.83. RECOMMENDATION: trust no one who brings you water.",
+      "when": "Act I, after the cistern vault is examined"
+    },
+    {
+      "id": "second-ledger",
+      "title": "The Second Ledger (excerpt)",
+      "from": "Steward Ilse Marrow (private hand)",
+      "to": "None",
+      "priority": "SEALED",
+      "text": "Quarter ending: 1,100 kg melange to K. — against 9,000 L delivered by H.W. via rock path. Running total owed to H.W.: 30,000 L, less 21,000 delivered. Promise stands: one voice at council when the Lady can be persuaded. God forgive me, the town would have died by summer.",
+      "when": "Act I, if the loose panel is found; otherwise Act III in the Assessor’s hands"
+    },
+    {
+      "id": "kessa-cipher",
+      "title": "Cipher Card in the Apron Hem",
+      "from": "Unknown",
+      "to": "Unknown",
+      "priority": "IMPERIAL",
+      "text": "A strip of shigawire-bound film bearing a Harkonnen cipher block and a single cleartext line: \"Ledger secured. Druze to proceed. The Lady carries — confirm.\" DECODING ASSESSMENT: the sender knows of Lady Senna’s pregnancy. Someone in the keep is closer to her than any agent believed.",
+      "when": "Act II, after tracing the hunter-seeker"
+    },
+    {
+      "id": "sietch-terms",
+      "title": "Terms of Sietch Hollow Wind",
+      "from": "Naib Haddar, spoken through Rhiya",
+      "to": "House Tessarin",
+      "priority": "URGENT",
+      "text": "Nine thousand litres remain owed. The water of Hadi Moussan returned to the deathstill. One voice at your council, as was promised. Give these and we stand beside you against the blue banners. Refuse, and we take what is owed from your cistern, as is our right under the oldest law.",
+      "when": "Act II, at the sietch"
+    },
+    {
+      "id": "mentat-final-computation",
+      "title": "Mentat Computation: The Audit",
+      "from": "MENTAT",
+      "to": "Agents of the House",
+      "priority": "SEALED",
+      "text": "DATA: the Assessor’s orders are dated four days before the shortfall was recorded. Kell’s crates bear Quota Office seals. CONCLUSION: this audit is a trap prepared in advance, using information from a sleeper under our roof. Exposed before witnesses, it is a breach of Landsraad forms. PROBABILITY DRUZE WITHDRAWS IF CONFRONTED WITH PROOF: 0.64. PROBABILITY HE TRIES TO KILL THE WITNESS FIRST: 0.91.",
+      "when": "Act III, before the audience, if the agents gathered the evidence"
+    }
+  ],
+  "maps": [
+    {
+      "id": "qarrat-keep",
+      "title": "QARRAT KEEP",
+      "subtitle": "House Tessarin seat — ground floor",
+      "description": "A modest rock-and-plasteel keep on the Shield Wall edge. Its cistern vault holds the town’s water reserve and is the true heart of the House.",
+      "kind": "ascii",
+      "ascii": "\n  ╔══════════════════════════════════════════════════════════════╗\n  ║        QARRAT KEEP — GROUND FLOOR   (House Tessarin)         ║\n  ║        Shield Wall edge, Arrakis · north is up               ║\n  ╠══════════════════════════════════════════════════════════════╣\n  ║                                                              ║\n  ║   ┌──────────────┐   ┌──────────────────┐   ┌─────────────┐  ║\n  ║   │ THOPTER PAD  │   │  GREAT HALL      │   │  STEWARD'S  │  ║\n  ║   │ (roof ramp)  │   │  [dais] [hearth] │   │  COUNTING   │  ║\n  ║   │   ▲ ramp     │   │  audience floor  │   │  ROOM       │  ║\n  ║   └──────┬───────┘   └────────┬─────────┘   │  [ledgers]  │  ║\n  ║          │                    │             └──────┬──────┘  ║\n  ║   ┌──────┴────────────────────┴────────────────────┴──────┐  ║\n  ║   │            COLONNADE  (shield-door every 10 m)        │  ║\n  ║   └──┬─────────────┬───────────────┬──────────────────┬───┘  ║\n  ║      │             │               │                  │      ║\n  ║   ┌──┴────────┐ ┌──┴──────────┐ ┌──┴───────────┐  ┌───┴───┐  ║\n  ║   │ GUARD     │ │ CONSERVATORY│ │ KITCHENS &   │  │ GUEST │  ║\n  ║   │ ROOM      │ │ (date palms,│ │ SERVANTS'    │  │ WING  │  ║\n  ║   │ [armory]  │ │  dew traps) │ │ STAIR  ▼     │  │ (3 rm)│  ║\n  ║   └──┬────────┘ └─────────────┘ └──────┬───────┘  └───────┘  ║\n  ║      │                                 │                     ║\n  ║   ┌──┴──────────────┐          ┌───────┴───────────────┐     ║\n  ║   │ OUTER GATE      │          │ CISTERN VAULT (below) │     ║\n  ║   │ (sand-lock, two │          │ ~~~~~~~~~~~~~~~~~~~~~ │     ║\n  ║   │  doors, seal)   │          │ ~ town water: 41,000 L│     ║\n  ║   └──┬──────────────┘          │ ~~~~~~~~~~~~~~~~~~~~~ │     ║\n  ║      │                         └───────────────────────┘     ║\n  ║   ═══╧═══ to QARRAT TOWN and the spice-yard                  ║\n  ║                                                              ║\n  ╚══════════════════════════════════════════════════════════════╝",
+      "rooms": [
+        {
+          "name": "Great Hall",
+          "note": "Audience chamber with a raised dais. Where the Assessor will be received in Act III."
+        },
+        {
+          "name": "Steward's Counting Room",
+          "note": "Ledgers, spice tallies and water accounts. A second, hidden ledger sits behind a loose wall panel."
+        },
+        {
+          "name": "Colonnade",
+          "note": "The keep’s spine; every room opens onto it. Shield-doors can seal any section."
+        },
+        {
+          "name": "Thopter Pad",
+          "note": "Roof landing reached by a ramp. One serviceable ornithopter and one that is not."
+        },
+        {
+          "name": "Guard Room",
+          "note": "Armory and duty roster. The roster for the night of the murder has a forged entry."
+        },
+        {
+          "name": "Conservatory",
+          "note": "Date palms and dew traps — an extravagant show of water wealth for guests."
+        },
+        {
+          "name": "Kitchens & Servants' Stair",
+          "note": "The only internal route down to the cistern that avoids the guard room."
+        },
+        {
+          "name": "Guest Wing",
+          "note": "Three rooms. The Fremen envoy refuses to sleep here; the Assessor will demand the best one."
+        },
+        {
+          "name": "Cistern Vault",
+          "note": "Below the kitchens. Forty-one thousand litres of town water. The drowned man was found here."
+        },
+        {
+          "name": "Outer Gate",
+          "note": "Double-door sand-lock with a water-seal. Logs every opening — or should."
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "title": "The Water Remembers",
+      "condition": "The agents expose Druze’s entrapment or Kessa’s breach of guest-right, and honor the debt to Sietch Hollow Wind.",
+      "text": "Druze withdraws with a smile that promises a longer game. Qarrat keeps its concession, now with a Fremen voice at its council and a powerful, patient enemy on Giedi Prime. That night, Moussan’s water goes to the deathstill, and the sietch sends back a single literjon as a gift — the first water the House has ever received rather than bought."
+    },
+    {
+      "title": "The Blue Collar",
+      "condition": "The agents conceal the arrangement, sacrifice the Steward, or refuse the Fremen debt.",
+      "text": "Steward Marrow confesses alone and is taken to Carthag. A Harkonnen administrator moves into the guest wing. The spice flows on quota and the water tariffs double. Three weeks later the cistern is found half empty one morning with no sign of entry, and the town learns what an unpaid debt to the desert costs."
+    }
+  ],
+  "characters": [
+    {
+      "id": "oren-haskell",
+      "name": "Oren Haskell",
+      "career": "Mentat",
+      "appearance": "Narrow, ink-stained, lips faintly red from sapho. Speaks in percentages when nervous. DRIVE STATEMENTS — Duty: I serve the House that bought my contract, not the one that might buy it next. · Faith: Faith is a variable I have not yet been able to solve. · Justice: Justice is a ledger that balances; I will balance it. · Power: Power is information arriving early. · Truth: Every lie leaves a residue in the numbers. I will find it.",
+      "attributes": {
+        "duty": 7,
+        "faith": 4,
+        "justice": 5,
+        "power": 6,
+        "truth": 8
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 5,
+        "discipline": 5,
+        "move": 4,
+        "understand": 8
+      },
+      "talent": "Data Without Context — After an hour with records, ledgers or testimony, reduce the Difficulty of your next UNDERSTAND test about them by 1.",
+      "gear": [
+        "Sapho juice",
+        "Filmbook reader",
+        "Poison snooper",
+        "Stillsuit",
+        "House signet ring (proxy)"
+      ],
+      "signatureItem": "A cracked abacus of shigawire beads from his first master — he no longer needs it, but cannot stop touching it.",
+      "personalAgenda": "Prove the spice shortfall is theft, name the thief to Lady Senna, and keep your reputation as a Mentat who is never wrong.",
+      "buddy": "Sister Ameline Vos",
+      "rival": "Cassius Tessarin",
+      "secret": "Your contract renewal is three weeks away and House Harkonnen has quietly made you an offer through the Assessor’s office.",
+      "agendaByAct": {
+        "1": "Find the gap in the spice ledger and compute who could have made it. Share only what you are certain of.",
+        "2": "You have found the second ledger. Decide whether the Steward’s crime is treason or the best decision anyone in this House has made.",
+        "3": "The Assessor will ask you, as a neutral Mentat, to certify the accounts. Whatever you certify becomes the truth. Choose."
+      }
+    },
+    {
+      "id": "ameline-vos",
+      "name": "Sister Ameline Vos",
+      "career": "Bene Gesserit",
+      "appearance": "Still as poured water, grey-eyed, dressed as a lady-in-waiting. Her smile arrives a moment after everyone else’s. DRIVE STATEMENTS — Duty: The Sisterhood placed me here; I will not leave its work half done. · Faith: The long plan is wiser than any single life, including mine. · Justice: Fairness is a luxury of those who will not live long. · Power: The hand that guides is stronger than the hand that strikes. · Truth: I hear every lie spoken in this keep. I choose which ones to answer.",
+      "attributes": {
+        "duty": 5,
+        "faith": 7,
+        "justice": 5,
+        "power": 7,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 7,
+        "discipline": 7,
+        "move": 4,
+        "understand": 4
+      },
+      "talent": "Truthsense — When someone lies to you face to face, the Narrator must tell you a lie was spoken (but not which part).",
+      "gear": [
+        "Poison snooper",
+        "Concealed slip-tip",
+        "Spice coffee service",
+        "Desert cloak"
+      ],
+      "signatureItem": "A ring with a hollow bezel holding a single dose of a Sisterhood antidote — meant for Lady Senna, not for you.",
+      "personalAgenda": "Keep Lady Senna Tessarin alive and on her seat. The Sisterhood has an interest in the child she carries.",
+      "buddy": "Oren Haskell",
+      "rival": "Farrah of Hollow Wind",
+      "secret": "Lady Senna is pregnant and has told no one but you. If the House falls, the child falls under Harkonnen wardship — unacceptable to your Mother Superior.",
+      "agendaByAct": {
+        "1": "Learn who in the keep is lying about the night of the murder. Tell no one of Lady Senna’s condition.",
+        "2": "The Fremen sietch could shelter Lady Senna if the House falls. Win their envoy’s respect — or her fear.",
+        "3": "If the audience turns against the House, use the Voice where it will matter most. The child must survive, whatever becomes of the title."
+      }
+    },
+    {
+      "id": "teodor-brask",
+      "name": "Teodor Brask",
+      "career": "Swordmaster",
+      "appearance": "Grey-bearded, heavy-shouldered, moves like a much younger man. Three dueling scars, one he will not explain. DRIVE STATEMENTS — Duty: I swore to the old Lord on his deathbed. The oath outlives him. · Faith: I believe in the blade, the shield and the slow, sure stroke. · Justice: A murderer under this roof answers to me before any court. · Power: Power is for lords. I want only to be ready. · Truth: A man’s guard tells you more than his tongue.",
+      "attributes": {
+        "duty": 8,
+        "faith": 5,
+        "justice": 6,
+        "power": 5,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 8,
+        "communicate": 4,
+        "discipline": 4,
+        "move": 6,
+        "understand": 4
+      },
+      "talent": "Guardian’s Step — When an ally within reach is attacked, spend 1 Momentum to take the attack yourself.",
+      "gear": [
+        "Rapier",
+        "Kindjal",
+        "Shield belt",
+        "Maula pistol",
+        "Stillsuit"
+      ],
+      "signatureItem": "The old Lord’s dueling glove, too small for your hand, carried in your belt.",
+      "personalAgenda": "Find the murderer and see justice done by the blade, under the forms. Keep Lady Senna safe at any cost.",
+      "buddy": "Cassius Tessarin",
+      "rival": "Oren Haskell",
+      "secret": "You trained Kessa Tine to fight with a knife when she was a girl in the kitchens. You trust her completely.",
+      "agendaByAct": {
+        "1": "Secure the keep. No one leaves or enters without your knowledge. Find who altered the guard roster.",
+        "2": "Someone in the household is a traitor. You must consider that it is someone you love.",
+        "3": "The Assessor’s champion will demand a duel under the forms. Win it, or yield it with honor — the House’s fate may depend on which."
+      }
+    },
+    {
+      "id": "farrah-hollow-wind",
+      "name": "Farrah of Hollow Wind",
+      "career": "Fremen Guide",
+      "appearance": "Small, sun-dark, eyes blue-within-blue. Wears her stillsuit even indoors and drinks only from her own catchpocket. DRIVE STATEMENTS — Duty: My sietch lent me to this House. I am its eyes here, and its debt-keeper. · Faith: The desert tests everyone. Only the worthy are returned. · Justice: Water taken must be water repaid. That is the oldest law. · Power: Outsiders want to own the desert. The desert owns them. · Truth: Watch the hands and the water. Words are wind.",
+      "attributes": {
+        "duty": 6,
+        "faith": 8,
+        "justice": 7,
+        "power": 4,
+        "truth": 5
+      },
+      "skills": {
+        "battle": 6,
+        "communicate": 4,
+        "discipline": 5,
+        "move": 7,
+        "understand": 4
+      },
+      "talent": "Walk Without Rhythm — On open sand, reduce the Difficulty of MOVE tests to avoid drawing a worm by 1.",
+      "gear": [
+        "Crysknife",
+        "Stillsuit",
+        "Fremkit",
+        "Thumper",
+        "Maker hooks",
+        "Paracompass"
+      ],
+      "signatureItem": "A string of water rings belonging to your brother, who went to the deathstill last summer.",
+      "personalAgenda": "Ensure the House honors its water debt to Sietch Hollow Wind, and that no one blames the Fremen for the drowned man.",
+      "buddy": "Teodor Brask",
+      "rival": "Sister Ameline Vos",
+      "secret": "You carried the spice out of the keep yourself, by the old rock path, on the Steward’s orders. You know exactly where it went.",
+      "agendaByAct": {
+        "1": "Someone wasted a man’s water in the cistern. That is a blasphemy that points at outsiders. Prove it was not your people.",
+        "2": "Guide the agents to the smugglers’ yard and the sietch. Do not reveal your own part until you must.",
+        "3": "If the House abandons the debt, your sietch will collect it in blood. Choose whether to warn the House or your people first."
+      }
+    },
+    {
+      "id": "cassius-tessarin",
+      "name": "Cassius Tessarin",
+      "career": "Noble Scion",
+      "appearance": "Lady Senna’s younger brother: handsome, restless, overdressed for the desert, sharper than he lets anyone see. DRIVE STATEMENTS — Duty: My sister rules. I was raised to be her shadow — I will not be her ghost. · Faith: I believe in luck, and in making it. · Justice: The Harkonnens have bled this town for a decade. Someone should make them pay. · Power: A minor House is only minor until it makes the right alliance. · Truth: Everyone at court is acting. The trick is knowing which play they are in.",
+      "attributes": {
+        "duty": 6,
+        "faith": 5,
+        "justice": 5,
+        "power": 8,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 5,
+        "communicate": 8,
+        "discipline": 4,
+        "move": 4,
+        "understand": 5
+      },
+      "talent": "Courtly Poise — In an intrigue conflict, your first COMMUNICATE test each scene gains one bonus d20 at no cost.",
+      "gear": [
+        "Rapier",
+        "Shield belt",
+        "House signet ring",
+        "Solari purse",
+        "Ornithopter access codes"
+      ],
+      "signatureItem": "An unsent letter to the heir of House Vaszari proposing marriage — and an alliance against the Harkonnens.",
+      "personalAgenda": "Turn the crisis into leverage. If the House must bend, make sure it bends toward a future you choose.",
+      "buddy": "Teodor Brask",
+      "rival": "Oren Haskell",
+      "secret": "You owe the smuggler Dunmore Kell eleven thousand solaris in gambling debts. He has been patient. That patience is ending.",
+      "agendaByAct": {
+        "1": "Keep your debt to Kell hidden. Learn what the Assessor wants before he arrives.",
+        "2": "Kell offers to forgive your debt if you guarantee him the next spice shipment. Decide what your name is worth.",
+        "3": "In the audience, someone must speak for the House. Make sure it is you — and that the Assessor leaves owing you something."
+      }
+    }
+  ],
+  "tips": [
+    "Let the Momentum pool rise early; the audience in Act III needs it.",
+    "Use Threat visibly: put a die on the table for each point. The players should watch it grow as the Assessor approaches.",
+    "Every NPC believes they serve a greater good. Play them sincerely.",
+    "If players solve the murder fast, have Kessa flee into the desert, where the worm or the Fremen find her first.",
+    "Drive statements are tools: when a player acts against one, offer them a choice — gain Threat for the Narrator, or challenge the statement and rewrite it."
+  ]
+}

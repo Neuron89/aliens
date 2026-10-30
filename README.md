@@ -1,395 +1,146 @@
-# MU/TH/UR — ALIEN RPG Game Mother Terminal
+# MU/TH/UR — Tabletop RPG Game Terminal
 
-A real-time companion web app for running [ALIEN RPG](https://freeleaguepublishing.com/games/alien/) tabletop sessions. Built with React, Socket.io, and a CRT-style terminal aesthetic inspired by the Weyland-Yutani computer systems from the ALIEN universe.
+![Node](https://img.shields.io/badge/node-18%2B-green) ![React](https://img.shields.io/badge/react-19-61dafb) ![Vite](https://img.shields.io/badge/vite-6-646cff) ![License](https://img.shields.io/badge/license-MIT-blue)
 
-The Game Mother (DM) runs a session from the main terminal. Players connect from their own devices using a session code and see only their character's information, status, and secret messages from MU/TH/UR.
+A real-time companion web app for running tabletop RPG sessions with a CRT-terminal aesthetic. The Game Master runs the session from a desktop
+or tablet; players join from their phones with a 4-letter code and see only their own character, status and private transmissions.
 
----
+The engine is **universe-agnostic**: each game system is a module in `web app/src/universes/<id>/` (theme, wording, rules, careers, dice, reference tabs),
+and scenarios are **content packs**: validated JSON documents you can bundle, drop in a folder, import, generate with Claude, or have Claude Code write by hand.
+
+## Universes
+
+| Universe | Status | Rules |
+|---|---|---|
+| **ALIEN RPG** (`alien`) | Complete: 4 bundled cinematic scenarios, Colonial Marines operations, Montero deck plans | Year Zero Engine (base + stress dice) |
+| **Dune** (`dune`) | In progress | 2d20 |
+
+Adding another one: [`docs/ADDING_A_UNIVERSE.md`](docs/ADDING_A_UNIVERSE.md).
 
 ## Features
 
-### Game Session (Multiplayer)
-- **DM creates a session** and gets a 4-letter access code
-- **Players join** via link or code from any device on the network
-- **Real-time sync** — health, stress, status effects, and inventory update instantly
-- **Secret messages** — DM sends private transmissions styled as MU/TH/UR communications
-- **Player isolation** — players only see their own character sheet, never the DM's tools
-- **Character death & reassignment** — DM can kill a character and assign a new one on the fly
-- **Broadcast messages** — shipwide announcements to all crew
+- **Game Night flow**: pick a universe, pick or generate a scenario, initialize a session, share a join link, play, pause, resume.
+- **Live sessions** over Socket.io: DM dashboard with per-player tracks (health, stress... defined by the universe), status effects, inventory, character assignment, kill/replace.
+- **Transmissions**: private and broadcast messages with universe-specific priorities; one-click **handouts** from the scenario pack.
+- **Scenario library and runner**: acts with read-aloud (text-to-speech), scene-by-scene runner with checks, stress triggers, NPCs, threats, locations, endings, GM tips; ambient audio presets.
+- **Characters**: pre-generated characters inside packs, plus an in-app creator driven by the universe's rules and careers.
+- **Maps**: ASCII and image maps from packs, plus an SVG deck-plan engine for interactive ship maps.
+- **Content packs**: schema-validated JSON, import/export in the UI, live runtime folder, validator and smoke scripts.
+- **Scenario generation**: Claude-backed generator (API key) or the **`gamenight` Claude Code skill** (no key needed).
+- **Per-universe theming**: palette, fonts, CRT effect, terminal name and wording change; layout stays the same.
+- **Session persistence**: games are snapshotted to disk so a DM can resume after a restart (being implemented; see `docs/GAME_NIGHT.md`).
 
-### Scenarios
-- Full text of cinematic scenarios with act-by-act read-aloud sections
-- **Text-to-Speech** narration with adjustable voice, rate, and pitch
-- **Ambient audio** presets (ship hum, tension, alert, dread) via Web Audio API
-- Colonial Marines campaign operations with extracted tactical maps
+## Quick start
 
-### Characters
-- 15 pre-built characters across 4 scenarios
-- Full stat blocks: attributes, skills, talents, gear, personal agendas
-- Buddy/rival relationships, signature items
+Requires Node.js 18+ (tested on current releases) and a local network if players use their own devices.
 
-### Maps
-- **SVG Map Engine** — a reusable, data-driven blueprint renderer for creating detailed deck plans
-- USCSS Montero with 3 switchable decks (Personnel, Operations, Cargo)
-- Thick-wall rendering, gap-style doors, corridor walls, hull exterior details
-- Varied room shapes (rectangles, octagons, circles)
-- Vent pathways with grate marks, structural interior hints
-- Colonial Marines tactical maps extracted from sourcebook PDFs
-
-### Dice Roller
-- Base dice + stress dice with full ALIEN RPG panic mechanics
-- Visual face results, automatic panic detection
-
-### Reference
-- Cheat sheets for combat, skills, difficulty levels, critical injuries
-- Xenomorph stat blocks and behavior reference
-
----
-
-## Quick Start
-
-### Prerequisites
-
-- **Node.js 18+** (tested on Node.js 22)
-- **npm** (comes with Node.js)
-- A local network if you want players to connect from other devices
-
-### Installation
+### Development
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Aliens-RPG-MUTHUR.git
-cd Aliens-RPG-MUTHUR/web\ app
+cd "web app"
 npm install
-```
-
-### Running the App
-
-```bash
 npm run dev
 ```
+Vite serves the UI on <http://localhost:3000> (hot reload) and the Node server runs on port 3002; Vite proxies `/api` and `/socket.io` to it.
+Other devices use `http://<your-LAN-IP>:3000`.
 
-This starts two servers concurrently:
+### Deploy on this machine (Windows, background server)
 
-| Server | Port | Purpose |
-|--------|------|---------|
-| **Vite** (dev server) | `3000` | Serves the React app with hot-reload |
-| **Socket.io** (game server) | `3002` | Handles real-time multiplayer sessions |
-
-Open your browser to **`http://localhost:3000`**.
-
-To access from other devices on your network (phones, tablets, player laptops), use your machine's local IP:
-
+```powershell
+powershell -File scripts\deploy-local.ps1            # build, sync to ..\aliens-deploy, start on :3100
+powershell -File scripts\deploy-local.ps1 -Port 3200
+powershell -File scripts\deploy-local.ps1 -Stop
 ```
-http://YOUR_LOCAL_IP:3000
-```
+Prints the LAN URL when the server answers. Details, firewall notes and the full host runbook: [`docs/GAME_NIGHT.md`](docs/GAME_NIGHT.md).
 
-You can find your local IP with `hostname -I` (Linux) or `ipconfig` (Windows).
-
-### Production Build
+### Production without the script
 
 ```bash
-npm run build    # Creates optimized build in dist/
-npm start        # Starts the Express server serving the built app + WebSockets
+cd "web app" && npm run build && npm start      # serves dist/ + API + sockets on PORT (default 3002)
 ```
 
-In production mode, the Express server (port 3002) serves both the static files and handles WebSocket connections. Point your browser to `http://YOUR_IP:3002`.
+## Generator setup
 
----
+The Claude-backed generator lives in `web app/server/generate.js` and `web app/server/generator/`. Put settings in `web app/.env` (git-ignored; loaded by `server/generator/env.js`;
+real environment variables win). When using the deployed copy, create the `.env` in `..\aliens-deploy\web app\`.
 
-## How to Use
+```ini
+ANTHROPIC_API_KEY=sk-ant-...
+GENERATOR_MODEL=claude-opus-5-5     # default
+GENERATOR_EFFORT=high               # default
+GENERATOR_MAX_TOKENS=64000          # default
+GENERATOR_FALLBACKS=1               # 0 disables the server-side-fallback beta
+GENERATOR_MOCK=0                    # 1 = return a canned pack without calling the API (testing)
+GENERATOR_MOCK_DELAY=350            # mock streaming delay in ms
+```
+Other server variables: `PORT` (default 3002; the deploy script sets 3100), `CONTENT_DIR` (runtime packs; default `web app/content`), `DATA_DIR` (session snapshots; default `web app/data`).
+The API endpoint is `POST /api/generate` with `{ universeId, params }`; it returns a pack validated against the schema. Without a key the endpoint reports an error;
+use the Claude Code skill instead. CLI: `node scripts/generate-pack.mjs --universe alien --players 4 ...` (run it with `--help` for the flags; the script is being added).
 
-### Starting a Game Session (DM)
+## Claude Code skill: write a scenario by hand
 
-1. Open the app in your browser
-2. Click **"INITIATE SESSION — GAME MOTHER (DM)"**
-3. A 4-letter access code is generated (e.g., `XKFM`)
-4. Share the join link with your players: `http://YOUR_IP:3000/?join=XKFM`
-5. The app switches to full DM mode with a **Session** tab
+`.claude/skills/gamenight/SKILL.md` teaches a Claude Code session to author a complete, validated pack from parameters with no API key: it collects parameters
+(universe, players, playtime, type, difficulty, tone, setting, threat, themes, avoid, lethality), reads the universe's rules, careers and tone guide, writes
+`web app/content/<universe>/<id>.json`, validates it and tells you where it shows up. Open Claude Code in this repo and say
+"set up a game night", "write a one-shot for alien" or "make characters for ...". Supporting files: `references/pack-skeleton.json` and `references/quality-checklist.md`.
 
-### DM Dashboard
+## Documentation
 
-The **Session** tab gives you:
+| Doc | Purpose |
+|---|---|
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | The contract: universe interface, pack schema summary, sessions, generator, theming |
+| [`docs/CONTENT_PACKS.md`](docs/CONTENT_PACKS.md) | Field-by-field pack guide, loading, import/export, validator, handouts |
+| [`docs/ADDING_A_UNIVERSE.md`](docs/ADDING_A_UNIVERSE.md) | Step-by-step new universe, with checklist |
+| [`docs/GAME_NIGHT.md`](docs/GAME_NIGHT.md) | Host runbook: deploy, DM flow, player flow, pause/resume, troubleshooting |
 
-- **Crew Status** — see all connected players, their health/stress bars, and status effects
-- Click any player card to expand the management panel:
-  - **Assign a character** from the pre-built pool
-  - **Adjust health** (+1 / -1 / MAX) and **stress** (+1 / -1 / CLEAR)
-  - **Add/remove status effects** (STRESSED, PANICKED, BLEEDING, BROKEN, etc.)
-  - **Manage inventory** (add/remove items)
-  - **View character sheet** summary (attributes, talent)
-  - **Kill character** and assign a replacement from available characters
-- **Transmissions** — send secret messages to individual players or broadcast to all
-  - Priority levels: STANDARD, PRIORITY, EYES ONLY, EMERGENCY
-- **Message Log** — full history of all transmissions
-
-While managing a session, you still have access to all other tabs (Scenarios, Maps, Dice, etc.).
-
-### Joining as a Player
-
-1. Visit the link the DM shared (e.g., `http://192.168.1.100:3000/?join=XKFM`)
-2. Enter your name and click **AUTHENTICATE**
-3. Wait for the DM to assign you a character
-4. Once assigned, you see your personal MU/TH/UR terminal with:
-   - **Status** — health, stress, attributes, active conditions, talent
-   - **Skills** — full skill list with attribute associations
-   - **Inventory** — equipment with signature item highlighted
-   - **Comms** — incoming transmissions from MU/TH/UR + ability to message back
-   - **Dossier** — appearance, personal agenda, buddy/rival, signature item
-
-Players **cannot** access scenarios, maps, DM tools, or other players' data.
-
----
-
-## Map Engine
-
-The SVG map engine is a reusable toolkit for generating detailed deck plans and blueprints. It's designed to be data-driven so you can create new maps by defining a configuration object.
-
-### Architecture
+## Repository layout
 
 ```
-src/components/MapEngine.jsx     — Core engine (primitives + wrapper)
-src/data/mapDefinitions/montero.jsx — Example: USCSS Montero definition
-src/components/MapRenderer.jsx   — Thin wrapper connecting engine + data
-```
-
-### Creating a New Map
-
-1. **Create a definition file** in `src/data/mapDefinitions/`:
-
-```jsx
-// src/data/mapDefinitions/myship.jsx
-import React from 'react';
-import {
-  Room, Door, Cor, ShaftRoom, Vents,
-  useMapTheme, purl, pid, DEFAULTS,
-} from '../../components/MapEngine';
-
-// Define your hull shape (SVG path), or omit for stations/facilities
-const HULL = `M 550 75 C 540 75, 500 97, ...  Z`;
-
-// Define deck components using the engine's primitives
-function MyDeckA() {
-  const C = useMapTheme();
-  return (
-    <g>
-      <Room x={460} y={165} w={120} h={55} label="BRIDGE"
-        shape="octagon" icons={['terminal', 'intercom']} crew />
-      <Cor x={539} y={220} w={22} h={5} />
-      <Door x={550} y={220} v={false} />
-      {/* ... more rooms, corridors, doors */}
-    </g>
-  );
-}
-
-// Export the config
-export const myShipConfig = {
-  width: 1100,
-  height: 920,
-  scenarioTag: 'MY SCENARIO',
-  hull: {
-    path: HULL,
-    background: (C) => <g>{/* nacelles, nozzles */}</g>,
-    overlays: (C) => <g>{/* seam lines */}</g>,
-  },
-  decks: [
-    { id: 'A', name: 'COMMAND DECK', page: '1', component: MyDeckA },
-  ],
-  specs: {
-    title: 'TECHNICAL SPECIFICATIONS',
-    items: [['LENGTH', '200 METRES'], ['CLASS', 'My Ship Class']],
-  },
-  legend: 'default',
-};
-```
-
-2. **Render it** with the engine:
-
-```jsx
-import MapEngine from './MapEngine';
-import { myShipConfig } from '../data/mapDefinitions/myship';
-
-export default function MyShipMap() {
-  return <MapEngine config={myShipConfig} />;
-}
-```
-
-### Engine Exports
-
-| Export | Description |
-|--------|------------|
-| `MapEngine` (default) | Full map wrapper with background, frame, hull, deck tabs, legend, specs |
-| `Room` | Room with thick walls, shape variants (`rect` / `octagon` / `circle`), crew floor tint, icons |
-| `Door` | Gap-in-wall door with swing indicator marks |
-| `Cor` | Corridor with visible wall edges and grating pattern |
-| `ShaftRoom` | Vertical access point — `ladder`, `elevator`, or `airscrub` |
-| `Vents` | Vent pathways (dashed lines) with grate marks at intersections |
-| `DEFAULT_THEME` | Full color palette object |
-| `createTheme(overrides)` | Merge custom colors with the default palette |
-| `useMapTheme()` | React hook to access the active theme from inside deck components |
-| `pid(name)` / `purl(name)` | Helpers for referencing engine SVG pattern/gradient IDs |
-| `registerIcon(name, fn)` | Add custom icons to the icon registry |
-| `MapLegend` | Standalone legend renderer |
-| `MapSpecs` | Standalone technical specs renderer |
-| `defaultLegendItems(C)` | Returns the standard legend item set |
-| `DEFAULTS` | Configurable constants (wall thickness, shaft size, door length) |
-| `seededRandom(seed)` | Deterministic random number generator |
-
-### Room Shapes
-
-```jsx
-<Room shape="rect" />      // Rectangle (default), supports rx for rounded corners
-<Room shape="octagon" />   // Octagonal
-<Room shape="circle" />    // Ellipse
-```
-
-### Built-in Icons
-
-`medkit`, `terminal`, `intercom`, `restricted`, `weapon`, `cryopod`
-
-Add custom icons with:
-```jsx
-import { registerIcon } from './MapEngine';
-registerIcon('reactor', (x, y, C) => (
-  <circle cx={x} cy={y} r="3" fill="none" stroke={C.accent} strokeWidth="0.5" />
-));
-```
-
-### Theming
-
-Override any color in the palette:
-
-```jsx
-const redTheme = createTheme({
-  accent: '#ff4444',
-  hull: '#8a2a2a',
-  hullOutline: '#cc4444',
-});
-
-// Pass as config:
-{ theme: { accent: '#ff4444', hull: '#8a2a2a' } }
-```
-
-### Config Shape Reference
-
-```js
-{
-  width: 1100,                          // SVG viewBox width
-  height: 920,                          // SVG viewBox height
-  theme: {},                            // Color overrides (optional)
-  stars: { count: 200, seed: 1979 },    // Star-field background
-  frame: true,                          // Border + corner marks
-  scenarioTag: 'SCENARIO NAME',         // Rotated text on left edge
-  hull: {                               // Ship hull (omit for non-ship maps)
-    path: 'M...',                       //   SVG path data
-    background: (C) => <g>...</g>,      //   Elements behind hull (nacelles)
-    overlays: (C) => <g>...</g>,        //   Elements inside hull clip (seams)
-  },
-  exteriorDetails: (C) => <g>...</g>,   // Sensors, antenna (on top of hull)
-  sidebar: (C, W, H) => <g>...</g>,     // Left sidebar content
-  decks: [                              // Deck definitions
-    { id: 'A', name: 'DECK NAME', page: '1', component: MyDeck },
-  ],
-  fixedOverlays: (C) => <g>...</g>,     // Elements on all decks (airlocks)
-  specs: { title: '...', items: [...] },// Technical specifications
-  legend: 'default',                    // 'default' or custom items array
-}
-```
-
----
-
-## Project Structure
-
-```
-Aliens-RPG-MUTHUR/
+.
+├── ARCHITECTURE.md
 ├── README.md
-├── .gitignore
-├── map-references/              # Reference map images for future map creation
-├── web app/
-│   ├── package.json             # Dependencies and scripts
-│   ├── vite.config.js           # Vite dev server + Socket.io proxy
-│   ├── index.html               # HTML entry point
-│   ├── server/
-│   │   └── index.js             # Express + Socket.io game server
-│   ├── public/
-│   │   ├── Deck A–D.jpg         # USCSS Cronus deck images
-│   │   └── maps/acm/            # Colonial Marines tactical maps
-│   └── src/
-│       ├── main.jsx             # React entry point
-│       ├── App.jsx              # Root component with role-based routing
-│       ├── index.css            # Global CRT terminal theme styles
-│       ├── context/
-│       │   └── GameContext.jsx   # Game state + Socket.io client management
-│       ├── hooks/
-│       │   ├── useTTS.js        # Text-to-speech for scenario narration
-│       │   └── useAmbientAudio.js  # Procedural ambient sound generation
-│       ├── components/
-│       │   ├── Header.jsx       # MU/TH/UR terminal header
-│       │   ├── Nav.jsx          # Navigation with session indicator
-│       │   ├── SessionScreen.jsx   # Create / join game session
-│       │   ├── DMDashboard.jsx  # DM player management panel
-│       │   ├── PlayerView.jsx   # Player-only character terminal
-│       │   ├── Scenarios.jsx    # Scenario browser with TTS
-│       │   ├── Characters.jsx   # Character reference browser
-│       │   ├── Maps.jsx         # Map viewer (SVG + images)
-│       │   ├── MapEngine.jsx    # Reusable SVG map generation engine
-│       │   ├── MapRenderer.jsx  # Montero map wrapper
-│       │   ├── DiceRoller.jsx   # ALIEN RPG dice roller
-│       │   ├── CheatSheets.jsx  # Quick-reference game rules
-│       │   ├── Xenomorphs.jsx   # Xenomorph stat reference
-│       │   └── AudioPanel.jsx   # Ambient audio controls
-│       └── data/
-│           ├── scenarios.js     # Scenario text and metadata
-│           ├── characters.js    # Character stats and profiles
-│           ├── maps.js          # Map metadata
-│           └── mapDefinitions/
-│               └── montero.jsx  # USCSS Montero SVG deck plan data
+├── docs/                         # guides (above)
+├── .claude/skills/gamenight/     # Claude Code skill (SKILL.md + references/)
+├── scripts/                      # repo-level tools (deploy, art)
+├── map-references/               # reference images for map making
+└── web app/
+    ├── package.json  vite.config.js  index.html
+    ├── content/                  # runtime packs: content/<universe>/<id>.json (git-ignored) + examples/
+    ├── data/                     # session snapshots (git-ignored)
+    ├── public/                   # images, deck plans, art
+    ├── scripts/                  # validate-content.mjs, smoke.mjs, ...
+    ├── server/                   # index.js, sessions.js, persistence.js, content.js, generate.js, generator/, schema/
+    └── src/
+        ├── engine/               # universe-agnostic UI, contexts, hooks
+        └── universes/
+            ├── index.js          # registry
+            └── alien/            # universe.core.js, index.js, theme, terms, rules, careers, generator, reference/, components/, maps/, content/
 ```
-
----
-
-## Tech Stack
-
-| Technology | Purpose |
-|-----------|---------|
-| **React 19** | UI framework |
-| **Vite 6** | Dev server and build tool |
-| **Socket.io** | Real-time WebSocket communication |
-| **Express** | HTTP server for production + WebSocket host |
-| **Web Speech API** | Text-to-speech for scenario narration |
-| **Web Audio API** | Procedural ambient sound generation |
-| **SVG** | Scalable vector map rendering |
-
----
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start both Vite dev server (3000) and game server (3002) |
-| `npm run dev:client` | Start only the Vite dev server |
-| `npm run dev:server` | Start only the Socket.io game server |
-| `npm run build` | Create production build in `dist/` |
-| `npm start` | Run production server (serves built app + WebSockets) |
+| Command | What it does |
+|---|---|
+| `scripts/deploy-local.ps1 [-Port N] [-Stop]` | Build, sync to `..\aliens-deploy`, install prod deps, (re)start the background server (default port 3100) |
+| `scripts/convert-art.py [--dry-run] [--keep] [--quality N] [--max-dim N] [--only TEXT]` | Convert PNG art and maps under `web app/public/art`, `web app/public/maps` and `map-references/` to WebP (needs Pillow; deletes the PNGs only after verifying all conversions, unless `--keep`) |
+| `scripts/crop_art.py` | Crop per-item images out of full-page book scans using `scripts/crop_art_config.json` |
+| `web app/scripts/validate-content.mjs` (`npm run validate`) | Validate bundled, runtime and example packs against the schema; exit 1 on failure |
+| `web app/scripts/smoke.mjs` (`npm run smoke`) | Import each universe core in Node, assert the interface, validate all packs |
+| `web app/scripts/generate-pack.mjs` | CLI scenario generator (needs `ANTHROPIC_API_KEY`; being added) |
+| `npm run dev` / `dev:client` / `dev:server` | Vite + server, only Vite (:3000), only the server (:3002) |
+| `npm run build` / `npm start` / `npm run preview` | Production build, run production server, preview the build |
 
----
+## Content and legal
 
-## Network Setup Tips
+- **No copyrighted books are stored in this repository.** Source PDFs are git-ignored (`alien documents/`, `scenarios/**/*.pdf`). Do not commit them.
+- Art and map images in `web app/public/` and `map-references/` were derived from sourcebooks the owner possesses; they are **for personal, private use at the owner's table** and must not be redistributed or published.
+- Generated and hand-written packs invent their own proper nouns and prose; they must not reproduce sourcebook text.
+- This is a fan-made companion tool. It is not affiliated with or endorsed by Free League Publishing, 20th Century Studios, Frank Herbert's estate, Legendary, Modiphius, or any other rights holder. ALIEN, Dune and related names, settings and mechanics belong to their respective owners.
 
-- The app is designed to run on a **local network** (home Wi-Fi, etc.)
-- All devices must be on the **same network** to connect
-- The DM's machine acts as the server — players connect to the DM's IP
-- Find your local IP: `hostname -I` (Linux/Mac) or `ipconfig` (Windows)
-- If you have firewall issues, ensure ports **3000** and **3002** are open
-- For a single-machine setup, use `localhost` for DM and `127.0.0.1` for player tabs
+## Credits
 
----
-
-## Legal Notice
-
-This is a fan-made companion tool for the ALIEN RPG by Free League Publishing. It is not affiliated with or endorsed by Free League Publishing, 20th Century Studios, or the ALIEN franchise. The ALIEN RPG, its scenarios, characters, and game mechanics are the property of their respective copyright holders. This tool is intended for personal use to enhance tabletop gameplay sessions.
-
----
+Built with React, Vite, Express, Socket.io, Ajv and the Anthropic SDK. ALIEN RPG by Free League Publishing (Year Zero Engine). Scenario packs and tooling by the project contributors; generated content by Claude.
 
 ## License
 
-MIT
+MIT (code). Game content is subject to the rights of its owners as described above.

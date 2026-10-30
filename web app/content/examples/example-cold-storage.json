@@ -1,0 +1,165 @@
+{
+  "packVersion": 1,
+  "id": "example-cold-storage",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Cold Storage",
+    "tagline": "A routine cargo inspection on a dead-quiet reefer barge. The manifest lists frozen beef. The freezers are warm.",
+    "synopsis": "EXAMPLE PACK — a deliberately small one-act scenario showing the shape of a hand-written content pack. The crew of a customs cutter boards the refrigerated barge Kestrel Nine to inspect cargo. A Company smuggler hid a facehugger-bearing egg crate among the meat lockers; the barge's single surviving crewman is already infected. Copy this file to content/alien/<your-id>.json (or import it from the Scenario Library) and edit it.",
+    "type": "One-Shot",
+    "players": "2–3",
+    "playtime": "1–2 hours",
+    "difficulty": "Introductory",
+    "tone": ["dread", "claustrophobia"],
+    "contentWarnings": ["body horror"],
+    "source": "custom"
+  },
+  "briefing": {
+    "from": "MU/TH/UR 6000 — ICC CUTTER HALBERD",
+    "to": "BOARDING TEAM",
+    "classification": "ROUTINE — CUSTOMS INSPECTION",
+    "text": "ATTENTION BOARDING TEAM. REFRIGERATED BARGE KESTREL NINE HAS FAILED TWO TRANSPONDER CHECKS ON APPROACH TO THEDUS STATION.\n\nManifest declares 40,000 kilograms of frozen protein for colonial distribution. Per ICC regulation 7/42, all non-responsive cargo vessels are subject to inspection prior to docking.\n\nCrew complement listed as three. One reply received: voice only, no video. Reply was not coherent.\n\nInspect cargo holds A through D. Report discrepancies. Do not open sealed Company containers without authorization.\n\nMU/TH/UR OUT."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "INSPECTION",
+      "summary": "Board the barge, find the warm freezers, the hidden crate and the last crewman — then get off before his chest opens.",
+      "readAloud": [
+        "The umbilical seals with a hiss and a shudder. Beyond the hatch the Kestrel Nine is dark except for the blue pilot lights along the deck, and the air that rolls out to meet you is warm and wet and smells of spoiled meat. Somewhere deep in the barge a compressor is cycling, trying and failing to start.",
+        "Frost should cover these bulkheads. Instead, condensation runs down them in thin streams and pools on the deck plates. Your boots splash as you walk. The only other sound is a slow, wet breathing coming from the direction of Hold C."
+      ],
+      "gmNotes": "Keep it small and tense: one corridor, four holds, one infected crewman (Okafor), one facehugger still loose. Let the players find the open Company crate in Hold D before they find Okafor. The chestburster emerges at the worst possible moment — ideally while someone is trying to help him.",
+      "scenes": [
+        {
+          "name": "Warm Freezers",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Hold A's freezer doors stand open. Rotting carcasses hang from hooks in the humid dark.",
+          "checks": ["COMTECH — pull the barge's power log (reefer units shut down from the bridge 30 hours ago)"],
+          "stressTriggers": ["STRESS +1 — the smell and the dark"],
+          "gmTip": "Someone switched the freezers off on purpose. That is the first clue that the cargo was never the point."
+        },
+        {
+          "name": "The Company Crate",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "In Hold D a stencilled Weyland-Yutani container has been cut open from the inside. Something leathery and opened like a flower sits in packing foam.",
+          "checks": ["OBSERVATION — notice the second empty cradle in the foam"],
+          "stressTriggers": ["STRESS +1 — all present"],
+          "outcomes": ["If the players report it, MU/TH/UR orders them to secure the crate for Company pickup."]
+        },
+        {
+          "name": "Okafor",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Okafor is lucid for one Round, then the chestburster emerges (Panic Roll for witnesses) and flees into the ducts. The loose facehugger attacks the first PC to search the ducts.",
+          "narration": "A man in a stained barge jumpsuit sits against the wall of Hold C, clutching his chest, smiling at you with relief.",
+          "checks": ["MEDICAL AID — find the scar on his face (too late to help)"],
+          "stressTriggers": ["IMMEDIATE PANIC ROLL — all witnesses"],
+          "npcGuidance": "Okafor begs them to take him off the barge. He hides the fact that something was on his face yesterday."
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Okafor",
+      "role": "Barge Loadmaster",
+      "agenda": "Get off the Kestrel Nine alive and get paid.",
+      "behavior": "Friendly, desperate, coughing. Lies about the last two days.",
+      "secret": "Took a bribe to carry the Company crate, and was face-hugged when he opened it."
+    }
+  ],
+  "threats": [
+    {
+      "name": "Facehugger",
+      "ref": "facehugger",
+      "description": "The second occupant of the crate, hiding in the air ducts above Hold C.",
+      "tactics": "Waits for a lone PC in a duct or crawlspace, then leaps."
+    },
+    {
+      "name": "Chestburster",
+      "ref": "chestburster",
+      "description": "Erupts from Okafor in Hold C.",
+      "tactics": "Flees and hides; never fights unless cornered."
+    }
+  ],
+  "keyLocations": [
+    { "name": "Kestrel Nine — Holds A–D", "description": "Four warm, dripping meat lockers off a single spine corridor. Hooks, carcasses, and a lot of places to hide." },
+    { "name": "Kestrel Nine — Bridge", "description": "Cramped two-seat bridge. The reefer controls were switched off by hand; the log shows Okafor's code." }
+  ],
+  "handouts": [
+    {
+      "id": "company-claim",
+      "title": "COMPANY CARGO CLAIM",
+      "from": "WEYLAND-YUTANI — SPECIAL PROJECTS",
+      "to": "BOARDING TEAM",
+      "priority": "PRIORITY",
+      "text": "CONTAINER WY-0451 ABOARD KESTREL NINE IS COMPANY PROPERTY UNDER ICC EXEMPTION 12-B. DO NOT OPEN. DO NOT DESTROY. SECURE FOR TRANSFER. COMPENSATION AUTHORIZED FOR COOPERATION.",
+      "when": "As soon as the players report the open crate"
+    }
+  ],
+  "maps": [
+    {
+      "id": "kestrel-nine",
+      "title": "REFRIGERATED BARGE KESTREL NINE",
+      "subtitle": "Example ASCII map",
+      "description": "Single-spine cargo barge with four reefer holds.",
+      "kind": "ascii",
+      "ascii": "╔══════════════════════════════════════╗\n║        KESTREL NINE — DECK PLAN       ║\n╠══════════════════════════════════════╣\n║ [BRIDGE]──┬──[HOLD A]   [HOLD B]       ║\n║           │      │          │          ║\n║           └──────┴── SPINE ─┴──┐       ║\n║                  │          │  │       ║\n║              [HOLD C]   [HOLD D]       ║\n║                  ░░ ducts ░░           ║\n║ [AIRLOCK]──── umbilical to HALBERD     ║\n╚══════════════════════════════════════╝",
+      "rooms": [
+        { "name": "Hold C", "note": "Okafor is here. Duct access above." },
+        { "name": "Hold D", "note": "The opened Company crate." }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "title": "PURGE THE BARGE",
+      "condition": "The players vent the Kestrel Nine's atmosphere or scuttle it and leave the crate behind.",
+      "text": "Through the cutter's viewport you watch the barge tumble away, frost finally blooming on its hull. Whatever is inside it will freeze now. The Company's lawyers will be waiting at Thedus. They always are."
+    },
+    {
+      "title": "COMPANY PROPERTY",
+      "condition": "The players secure the crate for Weyland-Yutani.",
+      "text": "The bonus clears your accounts before you dock. Nobody asks where the barge crew went. Three days later, the Halberd's air scrubbers start making a sound you do not recognize."
+    }
+  ],
+  "characters": [
+    {
+      "id": "example-inspector-varga",
+      "name": "Inspector Lena Varga",
+      "career": "Colonial Marshal",
+      "appearance": "Compact, grey-eyed, uniform pressed even after a month in transit. Talks slowly so people have to listen.",
+      "attributes": { "str": 3, "agi": 3, "wit": 5, "emp": 3 },
+      "skills": { "heavyMachinery": 0, "stamina": 1, "closeCombat": 1, "mobility": 1, "piloting": 0, "rangedCombat": 2, "observation": 3, "comtech": 1, "survival": 0, "manipulation": 1, "medicalAid": 0, "command": 0 },
+      "talent": "Investigator — +2 to OBSERVATION when looking for clues.",
+      "gear": ["M4A3 Service Pistol", "ICC inspection tablet", "Flashlight", "Brass inspector's seal (Signature Item)"],
+      "signatureItem": "Brass inspector's seal — her mother's, from the old Earth customs service.",
+      "personalAgenda": "Someone at Thedus is taking Company money to wave cargo through. Bring back proof — the crate is proof.",
+      "buddy": "Teo Salas",
+      "rival": "None"
+    },
+    {
+      "id": "example-tech-salas",
+      "name": "Teo Salas",
+      "career": "Roughneck",
+      "appearance": "Big, tired, grease under every fingernail. Hums when he works and when he is scared.",
+      "attributes": { "str": 5, "agi": 3, "wit": 3, "emp": 3 },
+      "skills": { "heavyMachinery": 3, "stamina": 2, "closeCombat": 1, "mobility": 0, "piloting": 1, "rangedCombat": 0, "observation": 1, "comtech": 2, "survival": 0, "manipulation": 0, "medicalAid": 0, "command": 0 },
+      "talent": "Heavy Lifter — +2 HEAVY MACHINERY.",
+      "gear": ["Cutting Torch", "Tool Kit", "Comm Unit", "Daughter's drawing (Signature Item)"],
+      "signatureItem": "A crayon drawing of a spaceship, folded into his breast pocket.",
+      "personalAgenda": "The Company's cooperation bonus would clear your debts. Make sure that crate reaches them intact.",
+      "buddy": "Inspector Lena Varga",
+      "rival": "Inspector Lena Varga"
+    }
+  ],
+  "tips": [
+    "This is an example pack: read it top to bottom to see every field a pack can use.",
+    "Two players each get one character; their agendas conflict over the crate by design.",
+    "Hold the chestburster until a player is touching Okafor."
+  ]
+}

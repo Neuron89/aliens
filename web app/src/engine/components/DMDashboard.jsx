@@ -1,0 +1,462 @@
+import React, { useState, useMemo } from 'react';
+import { useGame } from '../GameContext';
+import { useUniverse } from '../UniverseContext';
+import { useContent } from '../ContentContext';
+import { characterGroups, initialCharacterState, withDerived, attributeLabel, trackMaxFor } from '../rulesUtils';
+
+export default function DMDashboard() {
+  const {
+    gameCode, players, messages, leaveGame, packId,
+    assignCharacter, updatePlayer, sendMessage,
+    broadcastMessage, killCharacter, unreadCount, clearUnread, lastSaved, boardLinked,
+  } = useGame();
+  const { universe } = useUniverse();
+  const { packs, byId } = useContent();
+  const { terms, terminal, rules } = universe;
+  const priorities = terms.priorities?.length ? terms.priorities : ['STANDARD'];
+  const tracks = rules.tracks || [];
+  const statusEffects = rules.statusEffects || [];
+
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [panel, setPanel] = useState('players'); // 'players' | 'message' | 'log'
+  const [msgText, setMsgText] = useState('');
+  const [msgTarget, setMsgTarget] = useState('');
+  const [msgPriority, setMsgPriority] = useState(priorities[0]);
+  const [newItem, setNewItem] = useState('');
+
+  const playerList = Object.values(players);
+  const selected = selectedPlayer ? players[selectedPlayer] : null;
+  const activePack = packId ? byId[packId] : null;
+
+  const assignedIds = useMemo(() => {
+    return new Set(playerList.filter(p => p.character?.id).map(p => p.character.id));
+  }, [playerList]);
+
+  /* Active pack's characters first, then every other pack for this universe. */
+  const characterSources = useMemo(() => {
+    const groups = characterGroups(packs);
+    const seen = new Set();
+    const ordered = [
+      ...groups.filter(g => g.packId === packId),
+      ...groups.filter(g => g.packId !== packId),
+    ];
+    return ordered.map(g => ({
+      ...g,
+      characters: g.characters.filter(c => {
+        if (assignedIds.has(c.id) || seen.has(c.id)) return false;
+        seen.add(c.id);
+        return true;
+      }),
+    })).filter(g => g.characters.length > 0);
+  }, [packs, packId, assignedIds]);
+
+  const shareUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}?join=${gameCode}`
+    : '';
+
+  const doAssign = (playerId, char) => {
+    const character = withDerived(universe, char);
+    assignCharacter(playerId, character, initialCharacterState(universe, character));
+  };
+
+  const handleSendMsg = (e) => {
+    e.preventDefault();
+    if (!msgText.trim()) return;
+    if (msgTarget === 'broadcast') {
+      broadcastMessage(msgText, msgPriority);
+    } else if (msgTarget) {
+      sendMessage(msgTarget, msgText, msgPriority);
+    }
+    setMsgText('');
+  };
+
+  const setTrack = (p, key, value) => updatePlayer(p.id, { tracks: { [key]: value } });
+
+  const handleAddStatus = (playerId, effect) => {
+    const p = players[playerId];
+    if (!p || p.statusEffects.includes(effect)) return;
+    updatePlayer(playerId, { statusEffects: [...p.statusEffects, effect] });
+  };
+
+  const handleRemoveStatus = (playerId, effect) => {
+    const p = players[playerId];
+    if (!p) return;
+    updatePlayer(playerId, { statusEffects: p.statusEffects.filter(e => e !== effect) });
+  };
+
+  const handleAddItem = (playerId) => {
+    if (!newItem.trim()) return;
+    const p = players[playerId];
+    if (!p) return;
+    updatePlayer(playerId, { inventory: [...p.inventory, newItem.trim()] });
+    setNewItem('');
+  };
+
+  const handleRemoveItem = (playerId, idx) => {
+    const p = players[playerId];
+    if (!p) return;
+    const inv = [...p.inventory];
+    inv.splice(idx, 1);
+    updatePlayer(playerId, { inventory: inv });
+  };
+
+  const PLAYERS = terms.players.toUpperCase();
+  const MESSAGE = terms.message.toUpperCase();
+
+  const characterPicker = (playerId, compact) => (
+    characterSources.length === 0 ? (
+      <p style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>
+        No unassigned characters. Create one in the Characters tab or import a pack.
+      </p>
+    ) : characterSources.map(g => (
+      <div key={g.packId} style={{ marginBottom: '0.6rem' }}>
+        <div style={{ color: g.packId === packId ? 'var(--accent)' : 'var(--text-dim)', fontSize: '0.6rem', letterSpacing: '0.12em', marginBottom: '0.25rem' }}>
+          {g.title.toUpperCase()}{g.packId === packId ? ' — ACTIVE SCENARIO' : ''}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.4rem' }}>
+          {g.characters.map(c => (
+            <button key={c.id} style={smallBtn} onClick={() => doAssign(playerId, c)}>
+              {compact ? c.name : `${c.name} — ${c.career}`}
+            </button>
+          ))}
+        </div>
+      </div>
+    ))
+  );
+
+  return (
+    <div>
+      {/* Session header */}
+      <div className="panel" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div>
+          <h2 style={{ fontSize: '1rem', letterSpacing: '0.15em', marginBottom: '0.25rem' }}>
+            {terms.session.toUpperCase()} ACTIVE — {universe.name}
+          </h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <span style={{ color: 'var(--accent)', fontSize: '1.5rem', letterSpacing: '0.3em', fontWeight: 'bold' }}>
+              {gameCode}
+            </span>
+            <button onClick={() => navigator.clipboard?.writeText(shareUrl)} style={smallBtn}>
+              COPY LINK
+            </button>
+            <a href={`/?board=${gameCode}`} target="_blank" rel="noreferrer" style={{ ...smallBtn, textDecoration: 'none' }}>OPEN BOARD</a>
+            <span className={`mc-tv${boardLinked ? ' up' : ''}`} title="Table board screen"><span className="link-dot" />{boardLinked ? 'TV LINKED' : 'NO TV'}</span>
+            <span style={{ color: 'var(--text-dim)', fontSize: '0.7rem' }}>
+              {playerList.filter(p => p.connected !== false).length}/{playerList.length} {PLAYERS} ONLINE
+            </span>
+            <span style={{ color: 'var(--text-dim)', fontSize: '0.7rem' }}>
+              SCENARIO: <span style={{ color: 'var(--accent)' }}>{activePack ? activePack.meta.title.toUpperCase() : 'SANDBOX'}</span>
+            </span>
+            {lastSaved && (
+              <span className="session-saved">
+                {terms.session.toUpperCase()} SAVED {new Date(lastSaved).toLocaleTimeString([], { hour12: false })}
+              </span>
+            )}
+          </div>
+        </div>
+        <button onClick={leaveGame} style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }}>
+          END {terms.session.toUpperCase()}
+        </button>
+      </div>
+
+      {/* Panel tabs */}
+      <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+        {[
+          ['players', `${PLAYERS} STATUS (${playerList.length})`],
+          ['message', `${MESSAGE}S`],
+          ['log', `MESSAGE LOG${unreadCount > 0 ? ` (${unreadCount})` : ''}`],
+        ].map(([id, label]) => (
+          <button key={id} style={{
+            ...smallBtn,
+            background: panel === id ? 'var(--accent-glow)' : 'transparent',
+            borderColor: panel === id ? 'var(--accent)' : 'var(--border)',
+            color: panel === id ? 'var(--accent)' : 'var(--text-dim)',
+          }} onClick={() => { setPanel(id); if (id === 'log') clearUnread(); }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* ─── Players Panel ──────────────────────────── */}
+      {panel === 'players' && (
+        <div>
+          {playerList.length === 0 && (
+            <div className="panel" style={{ textAlign: 'center', color: 'var(--text-dim)' }}>
+              <p>AWAITING {PLAYERS} CONNECTIONS...</p>
+              <p style={{ fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                Share this link with your players: <br />
+                <span style={{ color: 'var(--accent)', wordBreak: 'break-all' }}>{shareUrl}</span>
+              </p>
+            </div>
+          )}
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
+            {playerList.map(p => (
+              <div key={p.id} className="panel" style={{
+                cursor: 'pointer',
+                border: selectedPlayer === p.id ? '1px solid var(--accent)' : '1px solid var(--border)',
+                opacity: !p.alive ? 0.5 : p.connected === false ? 0.55 : 1,
+              }} onClick={() => setSelectedPlayer(selectedPlayer === p.id ? null : p.id)}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <div>
+                    <div style={{ color: 'var(--text)', fontWeight: 'bold', fontSize: '0.85rem' }}>
+                      {p.name}
+                      {p.connected === false && <span className="offline-tag">OFFLINE</span>}
+                    </div>
+                    <div style={{ color: 'var(--accent)', fontSize: '0.7rem' }}>
+                      {p.character ? p.character.name : 'NO CHARACTER ASSIGNED'}
+                    </div>
+                  </div>
+                  {!p.alive && <span style={{ color: 'var(--danger)', fontSize: '0.7rem', letterSpacing: '0.1em' }}>KIA</span>}
+                </div>
+
+                {p.character && (
+                  <>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.4rem' }}>
+                      {tracks.map(t => (
+                        <StatBar key={t.key} label={t.short || t.label} value={p.tracks?.[t.key] ?? 0}
+                          max={p.trackMax?.[t.key] ?? trackMaxFor(t, p.character) ?? 0} color={t.color || 'var(--accent)'} />
+                      ))}
+                    </div>
+                    {p.statusEffects.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginTop: '0.25rem' }}>
+                        {p.statusEffects.map(e => (
+                          <span key={e} style={tagStyle}>{e}</span>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Selected player detail */}
+          {selected && (
+            <div className="panel" style={{ marginTop: '1rem', borderColor: 'var(--accent)' }}>
+              <h3 style={{ color: 'var(--accent)', marginBottom: '0.75rem', letterSpacing: '0.1em' }}>
+                EDITING: {selected.name} — {selected.character?.name || 'UNASSIGNED'}
+              </h3>
+
+              {!selected.character ? (
+                <div>
+                  <p style={{ color: 'var(--text-dim)', marginBottom: '0.5rem' }}>Assign a character:</p>
+                  {characterPicker(selected.id, false)}
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  {/* Track controls */}
+                  <div>
+                    {tracks.map((t, i) => {
+                      const value = selected.tracks?.[t.key] ?? 0;
+                      const max = selected.trackMax?.[t.key];
+                      return (
+                        <div key={t.key} style={{ marginTop: i ? '0.5rem' : 0 }}>
+                          <label style={labelStyle}>{t.label} ({value}{max !== undefined ? `/${max}` : ''})</label>
+                          <div style={{ display: 'flex', gap: '0.25rem' }}>
+                            <button style={smallBtn} onClick={() => setTrack(selected, t.key, value - 1)}>-1</button>
+                            <button style={smallBtn} onClick={() => setTrack(selected, t.key, value + 1)}>+1</button>
+                            {t.initial === 'max'
+                              ? <button style={smallBtn} onClick={() => setTrack(selected, t.key, max ?? value)}>MAX</button>
+                              : <button style={smallBtn} onClick={() => setTrack(selected, t.key, Number(t.initial) || 0)}>CLEAR</button>}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Status effects */}
+                  <div>
+                    <label style={labelStyle}>STATUS EFFECTS</label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginBottom: '0.5rem' }}>
+                      {selected.statusEffects.map(e => (
+                        <span key={e} style={{ ...tagStyle, cursor: 'pointer' }}
+                          onClick={() => handleRemoveStatus(selected.id, e)} title="Click to remove">
+                          {e} ×
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.2rem' }}>
+                      {statusEffects.filter(e => !selected.statusEffects.includes(e)).map(e => (
+                        <button key={e} style={{ ...smallBtn, fontSize: '0.6rem', padding: '0.2rem 0.4rem' }}
+                          onClick={() => handleAddStatus(selected.id, e)}>+{e}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Inventory */}
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <label style={labelStyle}>INVENTORY</label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginBottom: '0.5rem' }}>
+                      {selected.inventory.map((item, i) => (
+                        <span key={i} style={{ ...tagStyle, cursor: 'pointer', background: 'color-mix(in srgb, var(--accent) 6%, transparent)' }}
+                          onClick={() => handleRemoveItem(selected.id, i)} title="Click to remove">
+                          {item} ×
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.25rem' }}>
+                      <input value={newItem} onChange={e => setNewItem(e.target.value)}
+                        placeholder="Add item..." style={inputStyle}
+                        onKeyDown={e => e.key === 'Enter' && handleAddItem(selected.id)} />
+                      <button style={smallBtn} onClick={() => handleAddItem(selected.id)}>ADD</button>
+                    </div>
+                  </div>
+
+                  {/* Character sheet (read-only summary) */}
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <label style={labelStyle}>CHARACTER SHEET</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                      {Object.entries(selected.character.attributes || {}).map(([attr, val]) => (
+                        <div key={attr} style={{ textAlign: 'center', padding: '0.3rem', border: '1px solid var(--border)' }}>
+                          <div style={{ fontSize: '0.6rem', color: 'var(--text-dim)' }}>{attributeLabel(universe, attr, { short: true })}</div>
+                          <div style={{ fontSize: '1rem', color: 'var(--accent)' }}>{val}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>
+                      <strong style={{ color: 'var(--text)' }}>TALENT:</strong> {selected.character.talent}
+                    </div>
+                    {selected.character.personalAgenda && (
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginTop: '0.25rem' }}>
+                        <strong style={{ color: 'var(--text)' }}>AGENDA:</strong> {selected.character.personalAgenda}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Danger zone */}
+                  <div style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--danger)', paddingTop: '0.75rem' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      {selected.alive ? (
+                        <button style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }}
+                          onClick={() => { if (confirm('Kill this character?')) killCharacter(selected.id); }}>
+                          KILL CHARACTER
+                        </button>
+                      ) : (
+                        <div style={{ width: '100%' }}>
+                          <p style={{ color: 'var(--danger)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>
+                            CHARACTER DECEASED — Assign replacement:
+                          </p>
+                          {characterPicker(selected.id, true)}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ─── Message Panel ──────────────────────────── */}
+      {panel === 'message' && (
+        <div className="panel">
+          <h3 style={{ color: 'var(--accent)', marginBottom: '0.75rem', letterSpacing: '0.1em' }}>
+            TRANSMIT {MESSAGE}
+          </h3>
+          <form onSubmit={handleSendMsg}>
+            <div style={{ marginBottom: '0.5rem' }}>
+              <label style={labelStyle}>RECIPIENT</label>
+              <select value={msgTarget} onChange={e => setMsgTarget(e.target.value)} style={inputStyle}>
+                <option value="">Select recipient...</option>
+                <option value="broadcast">ALL {PLAYERS} ({terms.broadcast.toUpperCase()})</option>
+                {playerList.filter(p => p.character).map(p => (
+                  <option key={p.id} value={p.id}>{p.name} — {p.character.name}</option>
+                ))}
+              </select>
+            </div>
+            <div style={{ marginBottom: '0.5rem' }}>
+              <label style={labelStyle}>PRIORITY</label>
+              <select value={msgPriority} onChange={e => setMsgPriority(e.target.value)} style={inputStyle}>
+                {priorities.map(pr => <option key={pr} value={pr}>{pr}</option>)}
+              </select>
+            </div>
+            <div style={{ marginBottom: '0.75rem' }}>
+              <label style={labelStyle}>MESSAGE</label>
+              <textarea value={msgText} onChange={e => setMsgText(e.target.value)}
+                placeholder={`Enter ${terms.message.toLowerCase()}...`} rows={4}
+                style={{ ...inputStyle, resize: 'vertical' }} />
+            </div>
+            <button type="submit" disabled={!msgTarget || !msgText.trim()} style={smallBtn}>
+              TRANSMIT
+            </button>
+          </form>
+        </div>
+      )}
+
+      {/* ─── Message Log ────────────────────────────── */}
+      {panel === 'log' && (
+        <div className="panel" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+          <h3 style={{ color: 'var(--accent)', marginBottom: '0.75rem', letterSpacing: '0.1em' }}>
+            {MESSAGE} LOG
+          </h3>
+          {messages.length === 0 && (
+            <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>No {terms.message.toLowerCase()}s yet.</p>
+          )}
+          {[...messages].reverse().map(m => {
+            const fromGm = m.type === 'gm';
+            const from = fromGm ? terminal.name : m.from;
+            const to = m.toId === 'broadcast' ? `ALL ${PLAYERS}` : m.type === 'player' ? terminal.name : m.to;
+            return (
+              <div key={m.id} style={{
+                padding: '0.5rem', marginBottom: '0.5rem',
+                border: `1px solid ${fromGm ? 'var(--border)' : 'var(--accent)'}`,
+                background: fromGm ? 'color-mix(in srgb, var(--accent) 3%, transparent)' : 'color-mix(in srgb, var(--accent) 6%, transparent)',
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                  <span style={{ color: 'var(--accent)', fontSize: '0.7rem' }}>
+                    {from} → {to}
+                  </span>
+                  <span style={{ color: 'var(--text-dim)', fontSize: '0.65rem' }}>
+                    {new Date(m.timestamp).toLocaleTimeString()} — {m.priority === 'PLAYER' ? `${PLAYERS} ${MESSAGE}` : m.priority}
+                  </span>
+                </div>
+                <div style={{ color: 'var(--text)', fontSize: '0.8rem', whiteSpace: 'pre-wrap' }}>{m.text}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StatBar({ label, value, max, color }) {
+  const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0;
+  return (
+    <div style={{ flex: 1 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6rem', color: 'var(--text-dim)', marginBottom: '0.15rem' }}>
+        <span>{label}</span><span>{value}/{max}</span>
+      </div>
+      <div style={{ height: '6px', background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+        <div style={{ height: '100%', width: `${pct}%`, background: color, transition: 'width 0.3s' }} />
+      </div>
+    </div>
+  );
+}
+
+const smallBtn = {
+  padding: '0.4rem 0.7rem', background: 'transparent',
+  border: '1px solid var(--border)', color: 'var(--text-dim)',
+  fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
+  letterSpacing: '0.06em', cursor: 'pointer',
+};
+
+const labelStyle = {
+  display: 'block', color: 'var(--text-dim)', fontSize: '0.65rem',
+  letterSpacing: '0.1em', marginBottom: '0.2rem',
+};
+
+const inputStyle = {
+  width: '100%', padding: '0.5rem', background: 'var(--bg-card)',
+  border: '1px solid var(--border)', color: 'var(--text)',
+  fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
+  boxSizing: 'border-box',
+};
+
+const tagStyle = {
+  padding: '0.15rem 0.4rem', fontSize: '0.6rem', letterSpacing: '0.06em',
+  border: '1px solid var(--border)', color: 'var(--text-dim)',
+  background: 'color-mix(in srgb, var(--warn) 8%, transparent)',
+};

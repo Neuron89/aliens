@@ -1,0 +1,1036 @@
+{
+  "packVersion": 1,
+  "id": "the-weighing-of-house-varrin",
+  "universe": "dune",
+  "kind": "scenario",
+  "meta": {
+    "title": "The Weighing of House Varrin",
+    "tagline": "One night of courtesy before the Judge of the Change sits, and every guest at the Varrin table has come to buy the scale.",
+    "synopsis": "House Varrin holds the Weighing, the concession that certifies every kilo of spice shipped from Carthag. On the eve of the Harkonnen withdrawal, the House hosts a Landsraad reception before the Judge of the Change confirms its rights at dawn. The truth: for eleven years Varrin scales have weighed four parts in a hundred light, the difference skimmed into a Harkonnen hoard, and six days ago the dying Lord Castor secretly sold the concession to a Harkonnen front under blackmail. The deed closes at his death or at dawn. Ser Ulmar Harkonnen's poisoned gift is meant to close it early; the Guild envoy's sealed offer is meant to outbid it; the Fremen water-seller's prophecy points at the hoard. After a hunter-seeker, a duel of honor and a lasgun set against the house shield, the agents must expose, cover up, flee into the desert or kneel.",
+    "type": "One-Shot",
+    "players": "4–5",
+    "playtime": "3–5 hours",
+    "difficulty": "Standard",
+    "tone": [
+      "court intrigue",
+      "plans within plans",
+      "quiet menace",
+      "honor and duty"
+    ],
+    "contentWarnings": [
+      "poison",
+      "murder attempt",
+      "terminal illness",
+      "blackmail",
+      "political violence",
+      "duel to the death",
+      "threat of mass casualties",
+      "religious manipulation",
+      "player-vs-player conflict"
+    ],
+    "source": "bundled",
+    "generated": {
+      "by": "claude-code",
+      "model": "claude-opus-5-5",
+      "at": "2026-10-30T19:30:47.135Z",
+      "params": {
+        "universe": "dune",
+        "players": 5,
+        "playtime": "session 3-5h",
+        "type": "One-Shot",
+        "difficulty": "Standard",
+        "tone": [
+          "court intrigue",
+          "plans within plans",
+          "quiet menace",
+          "a single duel"
+        ],
+        "setting": "a Landsraad trade reception at the Residency of House Varrin, holders of the spice-weighing concession at the Carthag spiceport, during the Harkonnen-to-Atreides transition",
+        "threat": "a Harkonnen cousin with a poisoned gift, a Guild sealed offer, a Fremen prophecy, and a concession already sold from within",
+        "crew": "the inner circle of a minor House",
+        "lethality": "medium",
+        "authoring": "hand-written via the gamenight skill, no API calls"
+      }
+    }
+  },
+  "briefing": {
+    "from": "MENTAT OF HOUSE VARRIN",
+    "to": "THE INNER CIRCLE OF HOUSE VARRIN — BY THE LORD’S HAND",
+    "classification": "SEALED",
+    "text": "COMPUTATION BEGINS.\n\nFact: in eleven days the last Harkonnen garrison lifts from Carthag, and the fief of Arrakis passes to House Atreides. Every concession granted under the old masters must be confirmed before the Judge of the Change, or it lapses. Ours is the Weighing: no kilo of melange leaves the Carthag spiceport until a Varrin scale has measured it and a Varrin seal has sworn to the figure.\n\nFact: Judge Ottavio Strenn sits in this Residency at dawn tomorrow. Tonight, Lord Castor Varrin receives the Landsraad trade delegations that wish to be remembered kindly when the new fief-holder arrives.\n\nFact: the guest list has grown in the last six hours. An envoy of the Spacing Guild asks to present a sealed offer in person. Ser Ulmar Harkonnen, a cousin of the departing line, brings a gift. A CHOAM factor has requested a room for the night. A Fremen water-seller who has served the kitchen gate for nine years has asked to speak to the Lord, which she has never done.\n\nFact: the Lord's health is worse than the household has been told. I have not been told how much worse. I have been told not to ask.\n\nI compute that at least two of tonight's guests already know something about this House that its inner circle does not. I compute a probability of 0.58 that one of them is under our roof by invitation of someone inside it.\n\nLord Castor instructs you: receive them with grace, keep the scale steady, and bring every word you hear to the Mentat's table before the Judge sits.\n\nRISK ASSESSMENT: GRAVE. THE SHIELD IS UP. COMPUTATION PAUSED."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "ARRIVALS",
+      "summary": "The delegations arrive at the Varrin Residency; the agents read the room, receive a sealed offer, a gift and a prophecy, and survive a hunter-seeker during the toast.",
+      "readAloud": [
+        "The Residency glows above the spiceport like a lantern hung on a gallows. Through the shimmer of the house shield you can see the cranes of Carthag still working, swinging orange-dusted containers onto the lighters, and every one of them will pass across a Varrin scale before it leaves the planet. The air in the great hall is cool and faintly damp, a deliberate extravagance. Somewhere a servant is pouring water into crystal so that the guests can hear it.",
+        "They come one by one through the shield-gate, each moving at the slow, careful pace that the field demands. A Guild envoy in grey, eyes too still, carrying a sealed cylinder in both hands as if it were warm. A Harkonnen cousin in blue silk, smiling at everything, followed by a servant bearing a crystal griffin. A CHOAM factor who counts the candelabra. Last, an old man in Imperial black, the Judge of the Change, who looks at no one at all.",
+        "Lord Castor Varrin receives them from the dais, beside the great ceremonial scale that gives your House its name and its bread. His voice is steady. His hand on the scale's brass arm is not. You know the weight of the room before anyone speaks: every guest has come to buy something, and none of them has said what.",
+        "Down in the kitchens, past the water gate, a woman in a sand-colored cloak is waiting with her water-skins. She has sold water to this House for nine years and never once asked to come inside. Tonight she has asked to see the Lord. The servants say she spoke of the scale, and of dawn, and of something weighed that cannot be weighed back."
+      ],
+      "gmNotes": "Act I is a reception run as an intrigue conflict with every room treated as adjacent: let the agents split up, work the guests, and bring fragments back. Start Threat at 2 per player. The surface agendas are on display: Aster Quen wants the sealed offer opened before dawn; Ser Ulmar wants his gift accepted and served to the Lord tonight; Ilsabet Moreaux wants a buyer for what she knows; Ixa wants a private word with the Lord; Judge Strenn wants to be left alone. Underneath, Steward Oswin Pell is steering servants, seating and timing. The hunter-seeker during the toast is his: it is a feint to make Lord Castor retire early to his chambers, where the griffin decanter will follow him as a nightcap. Close the act when the Lord withdraws and the household goes to its rooms with the decanter carried upstairs.",
+      "agendaNotes": "Act I agendas are private and plausible. Teodor and Aurelian should both want to be the one who speaks for the House to the Judge; Severine should be quietly shaping how the Fremen prophecy is heard; Dr. Tervane should be testing every gift and watching Severine; Bastien should recognise a face in the Harkonnen retinue and say nothing. Send no agenda handouts yet: the first act lives on the character sheets.",
+      "scenes": [
+        {
+          "name": "The Guests Arrive",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The shield-gate hums as each delegation passes through at a walk. Servants in Varrin ochre take cloaks and stillsuit hoods; the herald calls names in an order that is itself a message.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 2 — set the precedence of the guests so no delegation takes insult (intrigue conflict)",
+            "UNDERSTAND + TRUTH, Difficulty 1 — read the Harkonnen retinue: one servant moves like a trained duellist and wears no shield belt",
+            "DISCIPLINE + FAITH, Difficulty 1 — keep your face still when the Guild envoy asks after the Lord’s health before anyone has mentioned it"
+          ],
+          "events": [
+            "Steward Pell quietly moves the Judge’s seat from the Lord’s right hand to the Harkonnen cousin’s left; if no agent notices, the Judge spends the evening listening to Ulmar.",
+            "Ilsabet Moreaux asks the herald, loudly, whether the Weighing is still Varrin property tonight."
+          ],
+          "stressTriggers": [
+            "THREAT +1 — if the precedence check fails, Ulmar takes public offence and the Narrator banks it for the challenge in Act II",
+            "MOMENTUM +1 — for each agent who brings a correct reading of a guest back to the Mentat’s table"
+          ],
+          "npcGuidance": "Aster Quen speaks only in conditionals and never sits. Ulmar compliments the Residency’s water three times, which on Arrakis is an insult disguised as praise. Judge Strenn answers every question with a question about procedure.",
+          "gmTip": "Do not run this as a series of rolls: give each agent one guest to handle and cut between them quickly, rolling only where something is at stake.",
+          "outcomes": [
+            "The agents learn which guests know of the Lord’s illness: the Guild envoy and the Harkonnen cousin",
+            "Kasimir Orlo is noticed in Ulmar’s retinue, which matters enormously to Bastien",
+            "A failed precedence leaves Ulmar holding a grievance he will spend later"
+          ]
+        },
+        {
+          "name": "The Gift of the Griffin",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Ser Ulmar’s servant unveils a decanter cut in the shape of a rearing griffin, filled with dark Giedi nightwine. Ulmar raises it to the hall and asks that the Lord drink of it tonight, so the old friendship of their Houses may end sweetly.",
+          "checks": [
+            "UNDERSTAND + DUTY, Difficulty 2 — the poison snooper reads the wine as clean; a trained eye notices an oily bloom where it touches crystal, a carrier agent with no purpose of its own",
+            "DISCIPLINE + TRUTH, Difficulty 2 — hear the lie in Ulmar’s toast: he means \"end\", not \"sweetly\"",
+            "COMMUNICATE + POWER, Difficulty 3 — decline or delay the gift without breaching guest-right before the Judge (intrigue conflict)"
+          ],
+          "events": [
+            "Lord Castor accepts the gift graciously before anyone can object, and orders it taken to his chambers."
+          ],
+          "stressTriggers": [
+            "THREAT +2 — if an agent openly accuses Ulmar of poisoning without proof: a breach of the forms in front of the Judge",
+            "STRESS +1 — Dr. Tervane, if her assay finds the carrier agent and she understands what it is meant to unlock"
+          ],
+          "npcGuidance": "Ulmar is delighted by any accusation; it gives him a grievance and a duel. Pell offers to carry the decanter personally, as a courtesy.",
+          "gmTip": "The wine alone is harmless, which is the whole trick. Let a Suk diagnosis name the carrier and the family of poison it completes, but not yet who gave the first half.",
+          "outcomes": [
+            "The decanter goes to the Lord’s chambers with Pell, setting up the Nightcap in Act II",
+            "An agent quietly palms a sample for the Suk Doctor’s kit",
+            "A public accusation hands Ulmar his pretext for a challenge"
+          ]
+        },
+        {
+          "name": "The Sealed Offer",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Aster Quen presents the cylinder to the dais. It bears the Guild seal and a second, smaller seal that must be broken before witnesses before dawn, or the offer withdraws itself. Lord Castor, coughing, gives it to his heir to hold.",
+          "checks": [
+            "UNDERSTAND + TRUTH, Difficulty 2 — the cylinder’s registry mark is dated eight days ago, before the withdrawal was announced; the Guild knew first",
+            "COMMUNICATE + POWER, Difficulty 3 — draw the envoy into saying what the Guild knows of Carthag weights (intrigue conflict)",
+            "COMMUNICATE + JUSTICE, Difficulty 2 — persuade Ilsabet Moreaux that the House can outbid whatever she has been paid to keep quiet"
+          ],
+          "events": [
+            "Ilsabet Moreaux watches the cylinder change hands and writes something down."
+          ],
+          "stressTriggers": [
+            "THREAT +1 — if the cylinder is opened in the great hall: every guest now knows the price of the House",
+            "MOMENTUM +2 — if an agent gets Aster Quen to use the word \"irregular\" about the scales"
+          ],
+          "npcGuidance": "Aster Quen will not lie, but answers every direct question with another possible future. Neutral Ground applies: anyone who starts a physical conflict in her presence pays 2 Threat first.",
+          "gmTip": "Deliver the Sealed Offer of the Guild handout when the cylinder is opened, whenever that is. Its threat is polite and absolute.",
+          "outcomes": [
+            "The agents hold an offer of sixty million solaris that expires at dawn",
+            "The agents learn the Guild believes the scales lie, and can prove it"
+          ]
+        },
+        {
+          "name": "Water at the Kitchen Gate",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "The kitchen yard smells of hot stone and onions. Ixa of Sietch Tamrak sits on her water-skins with her hood up and her stillsuit sealed, as if the Residency were open desert.",
+          "checks": [
+            "COMMUNICATE + FAITH, Difficulty 2 — be received as an honest buyer of water rather than a lord’s servant",
+            "UNDERSTAND + FAITH, Difficulty 2 — recognise the cadence of her prophecy as older than her tribe, and planted",
+            "MOVE + JUSTICE, Difficulty 1 — follow her glance to the servant passage door, where Steward Pell is listening"
+          ],
+          "events": [
+            "Ixa speaks her prophecy once, to whoever came, and will not repeat it."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any agent raised on Arrakis who refuses her offered water: an insult that will be remembered",
+            "THREAT +1 — if Pell is not noticed, he reports the conversation to Ulmar before the toast"
+          ],
+          "npcGuidance": "Ixa does not bargain tonight; she is measuring the House. She speaks of the Weeping Rock only if someone mentions spice that was never shipped.",
+          "gmTip": "Deliver the Words of the Water-Seller handout here. If no one comes down, Ixa reaches the dining court in Act II with the same words.",
+          "outcomes": [
+            "The agents hear of the Weeping Rock and the debt of water owed to it",
+            "Severine knows what the prophecy is meant to make people do",
+            "Ixa offers a road into the desert, for a price to be named later"
+          ]
+        },
+        {
+          "name": "The Toast and the Needle",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "A hunter-seeker rises from a basket of desert lilies on the dining table and hunts the Judge of the Change. Its operator is Steward Pell, two walls away in the servant passages; the device tracks motion and slips through personal shields on its first slow pass.",
+          "narration": "The Lord lifts his water-cup for the toast and the whole court rises with him. Something thin and bright lifts out of the lilies and hangs in the air, turning slowly, looking for a pulse.",
+          "checks": [
+            "DISCIPLINE + FAITH, Difficulty 2 — freeze while the needle passes your throat (skirmish: the device acts first)",
+            "BATTLE + DUTY, Difficulty 3 — snatch it out of the air bare-handed, or cut it with a slow blade",
+            "MOVE + TRUTH, Difficulty 2 — follow the operator’s line of sight to the hidden door in the dining court wall"
+          ],
+          "events": [
+            "Guests snap their shield belts on; the court becomes a room of shimmering, slow-moving figures.",
+            "Lord Castor, shaken and grey, announces that he will retire and receive no one until morning."
+          ],
+          "stressTriggers": [
+            "STRESS +2 — whoever the hunter-seeker hovers beside",
+            "THREAT +1 — each round the operator is not located",
+            "STRESS +1 — all agents present, if the Judge is struck (he survives, poisoned and enraged)"
+          ],
+          "npcGuidance": "Judge Strenn does not move a muscle; he has seen hunter-seekers before. Ulmar is first to praise the House’s response. Aster Quen steps back exactly one pace and is never in danger.",
+          "gmTip": "This is a scare, not a slaughter: if nobody stops it within three rounds, let it strike the Judge’s shoulder and run Dr. Tervane through a quick antidote scene. Send the Mentat Computation: the Needle handout afterward.",
+          "outcomes": [
+            "The device is destroyed and traced to the servant passages, where a door has been left unbarred",
+            "The Lord retires early; the griffin decanter follows him upstairs",
+            "If the Judge is hurt, he holds the House responsible until shown otherwise"
+          ]
+        },
+        {
+          "name": "The Factor’s Rumour",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Use if the pace flags. Ilsabet Moreaux finds an agent alone in the conservatory, admires the dew-glass, and remarks that she has never held escrow on a living man’s concession before.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 2 — get her to name a price for the rest of the sentence",
+            "UNDERSTAND + TRUTH, Difficulty 3 — compute from her phrasing that the escrow closes on a death or at dawn"
+          ],
+          "stressTriggers": [
+            "THREAT +1 — if the agent pays her in House seals she can show the Judge later"
+          ],
+          "npcGuidance": "Ilsabet will sell anything twice. She does not name the buyer, but she does name the clause.",
+          "gmTip": "This is the safety valve that points the players at the sale before Act II; use it only if they are drifting.",
+          "outcomes": [
+            "The agents learn that something of the House is in escrow tonight, and that time matters"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "KNIVES",
+      "summary": "The night of knives: the poisoned nightcap, a challenge and a duel of honor in the conservatory, and an espionage descent into the shield-generator vault, where the agents find the lasgun, the Black Tally and the deed of sale.",
+      "readAloud": [
+        "The Residency sleeps the way a held breath sleeps. Glowglobes dim to embers in the corridors, the house shield drones beneath every other sound, and the servants move through their hidden passages like water through rock. You can hear the spiceport still working beyond the field, the endless clank and hiss of the lighters, the scale-bells ringing every time a load is weighed. Tonight every bell sounds like a count.",
+        "Upstairs, in the Lord's chambers, a crystal griffin stands on a silver tray beside the sickbed. The wine inside it is the color of old blood and smells of plums and smoke. The poison snooper on its tripod glows a placid, reassuring green. Lord Castor watches it the way a man watches a door he is expecting someone to come through.",
+        "In the guest wing, a door opens and closes. A blade-master in Harkonnen blue walks the length of the gallery without a sound and stops outside a room that is not his. He stands there for a long moment, as if he were remembering a name, and then walks on.",
+        "Below everything, beneath the kitchens and the servant stair, the shield generator hums inside its vault, a deep, patient note you feel in your teeth more than you hear it. The vault has one door and two keys. Tonight, one of the keys is missing from its hook, and nobody remembers seeing who took it."
+      ],
+      "gmNotes": "Act II runs the middle hours of the night. Three threads must all be live: the Nightcap, where the second half of a two-part poison reaches a man already carrying the first (Pell has dosed Castor for months, and the griffin wine completes it); the Challenge and Duel, where Ulmar uses any slight to demand satisfaction under the forms and puts his blade Kasimir Orlo against the House; and the Shield Vault, where Pell has slaved a lasgun to fire into the generator's field at the first hour after dawn, while the Judge sits. Lasgun meets shield: the Residency, the Judge, the evidence and the Varrin name all go up together, and the deed closes on a dead grantor. The vault also holds the Black Tally and Lord Castor's private box with his copy of the deed of sale, sealed with a Bene Gesserit truth-witness mark. That is the discovery of the sale. Spend Threat freely in this act: the agents should never have enough people for all three threads.",
+      "agendaNotes": "Act II agendas set the agents against each other. Hand out the act 2 agendas by private dispatch as the act begins. The discovery of the sale is the hinge: Aurelian learns his father sold his birthright, Severine's witness mark is on the deed, Teodor's Black Tally is in the same box, and Bastien learns that the shield timings Pell used came from letters he wrote to his brother. Let accusations fly; do not let them resolve.",
+      "scenes": [
+        {
+          "name": "The Nightcap",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Pell pours a single measure of nightwine into the Lord’s cup and sets it by the sickbed. The snooper stays green. Lord Castor reaches for it slowly, because everything he does now is slow.",
+          "checks": [
+            "MOVE + JUSTICE, Difficulty 2 — reach the chambers before the cup reaches his lips",
+            "UNDERSTAND + DUTY, Difficulty 2 — name the complete poison: a slow compound already in his blood, with the wine as its key",
+            "DISCIPLINE + DUTY, Difficulty 3 — keep the Lord alive through the convulsion if he has already drunk"
+          ],
+          "events": [
+            "If no agent intervenes within a scene, Castor drinks; he collapses within the hour and lives only if treated before dawn."
+          ],
+          "stressTriggers": [
+            "STRESS +2 — Dr. Tervane, if the Lord drinks while she is in the Residency",
+            "THREAT +2 — if Castor dies: the deed of sale closes at once, and Ulmar knows it before the agents do"
+          ],
+          "npcGuidance": "Castor, if saved, is frightened and lucid and will not say why anyone would want him dead tonight. Pell is solicitous, distressed, and gone from the room the moment suspicion turns his way.",
+          "gmTip": "Deliver the Assay of the Lord’s Blood handout to Dr. Tervane privately when the poison is named. Castor living or dying changes Act III’s options more than any other single event.",
+          "outcomes": [
+            "Castor survives, weakened, able to speak at dawn",
+            "Castor dies and the sale closes; the agents must now break the deed, not merely stop it",
+            "Pell’s first dose is suspected, but the agents may wrongly blame Severine"
+          ]
+        },
+        {
+          "name": "The Challenge",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Ser Ulmar appears in the great hall in a dressing robe and a shield belt, attended by Kasimir Orlo. He has been insulted under this roof, he says, and he requires satisfaction under the forms before the Judge rises.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 3 — negotiate the terms: to first blood, to yielding, or to the death (intrigue conflict)",
+            "UNDERSTAND + TRUTH, Difficulty 2 — compute what the duel is for: removing the House’s Swordmaster or heir before dawn, and drawing every eye to the conservatory",
+            "COMMUNICATE + JUSTICE, Difficulty 2 — invoke the Judge as witness so the forms bind Ulmar too"
+          ],
+          "events": [
+            "If no grievance was banked in Act I, Ulmar manufactures one: a servant spilled water on his boots, a waste he calls a calculated insult."
+          ],
+          "stressTriggers": [
+            "THREAT +1 — refusing the challenge: the House is called coward before the Landsraad",
+            "STRESS +1 — Bastien, when Kasimir meets his eyes"
+          ],
+          "npcGuidance": "Ulmar insists the duel be to the death, then graciously accepts yielding if pushed, because either way the duel keeps the agents busy. Kasimir says nothing.",
+          "gmTip": "Deliver the Letter Folded into a Glove handout to Bastien privately here. Set the duel for the middle hour, which is exactly when Pell needs the vault quiet.",
+          "outcomes": [
+            "A duel under the forms is set in the conservatory, with terms the agents shaped",
+            "An agent realises the duel is a distraction and splits the party"
+          ]
+        },
+        {
+          "name": "Duel in the Conservatory",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "A duel under the forms: Kasimir Orlo, rapier and kindjal, personal shield, against the House champion. Kasimir is a superb slow-blade fighter (Battle 7, Move 6) who will not take a killing stroke against a yielding foe; if Bastien fights, Kasimir holds back until he learns why.",
+          "narration": "Glowglobes hang low among the date palms. The fountain is shut off so that no water is wasted on blood. Two shields hum, two blades come up, and the court lines the dew-glass to watch.",
+          "checks": [
+            "BATTLE + DUTY, Difficulty 2 — the duel itself, fought as a duel conflict: blades must slow to pass the shield",
+            "MOVE + JUSTICE, Difficulty 2 — keep your footing on wet stone and deny Kasimir the fountain wall",
+            "COMMUNICATE + FAITH, Difficulty 3 — speak to Kasimir mid-bout and tell him what his master is willing to burn"
+          ],
+          "events": [
+            "Halfway through, a servant runs to Steward Pell with a whispered message; Pell leaves."
+          ],
+          "stressTriggers": [
+            "STRESS +2 — the champion, per exchange lost",
+            "THREAT +2 — Narrator may spend to have a shield flicker at the worst moment; the duellist must yield the exchange",
+            "STRESS +1 — every Varrin agent watching, if the champion falls"
+          ],
+          "npcGuidance": "Ulmar watches only the door, not the duel. Judge Strenn watches only the forms. Aster Quen watches Ulmar.",
+          "gmTip": "This is the one duel of the night: make it slow, specific and expensive, and let the outcome change who speaks at dawn. If Kasimir learns of the lasgun, he yields at once and offers his testimony.",
+          "outcomes": [
+            "The House champion wins and Ulmar loses face before the Judge",
+            "Kasimir yields and turns, a witness against his own master",
+            "The champion falls; the House enters Act III wounded and disgraced"
+          ]
+        },
+        {
+          "name": "The Shield Vault",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Espionage conflict in the vault beneath the kitchens: a lasgun clamped to the generator housing on a timer, aimed into the emitter field, set for the first hour after dawn. Pell, or a Harkonnen trooper in a servant’s tunic, may be on guard; a lasgun fired at an active shield destroys both and everything around them.",
+          "narration": "The vault door stands a hand’s width open. Inside, the generator’s hum fills your skull and the air tastes of ozone. Clamped to the housing, its emitter pointed into the shimmer, sits a lasgun with a cheap timer wired to its trigger.",
+          "checks": [
+            "MOVE + TRUTH, Difficulty 3 — enter through the servant passages unseen (espionage conflict)",
+            "UNDERSTAND + TRUTH, Difficulty 3 — disarm the timer without firing the lasgun into the field",
+            "DISCIPLINE + DUTY, Difficulty 2 — decide to drop the house shield to make the device safe, leaving the Residency open to the sky",
+            "UNDERSTAND + POWER, Difficulty 2 — open the Lord’s private box in the archive niche and read what is inside"
+          ],
+          "events": [
+            "The box holds the Black Tally in Teodor’s cipher and the Lord’s copy of the deed of sale, sealed with a Bene Gesserit truth-witness mark.",
+            "If Pell is present, he fights only to reach the passage door and the roof."
+          ],
+          "stressTriggers": [
+            "STRESS +2 — the agent working the timer, on any complication",
+            "THREAT +3 — Narrator may spend to start the timer early: one more scene, not one more hour",
+            "STRESS +1 — all agents present, on reading the deed of sale"
+          ],
+          "npcGuidance": "Pell, if cornered, offers to name Ulmar in exchange for passage on the ornithopter, and means it; he is a hired man, not a believer.",
+          "gmTip": "Deliver the Deed of Sale handout when the box is opened. This is the hinge of the scenario: everything the agents choose at dawn starts here.",
+          "outcomes": [
+            "The lasgun is disarmed and kept as evidence of a breach of the forms",
+            "The house shield is dropped; the roof pad is now an open door",
+            "The agents hold the Black Tally and the deed, and every agent has a reason to want them"
+          ]
+        },
+        {
+          "name": "The Guild Listens",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Aster Quen receives visitors in the guest wing without lighting a single glowglobe. The cylinder’s offer, she says, is still open. So are other futures.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 3 — learn that the Guild holds heighliner manifests proving eleven years of light weights (intrigue conflict)",
+            "UNDERSTAND + TRUTH, Difficulty 2 — compute that the Guild and the Sisterhood have already agreed who should hold the scale"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — Severine, if the agents name the Sisterhood to the envoy"
+          ],
+          "npcGuidance": "Quen will buy the concession, the silence or the Black Tally, at a fair price; she will not buy loyalty, because she does not believe in it.",
+          "gmTip": "Use this scene to make the cover-up option real and attractive: the Guild can bury the past, if it owns the future.",
+          "outcomes": [
+            "A Guild purchase becomes a clean way out that saves the House’s wealth and costs its name"
+          ]
+        },
+        {
+          "name": "Knives in the Passages",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Skirmish in the servant passages: four Harkonnen house-troopers out of livery try to seize Ilsabet Moreaux’s escrow copy, or silence Ixa at the water gate. They use knives, not lasguns, and flee if two fall.",
+          "narration": "Use as a contingency if the night grows quiet. A scream in the servant passages, cut short; the hidden doors bang in their frames as people run between the walls.",
+          "checks": [
+            "BATTLE + DUTY, Difficulty 2 — fight in passages too narrow for two abreast (skirmish)",
+            "MOVE + JUSTICE, Difficulty 2 — reach Ixa or Ilsabet first"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — each agent engaged",
+            "THREAT +1 — if Ixa is harmed: her sietch will judge the House by it"
+          ],
+          "npcGuidance": "Ixa fights with a crysknife and will not be grateful for rescue. Ilsabet offers her escrow copy to whoever is winning.",
+          "gmTip": "Keep it short and brutal: three rounds, then the troopers vanish into walls they know better than you do.",
+          "outcomes": [
+            "The escrow copy changes hands",
+            "Ixa owes the House water, or the House owes Ixa blood"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT III",
+      "subtitle": "JUDGMENT",
+      "summary": "At dawn Judge Strenn sits in the great hall to confirm or strike the Weighing; with the deed, the Black Tally, the Guild offer and the Fremen road in play, the agents expose, cover up, flee or kneel.",
+      "readAloud": [
+        "Dawn on Arrakis does not arrive; it strikes. Light comes through the high windows of the great hall like a blade drawn across the floor, and the dust in the air turns to gold. The great scale on the dais has been polished in the night. Its two brass pans hang perfectly level, and the whole room seems to be waiting for someone to put something on one of them.",
+        "The Judge of the Change sits in a plain chair below the dais, because he is the Emperor's instrument and not a lord. A clerk at his elbow holds the concession rolls on a filmbook reader. He looks older in the morning, and more patient. He asks for silence once, and receives it.",
+        "The guests have taken their places as if for a play they have already read. The CHOAM factor holds a sealed document on her knees. The Guild envoy stands, as she always stands. Ser Ulmar wears a shield belt and a smile, and his eyes go to the windows, to the roof, to the clock above the door. Somewhere far below your feet, the shield generator hums on.",
+        "Your House has one hour to decide what it is. The scale does not care what you say about it, or what you swore last night, or whom you love. It measures only what you are willing to put in the pan, and it has never once been wrong about the weight."
+      ],
+      "gmNotes": "Act III is a single public intrigue conflict before the Judge, with private side-scenes as the agents scramble. Judge Strenn carries sealed instructions from Kaitain to confirm all concessions as they stand and ask no questions about weights; he is honest and hates them, and he will act only on proof laid before him publicly under the forms. The four roads: EXPOSE (lay the Black Tally, the deed and the lasgun before the Judge; the House loses the Weighing for fraud but breaks Ulmar and wins Atreides and Guild favor); COVER UP (Castor revokes the sale and the House sells to the Guild, which buries the past); KNEEL (accept the sale and become Ulmar's sworn weighers under the coming Atreides, a hidden Harkonnen knife); FLEE (take the Black Tally into the desert with Ixa and become outlaws holding a weapon). If the lasgun was not found, the timer runs during this act.",
+      "agendaNotes": "Act III agendas are open betrayal. Send each agent's act 3 agenda privately as the Judge sits. Teodor must decide what to certify; Aurelian decides whether to expose his father and his Mentat; Severine receives her Order's instruction and must choose it or the heir; Dr. Tervane decides whether to break a patient's confidence before the Judge; Bastien must decide whether his oath to Castor allows the heir to kneel. At least one agent should end the hearing having acted against another in front of witnesses.",
+      "scenes": [
+        {
+          "name": "The Kneeling Offer",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Before the hearing, Ulmar asks for a private word on the roof pad, under the open sky, where his ornithopter waits with its wings folded.",
+          "checks": [
+            "DISCIPLINE + JUSTICE, Difficulty 2 — hear him out without striking him",
+            "UNDERSTAND + TRUTH, Difficulty 2 — compute that his offer is genuine, and that the Harkonnens will come back for Arrakis"
+          ],
+          "events": [
+            "Ulmar offers: let the sale stand, keep the Varrin name on the concession, weigh light for the Harkonnens under the Atreides, and grow rich in silence."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any agent who agrees, the first time they look at the scale afterward"
+          ],
+          "npcGuidance": "Ulmar is frank and almost likeable here. He does not threaten; he simply describes what happens to Houses that refuse.",
+          "gmTip": "Make kneeling sound reasonable. It is the road that keeps everyone alive, and that is what makes it terrible.",
+          "outcomes": [
+            "An agent has a deal in their pocket to spring at the hearing, or to betray"
+          ]
+        },
+        {
+          "name": "The Judge Sits",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The clerk reads the concession aloud. Ilsabet Moreaux rises and presents the deed of sale held in escrow, in favor of the Ledgerhouse of Pell and Orrin of Carthag. Ser Ulmar does not look surprised.",
+          "checks": [
+            "COMMUNICATE + JUSTICE, Difficulty 3 — challenge the deed under the forms: signed under duress, or by a poisoned grantor (intrigue conflict, all zones adjacent)",
+            "UNDERSTAND + TRUTH, Difficulty 2 — show that the Ledgerhouse is a Harkonnen front, using the Steward’s name on the deed",
+            "COMMUNICATE + POWER, Difficulty 2 — invoke Name and Seal to call Lord Castor, alive or dead, as the first witness"
+          ],
+          "events": [
+            "If Castor lives, he is carried in on a litter and asks to speak.",
+            "Aster Quen announces that the Guild’s offer stands until the light reaches the scale."
+          ],
+          "stressTriggers": [
+            "THREAT +2 — Narrator spends to have Ulmar produce his own proof of the light weights, so that exposure costs the House everything",
+            "MOMENTUM +2 — if the agents show the lasgun to the Judge: a breach of the forms against an Imperial officer"
+          ],
+          "npcGuidance": "Strenn follows the forms precisely and will not help either side; Ilsabet answers only what is asked; Ulmar is calm until the lasgun appears.",
+          "gmTip": "Spend Threat openly here and let the players watch the pool. Deliver the Mentat Computation: Dawn handout as the hearing opens.",
+          "outcomes": [
+            "The deed is voided, challenged or upheld; the hearing moves to the weighing of the House"
+          ]
+        },
+        {
+          "name": "The Weighing",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The Judge turns to the House Mentat. Will you certify, on your honor and contract, that the scales of the Weighing have measured true? The clerk sets a fresh filmbook ready to record the answer.",
+          "checks": [
+            "DISCIPLINE + TRUTH, Difficulty 3 — certify a lie to an Imperial Judge with every eye in the hall on you",
+            "COMMUNICATE + JUSTICE, Difficulty 2 — lay the Black Tally before the court and survive the uproar",
+            "COMMUNICATE + FAITH, Difficulty 2 — use the Fremen prophecy before witnesses to turn the room"
+          ],
+          "events": [
+            "Whatever the Mentat answers, someone in the inner circle has the means to contradict it."
+          ],
+          "stressTriggers": [
+            "STRESS +2 — Teodor, whatever he says",
+            "STRESS +1 — any agent who contradicts another agent before the Judge"
+          ],
+          "npcGuidance": "Strenn wants a reason to strike the Harkonnens from his rolls and will seize it if handed proof; without proof, he confirms whatever the deed says.",
+          "gmTip": "This is the moment the agendas collide. Pause, let each player state what their character does, and resolve in reverse order of rank.",
+          "outcomes": [
+            "EXPOSE: the Black Tally is entered on the record",
+            "COVER UP: the Mentat certifies and the Guild buys",
+            "KNEEL: the deed stands and Ulmar smiles"
+          ]
+        },
+        {
+          "name": "Light on the Roof",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Contingency: if the lasgun was left armed, the timer reaches the first hour after dawn during the hearing; if it was disarmed, Pell or Ulmar instead tries to escape by the roof pad ornithopter with the escrow copy. A skirmish against two or three Harkonnen guards on a narrow pad in high wind.",
+          "narration": "A distant crack, a shudder through the stone, and the drone of the house shield rises to a whine. Or: wings unfolding on the roof, and the clatter of someone running on the stair.",
+          "checks": [
+            "MOVE + JUSTICE, Difficulty 3 — reach the vault or the roof in time",
+            "UNDERSTAND + TRUTH, Difficulty 3 — drop the shield before the beam touches the field",
+            "BATTLE + DUTY, Difficulty 2 — hold the ornithopter on the pad (skirmish)"
+          ],
+          "stressTriggers": [
+            "STRESS +3 — every agent in the Residency if the lasgun fires into a live shield and is not stopped",
+            "THREAT +2 — if Ulmar escapes with the escrow copy"
+          ],
+          "npcGuidance": "Ulmar abandons everyone, including Kasimir. Judge Strenn refuses to leave his chair until the forms are concluded.",
+          "gmTip": "Medium lethality: the shield-and-lasgun blast is the one thing in this scenario that can kill everyone at once, so give the agents a fair warning and a fair chance.",
+          "outcomes": [
+            "The disaster is averted in front of the Judge, which damns Ulmar",
+            "Ulmar escapes and the feud becomes kanly"
+          ]
+        },
+        {
+          "name": "Water for the Road",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Ixa waits at the water gate with two stillsuits too many and a thumper on her back. The desert, she says, does not ask for deeds.",
+          "checks": [
+            "COMMUNICATE + FAITH, Difficulty 2 — agree to the price: the location of the Weeping Rock and the seals of the hoard",
+            "MOVE + FAITH, Difficulty 2 — leave through the passages and the spiceport crowds before the hearing notices"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — each agent who leaves the Residency for the open sand with no stillsuit drill"
+          ],
+          "npcGuidance": "Ixa keeps her word to the letter and expects the same; the sietch will shelter the House for exactly as long as it keeps its own.",
+          "gmTip": "Flight is a real ending, not a failure: the House survives as outlaws holding the one weapon the Harkonnens fear.",
+          "outcomes": [
+            "The House goes into the desert with the Black Tally, and the Weighing lapses"
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Lord Castor Varrin",
+      "role": "Head of House Varrin, holder of the Weighing",
+      "agenda": "Save his son from the reckoning of the false weights, even if the price is the concession itself.",
+      "behavior": "Gracious, formal and visibly ill; he grips the scale’s arm when he stands. Under pressure he goes quiet and looks at his heir.",
+      "secret": "He ordered the light weights eleven years ago at Harkonnen demand, and six days ago he sold the Weighing to a Harkonnen front to buy silence and his son’s safety. He has begun to regret it since the Guild offer arrived.",
+      "stats": {
+        "communicate": 6,
+        "discipline": 5
+      }
+    },
+    {
+      "name": "Ser Ulmar Harkonnen",
+      "role": "Cousin of the departing Harkonnen line",
+      "agenda": "Close the sale before dawn so the Weighing stays a Harkonnen knife inside the Atreides fief.",
+      "behavior": "Charming, chatty and always complimentary about the House’s water. He never raises his voice; he raises his eyebrows.",
+      "secret": "He paid the Steward to poison the Lord slowly, sent the griffin decanter to finish him, and ordered the lasgun as a last resort that would kill everyone, himself excepted.",
+      "stats": {
+        "communicate": 4,
+        "battle": 3
+      }
+    },
+    {
+      "name": "Aster Quen",
+      "role": "Envoy of the Spacing Guild",
+      "agenda": "Buy the Weighing for the Guild so that Carthag weights become honest, because navigators are being shorted.",
+      "behavior": "Never sits, never eats, speaks in conditionals. She is polite and impossible to threaten.",
+      "secret": "The Guild holds heighliner manifests proving eleven years of light weights, and has agreed with the Bene Gesserit who should hold the scale afterward.",
+      "stats": {
+        "communicate": 5,
+        "understand": 6,
+        "discipline": 3
+      }
+    },
+    {
+      "name": "Ixa of Sietch Tamrak",
+      "role": "Fremen water-seller at the kitchen gate",
+      "agenda": "Recover the Weeping Rock, a sacred cave where the Harkonnens stored the skimmed spice and killed the Fremen who kept it.",
+      "behavior": "Patient, blunt, offers water before speaking. Measures the House by how it treats her water and her word.",
+      "secret": "She is a sayyadina in training sent by her sietch, and three Fremen fighters are already in the servant passages tonight.",
+      "stats": {
+        "move": 6,
+        "battle": 5
+      }
+    },
+    {
+      "name": "Judge Ottavio Strenn",
+      "role": "Judge of the Change, Imperial arbiter of the transfer",
+      "agenda": "Complete the transfer of Arrakis without scandal, and keep his conscience if he can.",
+      "behavior": "Dry, procedural, unflappable. He answers questions with questions about procedure and never touches food he did not see prepared.",
+      "secret": "He carries sealed instructions from Kaitain to confirm all concessions as they stand and ask no questions about weights. He despises them and will break them only on public proof.",
+      "stats": {
+        "understand": 6,
+        "discipline": 6
+      }
+    },
+    {
+      "name": "Ilsabet Moreaux",
+      "role": "CHOAM factor and holder of the escrow",
+      "agenda": "Close the escrow and collect her commission, or sell what she knows for more.",
+      "behavior": "Counts things aloud: candelabra, guards, cups. Cheerfully mercenary and honest about it.",
+      "secret": "She has already sold a copy of the deed to the Guild, and she will void the escrow for whoever pays most before dawn.",
+      "stats": {
+        "communicate": 5,
+        "understand": 5
+      }
+    },
+    {
+      "name": "Steward Oswin Pell",
+      "role": "Steward of the Varrin household for twenty years",
+      "agenda": "Earn his Harkonnen fee and his passage off Arrakis before the Atreides arrive.",
+      "behavior": "Indispensable, soft-spoken, always carrying something for someone. When suspected, he simply leaves the room.",
+      "secret": "He is the Harkonnen sleeper: he dosed the Lord for months, operated the hunter-seeker, took the vault key and set the lasgun, and his name hides in the buyer, the Ledgerhouse of Pell and Orrin.",
+      "stats": {
+        "move": 6,
+        "communicate": 4,
+        "battle": 3
+      }
+    },
+    {
+      "name": "Kasimir Orlo",
+      "role": "Sworn blade of Ser Ulmar",
+      "agenda": "Fight one last duel for Ulmar and so buy back his contract and his freedom.",
+      "behavior": "Silent, courteous, precise. He bows to his opponents and to the dead.",
+      "secret": "He is Bastien Orlo’s younger brother, exiled for killing a man in practice. He knows nothing of the lasgun and would turn on Ulmar if he learned of it.",
+      "stats": {
+        "battle": 7,
+        "move": 6,
+        "discipline": 5
+      }
+    }
+  ],
+  "threats": [
+    {
+      "name": "The Needle in the Lilies",
+      "ref": "hunter-seeker",
+      "description": "A hunter-seeker hidden in the table flowers, rising during the toast to hunt the Judge of the Change.",
+      "stats": {
+        "evade": 3,
+        "stress": 5
+      },
+      "tactics": "Act I: a feint to drive the Lord to his chambers. If Pell keeps it, Act II: it hunts whoever holds the Black Tally."
+    },
+    {
+      "name": "Steward Oswin Pell",
+      "ref": "harkonnen-assassin",
+      "description": "The trusted steward, already inside the house for twenty years.",
+      "tactics": "Poison first, devices second, the lasgun last. Never fights in the open unless cornered between the agents and the roof pad."
+    },
+    {
+      "name": "Kasimir Orlo, Duellist",
+      "description": "A slow-blade master in Harkonnen blue, rapier and kindjal, personal shield.",
+      "stats": {
+        "evade": 3,
+        "stress": 4
+      },
+      "tactics": "Act I: watches. Act II: fights the single duel of the scenario under the forms. Act III: a witness for whichever side tells him the truth about his master."
+    },
+    {
+      "name": "The Slaved Lasgun",
+      "description": "A lasgun clamped to the shield generator, aimed into the field on a cheap timer.",
+      "stats": {
+        "evade": 3,
+        "stress": 8
+      },
+      "tactics": "Set for the first hour after dawn. If it fires into a live house shield, the Residency is destroyed. Threat spends can bring the timer forward."
+    },
+    {
+      "name": "Harkonnen House-Troopers",
+      "description": "Four of Ulmar’s guards out of livery, carrying knives and stunners.",
+      "stats": {
+        "evade": 2,
+        "stress": 3
+      },
+      "tactics": "They move through the servant passages after the escrow copy or the Fremen woman; they flee if two fall."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "Varrin Residency — Great Hall",
+      "description": "A long, cool hall with high slit windows and a raised dais. The ceremonial Varrin Scale stands on it, brass pans level. Shield-doors at both ends turn every entrance into a slow walk. The Judge sits here at dawn."
+    },
+    {
+      "name": "Varrin Residency — Dining Court",
+      "description": "A long table under a painted ceiling of rain clouds no one here has ever seen. Every seat has a snooper post, and water is poured audibly from crystal. A hidden servant door waits behind a tapestry of the spiceport."
+    },
+    {
+      "name": "Varrin Residency — Conservatory",
+      "description": "Date palms, dew-glass panes and a fountain that runs only for guests. The stone floor is wet and slick near the basin. It is the duelling floor in Act II, and the factor’s favorite place for quiet offers."
+    },
+    {
+      "name": "Varrin Residency — Guest Wing",
+      "description": "Four suites along a gallery for the Guild, the Harkonnen cousin, the Judge and CHOAM, assigned by the Steward. The walls are thin, the servant doors are not locked, and Ulmar’s door is never closed all the way."
+    },
+    {
+      "name": "Varrin Residency — Shield-Generator Vault",
+      "description": "A rock chamber beneath the kitchens where the house shield generator hums. One door, two keys, and an archive niche holding the Lord’s private box. In Act II a lasgun is clamped to the housing, aimed into the field."
+    },
+    {
+      "name": "Varrin Residency — Roof Ornithopter Pad",
+      "description": "A wind-scoured platform above the guest wing, reached by a lift from the great hall. Two House ornithopters and, tonight, Ulmar’s blue-striped craft. The only way out that does not pass the gate."
+    },
+    {
+      "name": "Varrin Residency — Servant Passages",
+      "description": "Narrow corridors inside the walls, connecting the kitchens, the water gate and every room through hidden doors. Servants know them by touch. So does the Steward, and so, tonight, do three Fremen."
+    },
+    {
+      "name": "Varrin Residency — Lord’s Chambers",
+      "description": "A sickroom dressed as a study: filmbooks, a water-ring bowl, a snooper on a tripod, and a bed facing the window over the spiceport. The griffin decanter stands here through the night."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "mentat-opening-computation",
+      "title": "MENTAT COMPUTATION: THE RECEPTION",
+      "from": "MENTAT OF HOUSE VARRIN",
+      "to": "THE INNER CIRCLE OF HOUSE VARRIN",
+      "priority": "SEALED",
+      "text": "GUEST REGISTER, VERIFIED: Aster Quen, envoy, Spacing Guild. Ser Ulmar Harkonnen and a retinue of six. Ilsabet Moreaux, factor, CHOAM. Judge Ottavio Strenn, Judge of the Change, with one clerk. Ixa of Sietch Tamrak, water-seller, at the kitchen gate. PROBABILITY ANY GUEST IS HERE ONLY FOR THE FOOD: 0.02. PROBABILITY ONE GUEST INTENDS HARM TO THE LORD: 0.61. STANDING ORDERS: no gift reaches the Lord unassayed. No guest enters the vault level. No agent speaks to the Judge alone before dawn. RISK ASSESSMENT: GRAVE.",
+      "when": "Before Act I, as the players take their seats (with the briefing)"
+    },
+    {
+      "id": "guild-sealed-offer",
+      "title": "THE SEALED OFFER OF THE GUILD",
+      "from": "Aster Quen, for the Spacing Guild",
+      "to": "Lord Castor Varrin, or whoever holds his seal",
+      "priority": "IMPERIAL",
+      "text": "The Guild offers sixty million solaris and passage in perpetuity for every heir of Varrin, in exchange for the Weighing of Carthag, to be confirmed by the Judge of the Change at dawn. The Guild would be content for the past weights of Carthag to remain a private matter between friends. Should the Weighing pass elsewhere, the Guild would feel obliged to share its own measures of those weights with the Judge. This offer withdraws itself when the light reaches the scale.",
+      "when": "Act I, The Sealed Offer, when the cylinder is opened"
+    },
+    {
+      "id": "words-of-the-water-seller",
+      "title": "WORDS OF THE WATER-SELLER",
+      "from": "Ixa of Sietch Tamrak, spoken at the kitchen gate",
+      "to": "Whoever came down to the water",
+      "priority": "ROUTINE",
+      "text": "\"At sunrise the keeper of the scale is weighed. On one pan, his gold. On the other, what he took from the sand and hid in the rock that weeps. If he gives the sand back its own, the sand will carry his son. If he keeps it, the scale will tip into ash before the sun is a hand high. This was said before your grandfathers. I only carry it, as I carry water.\"",
+      "when": "Act I, Water at the Kitchen Gate (or Act II if no one went down)"
+    },
+    {
+      "id": "mentat-needle-computation",
+      "title": "MENTAT COMPUTATION: THE NEEDLE",
+      "from": "MENTAT",
+      "to": "THE INNER CIRCLE OF HOUSE VARRIN",
+      "priority": "URGENT",
+      "text": "DATA: the hunter-seeker rose from flowers placed by household staff. Its operator required line of sight; the only line runs from the dining court’s hidden door. The device chose the Judge but did not strike on its first pass. CONCLUSION: it was not meant to kill. It was meant to frighten the Lord into retiring early. PROBABILITY THE OPERATOR IS ON THE HOUSEHOLD ROLLS: 0.88. PROBABILITY THE NEXT ATTEMPT IS QUIETER: 0.93. RECOMMENDATION: follow whatever goes upstairs with the Lord.",
+      "when": "Act I, after The Toast and the Needle"
+    },
+    {
+      "id": "suk-assay",
+      "title": "ASSAY OF THE LORD’S BLOOD",
+      "from": "Dr. Maren Tervane, private notebook",
+      "to": "Dr. Maren Tervane",
+      "priority": "SEALED",
+      "text": "Compound in the nightwine: an inert carrier, invisible to the snooper. Compound already in the Lord’s blood: a slow agent of the chaumas family, deposited in small doses over at least four months. Separately, nothing. Together, heart failure within six hours, indistinguishable from his illness. Only two people serve the Lord’s food and cup: the Steward and the Lady Severine. I am conditioned to heal. Nothing in my conditioning tells me whom to accuse.",
+      "when": "Act II, The Nightcap, privately to Dr. Tervane once the poison is named"
+    },
+    {
+      "id": "letter-from-kasimir",
+      "title": "A LETTER FOLDED INTO A GLOVE",
+      "from": "Kasimir Orlo",
+      "to": "Bastien Orlo",
+      "priority": "SEALED",
+      "text": "Brother. Your letters reached me, every one, and I kept them, as you kept mine. I did not know until tonight that my master kept them too. He knows when your shield is changed and how long the vault is unwatched. I fight you at the middle hour because my contract says I must, and it is the last fight it says I must. Do not hold back for my sake. I will not for yours. K.",
+      "when": "Act II, The Challenge, privately to Bastien"
+    },
+    {
+      "id": "deed-of-sale",
+      "title": "DEED OF SALE (FILMBOOK COPY, LORD’S BOX)",
+      "from": "Lord Castor Varrin, under seal",
+      "to": "The Ledgerhouse of Pell and Orrin, Carthag",
+      "priority": "SEALED",
+      "text": "I, Castor of House Varrin, convey the Weighing of Carthag, with all scales, seals and rights, to the Ledgerhouse of Pell and Orrin, for forty million solaris and safe conduct for my heir. This conveyance is held in escrow by the factor of CHOAM and closes upon my death or upon confirmation by the Judge of the Change, whichever falls first. Witnessed, truly and freely signed. Seal of truth-witness affixed: S. A., of the Sisterhood.",
+      "when": "Act II, The Shield Vault, when the Lord’s private box is opened"
+    },
+    {
+      "id": "atreides-reply",
+      "title": "A REPLY FROM THE ATREIDES ADVANCE",
+      "from": "Factor Dorran Hale, Atreides advance office, Arrakeen",
+      "to": "Aurelian Varrin",
+      "priority": "URGENT",
+      "text": "My lord, your third letter is received. My Duke will look kindly on any House that brings him the true weights of Carthag, and coldly on any that conceals them. Bring the proof you promised before the Judge, in public, and House Atreides will speak for your confirmation. I am told a Harkonnen cousin is your guest tonight. Do not drink anything he gives you, and do not trust anyone who already knew he was coming.",
+      "when": "Act II, after the deed of sale is discovered, privately to Aurelian"
+    },
+    {
+      "id": "sisterhood-instruction",
+      "title": "A CIPHER IN THE MORNING TEA",
+      "from": "The Sisterhood, by hand-sign code",
+      "to": "Severine Ashka",
+      "priority": "SEALED",
+      "text": "The scale must pass to the Guild. The arrangement is made and must hold. The boy is not essential to it. The father is not essential to it. You are essential to it. If the House kneels to the griffin, the Order will not know you. If the House goes into the sand, the Order will not follow you. Remember what you are for.",
+      "when": "Act III, as the Judge sits, privately to Severine"
+    },
+    {
+      "id": "mentat-dawn-computation",
+      "title": "MENTAT COMPUTATION: DAWN",
+      "from": "MENTAT",
+      "to": "THE INNER CIRCLE OF HOUSE VARRIN",
+      "priority": "IMPERIAL",
+      "text": "DATA: the buyer, the Ledgerhouse of Pell and Orrin, is registered to our own Steward and a Giedi Prime address. The lasgun bore Harkonnen armory marks, filed half away. The Judge has not eaten since he arrived. CONCLUSION: the Harkonnens meant the sale to close by death and the evidence to close by fire. Exposed before the Judge, this is a breach of the forms against an Imperial officer. PROBABILITY THE JUDGE STRIKES THE DEED IF SHOWN THE LASGUN: 0.71. PROBABILITY HE ALSO STRIKES THE WEIGHING FROM VARRIN: 0.66. RISK ASSESSMENT: EVERY ROAD COSTS.",
+      "when": "Act III, as The Judge Sits opens, if the vault was searched"
+    }
+  ],
+  "maps": [
+    {
+      "id": "varrin-residency",
+      "title": "THE VARRIN RESIDENCY",
+      "subtitle": "House Varrin seat above the Carthag spiceport — three levels",
+      "description": "A minor House residency built to impress Landsraad guests: cool halls, wasteful water, and a shield generator in the rock beneath. Servant passages run inside every wall.",
+      "kind": "ascii",
+      "ascii": "╔══════════════════════════════════════════════════════════════════╗\n║ THE VARRIN RESIDENCY — CARTHAG, ARRAKIS                          ║\n║ House Varrin · three levels · north is up · ┄ hidden door        ║\n╠══════════════════════════════════════════════════════════════════╣\n║  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐ ║\n║  │ ROOF 'THOPTER PAD│  │ GUEST WING       │  │ LORD'S CHAMBERS │ ║\n║  │ 2 craft · beacon │  │ Guild, Harkonnen │  │ upper floor     │ ║\n║  │ lift to the hall │  │ Judge, CHOAM     │  │ sickbed         │ ║\n║  └────────┬─────────┘  └───┬──────────────┘  └────┬────────────┘ ║\n║           │ lift           │ grand stair          │ stair        ║\n║           │                │                      │              ║\n║  ┌────────┴────────────────┴──┐  ┌────────────────┴────────────┐ ║\n║  │ GREAT HALL                 │  │ DINING COURT                │ ║\n║  │ dais · the Varrin Scale    │  │ long table · water service  │ ║\n║  │ reception floor            │══│ snooper posts at each seat  │ ║\n║  │ shield-doors at both ends  │  │ arch to the conservatory    │ ║\n║  └─────────────┬──────────────┘  └──────────────┬──────────────┘ ║\n║                │                                │                ║\n║  ┌─────────────┴──────────────┐  ┌──────────────┴──────────────┐ ║\n║  │ SERVANT PASSAGES           │  │ CONSERVATORY                │ ║\n║  │ kitchens · water gate      │┄┄│ date palms · dew-glass      │ ║\n║  │ hidden doors to every room │  │ fountain · duelling floor   │ ║\n║  └──────────────────┬─────────┘  └─────────────────────────────┘ ║\n║                     │                                            ║\n║             ┌───────┴──────────────────────────────┐             ║\n║             │ SHIELD-GENERATOR VAULT (below)       │             ║\n║             │ generator housing · field emitter    │             ║\n║             │ archive niche · two-key door         │             ║\n║             └──────────────────────────────────────┘             ║\n║                                                                  ║\n║  ═══ south: forecourt, shield-gate, spiceport road               ║\n╚══════════════════════════════════════════════════════════════════╝",
+      "rooms": [
+        {
+          "name": "Great Hall",
+          "note": "Reception floor and the dais with the ceremonial Varrin Scale. The Judge sits here at dawn in Act III."
+        },
+        {
+          "name": "Dining Court",
+          "note": "The toast and the hunter-seeker in Act I. A hidden servant door behind the spiceport tapestry gives the operator his line of sight."
+        },
+        {
+          "name": "Conservatory",
+          "note": "Date palms, dew-glass and a fountain basin. The duel under the forms is fought here at the middle hour."
+        },
+        {
+          "name": "Guest Wing",
+          "note": "Suites for the Guild envoy, Ser Ulmar, the Judge and the CHOAM factor. Ilsabet’s escrow copy is in her writing case."
+        },
+        {
+          "name": "Shield-Generator Vault",
+          "note": "Below the kitchens, reached by the servant stair. The lasgun, the Black Tally and the Lord’s private box with the deed are here in Act II."
+        },
+        {
+          "name": "Roof Ornithopter Pad",
+          "note": "Reached by lift from the great hall. Ulmar’s craft waits here; the escape route in Act III if the house shield is down."
+        },
+        {
+          "name": "Servant Passages",
+          "note": "Hidden doors into every room, the kitchens and the water gate. Pell’s domain, and Ixa’s way out to the desert."
+        },
+        {
+          "name": "Lord’s Chambers",
+          "note": "Castor’s sickroom on the upper floor. The griffin decanter and the Nightcap scene."
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "title": "THE HONEST WEIGHT",
+      "condition": "The agents lay the Black Tally, the deed and the lasgun before the Judge in public, exposing the false weights and the Harkonnen plot together.",
+      "text": "The Judge strikes the deed, then strikes the Weighing from the rolls of House Varrin, and his voice does not change for either sentence. Ser Ulmar leaves the hall under guard, still smiling, already composing his letters to Giedi Prime. By noon the spiceport knows that the Varrin scales lied for eleven years, and by evening it knows who told. The Weighing passes to a Guild trust under Atreides eyes. House Varrin keeps its name, its Residency and a seat at the back of the Landsraad, poorer than it has been in a century. When the first honest load crosses the Carthag scale, the bell rings once, and you find that you can hear it without flinching."
+    },
+    {
+      "title": "THE GILDED CHAIN",
+      "condition": "The agents cover up the false weights, either by certifying them and selling to the Guild, or by kneeling to Ulmar and letting the sale stand.",
+      "text": "The Judge confirms what is put before him and signs without looking up. If the Guild bought the scale, House Varrin leaves Arrakis rich and rootless, with passage for every heir and no reason ever to come back; the Guild buries the past so deep that you begin to wonder whether it happened. If the griffin bought it, nothing seems to change at all: the Varrin seal stays on every load, and four parts in a hundred go on vanishing into the rock, now under an Atreides sky. Either way the bell on the Carthag scale rings as it always has. Only you know what it is counting."
+    },
+    {
+      "title": "WATER FOR THE ROAD",
+      "condition": "The agents take the Black Tally and flee into the desert with Ixa, trading the location of the Weeping Rock for the protection of Sietch Tamrak.",
+      "text": "You leave through the walls of your own house, in borrowed stillsuits, while the Judge is still reading the concession aloud to an empty dais. By the time anyone thinks to look for you, the spiceport crowds have swallowed you, and then the sand has. The Weighing lapses at noon for want of a holder. Three nights later the Fremen go to the Weeping Rock, and the Harkonnen hoard goes back to the desert it was taken from. You are outlaws now, a House without a house, carrying a ledger in Mentat cipher that could hang half the Harkonnen factors on Arrakis. The sietch gives you water. It does not yet give you trust."
+    }
+  ],
+  "characters": [
+    {
+      "id": "teodor-quill",
+      "name": "Teodor Quill",
+      "career": "Mentat",
+      "appearance": "Tall, stooped and immaculate, with sapho-stained lips and ink in the creases of his knuckles. He counts under his breath when a room goes quiet. DRIVE STATEMENTS — Duty: The House bought my mind; I will not let it be sold cheaply. · Faith: I believe in nothing I cannot weigh, and I weigh everything. · Justice: A false figure is a debt that comes due with interest. · Power: Whoever holds the true numbers holds the room. · Truth: I have told one lie for eleven years, and I know its exact weight.",
+      "attributes": {
+        "duty": 6,
+        "faith": 4,
+        "justice": 5,
+        "power": 7,
+        "truth": 8
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 5,
+        "discipline": 6,
+        "move": 4,
+        "understand": 7
+      },
+      "talent": "Projection Engine — Once per scene, state a conclusion about a person or plan. If the Narrator confirms it, gain 2 Momentum; if not, the Narrator gains 1 Threat.",
+      "gear": [
+        "Sapho juice",
+        "Filmbook reader",
+        "Poison snooper",
+        "House signet ring",
+        "The first calibration weight"
+      ],
+      "signatureItem": "The first calibration weight — a small brass weight from the day he first set the Varrin scales light, carried in his pocket as a reminder he cannot put down.",
+      "personalAgenda": "Keep the Weighing in Varrin hands through the Change, and make sure the Black Tally, the true record of the weights, is never seen by anyone outside the inner circle.",
+      "agendaByAct": {
+        "1": "Read every guest and compute who knows about the light weights. Keep Aurelian from speaking to the Judge alone; whatever the heir knows, he has not learned it from you.",
+        "2": "The Black Tally is in the vault where the knives are. Get it before anyone else, and if Aurelian learns what it is, persuade him that silence is the only thing keeping his House alive.",
+        "3": "The Judge will ask you to certify the weights. Certify the lie and save the House, or tell the truth and hang yourself. Before you choose, decide whether to tell the Judge about Aurelian’s letters to the Atreides."
+      },
+      "buddy": "Severine Ashka",
+      "rival": "Aurelian Varrin",
+      "secret": "For eleven years you have calibrated the Varrin scales four parts in a hundred light on Lord Castor’s orders, and kept the true figures in the Black Tally in your own cipher. Aurelian has promised the Atreides exactly that proof without knowing it would destroy you."
+    },
+    {
+      "id": "severine-ashka",
+      "name": "Severine Ashka",
+      "career": "Bene Gesserit",
+      "appearance": "Composed and unhurried, in grey-green silk, the Lord’s consort for six years. She never raises her voice and never needs to. DRIVE STATEMENTS — Duty: I owe the Sisterhood my training and this House my years; I have not decided which debt is larger. · Faith: Every legend is a tool someone forged; I know who forged this one. · Justice: Justice is a luxury of those who will not be here in a hundred years. · Power: The quietest voice in the room decides what the room remembers. · Truth: I can hear a lie in a breath; I have never been able to stop telling them.",
+      "attributes": {
+        "duty": 5,
+        "faith": 8,
+        "justice": 4,
+        "power": 6,
+        "truth": 7
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 7,
+        "discipline": 7,
+        "move": 4,
+        "understand": 4
+      },
+      "talent": "Truthsense — When someone lies to you face to face, the Narrator must tell you a lie was spoken (but not which part).",
+      "gear": [
+        "Poison snooper",
+        "Spice coffee service",
+        "Slip-tip",
+        "Shield belt",
+        "Ivory hand-fan"
+      ],
+      "signatureItem": "Ivory hand-fan — a gift from her Reverend Mother; its ribs carry a hand-sign cipher she can read with her fingertips in the dark.",
+      "personalAgenda": "Protect Lord Castor and ensure the line of Varrin continues under the Sisterhood’s eye, while steering the Weighing toward the outcome your Order has already agreed.",
+      "agendaByAct": {
+        "1": "The Fremen water-seller carries a prophecy your Order planted three generations ago. Make sure the court hears it as pointing toward the Guild, the ones who fold the road.",
+        "2": "When the deed of sale is found, every eye will go to your truth-witness seal. Deny it, explain it, or turn Aurelian against his father so that the sale is voided by his own hand.",
+        "3": "Your Order demands the scale pass to the Guild, even if the heir is ruined. Choose the Sisterhood or the young man you have watched grow up, and do it in front of the Judge."
+      },
+      "buddy": "Teodor Quill",
+      "rival": "Dr. Maren Tervane",
+      "secret": "Six days ago you witnessed Lord Castor sign away the Weighing and sealed the deed with your truth-witness mark, and he swore you to silence. Aurelian does not know his birthright is gone, and Dr. Tervane already suspects you of poisoning the Lord."
+    },
+    {
+      "id": "bastien-orlo",
+      "name": "Bastien Orlo",
+      "career": "Swordmaster",
+      "appearance": "Broad, grey at the temples, with a duellist’s scarred knuckles and a habit of standing between the heir and every door. He speaks little and bows precisely. DRIVE STATEMENTS — Duty: I swore to Lord Castor that his son would outlive him. · Faith: The blade is honest even when the hand is not. · Justice: The forms exist so that killing has a price. · Power: Power is a tool I hold for others and never for myself. · Truth: I taught my brother the slow blade, and I taught him wrong.",
+      "attributes": {
+        "duty": 8,
+        "faith": 6,
+        "justice": 6,
+        "power": 4,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 8,
+        "communicate": 4,
+        "discipline": 5,
+        "move": 5,
+        "understand": 4
+      },
+      "talent": "Read the Feint — In a duel, after your opponent rolls, spend 1 Momentum to force them to re-roll their best die.",
+      "gear": [
+        "Rapier",
+        "Kindjal",
+        "Shield belt",
+        "Stunner",
+        "Notched practice blade"
+      ],
+      "signatureItem": "Notched practice blade — the dulled sword he and his brother trained with as boys, one notch for every bout Kasimir won.",
+      "personalAgenda": "Keep Aurelian alive and the honor of House Varrin unbroken through the night, whatever the guests intend.",
+      "agendaByAct": {
+        "1": "Watch Ulmar’s retinue. Find out why your brother Kasimir wears Harkonnen blue, and keep Aurelian from accepting any challenge, however it is phrased.",
+        "2": "The challenge has come and you will answer it yourself. Decide whether to kill your brother, yield to him, or break the forms to save him, knowing Teodor will compute exactly how the vault was breached.",
+        "3": "If Aurelian kneels to a Harkonnen, your oath to his father requires you to stop him, before the Judge, by force if you must. Decide which you serve: the Varrin name, or the young man who bears it."
+      },
+      "buddy": "Aurelian Varrin",
+      "rival": "Teodor Quill",
+      "secret": "Kasimir Orlo is your younger brother. In your letters to him this year you mentioned the shield cycles and the vault watch as idle talk; those letters are how the Harkonnens breached the Residency, and Teodor’s security review will reveal it."
+    },
+    {
+      "id": "aurelian-varrin",
+      "name": "Aurelian Varrin",
+      "career": "Noble Scion",
+      "appearance": "Twenty-two, sharp-featured, dressed a little too well, with his father’s grey eyes and none of his patience. He touches his signet ring when he is lying. DRIVE STATEMENTS — Duty: I owe this House a better name than the one it has. · Faith: I believe the Atreides mean what they say, and I am betting everything on it. · Justice: Whatever my father’s generation did, mine will answer for it honestly. · Power: The Judge confirms an heir, not a ghost; I mean to be in that chair. · Truth: I do not yet know what the truth is, only that someone has been hiding it from me.",
+      "attributes": {
+        "duty": 6,
+        "faith": 4,
+        "justice": 7,
+        "power": 8,
+        "truth": 5
+      },
+      "skills": {
+        "battle": 5,
+        "communicate": 7,
+        "discipline": 4,
+        "move": 4,
+        "understand": 6
+      },
+      "talent": "Name and Seal — Once per session, invoke your House to open a door, an audience or a ledger that would otherwise stay shut.",
+      "gear": [
+        "House signet ring",
+        "Rapier",
+        "Shield belt",
+        "Solari purse",
+        "Mother’s water ring"
+      ],
+      "signatureItem": "Mother’s water ring — the last ring from his mother’s water, which he swore never to spend.",
+      "personalAgenda": "Be confirmed by the Judge as heir and holder of the Weighing on your own terms, with House Varrin standing beside the Atreides rather than behind the Harkonnens.",
+      "agendaByAct": {
+        "1": "Win the Judge’s ear and charm the Guild envoy. Find out what the Harkonnen cousin wants, and what Teodor keeps locked in the vault.",
+        "2": "Your father has sold your birthright. Get the escrow copy of the deed from the CHOAM factor by any means, and find out who witnessed the sale.",
+        "3": "Stand before the Judge. Expose your father’s sale and Teodor’s false weights, losing the concession but winning the Atreides, or kneel and keep the name. Whatever you choose, the House chooses with you."
+      },
+      "buddy": "Bastien Orlo",
+      "rival": "Severine Ashka",
+      "secret": "You have written three times to the Atreides advance office, promising proof of the true weights of Carthag in exchange for their support at your confirmation. You do not know what the proof is, only that Teodor keeps something in the vault."
+    },
+    {
+      "id": "maren-tervane",
+      "name": "Dr. Maren Tervane",
+      "career": "Suk Doctor",
+      "appearance": "Small, brisk and unadorned, with the Suk diamond tattooed on her brow and a medical case she never sets down. She examines everyone she speaks to, out of habit. DRIVE STATEMENTS — Duty: My patient is my House, and my patient is dying. · Faith: My conditioning holds; I have to believe that, or I have nothing. · Justice: Someone has been killing a man by the spoonful under my care. · Power: I hold the one fact that could end this night, and I am forbidden to say it. · Truth: A diagnosis does not care who it embarrasses.",
+      "attributes": {
+        "duty": 8,
+        "faith": 5,
+        "justice": 7,
+        "power": 4,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 5,
+        "discipline": 6,
+        "move": 4,
+        "understand": 7
+      },
+      "talent": "Diagnose Poison — Name the poison in any victim you examine; the Narrator also tells you the likeliest way it was given.",
+      "gear": [
+        "Suk medical kit",
+        "Chaumurky antidote kit",
+        "Poison snooper",
+        "Stillsuit",
+        "Lord Castor’s case-book"
+      ],
+      "signatureItem": "Lord Castor’s case-book — four months of observations in her tiny hand, the record of a poisoning she could name but not prove.",
+      "personalAgenda": "Keep Lord Castor alive until dawn, as your Suk oath demands, whatever he has done and whoever wants him dead.",
+      "agendaByAct": {
+        "1": "Assay every gift that comes near the Lord. Tell no one how ill he really is, and watch Severine, who serves his cup.",
+        "2": "The second half of the poison has arrived. Find who gave the first. Accuse Severine before the household, or keep the oath of silence Castor demanded of you.",
+        "3": "If the Lord dies before he speaks, the sale stands. Your conditioning forbids you to harm a patient, but only your oath forbids you to tell the Judge his secrets. Break it to save the House, or keep it and let the House fall."
+      },
+      "buddy": "Aurelian Varrin",
+      "rival": "Severine Ashka",
+      "secret": "Lord Castor has been poisoned slowly for four months and has days to live at most. He forbade you to tell anyone, even his son. You believe Severine, who serves his cup, is the poisoner; you are wrong, but you have written your suspicion in the case-book."
+    }
+  ],
+  "tips": [
+    "Start Threat at 2 per player and spend it visibly: put a die in a bowl for every point, so the table watches the night get worse.",
+    "Play the shield-and-lasgun rule as a loaded threat, not a rule lookup: mention the vault hum in every Act II scene, and once the lasgun is found, let every player feel that one mistake ends everyone.",
+    "Use Threat spends for complications rather than damage: a shield flickering mid-duel, a servant who saw too much, Ulmar producing his own proof, the timer jumping forward.",
+    "Run the reception and the dawn hearing as intrigue conflicts in which every zone is adjacent, and the vault descent as an espionage conflict; keep duels for the conservatory, and only one of them.",
+    "Every NPC believes they serve a larger good, even Pell, who thinks he is simply paid; play them sincerely and let the players choose whom to betray.",
+    "Deliver act agendas and private handouts by dispatch at the act break, and never resolve an accusation between agents before Act III.",
+    "With four players, drop Dr. Tervane and give her assay to the Mentat; Severine then becomes the only suspect in the poisoning, which raises the heat.",
+    "All four dawn choices are legitimate endings: do not punish flight or kneeling, but make each one cost exactly what the agents valued most."
+  ]
+}

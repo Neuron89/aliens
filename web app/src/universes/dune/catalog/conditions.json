@@ -1,0 +1,253 @@
+[
+  {
+    "id": "dehydrated",
+    "name": "Dehydrated",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "moderate",
+    "text": "You have lost more water than you can spare.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:move",
+        "text": "+1 Difficulty to all MOVE and BATTLE tests",
+        "value": 1
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot recover Stress through rest"
+      }
+    ],
+    "healBy": "Drink at least a litre and rest in shade or a sealed shelter.",
+    "notes": "Matches rules.conditions \"dehydrated\"."
+  },
+  {
+    "id": "exposed",
+    "name": "Exposed",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "moderate",
+    "text": "Sun, sand or cold has worn you down.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:discipline",
+        "text": "+1 Difficulty to DISCIPLINE tests",
+        "value": 1
+      }
+    ],
+    "healBy": "A full scene of shelter.",
+    "notes": "Matches rules.conditions \"exposed\"."
+  },
+  {
+    "id": "spice-withdrawal",
+    "name": "Spice Withdrawal",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "Your body demands the spice it has learned to need.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "+1 Difficulty to all tests",
+        "value": 1
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Suffer 1 Stress at the start of each scene"
+      }
+    ],
+    "healBy": "A dose of spice, or a week of medical care and DISCIPLINE (D3).",
+    "notes": "Matches rules.conditions \"spice-withdrawal\"."
+  },
+  {
+    "id": "wounded",
+    "name": "Wounded",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "moderate",
+    "text": "An injury slows you and hurts with every movement.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:battle",
+        "text": "+1 Difficulty to MOVE and BATTLE tests",
+        "value": 1
+      }
+    ],
+    "healBy": "Field Surgery or a medical kit and a scene of rest.",
+    "notes": "Matches rules.conditions \"wounded\"."
+  },
+  {
+    "id": "poisoned",
+    "name": "Poisoned",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "A poison is working through your body.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Suffer 2 Stress at the end of each scene until treated"
+      }
+    ],
+    "healBy": "Antidote kit, a Suk doctor, or a DISCIPLINE (D3) test to purge it.",
+    "notes": ""
+  },
+  {
+    "id": "exhausted",
+    "name": "Exhausted",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "minor",
+    "text": "You need sleep more than anything.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot spend Momentum on your own tests"
+      }
+    ],
+    "healBy": "A night of rest.",
+    "notes": ""
+  },
+  {
+    "id": "disgraced",
+    "name": "Disgraced",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "moderate",
+    "text": "Your reputation has suffered in public.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:communicate",
+        "text": "+1 Difficulty to COMMUNICATE tests with nobility",
+        "value": 1
+      }
+    ],
+    "healBy": "A public act of restitution or a victory witnessed by peers.",
+    "notes": ""
+  },
+  {
+    "id": "suspected",
+    "name": "Suspected",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "minor",
+    "text": "Someone powerful believes you are a traitor or spy.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "The Narrator may spend 1 Threat to have you watched in any scene"
+      }
+    ],
+    "healBy": "Clear your name with evidence or a powerful ally.",
+    "notes": ""
+  },
+  {
+    "id": "spice-addicted",
+    "name": "Spice-Addicted",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "minor",
+    "text": "You are bound to melange. Your eyes are slowly turning blue.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Must consume spice every few days or gain spice withdrawal"
+      }
+    ],
+    "healBy": "There is no cure; only a steady supply.",
+    "notes": ""
+  },
+  {
+    "id": "indebted",
+    "name": "Indebted",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "minor",
+    "text": "You owe a debt to someone who will collect.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Once per adventure the creditor can demand a service"
+      }
+    ],
+    "healBy": "Pay the debt in full.",
+    "notes": ""
+  },
+  {
+    "id": "marked-for-death",
+    "name": "Marked for Death",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "severe",
+    "text": "An assassin has been paid to kill you.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "The Narrator gains 2 Threat at the start of each session to spend on attempts"
+      }
+    ],
+    "healBy": "Kill or turn the assassin, or the one who paid.",
+    "notes": ""
+  },
+  {
+    "id": "sand-blind",
+    "name": "Sand-Blind",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "moderate",
+    "text": "Grit and glare have stolen your sight for now.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "+2 Difficulty to any test that relies on sight",
+        "value": 2
+      }
+    ],
+    "healBy": "Clean water and a day out of the glare.",
+    "notes": ""
+  },
+  {
+    "id": "shaken",
+    "name": "Shaken",
+    "source": "custom",
+    "kind": "debuff",
+    "group": "condition",
+    "severity": "minor",
+    "text": "Fear has its claws in you.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "+1 Difficulty on the next test",
+        "value": 1
+      }
+    ],
+    "healBy": "Pass a DISCIPLINE (D1) test or end the scene.",
+    "notes": ""
+  }
+]

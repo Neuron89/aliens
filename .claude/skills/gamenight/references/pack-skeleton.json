@@ -1,0 +1,148 @@
+{
+  "packVersion": 1,
+  "id": "skeleton-pack",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "PLACEHOLDER TITLE",
+    "tagline": "PLACEHOLDER tagline of 8 to 25 words that sells the premise without spoiling the twist.",
+    "synopsis": "PLACEHOLDER GM-facing overview, 60-150 words, spoilers allowed.",
+    "type": "Cinematic",
+    "players": "2",
+    "playtime": "3-4 hours",
+    "difficulty": "Standard",
+    "tone": ["dread", "paranoia"],
+    "contentWarnings": ["body horror", "character death"],
+    "generated": {
+      "by": "claude-code",
+      "model": "PLACEHOLDER-MODEL-ID",
+      "at": "2026-01-01T00:00:00Z",
+      "params": { "players": 2, "playtime": "3-4 hours", "tone": ["dread", "paranoia"] }
+    },
+    "source": "generated"
+  },
+  "briefing": {
+    "from": "PLACEHOLDER SENDER",
+    "to": "PLACEHOLDER RECIPIENT",
+    "classification": "PLACEHOLDER CLASSIFICATION",
+    "text": "PLACEHOLDER briefing paragraph one.\n\nPLACEHOLDER briefing paragraph two.\n\nPLACEHOLDER SIGN-OFF."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "HOPE",
+      "summary": "PLACEHOLDER one-line GM summary.",
+      "readAloud": [
+        "PLACEHOLDER second-person present-tense narration paragraph, 40-120 words.",
+        "PLACEHOLDER second narration paragraph."
+      ],
+      "gmNotes": "PLACEHOLDER private GM guidance.",
+      "agendaNotes": "PLACEHOLDER how the personal agendas develop in this act.",
+      "scenes": [
+        {
+          "name": "PLACEHOLDER Scene",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "PLACEHOLDER what attacks and how it escalates.",
+          "narration": "PLACEHOLDER what the GM describes when the scene starts.",
+          "checks": ["OBSERVATION — PLACEHOLDER purpose", "COMTECH at −2 — PLACEHOLDER purpose"],
+          "events": ["PLACEHOLDER something that happens regardless of player action."],
+          "stressTriggers": ["STRESS +1 — all PCs present"],
+          "npcGuidance": "PLACEHOLDER how NPCs behave here.",
+          "gmTip": "PLACEHOLDER pacing advice.",
+          "outcomes": ["PLACEHOLDER outcome and where it leads."]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "PLACEHOLDER NPC",
+      "role": "PLACEHOLDER role",
+      "agenda": "PLACEHOLDER what they want.",
+      "behavior": "PLACEHOLDER how to play them.",
+      "secret": "PLACEHOLDER what they hide.",
+      "stats": { "health": 4 }
+    }
+  ],
+  "threats": [
+    {
+      "name": "PLACEHOLDER Threat",
+      "ref": "drone",
+      "description": "PLACEHOLDER first-contact description.",
+      "tactics": "PLACEHOLDER escalation."
+    }
+  ],
+  "keyLocations": [
+    { "name": "PLACEHOLDER Site — Location", "description": "PLACEHOLDER sensory, gameable description." }
+  ],
+  "handouts": [
+    {
+      "id": "placeholder-handout",
+      "title": "PLACEHOLDER HANDOUT",
+      "from": "PLACEHOLDER SENDER",
+      "to": "ALL CREW",
+      "priority": "PRIORITY",
+      "text": "PLACEHOLDER IN-WORLD TELETYPE TEXT.",
+      "when": "Act I, after the first scene"
+    }
+  ],
+  "maps": [
+    {
+      "id": "placeholder-map",
+      "title": "PLACEHOLDER MAP",
+      "subtitle": "PLACEHOLDER class or region",
+      "description": "PLACEHOLDER GM context.",
+      "kind": "ascii",
+      "ascii": "┌──────────┐\n│ PLACEHOLDER │\n└──────────┘",
+      "rooms": [{ "name": "PLACEHOLDER Room", "note": "PLACEHOLDER contents." }]
+    }
+  ],
+  "endings": [
+    { "title": "PLACEHOLDER SUCCESS", "condition": "PLACEHOLDER condition.", "text": "PLACEHOLDER epilogue." },
+    { "title": "PLACEHOLDER LOSS", "condition": "PLACEHOLDER condition.", "text": "PLACEHOLDER epilogue." }
+  ],
+  "characters": [
+    {
+      "id": "placeholder-pc-one",
+      "name": "PLACEHOLDER One",
+      "career": "Pilot",
+      "appearance": "PLACEHOLDER appearance and manner.",
+      "attributes": { "str": 3, "agi": 5, "wit": 3, "emp": 3 },
+      "skills": {
+        "heavyMachinery": 0, "stamina": 1, "closeCombat": 0, "mobility": 2,
+        "piloting": 4, "rangedCombat": 2, "observation": 2, "comtech": 2,
+        "survival": 0, "manipulation": 1, "medicalAid": 0, "command": 1
+      },
+      "talent": "Like a Glove — Re-roll failed PILOTING roll once per session.",
+      "gear": ["Flashlight", "Comm Unit", "PLACEHOLDER keepsake"],
+      "signatureItem": "PLACEHOLDER keepsake — one-sentence story.",
+      "personalAgenda": "PLACEHOLDER agenda in second person.",
+      "agendaByAct": { "1": "PLACEHOLDER act 1 agenda.", "2": "PLACEHOLDER act 2 agenda.", "3": "PLACEHOLDER act 3 agenda." },
+      "buddy": "PLACEHOLDER Two",
+      "rival": "None",
+      "secret": "PLACEHOLDER hidden truth that collides with PLACEHOLDER Two."
+    },
+    {
+      "id": "placeholder-pc-two",
+      "name": "PLACEHOLDER Two",
+      "career": "Medic",
+      "appearance": "PLACEHOLDER appearance and manner.",
+      "attributes": { "str": 2, "agi": 3, "wit": 4, "emp": 5 },
+      "skills": {
+        "heavyMachinery": 0, "stamina": 2, "closeCombat": 0, "mobility": 1,
+        "piloting": 0, "rangedCombat": 1, "observation": 3, "comtech": 1,
+        "survival": 1, "manipulation": 2, "medicalAid": 4, "command": 1
+      },
+      "talent": "Compassion — When you comfort someone, reduce their Stress by 2.",
+      "gear": ["Medkit", "First Aid Kit", "PLACEHOLDER keepsake"],
+      "signatureItem": "PLACEHOLDER keepsake — one-sentence story.",
+      "personalAgenda": "PLACEHOLDER agenda in second person.",
+      "agendaByAct": { "1": "PLACEHOLDER act 1 agenda.", "2": "PLACEHOLDER act 2 agenda.", "3": "PLACEHOLDER act 3 agenda." },
+      "buddy": "None",
+      "rival": "PLACEHOLDER One",
+      "secret": "PLACEHOLDER hidden truth that collides with PLACEHOLDER One."
+    }
+  ],
+  "tips": ["PLACEHOLDER one concrete sentence of GM advice."]
+}

@@ -1,0 +1,94 @@
+{
+  "packVersion": 1,
+  "id": "acm-quiet-catch",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Operation Quiet Catch",
+    "tagline": "A weapons test facility gone dark. Whatever they were building, it got loose.",
+    "type": "Campaign",
+    "players": "3–5",
+    "playtime": "4–6 hours",
+    "difficulty": "Hard",
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "MU/TH/UR 9000",
+    "to": "KILO COMPANY, 2ND PLATOON",
+    "classification": "MISSION BRIEFING — OPERATION QUIET CATCH",
+    "text": "MISSION OBJECTIVE: The Ouragan Test Facility has gone silent. This Weyland-Yutani weapons testing installation was conducting classified research when all communications ceased 72 hours ago.\n\nYour platoon is tasked with investigating the facility, securing any surviving personnel, and determining the cause of the communications blackout. The facility includes conventional weapons testing pits, workshops, and a fortified perimeter.\n\nBe advised: the nature of the research conducted at Ouragan is classified. Expect unconventional threats. Exercise extreme caution."
+  },
+  "acts": [
+    {
+      "title": "OPERATION",
+      "subtitle": "MISSION BRIEFING",
+      "summary": "A weapons test facility gone dark. Whatever they were building, it got loose.",
+      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "OURAGAN TEST FACILITY — Main Gate",
+      "description": "Fortified entrance. Security checkpoint. Currently unresponsive."
+    },
+    {
+      "name": "OURAGAN TEST FACILITY — Testing Pits",
+      "description": "Open-air weapons testing areas. Blast walls and observation bunkers."
+    },
+    {
+      "name": "OURAGAN TEST FACILITY — Workshops",
+      "description": "Engineering and fabrication facilities. Weapons prototypes."
+    },
+    {
+      "name": "OURAGAN TEST FACILITY — Administration",
+      "description": "Facility command. Research data terminals. Staff quarters."
+    },
+    {
+      "name": "OURAGAN TEST FACILITY — Storage Bunkers",
+      "description": "Ammunition and weapons storage. Underground reinforced structures."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "MISSION BRIEFING — OPERATION QUIET CATCH",
+      "from": "MU/TH/UR 9000",
+      "to": "KILO COMPANY, 2ND PLATOON",
+      "priority": "PRIORITY",
+      "text": "MISSION OBJECTIVE: The Ouragan Test Facility has gone silent. This Weyland-Yutani weapons testing installation was conducting classified research when all communications ceased 72 hours ago.\n\nYour platoon is tasked with investigating the facility, securing any surviving personnel, and determining the cause of the communications blackout. The facility includes conventional weapons testing pits, workshops, and a fortified perimeter.\n\nBe advised: the nature of the research conducted at Ouragan is classified. Expect unconventional threats. Exercise extreme caution.",
+      "when": "Start of the session, before Act I"
+    }
+  ],
+  "maps": [
+    {
+      "id": "ouragan-test-facility",
+      "title": "OURAGAN TEST FACILITY",
+      "subtitle": "Weyland-Yutani Weapons Testing Installation",
+      "description": "Classified W-Y weapons testing facility that has gone silent. Conventional weapons testing pits, workshops, and fortified perimeter. Nature of research: classified.",
+      "kind": "image",
+      "src": "/maps/acm/ouragan-test-facility.webp",
+      "rooms": [
+        {
+          "name": "Main Gate",
+          "note": "Fortified entrance. Security checkpoint. Currently unresponsive."
+        },
+        {
+          "name": "Testing Pits",
+          "note": "Open-air weapons testing areas. Blast walls and observation bunkers."
+        },
+        {
+          "name": "Workshops",
+          "note": "Engineering and fabrication facilities. Weapons prototypes."
+        },
+        {
+          "name": "Administration",
+          "note": "Facility command. Research data terminals. Staff quarters."
+        },
+        {
+          "name": "Storage Bunkers",
+          "note": "Ammunition and weapons storage. Underground reinforced structures."
+        }
+      ]
+    }
+  ]
+}

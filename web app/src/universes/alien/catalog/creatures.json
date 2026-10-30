@@ -1,0 +1,2925 @@
+[
+  {
+    "id": "neomorphic-egg-sacs",
+    "name": "Neomorphic Egg Sacs",
+    "type": "neomorph",
+    "stage": "Stage I",
+    "source": "CRB",
+    "page": 293,
+    "stats": null,
+    "signatureAttacks": [],
+    "special": "Fungus-like pods (clutches of 2D6) formed when the pathogen meets spores and microbes; disturbing them releases Stage II motes.",
+    "tactics": "Destroy with fire, or freeze inert with liquid nitrogen (until they thaw).",
+    "art": "/art/xenomorphs/cropped/neomorph-egg.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/xenomorphs/crb-xeno-297.webp"
+  },
+  {
+    "id": "neomorphic-motes",
+    "name": "Neomorphic Motes",
+    "type": "neomorph",
+    "stage": "Stage II",
+    "source": "CRB",
+    "page": 294,
+    "stats": null,
+    "signatureAttacks": [],
+    "special": "A puff of near-invisible spore insects that enter an unprotected orifice or wound. Exposure is a disease with Virulence 9: if the first Sickness Roll fails, the host reaches Stage III within a Shift; no further rolls.",
+    "tactics": "Smoke repels them and fire kills them; keep orifices and wounds covered.",
+    "virulence": 9,
+    "art": null,
+    "artPage": "/art/xenomorphs/crb-xeno-298.webp"
+  },
+  {
+    "id": "bloodburster",
+    "name": "Neomorphic Bloodburster",
+    "type": "neomorph",
+    "stage": "Stage III",
+    "source": "CRB",
+    "page": 295,
+    "stats": {
+      "speed": 3,
+      "health": 2,
+      "armor": 3,
+      "armorVsFire": 0,
+      "skills": {
+        "mobility": 9,
+        "observation": 6
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-3",
+        "name": "Escape",
+        "text": "Flees two zones in one action, into a duct if possible; once out of sight combat ends and stealth mode begins."
+      },
+      {
+        "roll": "4",
+        "name": "Terrifying Hiss",
+        "text": "Jumps at the victim baring teeth: immediate Panic Roll."
+      },
+      {
+        "roll": "5",
+        "name": "Leg Bite / Leg Slash",
+        "text": "6 Base Dice, Damage 2. Damage inflicts critical injury #53 even if not Broken, plus a Panic Roll."
+      },
+      {
+        "roll": "6",
+        "name": "Throat Bite",
+        "text": "8 Base Dice, Damage 1. Damage inflicts critical injury #61 even if not Broken, plus a Panic Roll."
+      }
+    ],
+    "special": "Its birth kills the host outright. Takes one Round to struggle free of its sac, then attacks anything alive. Sprint as a slow action. Grows to a Neophyte after D6 Turns once it escapes (a few Turns).",
+    "tactics": "Hit it in the Round it is still stuck in its sac; fire or heavy damage then makes it run and hide to grow.",
+    "art": "/art/xenomorphs/cropped/bloodburster.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "neophyte-juvenile-neomorph",
+    "name": "Neophyte (Juvenile Neomorph)",
+    "type": "neomorph",
+    "stage": "Stage IV",
+    "source": "CRB",
+    "page": 295,
+    "stats": {
+      "speed": 3,
+      "health": 4,
+      "armor": 4,
+      "armorVsFire": 2,
+      "skills": {
+        "mobility": 10,
+        "observation": 6
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Terrifying Hiss",
+        "text": "Leans in close and hisses: the victim makes an immediate Panic Roll."
+      },
+      {
+        "roll": "2",
+        "name": "Tail Slash",
+        "text": "Tail slash with 10 Base Dice, Damage 2, armor piercing."
+      },
+      {
+        "roll": "3",
+        "name": "Deadly Grab",
+        "text": "8 Base Dice, Damage 1. On a hit the victim is dragged one zone away and dropped: prone, drops held items, Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Leaping Attack",
+        "text": "8 Base Dice, Damage 1. On a success the victim is knocked down and panics, and the Neomorph gets a free unblockable follow-up of 10 Base Dice, Damage 2."
+      },
+      {
+        "roll": "5",
+        "name": "Throat Bite",
+        "text": "8 Base Dice, Damage 1. If it deals damage it inflicts critical injury #61 even on a non-Broken victim, plus a Panic Roll."
+      },
+      {
+        "roll": "6",
+        "name": "Tail Spike",
+        "text": "7 Base Dice, Damage 1, armor piercing. If it deals damage the victim suffers critical injury #66 and dies."
+      }
+    ],
+    "special": "Sprint as a slow action. Becomes an adult Neomorph after one Shift. The book prints the adult attack table only; juveniles use it too (GM call).",
+    "tactics": "Fixates on one victim and ignores damage until critical; only sustained concentrated fire stops it.",
+    "art": "/art/xenomorphs/cropped/neophyte.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "adult-neomorph",
+    "name": "Adult Neomorph",
+    "type": "neomorph",
+    "stage": "Stage V",
+    "source": "CRB",
+    "page": 297,
+    "stats": {
+      "speed": 2,
+      "health": 6,
+      "armor": 6,
+      "armorVsFire": 3,
+      "skills": {
+        "mobility": 9,
+        "observation": 8
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Terrifying Hiss",
+        "text": "Leans in close and hisses: the victim makes an immediate Panic Roll."
+      },
+      {
+        "roll": "2",
+        "name": "Tail Slash",
+        "text": "Tail slash with 10 Base Dice, Damage 2, armor piercing."
+      },
+      {
+        "roll": "3",
+        "name": "Deadly Grab",
+        "text": "8 Base Dice, Damage 1. On a hit the victim is dragged one zone away and dropped: prone, drops held items, Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Leaping Attack",
+        "text": "8 Base Dice, Damage 1. On a success the victim is knocked down and panics, and the Neomorph gets a free unblockable follow-up of 10 Base Dice, Damage 2."
+      },
+      {
+        "roll": "5",
+        "name": "Throat Bite",
+        "text": "8 Base Dice, Damage 1. If it deals damage it inflicts critical injury #61 even on a non-Broken victim, plus a Panic Roll."
+      },
+      {
+        "roll": "6",
+        "name": "Tail Spike",
+        "text": "7 Base Dice, Damage 1, armor piercing. If it deals damage the victim suffers critical injury #66 and dies."
+      }
+    ],
+    "special": "Sprint as a slow action. Burns out and dies naturally within about 24 hours (four Shifts), seeding new spore sacs. Blood is not acidic.",
+    "tactics": "A full burst from an automatic weapon drops it; put a finishing shot in the head, as they rise again.",
+    "art": "/art/xenomorphs/cropped/adult-neomorph.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "ovomorph-egg",
+    "name": "Ovomorph (Egg)",
+    "type": "xenomorph",
+    "stage": "Stage I",
+    "source": "CRB",
+    "page": 301,
+    "stats": {
+      "speed": 0,
+      "health": 2,
+      "armor": 2,
+      "armorVsFire": 0,
+      "acidSplash": 4,
+      "skills": {}
+    },
+    "signatureAttacks": [],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. A potential host at ENGAGED range must pass MOBILITY each Round or the egg opens and releases a facehugger; at SHORT range roll a Stress Die each Round, a facehugger result opens it.",
+    "tactics": "Bullets glance off; burn it or blow it up (it splashes acid when it bursts). Extreme cold makes it dormant.",
+    "art": "/art/xenomorphs/cropped/ovomorph.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/xenomorphs/crb-xeno-305.webp"
+  },
+  {
+    "id": "queens-egg",
+    "name": "The Queen's Egg",
+    "type": "xenomorph",
+    "stage": "Stage I",
+    "source": "CRB",
+    "page": 301,
+    "stats": {
+      "speed": 0,
+      "health": 3,
+      "armor": 3,
+      "armorVsFire": 1,
+      "acidSplash": 5,
+      "skills": {}
+    },
+    "signatureAttacks": [],
+    "special": "Queen-laid eggs are hardier than ovomorphed ones. Same opening rules as an Ovomorph.",
+    "tactics": "Fire or explosives.",
+    "art": null,
+    "artPage": "/art/xenomorphs/crb-xeno-305.webp"
+  },
+  {
+    "id": "facehugger",
+    "name": "Facehugger",
+    "type": "xenomorph",
+    "stage": "Stage II",
+    "source": "CRB",
+    "page": 303,
+    "stats": {
+      "speed": 2,
+      "health": 2,
+      "armor": 2,
+      "armorVsFire": 0,
+      "acidSplash": 4,
+      "skills": {
+        "mobility": 8,
+        "observation": 8
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-2",
+        "name": "Skittering Menace",
+        "text": "It picks its host and scuttles in: the victim gets +1 Stress and makes a Panic Roll."
+      },
+      {
+        "roll": "3",
+        "name": "Tail Lash",
+        "text": "5 Base Dice, Damage 1 (Royal: 6 dice, Damage 2), and +1 Stress to the victim."
+      },
+      {
+        "roll": "4",
+        "name": "Tail Grapple",
+        "text": "Grabs from behind; D6: 1-2 legs caught, prone; 3-4 arms tangled, no held items; 5-6 tail around the throat, drowning effects. Panic Roll in every case."
+      },
+      {
+        "roll": "5",
+        "name": "Face Grapple",
+        "text": "Opposed: 6 Base Dice vs the victim's CLOSE COMBAT (no action). If it wins, The Final Embrace follows on its next initiative; if not, it is thrown off and attacks again."
+      },
+      {
+        "roll": "6",
+        "name": "The Final Embrace",
+        "text": "6 Base Dice; acid defeats helmets and masks. Any success means the victim is facehugged and immediately Broken."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Automatically facehugs any immobilized host at ENGAGED range. Victim is unconscious; the hugger dies after a Shift; a Chestburster is born a Shift later, killing the host.",
+    "tactics": "Nearly impossible to remove without killing the host; vulnerable to pulse rounds, lasers and fire.",
+    "art": "/art/xenomorphs/cropped/facehugger.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "praeto-facehugger",
+    "name": "Praeto-Facehugger",
+    "type": "xenomorph",
+    "stage": "Stage II",
+    "source": "CRB",
+    "page": 303,
+    "stats": {
+      "speed": 2,
+      "health": 2,
+      "armor": 2,
+      "armorVsFire": 0,
+      "acidSplash": 4,
+      "skills": {
+        "mobility": 6,
+        "observation": 8
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-2",
+        "name": "Skittering Menace",
+        "text": "It picks its host and scuttles in: the victim gets +1 Stress and makes a Panic Roll."
+      },
+      {
+        "roll": "3",
+        "name": "Tail Lash",
+        "text": "5 Base Dice, Damage 1 (Royal: 6 dice, Damage 2), and +1 Stress to the victim."
+      },
+      {
+        "roll": "4",
+        "name": "Tail Grapple",
+        "text": "Grabs from behind; D6: 1-2 legs caught, prone; 3-4 arms tangled, no held items; 5-6 tail around the throat, drowning effects. Panic Roll in every case."
+      },
+      {
+        "roll": "5",
+        "name": "Face Grapple",
+        "text": "Opposed: 6 Base Dice vs the victim's CLOSE COMBAT (no action). If it wins, The Final Embrace follows on its next initiative; if not, it is thrown off and attacks again."
+      },
+      {
+        "roll": "6",
+        "name": "The Final Embrace",
+        "text": "6 Base Dice; acid defeats helmets and masks. Any success means the victim is facehugged and immediately Broken."
+      }
+    ],
+    "special": "Slightly larger, less dexterous hugger carrying a Praetomorph seed. Otherwise as a Facehugger.",
+    "tactics": "As Facehugger.",
+    "art": null
+  },
+  {
+    "id": "royal-facehugger",
+    "name": "Royal Facehugger",
+    "type": "xenomorph",
+    "stage": "Stage II",
+    "source": "CRB",
+    "page": 303,
+    "stats": {
+      "speed": 2,
+      "health": 3,
+      "armor": 4,
+      "armorVsFire": 2,
+      "acidSplash": 5,
+      "skills": {
+        "mobility": 8,
+        "observation": 10
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-2",
+        "name": "Skittering Menace",
+        "text": "It picks its host and scuttles in: the victim gets +1 Stress and makes a Panic Roll."
+      },
+      {
+        "roll": "3",
+        "name": "Tail Lash",
+        "text": "5 Base Dice, Damage 1 (Royal: 6 dice, Damage 2), and +1 Stress to the victim."
+      },
+      {
+        "roll": "4",
+        "name": "Tail Grapple",
+        "text": "Grabs from behind; D6: 1-2 legs caught, prone; 3-4 arms tangled, no held items; 5-6 tail around the throat, drowning effects. Panic Roll in every case."
+      },
+      {
+        "roll": "5",
+        "name": "Face Grapple",
+        "text": "Opposed: 6 Base Dice vs the victim's CLOSE COMBAT (no action). If it wins, The Final Embrace follows on its next initiative; if not, it is thrown off and attacks again."
+      },
+      {
+        "roll": "6",
+        "name": "The Final Embrace",
+        "text": "6 Base Dice; acid defeats helmets and masks. Any success means the victim is facehugged and immediately Broken."
+      }
+    ],
+    "special": "Large armored hugger with serrated fingers and bladed tail that seeds Queens (possibly with a guardian twin). Uses the stronger Tail Lash.",
+    "tactics": "As Facehugger, but tougher.",
+    "art": null
+  },
+  {
+    "id": "chestburster",
+    "name": "Chestburster",
+    "type": "xenomorph",
+    "stage": "Stage III",
+    "source": "CRB",
+    "page": 306,
+    "stats": {
+      "speed": 2,
+      "health": 2,
+      "armor": 2,
+      "armorVsFire": 0,
+      "acidSplash": 4,
+      "skills": {
+        "mobility": 8,
+        "observation": 6
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-3",
+        "name": "Escape",
+        "text": "Flees two zones in one action, into a duct if possible; once out of sight combat ends and stealth mode begins."
+      },
+      {
+        "roll": "4",
+        "name": "Terrifying Hiss",
+        "text": "Jumps at the victim baring teeth: immediate Panic Roll."
+      },
+      {
+        "roll": "5",
+        "name": "Leg Bite / Leg Slash",
+        "text": "6 Base Dice, Damage 2. Damage inflicts critical injury #53 even if not Broken, plus a Panic Roll."
+      },
+      {
+        "roll": "6",
+        "name": "Throat Bite",
+        "text": "8 Base Dice, Damage 1. Damage inflicts critical injury #61 even if not Broken, plus a Panic Roll."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Birth kills the host; first-time witnesses make a Panic Roll. Evolves to Stage IV within a Shift after feeding on metals and organics.",
+    "tactics": "At its weakest now: guns, knives, explosives and fire all work, if you can catch it.",
+    "art": "/art/xenomorphs/cropped/chestburster.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/xenomorphs/crb-xeno-310.webp"
+  },
+  {
+    "id": "bambi-burster",
+    "name": "Bambi-Burster",
+    "type": "xenomorph",
+    "stage": "Stage III",
+    "source": "CRB",
+    "page": 306,
+    "stats": {
+      "speed": 2,
+      "health": 2,
+      "armor": 2,
+      "armorVsFire": 0,
+      "acidSplash": 4,
+      "skills": {
+        "mobility": 10,
+        "observation": 6
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-3",
+        "name": "Escape",
+        "text": "Flees two zones in one action, into a duct if possible; once out of sight combat ends and stealth mode begins."
+      },
+      {
+        "roll": "4",
+        "name": "Terrifying Hiss",
+        "text": "Jumps at the victim baring teeth: immediate Panic Roll."
+      },
+      {
+        "roll": "5",
+        "name": "Leg Bite / Leg Slash",
+        "text": "6 Base Dice, Damage 2. Damage inflicts critical injury #53 even if not Broken, plus a Panic Roll."
+      },
+      {
+        "roll": "6",
+        "name": "Throat Bite",
+        "text": "8 Base Dice, Damage 1. Damage inflicts critical injury #61 even if not Broken, plus a Panic Roll."
+      }
+    ],
+    "special": "Four-legged chestburster from a quadruped host; extremely fast.",
+    "tactics": "As Chestburster.",
+    "art": null,
+    "artPage": "/art/xenomorphs/crb-xeno-310.webp"
+  },
+  {
+    "id": "imp",
+    "name": "Imp",
+    "type": "xenomorph",
+    "stage": "Stage III",
+    "source": "CRB",
+    "page": 306,
+    "stats": {
+      "speed": 2,
+      "health": 2,
+      "armor": 0,
+      "armorVsFire": 3,
+      "acidSplash": 4,
+      "skills": {
+        "mobility": 8,
+        "observation": 8
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-3",
+        "name": "Escape",
+        "text": "Flees two zones in one action, into a duct if possible; once out of sight combat ends and stealth mode begins."
+      },
+      {
+        "roll": "4",
+        "name": "Terrifying Hiss",
+        "text": "Jumps at the victim baring teeth: immediate Panic Roll."
+      },
+      {
+        "roll": "5",
+        "name": "Leg Bite / Leg Slash",
+        "text": "6 Base Dice, Damage 2. Damage inflicts critical injury #53 even if not Broken, plus a Panic Roll."
+      },
+      {
+        "roll": "6",
+        "name": "Throat Bite",
+        "text": "8 Base Dice, Damage 1. Damage inflicts critical injury #61 even if not Broken, plus a Panic Roll."
+      }
+    ],
+    "special": "Immature Praetomorph that may mimic the nearest creature if unthreatened and matures faster than a chestburster. Note its armor is listed as 0 normally but 3 vs fire.",
+    "tactics": "As Chestburster.",
+    "art": null,
+    "artPage": "/art/xenomorphs/crb-xeno-310.webp"
+  },
+  {
+    "id": "queenburster",
+    "name": "Queenburster",
+    "type": "xenomorph",
+    "stage": "Stage III",
+    "source": "CRB",
+    "page": 306,
+    "stats": {
+      "speed": 2,
+      "health": 3,
+      "armor": 4,
+      "armorVsFire": 2,
+      "acidSplash": 5,
+      "skills": {
+        "mobility": 8,
+        "observation": 6
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-3",
+        "name": "Escape",
+        "text": "Flees two zones in one action, into a duct if possible; once out of sight combat ends and stealth mode begins."
+      },
+      {
+        "roll": "4",
+        "name": "Terrifying Hiss",
+        "text": "Jumps at the victim baring teeth: immediate Panic Roll."
+      },
+      {
+        "roll": "5",
+        "name": "Leg Bite / Leg Slash",
+        "text": "6 Base Dice, Damage 2. Damage inflicts critical injury #53 even if not Broken, plus a Panic Roll."
+      },
+      {
+        "roll": "6",
+        "name": "Throat Bite",
+        "text": "8 Base Dice, Damage 1. Damage inflicts critical injury #61 even if not Broken, plus a Panic Roll."
+      }
+    ],
+    "special": "Embryonic Queen that gestates over days; born with a partial crest, four arms and legs.",
+    "tactics": "As Chestburster.",
+    "art": null,
+    "artPage": "/art/xenomorphs/crb-xeno-310.webp"
+  },
+  {
+    "id": "stalker",
+    "name": "Stalker",
+    "type": "xenomorph",
+    "stage": "Stage IV",
+    "source": "CRB",
+    "page": 309,
+    "stats": {
+      "speed": 2,
+      "health": 6,
+      "armor": 10,
+      "armorVsFire": 5,
+      "acidSplash": 8,
+      "skills": {
+        "mobility": 8,
+        "observation": 6
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Hypnotizing Gaze",
+        "text": "The victim is transfixed: +1 Stress and an immediate Panic Roll."
+      },
+      {
+        "roll": "2",
+        "name": "Playing With Its Prey",
+        "text": "Knocks the victim down and makes them drop held items, no damage; +1 Stress and a Panic Roll."
+      },
+      {
+        "roll": "3",
+        "name": "Deadly Grab",
+        "text": "10 Base Dice, Damage 1. On a hit drags the victim to a neighboring zone: prone, drops items, Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Ready to Kill",
+        "text": "10 Base Dice; on a hit the victim is grabbed and must win opposed CLOSE COMBAT vs 10 dice to break free. Victim and friends in the zone make Panic Rolls; next initiative it uses Headbite unless freed."
+      },
+      {
+        "roll": "5",
+        "name": "Capture for the Hive",
+        "text": "Venom tail, 10 Base Dice; any damage is reduced to 1 and paralysis follows: STAMINA successes = Rounds before falling unconscious for a Shift. Cured by adrenaline (MEDICAL AID with a medkit)."
+      },
+      {
+        "roll": "6",
+        "name": "Headbite",
+        "text": "Inner jaws, 9 Base Dice, Damage 2. Any damage means critical injury #64 (death), unless the GM keeps the victim alive for ovomorphing."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Feral Hunger: whenever an attack deals damage it immediately makes a free extra attack (8 Base Dice, Damage 1) on the same target.",
+    "tactics": "Feral, animalistic Praetomorph adult (no Queen stage); can be lured into hazards.",
+    "art": "/art/xenomorphs/cropped/stalker.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/xenomorphs/crb-xeno-313.webp"
+  },
+  {
+    "id": "scout",
+    "name": "Scout",
+    "type": "xenomorph",
+    "stage": "Stage IV",
+    "source": "CRB",
+    "page": 309,
+    "stats": {
+      "speed": 3,
+      "health": 5,
+      "armor": 8,
+      "armorVsFire": 4,
+      "acidSplash": 8,
+      "skills": {
+        "mobility": 8,
+        "observation": 10
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Hypnotizing Gaze",
+        "text": "The victim is transfixed: +1 Stress and an immediate Panic Roll."
+      },
+      {
+        "roll": "2",
+        "name": "Playing With Its Prey",
+        "text": "Knocks the victim down and makes them drop held items, no damage; +1 Stress and a Panic Roll."
+      },
+      {
+        "roll": "3",
+        "name": "Deadly Grab",
+        "text": "10 Base Dice, Damage 1. On a hit drags the victim to a neighboring zone: prone, drops items, Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Ready to Kill",
+        "text": "10 Base Dice; on a hit the victim is grabbed and must win opposed CLOSE COMBAT vs 10 dice to break free. Victim and friends in the zone make Panic Rolls; next initiative it uses Headbite unless freed."
+      },
+      {
+        "roll": "5",
+        "name": "Capture for the Hive",
+        "text": "Venom tail, 10 Base Dice; any damage is reduced to 1 and paralysis follows: STAMINA successes = Rounds before falling unconscious for a Shift. Cured by adrenaline (MEDICAL AID with a medkit)."
+      },
+      {
+        "roll": "6",
+        "name": "Headbite",
+        "text": "Inner jaws, 9 Base Dice, Damage 2. Any damage means critical injury #64 (death), unless the GM keeps the victim alive for ovomorphing."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor.",
+    "tactics": "Fast runner that finds hosts and alerts the hive; can be tricked into hazards.",
+    "art": "/art/xenomorphs/cropped/scout.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/xenomorphs/crb-xeno-313.webp"
+  },
+  {
+    "id": "drone",
+    "name": "Drone",
+    "type": "xenomorph",
+    "stage": "Stage IV",
+    "source": "CRB",
+    "page": 309,
+    "stats": {
+      "speed": 2,
+      "health": 7,
+      "armor": 8,
+      "armorVsFire": 4,
+      "acidSplash": 8,
+      "skills": {
+        "mobility": 10,
+        "observation": 8
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Hypnotizing Gaze",
+        "text": "The victim is transfixed: +1 Stress and an immediate Panic Roll."
+      },
+      {
+        "roll": "2",
+        "name": "Playing With Its Prey",
+        "text": "Knocks the victim down and makes them drop held items, no damage; +1 Stress and a Panic Roll."
+      },
+      {
+        "roll": "3",
+        "name": "Deadly Grab",
+        "text": "10 Base Dice, Damage 1. On a hit drags the victim to a neighboring zone: prone, drops items, Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Ready to Kill",
+        "text": "10 Base Dice; on a hit the victim is grabbed and must win opposed CLOSE COMBAT vs 10 dice to break free. Victim and friends in the zone make Panic Rolls; next initiative it uses Headbite unless freed."
+      },
+      {
+        "roll": "5",
+        "name": "Capture for the Hive",
+        "text": "Venom tail, 10 Base Dice; any damage is reduced to 1 and paralysis follows: STAMINA successes = Rounds before falling unconscious for a Shift. Cured by adrenaline (MEDICAL AID with a medkit)."
+      },
+      {
+        "roll": "6",
+        "name": "Headbite",
+        "text": "Inner jaws, 9 Base Dice, Damage 2. Any damage means critical injury #64 (death), unless the GM keeps the victim alive for ovomorphing."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Silent Assassin: targets get -2 OBSERVATION against its stealth rolls and sneak attacks from the same zone.",
+    "tactics": "Methodical ambusher that keeps a routine and hibernates near warm machinery; hunt it there.",
+    "art": "/art/xenomorphs/cropped/drone.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/xenomorphs/crb-xeno-313.webp"
+  },
+  {
+    "id": "soldier",
+    "name": "Soldier",
+    "type": "xenomorph",
+    "stage": "Stage V",
+    "source": "CRB",
+    "page": 310,
+    "stats": {
+      "speed": 2,
+      "health": 8,
+      "armor": 10,
+      "armorVsFire": 5,
+      "acidSplash": 10,
+      "skills": {
+        "mobility": 8,
+        "observation": 8
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Assessing the Threat",
+        "text": "Pauses and hisses quietly: everyone within MEDIUM range gets +1 Stress."
+      },
+      {
+        "roll": "2",
+        "name": "One for All",
+        "text": "Sweeps through the biggest group: everyone within SHORT range must pass MOBILITY or be knocked down taking 1 damage; all make Panic Rolls."
+      },
+      {
+        "roll": "3",
+        "name": "All-Out Attack",
+        "text": "12 Base Dice, Damage 2, armor piercing."
+      },
+      {
+        "roll": "4",
+        "name": "Capture for the Hive",
+        "text": "Venom tail, 12 Base Dice; damage drops to 1 and the paralysis rules apply (STAMINA successes = Rounds awake, then a Shift unconscious); otherwise it hauls the victim to the egg chamber."
+      },
+      {
+        "roll": "5",
+        "name": "Die for the Queen",
+        "text": "Guts itself in a leap: everyone within SHORT range takes a 12-dice acid splash; the Xeno dies."
+      },
+      {
+        "roll": "6",
+        "name": "Headbite",
+        "text": "10 Base Dice, Damage 2; any damage means critical injury #64 (death)."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor.",
+    "tactics": "Attacks in numbers; pulse rifles and area weapons work best.",
+    "art": "/art/xenomorphs/cropped/soldier.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/xenomorphs/crb-xeno-314.webp"
+  },
+  {
+    "id": "worker",
+    "name": "Worker",
+    "type": "xenomorph",
+    "stage": "Stage V",
+    "source": "CRB",
+    "page": 310,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": 5,
+      "armorVsFire": 2,
+      "acidSplash": 6,
+      "skills": {
+        "mobility": 4,
+        "observation": 4
+      }
+    },
+    "signatureAttacks": [],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Builds and tends the hive and ignores threats there; flees when threatened (the book gives it no attack table).",
+    "tactics": "Easy to kill, offers little resistance.",
+    "art": null,
+    "artPage": "/art/xenomorphs/crb-xeno-314.webp"
+  },
+  {
+    "id": "sentry",
+    "name": "Sentry",
+    "type": "xenomorph",
+    "stage": "Stage V",
+    "source": "CRB",
+    "page": 310,
+    "stats": {
+      "speed": 3,
+      "health": 8,
+      "armor": 12,
+      "armorVsFire": 5,
+      "acidSplash": 10,
+      "skills": {
+        "mobility": 12,
+        "observation": 10
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Assessing the Threat",
+        "text": "Pauses and hisses quietly: everyone within MEDIUM range gets +1 Stress."
+      },
+      {
+        "roll": "2",
+        "name": "One for All",
+        "text": "Sweeps through the biggest group: everyone within SHORT range must pass MOBILITY or be knocked down taking 1 damage; all make Panic Rolls."
+      },
+      {
+        "roll": "3",
+        "name": "All-Out Attack",
+        "text": "12 Base Dice, Damage 2, armor piercing."
+      },
+      {
+        "roll": "4",
+        "name": "Capture for the Hive",
+        "text": "Venom tail, 12 Base Dice; damage drops to 1 and the paralysis rules apply (STAMINA successes = Rounds awake, then a Shift unconscious); otherwise it hauls the victim to the egg chamber."
+      },
+      {
+        "roll": "5",
+        "name": "Die for the Queen",
+        "text": "Guts itself in a leap: everyone within SHORT range takes a 12-dice acid splash; the Xeno dies."
+      },
+      {
+        "roll": "6",
+        "name": "Headbite",
+        "text": "10 Base Dice, Damage 2; any damage means critical injury #64 (death)."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor.",
+    "tactics": "Never leaves the inner hive unless the Queen does; will sacrifice itself for her.",
+    "art": null,
+    "artPage": "/art/xenomorphs/crb-xeno-314.webp"
+  },
+  {
+    "id": "praetorian",
+    "name": "Praetorian",
+    "type": "xenomorph",
+    "stage": "Stage VI",
+    "source": "CRB",
+    "page": 313,
+    "stats": {
+      "speed": 2,
+      "health": 10,
+      "armor": 12,
+      "armorVsFire": 5,
+      "acidSplash": 10,
+      "skills": {
+        "mobility": 5,
+        "observation": 8
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Call the Guard",
+        "text": "Shrieks for D6 Sentries (Queen) or Soldiers (Praetorian/Charger), who arrive next Round and act normally."
+      },
+      {
+        "roll": "2",
+        "name": "Charge",
+        "text": "Charger only (others re-roll): the target passes MOBILITY (no action) or is crushed, immediately Broken with a random critical injury; even on a success they fall and gain +1 Stress."
+      },
+      {
+        "roll": "3",
+        "name": "Beastly Bite",
+        "text": "10 Base Dice, Damage 1; damage inflicts critical injury #61 even if not Broken, plus a Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Crushing Blow",
+        "text": "Victim rolls MOBILITY at -2 (no action) or suffers three critical injuries at once; knocked down and makes a Panic Roll."
+      },
+      {
+        "roll": "5",
+        "name": "Tail Spike",
+        "text": "10 Base Dice (Queen 14), Damage 1, armor piercing; damage means critical injury #66 (death)."
+      },
+      {
+        "roll": "6",
+        "name": "Headbite",
+        "text": "10 Base Dice, Damage 2; damage means critical injury #64 (death)."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor.",
+    "tactics": "Royal guard and commander; killing it briefly disorients its Soldiers.",
+    "art": "/art/xenomorphs/cropped/praetorian.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "charger-crusher",
+    "name": "Charger / Crusher",
+    "type": "xenomorph",
+    "stage": "Stage VI",
+    "source": "CRB",
+    "page": 313,
+    "stats": {
+      "speed": 1,
+      "health": 16,
+      "armor": 18,
+      "armorVsFire": 6,
+      "acidSplash": 10,
+      "skills": {
+        "mobility": 4,
+        "observation": 5
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Call the Guard",
+        "text": "Shrieks for D6 Sentries (Queen) or Soldiers (Praetorian/Charger), who arrive next Round and act normally."
+      },
+      {
+        "roll": "2",
+        "name": "Charge",
+        "text": "Charger only (others re-roll): the target passes MOBILITY (no action) or is crushed, immediately Broken with a random critical injury; even on a success they fall and gain +1 Stress."
+      },
+      {
+        "roll": "3",
+        "name": "Beastly Bite",
+        "text": "10 Base Dice, Damage 1; damage inflicts critical injury #61 even if not Broken, plus a Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Crushing Blow",
+        "text": "Victim rolls MOBILITY at -2 (no action) or suffers three critical injuries at once; knocked down and makes a Panic Roll."
+      },
+      {
+        "roll": "5",
+        "name": "Tail Spike",
+        "text": "10 Base Dice (Queen 14), Damage 1, armor piercing; damage means critical injury #66 (death)."
+      },
+      {
+        "roll": "6",
+        "name": "Headbite",
+        "text": "10 Base Dice, Damage 2; damage means critical injury #64 (death)."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Cannot climb or jump well.",
+    "tactics": "Near-invulnerable head-on; its body is only Soldier-grade, so flank it with explosives or heavy weapons.",
+    "art": null
+  },
+  {
+    "id": "queen",
+    "name": "Queen",
+    "type": "xenomorph",
+    "stage": "Stage VI",
+    "source": "CRB",
+    "page": 313,
+    "stats": {
+      "speed": 2,
+      "health": 14,
+      "armor": 14,
+      "armorVsFire": 5,
+      "acidSplash": 10,
+      "skills": {
+        "mobility": 8,
+        "observation": 12
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Call the Guard",
+        "text": "Shrieks for D6 Sentries (Queen) or Soldiers (Praetorian/Charger), who arrive next Round and act normally."
+      },
+      {
+        "roll": "2",
+        "name": "Charge",
+        "text": "Charger only (others re-roll): the target passes MOBILITY (no action) or is crushed, immediately Broken with a random critical injury; even on a success they fall and gain +1 Stress."
+      },
+      {
+        "roll": "3",
+        "name": "Beastly Bite",
+        "text": "10 Base Dice, Damage 1; damage inflicts critical injury #61 even if not Broken, plus a Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Crushing Blow",
+        "text": "Victim rolls MOBILITY at -2 (no action) or suffers three critical injuries at once; knocked down and makes a Panic Roll."
+      },
+      {
+        "roll": "5",
+        "name": "Tail Spike",
+        "text": "10 Base Dice (Queen 14), Damage 1, armor piercing; damage means critical injury #66 (death)."
+      },
+      {
+        "roll": "6",
+        "name": "Headbite",
+        "text": "10 Base Dice, Damage 2; damage means critical injury #64 (death)."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Lays eggs en masse from an egg sac and directs the hive.",
+    "tactics": "Don't.",
+    "art": "/art/xenomorphs/cropped/queen.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "the-swarm",
+    "name": "The Swarm",
+    "type": "creature",
+    "source": "CRB",
+    "page": 317,
+    "stats": {
+      "speed": "1 per zone covered",
+      "health": "5 per zone covered",
+      "armor": "Immune to everything but fire, explosions and electricity",
+      "skills": {}
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Consume",
+        "text": "Feeds: the Swarm regains 2 Health."
+      },
+      {
+        "roll": "2",
+        "name": "Pheromones",
+        "text": "Agitation builds: +1 to its next roll on this table (cumulative)."
+      },
+      {
+        "roll": "3",
+        "name": "Suffocating Swarm",
+        "text": "Everyone inside rolls STAMINA; failures cannot act next Round and are targeted by Stripped to the Bone next."
+      },
+      {
+        "roll": "4",
+        "name": "Desperate Hunger",
+        "text": "Everyone in armor takes 8 Base Dice, Damage 1, subtracted from Armor Rating; unarmored victims just lose their clothes."
+      },
+      {
+        "roll": "5",
+        "name": "Feeding Frenzy",
+        "text": "Everyone inside takes 6 Base Dice, Damage 1; armor is halved (round down)."
+      },
+      {
+        "roll": "6",
+        "name": "Stripped to the Bone",
+        "text": "One victim takes 8 Base Dice, Damage 1 with armor halved; damage also means a critical injury even if not Broken, and the Swarm repeats this on them every Round until rescued or driven off."
+      }
+    ],
+    "special": "Size is measured in zones; it cannot be killed, only driven off when its Health hits zero.",
+    "tactics": "Fire, electricity and pesticides; in space, burn dormant swarms with engine exhaust.",
+    "art": "/art/xenomorphs/cropped/swarm.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "harvesters",
+    "name": "Harvester",
+    "type": "creature",
+    "source": "CRB",
+    "page": 318,
+    "stats": {
+      "speed": 1,
+      "health": 15,
+      "armor": 15,
+      "skills": {
+        "mobility": 4
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Sonar Sweep",
+        "text": "+1 to its next roll on this table (max 6); every PC up to LONG range gets +1 Stress."
+      },
+      {
+        "roll": "2",
+        "name": "Sonar Pulse",
+        "text": "Everyone in SHORT range passes STAMINA (no action) or is stunned and loses their next action; those not stunned make Panic Rolls."
+      },
+      {
+        "roll": "3",
+        "name": "Charge",
+        "text": "Charges into the next zone through the biggest threat; everyone in the path passes MOBILITY or takes 10 Base Dice, Damage 1, and is knocked prone."
+      },
+      {
+        "roll": "4",
+        "name": "Stampede",
+        "text": "Bucks wildly: everyone within SHORT range takes 6 Base Dice, Damage 2, prone if hit."
+      },
+      {
+        "roll": "5",
+        "name": "Burrowing Claws",
+        "text": "10 Base Dice, Damage 2."
+      },
+      {
+        "roll": "6",
+        "name": "Pulverize",
+        "text": "Drags the victim toward its grinding maw: opposed CLOSE COMBAT vs 8 dice (no action); failure is death. Witnesses gain +1 Stress and make Panic Rolls."
+      }
+    ],
+    "special": "Six-legged burrowing behemoth that navigates by sonar. Underbelly armor is only 5. Hidden Behemoth: sleeps just under the surface; walkers get an OBSERVATION roll to spot weak ground or fall in and give it a free attack. Carries 2D6 young who defend her.",
+    "tactics": "Strike the soft underbelly, if you can get close without being ground up.",
+    "armorUnderbelly": 5,
+    "art": "/art/xenomorphs/cropped/harvesters.webp",
+    "artStatus": "crop-mismatch",
+    "artPage": "/art/xenomorphs/crb-xeno-322.webp"
+  },
+  {
+    "id": "harvester-juvenile",
+    "name": "Harvester Juvenile",
+    "type": "creature",
+    "source": "CRB",
+    "page": 318,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": 4,
+      "skills": {
+        "mobility": 8
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "-",
+        "name": "Defend Mother",
+        "text": "Leaps to its mother's defense: 4 Base Dice, Damage 1."
+      }
+    ],
+    "special": "Boar-sized young that ride under the adult's shell and attack if she is in real danger.",
+    "tactics": "",
+    "art": null,
+    "artPage": "/art/xenomorphs/crb-xeno-322.webp"
+  },
+  {
+    "id": "lion-worms",
+    "name": "Lion Worm",
+    "type": "creature",
+    "source": "CRB",
+    "page": 321,
+    "stats": {
+      "speed": 2,
+      "health": 8,
+      "armor": 4,
+      "skills": {
+        "mobility": 12,
+        "observation": 8
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Intimidating Display",
+        "text": "A bluff covering a retreat: PCs within SHORT range make Panic Rolls; it withdraws into stealth and gets +1 on its next roll here (max 6)."
+      },
+      {
+        "roll": "2",
+        "name": "Play With Its Prey",
+        "text": "8 Base Dice; a hit knocks the target down and makes them drop held items without damage; Panic Roll."
+      },
+      {
+        "roll": "3",
+        "name": "Acrid Pheromones",
+        "text": "PCs within SHORT range pass STAMINA or are stunned and lose their next slow action."
+      },
+      {
+        "roll": "4",
+        "name": "Feral Rage",
+        "text": "10 Base Dice, Damage 2; if it deals damage it attacks again for free with the same dice."
+      },
+      {
+        "roll": "5",
+        "name": "Crippling Attack",
+        "text": "8 Base Dice, Damage 1; damage inflicts critical injury #56 even if not Broken."
+      },
+      {
+        "roll": "6",
+        "name": "Death Roll",
+        "text": "10 Base Dice, Damage 1; a hit grapples and disorients (lose next slow action), and next action it squeezes for another 10 dice, Damage 1."
+      }
+    ],
+    "special": "Ambush Predator: in its own territory, prey get -2 OBSERVATION against it in stealth mode.",
+    "tactics": "Confuse it with pollen, pollutants, or the scent of a rival lion worm.",
+    "art": "/art/xenomorphs/cropped/lion-worms.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "tanakan-scorpionids",
+    "name": "Tanakan Scorpionid",
+    "type": "creature",
+    "source": "CRB",
+    "page": 322,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": 6,
+      "skills": {
+        "mobility": 6,
+        "observation": 6
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Retreat",
+        "text": "Decides the fight isn't worth it and flees."
+      },
+      {
+        "roll": "2",
+        "name": "Pinned Down",
+        "text": "10 Base Dice, Damage 1; a hit knocks the target prone, makes them drop held items and forces a Panic Roll."
+      },
+      {
+        "roll": "3",
+        "name": "Pincer Grab",
+        "text": "8 Base Dice, Damage 1; a hit grapples (opposed CLOSE COMBAT vs 8 to escape) and next initiative it uses Tail Strike; underwater it also drags the victim a zone deeper (drowning)."
+      },
+      {
+        "roll": "4",
+        "name": "Flailing Strike",
+        "text": "8 Base Dice, Damage 1; a hit flings the victim into the next zone with an immediate critical injury, prone and disarmed."
+      },
+      {
+        "roll": "5",
+        "name": "Tail Strike",
+        "text": "10 Base Dice, Damage 1; damage poisons the victim, a disease with Virulence 9."
+      },
+      {
+        "roll": "6",
+        "name": "Immobilize",
+        "text": "8 Base Dice, Damage 2 at the legs; damage inflicts critical injury #35."
+      }
+    ],
+    "special": "Armor is 3 against bullets. In water: Speed 3, Mobility 10, Observation 10, and it can sprint (slow action, two zones) when starting in water.",
+    "tactics": "Shells stop knives but not bullets.",
+    "statsInWater": {
+      "speed": 3,
+      "health": 5,
+      "armor": 6,
+      "skills": {
+        "mobility": 10,
+        "observation": 10
+      }
+    },
+    "armorVsBullets": 3,
+    "art": "/art/xenomorphs/cropped/tanakan-scorpionids.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "biodrone",
+    "name": "Biodrone (Xenomorph XX121B)",
+    "type": "xenomorph",
+    "stage": "Stage IV",
+    "source": "ACM",
+    "page": 176,
+    "stats": {
+      "speed": 2,
+      "health": 6,
+      "armor": 8,
+      "armorVsFire": 4,
+      "acidSplash": 8,
+      "skills": {
+        "mobility": 8,
+        "observation": 10
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Hypnotizing Gaze",
+        "text": "The victim is transfixed: +1 Stress and an immediate Panic Roll."
+      },
+      {
+        "roll": "2",
+        "name": "Playing With Its Prey",
+        "text": "Knocks the victim down and makes them drop held items, no damage; +1 Stress and a Panic Roll."
+      },
+      {
+        "roll": "3",
+        "name": "Deadly Grab",
+        "text": "10 Base Dice, Damage 1. On a hit drags the victim to a neighboring zone: prone, drops items, Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Ready to Kill",
+        "text": "10 Base Dice; on a hit the victim is grabbed and must win opposed CLOSE COMBAT vs 10 dice to break free. Victim and friends in the zone make Panic Rolls; next initiative it uses Headbite unless freed."
+      },
+      {
+        "roll": "5",
+        "name": "Capture for the Hive",
+        "text": "Venom tail, 10 Base Dice; any damage is reduced to 1 and paralysis follows: STAMINA successes = Rounds before falling unconscious for a Shift. Cured by adrenaline (MEDICAL AID with a medkit)."
+      },
+      {
+        "roll": "6",
+        "name": "Headbite",
+        "text": "Inner jaws, 9 Base Dice, Damage 2. Any damage means critical injury #64 (death), unless the GM keeps the victim alive for ovomorphing."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Gene-locked at Stage IV (no Queens) and meant to die after six days; when it collapses it has a 50% chance to get back up ('Reborn', no expiry). Still reproduces by ovomorphing captives.",
+    "tactics": "Keep shooting after it falls.",
+    "note": "Uses the Stage IV Drone attack table (CRB p309).",
+    "art": null,
+    "artPage": "/art/xenomorphs/acm-xeno-180.webp"
+  },
+  {
+    "id": "goreburster",
+    "name": "Goreburster (Xenomorph XX121AB)",
+    "type": "xenomorph",
+    "stage": "Stage III",
+    "source": "ACM",
+    "page": 177,
+    "stats": {
+      "speed": 3,
+      "health": 6,
+      "armor": 6,
+      "armorVsFire": 3,
+      "acidSplash": 6,
+      "skills": {
+        "mobility": 8,
+        "observation": 6
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1-2",
+        "name": "Bodyslam",
+        "text": "Knocks the target prone and flees two zones into a duct, leaving a toxic pink trail (Virulence 6 on contact)."
+      },
+      {
+        "roll": "3",
+        "name": "Terrorizing Hiss",
+        "text": "Immediate Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Head Attack",
+        "text": "9 Base Dice, Damage 2; a hit knocks prone; damage inflicts critical injury #15, #31 or #34 (equal odds) and a Panic Roll."
+      },
+      {
+        "roll": "5",
+        "name": "Suffocation",
+        "text": "10 Base Dice, Damage 1; a hit grapples and drowns the victim (Panic Roll); escaping needs CLOSE COMBAT vs its 10 dice; it keeps grappling until the victim is Broken."
+      },
+      {
+        "roll": "6",
+        "name": "Disembowelment",
+        "text": "8 Base Dice, Damage 1; damage inflicts critical injury #46 and a Panic Roll; if not removed by next Round it inflicts #63 (death)."
+      }
+    ],
+    "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. After a damaging hit the victim rolls Sickness vs Virulence 6 every Turn or explodes, until sterilized with UV (AutoDoc, medpod, etc.). Does not mature; dies on its own after a Shift or two.",
+    "tactics": "Hazmat gear; trap it or wait it out.",
+    "art": null,
+    "artPage": "/art/xenomorphs/acm-xeno-181.webp"
+  },
+  {
+    "id": "vitiate-afflicted",
+    "name": "Vitiate 'Afflicted' (Anathema Stage I)",
+    "type": "anathema",
+    "stage": "Stage I",
+    "source": "ACM",
+    "page": 179,
+    "stats": null,
+    "signatureAttacks": [],
+    "special": "Infected human: paranoia, delirium, endless tears (+1 Stress), worms visible in the eyes late in the stage. Touching one without a hazmat/compression suit: Sickness Roll vs Virulence 4. Each Shift roll vs Virulence 8 or advance to Stage II.",
+    "tactics": "Isolation; avoid the contagious eye worms.",
+    "art": "/art/xenomorphs/cropped/vitiate.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "ague-febrile",
+    "name": "Ague 'Febrile' (Anathema Stage II)",
+    "type": "anathema",
+    "stage": "Stage II",
+    "source": "ACM",
+    "page": 180,
+    "stats": null,
+    "signatureAttacks": [
+      {
+        "roll": "-",
+        "name": "Enthralling Gaze",
+        "text": "Fast action vs a human in SHORT range: WITS roll (attribute only) or lose next fast and slow action; victim and friendly PCs in SHORT range gain +1 Stress."
+      }
+    ],
+    "special": "Feverish, bleeding internally, black eyes, spreading veins (+1 Stress). Contact without protection: Sickness Roll vs Virulence 6. After a Shift, roll vs Virulence 8: success = Stage III, failure = Stage IV.",
+    "tactics": "Fire, or nuke it from orbit.",
+    "art": "/art/xenomorphs/cropped/ague.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "lusus-freak",
+    "name": "Lusus 'Freak' (Anathema Stage III)",
+    "type": "anathema",
+    "stage": "Stage III",
+    "source": "ACM",
+    "page": 180,
+    "stats": {
+      "speed": 2,
+      "health": 8,
+      "armor": 3,
+      "armorVsFire": 0,
+      "skills": {
+        "mobility": 5,
+        "observation": 3
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Horrific Howl",
+        "text": "PCs in SHORT range make Panic Rolls."
+      },
+      {
+        "roll": "2",
+        "name": "Fist Strike",
+        "text": "10 Base Dice, Damage 1."
+      },
+      {
+        "roll": "3",
+        "name": "Eye Gouge",
+        "text": "7 Base Dice, Damage 1; damage inflicts critical injury #34 and a Panic Roll."
+      },
+      {
+        "roll": "4",
+        "name": "Beat Down",
+        "text": "8 Base Dice, Damage 1; a hit knocks down and disarms (Panic Roll), followed by a bonus pummeling of 10 Base Dice, Damage 2."
+      },
+      {
+        "roll": "5",
+        "name": "Bearhug",
+        "text": "8 Base Dice, Damage 1; damage inflicts critical injury #56 and a Panic Roll."
+      },
+      {
+        "roll": "6",
+        "name": "Black Vomit",
+        "text": "Sickness Roll vs Virulence 10 or become an Anathema; suited victims first make a CLOSE COMBAT roll to keep their visor on."
+      }
+    ],
+    "special": "Rage-driven mutant that attacks all life but can use simple tools. Unprotected contact: Sickness Roll vs Virulence 7. Progresses to Stage IV within a Shift or two.",
+    "tactics": "Treat as a full creature; burn it.",
+    "art": "/art/xenomorphs/cropped/lusus.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "nocuous-terminal",
+    "name": "Nocuous 'Terminal' (Anathema Stage IV)",
+    "type": "anathema",
+    "stage": "Stage IV",
+    "source": "ACM",
+    "page": 181,
+    "stats": null,
+    "signatureAttacks": [],
+    "special": "Disintegrating body loses 1 Health per Round and dies at zero (no Death Roll), releasing the accelerant into the air: unprotected people in the same zone roll Sickness vs Virulence 8, adjacent zone vs 4.",
+    "tactics": "Too late: hold your breath, get indoors, bring incinerators.",
+    "art": "/art/xenomorphs/cropped/nocuous.webp",
+    "artStatus": "crop-mismatch"
+  },
+  {
+    "id": "arctura",
+    "name": "Arctura",
+    "type": "creature",
+    "source": "ACM",
+    "page": 147,
+    "stats": {
+      "speed": 2,
+      "health": 6,
+      "armor": 0,
+      "skills": {
+        "mobility": 4,
+        "observation": 2
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "1",
+        "name": "Echolocation",
+        "text": "+1 to its next roll here (max 6); PCs up to LONG range gain +1 Stress."
+      },
+      {
+        "roll": "2",
+        "name": "Ultrasonic Challenge",
+        "text": "Everyone in SHORT range passes STAMINA (no action) or is stunned and loses their next action; +1 Stress."
+      },
+      {
+        "roll": "3",
+        "name": "Pummel Attack",
+        "text": "6 Base Dice, Damage 1; a hit knocks down and disarms (Panic Roll), then a bonus pummel of 6 Base Dice, Damage 2."
+      },
+      {
+        "roll": "4",
+        "name": "Not the Face",
+        "text": "6 Base Dice, Damage 1; damage means a Panic Roll and critical injury #31."
+      },
+      {
+        "roll": "5",
+        "name": "Rend Limb From Limb",
+        "text": "5 Base Dice, Damage 1; damage inflicts critical injury #54 and a Panic Roll."
+      },
+      {
+        "roll": "6",
+        "name": "Savage Bite",
+        "text": "6 Base Dice, Damage 1; damage inflicts critical injury #61 and a Panic Roll."
+      }
+    ],
+    "special": "Blind ape-like predator of Arcturus that hunts by sonar.",
+    "tactics": "",
+    "art": null
+  },
+  {
+    "id": "running-flatfish",
+    "name": "Running Flatfish",
+    "type": "creature",
+    "source": "ACM",
+    "page": 230,
+    "stats": {
+      "speed": null,
+      "health": 2,
+      "armor": 3,
+      "skills": {
+        "mobility": 12,
+        "observation": 4
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "-",
+        "name": "Poison Bite",
+        "text": "5 Base Dice, Damage 1; a hit forces a Sickness Roll vs Virulence 6, rolled every Turn instead of every Shift."
+      }
+    ],
+    "special": "Two-meter millipede-like fish that swims and crawls along bulkheads and ceilings. No Speed given in the book.",
+    "tactics": "",
+    "art": null
+  },
+  {
+    "id": "arcturian-grain-parasites",
+    "name": "Arcturian Grain Parasites",
+    "type": "creature",
+    "source": "ACM",
+    "page": 247,
+    "stats": {
+      "speed": "1 per zone covered",
+      "health": "3 per zone covered",
+      "armor": "When clustered, immune to all but fire, electricity and pesticides",
+      "skills": {}
+    },
+    "signatureAttacks": [
+      {
+        "roll": "-",
+        "name": "Swarming Bites",
+        "text": "Attack en masse with 6 Base Dice, Damage 1, and smother a target in their hundreds (asphyxiation rules)."
+      }
+    ],
+    "special": "Cluster rules: size and Speed equal the zones covered; Health 3 per zone; disperses at zero.",
+    "tactics": "",
+    "art": null
+  },
+  {
+    "id": "hungry-tendril",
+    "name": "Hungry Tendril",
+    "type": "creature",
+    "source": "ACM",
+    "page": 336,
+    "stats": {
+      "speed": 1,
+      "health": 1,
+      "armor": 1,
+      "skills": {
+        "mobility": 1
+      }
+    },
+    "signatureAttacks": [
+      {
+        "roll": "-",
+        "name": "Snare",
+        "text": "Grapple with 6 Base Dice, no damage; the victim must win opposed CLOSE COMBAT vs 6 dice or be dragged under to drown."
+      }
+    ],
+    "special": "Seabed tendrils in Pandora's shallows that bury themselves at low tide.",
+    "tactics": "",
+    "art": null
+  },
+  {
+    "id": "fighting-joe",
+    "name": "Norcomm Dzho 'Fighting Joe' Automaton",
+    "type": "synthetic",
+    "source": "ACM",
+    "page": 268,
+    "stats": {
+      "speed": 1,
+      "health": 7,
+      "armor": null,
+      "attributes": {
+        "str": 7,
+        "agi": 2,
+        "wit": 1,
+        "emp": 1
+      },
+      "skills": {
+        "rangedCombat": 2,
+        "observation": 1,
+        "comtech": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "UPP-repurposed Seegson Working Joe slaved to a 1VAN/3 mainframe (which can lend its skills for a Round). Talent: Pack Mule. Substandard components: every critical injury rolls twice on the synthetic table.",
+    "tactics": "Overwhelm the controlling computer.",
+    "talents": [
+      "pack-mule"
+    ],
+    "art": null
+  },
+  {
+    "id": "uscmc-berserker",
+    "name": "USCMC Berserker (MOX Exowarrior)",
+    "type": "cyborg",
+    "source": "ACM",
+    "page": 295,
+    "stats": {
+      "speed": 1,
+      "health": 8,
+      "armor": 10,
+      "attributes": {
+        "str": 6,
+        "agi": 3,
+        "wit": 2,
+        "emp": 1
+      },
+      "skills": {
+        "stamina": 6,
+        "closeCombat": 5,
+        "mobility": 3,
+        "rangedCombat": 7
+      },
+      "airSupply": 8
+    },
+    "signatureAttacks": [],
+    "special": "Convict hard-wired into a MOX exosuit (in-suit skill values shown; base Stamina 3, Close Combat 2, Ranged Combat 4). Talents: Tough, Killer, Rapid Fire. Armed with a 25mm gatling gun, M240, stun baton, U1 launcher, U4 launcher with QTC and a Damage 2 claw. The typical Berserker on ACM p170 has STR 5 and Health 7.",
+    "tactics": "Unstable and liable to turn on friendlies; subdue it, lure it away or destroy it.",
+    "talents": [
+      "tough",
+      "killer",
+      "rapid-fire"
+    ],
+    "art": null
+  },
+  {
+    "id": "npc-android-covert",
+    "name": "Android, Covert",
+    "type": "synthetic",
+    "source": "CRB",
+    "page": 355,
+    "stats": {
+      "speed": 1,
+      "health": 8,
+      "armor": null,
+      "attributes": {
+        "str": 8,
+        "agi": 8,
+        "wit": 3,
+        "emp": 1
+      },
+      "skills": {
+        "closeCombat": 3,
+        "rangedCombat": 2,
+        "survival": 1,
+        "comtech": 2,
+        "heavyMachinery": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "take-control"
+    ],
+    "gear": "",
+    "art": null
+  },
+  {
+    "id": "npc-android-curious",
+    "name": "Android, Curious",
+    "type": "synthetic",
+    "source": "CRB",
+    "page": 355,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": null,
+      "attributes": {
+        "str": 4,
+        "agi": 4,
+        "wit": 8,
+        "emp": 4
+      },
+      "skills": {
+        "observation": 3,
+        "mobility": 2,
+        "comtech": 3,
+        "stamina": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "watchful"
+    ],
+    "gear": "",
+    "art": null
+  },
+  {
+    "id": "npc-android-refurbished",
+    "name": "Android, Refurbished",
+    "type": "synthetic",
+    "source": "CRB",
+    "page": 355,
+    "stats": {
+      "speed": 1,
+      "health": 7,
+      "armor": null,
+      "attributes": {
+        "str": 7,
+        "agi": 7,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 2,
+        "comtech": 2,
+        "observation": 2,
+        "piloting": 4
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "spaceship-mechanic"
+    ],
+    "gear": "",
+    "art": null
+  },
+  {
+    "id": "npc-colonial-marshal",
+    "name": "Colonial Marshal",
+    "type": "npc",
+    "source": "CRB",
+    "page": 355,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": null,
+      "attributes": {
+        "str": 4,
+        "agi": 4,
+        "wit": 4,
+        "emp": 2
+      },
+      "skills": {
+        "mobility": 1,
+        "observation": 2,
+        "medicalAid": 1,
+        "closeCombat": 2,
+        "manipulation": 1,
+        "rangedCombat": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "fast-reflexes"
+    ],
+    "gear": "Folding knife, Armat 12 gauge pump shotgun, M4A3 pistol, handcuffs, flashlight.",
+    "art": null
+  },
+  {
+    "id": "npc-colony-ops-manager",
+    "name": "Colony Ops Manager",
+    "type": "npc",
+    "source": "CRB",
+    "page": 355,
+    "stats": {
+      "speed": 1,
+      "health": 2,
+      "armor": null,
+      "attributes": {
+        "str": 2,
+        "agi": 4,
+        "wit": 3,
+        "emp": 5
+      },
+      "skills": {
+        "stamina": 2,
+        "comtech": 1,
+        "command": 3,
+        "manipulation": 2,
+        "survival": 1,
+        "heavyMachinery": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "counselor"
+    ],
+    "gear": "",
+    "art": null
+  },
+  {
+    "id": "npc-corporate-exec",
+    "name": "Corporate Exec",
+    "type": "npc",
+    "source": "CRB",
+    "page": 356,
+    "stats": {
+      "speed": 1,
+      "health": 2,
+      "armor": null,
+      "attributes": {
+        "str": 2,
+        "agi": 3,
+        "wit": 5,
+        "emp": 4
+      },
+      "skills": {
+        "command": 3,
+        "manipulation": 4,
+        "observation": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "take-control"
+    ],
+    "gear": "Penlight, Swiss army knife, $2000 bribe money, PDT, voice recorder.",
+    "art": null
+  },
+  {
+    "id": "npc-corporate-killer",
+    "name": "Corporate Killer",
+    "type": "npc",
+    "source": "CRB",
+    "page": 356,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": null,
+      "attributes": {
+        "str": 4,
+        "agi": 5,
+        "wit": 4,
+        "emp": 1
+      },
+      "skills": {
+        "closeCombat": 3,
+        "rangedCombat": 4,
+        "observation": 2,
+        "mobility": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "merciless"
+    ],
+    "gear": "M42A scope rifle, hunting knife, medkit, flashlight, garotte, gag, tie-wraps, binoculars.",
+    "art": null
+  },
+  {
+    "id": "npc-cultist",
+    "name": "Cultist",
+    "type": "npc",
+    "source": "CRB",
+    "page": 356,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": null,
+      "attributes": {
+        "str": 4,
+        "agi": 3,
+        "wit": 2,
+        "emp": 5
+      },
+      "skills": {
+        "closeCombat": 3,
+        "manipulation": 3,
+        "observation": 2,
+        "rangedCombat": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "hothead"
+    ],
+    "gear": "Two hunting knives, twelve doses of recreational drugs, .357 Magnum.",
+    "art": null
+  },
+  {
+    "id": "npc-icc-inspector",
+    "name": "ICC Inspector",
+    "type": "npc",
+    "source": "CRB",
+    "page": 356,
+    "stats": {
+      "speed": 1,
+      "health": 3,
+      "armor": null,
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 5,
+        "emp": 3
+      },
+      "skills": {
+        "observation": 4,
+        "comtech": 2,
+        "command": 2,
+        "manipulation": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "watchful"
+    ],
+    "gear": "Seegson P-DAT, flashlight, digital camera, voice recorder, clipboard, hazard tape, SSDD.",
+    "art": null
+  },
+  {
+    "id": "npc-medical-doctor",
+    "name": "Medical Doctor",
+    "type": "npc",
+    "source": "CRB",
+    "page": 356,
+    "stats": {
+      "speed": 1,
+      "health": 2,
+      "armor": null,
+      "attributes": {
+        "str": 2,
+        "agi": 3,
+        "wit": 4,
+        "emp": 5
+      },
+      "skills": {
+        "observation": 3,
+        "medicalAid": 4,
+        "manipulation": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "field-surgeon"
+    ],
+    "gear": "Personal medkit, surgical kit, flashlight, four shots of Naproleve, hypodermic needles.",
+    "art": null
+  },
+  {
+    "id": "npc-mercenary-soldier",
+    "name": "Mercenary/Soldier",
+    "type": "npc",
+    "source": "CRB",
+    "page": 357,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 4,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "closeCombat": 2,
+        "stamina": 2,
+        "rangedCombat": 3,
+        "mobility": 2,
+        "survival": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "killer"
+    ],
+    "gear": "M4A3 pistol, medkit, flashlight, pulse rifle, 4 grenades, combat knife.",
+    "art": null
+  },
+  {
+    "id": "npc-mining-wildcatter",
+    "name": "Mining Wildcatter",
+    "type": "npc",
+    "source": "CRB",
+    "page": 357,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "stamina": 2,
+        "closeCombat": 1,
+        "survival": 3,
+        "heavyMachinery": 3,
+        "comtech": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "merciless"
+    ],
+    "gear": "Geology kit, climbing gear, flashlight, multi-tool, digital camera, sample container.",
+    "art": null
+  },
+  {
+    "id": "npc-rogue-scientist",
+    "name": "Rogue Scientist",
+    "type": "npc",
+    "source": "CRB",
+    "page": 357,
+    "stats": {
+      "speed": 1,
+      "health": 3,
+      "armor": null,
+      "attributes": {
+        "str": 3,
+        "agi": 4,
+        "wit": 5,
+        "emp": 2
+      },
+      "skills": {
+        "observation": 4,
+        "survival": 2,
+        "comtech": 3,
+        "mobility": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "analysis"
+    ],
+    "gear": "Bio-testing kit, survival knife, pocket survival kit, digital camera, electronic repair kit, voice recorder, sample case.",
+    "art": null
+  },
+  {
+    "id": "npc-salvage-expert",
+    "name": "Salvage Expert",
+    "type": "npc",
+    "source": "CRB",
+    "page": 357,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 4,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "heavyMachinery": 3,
+        "mobility": 3,
+        "stamina": 2,
+        "survival": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "spaceship-mechanic"
+    ],
+    "gear": "Rugged flashlight, multi-tool, cutting tool, maintenance jack.",
+    "art": null
+  },
+  {
+    "id": "npc-pilot",
+    "name": "Pilot",
+    "type": "npc",
+    "source": "CRB",
+    "page": 357,
+    "stats": {
+      "speed": 1,
+      "health": 3,
+      "armor": null,
+      "attributes": {
+        "str": 3,
+        "agi": 5,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "piloting": 3,
+        "rangedCombat": 3,
+        "comtech": 2,
+        "observation": 1,
+        "survival": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "full-throttle"
+    ],
+    "gear": "M4A3 pistol, binoculars, flashlight, pilot logbook, nav charts.",
+    "art": null
+  },
+  {
+    "id": "npc-outer-rim-colonists",
+    "name": "Outer Rim Colonists/Settlers",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "closeCombat": 1,
+        "heavyMachinery": 3,
+        "stamina": 2,
+        "survival": 3,
+        "comtech": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "merciless"
+    ],
+    "gear": "Testing kit, climbing gear, flashlight, multi-tool, sample containers.",
+    "art": null
+  },
+  {
+    "id": "npc-frontier-marshals",
+    "name": "Frontier Marshals",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": null,
+      "attributes": {
+        "str": 4,
+        "agi": 4,
+        "wit": 4,
+        "emp": 2
+      },
+      "skills": {
+        "closeCombat": 2,
+        "rangedCombat": 3,
+        "mobility": 1,
+        "observation": 2,
+        "manipulation": 1,
+        "medicalAid": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "investigator"
+    ],
+    "gear": "Folding knife, Armat 37A2 shotgun, M4A3 pistol, handcuffs, flashlight.",
+    "art": null
+  },
+  {
+    "id": "npc-convicted-killers",
+    "name": "Convicted Killers",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 2,
+        "emp": 4
+      },
+      "skills": {
+        "closeCombat": 3,
+        "heavyMachinery": 1,
+        "stamina": 2,
+        "manipulation": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "menacing"
+    ],
+    "gear": "Two shivs, cigarettes, a dose of street drugs.",
+    "art": null
+  },
+  {
+    "id": "npc-insurgents",
+    "name": "Insurgents",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "closeCombat": 1,
+        "heavyMachinery": 2,
+        "stamina": 2,
+        "rangedCombat": 1,
+        "comtech": 1,
+        "survival": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "hard-hitter"
+    ],
+    "gear": "EVA pistol, AK-4047 or shotgun, Molotov cocktail.",
+    "art": null
+  },
+  {
+    "id": "npc-cult-fanatics",
+    "name": "Cult Fanatics",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": null,
+      "attributes": {
+        "str": 4,
+        "agi": 3,
+        "wit": 2,
+        "emp": 5
+      },
+      "skills": {
+        "closeCombat": 3,
+        "rangedCombat": 1,
+        "observation": 2,
+        "manipulation": 4
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "hothead"
+    ],
+    "gear": "Recreational drugs, X-stims, razor, pamphlets.",
+    "art": null
+  },
+  {
+    "id": "npc-terrorists",
+    "name": "Terrorists",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 3,
+      "armor": null,
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 3,
+        "emp": 5
+      },
+      "skills": {
+        "closeCombat": 2,
+        "mobility": 1,
+        "rangedCombat": 3,
+        "manipulation": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "nerves-of-steel"
+    ],
+    "gear": "Belt of 20 M40 grenades, X-stims, F903WE rifle, pocket knife.",
+    "art": null
+  },
+  {
+    "id": "npc-independent-security",
+    "name": "Independent Security Forces",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 4,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "closeCombat": 2,
+        "stamina": 1,
+        "rangedCombat": 3,
+        "mobility": 2,
+        "observation": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "overkill"
+    ],
+    "gear": "Kevlar armor, M41A, medkit, four grenades, flashlight.",
+    "art": null
+  },
+  {
+    "id": "npc-space-consortium-pmc",
+    "name": "Space Consortium PMCs",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 7,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 4,
+        "emp": 2
+      },
+      "skills": {
+        "closeCombat": 2,
+        "rangedCombat": 5,
+        "observation": 2,
+        "mobility": 2,
+        "manipulation": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "tough"
+    ],
+    "gear": "W-Y M3 armor, M41A with bayonet, medkit, six grenades, flashlight.",
+    "art": null
+  },
+  {
+    "id": "npc-wy-dog-catchers",
+    "name": "Weyland-Yutani Dog Catchers",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": null,
+      "attributes": {
+        "str": 4,
+        "agi": 5,
+        "wit": 4,
+        "emp": 1
+      },
+      "skills": {
+        "closeCombat": 3,
+        "mobility": 1,
+        "rangedCombat": 4,
+        "observation": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "merciless"
+    ],
+    "gear": "APE suit, M41A or M41AE2, catch pole and containment gear, hunting knife, medkit, flashlight, binoculars.",
+    "art": null
+  },
+  {
+    "id": "npc-3we-royal-marine-commandos",
+    "name": "3WE Royal Marine Commandos",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 4,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "closeCombat": 3,
+        "rangedCombat": 5,
+        "mobility": 2,
+        "stamina": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "rapid-fire"
+    ],
+    "gear": "Kevlar armor, NSG23 rifle, four grenades, medkit, flashlight.",
+    "art": null
+  },
+  {
+    "id": "npc-3we-isaf-pilots-soldiers",
+    "name": "3WE ISAF Pilots/Soldiers",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": null,
+      "attributes": {
+        "str": 4,
+        "agi": 4,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "closeCombat": 2,
+        "rangedCombat": 4,
+        "mobility": 2,
+        "piloting": 2
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "heavy-weapons"
+    ],
+    "gear": "Kevlar armor, Weyland ES-4 pistol, personal medkit.",
+    "art": null
+  },
+  {
+    "id": "npc-uscmc-officers",
+    "name": "USCMC Officers",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 3,
+      "armor": null,
+      "attributes": {
+        "str": 3,
+        "agi": 4,
+        "wit": 3,
+        "emp": 4
+      },
+      "skills": {
+        "closeCombat": 1,
+        "rangedCombat": 3,
+        "command": 3,
+        "manipulation": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "field-commander"
+    ],
+    "gear": "VP-70 or M4A3-type pistol, P-DAT, two grenades, flashlight, medkit, pocket knife.",
+    "art": null
+  },
+  {
+    "id": "npc-uscmc-riflemen",
+    "name": "USCMC Riflemen",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 5,
+        "wit": 2,
+        "emp": 2
+      },
+      "skills": {
+        "closeCombat": 2,
+        "stamina": 1,
+        "mobility": 3,
+        "rangedCombat": 3,
+        "survival": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "past-the-limit"
+    ],
+    "gear": "M3 armor, M41A, sidearm, flashlight, medkit, four grenades, combat knife.",
+    "art": null
+  },
+  {
+    "id": "npc-usasf-pilots-dropship-crew",
+    "name": "USASF Pilots/USCMC Dropship Crew",
+    "type": "npc",
+    "source": "ACM",
+    "page": 220,
+    "stats": {
+      "speed": 1,
+      "health": 3,
+      "armor": null,
+      "attributes": {
+        "str": 3,
+        "agi": 5,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "piloting": 3,
+        "rangedCombat": 3,
+        "comtech": 3,
+        "observation": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "full-throttle"
+    ],
+    "gear": "VP-70 or M4A3-type pistol, flares.",
+    "art": null
+  },
+  {
+    "id": "npc-nco-synthetic",
+    "name": "NCO Synthetic",
+    "type": "synthetic",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 7,
+      "armor": null,
+      "attributes": {
+        "str": 7,
+        "agi": 5,
+        "wit": 5,
+        "emp": 3
+      },
+      "skills": {
+        "mobility": 2,
+        "comtech": 3,
+        "observation": 2,
+        "medicalAid": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "watchful"
+    ],
+    "gear": "P-DAT, tools, spare M41A ammo, PR-PUT terminal.",
+    "art": null
+  },
+  {
+    "id": "npc-aw-soldiers-blackguard",
+    "name": "USCMC Elite AW Soldiers (Blackguard)",
+    "type": "npc",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 6,
+      "armor": null,
+      "attributes": {
+        "str": 6,
+        "agi": 3,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "closeCombat": 4,
+        "rangedCombat": 5,
+        "mobility": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "menacing",
+      "overkill"
+    ],
+    "gear": "Black M3 armor, M41AE2, combat knife, six grenades.",
+    "art": null
+  },
+  {
+    "id": "npc-project-scientist",
+    "name": "Project Scientist",
+    "type": "npc",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 3,
+      "armor": null,
+      "attributes": {
+        "str": 3,
+        "agi": 4,
+        "wit": 5,
+        "emp": 2
+      },
+      "skills": {
+        "comtech": 4,
+        "observation": 3,
+        "survival": 1,
+        "manipulation": 1,
+        "medicalAid": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "inquisitive"
+    ],
+    "gear": "SSDD, Samani watch, electronic repair kit, CBRN kit.",
+    "art": null
+  },
+  {
+    "id": "npc-project-surgeon",
+    "name": "Project Surgeon",
+    "type": "npc",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 2,
+      "armor": null,
+      "attributes": {
+        "str": 2,
+        "agi": 4,
+        "wit": 4,
+        "emp": 4
+      },
+      "skills": {
+        "observation": 3,
+        "manipulation": 3,
+        "medicalAid": 4
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "field-surgeon"
+    ],
+    "gear": "Bio-testing kit, medkit, surgical kit, flashlight, TX-9 pistol with X-stims, Neversleep and Naproleve doses.",
+    "art": null
+  },
+  {
+    "id": "npc-uppa-soldier",
+    "name": "UPPA Soldier",
+    "type": "npc",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 4,
+      "armor": null,
+      "attributes": {
+        "str": 4,
+        "agi": 4,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "closeCombat": 2,
+        "stamina": 2,
+        "mobility": 2,
+        "rangedCombat": 3,
+        "survival": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "hug-the-dirt"
+    ],
+    "gear": "6B90 armor, QSZ-203, flashlight, AK-4047, four grenades, combat knife.",
+    "art": null
+  },
+  {
+    "id": "npc-upp-sof-commandos",
+    "name": "UPP SOF Commandos",
+    "type": "npc",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 5,
+      "armor": null,
+      "attributes": {
+        "str": 5,
+        "agi": 4,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "closeCombat": 4,
+        "rangedCombat": 4,
+        "mobility": 2,
+        "stamina": 1,
+        "survival": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "zero-g-training"
+    ],
+    "gear": "CCC5 suit, AK-104s suit gun, QSZ-203, flashlight, four grenades, combat knife.",
+    "art": null
+  },
+  {
+    "id": "npc-upp-mss-officer",
+    "name": "UPP MSS Officer",
+    "type": "npc",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 3,
+      "armor": null,
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 4,
+        "emp": 4
+      },
+      "skills": {
+        "closeCombat": 2,
+        "mobility": 1,
+        "rangedCombat": 3,
+        "observation": 3,
+        "manipulation": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "stealthy"
+    ],
+    "gear": "QSZ-203, two grenades, TX-9 pistol, folding knife, P-DAT. Book also lists an 'Intimidation' talent, which does not exist in the CRB.",
+    "art": null
+  },
+  {
+    "id": "npc-working-joe",
+    "name": "Working Joe Androids",
+    "type": "synthetic",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 7,
+      "armor": null,
+      "attributes": {
+        "str": 7,
+        "agi": 2,
+        "wit": 1,
+        "emp": 1
+      },
+      "skills": {
+        "heavyMachinery": 3,
+        "comtech": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "pack-mule"
+    ],
+    "gear": "Maintenance jack, DV-303 bolt gun or cutting torch. Need an APOLLO/1VAN computer link to adapt; every crit rolls twice on the synthetic table.",
+    "art": null
+  },
+  {
+    "id": "npc-upp-david-5",
+    "name": "UPP David-5 Dream Technician Android",
+    "type": "synthetic",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 7,
+      "armor": null,
+      "attributes": {
+        "str": 7,
+        "agi": 5,
+        "wit": 4,
+        "emp": 4
+      },
+      "skills": {
+        "mobility": 2,
+        "comtech": 5,
+        "observation": 3
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "watchful"
+    ],
+    "gear": "P-DAT, neuro visor. Every crit rolls twice on the synthetic table.",
+    "art": null
+  },
+  {
+    "id": "npc-upp-david-7",
+    "name": "UPP David-7 Combat Model Android",
+    "type": "synthetic",
+    "source": "ACM",
+    "page": 221,
+    "stats": {
+      "speed": 1,
+      "health": 7,
+      "armor": null,
+      "attributes": {
+        "str": 7,
+        "agi": 7,
+        "wit": 4,
+        "emp": 2
+      },
+      "skills": {
+        "closeCombat": 3,
+        "mobility": 2,
+        "rangedCombat": 3,
+        "comtech": 1,
+        "observation": 1
+      }
+    },
+    "signatureAttacks": [],
+    "special": "",
+    "tactics": "",
+    "talents": [
+      "killer"
+    ],
+    "gear": "6B90 armor, QSZ-203, flashlight, AK-4047, four grenades, combat knife. Every crit rolls twice on the synthetic table.",
+    "art": null
+  }
+]

@@ -1,0 +1,367 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://muthur.local/schema/content-pack.schema.json",
+  "title": "Content Pack (v1)",
+  "description": "A self-contained tabletop RPG content pack: one scenario (or a campaign frame, or a set of characters) plus everything a game master needs to run it at the table — briefing, acts with read-aloud narration and GM notes, a scene-by-scene runner, NPCs, threats, handouts, maps, endings and pre-generated characters. Packs are pure data rendered by a universe-agnostic engine; never put rules text, HTML or markdown tables in prose fields. Write in the voice and setting of the universe named in `universe`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["packVersion", "id", "universe", "kind", "meta"],
+  "properties": {
+    "packVersion": {
+      "description": "Schema version of this pack. Always the integer 1 for this schema.",
+      "const": 1
+    },
+    "id": {
+      "description": "Stable kebab-case identifier, unique within the universe (e.g. \"derelict-signal-7c\"). Lowercase letters, digits and single hyphens only; 3–64 characters. Used as the file name on disk.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 3,
+      "maxLength": 64
+    },
+    "universe": {
+      "description": "Registry id of the universe this pack belongs to (e.g. \"alien\", \"dune\"). Determines theme, rules, attribute/skill keys and terminology.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "kind": {
+      "description": "\"scenario\" = one playable adventure (requires at least one act). \"campaign\" = a campaign frame or multi-session arc (requires at least one act). \"characters\" = a roster of characters only, no acts needed. \"maps\" = a map overlay pack with id \"<packId>-maps\": its maps[] are merged by map id into pack <packId> at load (used by the Room Editor for bundled packs).",
+      "type": "string",
+      "enum": ["scenario", "characters", "campaign", "maps"]
+    },
+    "meta": {
+      "description": "Catalogue information shown in the scenario library and used for filtering.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "tagline"],
+      "properties": {
+        "title": {
+          "description": "Evocative title, 2–6 words, title case (e.g. \"Chariot of the Gods\"). No subtitle, no quotes.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "tagline": {
+          "description": "One punchy sentence (8–25 words) that sells the premise and hints at the horror or stakes, like a film poster line. No spoilers of twists.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "synopsis": {
+          "description": "GM-facing overview of the whole scenario in 2–5 sentences (60–150 words): the situation, what is really going on, the main threat and the shape of the climax. Spoilers allowed — players never see this.",
+          "type": "string"
+        },
+        "type": {
+          "description": "Play style. \"Cinematic\" = one-shot with pre-generated characters, personal agendas and expected character death; \"Campaign\" = part of an ongoing campaign with persistent characters; \"One-Shot\" = standalone session without the cinematic agenda structure.",
+          "type": "string",
+          "enum": ["Cinematic", "Campaign", "One-Shot"]
+        },
+        "players": {
+          "description": "Recommended player count as a range or number, e.g. \"3–5\" or \"4\".",
+          "type": "string"
+        },
+        "playtime": {
+          "description": "Expected real-world play time, e.g. \"3–4 hours\" or \"2 sessions\".",
+          "type": "string"
+        },
+        "difficulty": {
+          "description": "Short difficulty label for the GM, e.g. \"Introductory\", \"Standard\", \"Hard\", \"Extreme\", or \"Advanced Cinematic\".",
+          "type": "string"
+        },
+        "tone": {
+          "description": "2–5 lowercase tone keywords that describe how the scenario should feel, e.g. [\"dread\", \"isolation\", \"corporate betrayal\"].",
+          "type": "array",
+          "items": { "type": "string", "description": "A single lowercase tone keyword or short phrase." }
+        },
+        "contentWarnings": {
+          "description": "Lowercase content warnings the GM should discuss with players before play, e.g. [\"body horror\", \"child endangerment\"]. Empty array if none.",
+          "type": "array",
+          "items": { "type": "string", "description": "A single lowercase content warning." }
+        },
+        "generated": {
+          "description": "Provenance for machine-generated packs. Omit for hand-written packs.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "by": { "description": "Who generated the pack, e.g. \"claude\".", "type": "string" },
+            "model": { "description": "Model identifier used, e.g. \"claude-opus-5-5\".", "type": "string" },
+            "at": { "description": "ISO-8601 timestamp of generation.", "type": "string", "format": "date-time" },
+            "params": {
+              "description": "The generation parameters exactly as submitted (players, playtime, tone, setting hints, etc.). Open map; any keys allowed.",
+              "type": "object"
+            }
+          }
+        },
+        "source": {
+          "description": "Where the pack came from: \"bundled\" = shipped inside the app, \"custom\" = written or imported by a user, \"generated\" = produced by the AI generator.",
+          "type": "string",
+          "enum": ["bundled", "custom", "generated"]
+        }
+      }
+    },
+    "briefing": {
+      "description": "The in-world opening transmission shown to players before Act I — a memo, order or computer message in the universe's voice (for ALIEN: terse MU/TH/UR or corporate/military teletype).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {
+        "from": { "description": "Sender line in upper case, e.g. \"MU/TH/UR 6000 MAINFRAME\" or \"USCM COMMAND — FORT NEBRASKA\".", "type": "string" },
+        "to": { "description": "Recipient line in upper case, e.g. \"CREW, USCSS MONTERO\".", "type": "string" },
+        "classification": { "description": "Classification or priority line in upper case, e.g. \"PRIORITY ONE — COMPANY DIRECTIVE\".", "type": "string" },
+        "text": {
+          "description": "The briefing body: 120–350 words in 3–7 short paragraphs separated by blank lines, written entirely in-world (no rules, no GM asides). It should state the mission, hint at what is being withheld, and end with a sign-off.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "acts": {
+      "description": "The scenario's acts in play order. Cinematic scenarios use exactly three (e.g. HOPE → DOUBT → HORROR). Required (at least one) for kind \"scenario\" and \"campaign\".",
+      "type": "array",
+      "items": { "$ref": "#/$defs/act" }
+    },
+    "npcs": {
+      "description": "Important non-player characters the GM portrays, 3–8 for a typical scenario.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/npc" }
+    },
+    "threats": {
+      "description": "Creatures and hostile forces the players may face, from first glimpse to final form.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/threat" }
+    },
+    "keyLocations": {
+      "description": "Places the action moves through, 4–10 entries, each a sensory, gameable description.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "description"],
+        "properties": {
+          "name": { "description": "Location name, optionally prefixed with the vessel or site, e.g. \"USCSS Cronus — Lab Module\".", "type": "string", "minLength": 1 },
+          "description": { "description": "1–3 sentences (20–60 words): what it looks, sounds and smells like, and what can happen or be found there.", "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "handouts": {
+      "description": "In-world messages the GM can push to players' phones as transmissions during play: orders, intercepted logs, private agenda updates. 2–6 per scenario.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/handout" }
+    },
+    "maps": {
+      "description": "Maps for the GM screen: ASCII schematics drawn with box-drawing characters, or images by URL.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/map" }
+    },
+    "endings": {
+      "description": "Possible outcomes the GM narrates at the end, 2–4 entries covering success, pyrrhic victory and total loss.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "condition", "text"],
+        "properties": {
+          "title": { "description": "Short ending name in upper case, e.g. \"ESCAPE IN THE EEV\".", "type": "string", "minLength": 1 },
+          "condition": { "description": "What must be true for this ending, in one sentence of GM language.", "type": "string", "minLength": 1 },
+          "text": { "description": "Read-aloud epilogue, 1–3 paragraphs of second-person or cinematic narration (60–200 words), no rules text.", "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "characters": {
+      "description": "Pre-generated player characters embedded in the pack (Cinematic scenarios: one per expected player, typically 4–5, each with a personal agenda that conflicts with at least one other character's).",
+      "type": "array",
+      "items": { "$ref": "#/$defs/character" }
+    },
+    "tips": {
+      "description": "Practical advice for the GM running this pack, 3–8 one-sentence tips (pacing, when to spring events, how to handle player-vs-player conflict).",
+      "type": "array",
+      "items": { "type": "string", "description": "One concrete, actionable sentence of GM advice." }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "properties": { "kind": { "enum": ["scenario", "campaign"] } }, "required": ["kind"] },
+      "then": { "type": "object", "required": ["acts"], "properties": { "acts": { "type": "array", "minItems": 1 } } }
+    }
+  ],
+  "$defs": {
+    "act": {
+      "description": "One act of the scenario.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title"],
+      "properties": {
+        "title": { "description": "Act label in upper case, e.g. \"ACT I\".", "type": "string", "minLength": 1 },
+        "subtitle": { "description": "One or two upper-case words naming the act's mood or theme, e.g. \"HOPE\", \"THE LONG NIGHT\".", "type": "string" },
+        "summary": { "description": "GM-facing one or two sentence summary of what happens in this act.", "type": "string" },
+        "readAloud": {
+          "description": "2–6 paragraphs of second-person present-tense narration the GM (or text-to-speech) reads to players, each 40–120 words. Pure atmosphere and situation — no rules text, no dice, no GM secrets, no stage directions.",
+          "type": "array",
+          "items": { "type": "string", "description": "One narration paragraph, 40–120 words, second person, present tense." }
+        },
+        "gmNotes": { "description": "Private GM guidance for the act in 1–3 paragraphs: what is really happening, which events to trigger, how agendas should start to bite, and how to pace toward the next act.", "type": "string" },
+        "agendaNotes": { "description": "How the characters' personal agendas should develop during this act (subtle in Act I, conflicting in Act II, open betrayal in Act III).", "type": "string" },
+        "scenes": {
+          "description": "Ordered scene-by-scene runner the GM checks off during play, typically 3–8 per act.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/scene" }
+        }
+      }
+    },
+    "scene": {
+      "description": "One scene or event in the scene runner.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "description": "Short evocative scene name, 1–5 words, e.g. \"Mother Awakens\".", "type": "string", "minLength": 1 },
+        "mandatory": { "description": "true if the plot needs this scene to happen; false if optional color or a contingency.", "type": "boolean" },
+        "encounter": { "description": "true if this scene contains a fight or a direct threat encounter.", "type": "boolean" },
+        "encounterDetail": { "description": "When encounter is true: what attacks, how many, key stats or behavior, and how it escalates or escapes. One to three sentences.", "type": "string" },
+        "narration": { "description": "What the GM describes or reads when the scene starts: 1–4 sentences, sensory and specific.", "type": "string" },
+        "checks": {
+          "description": "Skill checks the scene calls for, each as \"SKILL — purpose\" or \"SKILL at −2 — purpose\" using the universe's skill names in upper case.",
+          "type": "array",
+          "items": { "type": "string", "description": "One skill check, e.g. \"OBSERVATION — notice the elongated forearms\"." }
+        },
+        "events": {
+          "description": "Things that happen during the scene regardless of player action, in order.",
+          "type": "array",
+          "items": { "type": "string", "description": "One event in one sentence." }
+        },
+        "stressTriggers": {
+          "description": "Stress or panic consequences, e.g. \"STRESS +1 — all PCs present\" or \"IMMEDIATE PANIC ROLL — witnesses\".",
+          "type": "array",
+          "items": { "type": "string", "description": "One stress or panic trigger with who it affects." }
+        },
+        "npcGuidance": { "description": "How NPCs present in this scene behave, what they want and what they lie about.", "type": "string" },
+        "gmTip": { "description": "One or two sentences of practical advice for running the scene (pacing, reveals, what to hold back).", "type": "string" },
+        "outcomes": {
+          "description": "Likely results of the scene and where each leads.",
+          "type": "array",
+          "items": { "type": "string", "description": "One outcome and its consequence." }
+        }
+      }
+    },
+    "npc": {
+      "description": "A non-player character.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "role", "agenda", "behavior"],
+      "properties": {
+        "name": { "description": "Name as players would hear it, e.g. \"Dr. Flynn\" or \"Ava 6\".", "type": "string", "minLength": 1 },
+        "role": { "description": "Position or function in a few words, e.g. \"Weyland-Yutani Representative\".", "type": "string" },
+        "agenda": { "description": "What the NPC wants, in one sentence.", "type": "string" },
+        "behavior": { "description": "How to play them: demeanor, tells, what they do under pressure. One or two sentences.", "type": "string" },
+        "secret": { "description": "What the NPC hides from the players, if anything.", "type": "string" },
+        "stats": { "description": "Optional game statistics in the universe's own keys (e.g. {\"health\": 4, \"rangedCombat\": 3}). Open map.", "type": "object" }
+      }
+    },
+    "threat": {
+      "description": "A creature or hostile force.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "description": "Threat name, e.g. \"Neomorph\" or \"UPP Spetsnaz squad\".", "type": "string", "minLength": 1 },
+        "ref": { "description": "Id of a matching entry in the universe bestiary (e.g. \"drone\", \"neomorph\") so the GM can open full stats.", "type": "string" },
+        "description": { "description": "What it looks like and how it is first encountered, in 1–2 sentences.", "type": "string" },
+        "stats": { "description": "Optional statistics in the universe's own keys (e.g. {\"speed\": 2, \"health\": 7, \"armor\": 8}). Open map.", "type": "object" },
+        "tactics": { "description": "How the threat behaves and escalates over the scenario, in 1–3 sentences.", "type": "string" }
+      }
+    },
+    "handout": {
+      "description": "An in-world message the GM can send to players as a transmission.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "text"],
+      "properties": {
+        "id": { "description": "kebab-case id unique within the pack.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "title": { "description": "Short handout title in upper case, e.g. \"SPECIAL ORDER 966\".", "type": "string", "minLength": 1 },
+        "from": { "description": "In-world sender line, e.g. \"MU/TH/UR 2000\".", "type": "string" },
+        "to": { "description": "Intended recipient: a character name, a role, or \"ALL CREW\".", "type": "string" },
+        "priority": { "description": "Priority label shown on the player's phone; prefer one of the universe's priorities (ALIEN: STANDARD, PRIORITY, EYES ONLY, EMERGENCY).", "type": "string" },
+        "text": { "description": "The message body, 20–200 words, fully in-world in teletype style. No GM notes.", "type": "string", "minLength": 1 },
+        "when": { "description": "When the GM should send it, e.g. \"Act II, after the logs are recovered\".", "type": "string" }
+      }
+    },
+    "map": {
+      "description": "A map for the GM screen.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "kind"],
+      "properties": {
+        "id": { "description": "kebab-case id unique within the universe's maps, e.g. \"uscss-cronus\".", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "title": { "description": "Map title in upper case, e.g. \"USCSS CRONUS\".", "type": "string", "minLength": 1 },
+        "subtitle": { "description": "Class, designation or region line, e.g. \"Weyland-Yutani Science Vessel — Derelict\".", "type": "string" },
+        "description": { "description": "One or two sentences of GM context for the location.", "type": "string" },
+        "kind": {"description":"\"ascii\" = schematic drawn in the `ascii` field; \"image\" = picture at `src`; \"engine\" = interactive deck plan registered by the universe (`engine`).","type":"string","enum":["ascii","image","engine"]},
+        "ascii": { "description": "Required when kind is \"ascii\": a monospace schematic drawn with box-drawing characters (╔═╗║┌─┐│└┘), at most ~70 columns wide, with labelled rooms and a title block.", "type": "string" },
+        "src": { "description": "Required when kind is \"image\": absolute URL path of the image, e.g. \"/maps/acm/talos-station.png\".", "type": "string" },
+        "engine": { "description": "Optional id of an interactive MapEngine deck plan registered by the universe (e.g. \"uscss-montero\"); the GM screen offers it alongside this map.", "type": "string" },
+        "size": {"description":"Optional source size [width, height] in px (image maps: the image natural size). Rooms stay normalized.","type":"array","items":{"type":"number","minimum":1},"minItems":2,"maxItems":2},
+        "levels": {"description":"Optional decks/levels; rooms and tokens carry a level id.","type":"array","items":{"type":"object","additionalProperties":false,"required":["id","label"],"properties":{"id":{"type":"string","pattern":"^[a-z0-9]+(-[a-z0-9]+)*$","description":"kebab-case level id, e.g. \"deck-a\"."},"label":{"type":"string","description":"Display label, e.g. \"DECK A\"."},"src":{"type":"string","description":"Optional per-level image."},"engine":{"type":"string","description":"Optional per-level engine deck id."}}}},
+        "rooms": {
+          "description": "Labelled areas on the map with short GM notes.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name"],
+            "properties": {
+              "id": {"description":"kebab-case room id unique within the map (needed for the table board fog).","type":"string","pattern":"^[a-z0-9]+(-[a-z0-9]+)*$"},
+              "name": { "description": "Room or area name as labelled on the map.", "type": "string", "minLength": 1 },
+              "note": { "description": "1–3 sentences: contents, hazards, clues.", "type": "string" },
+              "level": {"description":"Level id this room is on (multi-level maps).","type":"string"},
+              "shape": {"description":"Room outline in normalized map space (0..1 of the map width/height). rect: x, y, w, h. poly: points [[x,y],...] (3+).","type":"object","additionalProperties":false,"required":["type"],"properties":{"type":{"description":"\"rect\" or \"poly\".","type":"string","enum":["rect","poly"]},"x":{"type":"number","minimum":0,"maximum":1,"description":"rect: left edge."},"y":{"type":"number","minimum":0,"maximum":1,"description":"rect: top edge."},"w":{"type":"number","minimum":0,"maximum":1,"description":"rect: width."},"h":{"type":"number","minimum":0,"maximum":1,"description":"rect: height."},"points":{"description":"poly: vertices [[x,y],...].","type":"array","minItems":3,"items":{"type":"array","items":{"type":"number","minimum":0,"maximum":1},"minItems":2,"maxItems":2}}}}
+            }
+          }
+        },
+        "doors": {"description":"Optional connections between rooms.","type":"array","items":{"type":"object","additionalProperties":false,"required":["from","to"],"properties":{"from":{"type":"string","description":"Room id."},"to":{"type":"string","description":"Room id."},"locked":{"type":"boolean","description":"Locked door."}}}},
+        "spawn": {"description":"Default drop points (normalized) for new tokens.","type":"object","additionalProperties":false,"properties":{"pc":{"type":"array","items":{"type":"number","minimum":0,"maximum":1},"minItems":2,"maxItems":2,"description":"Default PC drop point [x, y]."},"levels":{"type":"object","description":"Per-level overrides: { \"<levelId>\": { \"pc\": [x, y] } }.","additionalProperties":{"type":"object","additionalProperties":false,"properties":{"pc":{"type":"array","items":{"type":"number","minimum":0,"maximum":1},"minItems":2,"maxItems":2}}}}}},
+        "grid": {"description":"Optional grid cell size as a fraction of the map width (token size 1 = one cell). Default 1/40.","type":"number","exclusiveMinimum":0,"maximum":0.5},
+        "outline": {"description":"Optional hull/outline SVG path in normalized coordinates; the table board dims everything outside it.","type":"string"},
+        "crop": {"description":"Optional normalized region the table board fits to the screen.","type":"object","additionalProperties":false,"required":["x","y","w","h"],"properties":{"x":{"type":"number","minimum":0,"maximum":1},"y":{"type":"number","minimum":0,"maximum":1},"w":{"type":"number","minimum":0,"maximum":1},"h":{"type":"number","minimum":0,"maximum":1}}}
+      },
+      "allOf": [
+        { "if": { "type": "object", "properties": { "kind": { "const": "ascii" } }, "required": ["kind"] }, "then": { "type": "object", "required": ["ascii"] } },
+        { "if": { "type": "object", "properties": { "kind": { "const": "image" } }, "required": ["kind"] }, "then": { "type": "object", "required": ["src"] } },
+        { "if": { "type": "object", "properties": { "kind": { "const": "engine" } }, "required": ["kind"] }, "then": { "type": "object", "required": ["engine"] } }
+      ]
+    },
+    "character": {
+      "description": "A player character, shaped by the universe's rules. Attribute and skill keys must be the universe's keys (ALIEN: attributes str/agi/wit/emp 2–5; skills heavyMachinery, stamina, closeCombat, mobility, piloting, rangedCombat, observation, comtech, survival, manipulation, medicalAid, command 0–5).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "career", "appearance", "attributes", "skills", "talent", "gear", "signatureItem", "personalAgenda", "buddy", "rival"],
+      "properties": {
+        "id": { "description": "kebab-case id unique across the universe, e.g. \"cpt-miller\".", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "name": { "description": "Full name with rank or title if any, e.g. \"Captain Lucas Miller\".", "type": "string", "minLength": 1 },
+        "career": { "description": "Career name, ideally one of the universe's careers (ALIEN: Colonial Marine, Colonial Marshal, Company Agent, Kid, Medic, Officer, Pilot, Roughneck, Scientist).", "type": "string", "minLength": 1 },
+        "appearance": { "description": "2–3 sentences of physical description and manner a player can perform.", "type": "string" },
+        "attributes": { "description": "Attribute scores keyed by the universe's attribute keys. Open map.", "type": "object" },
+        "skills": { "description": "Skill levels keyed by the universe's skill keys; include every skill, using 0 for untrained. Open map.", "type": "object" },
+        "health": { "description": "Optional starting health. The engine recomputes it from the universe rules on assignment, so this is informational only.", "type": "integer", "minimum": 0 },
+        "talent": { "description": "One talent in the form \"Name — effect in one sentence\".", "type": "string" },
+        "gear": { "description": "3–6 carried items, including the signature item.", "type": "array", "items": { "type": "string", "description": "One item of gear." } },
+        "signatureItem": { "description": "A personal keepsake with a one-sentence story, e.g. \"Dented coffee thermos — been with him through every voyage.\"", "type": "string" },
+        "personalAgenda": { "description": "The character's secret or personal goal for the scenario, 1–3 sentences in second person. In Cinematic play it must conflict with at least one other character's agenda.", "type": "string" },
+        "agendaByAct": {
+          "description": "Optional replacement agendas handed out at the start of each act, keyed by act number as a string (\"1\", \"2\", \"3\"). Later acts should escalate toward betrayal.",
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[1-9][0-9]?$": { "type": "string", "description": "The agenda for that act, 1–3 sentences in second person." }
+          }
+        },
+        "buddy": { "description": "Name of the character this PC trusts most (another PC or 'None').", "type": "string" },
+        "rival": { "description": "Name of the character this PC distrusts most (another PC or 'None').", "type": "string" },
+        "secret": { "description": "Optional hidden truth known only to this character's player (e.g. they are a synthetic).", "type": "string" },
+        "driveStatements": {
+          "description": "Optional one-line belief statement per attribute, keyed by the universe's attribute keys (DUNE drives: duty, faith, justice, power, truth). Written by the player in the character builder.",
+          "type": "object",
+          "additionalProperties": { "type": "string", "description": "One sentence in the character's voice." }
+        }
+      }
+    }
+  }
+}

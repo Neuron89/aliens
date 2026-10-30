@@ -1,0 +1,884 @@
+[
+  {
+    "id": "winded",
+    "table": "human",
+    "roll": "11",
+    "name": "Winded",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [],
+    "healTime": null,
+    "text": "Knocked breathless; no lasting effect."
+  },
+  {
+    "id": "stunned",
+    "table": "human",
+    "roll": "12",
+    "name": "Stunned",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [],
+    "healTime": null,
+    "text": "Dazed for a moment; no lasting effect."
+  },
+  {
+    "id": "crippling-pain",
+    "table": "human",
+    "roll": "13",
+    "name": "Crippling Pain",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress.",
+        "value": 1
+      }
+    ],
+    "healTime": null,
+    "text": "Pain spikes your Stress Level by one."
+  },
+  {
+    "id": "sprained-ankle",
+    "table": "human",
+    "roll": "14",
+    "name": "Sprained Ankle",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:mobility",
+        "text": "MOBILITY -2.",
+        "value": -2
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot run."
+      }
+    ],
+    "healTime": null,
+    "text": "MOBILITY -2 and no running until someone makes a MEDICAL AID roll."
+  },
+  {
+    "id": "blood-in-eyes",
+    "table": "human",
+    "roll": "15",
+    "name": "Blood in Eyes",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:observation",
+        "text": "OBSERVATION -2.",
+        "value": -2
+      },
+      {
+        "kind": "debuff",
+        "target": "skill:rangedCombat",
+        "text": "RANGED COMBAT -2.",
+        "value": -2
+      }
+    ],
+    "healTime": null,
+    "text": "OBSERVATION and RANGED COMBAT -2 until a MEDICAL AID roll is made."
+  },
+  {
+    "id": "concussion",
+    "table": "human",
+    "roll": "16",
+    "name": "Concussion",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:mobility",
+        "text": "MOBILITY -2.",
+        "value": -2
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "MOBILITY -2 while healing."
+  },
+  {
+    "id": "severed-ear",
+    "table": "human",
+    "roll": "21",
+    "name": "Severed Ear",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:observation",
+        "text": "OBSERVATION -2.",
+        "value": -2
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "OBSERVATION -2 while healing."
+  },
+  {
+    "id": "broken-toes",
+    "table": "human",
+    "roll": "22",
+    "name": "Broken Toes",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Running becomes a slow action."
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "Running is a slow action while healing."
+  },
+  {
+    "id": "broken-hand",
+    "table": "human",
+    "roll": "23",
+    "name": "Broken Hand",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot use the hand."
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "One hand is useless while healing."
+  },
+  {
+    "id": "knocked-out-teeth",
+    "table": "human",
+    "roll": "24",
+    "name": "Knocked-Out Teeth",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:manipulation",
+        "text": "MANIPULATION -2.",
+        "value": -2
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "MANIPULATION -2 while healing."
+  },
+  {
+    "id": "impaled-thigh",
+    "table": "human",
+    "roll": "25",
+    "name": "Impaled Thigh",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Running becomes a slow action."
+      }
+    ],
+    "healTime": "2D6 days",
+    "text": "Running is a slow action while healing."
+  },
+  {
+    "id": "slashed-shoulder",
+    "table": "human",
+    "roll": "26",
+    "name": "Slashed Shoulder",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot use the arm."
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "One arm is useless while healing."
+  },
+  {
+    "id": "broken-nose",
+    "table": "human",
+    "roll": "31",
+    "name": "Broken Nose",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:manipulation",
+        "text": "MANIPULATION -1.",
+        "value": -1
+      },
+      {
+        "kind": "debuff",
+        "target": "skill:observation",
+        "text": "OBSERVATION -1.",
+        "value": -1
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "MANIPULATION and OBSERVATION -1 while healing."
+  },
+  {
+    "id": "crotch-hit",
+    "table": "human",
+    "roll": "32",
+    "name": "Crotch Hit",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "1 damage on every MOBILITY or CLOSE COMBAT roll.",
+        "value": -1
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "Every MOBILITY or CLOSE COMBAT roll costs 1 Health while healing."
+  },
+  {
+    "id": "broken-ribs",
+    "table": "human",
+    "roll": "33",
+    "name": "Broken Ribs",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:mobility",
+        "text": "MOBILITY -2.",
+        "value": -2
+      },
+      {
+        "kind": "debuff",
+        "target": "skill:closeCombat",
+        "text": "CLOSE COMBAT -2.",
+        "value": -2
+      }
+    ],
+    "healTime": "2D6 days",
+    "text": "MOBILITY and CLOSE COMBAT -2 while healing."
+  },
+  {
+    "id": "gouged-eye",
+    "table": "human",
+    "roll": "34",
+    "name": "Gouged Eye",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:rangedCombat",
+        "text": "RANGED COMBAT -2.",
+        "value": -2
+      },
+      {
+        "kind": "debuff",
+        "target": "skill:observation",
+        "text": "OBSERVATION -2.",
+        "value": -2
+      }
+    ],
+    "healTime": "2D6 days",
+    "text": "RANGED COMBAT and OBSERVATION -2 while healing."
+  },
+  {
+    "id": "busted-kneecap",
+    "table": "human",
+    "roll": "35",
+    "name": "Busted Kneecap",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot run, only crawl."
+      }
+    ],
+    "healTime": "2D6 days",
+    "text": "No running, only crawling, while healing."
+  },
+  {
+    "id": "broken-arm",
+    "table": "human",
+    "roll": "36",
+    "name": "Broken Arm",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot use the arm."
+      }
+    ],
+    "healTime": "2D6 days",
+    "text": "One arm is useless while healing."
+  },
+  {
+    "id": "broken-leg",
+    "table": "human",
+    "roll": "41",
+    "name": "Broken Leg",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot run, only crawl."
+      }
+    ],
+    "healTime": "2D6 days",
+    "text": "No running, only crawling, while healing."
+  },
+  {
+    "id": "crushed-foot",
+    "table": "human",
+    "roll": "42",
+    "name": "Crushed Foot",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot run, only crawl."
+      }
+    ],
+    "healTime": "3D6 days",
+    "text": "No running, only crawling, while healing."
+  },
+  {
+    "id": "crushed-elbow",
+    "table": "human",
+    "roll": "43",
+    "name": "Crushed Elbow",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot use the arm."
+      }
+    ],
+    "healTime": "3D6 days",
+    "text": "One arm is useless while healing."
+  },
+  {
+    "id": "punctured-lung",
+    "table": "human",
+    "roll": "44",
+    "name": "Punctured Lung",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:stamina",
+        "text": "STAMINA -2.",
+        "value": -2
+      },
+      {
+        "kind": "debuff",
+        "target": "skill:mobility",
+        "text": "MOBILITY -2.",
+        "value": -2
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "Fatal: Death Roll after one Day unless treated. STAMINA and MOBILITY -2.",
+    "timeLimit": "One Day"
+  },
+  {
+    "id": "bleeding-gut",
+    "table": "human",
+    "roll": "45",
+    "name": "Bleeding Gut",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "health",
+        "text": "1 damage on every MOBILITY or CLOSE COMBAT roll.",
+        "value": -1
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "Fatal: Death Roll after one Shift unless treated. Every MOBILITY or CLOSE COMBAT roll costs 1 Health.",
+    "timeLimit": "One Shift"
+  },
+  {
+    "id": "ruptured-intestines",
+    "table": "human",
+    "roll": "46",
+    "name": "Ruptured Intestines",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Disease with Virulence 6."
+      }
+    ],
+    "healTime": "2D6 days",
+    "text": "Fatal: Death Roll after one Shift unless treated. You also contract a disease with Virulence 6.",
+    "timeLimit": "One Shift"
+  },
+  {
+    "id": "busted-kidney",
+    "table": "human",
+    "roll": "51",
+    "name": "Busted Kidney",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot run, only crawl."
+      },
+      {
+        "kind": "debuff",
+        "target": "skill:mobility",
+        "text": "MOBILITY -2.",
+        "value": -2
+      }
+    ],
+    "healTime": "2D6 days",
+    "text": "Fatal: Death Roll after one Day unless treated. Crawl only, MOBILITY -2.",
+    "timeLimit": "One Day"
+  },
+  {
+    "id": "arm-artery-cut",
+    "table": "human",
+    "roll": "52",
+    "name": "Arm Artery Cut",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot use the arm."
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "Fatal: Death Roll after one Turn unless treated (MEDICAL AID -1). One arm useless.",
+    "timeLimit": "One Turn",
+    "medicalAidModifier": -1
+  },
+  {
+    "id": "leg-artery-cut",
+    "table": "human",
+    "roll": "53",
+    "name": "Leg Artery Cut",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Running becomes a slow action."
+      }
+    ],
+    "healTime": "D6 days",
+    "text": "Fatal: Death Roll after one Turn unless treated (MEDICAL AID -1). Running is a slow action.",
+    "timeLimit": "One Turn",
+    "medicalAidModifier": -1
+  },
+  {
+    "id": "severed-arm",
+    "table": "human",
+    "roll": "54",
+    "name": "Severed Arm",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot use the arm."
+      }
+    ],
+    "healTime": "Permanent",
+    "text": "Fatal: Death Roll after one Shift unless treated (MEDICAL AID -1). The arm is gone for good.",
+    "timeLimit": "One Shift",
+    "medicalAidModifier": -1
+  },
+  {
+    "id": "severed-leg",
+    "table": "human",
+    "roll": "55",
+    "name": "Severed Leg",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot run, only crawl."
+      }
+    ],
+    "healTime": "Permanent",
+    "text": "Fatal: Death Roll after one Shift unless treated (MEDICAL AID -1). Crawl only, permanently.",
+    "timeLimit": "One Shift",
+    "medicalAidModifier": -1
+  },
+  {
+    "id": "cracked-spine",
+    "table": "human",
+    "roll": "56",
+    "name": "Cracked Spine",
+    "source": "CRB",
+    "page": 100,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Paralyzed from the neck down."
+      }
+    ],
+    "healTime": "3D6 days",
+    "text": "Not fatal, but you are paralyzed from the neck down; without timely MEDICAL AID it becomes permanent."
+  },
+  {
+    "id": "ruptured-jugular",
+    "table": "human",
+    "roll": "61",
+    "name": "Ruptured Jugular",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:stamina",
+        "text": "STAMINA -1.",
+        "value": -1
+      }
+    ],
+    "healTime": "2D6 days",
+    "text": "Fatal: Death Roll after one Round unless treated (MEDICAL AID -1). STAMINA -1.",
+    "timeLimit": "One Round",
+    "medicalAidModifier": -1
+  },
+  {
+    "id": "ruptured-aorta",
+    "table": "human",
+    "roll": "62",
+    "name": "Ruptured Aorta",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "skill:stamina",
+        "text": "STAMINA -2.",
+        "value": -2
+      }
+    ],
+    "healTime": "3D6 days",
+    "text": "Fatal: Death Roll after one Round unless treated (MEDICAL AID -2). STAMINA -2.",
+    "timeLimit": "One Round",
+    "medicalAidModifier": -2
+  },
+  {
+    "id": "disemboweled",
+    "table": "human",
+    "roll": "63",
+    "name": "Disemboweled",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Instant death."
+      }
+    ],
+    "healTime": null,
+    "text": "Instant death, no Death Roll."
+  },
+  {
+    "id": "crushed-skull",
+    "table": "human",
+    "roll": "64",
+    "name": "Crushed Skull",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Instant death."
+      }
+    ],
+    "healTime": null,
+    "text": "Instant death, no Death Roll."
+  },
+  {
+    "id": "pierced-head",
+    "table": "human",
+    "roll": "65",
+    "name": "Pierced Head",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Instant death."
+      }
+    ],
+    "healTime": null,
+    "text": "Instant death, no Death Roll."
+  },
+  {
+    "id": "impaled-heart",
+    "table": "human",
+    "roll": "66",
+    "name": "Impaled Heart",
+    "source": "CRB",
+    "page": 100,
+    "fatal": true,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Instant death."
+      }
+    ],
+    "healTime": null,
+    "text": "Instant death, no Death Roll."
+  },
+  {
+    "id": "synth-ruptured-fluid-pump",
+    "table": "synthetic",
+    "roll": "1",
+    "name": "Ruptured Fluid Pump",
+    "source": "CRB",
+    "page": 111,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Loses its next slow action."
+      }
+    ],
+    "healTime": "Repair",
+    "text": "The android loses its next slow action."
+  },
+  {
+    "id": "synth-destroyed-leg-servos",
+    "table": "synthetic",
+    "roll": "2",
+    "name": "Destroyed Leg Servos",
+    "source": "CRB",
+    "page": 111,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot run, only crawl."
+      }
+    ],
+    "healTime": "Repair",
+    "text": "Both legs fail: prone, can only crawl."
+  },
+  {
+    "id": "synth-destroyed-arm-servos",
+    "table": "synthetic",
+    "roll": "3",
+    "name": "Destroyed Arm Servos",
+    "source": "CRB",
+    "page": 111,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot use the arm."
+      }
+    ],
+    "healTime": "Repair",
+    "text": "One arm fails: one-handed gear only."
+  },
+  {
+    "id": "synth-head-dislocation",
+    "table": "synthetic",
+    "roll": "4",
+    "name": "Head Dislocation",
+    "source": "CRB",
+    "page": 111,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "All fast actions become slow actions."
+      }
+    ],
+    "healTime": "Repair",
+    "text": "Neck fractured, head twisted: every fast action becomes a slow one."
+  },
+  {
+    "id": "synth-severe-chassis-breach",
+    "table": "synthetic",
+    "roll": "5",
+    "name": "Severe Chassis Breach",
+    "source": "CRB",
+    "page": 111,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Completely immobilized."
+      }
+    ],
+    "healTime": "Repair",
+    "text": "Internals spill out; the android cannot move at all."
+  },
+  {
+    "id": "synth-system-shutdown",
+    "table": "synthetic",
+    "roll": "6",
+    "name": "System Shutdown",
+    "source": "CRB",
+    "page": 111,
+    "fatal": "shutdown",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Destroyed; COMTECH needed even to communicate."
+      }
+    ],
+    "healTime": "Reactivation",
+    "text": "Torn apart or crushed. Reviving it to talk needs power, a Turn and a COMTECH roll; it can then be repaired but gains a permanent mental trauma."
+  },
+  {
+    "id": "xeno-rise-again",
+    "table": "xenomorph",
+    "roll": "1",
+    "name": "Rise Again",
+    "source": "CRB",
+    "page": 291,
+    "fatal": false,
+    "effects": [],
+    "healTime": null,
+    "text": "Falls as if dead; if attacked again or on its next initiative it regains 1 Health and gets up."
+  },
+  {
+    "id": "xeno-wounded",
+    "table": "xenomorph",
+    "roll": "2",
+    "name": "Wounded",
+    "source": "CRB",
+    "page": 291,
+    "fatal": false,
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Speed -1 (min 1)."
+      }
+    ],
+    "healTime": null,
+    "text": "Staggers, bleeding: Speed -1 (min 1) but regains 1 Health. Each Round on a D6 roll of 1-3 it tries to flee."
+  },
+  {
+    "id": "xeno-desperate-action",
+    "table": "xenomorph",
+    "roll": "3",
+    "name": "Desperate Action",
+    "source": "CRB",
+    "page": 291,
+    "fatal": false,
+    "effects": [],
+    "healTime": null,
+    "text": "Gets an immediate extra fast and slow action. D6 1-3: tries to escape (regains half Health if it does); 4-6: attacks the closest foe; if that deals no damage it dies, otherwise it regains 1 Health."
+  },
+  {
+    "id": "xeno-last-breath",
+    "table": "xenomorph",
+    "roll": "4",
+    "name": "Last Breath",
+    "source": "CRB",
+    "page": 291,
+    "fatal": "timed",
+    "effects": [],
+    "healTime": null,
+    "text": "Mortally wounded: on its next initiative it tries to kill the nearest victim, then dies. Any further wound kills it instantly.",
+    "timeLimit": "Next initiative"
+  },
+  {
+    "id": "xeno-torn-apart",
+    "table": "xenomorph",
+    "roll": "5-6",
+    "name": "Torn Apart",
+    "source": "CRB",
+    "page": 291,
+    "fatal": true,
+    "effects": [],
+    "healTime": null,
+    "text": "Dies instantly; the remains are so mangled that Analysis gets OBSERVATION -2."
+  }
+]

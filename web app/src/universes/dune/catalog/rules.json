@@ -1,0 +1,316 @@
+[
+  {
+    "id": "creation-steps",
+    "source": "custom",
+    "text": "Creation order: archetype, drives, drive statements, skills, focus, talent, gear, name, appearance, personal agenda.",
+    "value": [
+      "career",
+      "attributes",
+      "drive-statements",
+      "skills",
+      "focus",
+      "talent",
+      "gear",
+      "name",
+      "appearance",
+      "agenda"
+    ],
+    "notes": ""
+  },
+  {
+    "id": "attribute-points",
+    "source": "custom",
+    "text": "Distribute 30 points among the five drives: DUTY, FAITH, JUSTICE, POWER, TRUTH.",
+    "value": 30,
+    "notes": ""
+  },
+  {
+    "id": "attribute-min",
+    "source": "custom",
+    "text": "No drive may start below 4.",
+    "value": 4,
+    "notes": ""
+  },
+  {
+    "id": "attribute-max",
+    "source": "custom",
+    "text": "No drive may start above 8.",
+    "value": 8,
+    "notes": ""
+  },
+  {
+    "id": "key-attribute-max",
+    "source": "custom",
+    "text": "Your archetype’s key drive is a suggestion; it follows the same cap of 8.",
+    "value": 8,
+    "notes": ""
+  },
+  {
+    "id": "drive-statements",
+    "source": "custom",
+    "text": "Write a one-line statement for every drive rated 6 or more. A test may only use a drive whose statement fits the action.",
+    "value": 6,
+    "notes": ""
+  },
+  {
+    "id": "skill-points",
+    "source": "custom",
+    "text": "Distribute 26 points among the five skills: BATTLE, COMMUNICATE, DISCIPLINE, MOVE, UNDERSTAND.",
+    "value": 26,
+    "notes": ""
+  },
+  {
+    "id": "skill-min",
+    "source": "custom",
+    "text": "No skill may start below 4.",
+    "value": 4,
+    "notes": ""
+  },
+  {
+    "id": "key-skill-max",
+    "source": "custom",
+    "text": "Key skills may start at up to 8.",
+    "value": 8,
+    "notes": ""
+  },
+  {
+    "id": "other-skill-max",
+    "source": "custom",
+    "text": "Other skills may also start at up to 8; most characters keep them at 4–6.",
+    "value": 8,
+    "notes": ""
+  },
+  {
+    "id": "starting-focus",
+    "source": "custom",
+    "text": "Pick two focuses (a narrow specialty such as \"Poisons\" or \"Short blades\"). A focused test scores two successes on any die up to the skill rating.",
+    "value": 2,
+    "notes": ""
+  },
+  {
+    "id": "starting-talents",
+    "source": "custom",
+    "text": "Pick one talent from your archetype, or one general talent.",
+    "value": 1,
+    "notes": ""
+  },
+  {
+    "id": "starting-gear",
+    "source": "custom",
+    "text": "Take the archetype’s fixed items and one item from each choice line. Add one personal item of Quality 0–1.",
+    "value": null,
+    "notes": ""
+  },
+  {
+    "id": "stress-max",
+    "source": "custom",
+    "text": "A character can take 8 Stress. At 8 they are taken out and roll on the consequence table.",
+    "value": 8,
+    "notes": ""
+  },
+  {
+    "id": "stress-recovery",
+    "source": "custom",
+    "text": "Remove all Stress after a scene of rest; a Suk doctor or Field Surgery removes 2 at once.",
+    "value": null,
+    "notes": ""
+  },
+  {
+    "id": "test-target",
+    "source": "custom",
+    "text": "Target number = drive + skill.",
+    "value": "drive + skill",
+    "notes": ""
+  },
+  {
+    "id": "test-dice",
+    "source": "custom",
+    "text": "Roll 2d20. Buy up to three more d20 with Momentum (1, 2, then 3) or by giving the Narrator Threat. Maximum 5d20.",
+    "value": {
+      "base": 2,
+      "max": 5
+    },
+    "notes": ""
+  },
+  {
+    "id": "difficulty-ladder",
+    "source": "custom",
+    "text": "Difficulty 0 Simple, 1 Average, 2 Challenging, 3 Daunting, 4 Dire, 5 Epic.",
+    "value": [
+      "Simple",
+      "Average",
+      "Challenging",
+      "Daunting",
+      "Dire",
+      "Epic"
+    ],
+    "notes": ""
+  },
+  {
+    "id": "critical-range",
+    "source": "custom",
+    "text": "A natural 1 is two successes. With an applicable focus, any die up to the skill rating is two successes.",
+    "value": 1,
+    "notes": ""
+  },
+  {
+    "id": "complication-range",
+    "source": "custom",
+    "text": "A natural 20 is a complication. Hostile conditions widen the range down to 16–20.",
+    "value": 1,
+    "notes": ""
+  },
+  {
+    "id": "momentum-cap",
+    "source": "custom",
+    "text": "The players share a Momentum pool capped at 6. Unspent Momentum drops by 1 at the end of each scene.",
+    "value": 6,
+    "notes": ""
+  },
+  {
+    "id": "momentum-spends",
+    "source": "custom",
+    "text": "Spend Momentum to buy d20s (1/2/3), Obtain Information (1), Create a Trait (2), inflict extra Stress (1 each), or Keep the Initiative (2).",
+    "value": [
+      {
+        "name": "Buy d20",
+        "cost": "1/2/3"
+      },
+      {
+        "name": "Obtain Information",
+        "cost": 1
+      },
+      {
+        "name": "Create Trait",
+        "cost": 2
+      },
+      {
+        "name": "Extra Stress",
+        "cost": 1
+      },
+      {
+        "name": "Keep the Initiative",
+        "cost": 2
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "threat-start",
+    "source": "custom",
+    "text": "The Narrator starts each session with 2 Threat per player.",
+    "value": 2,
+    "notes": ""
+  },
+  {
+    "id": "threat-gain",
+    "source": "custom",
+    "text": "Threat grows when players buy dice with it, when a complication is converted (2 Threat), and when the characters act openly against a powerful faction.",
+    "value": null,
+    "notes": ""
+  },
+  {
+    "id": "threat-spends",
+    "source": "custom",
+    "text": "The Narrator spends Threat on NPC dice (1/2/3), +1 Difficulty (2), complications or environment effects (2), changing a trait (2), reinforcements (each creature lists its cost), and rival House actions (1).",
+    "value": [
+      {
+        "name": "NPC d20",
+        "cost": "1/2/3"
+      },
+      {
+        "name": "Raise Difficulty",
+        "cost": 2
+      },
+      {
+        "name": "Complication",
+        "cost": 2
+      },
+      {
+        "name": "Change Trait",
+        "cost": 2
+      },
+      {
+        "name": "Reinforcements",
+        "cost": "creature.stats.threat"
+      },
+      {
+        "name": "Rival House Action",
+        "cost": 1
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "keep-the-initiative",
+    "source": "custom",
+    "text": "In a conflict the acting side passes the turn to the other side, or pays 2 Momentum (players) / 2 Threat (Narrator) to act again at +1 Difficulty.",
+    "value": 2,
+    "notes": ""
+  },
+  {
+    "id": "asset-quality",
+    "source": "custom",
+    "text": "Assets (weapons, gear, contacts, secrets) have Quality 0–4. An asset of Quality 3+ grants one free bonus d20 when it is decisive (weapons: stats.bonus).",
+    "value": {
+      "min": 0,
+      "max": 4,
+      "bonusAt": 3
+    },
+    "notes": ""
+  },
+  {
+    "id": "shields",
+    "source": "custom",
+    "text": "Shields stop fast attacks. A blade attacker spends 1 Momentum for a slow strike to pass a shield. A lasgun hitting a shield causes a pseudo-atomic blast.",
+    "value": null,
+    "notes": ""
+  },
+  {
+    "id": "conflict-types",
+    "source": "custom",
+    "text": "Conflicts are duels, skirmishes, warfare, espionage or intrigue. Each is divided into zones; in intrigue every zone is adjacent.",
+    "value": [
+      {
+        "id": "duel",
+        "name": "Duel",
+        "text": "Two combatants in one zone; shields make the slow strike the only way through."
+      },
+      {
+        "id": "skirmish",
+        "name": "Skirmish",
+        "text": "Small groups across several zones; movement, cover and assets matter."
+      },
+      {
+        "id": "warfare",
+        "name": "Warfare",
+        "text": "Armies are assets; characters lead, scout or strike key targets."
+      },
+      {
+        "id": "espionage",
+        "name": "Espionage",
+        "text": "Infiltration and counter-intelligence; exposure is tracked as a clock."
+      },
+      {
+        "id": "intrigue",
+        "name": "Intrigue",
+        "text": "Words as weapons; all zones are adjacent; secrets and leverage are assets."
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "consequences",
+    "source": "custom",
+    "text": "When taken out, roll 1d20 on the consequence table (injuries.json). Consequences replace hit-point injuries: wounds, poison, dehydration, exposure and disgrace.",
+    "value": "1d20",
+    "notes": ""
+  },
+  {
+    "id": "encumbrance",
+    "source": "custom",
+    "text": "Dune does not track encumbrance by weight. Weight is shown for flavor; the Narrator vetoes absurd loads.",
+    "value": null,
+    "notes": ""
+  }
+]

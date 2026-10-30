@@ -1,0 +1,834 @@
+[
+  {
+    "id": "fremkit",
+    "name": "Fremkit",
+    "source": "custom",
+    "category": "survival",
+    "quality": 2,
+    "weight": 1,
+    "cost": 300,
+    "tags": [
+      "desert"
+    ],
+    "notes": "A desert survival pack: stilltent, sandsnork, paracompass, repair patches, cord and a few tools.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Counts as the right tool for most desert survival tests"
+      }
+    ],
+    "art": "/art/dune/gear/fremkit.webp"
+  },
+  {
+    "id": "paracompass",
+    "name": "Paracompass",
+    "source": "custom",
+    "category": "survival",
+    "quality": 1,
+    "weight": 0,
+    "cost": 120,
+    "tags": [
+      "navigation"
+    ],
+    "notes": "A magnetic compass adjusted for Arrakis’ local anomalies.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:move",
+        "text": "-1 Difficulty to navigate the open desert",
+        "value": -1
+      }
+    ],
+    "art": "/art/dune/gear/paracompass.webp"
+  },
+  {
+    "id": "thumper",
+    "name": "Thumper",
+    "source": "custom",
+    "category": "survival",
+    "quality": 2,
+    "weight": 1,
+    "cost": 150,
+    "tags": [
+      "worm",
+      "lure"
+    ],
+    "notes": "A spring-wound stake that drums the sand to call a worm — or draw one away from you.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Draw a worm to a chosen point within a few minutes"
+      }
+    ],
+    "art": "/art/dune/gear/thumper.webp"
+  },
+  {
+    "id": "sandsnork",
+    "name": "Sandsnork",
+    "source": "custom",
+    "category": "survival",
+    "quality": 1,
+    "weight": 0,
+    "cost": 50,
+    "tags": [
+      "breathing"
+    ],
+    "notes": "A breathing tube that lets you survive being buried under a sandslide or a storm.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Survive burial in sand for hours"
+      }
+    ],
+    "art": "/art/dune/gear/sandsnork.webp"
+  },
+  {
+    "id": "stilltent",
+    "name": "Stilltent",
+    "source": "custom",
+    "category": "survival",
+    "quality": 2,
+    "weight": 1,
+    "cost": 400,
+    "tags": [
+      "shelter",
+      "water-recycling"
+    ],
+    "notes": "A sealed shelter that recovers the moisture of those sleeping inside.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Rest in the open desert without losing water"
+      }
+    ],
+    "art": "/art/dune/gear/stilltent.webp"
+  },
+  {
+    "id": "literjon",
+    "name": "Literjon",
+    "source": "custom",
+    "category": "survival",
+    "quality": 0,
+    "weight": 0.5,
+    "cost": 30,
+    "tags": [
+      "water"
+    ],
+    "notes": "A sealed one-litre water container. Its contents are worth more than most weapons.",
+    "effects": [],
+    "art": "/art/dune/gear/literjon.webp"
+  },
+  {
+    "id": "dew-collector",
+    "name": "Dew Collector",
+    "source": "custom",
+    "category": "survival",
+    "quality": 1,
+    "weight": 0.5,
+    "cost": 200,
+    "tags": [
+      "water"
+    ],
+    "notes": "A curved condensing surface that gathers a little morning dew.",
+    "effects": [],
+    "art": "/art/dune/gear/dew-collector.webp"
+  },
+  {
+    "id": "sandmask",
+    "name": "Sand Mask",
+    "source": "custom",
+    "category": "survival",
+    "quality": 1,
+    "weight": 0,
+    "cost": 40,
+    "tags": [
+      "breathing"
+    ],
+    "notes": "Cloth mask and goggles against grit and glare.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Ignore the first exposure complication in a storm"
+      }
+    ],
+    "art": "/art/dune/gear/sandmask.webp"
+  },
+  {
+    "id": "maker-hooks",
+    "name": "Maker Hooks",
+    "source": "custom",
+    "category": "survival",
+    "quality": 3,
+    "weight": 1,
+    "cost": 0,
+    "tags": [
+      "worm",
+      "fremen"
+    ],
+    "notes": "Long hooked poles used to open a worm’s ring segments and steer it.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Allows sandrider tests (MOVE + FAITH, Difficulty 3)"
+      }
+    ],
+    "art": "/art/dune/gear/maker-hooks.webp"
+  },
+  {
+    "id": "stillsuit-repair",
+    "name": "Stillsuit Repair Kit",
+    "source": "custom",
+    "category": "survival",
+    "quality": 1,
+    "weight": 0,
+    "cost": 60,
+    "tags": [
+      "repair"
+    ],
+    "notes": "Patches, seal glue and spare tubes.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Restore a damaged stillsuit in one scene"
+      }
+    ],
+    "art": "/art/dune/gear/stillsuit-repair.webp"
+  },
+  {
+    "id": "krimskell-rope",
+    "name": "Krimskell Fiber Rope",
+    "source": "custom",
+    "category": "survival",
+    "quality": 2,
+    "weight": 0.5,
+    "cost": 90,
+    "tags": [
+      "climbing"
+    ],
+    "notes": "Hooked fiber that tightens under strain. Prized by climbers and kidnappers.",
+    "effects": [],
+    "art": "/art/dune/gear/krimskell-rope.webp"
+  },
+  {
+    "id": "oil-lens-binoculars",
+    "name": "Oil-Lens Binoculars",
+    "source": "custom",
+    "category": "survival",
+    "quality": 2,
+    "weight": 0.5,
+    "cost": 250,
+    "tags": [
+      "observation"
+    ],
+    "notes": "Variable-focus lenses for spotting worm sign and patrols from far away.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:understand",
+        "text": "-1 Difficulty to spot at long range",
+        "value": -1
+      }
+    ],
+    "art": "/art/dune/gear/oil-lens-binoculars.webp"
+  },
+  {
+    "id": "glowglobe",
+    "name": "Glowglobe",
+    "source": "custom",
+    "category": "survival",
+    "quality": 0,
+    "weight": 0,
+    "cost": 20,
+    "tags": [
+      "light"
+    ],
+    "notes": "A floating suspensor lamp that follows its owner.",
+    "effects": [],
+    "art": "/art/dune/gear/glowglobe.webp"
+  },
+  {
+    "id": "poison-snooper",
+    "name": "Poison Snooper",
+    "source": "custom",
+    "category": "espionage",
+    "quality": 2,
+    "weight": 0.5,
+    "cost": 700,
+    "tags": [
+      "detection"
+    ],
+    "notes": "A scanner that reveals most poisons in food or drink.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Detect common poisons automatically; rare ones need UNDERSTAND (D2)"
+      }
+    ],
+    "art": "/art/dune/gear/poison-snooper.webp"
+  },
+  {
+    "id": "cone-of-silence",
+    "name": "Cone of Silence",
+    "source": "custom",
+    "category": "espionage",
+    "quality": 3,
+    "weight": 0.5,
+    "cost": 1500,
+    "tags": [
+      "privacy"
+    ],
+    "notes": "A field projector that muffles speech so only those inside can hear.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Conversations inside cannot be overheard by ordinary means"
+      }
+    ],
+    "art": "/art/dune/gear/cone-of-silence.webp"
+  },
+  {
+    "id": "distrans",
+    "name": "Distrans",
+    "source": "custom",
+    "category": "espionage",
+    "quality": 2,
+    "weight": 0,
+    "cost": 400,
+    "tags": [
+      "messaging"
+    ],
+    "notes": "A device that imprints a message onto a bat or bird’s cries for later playback.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Send a message across the desert without radio"
+      }
+    ],
+    "art": "/art/dune/gear/distrans.webp"
+  },
+  {
+    "id": "forged-papers",
+    "name": "Forged Travel Papers",
+    "source": "custom",
+    "category": "espionage",
+    "quality": 1,
+    "weight": 0,
+    "cost": 300,
+    "tags": [
+      "identity"
+    ],
+    "notes": "Seals and passes good enough for a bored guard. Not for a Guild scrutineer.",
+    "effects": [],
+    "art": "/art/dune/gear/forged-papers.webp"
+  },
+  {
+    "id": "ledger-crystal",
+    "name": "Ledger Crystal",
+    "source": "custom",
+    "category": "espionage",
+    "quality": 1,
+    "weight": 0,
+    "cost": 100,
+    "tags": [
+      "data"
+    ],
+    "notes": "A data crystal holding accounts, letters or evidence.",
+    "effects": [],
+    "art": "/art/dune/gear/ledger-crystal.webp"
+  },
+  {
+    "id": "filmbook",
+    "name": "Filmbook",
+    "source": "custom",
+    "category": "espionage",
+    "quality": 1,
+    "weight": 0,
+    "cost": 150,
+    "tags": [
+      "data",
+      "education"
+    ],
+    "notes": "A coin-sized reader that projects texts and lessons. Some carry hidden training.",
+    "effects": [],
+    "art": "/art/dune/gear/filmbook.webp"
+  },
+  {
+    "id": "solido-projector",
+    "name": "Solido Projector",
+    "source": "custom",
+    "category": "espionage",
+    "quality": 2,
+    "weight": 1,
+    "cost": 1200,
+    "tags": [
+      "holographic",
+      "communication"
+    ],
+    "notes": "Projects a three-dimensional image of a person or message.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Show a convincing recorded likeness"
+      }
+    ],
+    "art": "/art/dune/gear/solido-projector.webp"
+  },
+  {
+    "id": "radio-comm",
+    "name": "Field Radio",
+    "source": "custom",
+    "category": "espionage",
+    "quality": 1,
+    "weight": 0.5,
+    "cost": 200,
+    "tags": [
+      "communication"
+    ],
+    "notes": "A sand-sealed transceiver. Storms cut it off; enemies can listen.",
+    "effects": [],
+    "art": "/art/dune/gear/radio-comm.webp"
+  },
+  {
+    "id": "ixian-probe",
+    "name": "Ixian Probe",
+    "source": "custom",
+    "category": "espionage",
+    "quality": 4,
+    "weight": 2,
+    "cost": 10000,
+    "tags": [
+      "interrogation",
+      "forbidden"
+    ],
+    "notes": "A machine that reads a subject’s memory, alive or recently dead.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Using it is a crime in most courts; anyone probed suffers 4 Stress"
+      }
+    ],
+    "art": "/art/dune/gear/ixian-probe.webp"
+  },
+  {
+    "id": "suk-medkit",
+    "name": "Suk Medical Kit",
+    "source": "custom",
+    "category": "medical",
+    "quality": 3,
+    "weight": 1,
+    "cost": 1200,
+    "tags": [
+      "healing"
+    ],
+    "notes": "Surgical tools and drugs from a Suk school.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:understand",
+        "text": "-1 Difficulty on medical UNDERSTAND tests",
+        "value": -1
+      }
+    ],
+    "art": "/art/dune/gear/suk-medkit.webp"
+  },
+  {
+    "id": "chaumurky-kit",
+    "name": "Antidote Kit",
+    "source": "custom",
+    "category": "medical",
+    "quality": 2,
+    "weight": 0.5,
+    "cost": 500,
+    "tags": [
+      "poison"
+    ],
+    "notes": "General antidotes and stimulants for the poisons of court.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Clear the poisoned condition with an UNDERSTAND test (D1)"
+      }
+    ],
+    "art": "/art/dune/gear/chaumurky-kit.webp"
+  },
+  {
+    "id": "spice-melange",
+    "name": "Spice Melange",
+    "source": "custom",
+    "category": "substance",
+    "quality": 2,
+    "weight": 0,
+    "cost": 600,
+    "tags": [
+      "spice",
+      "addictive"
+    ],
+    "notes": "The most valuable substance in the Imperium. Extends life, sharpens awareness, binds the user forever.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Once per session: +1 free d20 on a UNDERSTAND test"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Repeated use leads to spice addiction (see conditions)"
+      }
+    ],
+    "art": "/art/dune/gear/spice-melange.webp"
+  },
+  {
+    "id": "semuta",
+    "name": "Semuta",
+    "source": "custom",
+    "category": "substance",
+    "quality": 1,
+    "weight": 0,
+    "cost": 400,
+    "tags": [
+      "narcotic",
+      "addictive"
+    ],
+    "notes": "A burnt spice residue that induces a timeless ecstasy when paired with music.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "+1 Difficulty to all tests for a scene after use"
+      }
+    ],
+    "art": "/art/dune/gear/semuta.webp"
+  },
+  {
+    "id": "sapho-juice",
+    "name": "Sapho Juice",
+    "source": "custom",
+    "category": "substance",
+    "quality": 2,
+    "weight": 0,
+    "cost": 300,
+    "tags": [
+      "mentat",
+      "stimulant"
+    ],
+    "notes": "A dark red juice that amplifies a Mentat’s computations and stains the lips.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:understand",
+        "text": "Mentats: re-roll one d20 on UNDERSTAND tests for a scene"
+      }
+    ],
+    "art": "/art/dune/gear/sapho-juice.webp"
+  },
+  {
+    "id": "verite",
+    "name": "Verite",
+    "source": "custom",
+    "category": "substance",
+    "quality": 3,
+    "weight": 0,
+    "cost": 2000,
+    "tags": [
+      "truth-drug"
+    ],
+    "notes": "A drug that makes lying almost impossible for a short time.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "A dosed subject must pass DISCIPLINE (D3) to lie"
+      }
+    ],
+    "art": "/art/dune/gear/verite.webp"
+  },
+  {
+    "id": "water-of-life",
+    "name": "Water of Life",
+    "source": "custom",
+    "category": "substance",
+    "quality": 4,
+    "weight": 0.5,
+    "cost": 0,
+    "tags": [
+      "sacred",
+      "poison",
+      "fremen"
+    ],
+    "notes": "The poisonous bile of a drowned worm. Changed by a Reverend Mother, it becomes a sacrament.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Unchanged, it is a lethal poison (8 Stress)"
+      }
+    ],
+    "art": "/art/dune/gear/water-of-life.webp"
+  },
+  {
+    "id": "water-rings",
+    "name": "Water Rings",
+    "source": "custom",
+    "category": "social",
+    "quality": 1,
+    "weight": 0,
+    "cost": 0,
+    "tags": [
+      "fremen",
+      "currency"
+    ],
+    "notes": "Metal rings marking water owed to their owner. Among Fremen, a debt and a bond.",
+    "effects": [],
+    "art": "/art/dune/gear/water-rings.webp"
+  },
+  {
+    "id": "signet-ring",
+    "name": "House Signet Ring",
+    "source": "custom",
+    "category": "social",
+    "quality": 3,
+    "weight": 0,
+    "cost": 0,
+    "tags": [
+      "authority"
+    ],
+    "notes": "The seal of your House. It authenticates orders, and a stolen one starts wars.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Orders sealed with it are obeyed by House servants"
+      }
+    ],
+    "art": "/art/dune/gear/signet-ring.webp"
+  },
+  {
+    "id": "solari-purse",
+    "name": "Solari Purse",
+    "source": "custom",
+    "category": "social",
+    "quality": 1,
+    "weight": 0,
+    "cost": 500,
+    "tags": [
+      "currency"
+    ],
+    "notes": "A purse of Imperial coin for bribes, fees and food.",
+    "effects": [],
+    "art": "/art/dune/gear/solari-purse.webp"
+  },
+  {
+    "id": "house-livery",
+    "name": "House Livery",
+    "source": "custom",
+    "category": "social",
+    "quality": 1,
+    "weight": 0.5,
+    "cost": 100,
+    "tags": [
+      "identity"
+    ],
+    "notes": "Uniform and colors of your House. It opens doors — and makes you a target.",
+    "effects": [],
+    "art": "/art/dune/gear/house-livery.webp"
+  },
+  {
+    "id": "sietch-token",
+    "name": "Sietch Token",
+    "source": "custom",
+    "category": "social",
+    "quality": 2,
+    "weight": 0,
+    "cost": 0,
+    "tags": [
+      "fremen",
+      "favor"
+    ],
+    "notes": "A carved bone marker given by a sietch. Showing it to the right Fremen buys a night of shelter.",
+    "effects": [],
+    "art": "/art/dune/gear/sietch-token.webp"
+  },
+  {
+    "id": "spice-coffee",
+    "name": "Spice Coffee Service",
+    "source": "custom",
+    "category": "social",
+    "quality": 2,
+    "weight": 1,
+    "cost": 400,
+    "tags": [
+      "hospitality"
+    ],
+    "notes": "An ornate service for formal hospitality. How you serve it is a message.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:communicate",
+        "text": "+1 free d20 on the first COMMUNICATE test with a guest",
+        "value": 1
+      }
+    ],
+    "art": "/art/dune/gear/spice-coffee.webp"
+  },
+  {
+    "id": "baliset",
+    "name": "Baliset",
+    "source": "custom",
+    "category": "social",
+    "quality": 1,
+    "weight": 1,
+    "cost": 300,
+    "tags": [
+      "music"
+    ],
+    "notes": "A nine-string instrument. A good player is welcome at any campfire or court.",
+    "effects": [],
+    "art": "/art/dune/gear/baliset.webp"
+  },
+  {
+    "id": "shield-wall-map",
+    "name": "Survey Map of the Shield Wall",
+    "source": "custom",
+    "category": "social",
+    "quality": 2,
+    "weight": 0,
+    "cost": 800,
+    "tags": [
+      "navigation",
+      "secret"
+    ],
+    "notes": "An old map marking caves, water caches and passes. Several people would kill for it.",
+    "effects": [],
+    "art": "/art/dune/gear/shield-wall-map.webp"
+  },
+  {
+    "id": "ornithopter-access",
+    "name": "Ornithopter Access",
+    "source": "custom",
+    "category": "vehicle",
+    "quality": 3,
+    "weight": 0,
+    "cost": 0,
+    "tags": [
+      "vehicle",
+      "flight"
+    ],
+    "notes": "Codes and a pilot’s permission to use a House ornithopter.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Cross the desert in hours rather than days"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Storms and worm-sign force a landing"
+      }
+    ],
+    "art": "/art/dune/gear/ornithopter-access.webp"
+  },
+  {
+    "id": "sandcrawler",
+    "name": "Sandcrawler",
+    "source": "custom",
+    "category": "vehicle",
+    "quality": 2,
+    "weight": 0,
+    "cost": 0,
+    "tags": [
+      "vehicle",
+      "ground"
+    ],
+    "notes": "A tracked desert transport. Slow, loud and a magnet for worms.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Every scene in the open adds 1 Threat for worm sign"
+      }
+    ],
+    "art": "/art/dune/gear/sandcrawler.webp"
+  },
+  {
+    "id": "carryall-contract",
+    "name": "Carryall Contract",
+    "source": "custom",
+    "category": "vehicle",
+    "quality": 3,
+    "weight": 0,
+    "cost": 5000,
+    "tags": [
+      "vehicle",
+      "lift"
+    ],
+    "notes": "A standing contract for a heavy lifter to pull a crawler off the sand when a worm comes.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "A harvester can be lifted before a worm arrives (if the carryall is called in time)"
+      }
+    ],
+    "art": "/art/dune/gear/carryall-contract.webp"
+  },
+  {
+    "id": "suspensor-chair",
+    "name": "Suspensor Chair",
+    "source": "custom",
+    "category": "vehicle",
+    "quality": 2,
+    "weight": 0,
+    "cost": 1500,
+    "tags": [
+      "luxury"
+    ],
+    "notes": "A floating chair for the wealthy, the old, or the very heavy.",
+    "effects": [],
+    "art": "/art/dune/gear/suspensor-chair.webp"
+  },
+  {
+    "id": "windtrap",
+    "name": "Portable Windtrap",
+    "source": "custom",
+    "category": "tool",
+    "quality": 2,
+    "weight": 3,
+    "cost": 2500,
+    "tags": [
+      "water"
+    ],
+    "notes": "A collapsible trap that wrings moisture from the night air for a small camp.",
+    "effects": [],
+    "art": "/art/dune/gear/windtrap.webp"
+  },
+  {
+    "id": "heat-mask",
+    "name": "Filter Mask",
+    "source": "custom",
+    "category": "tool",
+    "quality": 1,
+    "weight": 0,
+    "cost": 80,
+    "tags": [
+      "breathing"
+    ],
+    "notes": "Filters out spice dust and smoke.",
+    "effects": [],
+    "art": "/art/dune/gear/heat-mask.webp"
+  }
+]

@@ -1,0 +1,94 @@
+{
+  "packVersion": 1,
+  "id": "acm-deep-shaft",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Operation Deep Shaft",
+    "tagline": "A mining operation that dug too deep. Black goo. Infected workers. No way out but down.",
+    "type": "Campaign",
+    "players": "3–5",
+    "playtime": "4–6 hours",
+    "difficulty": "Extreme",
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "MU/TH/UR 9000",
+    "to": "KILO COMPANY, 2ND PLATOON",
+    "classification": "MISSION BRIEFING — OPERATION DEEP SHAFT",
+    "text": "MISSION OBJECTIVE: Sonderdatch Mine has broadcast an SOS. The mining operation, secretly controlled by Weyland-Yutani's Deep Void division, broke through to a pressure pocket filled with black accelerant — Engineer biological material.\n\nOver a dozen workers are infected. At least three have become Anathemas. 37 miners are MIA in the tunnels below. A Blackguard team is already on site with their own agenda.\n\nYour platoon will evacuate survivors to the quarantine hospital ship. Expect Anathemas at multiple infection stages, hostile Blackguard operatives, and Children of the Two Divines cultists. The mine is unstable and flooding with black goo."
+  },
+  "acts": [
+    {
+      "title": "OPERATION",
+      "subtitle": "MISSION BRIEFING",
+      "summary": "A mining operation that dug too deep. Black goo. Infected workers. No way out but down.",
+      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "SONDERDATCH MINE — Surface Facilities",
+      "description": "Mine head, processing plant, crew facilities. Blackguard operatives on site."
+    },
+    {
+      "name": "SONDERDATCH MINE — Upper Shafts",
+      "description": "Primary mining tunnels. Equipment and rail systems."
+    },
+    {
+      "name": "SONDERDATCH MINE — Mid-Level Tunnels",
+      "description": "Secondary mining operations. Unstable. Some sections flooded."
+    },
+    {
+      "name": "SONDERDATCH MINE — Deep Excavation",
+      "description": "The breakthrough point. Black accelerant seepage. Extreme biological hazard."
+    },
+    {
+      "name": "SONDERDATCH MINE — Quarantine Hospital Ship",
+      "description": "Medical vessel on surface. Evacuation point for survivors."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "MISSION BRIEFING — OPERATION DEEP SHAFT",
+      "from": "MU/TH/UR 9000",
+      "to": "KILO COMPANY, 2ND PLATOON",
+      "priority": "PRIORITY",
+      "text": "MISSION OBJECTIVE: Sonderdatch Mine has broadcast an SOS. The mining operation, secretly controlled by Weyland-Yutani's Deep Void division, broke through to a pressure pocket filled with black accelerant — Engineer biological material.\n\nOver a dozen workers are infected. At least three have become Anathemas. 37 miners are MIA in the tunnels below. A Blackguard team is already on site with their own agenda.\n\nYour platoon will evacuate survivors to the quarantine hospital ship. Expect Anathemas at multiple infection stages, hostile Blackguard operatives, and Children of the Two Divines cultists. The mine is unstable and flooding with black goo.",
+      "when": "Start of the session, before Act I"
+    }
+  ],
+  "maps": [
+    {
+      "id": "sonderdatch-mine",
+      "title": "SONDERDATCH MINE",
+      "subtitle": "Elevation & Surface — Deep Void Operation",
+      "description": "Mining operation that broke through to an Engineer accelerant deposit. Workers infected. Anathemas active. Mine flooding with black goo.",
+      "kind": "image",
+      "src": "/maps/acm/sonderdatch-mine.webp",
+      "rooms": [
+        {
+          "name": "Surface Facilities",
+          "note": "Mine head, processing plant, crew facilities. Blackguard operatives on site."
+        },
+        {
+          "name": "Upper Shafts",
+          "note": "Primary mining tunnels. Equipment and rail systems."
+        },
+        {
+          "name": "Mid-Level Tunnels",
+          "note": "Secondary mining operations. Unstable. Some sections flooded."
+        },
+        {
+          "name": "Deep Excavation",
+          "note": "The breakthrough point. Black accelerant seepage. Extreme biological hazard."
+        },
+        {
+          "name": "Quarantine Hospital Ship",
+          "note": "Medical vessel on surface. Evacuation point for survivors."
+        }
+      ]
+    }
+  ]
+}

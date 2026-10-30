@@ -1,0 +1,194 @@
+[
+  {
+    "id": "keeping-it-together",
+    "roll": "1-6",
+    "name": "Keeping It Together",
+    "source": "CRB",
+    "page": 105,
+    "text": "You hold your nerve, just.",
+    "effects": [],
+    "panicAction": false
+  },
+  {
+    "id": "nervous-twitch",
+    "roll": "7",
+    "name": "Nervous Twitch",
+    "source": "CRB",
+    "page": 105,
+    "text": "Your Stress and every friendly PC's within SHORT range rises by one.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress to you and friendly PCs in SHORT range.",
+        "value": 1
+      }
+    ],
+    "panicAction": false
+  },
+  {
+    "id": "tremble",
+    "roll": "8",
+    "name": "Tremble",
+    "source": "CRB",
+    "page": 105,
+    "text": "Uncontrollable shaking: -2 to all AGILITY-based rolls until the panic ends.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "attr:agi",
+        "text": "-2 to AGILITY-based skill rolls until panic stops.",
+        "value": -2
+      }
+    ],
+    "panicAction": false
+  },
+  {
+    "id": "drop-item",
+    "roll": "9",
+    "name": "Drop Item",
+    "source": "CRB",
+    "page": 105,
+    "text": "You drop a weapon or other key item (GM picks) and gain +1 Stress.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Drop an important item (GM's choice)."
+      },
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress.",
+        "value": 1
+      }
+    ],
+    "panicAction": false
+  },
+  {
+    "id": "freeze",
+    "roll": "10",
+    "name": "Freeze",
+    "source": "CRB",
+    "page": 105,
+    "text": "Frozen for a Round: you lose your next slow action, and you and friendly PCs in SHORT range gain +1 Stress.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Lose next slow action."
+      },
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress to you and friendly PCs in SHORT range.",
+        "value": 1
+      }
+    ],
+    "panicAction": true
+  },
+  {
+    "id": "seek-cover",
+    "roll": "11",
+    "name": "Seek Cover",
+    "source": "CRB",
+    "page": 105,
+    "text": "Your next action must be moving to safety (retreat roll allowed if ENGAGED). You lose 1 Stress but friendly PCs in SHORT range gain 1. Normal after one Round.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Next action: move away to cover."
+      },
+      {
+        "kind": "buff",
+        "target": "stress",
+        "value": -1,
+        "text": "-1 Stress to you."
+      },
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "text": "+1 Stress to friendly PCs in SHORT range.",
+        "value": 1
+      }
+    ],
+    "panicAction": true
+  },
+  {
+    "id": "scream",
+    "roll": "12",
+    "name": "Scream",
+    "source": "CRB",
+    "page": 105,
+    "text": "You scream for a Round, losing your next slow action. You lose 1 Stress, but every friendly character who hears it must make a Panic Roll.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Lose next slow action; friendlies who hear must roll for panic."
+      },
+      {
+        "kind": "buff",
+        "target": "stress",
+        "value": -1,
+        "text": "-1 Stress to you."
+      }
+    ],
+    "panicAction": true
+  },
+  {
+    "id": "flee",
+    "roll": "13",
+    "name": "Flee",
+    "source": "CRB",
+    "page": 105,
+    "text": "You run to a safe place and refuse to leave; no attacks, nothing dangerous; no retreat roll if ENGAGED. You lose 1 Stress; every friendly character who sees you run must make a Panic Roll.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Flee and stay in safety; watchers roll for panic."
+      },
+      {
+        "kind": "buff",
+        "target": "stress",
+        "value": -1,
+        "text": "-1 Stress to you."
+      }
+    ],
+    "panicAction": true
+  },
+  {
+    "id": "berserk",
+    "roll": "14",
+    "name": "Berserk",
+    "source": "CRB",
+    "page": 105,
+    "text": "You attack the nearest person or creature, friend or foe, until you or it is Broken. Friendly witnesses must make a Panic Roll.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Must attack nearest target until someone is Broken; witnesses roll for panic."
+      }
+    ],
+    "panicAction": true
+  },
+  {
+    "id": "catatonic",
+    "roll": "15+",
+    "name": "Catatonic",
+    "source": "CRB",
+    "page": 105,
+    "text": "You collapse, unable to move or speak, staring into nothing.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot move, speak or act."
+      }
+    ],
+    "panicAction": true
+  }
+]

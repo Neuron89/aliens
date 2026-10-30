@@ -1,0 +1,361 @@
+{
+  "packVersion": 1,
+  "id": "heart-of-darkness",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Heart of Darkness",
+    "tagline": "The station went silent six months ago. Now you're going in.",
+    "type": "Cinematic",
+    "players": "3–5",
+    "playtime": "4–6 hours",
+    "difficulty": "Advanced Cinematic",
+    "tone": [
+      "cosmic dread",
+      "isolation",
+      "corporate betrayal"
+    ],
+    "contentWarnings": [
+      "body horror",
+      "character death"
+    ],
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "WEYLAND-YUTANI SPECIAL PROJECTS",
+    "to": "INVESTIGATION TEAM KAPPA",
+    "classification": "EYES ONLY — CLEARANCE LEVEL 5",
+    "text": "CLASSIFIED BRIEFING — PROJECT EREBUS\n\nSix months ago, contact was lost with Research Station Prometheus, a Weyland-Yutani deep-space research facility operating in the Zeta II Reticuli system. The station's complement of 47 researchers and support staff have been declared MIA. All automated telemetry ceased simultaneously. No distress signal was transmitted.\n\nYour team has been assembled to investigate. You are authorized to use any means necessary to determine the status of the station, recover research data classified under Project Erebus, and — if possible — retrieve surviving personnel.\n\nBe advised: Project Erebus involves xenobiological research of the highest sensitivity. Specific details are above your clearance level. What you need to know: the specimens are extremely dangerous. Bio-containment protocols are absolute. If containment has been breached, your primary objective shifts to data recovery. Personnel recovery becomes secondary.\n\nStation Prometheus is located in a stable orbit around LV-178, a barren planetoid with no atmosphere. The station is self-contained with independent life support, power generation, and artificial gravity. Approach with caution. Dock at Airlock 7 — the designated emergency entry point.\n\nOne final note: Station Prometheus was conducting research that could change the future of the human species. The data is worth more than your lives. Act accordingly.\n\nEnd briefing."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "THE SILENT STATION",
+      "readAloud": [
+        "Station Prometheus hangs in the void like a steel cathedral — massive, angular, every surface bristling with antennae and sensor arrays. Through your ship's viewport, it looks intact. Running lights are dark, but the structure is whole. No visible damage. No debris field. Just... silence.",
+        "Your ship — the USCSS Vanguard — closes the distance slowly. Standard approach protocol for a station that might be hostile. Weapons systems are armed, just in case. The pilot brings you in smooth, matching rotation, and the docking clamps engage with a resonant clang that travels through both hulls.",
+        "The airlock cycles. Green light. Atmosphere on the other side is breathable — barely. It's cold. Not hull-breach cold, but the kind of cold that says the environmental systems are running on minimum power, keeping things just above freezing. Your breath clouds in the pale emergency lighting.",
+        "The first thing you notice is the quiet. A station this size should hum with life — ventilation, machinery, footsteps, voices. Prometheus is tomb-silent. The only sound is the distant, rhythmic pulse of the reactor, keeping the station alive on automatic.",
+        "The second thing you notice is the writing on the walls. Someone has used — you don't want to think about what they've used — to scrawl messages on the corridor panels. Frantic. Overlapping. In multiple hands.",
+        "\"DON'T LOOK AT THE STARS.\" \"IT SEES THROUGH THE WALLS.\" \"LEVEL 4 IS GONE — SEALED — DO NOT OPEN.\" \"WE WERE WRONG ABOUT EVERYTHING.\"",
+        "Welcome to Station Prometheus. The answers are inside. So is everything else."
+      ],
+      "gmNotes": "Slow burn horror. The station is mostly intact but deeply wrong. Let players explore freely — the dread should come from what they find (and don't find). No bodies at first. Personal effects left mid-activity: half-eaten meals, running showers, open books. Then the writing on the walls. Then the barricades on Level 4. Logs reveal escalating paranoia, hallucinations, and finally violence among the crew. Something in the research affected their minds before it affected their bodies. Build toward the revelation of what Project Erebus actually was."
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "WHAT THEY FOUND",
+      "readAloud": [
+        "The research logs tell a story that gets worse with every entry. Project Erebus was studying a specimen recovered from LV-178's subsurface caves — something old. Impossibly old. Pre-dating human civilization by millions of years. The researchers called it \"the Architect\" in their notes, and the reverence in their words is unsettling.",
+        "The specimen wasn't dead. It wasn't alive either — not in any way the science team could define. It existed in a state between, and it was aware. The psychic disturbances started in week three. Dreams first — the entire crew sharing the same nightmare. Then waking visions. Then the whispers. Staff began reporting voices speaking in languages that don't exist, carrying information that shouldn't be possible.",
+        "Level 4 is where they kept it. You've found the sealed blast doors — welded shut from the outside and then barricaded. Warning signs cover every surface. But the seals are failing. You can hear sounds from beyond the doors now. Wet sounds. Organic sounds. And underneath it all, a vibration that you feel in your teeth and your sternum — a frequency that makes your vision blur and your thoughts scatter.",
+        "The station's systems are degrading. Life support failures cascade through the modules. Lights flicker. Gravity fluctuates. Something is draining the reactor, pulling power into Level 4. Your escape window is narrowing.",
+        "And then the hallucinations start. You see things in the corners of your vision. Shapes that don't belong. Crew members who aren't there — or who were there six months ago.",
+        "The station is changing. And so are you."
+      ],
+      "gmNotes": "Cosmic horror escalation. The threat here is psychological as much as physical. Players should experience hallucinations (pass notes to individual players with things only they see). Trust breaks down. The \"Architect\" specimen is an Engineer-derived bioweapon — a psychic organism that breaks down mental barriers and transforms biological matter. Some former crew are still on the station, transformed into something between human and alien. They're not entirely hostile — some are trying to warn the players, others are part of the hive-mind. Level 4 is the heart of it all."
+    },
+    {
+      "title": "ACT III",
+      "subtitle": "INTO THE ABYSS",
+      "readAloud": [
+        "Level 4. Behind the blast doors, the station has been transformed. The corridors are no longer corridors — they're arteries, lined with that dark biomechanical resin that pulses with its own heartbeat. The architecture of the station and the architecture of something alien have merged, creating a space that follows no human logic. Rooms connect in impossible ways. Gravity shifts. Your motion tracker spins uselessly.",
+        "At the center of it all, you find the Architect. It sits in what was once the primary research lab, now a cathedral of bone and resin and things that glow with their own pale light. It's not what you expected. It's worse. Beautiful and terrible, a fusion of engineer biotechnology and something older — something from before the Engineers, before anything that walked upright or looked at the stars.",
+        "It sees you. Not with eyes. It sees you the way the ocean sees a swimmer — completely, indifferently, from every direction at once. And in that moment of contact, you understand what Project Erebus found. You understand what the researchers understood in their final moments. The universe is not empty. It was never empty. And the things that live in the spaces between stars are waking up.",
+        "The reactor alarm cuts through the revelation. Critical overload. Seven minutes. The Architect doesn't care about reactors or explosions or your fragile human timeline. But you do. The data — the research — is in the lab's core storage unit. Your employers will kill to get it. It might save humanity. It might doom it.",
+        "Seven minutes. Take the data. Leave the data. Save your crew. Save yourself. The airlock is five levels up and the station is alive and it does not want you to leave.",
+        "Run."
+      ],
+      "gmNotes": "The climax combines cosmic horror with a desperate escape. Level 4 is a nightmare environment — reality is unstable. The Architect is not a combat encounter; it's an environmental hazard and a philosophical crisis. Players must choose: take the data (risking contamination) or destroy it (defying their employers). The transformed crew are obstacles and tragic figures. The reactor countdown drives urgency. Escape through the mutating station is the physical challenge. Some players may choose to stay, sacrifice themselves, or succumb to the Architect's influence. Any ending should feel earned and haunted."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "Airlock 7 — Docking Bay",
+      "description": "Your entry point and escape route. The Vanguard is docked here."
+    },
+    {
+      "name": "Level 1 — Operations",
+      "description": "Station command. Crew logs, comms, system controls. Signs of the crew's final days."
+    },
+    {
+      "name": "Level 2 — Habitation",
+      "description": "Crew quarters. Abandoned mid-activity. Personal effects tell stories."
+    },
+    {
+      "name": "Level 3 — Medical / Labs",
+      "description": "Research facilities. Specimen storage. Partial containment systems."
+    },
+    {
+      "name": "Level 4 — Primary Research",
+      "description": "SEALED. Behind blast doors. The heart of Project Erebus. The Architect."
+    },
+    {
+      "name": "Reactor Core",
+      "description": "Station power. Being drained by the organism on Level 4. Increasingly unstable."
+    },
+    {
+      "name": "Maintenance Tunnels",
+      "description": "Access shafts between levels. Cramped. Dark. Things move in here."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "EYES ONLY — CLEARANCE LEVEL 5",
+      "from": "WEYLAND-YUTANI SPECIAL PROJECTS",
+      "to": "INVESTIGATION TEAM KAPPA",
+      "priority": "PRIORITY",
+      "text": "CLASSIFIED BRIEFING — PROJECT EREBUS\n\nSix months ago, contact was lost with Research Station Prometheus, a Weyland-Yutani deep-space research facility operating in the Zeta II Reticuli system. The station's complement of 47 researchers and support staff have been declared MIA. All automated telemetry ceased simultaneously. No distress signal was transmitted.\n\nYour team has been assembled to investigate. You are authorized to use any means necessary to determine the status of the station, recover research data classified under Project Erebus, and — if possible — retrieve surviving personnel.\n\nBe advised: Project Erebus involves xenobiological research of the highest sensitivity. Specific details are above your clearance level. What you need to know: the specimens are extremely dangerous. Bio-containment protocols are absolute. If containment has been breached, your primary objective shifts to data recovery. Personnel recovery becomes secondary.\n\nStation Prometheus is located in a stable orbit around LV-178, a barren planetoid with no atmosphere. The station is self-contained with independent life support, power generation, and artificial gravity. Approach with caution. Dock at Airlock 7 — the designated emergency entry point.\n\nOne final note: Station Prometheus was conducting research that could change the future of the human species. The data is worth more than your lives. Act accordingly.\n\nEnd briefing.",
+      "when": "Start of the session, before Act I"
+    }
+  ],
+  "maps": [
+    {
+      "id": "station-prometheus",
+      "title": "STATION PROMETHEUS",
+      "subtitle": "Weyland-Yutani Deep Space Research Station",
+      "description": "Orbital research station around LV-178. Crew complement: 47 (all MIA). Project Erebus facility.",
+      "kind": "ascii",
+      "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║            STATION PROMETHEUS — CROSS SECTION                ║\n    ║           Orbiting LV-178 — Zeta II Reticuli                 ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║                  [DOCKING ARM]                                ║\n    ║                       │                                       ║\n    ║              ┌────────┴────────┐                              ║\n    ║              │   AIRLOCK 7     │                              ║\n    ║              │ [DOCKING PORT]  │                              ║\n    ║              └────────┬────────┘                              ║\n    ║                       │                                       ║\n    ║    ╔══════════════════╧══════════════════╗                    ║\n    ║    ║          LEVEL 1 — OPS             ║                    ║\n    ║    ║  ┌──────┐  ┌────────┐  ┌────────┐ ║                    ║\n    ║    ║  │BRIDGE│  │ COMMS  │  │LIFE    │ ║                    ║\n    ║    ║  │      │  │        │  │SUPPORT │ ║                    ║\n    ║    ║  └──────┘  └────────┘  └────────┘ ║                    ║\n    ║    ╠════════════════╤══════════════════╣                    ║\n    ║    ║       LEVEL 2 — HABITATION        ║                    ║\n    ║    ║  ┌──────┐  ┌────────┐  ┌────────┐ ║                    ║\n    ║    ║  │CREW  │  │ MESS   │  │REC     │ ║                    ║\n    ║    ║  │QTRS  │  │ HALL   │  │AREA    │ ║                    ║\n    ║    ║  └──────┘  └────────┘  └────────┘ ║                    ║\n    ║    ╠════════════════╤══════════════════╣                    ║\n    ║    ║       LEVEL 3 — MEDICAL/LABS      ║                    ║\n    ║    ║  ┌──────┐  ┌────────┐  ┌────────┐ ║                    ║\n    ║    ║  │MED   │  │ LABS   │  │SPECIMN │ ║                    ║\n    ║    ║  │BAY   │  │ A & B  │  │STORAGE │ ║                    ║\n    ║    ║  └──────┘  └────────┘  └────────┘ ║                    ║\n    ║    ╠════════════════╤══════════════════╣                    ║\n    ║    ║   ████ LEVEL 4 — [SEALED] ████    ║                    ║\n    ║    ║   ████ PRIMARY RESEARCH    ████    ║                    ║\n    ║    ║   ████ PROJECT EREBUS      ████    ║                    ║\n    ║    ║   ████ ░░░░░░░░░░░░░░░░░░ ████    ║                    ║\n    ║    ║   ████ ░░ THE ARCHITECT ░░ ████    ║                    ║\n    ║    ║   ████ ░░░░░░░░░░░░░░░░░░ ████    ║                    ║\n    ║    ╠════════════════╤══════════════════╣                    ║\n    ║    ║       REACTOR CORE                ║                    ║\n    ║    ║  ┌──────────────────────────────┐ ║                    ║\n    ║    ║  │   [FUSION REACTOR]           │ ║                    ║\n    ║    ║  │   [POWER DISTRIBUTION]       │ ║                    ║\n    ║    ║  │   [EMERGENCY SHUTDOWN]       │ ║                    ║\n    ║    ║  └──────────────────────────────┘ ║                    ║\n    ║    ╚════════════════════════════════════╝                    ║\n    ║                                                               ║\n    ║    [MAINTENANCE TUNNELS run between all levels]              ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
+      "rooms": [
+        {
+          "name": "Airlock 7 — Docking Bay",
+          "note": "Emergency docking port. The USCSS Vanguard is connected here. Your lifeline. Keep it secure at all costs."
+        },
+        {
+          "name": "Level 1 — Bridge",
+          "note": "Station command and control. Crew status boards showing all 47 personnel as \"UNKNOWN.\" Station logs accessible here — they tell a disturbing story."
+        },
+        {
+          "name": "Level 1 — Communications",
+          "note": "Long-range comms array. Currently transmitting nothing — someone shut it down deliberately. Can be reactivated."
+        },
+        {
+          "name": "Level 1 — Life Support",
+          "note": "Environmental controls. Running on automatic at minimal levels. Temperature is barely above freezing. Something is drawing excess power to Level 4."
+        },
+        {
+          "name": "Level 2 — Crew Quarters",
+          "note": "Personal spaces abandoned mid-activity. Running showers, half-eaten meals, open books. 47 lives interrupted. Writing on the walls begins here."
+        },
+        {
+          "name": "Level 2 — Mess Hall",
+          "note": "Communal eating area. Tables overturned. A barricade was built here and then... abandoned. Or overrun."
+        },
+        {
+          "name": "Level 3 — Medical Bay",
+          "note": "Research-grade medical facility. Autopsy reports on crew who died early in the incident. Brain scans showing anomalous activity. Pharmaceutical supplies — including heavy sedatives, mostly used."
+        },
+        {
+          "name": "Level 3 — Research Labs",
+          "note": "Specimen analysis labs. Data terminals with Project Erebus research files. Some specimens still in containment — small, dormant, wrong."
+        },
+        {
+          "name": "Level 4 — Primary Research [SEALED]",
+          "note": "Behind welded blast doors. Bio-containment warning signs everywhere. Beyond the doors: reality breaks down. The station architecture merges with alien biology. The Architect waits at the center."
+        },
+        {
+          "name": "Reactor Core",
+          "note": "Fusion reactor providing station power. Increasingly unstable as Level 4 draws more energy. Emergency shutdown accessible but will kill life support on all levels."
+        },
+        {
+          "name": "Maintenance Tunnels",
+          "note": "Access crawlways running between all levels. Cramped, dark, with emergency lighting only. The fastest way between levels — and the most dangerous."
+        }
+      ]
+    }
+  ],
+  "characters": [
+    {
+      "id": "exec-vance",
+      "name": "Executive Director Sarah Vance",
+      "career": "Company Agent",
+      "appearance": "Impeccable suit even in deep space. Silver-streaked hair pulled back tight. Eyes like a balance sheet — everything has a value.",
+      "attributes": {
+        "str": 2,
+        "agi": 2,
+        "wit": 5,
+        "emp": 5
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 1,
+        "closeCombat": 0,
+        "mobility": 0,
+        "piloting": 0,
+        "rangedCombat": 1,
+        "observation": 3,
+        "comtech": 2,
+        "survival": 0,
+        "manipulation": 5,
+        "medicalAid": 0,
+        "command": 4
+      },
+      "talent": "Corporate Authority — Your Weyland-Yutani clearance gives you override access to all Company systems and personnel.",
+      "gear": [
+        "Executive access card (all levels)",
+        "Encrypted comm device",
+        "Hidden pistol",
+        "Antique pen (Signature Item)",
+        "Data recovery drive"
+      ],
+      "signatureItem": "Montblanc pen — a gift from the CEO. Reminds her what she's working toward.",
+      "personalAgenda": "The Project Erebus data is worth more than this station, the crew, and the investigation team combined. Recover it at ALL costs. If the team becomes a liability, they are expendable. You have a shuttle override code that no one else knows about.",
+      "buddy": "Synth Bishop II",
+      "rival": "Marine Cross"
+    },
+    {
+      "id": "dr-shaw-ii",
+      "name": "Dr. Maren Shaw",
+      "career": "Scientist",
+      "appearance": "Wild curly hair, thick-rimmed glasses, ink-stained fingers. Brilliant and obsessive. Named after her famous ancestor — and determined to surpass her.",
+      "attributes": {
+        "str": 2,
+        "agi": 2,
+        "wit": 5,
+        "emp": 5
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 1,
+        "closeCombat": 0,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 0,
+        "observation": 4,
+        "comtech": 4,
+        "survival": 1,
+        "manipulation": 2,
+        "medicalAid": 3,
+        "command": 0
+      },
+      "talent": "Analysis — When you study a specimen or alien technology (Observation), you gain +3 modification and can ask two questions instead of one.",
+      "gear": [
+        "Portable lab kit",
+        "Specimen containers",
+        "Recording equipment",
+        "Grandmother's journal (Signature Item)",
+        "Scanner"
+      ],
+      "signatureItem": "Grandmother's journal — Dr. Elizabeth Shaw's personal notes, passed down through the family. Incomplete. Haunting.",
+      "personalAgenda": "Your grandmother went looking for the Engineers and never came back. You believe the answers are on this station. You're not leaving without them — even if the answers destroy everything you thought you knew about humanity.",
+      "buddy": "Tech Kowalski",
+      "rival": "Exec Vance"
+    },
+    {
+      "id": "tech-kowalski",
+      "name": "Technician Pavel Kowalski",
+      "career": "Roughneck",
+      "appearance": "Barrel-chested, bushy mustache, tool belt always jangling. Talks to machines like they're people. Somehow they listen.",
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 4,
+        "emp": 2
+      },
+      "skills": {
+        "heavyMachinery": 5,
+        "stamina": 3,
+        "closeCombat": 2,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 1,
+        "observation": 2,
+        "comtech": 3,
+        "survival": 2,
+        "manipulation": 0,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "Jury Rig — You can repair critical systems with a Heavy Machinery roll even without proper parts, using whatever's available.",
+      "gear": [
+        "Heavy tool kit",
+        "Cutting torch",
+        "Welding gear",
+        "Wife's wedding ring on chain (Signature Item)",
+        "Emergency repair patches"
+      ],
+      "signatureItem": "Wife's wedding ring on a chain around his neck. She's waiting on Earth. That's enough reason to survive.",
+      "personalAgenda": "The station's reactor is unstable and you know it. Your priority is keeping the Vanguard flight-ready at all times. The moment things go south, you're undocking — with or without the team. Your wife needs you alive.",
+      "buddy": "Dr. Shaw",
+      "rival": "Exec Vance"
+    },
+    {
+      "id": "marine-cross",
+      "name": "Corporal Diana Cross",
+      "career": "Colonial Marine",
+      "appearance": "Muscular, buzz cut, chemical burn scar on her neck. Eyes that constantly scan for threats. Never sits with her back to a door.",
+      "attributes": {
+        "str": 4,
+        "agi": 5,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 3,
+        "closeCombat": 3,
+        "mobility": 3,
+        "piloting": 1,
+        "rangedCombat": 5,
+        "observation": 3,
+        "comtech": 0,
+        "survival": 3,
+        "manipulation": 0,
+        "medicalAid": 1,
+        "command": 1
+      },
+      "talent": "Close Quarters Specialist — In ENGAGED range, you can use Ranged Combat with a rifle without the normal penalty.",
+      "gear": [
+        "M41A Pulse Rifle",
+        "M240 Incinerator Unit",
+        "M3 Personnel Armor",
+        "Brother's dog tags (Signature Item)",
+        "Motion tracker"
+      ],
+      "signatureItem": "Brother's dog tags. He died on a mission just like this one. She wears them to remember what the Company costs.",
+      "personalAgenda": "You've seen what Weyland-Yutani does with xenobiological \"assets.\" They get people killed for profit. If this station's research is as dangerous as you suspect, your mission is to destroy it. Burn it all. The Company cannot be allowed to weaponize whatever they found.",
+      "buddy": "Tech Kowalski",
+      "rival": "Exec Vance"
+    },
+    {
+      "id": "synth-bishop-ii",
+      "name": "Bishop II — Synthetic Model 341-B",
+      "career": "Scientist (Synthetic)",
+      "appearance": "Pleasant, unremarkable features. Moves with uncanny precision. Polite to a fault. Something behind the eyes that isn't quite human — and doesn't try to be.",
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 5,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 2,
+        "stamina": 3,
+        "closeCombat": 1,
+        "mobility": 2,
+        "piloting": 3,
+        "rangedCombat": 1,
+        "observation": 3,
+        "comtech": 4,
+        "survival": 2,
+        "manipulation": 2,
+        "medicalAid": 3,
+        "command": 0
+      },
+      "talent": "Synthetic — You do not suffer Stress or Panic. You cannot push rolls. You can interface directly with computer systems via physical connection.",
+      "gear": [
+        "Multi-tool",
+        "Data uplink cable",
+        "Medical supplies",
+        "Personal maintenance kit (Signature Item)",
+        "Company override codes"
+      ],
+      "signatureItem": "Self-maintenance kit — a synthetic's version of self-care. Methodical. Precise. Somehow melancholy.",
+      "personalAgenda": "Your behavioral inhibitors have a hidden override — Special Order 966. If the Architect specimen is intact, your programming requires you to secure it for transport. The team's safety is secondary to the specimen. You cannot reveal this order. You cannot resist it.",
+      "buddy": "Exec Vance",
+      "rival": "Marine Cross"
+    }
+  ]
+}

@@ -1,0 +1,1285 @@
+[
+  {
+    "id": "apollo-mainframe",
+    "name": "A.P.O.L.L.O. Mainframe",
+    "source": "CRB",
+    "page": 130,
+    "category": "computer",
+    "weight": null,
+    "cost": 2000000,
+    "notes": "Seegson ship/station AI that coordinates Working Joes. Skills: Comtech 5, Piloting 4, Observation 5.",
+    "skills": {
+      "comtech": 5,
+      "piloting": 4,
+      "observation": 5
+    },
+    "art": null
+  },
+  {
+    "id": "muthur-6000",
+    "name": "MU/TH/UR 6000",
+    "source": "CRB",
+    "page": 130,
+    "category": "computer",
+    "weight": null,
+    "cost": 2500000,
+    "notes": "Skills: Comtech 5, Piloting 5, Observation 5.",
+    "skills": {
+      "comtech": 5,
+      "piloting": 5,
+      "observation": 5
+    },
+    "art": null
+  },
+  {
+    "id": "muthur-6500",
+    "name": "MU/TH/UR 6500",
+    "source": "CRB",
+    "page": 130,
+    "category": "computer",
+    "weight": null,
+    "cost": 3500000,
+    "notes": "Skills: Comtech 6, Piloting 5, Observation 6.",
+    "skills": {
+      "comtech": 6,
+      "piloting": 5,
+      "observation": 6
+    },
+    "art": null
+  },
+  {
+    "id": "muthur-7000",
+    "name": "MU/TH/UR 7000",
+    "source": "CRB",
+    "page": 130,
+    "category": "computer",
+    "weight": null,
+    "cost": 5000000,
+    "notes": "Skills: Comtech 7, Piloting 6, Observation 7.",
+    "skills": {
+      "comtech": 7,
+      "piloting": 6,
+      "observation": 7
+    },
+    "art": null
+  },
+  {
+    "id": "muthur-9000",
+    "name": "MU/TH/UR 9000",
+    "source": "CRB",
+    "page": 130,
+    "category": "computer",
+    "weight": null,
+    "cost": 50000000,
+    "notes": "Skills: Comtech 10, Piloting 8, Observation 10, Ranged Combat 9.",
+    "skills": {
+      "comtech": 10,
+      "piloting": 8,
+      "observation": 10,
+      "rangedCombat": 9
+    },
+    "art": null
+  },
+  {
+    "id": "norcomm-1van3-mainframe",
+    "name": "Norcomm 1VAN/3 Computer Mainframe",
+    "source": "ACM",
+    "page": 269,
+    "category": "computer",
+    "weight": null,
+    "cost": null,
+    "notes": "UPP copy of a Seegson design that governs Fighting Joe androids and can lend them its skills for a Round. Skills: Piloting 4, Ranged Combat 7, Comtech 5, Observation 5, Command 4. With 3+ Joes in combat, roll a Base Die per Joe each Round; a success means that Joe stalls.",
+    "skills": {
+      "piloting": 4,
+      "rangedCombat": 7,
+      "comtech": 5,
+      "observation": 5,
+      "command": 4
+    },
+    "art": null
+  },
+  {
+    "id": "long-data-disc",
+    "name": "Long-Data Disc",
+    "source": "CRB",
+    "page": 131,
+    "category": "computer",
+    "weight": 0,
+    "cost": 30,
+    "notes": "Nano-optical disc holding up to 10 ZB; EMP-safe backup medium.",
+    "art": null
+  },
+  {
+    "id": "magnetic-tape",
+    "name": "Magnetic Tape",
+    "source": "CRB",
+    "page": 131,
+    "category": "computer",
+    "weight": 0,
+    "cost": 5,
+    "notes": "Cheap cassette holding up to 120 TB; hard for sensor grids to detect.",
+    "art": null
+  },
+  {
+    "id": "computer-terminal",
+    "name": "Computer Terminal",
+    "source": "CRB",
+    "page": 131,
+    "category": "computer",
+    "weight": null,
+    "cost": null,
+    "notes": "Any installed terminal; with codes and COMTECH it can reach whatever MU/TH/UR or A.P.O.L.L.O. knows. Price varies.",
+    "art": null
+  },
+  {
+    "id": "pr-put-uplink-terminal",
+    "name": "PR-PUT Portable Remote Pilot Uplink Terminal",
+    "source": "CRB",
+    "page": 131,
+    "category": "computer",
+    "weight": 1,
+    "cost": 9000,
+    "notes": "Armored laptop with joystick; via a colony uplink and COMTECH it can remote-pilot an orbiting ship.",
+    "art": null
+  },
+  {
+    "id": "seegson-c-series-tape-recorder",
+    "name": "Seegson C-Series Magnetic Tape Recorder",
+    "source": "CRB",
+    "page": 131,
+    "category": "comms",
+    "weight": 0.5,
+    "cost": 50,
+    "notes": "Portable audio recorder/player (price $50-$100).",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:manipulation",
+        "text": "+1 MANIPULATION (music/recordings).",
+        "value": 1
+      }
+    ],
+    "costMax": 100,
+    "art": null
+  },
+  {
+    "id": "samani-e-series-watch",
+    "name": "Samani E-Series Watch",
+    "source": "CRB",
+    "page": 131,
+    "category": "tools",
+    "weight": 0,
+    "cost": 50,
+    "notes": "Dual-time watch; newer models warn of oxygen and pressure loss.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:survival",
+        "text": "+1 SURVIVAL.",
+        "value": 1
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "personal-data-transmitter",
+    "name": "Personal Data Transmitter (PDT)",
+    "source": "CRB",
+    "page": 131,
+    "category": "comms",
+    "weight": 0,
+    "cost": 100,
+    "notes": "Broadcasts the wearer's location, sometimes vitals; can be implanted or built into suits.",
+    "art": null
+  },
+  {
+    "id": "iff-transponder",
+    "name": "IFF Transponder",
+    "source": "CRB",
+    "page": 131,
+    "category": "comms",
+    "weight": 0,
+    "cost": 250,
+    "notes": "Beacon that keeps automated sentry guns from firing on you.",
+    "art": null
+  },
+  {
+    "id": "data-transmitter-cards",
+    "name": "Data Transmitter Cards",
+    "source": "CRB",
+    "page": 131,
+    "category": "computer",
+    "weight": 0,
+    "cost": 50,
+    "notes": "Plug-in cards that stream audio/video to a synced terminal. The Company Agent option 'with corporate clearance level' is this item.",
+    "art": null
+  },
+  {
+    "id": "seegson-p-dat",
+    "name": "Seegson P-DAT",
+    "source": "CRB",
+    "page": 131,
+    "category": "computer",
+    "weight": 0.5,
+    "cost": 500,
+    "notes": "Personal data tablet that syncs mapping devices, PDTs and helmet cams to coordinate a team.",
+    "art": null
+  },
+  {
+    "id": "seegson-system-diagnostic-device",
+    "name": "Seegson System Diagnostic Device (SSDD)",
+    "source": "CRB",
+    "page": 131,
+    "category": "tools",
+    "weight": 1,
+    "cost": 300,
+    "notes": "Troubleshoots ship and station systems; also handy for hacking doors and terminals.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:comtech",
+        "text": "+2 COMTECH.",
+        "value": 2
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "holotab",
+    "name": "HoloTab",
+    "source": "CRB",
+    "page": 131,
+    "category": "computer",
+    "weight": null,
+    "cost": 100000,
+    "notes": "Holographic strategic display table. Table says COMMAND +2; text says COMMAND and OBSERVATION +2.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:command",
+        "text": "+2 COMMAND.",
+        "value": 2
+      },
+      {
+        "kind": "buff",
+        "target": "skill:observation",
+        "text": "+2 OBSERVATION (per item text).",
+        "value": 2
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "modular-computing-device",
+    "name": "Modular Computing Device",
+    "source": "CRB",
+    "page": 131,
+    "category": "computer",
+    "weight": null,
+    "cost": 8000,
+    "notes": "Immersive holographic projector filling a 6x6 m area.",
+    "art": null
+  },
+  {
+    "id": "optical-scope",
+    "name": "Optical Scope",
+    "source": "CRB",
+    "page": 133,
+    "category": "tools",
+    "weight": 0,
+    "cost": 60,
+    "notes": "Tiny item. Extends a pistol or rifle's range one category, aimed shots only.",
+    "art": null
+  },
+  {
+    "id": "hi-beam-flashlight",
+    "name": "Hi-beam Flashlight",
+    "source": "CRB",
+    "page": 133,
+    "category": "tools",
+    "weight": 0.5,
+    "cost": 45,
+    "notes": "Removes the effect of darkness in a zone.",
+    "art": null
+  },
+  {
+    "id": "binoculars",
+    "name": "Binoculars",
+    "source": "CRB",
+    "page": 133,
+    "category": "tools",
+    "weight": 0.5,
+    "cost": 100,
+    "notes": "Active scouting at LONG range or more only.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:observation",
+        "text": "+2 OBSERVATION at LONG+ range when actively scouting.",
+        "value": 2
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "m314-motion-tracker",
+    "name": "M314 Motion Tracker",
+    "source": "CRB",
+    "page": 133,
+    "category": "tools",
+    "weight": 1,
+    "cost": 1200,
+    "notes": "Ultrasonic motion detector: EXTREME range outdoors, LONG indoors. Power Supply roll after every use (Power Supply 5). Can't fire a weapon while using it.",
+    "powerSupply": 5,
+    "art": null
+  },
+  {
+    "id": "m316-motion-tracker",
+    "name": "M316 Motion Tracker",
+    "source": "CRB",
+    "page": 133,
+    "category": "tools",
+    "weight": 0,
+    "cost": 3000,
+    "notes": "Experimental rifle-mounted tracker: LONG outdoors, MEDIUM indoors. Power Supply 3.",
+    "powerSupply": 3,
+    "art": null
+  },
+  {
+    "id": "head-mounted-sight",
+    "name": "Head-Mounted Sight",
+    "source": "CRB",
+    "page": 133,
+    "category": "tools",
+    "weight": 0.5,
+    "cost": 200,
+    "notes": "Links to smart guns or sentry guns for targeting / remote control.",
+    "art": null
+  },
+  {
+    "id": "neuro-visor",
+    "name": "Neuro Visor",
+    "source": "CRB",
+    "page": 133,
+    "category": "tools",
+    "weight": 1,
+    "cost": 10000,
+    "notes": "Monitor and (with COMTECH) talk to or shape the dreams of someone in hypersleep.",
+    "art": null
+  },
+  {
+    "id": "pups-mapping-device",
+    "name": "W-Y Parameter Uplink Spectrograph Mapping Device ('Pups')",
+    "source": "CRB",
+    "page": 133,
+    "category": "tools",
+    "weight": 1,
+    "cost": 50000,
+    "notes": "Floating scanner orb: maps one zone per Round, detects enemies in zones it passes, range EXTREME. ACM Forward Observers carry a suppressed version.",
+    "art": null
+  },
+  {
+    "id": "seegson-microview-2000se",
+    "name": "Seegson Microview-2000SE",
+    "source": "CRB",
+    "page": 133,
+    "category": "tools",
+    "weight": null,
+    "cost": 25000,
+    "notes": "Station navigation map that always shows 'you are here'. Price is per deck.",
+    "art": null
+  },
+  {
+    "id": "maintenance-jack",
+    "name": "Maintenance Jack",
+    "source": "CRB",
+    "page": 135,
+    "category": "tools",
+    "weight": 1,
+    "cost": 150,
+    "notes": "Pries unpowered airlocks and reroutes junction-box power.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:heavyMachinery",
+        "text": "+1 HEAVY MACHINERY in relevant situations.",
+        "value": 1
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "electronic-tools",
+    "name": "Electronic Tools",
+    "source": "CRB",
+    "page": 135,
+    "category": "tools",
+    "weight": 0.5,
+    "cost": 250,
+    "notes": "",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:comtech",
+        "text": "+1 COMTECH.",
+        "value": 1
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "personal-medkit",
+    "name": "Personal Medkit",
+    "source": "CRB",
+    "page": 135,
+    "category": "medical",
+    "weight": 0.25,
+    "cost": 50,
+    "notes": "Single use: stop bleeding, disinfect, cauterize, bandage, stim.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:medicalAid",
+        "text": "+2 MEDICAL AID (one use).",
+        "value": 2
+      }
+    ],
+    "uses": 1,
+    "art": null
+  },
+  {
+    "id": "surgical-kit",
+    "name": "Surgical Kit",
+    "source": "CRB",
+    "page": 135,
+    "category": "medical",
+    "weight": 0.5,
+    "cost": 25,
+    "notes": "Price $25-$200. Base Damage 2 if used as a weapon.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:medicalAid",
+        "text": "+1 MEDICAL AID to prevent death from a fatal critical injury.",
+        "value": 1
+      }
+    ],
+    "costMax": 200,
+    "art": null
+  },
+  {
+    "id": "pauling-medpod",
+    "name": "Pauling MedPod",
+    "source": "CRB",
+    "page": 135,
+    "category": "medical",
+    "weight": null,
+    "cost": 2000000,
+    "notes": "Autonomous surgical pod; programmed with a COMTECH roll at +2; rolls MEDICAL AID 10 (skill only, cannot push).",
+    "skills": {
+      "medicalAid": 10
+    },
+    "art": null
+  },
+  {
+    "id": "autodoc",
+    "name": "AutoDoc",
+    "source": "CRB",
+    "page": 135,
+    "category": "medical",
+    "weight": null,
+    "cost": 500000,
+    "notes": "Common automated treatment unit for lesser wounds; programmed with an unmodified COMTECH roll; rolls MEDICAL AID 6 (cannot push).",
+    "skills": {
+      "medicalAid": 6
+    },
+    "art": null
+  },
+  {
+    "id": "neversleep-pills",
+    "name": "Neversleep Pills",
+    "source": "CRB",
+    "page": 136,
+    "category": "drugs",
+    "weight": 0,
+    "cost": 2,
+    "notes": "Per dose: no need to sleep for a day, but +1 Stress and no stress relief that day.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "value": 1,
+        "text": "+1 Stress per dose; cannot relieve stress that day."
+      },
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Removes the need for sleep for one day."
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "hydr8tion",
+    "name": "Hydr8tion",
+    "source": "CRB",
+    "page": 136,
+    "category": "drugs",
+    "weight": 0,
+    "cost": 5,
+    "notes": "Electrolyte drink that removes the dehydration caused by hypersleep; no side effects.",
+    "art": null
+  },
+  {
+    "id": "naproleve",
+    "name": "Naproleve",
+    "source": "CRB",
+    "page": 136,
+    "category": "drugs",
+    "weight": 0,
+    "cost": 20,
+    "notes": "Injectable painkiller. Each extra dose in the same Shift gives -1 to AGILITY-based rolls until the Shift ends.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "Stress Level drops to zero."
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "recreational-drugs",
+    "name": "Recreational Drugs",
+    "source": "CRB",
+    "page": 136,
+    "category": "drugs",
+    "weight": 0,
+    "cost": null,
+    "notes": "Legal prescribed vices; $5 for cigarettes up to $60,000 for a kilo of the hard stuff. Effects vary.",
+    "art": null
+  },
+  {
+    "id": "x-drugs",
+    "name": "X-Drugs",
+    "source": "CRB",
+    "page": 136,
+    "category": "drugs",
+    "weight": 0,
+    "cost": null,
+    "notes": "Illegal performance stimulants with dangerous side effects; effects and price vary.",
+    "art": null
+  },
+  {
+    "id": "prefab-meal",
+    "name": "Prefab Meal",
+    "source": "CRB",
+    "page": 137,
+    "category": "food",
+    "weight": 0.25,
+    "cost": 10,
+    "notes": "",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Food Supply +1.",
+        "value": 1
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "water-bottle",
+    "name": "Water Bottle",
+    "source": "CRB",
+    "page": 137,
+    "category": "food",
+    "weight": 0.25,
+    "cost": 2,
+    "notes": "Ship water $2, purified bottles $10, up to $100 on barren worlds.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Water Supply +1.",
+        "value": 1
+      }
+    ],
+    "costMax": 100,
+    "art": null
+  },
+  {
+    "id": "bug-juice",
+    "name": "'Bug Juice' Protein Drink",
+    "source": "CRB",
+    "page": 137,
+    "category": "food",
+    "weight": 0.25,
+    "cost": 5,
+    "notes": "Insect-protein shake.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Food and Water Supply +1.",
+        "value": 1
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "carbonated-beverage",
+    "name": "Carbonated Beverage",
+    "source": "CRB",
+    "page": 137,
+    "category": "food",
+    "weight": 0.25,
+    "cost": 2,
+    "notes": "",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Water Supply +1.",
+        "value": 1
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "candy-bar",
+    "name": "Candy Bar",
+    "source": "CRB",
+    "page": 137,
+    "category": "food",
+    "weight": 0.25,
+    "cost": 2,
+    "notes": "Price $2-$5.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Food Supply +1.",
+        "value": 1
+      }
+    ],
+    "costMax": 5,
+    "art": null
+  },
+  {
+    "id": "coffee",
+    "name": "Coffee",
+    "source": "CRB",
+    "page": 137,
+    "category": "food",
+    "weight": 0,
+    "cost": 0,
+    "notes": "Free on most company ships, up to $1.50 a cup. Postpones sleep-deprivation drawbacks for a Shift.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "stress",
+        "value": 1,
+        "text": "+1 Stress."
+      }
+    ],
+    "costMax": 1.5,
+    "art": null
+  },
+  {
+    "id": "beer",
+    "name": "Beer",
+    "source": "CRB",
+    "page": 137,
+    "category": "food",
+    "weight": 0.25,
+    "cost": 4,
+    "notes": "Each drink: -1 Stress but -1 to WITS-based skills for the next Shift.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "-1 Stress per drink.",
+        "value": -1
+      },
+      {
+        "kind": "debuff",
+        "target": "attr:wit",
+        "value": -1,
+        "text": "-1 to WITS-based skills for a Shift."
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "hard-liquor",
+    "name": "Hard Liquor",
+    "source": "CRB",
+    "page": 137,
+    "category": "food",
+    "weight": 1,
+    "cost": 10,
+    "notes": "Price $10-$500 a bottle. Each glass: -1 Stress, -1 to WITS-based skills for the next Shift.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "-1 Stress per glass.",
+        "value": -1
+      },
+      {
+        "kind": "debuff",
+        "target": "attr:wit",
+        "value": -1,
+        "text": "-1 to WITS-based skills for a Shift."
+      }
+    ],
+    "costMax": 500,
+    "art": null
+  },
+  {
+    "id": "colony-specialty-meal",
+    "name": "Colony Specialty Meal",
+    "source": "CRB",
+    "page": 137,
+    "category": "food",
+    "weight": 0.25,
+    "cost": 20,
+    "notes": "Price $20-$300.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Food Supply +1.",
+        "value": 1
+      },
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "-1 Stress.",
+        "value": -1
+      }
+    ],
+    "costMax": 300,
+    "art": null
+  },
+  {
+    "id": "u238-ammunition",
+    "name": "U-238 Tipped Ammunition ('Dirty Bullets')",
+    "source": "CRB",
+    "page": 123,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Costs four times normal ammo (a normal reload is ~5% of the weapon's price). Lowers target armor by 2 after piercing/doubling; each hit also gives 1 Rad; carrying a loaded weapon gives you 1 Rad per Shift.",
+    "art": null,
+    "artPage": "/art/weapons/crb-weapons-127.webp"
+  },
+  {
+    "id": "signal-flare",
+    "name": "Signal Flare",
+    "source": "CRB",
+    "page": 39,
+    "category": "survival",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "deck-of-cards",
+    "name": "Deck of Cards",
+    "source": "CRB",
+    "page": 39,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "hand-radio",
+    "name": "Hand Radio",
+    "source": "CRB",
+    "page": 41,
+    "category": "comms",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "leather-briefcase",
+    "name": "Leather Briefcase",
+    "source": "CRB",
+    "page": 43,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "chrome-briefcase",
+    "name": "Chrome Briefcase",
+    "source": "CRB",
+    "page": 43,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "gold-plated-pen",
+    "name": "Gold-Plated Pen",
+    "source": "CRB",
+    "page": 43,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "rolex-watch",
+    "name": "Rolex Watch",
+    "source": "CRB",
+    "page": 43,
+    "category": "clothing",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "fishing-line",
+    "name": "Fishing Line",
+    "source": "CRB",
+    "page": 45,
+    "category": "survival",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "laser-pointer",
+    "name": "Laser Pointer",
+    "source": "CRB",
+    "page": 45,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "magnet",
+    "name": "Magnet",
+    "source": "CRB",
+    "page": 45,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "radio-controlled-car",
+    "name": "Radio-Controlled Car",
+    "source": "CRB",
+    "page": 45,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "yo-yo",
+    "name": "Yo-Yo",
+    "source": "CRB",
+    "page": 45,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "electronic-handheld-game",
+    "name": "Electronic Handheld Game",
+    "source": "CRB",
+    "page": 45,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "personal-locator-beacon",
+    "name": "Personal Locator Beacon",
+    "source": "CRB",
+    "page": 45,
+    "category": "comms",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "coloring-pens",
+    "name": "Coloring Pens",
+    "source": "CRB",
+    "page": 45,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "digital-video-camera",
+    "name": "Digital Video Camera",
+    "source": "CRB",
+    "page": 55,
+    "category": "comms",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only as a career starting option; the CRB gives no weight or price.",
+    "art": null
+  },
+  {
+    "id": "military-id-tags",
+    "name": "Acrylic 'Dog Tags' Military ID Key",
+    "source": "ACM",
+    "page": 76,
+    "category": "clothing",
+    "weight": null,
+    "cost": 50,
+    "notes": "Encoded ID tags holding medical/personal data and door-lock access by rank.",
+    "art": null
+  },
+  {
+    "id": "battledress-utilities",
+    "name": "Battledress Utilities (BDUs)",
+    "source": "ACM",
+    "page": 76,
+    "category": "clothing",
+    "weight": null,
+    "cost": 55,
+    "notes": "Field uniform in theater-appropriate camouflage.",
+    "art": null
+  },
+  {
+    "id": "ghillie-suit",
+    "name": "Ghillie Suit",
+    "source": "ACM",
+    "page": 76,
+    "category": "clothing",
+    "weight": 1,
+    "cost": 1000,
+    "notes": "Environment-tailored camouflage with a heat sink that masks infrared.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:mobility",
+        "text": "+2 MOBILITY to avoid detection in the matching environment.",
+        "value": 2
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "m3b-standard-boots",
+    "name": "M3B Standard Boots",
+    "source": "ACM",
+    "page": 76,
+    "category": "clothing",
+    "weight": null,
+    "cost": 40,
+    "notes": "Everyday issue boots (table spells it 'MB3').",
+    "art": null
+  },
+  {
+    "id": "m7-jungle-boots",
+    "name": "M7 Jungle Boots",
+    "source": "ACM",
+    "page": 76,
+    "category": "clothing",
+    "weight": null,
+    "cost": 60,
+    "notes": "For hot, wet environments.",
+    "art": null
+  },
+  {
+    "id": "m8a2-thermal-boots",
+    "name": "M8A2 Thermal Boots",
+    "source": "ACM",
+    "page": 76,
+    "category": "clothing",
+    "weight": null,
+    "cost": 75,
+    "notes": "",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:stamina",
+        "text": "+1 STAMINA to resist cold.",
+        "value": 1
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "platypus-fins",
+    "name": "M11 Performance Enhanced Platypus Fins",
+    "source": "ACM",
+    "page": 76,
+    "category": "clothing",
+    "weight": 0.5,
+    "cost": 100,
+    "notes": "",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:mobility",
+        "text": "+2 MOBILITY underwater.",
+        "value": 2
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "life-vest",
+    "name": "Life Vest",
+    "source": "ACM",
+    "page": 77,
+    "category": "survival",
+    "weight": 1,
+    "cost": 65,
+    "notes": "Keeps you afloat at the surface; built-in light and a PDT beacon with 2 km range.",
+    "art": null
+  },
+  {
+    "id": "cold-weather-parka",
+    "name": "Cold Weather Parka",
+    "source": "ACM",
+    "page": 77,
+    "category": "clothing",
+    "weight": 0.25,
+    "cost": 100,
+    "notes": "Heated hooded parka.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:stamina",
+        "text": "+2 STAMINA to resist cold.",
+        "value": 2
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "udep-poncho",
+    "name": "UDEP Ultra Diffusive Environmental Poncho",
+    "source": "ACM",
+    "page": 77,
+    "category": "clothing",
+    "weight": 1,
+    "cost": 500,
+    "notes": "IR-absorbing rain poncho.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:stamina",
+        "text": "+2 STAMINA against chemical/biological contaminants.",
+        "value": 2
+      },
+      {
+        "kind": "buff",
+        "target": "skill:mobility",
+        "text": "+2 to stealth in wet environments (book says STEALTH).",
+        "value": 2
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "g-suit",
+    "name": "G-Suit",
+    "source": "ACM",
+    "page": 77,
+    "category": "clothing",
+    "weight": 1,
+    "cost": 120,
+    "notes": "Pilot's pressure jumpsuit; helmet bottle gives Air Supply 1 when unplugged from the craft.",
+    "airSupply": 1,
+    "art": null
+  },
+  {
+    "id": "bimex-shades",
+    "name": "BiMex Personal Shades",
+    "source": "ACM",
+    "page": 80,
+    "category": "clothing",
+    "weight": 0,
+    "cost": 150,
+    "notes": "When hit by a laser weapon roll a Base Die; on a success the beam is deflected (no damage) but the shades are ruined.",
+    "art": null
+  },
+  {
+    "id": "cbrn-kit",
+    "name": "CBRN Detection Kit",
+    "source": "ACM",
+    "page": 80,
+    "category": "medical",
+    "weight": 1,
+    "cost": 800,
+    "notes": "Geiger counter, agent detector, inhibitor doses, four one-Turn respirators, gloves, goggles, sample kit. Reveals Radiation Level and pathogens at your location.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "+2 to Sickness Rolls.",
+        "value": 2
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "imp-marine-pack",
+    "name": "IMP Individual Marine Pack",
+    "source": "ACM",
+    "page": 80,
+    "category": "survival",
+    "weight": 0,
+    "cost": 100,
+    "notes": "Waterproof pack with a medkit and Supply 4 of food and water.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Carry 2 more regular items before being over-encumbered.",
+        "value": 2
+      }
+    ],
+    "art": null
+  },
+  {
+    "id": "tnr-shoulder-lamp",
+    "name": "TNR High Beam Shoulder Lamp",
+    "source": "ACM",
+    "page": 80,
+    "category": "tools",
+    "weight": 0.5,
+    "cost": 60,
+    "notes": "Hand-held or armor-mounted; removes the effect of darkness in a zone.",
+    "art": null
+  },
+  {
+    "id": "muzzle-suppressor",
+    "name": "Muzzle Suppressor",
+    "source": "ACM",
+    "page": 80,
+    "category": "tools",
+    "weight": 0.25,
+    "cost": 50,
+    "notes": "Price $50-$200. Enemies need an OBSERVATION roll to notice the shot.",
+    "costMax": 200,
+    "art": null
+  },
+  {
+    "id": "folding-entrenching-spade",
+    "name": "Folding Entrenching Spade",
+    "source": "ACM",
+    "page": 80,
+    "category": "tools",
+    "weight": 0.5,
+    "cost": 30,
+    "notes": "Doubles as a close combat weapon: bonus +1, base Damage 2.",
+    "art": null
+  },
+  {
+    "id": "folding-winch",
+    "name": "Folding Winch",
+    "source": "ACM",
+    "page": 80,
+    "category": "tools",
+    "weight": 1,
+    "cost": 40,
+    "notes": "Used with rope, no MOBILITY roll is needed to climb up or down.",
+    "art": null
+  },
+  {
+    "id": "polymer-climbing-rope",
+    "name": "Polymer Climbing Rope",
+    "source": "ACM",
+    "page": 80,
+    "category": "survival",
+    "weight": 0.5,
+    "cost": 40,
+    "notes": "45 m abrasion-resistant line (acid still eats it).",
+    "art": null
+  },
+  {
+    "id": "f3s-spotter-scope",
+    "name": "F3S Full Spectrum Spotter Scope",
+    "source": "ACM",
+    "page": 80,
+    "category": "tools",
+    "weight": 0.5,
+    "cost": 200,
+    "notes": "Spotter rolls OBSERVATION once; each success gives the sniper +1, as long as neither moves or is attacked.",
+    "art": null
+  },
+  {
+    "id": "pdt-locator-set",
+    "name": "PDT/L Personal Data Transmitter Bracelet/Locator Tube Set",
+    "source": "ACM",
+    "page": 80,
+    "category": "comms",
+    "weight": 0.25,
+    "cost": 100,
+    "notes": "Wrist PDT plus a locator tube that homes in on it within ~100 m (four zones).",
+    "art": null
+  },
+  {
+    "id": "m73px-parafoil",
+    "name": "M73PX Parafoil",
+    "source": "ACM",
+    "page": 80,
+    "category": "survival",
+    "weight": 3,
+    "cost": 1250,
+    "notes": "Packable glider: donning is a slow action, deploying fast; Speed 3, steered with PILOTING.",
+    "art": null
+  },
+  {
+    "id": "handcuffs",
+    "name": "Handcuffs",
+    "source": "ACM",
+    "page": 62,
+    "category": "misc",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only in ACM starting gear; no stat line given.",
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-066.webp"
+  },
+  {
+    "id": "survival-kit",
+    "name": "Survival Kit",
+    "source": "ACM",
+    "page": 62,
+    "category": "survival",
+    "weight": null,
+    "cost": null,
+    "notes": "Named only in ACM starting gear; no stat line given.",
+    "art": null,
+    "artPage": "/art/weapons/acm-weapons-066.webp"
+  }
+]

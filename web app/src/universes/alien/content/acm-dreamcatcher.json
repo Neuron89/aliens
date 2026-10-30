@@ -1,0 +1,102 @@
+{
+  "packVersion": 1,
+  "id": "acm-dreamcatcher",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Operation Dreamcatcher",
+    "tagline": "A remote relay station. A skeleton crew. And signals that should not exist.",
+    "type": "Campaign",
+    "players": "3–5",
+    "playtime": "4–6 hours",
+    "difficulty": "Hard",
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "MU/TH/UR 9000",
+    "to": "KILO COMPANY, 2ND PLATOON",
+    "classification": "MISSION BRIEFING — OPERATION DREAMCATCHER",
+    "text": "MISSION OBJECTIVE: Talos Station — a Weyland-Yutani CN-Class Network Relay Station — has been transmitting anomalous signals. The 12-person crew has missed two scheduled check-ins.\n\nYour platoon will dock with Talos Station, assess the situation, and restore communications capability. The station consists of multiple decks connected by a central hub, with two massive communications dishes.\n\nBe advised: Talos Station operates with an Apollo-class mainframe. Trust the data, not the machine."
+  },
+  "acts": [
+    {
+      "title": "OPERATION",
+      "subtitle": "MISSION BRIEFING",
+      "summary": "A remote relay station. A skeleton crew. And signals that should not exist.",
+      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "TALOS STATION — Docking Ring",
+      "description": "External docking ports. Approach and boarding point."
+    },
+    {
+      "name": "TALOS STATION — Operations Deck",
+      "description": "Station command, communications arrays, sensor equipment."
+    },
+    {
+      "name": "TALOS STATION — Habitation Deck",
+      "description": "Crew quarters, mess hall, recreation for 12 crew members."
+    },
+    {
+      "name": "TALOS STATION — Technical Deck",
+      "description": "Apollo mainframe, relay equipment, data processing."
+    },
+    {
+      "name": "TALOS STATION — Engineering Deck",
+      "description": "Reactor, life support, and maintenance systems."
+    },
+    {
+      "name": "TALOS STATION — Antenna Arrays",
+      "description": "Two massive communications dishes. External EVA access only."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "MISSION BRIEFING — OPERATION DREAMCATCHER",
+      "from": "MU/TH/UR 9000",
+      "to": "KILO COMPANY, 2ND PLATOON",
+      "priority": "PRIORITY",
+      "text": "MISSION OBJECTIVE: Talos Station — a Weyland-Yutani CN-Class Network Relay Station — has been transmitting anomalous signals. The 12-person crew has missed two scheduled check-ins.\n\nYour platoon will dock with Talos Station, assess the situation, and restore communications capability. The station consists of multiple decks connected by a central hub, with two massive communications dishes.\n\nBe advised: Talos Station operates with an Apollo-class mainframe. Trust the data, not the machine.",
+      "when": "Start of the session, before Act I"
+    }
+  ],
+  "maps": [
+    {
+      "id": "talos-station",
+      "title": "TALOS STATION",
+      "subtitle": "W-Y CN-Class Network Relay Station — All Decks",
+      "description": "Remote Weyland-Yutani relay station transmitting anomalous signals. 12-person crew missed two check-ins. Apollo-class mainframe on board.",
+      "kind": "image",
+      "src": "/maps/acm/talos-station.webp",
+      "rooms": [
+        {
+          "name": "Docking Ring",
+          "note": "External docking ports. Approach and boarding point."
+        },
+        {
+          "name": "Operations Deck",
+          "note": "Station command, communications arrays, sensor equipment."
+        },
+        {
+          "name": "Habitation Deck",
+          "note": "Crew quarters, mess hall, recreation for 12 crew members."
+        },
+        {
+          "name": "Technical Deck",
+          "note": "Apollo mainframe, relay equipment, data processing."
+        },
+        {
+          "name": "Engineering Deck",
+          "note": "Reactor, life support, and maintenance systems."
+        },
+        {
+          "name": "Antenna Arrays",
+          "note": "Two massive communications dishes. External EVA access only."
+        }
+      ]
+    }
+  ]
+}

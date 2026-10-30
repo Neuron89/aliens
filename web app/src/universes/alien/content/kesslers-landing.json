@@ -1,0 +1,1016 @@
+{
+  "packVersion": 1,
+  "id": "kesslers-landing",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Kessler's Landing",
+    "tagline": "A frontier colony on the edge of eternal night, locked down by an orbiting cutter that knows something the colonists do not.",
+    "synopsis": "Six days ago the Company-chartered medical freighter Clement Hale docked at Kessler's Landing, offloaded two cryo patients into the clinic and six crates of 'biomedical waste', then fled early, leaving a medtech behind. Now an ICC cutter enforces a quarantine and three miners are missing. The crates were Varga-Lindqvist's spore cultures, code-named MERIDIAN, dumped in an old mine drift by union roughnecks the Company liaison paid off the books. The patients in sealed Wing C were incubating Neomorphs. Act I is an investigation into the miners, the sealed wing and the manifest. Act II reveals the truth and splits the colony between a union riot to seize the last ship and the administrator's lockdown. Act III is a siege of the admin block as the night-side storm hits, while the cutter's commander waits for a specimen rather than send marines.",
+    "type": "Cinematic",
+    "players": "4–5",
+    "playtime": "3–5 hours",
+    "difficulty": "Standard",
+    "tone": [
+      "paranoia",
+      "frontier noir",
+      "slow-burn dread",
+      "siege"
+    ],
+    "contentWarnings": [
+      "body horror",
+      "character death",
+      "infection and disease",
+      "child endangerment",
+      "mob violence",
+      "religious extremism",
+      "medical exploitation",
+      "player-vs-player conflict"
+    ],
+    "generated": {
+      "by": "claude-code",
+      "model": "claude-opus-5-5",
+      "at": "2026-10-30T19:23:03Z",
+      "params": {
+        "universe": "alien",
+        "players": 5,
+        "playtime": "session 3-5h",
+        "type": "Cinematic",
+        "difficulty": "Standard",
+        "tone": [
+          "paranoia",
+          "frontier noir",
+          "slow-burn dread",
+          "siege"
+        ],
+        "setting": "frontier colony — Kessler's Landing, 400-soul independent colony on the terminator of tidally locked Varrow IV, quarantined by an ICC cutter",
+        "threat": "Neomorph spores",
+        "themes": "complicity, debt, who gets a seat on the last ship",
+        "lethality": "medium"
+      }
+    },
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "BELLWETHER — COLONY OPERATIONS MAINFRAME",
+    "to": "ALL DEPARTMENT HEADS — KESSLER'S LANDING",
+    "classification": "COLONY STATUS — QUARANTINE CATEGORY 2",
+    "text": "BELLWETHER COLONY OPERATIONS — KESSLER'S LANDING, VARROW IV.\nLOCAL CYCLE 0600. THE SUN DOES NOT MOVE. REMINDER: IT NEVER DOES.\n\nTERMINATOR BAND STABLE. HUB TEMPERATURE 11C. NIGHT-SIDE PRESSURE FALLING 4 MILLIBARS PER CYCLE. STORM FRONT DESIGNATED \"THE WALL\" TRACKING EAST. ESTIMATED ARRIVAL: 31 HOURS. PREPARE SHUTTERS.\n\nCOLONY POPULATION: 400 REGISTERED. 397 ACCOUNTED. SEAM 9 SHIFT (3 PERSONNEL) OVERDUE 52 HOURS. SEARCH NOT AUTHORISED PENDING ADMINISTRATOR REVIEW.\n\nCLINIC WING C: SEALED UNDER PRIVATE MEDICAL CONTRACT 2193-VL-0417. ACCESS LOGGING DISABLED BY REQUEST.\n\nLANDING PAD: MSV CLEMENT HALE DEPARTED 6 DAYS AGO, 4 HOURS AHEAD OF FILED SCHEDULE. ONE CREW MEMBER NOT ABOARD. NO EXPLANATION FILED.\n\nORBITAL TRAFFIC: ICC CUTTER PROBITY HOLDING AT 400 KM. COLONY STATUS: QUARANTINE (CATEGORY 2). NO DEPARTURES. FURTHER DETAIL WITHHELD AT ICC REQUEST — ADDITIONAL DATA CLASSIFIED.\n\nASSEMBLY CALLED, ADMIN BLOCK FLOOR, 0700. ATTENDANCE MANDATORY FOR MARSHAL, MEDICAL OFFICER, UNION STEWARD, COMPANY LIAISON AND GROUNDED VESSEL MASTER.\n\nKEEP THE LIGHTS ON.\n\nBELLWETHER OUT."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "MISSING",
+      "summary": "Investigation under quarantine: three missing miners, a clinic wing nobody may open, and a freighter manifest that does not add up.",
+      "readAloud": [
+        "You wake to the same light you went to sleep in. On Varrow IV the sun hangs fixed above the day-side horizon, a bruised orange coin that never sets, and Kessler's Landing lives in the thin band of twilight beneath it. The heaters tick. The concourse smells of ore dust, fryer oil and wet felt. Somewhere a pump coughs and catches. Outside the porthole, the night side is a black wall of cloud, and it is closer than yesterday.",
+        "The admin block floor is packed and too warm. Four hundred people live here and it feels like half of them have crowded in to hear the news you already know. Overhead, the big CRT shows a slow green dot in orbit: the ICC cutter Probity, holding station, saying nothing. Nobody leaves. Nobody lands. Someone at the back asks the question everyone is thinking. Quarantined for what?",
+        "Nobody answers. The administrator taps the microphone twice, the feedback whines, and the room goes quiet the way a mine goes quiet before a roof fall. You feel eyes on you. The badge, the white coat, the union armband, the Company pin, the stranger whose ship sits cold on Pad 2. Four hundred people are deciding, right now, which of you they can trust.",
+        "Later, alone in the concourse, you notice small wrong things. A clinic door chained from the outside. A row of empty hooks in the Seam 9 locker bay, three helmets missing. A child's chalk drawing on the hab wall of something pale with too many joints, half rubbed out by a sleeve. The air recyclers hum. The cloud wall creeps east. You have thirty-one hours."
+      ],
+      "gmNotes": "This act is noir: interviews, records, locked doors. Let the PCs split up and follow leads in any order: the pad tower (manifest), the clinic (Wing C), the Seam 9 drift (missing miners), the chapel (Brother Lowe). Each lead implicates a different PC, and each PC is tempted to hide what they find. The Neomorph threat stays mostly off-screen: one glimpse in Seam 9, one sound behind Wing C's door. End the act when Wing C is opened or Ilse Varnaby is found, whichever comes first. If the table stalls, have Bellwether report a power draw inside the sealed wing that should not exist.",
+      "agendaNotes": "Agendas are private and reasonable here: the Marshal wants the missing miners, the Doctor wants Wing C left shut until he understands it, the Steward wants her crew home, the Liaison wants the manifest buried, the Pilot wants off-world. Deliver nothing extra yet; let the secrets do the work. Reward players who lie well with information, and those who tell the truth with allies.",
+      "scenes": [
+        {
+          "name": "The Assembly",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Administrator Ferrante-Quaye reads the ICC quarantine order to a hostile crowd and asks for calm. Rennick Soll of Local 31 shouts down the room, demanding a search for the Seam 9 crew. Brother Lowe stands at the back and says nothing at all.",
+          "checks": [
+            "COMMAND — hold the room long enough to be heard",
+            "MANIPULATION — get the administrator to admit she signed the Clement Hale docking permit",
+            "OBSERVATION — notice the administrator and the Company liaison avoiding each other’s eyes"
+          ],
+          "events": [
+            "The ICC quarantine notice is read aloud and posted to every terminal.",
+            "Soll calls for the union to march on the pad if no search is authorised by end of shift."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any PC who is publicly accused by Soll or the crowd"
+          ],
+          "npcGuidance": "Ferrante-Quaye is reasonable and tired, and lies smoothly about the docking fee. Soll wants a fight and wants the Steward to take his side in front of everyone. Deputy Kwan stays near the Marshal and sweats.",
+          "gmTip": "Use this scene to introduce every PC through how the crowd treats them; the Pilot is the outsider, the Liaison is the scapegoat.",
+          "outcomes": [
+            "Search of Seam 9 authorised: leads open to the drift.",
+            "Crowd turns ugly: the Liaison is shoved and threatened, and starts Act II with nobody willing to stand near them."
+          ]
+        },
+        {
+          "name": "Pad Tower Records",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "The pad tower is a cold glass box above Pad 1, its logs on spooled tape and a cranky terminal. The Clement Hale's docking record shows two cryo units and six sealed crates offloaded, and a departure four hours early with one crew member unaccounted for.",
+          "checks": [
+            "COMTECH — recover the Clement Hale’s full cargo manifest from the tower cache",
+            "COMTECH at −2 — restore the deleted page showing who countersigned the crate release",
+            "PILOTING — read the departure telemetry and realise the Hale burned hard enough to injure its crew"
+          ],
+          "events": [
+            "The ICC cutter pings the tower: any attempt to fuel a vessel will be logged as a quarantine breach."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever reads the countersignature and recognises the name"
+          ],
+          "gmTip": "The countersignatures are the administrator and the Company liaison. Give the manifest handout; let the PC who reads it decide whether to share it.",
+          "outcomes": [
+            "The manifest is found: two cryo patients to Wing C, six crates to Seam 9 for disposal.",
+            "The Liaison gets here first and quietly wipes the countersignature page (MANIPULATION or COMTECH to notice the wipe later)."
+          ]
+        },
+        {
+          "name": "Seam 9 Drift",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "In the warm, wet end of the drift, six crates lie split open beside the body of miner Kofi Dunmore, his back burst outward like a dropped fruit. Pale egg sacs cling to the walls, swelling in the heat. If a PC gets close or stays more than a few minutes, a sac ruptures in a puff of grey spores: STAMINA to avoid inhaling them. Something pale and the size of a dog moves at the edge of the lamplight and is gone down a side cut.",
+          "narration": "Two kilometres of old drift, its rails rusted, its air warm from the processor's waste heat. The steward's crew's tags are on the gate log: in, never out. The deeper you go, the wetter it gets.",
+          "checks": [
+            "SURVIVAL — read the drift and find the dump site before the lamps fail",
+            "HEAVY MACHINERY — get the cage lift running again for a fast exit",
+            "STAMINA — avoid breathing the spore cloud when a sac bursts",
+            "OBSERVATION — notice two of the three miners’ boot tracks leading back toward the hub"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs who see Dunmore’s body",
+            "IMMEDIATE PANIC ROLL — any PC who inhales spores and fails the STAMINA roll (they are now secretly INFECTED)"
+          ],
+          "npcGuidance": "If Rennick Soll comes along, he recognises the crates from the off-books job and goes very quiet.",
+          "gmTip": "Track infection secretly. An infected PC shows symptoms in Act II and can burst late in Act III; at medium lethality allow the Doctor a hard MEDICAL AID roll to cut out the growth.",
+          "outcomes": [
+            "The crates are found: the Steward and the Liaison both know who put them there.",
+            "A sample is taken: the Liaison or the Doctor now holds something the Company wants.",
+            "Two tracks lead back to the hub: one to the chapel, one lost in the hab ducts."
+          ]
+        },
+        {
+          "name": "Wing C",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The clinic's Wing C is chained from the outside, its access log disabled, its window painted over. Something inside is drawing power. At night, the orderlies say, someone knocks.",
+          "checks": [
+            "MEDICAL AID — read the contract paperwork on the door and see that it forbids treating whoever is inside",
+            "HEAVY MACHINERY — cut the chain and force the pressure door",
+            "MANIPULATION — get the Doctor to admit he has the key",
+            "OBSERVATION — spot the dried, scraped-through floor drain beside one empty cryo pod"
+          ],
+          "events": [
+            "Inside: Ilse Varnaby alive and starving in the scrub room, one cryo patient burst open on the gurney, the other pod empty and torn from inside."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs who enter Wing C",
+            "STRESS +2 — the Doctor, if he has heard the knocking and done nothing"
+          ],
+          "npcGuidance": "Varnaby is lucid, furious and frightened. She begs for water first, then for the Marshal; she will not talk in front of the Company liaison.",
+          "gmTip": "This is the act break. Do not let Varnaby explain everything yet; she collapses or is sedated, and the truth comes in Act II.",
+          "outcomes": [
+            "Varnaby is freed: move to Act II.",
+            "The Doctor keeps the wing shut: Bellwether flags the power draw publicly, and the crowd forces the door at the start of Act II."
+          ]
+        },
+        {
+          "name": "Chapel of the Long Night",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Brother Cassian Lowe's chapel is a converted ore bunker in Hab Stack D, lit by candles made from processor wax. He welcomes you, offers tea, and keeps standing between you and the trapdoor to the undercroft.",
+          "checks": [
+            "MANIPULATION — get Lowe to admit someone is sleeping in the undercroft",
+            "OBSERVATION — hear laboured breathing under the floor between hymns",
+            "MEDICAL AID — recognise fever, back swelling and blood in the sputum on the rag Lowe burns"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any PC who looks into the undercroft and sees the miner’s swollen back"
+          ],
+          "npcGuidance": "Lowe is gentle and immovable. The man below is his nephew, miner Arlo Lowe. Lowe believes prayer will save him and that the Company will kill him if they find him.",
+          "gmTip": "This is a contingency: if the PCs remove Arlo now, the Act II burst happens in the clinic instead of the chapel. Either way it happens.",
+          "outcomes": [
+            "Arlo is moved to the clinic under guard.",
+            "Lowe refuses and the PCs leave him: the burst happens in front of his congregation in Act II."
+          ]
+        },
+        {
+          "name": "Pell's Ducts",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Eleven-year-old Pell Arrowood knows every crawlway in the hab stacks, and her mother is one of the missing Seam 9 crew. She's been leaving ration bars in a duct junction behind Stack B, because something has been taking them.",
+          "checks": [
+            "MANIPULATION — earn Pell’s trust enough that she shows you the junction",
+            "MOBILITY — follow her through a duct built for a child",
+            "OBSERVATION — recognise that the shed skin in the junction is far larger than the last one she found"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any PC who crawls into the junction and finds the shed skin"
+          ],
+          "npcGuidance": "Pell is brave, blunt and lying about how many times she has been down here. She thinks the creature is a lost animal from the freighter.",
+          "gmTip": "Give the child’s note handout here. Pell is the colony’s heart in Act III; make the players care about her now.",
+          "outcomes": [
+            "Pell becomes a guide: she knows a duct into the admin block that will matter in Act III.",
+            "Pell is scolded and sent home: she goes back to the ducts alone."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "FRACTURE",
+      "summary": "Varnaby tells the truth about MERIDIAN, a miner bursts in public, and Kessler's Landing splits between a union riot to seize the last ship and a hard lockdown.",
+      "readAloud": [
+        "The clinic smells of iodine and something sweeter underneath, like fruit left in the sun. Ilse Varnaby sits on the edge of a cot with both hands around a mug she cannot stop shaking. Her uniform still carries the Clement Hale's patch, the stitching picked half out. She looks at each of you in turn, the way a person counts exits. Then she starts talking, and the room gets very cold.",
+        "Word moves faster than people in a colony this small. By the next shift the concourse is full of rumours: plague, Company experiment, the ICC is going to burn you all from orbit. Someone has spray-painted the Company pin on the clinic door with a line through it. The union hall lights stay on all cycle. The chapel bell rings and does not stop.",
+        "You hear the scream through two bulkheads. When you get there the crowd is already backing away in a slow, silent wave. On the floor is a man who was breathing a minute ago. There is a hole in him from the inside, and the wet trail across the floor leads to a vent grate, and the grate is bent outward. A child is crying somewhere. Nobody moves to stop it.",
+        "Up on the big CRT, the green dot of the Probity has not moved. A new message scrolls across every terminal in the colony, polite and final. Any vessel that lifts will be fired upon. Below it, Bellwether updates the storm clock without comment. The wall of night-side cloud fills every east-facing window now, lit from inside by lightning that makes no sound."
+      ],
+      "gmNotes": "The truth arrives and nobody is innocent. Varnaby explains MERIDIAN: a spore culture Varga-Lindqvist was moving for Weyland-Yutani's bio division, two crew infected in transit, the Hale's master offloading the patients and the waste here under a contract the colony needed money from. The Arlo Lowe burst then happens in public. From here the colony has two answers: Rennick Soll's union wants to seize the Wren's Due and run the blockade with the children; Administrator Ferrante-Quaye wants a total lockdown and full cooperation with the ICC to save the colony's charter. Each PC is pulled to one side. There are now two adult or near-adult Neomorphs loose (from Wing C and from Dunmore), and a third about to emerge from Arlo.",
+      "agendaNotes": "Push the private handouts now: the Liaison's special order, the Marshal's ICC directive and the Pilot's contract recall. Every PC now has a reason to want the Wren's Due, Varnaby, or the sample for themselves. Make the Steward choose publicly between Soll and the Marshal. Infected PCs start coughing.",
+      "scenes": [
+        {
+          "name": "Varnaby Talks",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Varnaby tells the story in pieces: the MERIDIAN culture, the two crewmates who got sick, the master's call to Varga-Lindqvist, the order to offload 'patients and waste' at the nearest colony that would take money. She has the Hale's real log on a data spike sewn into her collar.",
+          "checks": [
+            "MEDICAL AID — keep Varnaby conscious and coherent through the interview",
+            "MANIPULATION — get the data spike from her",
+            "OBSERVATION — notice the blood she coughs into her sleeve: she is infected",
+            "COMTECH — read the data spike without triggering its wipe routine"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs present when Varnaby names who signed for the cargo",
+            "STRESS +1 — the Liaison and the Steward, when their names come up"
+          ],
+          "npcGuidance": "Varnaby wants the spike broadcast, not handed to the ICC. She knows she has about a day before she bursts and wants to die after it is sent, not before.",
+          "gmTip": "Give the Varnaby log handout to the Doctor. Whoever holds the spike from now on holds the most valuable object in the colony.",
+          "outcomes": [
+            "The table knows the truth and who is complicit.",
+            "If the Liaison takes the spike, the Company has its evidence back and the colony has nothing."
+          ]
+        },
+        {
+          "name": "The Undercroft Burst",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Arlo Lowe bursts in front of a crowd: in the chapel if he was left there, in the clinic ward if he was moved. A bloodburster tears free, then a Neophyte-sized Neomorph flees for the vents. Anyone within reach must roll MOBILITY to avoid being knocked down in the stampede. If the PCs fire into the crowd's direction, roll for bystanders.",
+          "narration": "Brother Lowe is mid-hymn, or Doctor's orderlies are mid-shift, when Arlo begins to convulse.",
+          "checks": [
+            "RANGED COMBAT — shoot the creature before it reaches the vent",
+            "MOBILITY — stay on your feet as the crowd stampedes",
+            "COMMAND — stop the crowd crushing the children near the door",
+            "MEDICAL AID — try to save Arlo, knowing it is too late"
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all PCs who witness the burst",
+            "STRESS +1 — any PC who fires toward the crowd"
+          ],
+          "npcGuidance": "Brother Lowe falls to his knees and then rises a different man: he declares the colony judged and the Company the devil's hand. His congregation follows him to the union hall.",
+          "gmTip": "This is the public tipping point. Do not let the PCs kill the creature cleanly; it must get away to feed the siege.",
+          "outcomes": [
+            "The creature escapes into the vents: three Neomorphs now loose.",
+            "Lowe joins Soll: the riot gains numbers and a sermon."
+          ]
+        },
+        {
+          "name": "Riot or Lockdown",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The union hall fills with roughnecks, families and Lowe's faithful. Rennick Soll calls a vote to seize the Wren's Due and fly the children past the Probity. Across the concourse, Administrator Ferrante-Quaye orders the admin block sealed and asks the Marshal to arrest the ringleaders.",
+          "checks": [
+            "COMMAND — sway the union vote one way or the other",
+            "MANIPULATION — turn Lowe against Soll, or Soll against the administrator",
+            "CLOSE COMBAT — break up a fight on the hall floor without a death",
+            "OBSERVATION — see Deputy Kwan pass a sidearm to a union man"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — the Marshal and the Steward if they end up on opposite sides of the vote",
+            "STRESS +1 — any PC who strikes a colonist"
+          ],
+          "npcGuidance": "Soll wants the Steward's endorsement and will call her a Company rat if she refuses. Ferrante-Quaye promises the ICC will lift the quarantine for anyone who cooperates; she half believes it.",
+          "gmTip": "Do not resolve this with a single roll. Let the table argue. Whichever side wins, the other does something desperate.",
+          "outcomes": [
+            "Riot wins: the union marches on the pad (go to The Pad Standoff).",
+            "Lockdown wins: Soll and a dozen hardliners are locked in the brig, and break out during the Act III siege."
+          ]
+        },
+        {
+          "name": "The Pad Standoff",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Forty colonists with pry bars and two stolen pistols face the Marshal and Deputy Kwan at the pad gate, with the Pilot's ship behind them. The Probity's targeting radar paints the pad, and every CRT in the tower beeps with it. If anyone starts fuelling the Wren's Due, a Neomorph drawn by the noise drops from the fuel gantry into the crowd.",
+          "narration": "The pad lights are amber in the twilight. The Wren's Due sits on Pad 2 with frost on her landing gear, the only ship on Varrow IV that can reach orbit.",
+          "checks": [
+            "COMMAND — talk the crowd down before the first shot",
+            "PILOTING — start a cold launch sequence fast enough to matter",
+            "RANGED COMBAT — hit the creature on the gantry without hitting the fuel line",
+            "HEAVY MACHINERY — lock out the fuel pumps so nobody can launch"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs when the Probity’s targeting radar locks onto the pad",
+            "IMMEDIATE PANIC ROLL — anyone hit by spraying fuel when the creature attacks"
+          ],
+          "npcGuidance": "Soll leads from the front. Kwan wavers and may switch sides. Pell is somewhere in the crowd.",
+          "gmTip": "This is the contingency if the riot wins. Its best outcome is that the fuel lines are cut and nobody leaves yet, so everyone ends up in the admin block for the siege.",
+          "outcomes": [
+            "The launch is stopped: the ship stays, and both sides blame the PCs.",
+            "The ship is fuelled: it can launch in Act III, with or without permission."
+          ]
+        },
+        {
+          "name": "Clinic Breach",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "The Wing C Neomorph, now adult, returns to the clinic for the warm bodies in the ward. It comes through the morgue ceiling. It targets the weakest first: Varnaby, the sedated patients, then whoever stands between. It flees at 2 damage and returns later.",
+          "narration": "The clinic lights stutter at the end of a long shift. In the morgue, a ceiling tile is lying on the floor.",
+          "checks": [
+            "OBSERVATION — spot the creature in the ceiling space before it drops",
+            "CLOSE COMBAT — fight it off a patient with whatever is to hand",
+            "MOBILITY — get Varnaby out through the ward without being cornered",
+            "MEDICAL AID — stop the bleeding of anyone it opens up"
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — any PC who sees the adult Neomorph clearly for the first time",
+            "STRESS +1 — all PCs in the clinic"
+          ],
+          "gmTip": "Use this if the act needs a jolt of physical danger, or to make the Doctor choose between Varnaby, the spike and his samples.",
+          "outcomes": [
+            "The clinic is abandoned: survivors move to the admin block.",
+            "Varnaby is lost: whoever has the spike now carries the only evidence."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT III",
+      "subtitle": "SIEGE",
+      "summary": "The night-side storm hits, the colony crams into the admin block, three Neomorphs lay siege, and the cutter commander offers a deal for a live specimen instead of a rescue.",
+      "readAloud": [
+        "The Wall arrives as a sound first, a low freight-train roar under the floor that rattles teeth and cutlery. Then the twilight goes out like a lamp. Hail the size of rivets hammers the concourse roof. The temperature drops twenty degrees in ten minutes, and every breath hangs in front of your face. Bellwether reads the wind speed in the same calm voice it uses for the lunch menu.",
+        "Two hundred people are packed into a building meant for forty. They sleep in corridors, under desks, against the warm wall of the generator room. Children are wrapped in survey tarps. The air tastes of sweat, ozone and fear. Every few minutes the lights brown out, and in those seconds of dark the whole block holds its breath and listens to the ducts.",
+        "Something walks on the roof. You hear its weight shift, patient and deliberate, between the thunderclaps. Then there is a sound like a fingernail on the outer shutter, slow and testing, moving from window to window as if it is counting them. The motion tracker on the ops desk chirps once, twice, then shows three contacts, and all three are closing.",
+        "On the comms panel, a green light blinks: priority channel, ICCV Probity. Commander Strand's voice is warm and reasonable and four hundred kilometres away. He regrets the weather. He regrets the loss of life. He has a proposal. Behind you, two hundred people are pretending not to listen, and every one of them hears it."
+      ],
+      "gmNotes": "Siege structure: the admin block has four ways in (main shutters, pad tube, clinic tube, roof and the uplink mast hatch) plus the duct Pell knows. Run the Neomorph attacks as waves between talky scenes, testing a different entrance each time. Strand's offer is the Company's: deliver a live or intact specimen and Varnaby's data spike to the Wren's Due, lift to the cutter, and the quarantine will be lifted for 'confirmed clean' survivors. It is a lie; the Probity will log the colony as lost either way. The way out is to broadcast the spike on open frequency from the uplink mast so the cutter cannot quietly bury Kessler's Landing, then hold until the storm passes and the marines are forced to land. Infected PCs or NPCs can burst now. Hold the line: at medium lethality, most PCs should be able to survive with good choices, but someone should not.",
+      "agendaNotes": "Every agenda now collides openly: the Liaison wants the specimen on the ship, the Pilot wants to lift with whoever pays, the Marshal has orders to stop any launch, the Steward wants the children aboard, and the Doctor wants every sample burned. Let at least one betrayal happen on-screen, and let the players decide what it costs.",
+      "scenes": [
+        {
+          "name": "Into the Block",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "With the storm ten minutes out, the PCs must get the last stragglers in from the hab stacks and union hall: Brother Lowe's congregation, Soll's hardliners, Pell, if she can be found. Then the shutters come down.",
+          "checks": [
+            "COMMAND — organise two hundred frightened people into the block in time",
+            "SURVIVAL — judge how long you have before the gust front makes the concourse lethal",
+            "STAMINA — carry the injured the last hundred metres through the freezing wind"
+          ],
+          "events": [
+            "The shutters drop on schedule. Anyone still outside is outside.",
+            "Bellwether broadcasts the storm warning."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any PC who orders the shutters closed while people are still running toward them"
+          ],
+          "npcGuidance": "Ferrante-Quaye wants the shutters down on time. Lowe will not come in without his last two parishioners. Pell is missing; she went into the ducts.",
+          "gmTip": "Make the choice about the shutters personal: someone they know is still on the concourse.",
+          "outcomes": [
+            "Everyone is inside: the siege begins with full numbers and full tempers.",
+            "People are left outside: one comes back later, scratching at the shutter, infected."
+          ]
+        },
+        {
+          "name": "Hold the Shutters",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Three adult Neomorphs test the block. Wave one: one hits the pad tube door while another drops through the roof hatch into the records room. Wave two: all three hit together during a brownout, one coming up the clinic tube. Each retreats after taking 3 damage and returns 10-20 minutes later. If Pell's duct is open, one comes through it. A M240 incinerator from the pad stores, if recovered, holds a corridor for one wave.",
+          "narration": "The block has four doors and not enough guns. The motion tracker on the ops desk is the only eye that works in the dark.",
+          "checks": [
+            "RANGED COMBAT — hold a corridor during a wave",
+            "HEAVY MACHINERY — weld the clinic tube door shut under attack",
+            "COMTECH — keep the generator and the tracker running through the brownouts",
+            "CLOSE COMBAT — fight off a Neomorph in a crowded office",
+            "COMMAND — stop the civilians stampeding toward the shutters"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs at every brownout",
+            "IMMEDIATE PANIC ROLL — any PC who sees a civilian taken through a ceiling panel"
+          ],
+          "npcGuidance": "Soll fights like a lion and gets reckless. Kwan freezes. Ferrante-Quaye stays at the ops desk and reads tracker contacts aloud in a steady voice.",
+          "gmTip": "Alternate waves with the human scenes. Each wave should cost something: a door, ammo, an NPC, a limb.",
+          "outcomes": [
+            "The block holds: move toward the endings.",
+            "A wall falls: the survivors retreat to the hardened shelter, and only the uplink mast or the ship remain as ways out."
+          ]
+        },
+        {
+          "name": "The Strand Channel",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Commander Strand opens the priority channel and makes his offer: bring a live specimen or an intact corpse and the Varga-Lindqvist data spike to Pad 2, put them on the Wren's Due, lift to the Probity, and the quarantine will be lifted for confirmed-clean survivors. He wants an answer before the storm's eye passes.",
+          "checks": [
+            "MANIPULATION — get Strand to say on record what he will do if you refuse",
+            "COMTECH — trace the channel and find a Company encryption key on the cutter’s side",
+            "OBSERVATION — catch the hesitation when Strand promises to send marines",
+            "COMMAND — keep the crowd from rushing the pad tube when they hear the offer"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs when Strand admits the Probity has orders to fire on any unauthorised launch",
+            "STRESS +1 — the Liaison, when Strand addresses them by name"
+          ],
+          "npcGuidance": "Strand is calm, polite and never says anything incriminating unless tricked. Ferrante-Quaye wants to accept. Varnaby, if alive, begs them to broadcast instead.",
+          "gmTip": "This is the scene that turns agendas into betrayal. Give the ICC final notice handout here.",
+          "outcomes": [
+            "The deal is accepted: the Liaison and Pilot go for the pad with the specimen.",
+            "The deal is refused: the PCs must get to the uplink mast."
+          ]
+        },
+        {
+          "name": "The Uplink Mast",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "The mast hatch opens onto the admin block roof in the full storm: hail, 140-knot gusts, near-zero visibility. One Neomorph is nesting in the mast housing. The transmitter needs ten minutes of power and someone at the dish to hold the alignment.",
+          "narration": "The uplink mast rises thirty metres above the admin block, its dish iced over. A broadcast from it reaches every ship and relay in the system on open band, beyond the ICC's control.",
+          "checks": [
+            "STAMINA — climb the mast in the gale",
+            "SURVIVAL — avoid hypothermia and lightning on the roof",
+            "COMTECH — broadcast the data spike in clear on the open distress band",
+            "RANGED COMBAT at −2 — shoot the creature in the mast housing through the hail"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any PC on the roof, each round",
+            "IMMEDIATE PANIC ROLL — any PC who falls and is caught by their safety line"
+          ],
+          "gmTip": "This is the path to the best ending. It should be physically terrifying and cost a lot.",
+          "outcomes": [
+            "The broadcast goes out: every ship in the system hears what was done at Kessler’s Landing.",
+            "The broadcast fails: only the ship or the deal remain."
+          ]
+        },
+        {
+          "name": "Run for Wren's Due",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "The pad tube is half-flooded with freezing meltwater and has one Neomorph in it. The Wren's Due takes eight minutes to warm up from cold. If she lifts without Strand's permission, the Probity fires one warning shot, then one for real; a successful PILOTING at −2 roll with Reckless can dodge into the storm wall and break lock.",
+          "narration": "Three hundred metres of dark tube between the block and the last ship off Varrow IV.",
+          "checks": [
+            "MOBILITY — get through the flooded tube with civilians in tow",
+            "PILOTING at −2 — lift into the storm and break the Probity’s lock",
+            "HEAVY MACHINERY — release the frozen docking clamps by hand",
+            "RANGED COMBAT — keep the creature off the boarding ramp"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs aboard when the Probity locks on",
+            "IMMEDIATE PANIC ROLL — any PC who must choose who is left on the ramp"
+          ],
+          "npcGuidance": "Soll will bring as many children as the ship holds. The Liaison may try to load a specimen crate in their place.",
+          "gmTip": "This is the contingency for when the siege is lost or the agendas tear the group apart. Count the seats aloud: there are twelve.",
+          "outcomes": [
+            "The ship escapes: go to the pyrrhic ending.",
+            "The ship is shot down or delivers the specimen: go to the loss ending."
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Administrator Odalys Ferrante-Quaye",
+      "role": "Elected colony administrator of Kessler's Landing",
+      "agenda": "Keep the colony's independent charter alive at any cost. Cooperate fully with the ICC, enforce the lockdown, and keep the docking fee she took off the record.",
+      "behavior": "Tired, competent, warm in public and cold in private. Speaks in figures. Never raises her voice; lowers it instead.",
+      "secret": "She signed the Clement Hale's docking permit and Wing C contract for a 600,000-credit fee that cleared the colony's debt. She knew 'patients' meant something the Hale could not keep aboard.",
+      "stats": {
+        "health": 3,
+        "command": 3,
+        "manipulation": 3
+      }
+    },
+    {
+      "name": "Ilse Varnaby",
+      "role": "Medtech of the MSV Clement Hale, left behind",
+      "agenda": "Get the Hale's true log broadcast publicly before she dies, so Varga-Lindqvist cannot bury what it did.",
+      "behavior": "Gaunt, sharp, bitter, very funny in a way that makes people uncomfortable. Trusts the law, hates the Company, flinches at every vent.",
+      "secret": "She is infected. She inhaled spores while treating the second patient and knows she has about a day. She also drugged the Hale's master to stop him from venting the patients into space, which is why the crew left her.",
+      "stats": {
+        "health": 2,
+        "medicalAid": 4,
+        "comtech": 2
+      }
+    },
+    {
+      "name": "Brother Cassian Lowe",
+      "role": "Preacher of the Chapel of the Long Night, Hab Stack D",
+      "agenda": "Keep his congregation together and away from Company hands; after Act II, lead them in defiance of the quarantine as a sign of faith.",
+      "behavior": "Soft-spoken, kind, unshakeable. Quotes no scripture anyone recognises. Becomes fiery and dangerous after the burst.",
+      "secret": "He has been hiding his infected nephew, miner Arlo Lowe, in the chapel undercroft for two days and burning the bloody rags.",
+      "stats": {
+        "health": 3,
+        "command": 2,
+        "manipulation": 3
+      }
+    },
+    {
+      "name": "Pell Arrowood",
+      "role": "Eleven-year-old duct runner; daughter of a missing Seam 9 miner",
+      "agenda": "Find her mother, Jessamy Arrowood, who she is sure is alive in the ducts.",
+      "behavior": "Fierce, blunt, small, everywhere. Hates being called brave. Will follow the PCs whether told to or not.",
+      "secret": "Her mother is dead in the far end of Seam 9. The thing in the ducts that takes Pell's ration bars is the Neomorph from Wing C; Pell knows a duct that runs straight into the admin block.",
+      "stats": {
+        "health": 2,
+        "mobility": 4,
+        "observation": 3
+      }
+    },
+    {
+      "name": "Commander Aurelio Strand",
+      "role": "Captain of the ICC cutter Probity, enforcing the quarantine",
+      "agenda": "Keep his record clean and his crew safe; recover a MERIDIAN specimen and the data spike for the Company contact who funds his pension, then log the colony as lost.",
+      "behavior": "Only heard over comms. Gracious, regretful, bureaucratically precise. Never threatens; only states facts.",
+      "secret": "His marines have orders not to land under any circumstances, and Weyland-Yutani has paid him to deliver the specimen. He will fire on any unauthorised ship and will not lift the quarantine whatever the PCs do.",
+      "stats": {
+        "command": 4,
+        "manipulation": 4
+      }
+    },
+    {
+      "name": "Rennick Soll",
+      "role": "Hardline organiser, Hardrock & Haulage Union Local 31",
+      "agenda": "Get the colony's families off-world on the Wren's Due, by force if needed, and break the administrator's power.",
+      "behavior": "Loud, physical, generous, frightening in a crowd. Calls everyone by their last name. Loyal to the Steward until she disagrees with him.",
+      "secret": "He was on the Seam 9 dump crew's roster and swapped out of the shift the day before. He knows exactly what was in the crates and where the money came from.",
+      "stats": {
+        "health": 5,
+        "closeCombat": 3,
+        "command": 2
+      }
+    },
+    {
+      "name": "Deputy Tobiah Kwan",
+      "role": "Marshal's deputy",
+      "agenda": "Survive, keep his job, and not be the one who shoots a neighbour.",
+      "behavior": "Young, eager, scared. Repeats the Marshal's orders a beat too late.",
+      "secret": "He has been selling clinic sedatives to roughnecks for months, and the union is blackmailing him with it; he will pass them a gun when asked.",
+      "stats": {
+        "health": 3,
+        "rangedCombat": 2
+      }
+    }
+  ],
+  "threats": [
+    {
+      "name": "MERIDIAN Egg Sacs",
+      "ref": "neomorphic-egg-sacs",
+      "description": "Pale, fist-sized bulbs clustered on the warm wet walls of Seam 9 around the split crates. They pulse slowly and burst in a grey puff of spores when disturbed or when warmth comes close.",
+      "tactics": "Act I: passive, they burst when approached. Act II: Bellwether detects spore counts in the hab recyclers. Act III: irrelevant, unless someone tries to collect a sample for the Company."
+    },
+    {
+      "name": "Bloodburster",
+      "ref": "bloodburster",
+      "description": "The infected miners and anyone who breathes the spores. The first sign is fever and a dry cough, then swelling along the spine, then the burst.",
+      "tactics": "Act I: Kofi Dunmore is already dead. Act II: Arlo Lowe bursts in public. Act III: Varnaby, an infected PC or a straggler bursts inside the admin block at the worst moment."
+    },
+    {
+      "name": "Neomorph (adult)",
+      "ref": "adult-neomorph",
+      "description": "Pale, translucent, fast, with a narrow head and a human hunch. Three develop over the scenario: from the Wing C patient, from Kofi Dunmore and from Arlo Lowe.",
+      "tactics": "Act I: seen once, at the edge of the light. Act II: one hunts the clinic, one escapes the burst. Act III: all three probe the admin block in waves, testing doors, using the storm and brownouts, retreating when hurt and returning."
+    },
+    {
+      "name": "ICCV Probity",
+      "description": "An ICC customs cutter in low orbit, with a rail battery and a detachment of marines who will not land.",
+      "tactics": "Act I: silent watchfulness and posted notices. Act II: target locks on the pad and a firing warning. Act III: Strand offers the specimen deal and fires on any unauthorised launch."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "Kessler's Landing — Admin Block",
+      "description": "A squat ceramcrete bunker with storm shutters, the colony ops center, the brig, a hardened shelter for forty, and the uplink mast. Bellwether lives in a humming rack behind the ops desk. In Act III it holds two hundred people and smells of wet wool and fear."
+    },
+    {
+      "name": "Kessler's Landing — Clinic",
+      "description": "Twelve beds, a lab, a morgue and the chained Wing C. The Doctor's coffee mug sits beside a stack of unpaid supply invoices. Wing C's floor drain has been scraped open from beneath, and something dragged itself through it."
+    },
+    {
+      "name": "Seam 9 Drift",
+      "description": "An exhausted thorianite seam two kilometres long, warmed by processor waste heat and dripping with condensation. Old rails, dead lamps, three missing helmets. At its end, six split crates and a garden of pale sacs on the walls."
+    },
+    {
+      "name": "Union Hall, Local 31",
+      "description": "A former ore shed with a bar, a stage made of pallets, a strike fund jar and a wall of photographs of the dead. The heart of the riot. The roughnecks keep the heaters too hot and the doors open."
+    },
+    {
+      "name": "Hab Stacks A–D and the Chapel",
+      "description": "Four stacked prefab towers where most of the four hundred live. Stack D holds the Chapel of the Long Night in a converted ore bunker, candles of processor wax, and a trapdoor to the undercroft."
+    },
+    {
+      "name": "Landing Pad and Tower",
+      "description": "Two pads, a fuel farm and a glass tower above the pad with spooled tape logs. The Wren's Due sits frosted on Pad 2: twelve seats, eight minutes to warm up, the only way off-world."
+    },
+    {
+      "name": "Ore Processor",
+      "description": "A roaring, heat-shimmering smelter feeding the colony its power and its only export. The cage lift down to Seam 9 starts here. The noise covers any other sound."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "COLONY STATUS — QUARANTINE CATEGORY 2",
+      "from": "BELLWETHER — COLONY OPERATIONS MAINFRAME",
+      "to": "ALL CREW",
+      "priority": "PRIORITY",
+      "text": "BELLWETHER COLONY OPERATIONS — KESSLER'S LANDING, VARROW IV.\nLOCAL CYCLE 0600. THE SUN DOES NOT MOVE. REMINDER: IT NEVER DOES.\n\nTERMINATOR BAND STABLE. HUB TEMPERATURE 11C. NIGHT-SIDE PRESSURE FALLING 4 MILLIBARS PER CYCLE. STORM FRONT DESIGNATED \"THE WALL\" TRACKING EAST. ESTIMATED ARRIVAL: 31 HOURS. PREPARE SHUTTERS.\n\nCOLONY POPULATION: 400 REGISTERED. 397 ACCOUNTED. SEAM 9 SHIFT (3 PERSONNEL) OVERDUE 52 HOURS. SEARCH NOT AUTHORISED PENDING ADMINISTRATOR REVIEW.\n\nCLINIC WING C: SEALED UNDER PRIVATE MEDICAL CONTRACT 2193-VL-0417. ACCESS LOGGING DISABLED BY REQUEST.\n\nLANDING PAD: MSV CLEMENT HALE DEPARTED 6 DAYS AGO, 4 HOURS AHEAD OF FILED SCHEDULE. ONE CREW MEMBER NOT ABOARD. NO EXPLANATION FILED.\n\nORBITAL TRAFFIC: ICC CUTTER PROBITY HOLDING AT 400 KM. COLONY STATUS: QUARANTINE (CATEGORY 2). NO DEPARTURES. FURTHER DETAIL WITHHELD AT ICC REQUEST — ADDITIONAL DATA CLASSIFIED.\n\nASSEMBLY CALLED, ADMIN BLOCK FLOOR, 0700. ATTENDANCE MANDATORY FOR MARSHAL, MEDICAL OFFICER, UNION STEWARD, COMPANY LIAISON AND GROUNDED VESSEL MASTER.\n\nKEEP THE LIGHTS ON.\n\nBELLWETHER OUT.",
+      "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "icc-quarantine-notice",
+      "title": "ICC QUARANTINE ORDER 2193-Q-114",
+      "from": "ICCV PROBITY — COMMANDER A. STRAND",
+      "to": "ALL CREW",
+      "priority": "EMERGENCY",
+      "text": "BY AUTHORITY OF THE INTERSTELLAR COMMERCE COMMISSION, REGULATION 77-C (BIOHAZARD CONTAINMENT): THE SETTLEMENT KESSLER'S LANDING, VARROW IV, IS PLACED UNDER CATEGORY 2 QUARANTINE EFFECTIVE IMMEDIATELY.\n\nNO VESSEL MAY LAND OR LIFT. NO CARGO MAY BE TRANSFERRED. ALL SICKNESS, DEATHS AND UNUSUAL BIOLOGICAL MATERIAL ARE TO BE REPORTED TO THIS VESSEL ON CHANNEL 9.\n\nNATURE OF THE HAZARD: ADDITIONAL DATA CLASSIFIED.\n\nNON-COMPLIANCE WILL BE TREATED AS A BREACH OF INTERSTELLAR QUARANTINE LAW. THE ICC THANKS YOU FOR YOUR COOPERATION.\n\nPROBITY OUT.",
+      "when": "Act I, during The Assembly"
+    },
+    {
+      "id": "clement-hale-manifest",
+      "title": "PAD TOWER LOG — MSV CLEMENT HALE",
+      "from": "BELLWETHER — PAD TOWER CACHE",
+      "to": "Pilot Renny Szabo",
+      "priority": "STANDARD",
+      "text": "VESSEL: MSV CLEMENT HALE. CHARTER: VARGA-LINDQVIST MEDICAL LOGISTICS (W-Y SUBSIDIARY).\nDOCKED PAD 1, 9 DAYS AGO. FILED REASON: CRYO SYSTEM FAULT.\n\nOFFLOADED: 2 X CRYO UNITS, 'PATIENTS — STABILISATION', TO CLINIC WING C UNDER CONTRACT 2193-VL-0417.\nOFFLOADED: 6 X SEALED CRATES, 'BIOMEDICAL WASTE — LOT VL-7 MERIDIAN', TO SEAM 9 FOR DISPOSAL.\n\nRELEASE COUNTERSIGNED: ADMINISTRATOR O. FERRANTE-QUAYE / COMPANY LIAISON C. VALE.\n\nDEPARTED 6 DAYS AGO, 4 HOURS EARLY. BURN: 4.1 G. CREW ABOARD: 6 OF 7. MISSING: MEDTECH I. VARNABY.\n\nPAGE 2 OF 3 DELETED BY USER REQUEST.\n\nBELLWETHER OUT.",
+      "when": "Act I, after Pad Tower Records"
+    },
+    {
+      "id": "pells-note",
+      "title": "NOTE FOUND IN A DUCT",
+      "from": "Pell Arrowood",
+      "to": "ALL CREW",
+      "priority": "STANDARD",
+      "text": "To whoever is eating my ration bars. If you are my mum's dog from the ship please come out. If you are my mum please come out. I left you the good ones with the nuts. You are getting bigger. Your old skin is in the B junction, I did not touch it. Please do not come in my room again at night. I am not scared. Pell A. Stack B room 14.",
+      "when": "Act I, in Pell's Ducts"
+    },
+    {
+      "id": "varnaby-log",
+      "title": "MSV CLEMENT HALE — MEDICAL LOG (RECOVERED)",
+      "from": "DATA SPIKE — I. VARNABY",
+      "to": "Dr. Anselm Okafor",
+      "priority": "EYES ONLY",
+      "text": "MEDICAL LOG, CLEMENT HALE. DAY 41. CREWMEN HOLT AND REYES FEVERISH AFTER CARGO HOLD SEAL FAILURE ON LOT VL-7 MERIDIAN. SPINAL SWELLING. MASTER ORDERS NO TREATMENT, ONLY OBSERVATION.\n\nDAY 43. VARGA-LINDQVIST REPLY: 'SUBJECTS ARE THE PRODUCT. PRESERVE AT ALL COSTS. DIVERT TO NEAREST NON-COMPANY SETTLEMENT. OFFLOAD WITH WASTE. RETRIEVAL TO FOLLOW.'\n\nDAY 44. KESSLER'S LANDING AGREES TERMS. CONTRACT PAID.\n\nDAY 46. HOLT IS DEAD. SOMETHING CAME OUT OF HIM. MASTER WANTS TO LEAVE NOW. I SAID NO. THEY SEALED THE DOOR BEHIND ME.\n\nIF YOU ARE READING THIS, DO NOT GIVE THIS TO THE ICC. THEY ARE THE RETRIEVAL.",
+      "when": "Act II, after Varnaby Talks"
+    },
+    {
+      "id": "liaison-special-order",
+      "title": "SPECIAL ORDER 2193-VL-7B",
+      "from": "WEYLAND-YUTANI BIO DIVISION VIA PROBITY RELAY",
+      "to": "Liaison Corin Vale",
+      "priority": "EYES ONLY",
+      "text": "LIAISON VALE. YOUR PERFORMANCE IN SECURING KESSLER'S LANDING AS AN INTERIM HOLDING SITE IS NOTED.\n\nPRIORITY ONE: RECOVER ONE MERIDIAN SPECIMEN, LIVING OR INTACT. PRIORITY TWO: RECOVER DATA SPIKE HELD BY I. VARNABY. DELIVER BOTH TO ICCV PROBITY.\n\nA SEAT ON THE OUTBOUND VESSEL IS GUARANTEED. COLONY PERSONNEL ARE NOT TO BE INFORMED. SURVIVAL OF NON-ESSENTIAL PERSONNEL IS NOT A MISSION REQUIREMENT.\n\nCREW EXPENDABLE.\n\nMU/TH/UR RELAY OUT.",
+      "when": "Act II, after Varnaby Talks"
+    },
+    {
+      "id": "marshal-icc-directive",
+      "title": "DEPUTISED OFFICER DIRECTIVE",
+      "from": "ICCV PROBITY — COMMANDER A. STRAND",
+      "to": "Marshal Thea Navarro",
+      "priority": "EYES ONLY",
+      "text": "MARSHAL NAVARRO. UNDER YOUR STANDING ICC DEPUTATION (REG. 12-D), YOU ARE DIRECTED TO PREVENT ANY VESSEL LIFTING FROM KESSLER'S LANDING BY ANY MEANS NECESSARY, INCLUDING DISABLING THE VESSEL OR ITS PILOT.\n\nYOU WILL ALSO TAKE CUSTODY OF MEDTECH I. VARNABY AND ANY RECORDS IN HER POSSESSION AND HOLD THEM FOR ICC COLLECTION.\n\nCOMPLIANCE WILL BE NOTED IN YOUR REVIEW. NON-COMPLIANCE WILL ALSO BE NOTED.\n\nPROBITY OUT.",
+      "when": "Act II, during Riot or Lockdown"
+    },
+    {
+      "id": "pilot-contract-recall",
+      "title": "CONTRACT AMENDMENT — WREN'S DUE",
+      "from": "VARGA-LINDQVIST MEDICAL LOGISTICS — CHARTER DESK",
+      "to": "Pilot Renny Szabo",
+      "priority": "EYES ONLY",
+      "text": "MASTER SZABO. YOUR RETRIEVAL CONTRACT (ONE PASSENGER: I. VARNABY, AND ONE COLD CASE) IS AMENDED.\n\nPASSENGER RETRIEVAL IS CANCELLED. CONFIRMATION OF PASSENGER'S DEATH WILL BE ACCEPTED IN ITS PLACE AT THE SAME RATE.\n\nCOLD CASE RETRIEVAL STANDS. THE ICCV PROBITY WILL GRANT YOUR LAUNCH CLEARANCE ON RECEIPT. FEE TRIPLED. YOUR LIENS WILL BE CLEARED.\n\nACKNOWLEDGE ON CHANNEL 9.\n\nCHARTER DESK OUT.",
+      "when": "Act II, after The Undercroft Burst"
+    },
+    {
+      "id": "storm-front-warning",
+      "title": "WEATHER EMERGENCY — THE WALL",
+      "from": "BELLWETHER — COLONY OPERATIONS MAINFRAME",
+      "to": "ALL CREW",
+      "priority": "EMERGENCY",
+      "text": "STORM FRONT 'THE WALL' AT HUB PERIMETER. GUSTS 140 KNOTS. TEMPERATURE FALLING 2C PER MINUTE. HAIL.\n\nALL PERSONNEL TO ADMIN BLOCK IMMEDIATELY. SHUTTERS CLOSE IN 10 MINUTES. SHUTTERS WILL NOT REOPEN UNTIL FRONT HAS PASSED: ESTIMATE 9 HOURS.\n\nMOTION SENSORS IN CONCOURSE REPORT 3 UNREGISTERED CONTACTS. CONTACTS ARE NOT COLONISTS.\n\nKEEP THE LIGHTS ON.\n\nBELLWETHER OUT.",
+      "when": "Start of Act III, Into the Block"
+    },
+    {
+      "id": "icc-final-notice",
+      "title": "ICC NOTICE 2193-Q-114-F",
+      "from": "ICCV PROBITY — COMMANDER A. STRAND",
+      "to": "ALL CREW",
+      "priority": "EMERGENCY",
+      "text": "TO THE PEOPLE OF KESSLER'S LANDING. THE PROBITY REGRETS IT CANNOT RISK ITS PERSONNEL IN CURRENT CONDITIONS.\n\nTHE QUARANTINE WILL BE LIFTED FOR CONFIRMED-CLEAN PERSONNEL UPON DELIVERY OF ONE BIOLOGICAL SPECIMEN AND ALL MEDICAL RECORDS RELATING TO MSV CLEMENT HALE TO PAD 2 FOR TRANSFER.\n\nANY OTHER LAUNCH WILL BE FIRED UPON. THIS OFFER EXPIRES WHEN THE STORM PASSES.\n\nTHE ICC THANKS YOU FOR YOUR COOPERATION.\n\nPROBITY OUT.",
+      "when": "Act III, during The Strand Channel"
+    }
+  ],
+  "maps": [
+    {
+      "id": "kesslers-landing-hub",
+      "title": "KESSLER'S LANDING — HUB",
+      "subtitle": "Independent mining colony, terminator band of Varrow IV",
+      "description": "The colony hub as the PCs know it. Every building is linked by heated tube connectors; the admin block is the only structure rated for a night-side storm. Seam 9 runs two kilometres from the processor cage lift.",
+      "kind": "ascii",
+      "ascii": "┌──────────────────────────────────────────────────────────────────┐\n│        KESSLER'S LANDING — CENTRAL HUB (VARROW IV)               │\n│  ◀ NIGHT SIDE: storm fronts          DAY SIDE: glare, 140°C ▶    │\n│                                                                  │\n│  ┌──────────────┐   ┌────────────────┐   ┌────────────────┐      │\n│  │ ORE          │   │  ADMIN BLOCK   │   │  LANDING PAD   │      │\n│  │ PROCESSOR    │   │ [OPS] [BRIG]   │   │ [PAD 1] [PAD 2]│      │\n│  │ [SMELTER]    │═══│ [SHELTER]      │═══│ [FUEL] [TOWER] │      │\n│  │ [CAGE LIFT]  │   │ [UPLINK MAST]  │   │ WREN'S DUE ▲   │      │\n│  └──────┬───────┘   └───────┬────────┘   └────────────────┘      │\n│         │                   │                                    │\n│   SEAM 9 DRIFT        MAIN CONCOURSE (heated, 300 m)             │\n│   (2 km, sealed)            │                                    │\n│  ┌──────────────┐   ┌───────┴────────┐   ┌────────────────┐      │\n│  │ HAB STACKS   │   │    CLINIC      │   │  UNION HALL    │      │\n│  │ A  B  C  D   │═══│ [WARD] [LAB]   │═══│ [FLOOR] [BAR]  │      │\n│  │ [CHAPEL]     │   │ [WING C ✖]     │   │ [LOCKERS]      │      │\n│  │ [SCHOOLROOM] │   │ [MORGUE]       │   │ [STRIKE FUND]  │      │\n│  └──────────────┘   └────────────────┘   └────────────────┘      │\n│                                                                  │\n│  ═══ heated tube connector     ✖ sealed     ▲ grounded ship      │\n└──────────────────────────────────────────────────────────────────┘",
+      "rooms": [
+        {
+          "name": "Admin Block — Ops Center",
+          "note": "Bellwether rack, tracker console, comms panel with the Probity channel. Command post during the siege."
+        },
+        {
+          "name": "Admin Block — Brig",
+          "note": "Four cells. Lockdown puts Soll and the hardliners here."
+        },
+        {
+          "name": "Admin Block — Hardened Shelter",
+          "note": "Rated for forty, holds two hundred in Act III. Last fallback."
+        },
+        {
+          "name": "Admin Block — Uplink Mast",
+          "note": "Thirty-metre mast and dish on the roof, reached through a hatch. Open-band broadcast to the whole system."
+        },
+        {
+          "name": "Clinic — Ward and Lab",
+          "note": "Twelve beds, centrifuge, the Doctor’s samples. Varnaby recovers here."
+        },
+        {
+          "name": "Clinic — Wing C",
+          "note": "Chained and sealed. One burst patient, one empty pod, a drain scraped open from below."
+        },
+        {
+          "name": "Clinic — Morgue",
+          "note": "Ceiling tiles loose. Entry point in Clinic Breach."
+        },
+        {
+          "name": "Union Hall",
+          "note": "Local 31 hall: bar, pallet stage, strike fund. Riot headquarters."
+        },
+        {
+          "name": "Hab Stacks A–D",
+          "note": "Homes for most of the colony. Duct junction behind Stack B where Pell leaves food."
+        },
+        {
+          "name": "Chapel of the Long Night",
+          "note": "Converted ore bunker in Stack D; undercroft trapdoor hides Arlo Lowe."
+        },
+        {
+          "name": "Landing Pad — Pads 1 and 2",
+          "note": "Pad 1 empty since the Hale left. Wren's Due on Pad 2."
+        },
+        {
+          "name": "Landing Pad — Fuel Farm and Tower",
+          "note": "Fuel gantry, tape logs, the Hale manifest; the Probity paints this area with targeting radar."
+        },
+        {
+          "name": "Ore Processor",
+          "note": "Smelter, power plant and the cage lift down to Seam 9."
+        },
+        {
+          "name": "Seam 9 Drift",
+          "note": "Two kilometres of warm, wet drift; the dump site and egg sacs at its end."
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "title": "THE LIGHTS STAY ON",
+      "condition": "The data spike is broadcast from the uplink mast and the admin block holds until the storm passes. Most of the colony survives.",
+      "text": "The Wall moves on, the way it always does, dragging its thunder west. In the strange silent twilight that follows, every receiver in the system is still repeating Ilse Varnaby's log in a flat synthetic voice. Two freighters and a mining tug have answered. The Probity has not. Then, hours later, a dropship comes down through the clearing sky with its ramp already open, and the marines inside will not look you in the eye. Commander Strand has been recalled. Somewhere, lawyers are waking up. You stand on the shuttered steps of the admin block, counting faces, and you do not stop until you have counted all of them twice."
+    },
+    {
+      "title": "WREN'S DUE",
+      "condition": "The Wren's Due breaks the Probity's lock and escapes into the storm with a handful of survivors and the children aboard. The colony falls behind them.",
+      "text": "The ship shakes like it wants to come apart, and for a long moment the targeting tone is the only sound in the cabin. Then the storm takes you, black and roaring, and the tone stops. When you clear the cloud tops the stars are very bright. Behind you, Kessler's Landing is a fading orange smear on the line between day and night, its lights going out one stack at a time. Twelve seats. Fourteen people, two of them on the floor. Pell is asleep against your shoulder, holding a ration bar she will not eat. Nobody says the names of the people who did not fit."
+    },
+    {
+      "title": "PROBITY",
+      "condition": "The specimen is delivered to the Probity, or the block falls with the evidence still inside it. The Company wins.",
+      "text": "The cutter's hold is spotless and very cold. Men in sealed suits take the specimen case from your hands and thank you by name. Commander Strand is shorter than his voice. He offers coffee. Through the porthole, Varrow IV turns its one bright face toward you, and on the line where the night begins, a small cluster of lights blinks out, then flares white, then is gone. The report will say storm damage. The report will say no survivors. Your contract says you were never here. Someone hands you a pen, and you notice your own hand is not shaking at all."
+    }
+  ],
+  "characters": [
+    {
+      "id": "marshal-navarro",
+      "name": "Marshal Thea Navarro",
+      "career": "Colonial Marshal",
+      "appearance": "Broad-shouldered woman in her late forties with a grey braid and a coat patched at both elbows. Speaks slowly, writes everything down, and never sits with her back to a door.",
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 5,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 1,
+        "closeCombat": 2,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 3,
+        "observation": 4,
+        "comtech": 1,
+        "survival": 2,
+        "manipulation": 3,
+        "medicalAid": 0,
+        "command": 2
+      },
+      "talent": "Investigator — +2 to OBSERVATION when looking for clues.",
+      "gear": [
+        ".357 Magnum Revolver",
+        "Flashlight",
+        "Comm Unit",
+        "Binoculars",
+        "Pocket notebook of every arrest she has made"
+      ],
+      "signatureItem": "Pocket notebook of every arrest she has made — eleven years of names, and three blank pages she is saving for whoever did this.",
+      "personalAgenda": "Find the three missing Seam 9 miners and arrest whoever is responsible, whatever their badge or pin. Kessler's Landing has no other law but you.",
+      "agendaByAct": {
+        "1": "Find the missing miners and open Wing C. Keep your ICC deputation to yourself; it would cost you the crowd’s trust.",
+        "2": "Enforce the lockdown and take Varnaby and her records into custody, as the ICC directs. If the union steward leads a march on the pad, stop her.",
+        "3": "Stop the Wren's Due from lifting by any means, including disabling the pilot, unless you can broadcast the truth first. Arrest the Company liaison in front of everyone."
+      },
+      "buddy": "Dr. Anselm Okafor",
+      "rival": "Steward Jorunn Haldane",
+      "secret": "You are a deputised ICC officer, and Commander Strand has your private channel. You have already been told that if anyone tries to launch, you are expected to stop the ship, which puts you against the Pilot and the Steward's escape plan."
+    },
+    {
+      "id": "dr-okafor",
+      "name": "Dr. Anselm Okafor",
+      "career": "Medic",
+      "appearance": "Lean, tall man in his fifties with steel spectacles, rolled sleeves and a voice that never rises. Washes his hands too often. Hums old hymns under his breath when he's frightened.",
+      "attributes": {
+        "str": 2,
+        "agi": 3,
+        "wit": 4,
+        "emp": 5
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 2,
+        "closeCombat": 0,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 0,
+        "observation": 3,
+        "comtech": 2,
+        "survival": 1,
+        "manipulation": 2,
+        "medicalAid": 5,
+        "command": 1
+      },
+      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
+      "gear": [
+        "Medkit",
+        "First Aid Kit",
+        "Personal Terminal",
+        "Respirator Mask",
+        "Wing C key on a bootlace"
+      ],
+      "signatureItem": "Wing C key on a bootlace — you have worn it around your neck for six days, and it has never once felt light.",
+      "personalAgenda": "Keep the clinic running and your patients alive. Understand what is behind the Wing C door before anyone else opens it.",
+      "agendaByAct": {
+        "1": "Keep Wing C shut until you understand it, and keep anyone from learning you were paid to keep it shut.",
+        "2": "Keep Varnaby alive and develop a test to tell the infected from the clean. Refuse to hand her or your samples to the Marshal or the Liaison.",
+        "3": "Destroy every MERIDIAN sample and specimen before the Company can take one, even if the Liaison and the Pilot are counting on it to get off this world."
+      },
+      "buddy": "Marshal Thea Navarro",
+      "rival": "Liaison Corin Vale",
+      "secret": "You were paid 40,000 credits through the Liaison to keep Wing C sealed and log no treatment. For three nights you heard someone knocking inside and did nothing. It was Varnaby. The Marshal is investigating exactly the crime you committed."
+    },
+    {
+      "id": "steward-haldane",
+      "name": "Steward Jorunn Haldane",
+      "career": "Roughneck",
+      "appearance": "Big, sunburned, ore dust in every crease of her knuckles, union armband stitched onto her coverall. Laughs loudly and often. Goes completely still when she is angry.",
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 4,
+        "stamina": 3,
+        "closeCombat": 3,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 0,
+        "observation": 1,
+        "comtech": 0,
+        "survival": 2,
+        "manipulation": 2,
+        "medicalAid": 0,
+        "command": 2
+      },
+      "talent": "Heavy Lifter — +2 HEAVY MACHINERY.",
+      "gear": [
+        "Cutting Torch",
+        "Tool Kit",
+        "Respirator Mask",
+        "Emergency Flares",
+        "Local 31 strike-fund ledger"
+      ],
+      "signatureItem": "Local 31 strike-fund ledger — every credit the union ever raised, in your handwriting, including one entry you would burn the book to hide.",
+      "personalAgenda": "Bring your three missing Seam 9 roughnecks home. They're your people, and Local 31 doesn't leave anyone underground.",
+      "agendaByAct": {
+        "1": "Lead the search for the Seam 9 crew. Keep the off-books dump job out of every conversation.",
+        "2": "Get the colony's children onto the Pilot's ship and break the quarantine, even if it means facing down the Marshal at the pad gate.",
+        "3": "Seize the Wren's Due for the children by force if you have to, and make the Company liaison pay for what they bought with your crew's lives."
+      },
+      "buddy": "Pilot Renny Szabo",
+      "rival": "Marshal Thea Navarro",
+      "secret": "You took 15,000 credits from the Company liaison for the strike fund in exchange for sending your crew to dump the Clement Hale's crates in Seam 9. You sent them. The Liaison can prove it, and the Marshal will want to know."
+    },
+    {
+      "id": "liaison-vale",
+      "name": "Liaison Corin Vale",
+      "career": "Company Agent",
+      "appearance": "Neat, slight, thirty-five, in a Company jacket worn just shabby enough to look like a colonist. Smiles with their mouth only. Remembers everyone’s children’s names.",
+      "attributes": {
+        "str": 2,
+        "agi": 3,
+        "wit": 5,
+        "emp": 4
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 0,
+        "closeCombat": 0,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 1,
+        "observation": 3,
+        "comtech": 3,
+        "survival": 1,
+        "manipulation": 4,
+        "medicalAid": 1,
+        "command": 2
+      },
+      "talent": "Cunning — +2 to MANIPULATION for deception.",
+      "gear": [
+        "M4A3 Service Pistol",
+        "Personal Terminal",
+        "Samani E-Series Watch",
+        "Comm Unit",
+        "Sealed specimen case"
+      ],
+      "signatureItem": "Sealed specimen case — Company issue, thermally lined, delivered to you with the Clement Hale; you were told never to ask what it was for.",
+      "personalAgenda": "Protect Weyland-Yutani's thorianite offtake contract with Kessler's Landing, and keep your signature off anything connected to the Clement Hale.",
+      "agendaByAct": {
+        "1": "Erase the countersignature from the pad tower records before anyone reads it, and steer the investigation toward the Hale’s crew.",
+        "2": "Recover one MERIDIAN specimen and Varnaby’s data spike, per your special order. Use the Pilot if you can, and the Doctor’s guilt if you must.",
+        "3": "Get the specimen and the spike aboard the Wren's Due and to the Probity. The colony is expendable. So, if necessary, is everyone in this room."
+      },
+      "buddy": "Pilot Renny Szabo",
+      "rival": "Dr. Anselm Okafor",
+      "secret": "You negotiated the Clement Hale's offload, paid the Doctor to keep Wing C sealed and paid the Steward's union to dump the crates. You knew roughly what MERIDIAN was. If the Marshal reads the manifest, you are finished."
+    },
+    {
+      "id": "pilot-szabo",
+      "name": "Pilot Renny Szabo",
+      "career": "Pilot",
+      "appearance": "Wiry, restless, early thirties, flight jacket with a dozen faded charter patches and a burn scar on one wrist. Talks fast, taps every surface, and doesn't sleep.",
+      "attributes": {
+        "str": 2,
+        "agi": 5,
+        "wit": 4,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 0,
+        "closeCombat": 1,
+        "mobility": 3,
+        "piloting": 5,
+        "rangedCombat": 2,
+        "observation": 2,
+        "comtech": 3,
+        "survival": 1,
+        "manipulation": 1,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "Reckless — +2 PILOTING in dangerous maneuvers.",
+      "gear": [
+        "Rexim RXF-M5 EVA Pistol",
+        "Comm Unit",
+        "Emergency Flares",
+        "Flashlight",
+        "Wren's Due ignition fob"
+      ],
+      "signatureItem": "Wren's Due ignition fob — your mother's ship, mortgaged three times; this fob is the only part of her the bank doesn't own.",
+      "personalAgenda": "Get the Wren's Due off Varrow IV before the bank, the ICC or the weather takes her from you.",
+      "agendaByAct": {
+        "1": "Find out why the Probity really grounded you, and fuel your ship quietly before anyone thinks to stop you.",
+        "2": "Sell your twelve seats to whoever offers the best way out: the union’s children or the Liaison’s guaranteed clearance. Keep your real contract hidden.",
+        "3": "Lift with the cold case and confirmation of Varnaby’s death and get paid, or lift with the children and get shot at. Either way, the Marshal is not stopping you."
+      },
+      "buddy": "Steward Jorunn Haldane",
+      "rival": "Marshal Thea Navarro",
+      "secret": "You weren't stranded by accident. Varga-Lindqvist hired you to retrieve Ilse Varnaby and 'one cold case' from Kessler's Landing, and the quarantine caught you a day after landing. Varnaby is the Marshal's key witness and the Doctor's patient."
+    }
+  ],
+  "tips": [
+    "Run Act I as a noir procedural: let PCs split up, and cut between them at the moment each one finds something that implicates another.",
+    "Keep a secret infection track for anyone who breathes spores in Seam 9, and pay it off late in Act III.",
+    "Push each EYES ONLY handout privately and let the player decide when, or whether, to reveal it.",
+    "Never let Commander Strand say anything incriminating unless a PC earns it with a good MANIPULATION roll; the evidence is the point.",
+    "Give Pell Arrowood a reason to be in every act, so her fate in Act III lands.",
+    "During the siege, alternate Neomorph waves with arguments; the human scenes should feel as dangerous as the creatures.",
+    "At medium lethality, offer each dying PC a final heroic action instead of a quiet death."
+  ]
+}

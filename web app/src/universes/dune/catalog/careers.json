@@ -1,0 +1,584 @@
+[
+  {
+    "id": "mentat",
+    "name": "Mentat",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "truth",
+    "keySkills": [
+      "understand",
+      "discipline"
+    ],
+    "talents": [
+      "projection-engine",
+      "data-without-context",
+      "cold-tally"
+    ],
+    "startingGear": {
+      "fixed": [
+        "sapho-juice",
+        "filmbook"
+      ],
+      "choices": [
+        [
+          "ledger-crystal",
+          "cone-of-silence"
+        ],
+        [
+          "kindjal",
+          "flip-dart"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "A trained human computer. You ingest data, weigh probabilities and deliver conclusions your House stakes its future on.",
+    "appearanceHints": [
+      "red-stained lips from sapho",
+      "ink-stained fingers",
+      "motionless when thinking",
+      "formal, plain clothing"
+    ],
+    "agendaHints": [
+      "Prove a projection your master dismissed",
+      "Find who is feeding you false data",
+      "Keep a secret calculation to yourself"
+    ],
+    "typicalNames": [
+      "Orrin Vasq",
+      "Ilse Marrow",
+      "Teodor Hale"
+    ],
+    "signatureItemHints": [
+      "A stained sapho flask",
+      "A ledger no one else can read"
+    ],
+    "art": "/art/dune/archetypes/mentat.webp",
+    "notes": "Key drive TRUTH; key skills UNDERSTAND and DISCIPLINE."
+  },
+  {
+    "id": "bene-gesserit",
+    "name": "Bene Gesserit",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "faith",
+    "keySkills": [
+      "discipline",
+      "communicate"
+    ],
+    "talents": [
+      "the-voice",
+      "prana-bindu-calm",
+      "truthsense"
+    ],
+    "startingGear": {
+      "fixed": [
+        "house-livery"
+      ],
+      "choices": [
+        [
+          "poison-snooper",
+          "verite"
+        ],
+        [
+          "kindjal",
+          "slip-tip"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "A Sister of an ancient order of body and mind control. You serve the House, but the order’s plans come first.",
+    "appearanceHints": [
+      "dark hooded robes",
+      "unblinking attention",
+      "perfect posture",
+      "a voice that never rises"
+    ],
+    "agendaHints": [
+      "Report a bloodline secret to the order",
+      "Protect a child the order has an interest in",
+      "Test someone without them knowing"
+    ],
+    "typicalNames": [
+      "Lady Corvala",
+      "Sister Imreth",
+      "Reverend Mother Sabeth Vey"
+    ],
+    "signatureItemHints": [
+      "A plain black veil",
+      "A child’s toy from a forgotten mission"
+    ],
+    "art": "/art/dune/archetypes/bene-gesserit.webp",
+    "notes": "Key drive FAITH; key skills DISCIPLINE and COMMUNICATE."
+  },
+  {
+    "id": "swordmaster",
+    "name": "Swordmaster",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "duty",
+    "keySkills": [
+      "battle",
+      "move"
+    ],
+    "talents": [
+      "the-slow-blade",
+      "guardians-step",
+      "read-the-feint"
+    ],
+    "startingGear": {
+      "fixed": [
+        "rapier",
+        "dueling-leathers"
+      ],
+      "choices": [
+        [
+          "kindjal",
+          "sword"
+        ],
+        [
+          "shield-belt-dueling",
+          "shield-belt-personal"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "A blade-master of the Ginaz tradition. You train the House’s fighters and stand between its heir and every knife.",
+    "appearanceHints": [
+      "old scars",
+      "ready stance",
+      "dueling leathers",
+      "rapier on the hip"
+    ],
+    "agendaHints": [
+      "Train an heir who refuses to listen",
+      "Settle an old dueling debt",
+      "Find the gap in the household guard"
+    ],
+    "typicalNames": [
+      "Gurn Tallow",
+      "Mara Keshet",
+      "Brannoc Sel"
+    ],
+    "signatureItemHints": [
+      "A blade from your own master",
+      "A dueling scar you chose to keep"
+    ],
+    "art": "/art/dune/archetypes/swordmaster.webp",
+    "notes": "Key drive DUTY; key skills BATTLE and MOVE."
+  },
+  {
+    "id": "noble-scion",
+    "name": "Noble Scion",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "power",
+    "keySkills": [
+      "communicate",
+      "understand"
+    ],
+    "talents": [
+      "name-and-seal",
+      "courtly-poise",
+      "heirs-burden"
+    ],
+    "startingGear": {
+      "fixed": [
+        "signet-ring",
+        "house-livery"
+      ],
+      "choices": [
+        [
+          "kindjal",
+          "rapier"
+        ],
+        [
+          "shield-belt-personal",
+          "solari-purse"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "Blood of the House. Your name opens doors and your mistakes become everyone’s problem.",
+    "appearanceHints": [
+      "House colors",
+      "signet ring",
+      "trained courtesy",
+      "a guard never far away"
+    ],
+    "agendaHints": [
+      "Win the respect of a skeptical vassal",
+      "Secure an alliance by marriage or bargain",
+      "Hide a weakness from your rivals"
+    ],
+    "typicalNames": [
+      "Lord Aurel Tessarin",
+      "Lady Ysolde Vaszari",
+      "Heir Corin Ordrane"
+    ],
+    "signatureItemHints": [
+      "Your mother’s ring",
+      "A letter you have never opened"
+    ],
+    "art": "/art/dune/archetypes/noble-scion.webp",
+    "notes": "Key drive POWER; key skills COMMUNICATE and UNDERSTAND."
+  },
+  {
+    "id": "fremen-guide",
+    "name": "Fremen Guide",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "faith",
+    "keySkills": [
+      "move",
+      "battle"
+    ],
+    "talents": [
+      "walk-without-rhythm",
+      "water-discipline",
+      "desert-power"
+    ],
+    "startingGear": {
+      "fixed": [
+        "crysknife",
+        "stillsuit"
+      ],
+      "choices": [
+        [
+          "fremkit",
+          "maker-hooks"
+        ],
+        [
+          "paracompass",
+          "thumper"
+        ],
+        [
+          "water-rings",
+          "sietch-token"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "A child of the deep desert who has chosen, for now, to walk with outsiders. Your sietch is watching how they treat you.",
+    "appearanceHints": [
+      "stillsuit and cloak",
+      "blue-within-blue eyes",
+      "water rings on a cord",
+      "no wasted motion"
+    ],
+    "agendaHints": [
+      "Return a debt of water to your sietch",
+      "Judge whether these outsiders can be trusted",
+      "Keep the location of your sietch secret"
+    ],
+    "typicalNames": [
+      "Tamir ibn Qarrat",
+      "Zaida",
+      "Ruwan Var"
+    ],
+    "signatureItemHints": [
+      "Your first water ring",
+      "A worm-tooth bead"
+    ],
+    "art": "/art/dune/archetypes/fremen-guide.webp",
+    "notes": "Key drive FAITH; key skills MOVE and BATTLE."
+  },
+  {
+    "id": "suk-doctor",
+    "name": "Suk Doctor",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "duty",
+    "keySkills": [
+      "understand",
+      "discipline"
+    ],
+    "talents": [
+      "imperial-conditioning",
+      "field-surgery",
+      "diagnose-poison"
+    ],
+    "startingGear": {
+      "fixed": [
+        "suk-medkit"
+      ],
+      "choices": [
+        [
+          "chaumurky-kit",
+          "poison-snooper"
+        ],
+        [
+          "filmbook",
+          "glowglobe"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "A physician bearing the diamond tattoo of Imperial Conditioning. Everyone trusts you with their life — that is your burden.",
+    "appearanceHints": [
+      "diamond tattoo on the brow",
+      "hair bound in a silver ring",
+      "gentle, steady hands"
+    ],
+    "agendaHints": [
+      "Save a patient your House would rather lose",
+      "Learn who is testing your conditioning",
+      "Keep a medical secret"
+    ],
+    "typicalNames": [
+      "Dr. Wellan Shor",
+      "Dr. Amaris Pell",
+      "Dr. Osei Lan"
+    ],
+    "signatureItemHints": [
+      "Your school’s silver ring",
+      "A patient’s gift"
+    ],
+    "art": "/art/dune/archetypes/suk-doctor.webp",
+    "notes": "Key drive DUTY; key skills UNDERSTAND and DISCIPLINE."
+  },
+  {
+    "id": "spy-agent",
+    "name": "Spy/Agent",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "truth",
+    "keySkills": [
+      "move",
+      "communicate"
+    ],
+    "talents": [
+      "cover-identity",
+      "dead-drop",
+      "shadows-patience"
+    ],
+    "startingGear": {
+      "fixed": [
+        "forged-papers"
+      ],
+      "choices": [
+        [
+          "slip-tip",
+          "shigawire-garrote"
+        ],
+        [
+          "cone-of-silence",
+          "distrans"
+        ],
+        [
+          "stunner",
+          "flip-dart"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "Eyes and ears of the House. You go where the nobles cannot be seen to go and return with what they need to know.",
+    "appearanceHints": [
+      "forgettable face",
+      "servant’s clothes or merchant’s",
+      "always near an exit"
+    ],
+    "agendaHints": [
+      "Unmask a double agent",
+      "Protect an informant at any cost",
+      "Plant false information on a rival"
+    ],
+    "typicalNames": [
+      "\"Sand-Mouse\"",
+      "Kell Ruvane",
+      "Odile Fenn"
+    ],
+    "signatureItemHints": [
+      "A coin with a hidden message",
+      "A face you once wore"
+    ],
+    "art": "/art/dune/archetypes/spy-agent.webp",
+    "notes": "Key drive TRUTH; key skills MOVE and COMMUNICATE."
+  },
+  {
+    "id": "smuggler",
+    "name": "Smuggler",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "power",
+    "keySkills": [
+      "move",
+      "communicate"
+    ],
+    "talents": [
+      "a-price-for-everything",
+      "blind-routes",
+      "cut-and-run"
+    ],
+    "startingGear": {
+      "fixed": [
+        "sandmask"
+      ],
+      "choices": [
+        [
+          "maula-pistol",
+          "stunner"
+        ],
+        [
+          "radio-comm",
+          "oil-lens-binoculars"
+        ],
+        [
+          "solari-purse",
+          "semuta"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "You move spice, water and people past the Guild’s tariffs and the Houses’ patrols. Everyone needs you; no one admits it.",
+    "appearanceHints": [
+      "goggles pushed up",
+      "mismatched gear",
+      "easy smile, cold eyes"
+    ],
+    "agendaHints": [
+      "Pay off a debt to a dangerous patron",
+      "Find a buyer for an illegal cargo",
+      "Keep your crew alive"
+    ],
+    "typicalNames": [
+      "Esmé Varo",
+      "Dace Lash",
+      "Rhaz the Quick"
+    ],
+    "signatureItemHints": [
+      "A lucky goggle strap",
+      "A debt marker you will never cash"
+    ],
+    "art": "/art/dune/archetypes/smuggler.webp",
+    "notes": "Key drive POWER; key skills MOVE and COMMUNICATE."
+  },
+  {
+    "id": "planetologist",
+    "name": "Planetologist",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "justice",
+    "keySkills": [
+      "understand",
+      "move"
+    ],
+    "talents": [
+      "reading-the-land",
+      "ecological-mind",
+      "friend-of-the-sietch"
+    ],
+    "startingGear": {
+      "fixed": [
+        "stillsuit",
+        "paracompass"
+      ],
+      "choices": [
+        [
+          "dew-collector",
+          "stilltent"
+        ],
+        [
+          "filmbook",
+          "shield-wall-map"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "An Imperial ecologist sent to study Arrakis. The more you learn about the desert, the less you trust the Empire.",
+    "appearanceHints": [
+      "sun-darkened skin",
+      "notebook always open",
+      "Fremen-style scarf"
+    ],
+    "agendaHints": [
+      "Prove a theory about the spice cycle",
+      "Protect a hidden water project",
+      "Decide which side you are on"
+    ],
+    "typicalNames": [
+      "Dr. Hollis Ambry",
+      "Pardo Vell",
+      "Shara Ilvane"
+    ],
+    "signatureItemHints": [
+      "A pressed desert flower",
+      "A field journal"
+    ],
+    "art": "/art/dune/archetypes/planetologist.webp",
+    "notes": "Key drive JUSTICE; key skills UNDERSTAND and MOVE."
+  },
+  {
+    "id": "guild-envoy",
+    "name": "Guild Envoy",
+    "source": "custom",
+    "kind": "career",
+    "keyAttribute": "power",
+    "keySkills": [
+      "communicate",
+      "understand"
+    ],
+    "talents": [
+      "the-guild-remembers",
+      "prescient-hedge",
+      "neutral-ground"
+    ],
+    "startingGear": {
+      "fixed": [
+        "spice-melange"
+      ],
+      "choices": [
+        [
+          "radio-comm",
+          "solido-projector"
+        ],
+        [
+          "suspensor-chair",
+          "forged-papers"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Take every fixed item, then one item from each line.",
+      "cash": "1D20x10 solari"
+    },
+    "description": "A representative of the Spacing Guild seconded to the House. You speak softly because the whole Imperium depends on your masters.",
+    "appearanceHints": [
+      "tall and pale",
+      "faint spice scent",
+      "grey Guild robes"
+    ],
+    "agendaHints": [
+      "Secure the spice flow for the Guild",
+      "Watch for prescient interference",
+      "Learn what the House hides from the Guild"
+    ],
+    "typicalNames": [
+      "Envoy Corso Sol",
+      "Factor Maeve Dorn",
+      "Envoy Teb"
+    ],
+    "signatureItemHints": [
+      "A spice-stained travel pass",
+      "A Navigator’s token"
+    ],
+    "art": "/art/dune/archetypes/guild-envoy.webp",
+    "notes": "Key drive POWER; key skills COMMUNICATE and UNDERSTAND."
+  }
+]

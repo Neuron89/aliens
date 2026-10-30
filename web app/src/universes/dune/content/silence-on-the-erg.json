@@ -1,0 +1,1074 @@
+{
+  "packVersion": 1,
+  "id": "silence-on-the-erg",
+  "universe": "dune",
+  "kind": "scenario",
+  "meta": {
+    "title": "Silence on the Erg",
+    "tagline": "A House harvester has gone silent four hundred kilometres into the deep desert. Someone else is already flying out to find it.",
+    "synopsis": "Seven days after a Coriolis storm, the spice harvester Saltmother’s Due of minor House Oskaren lies broken in the deep erg, her beacon dark. The agents fly out in a single ornithopter to recover the crew, the spice, or her Guild-sealed yield register, which proves the House has skimmed the Emperor’s spice tithe for three years. At the wreck they find four survivors who should be dead, kept alive by a Fremen sietch in exchange for the spice hold; a crawler boss who killed a crewman to keep the beacon off; and a Harkonnen salvage team under a false CHOAM banner, led there by coordinates the party’s own pilot sold. With worm-sign closing and an overloaded ornithopter, the agents must choose between the crew, the spice and the truth, and decide who holds House Oskaren by the throat when they return.",
+    "type": "One-Shot",
+    "players": "4–5",
+    "playtime": "3–5 hours",
+    "difficulty": "Standard",
+    "tone": [
+      "desert survival",
+      "awe",
+      "faith versus pragmatism",
+      "betrayal in the open desert"
+    ],
+    "contentWarnings": [
+      "character death",
+      "player-vs-player conflict",
+      "murder",
+      "dehydration and heat exposure",
+      "desiccated corpses and reclaiming water from the dead",
+      "drug dependency (spice saturation)",
+      "people devoured by sandworms",
+      "violence with blades and firearms"
+    ],
+    "source": "bundled",
+    "generated": {
+      "by": "claude-code",
+      "model": "claude-opus-5-5",
+      "at": "2026-10-30T19:23:26Z",
+      "params": {
+        "universe": "dune",
+        "players": 5,
+        "playtime": "session 3-5h",
+        "type": "One-Shot",
+        "difficulty": "Standard",
+        "tone": [
+          "survival",
+          "awe",
+          "faith vs. pragmatism",
+          "betrayal in the open desert"
+        ],
+        "setting": "a deep-desert recovery expedition: a House Oskaren spice harvester silent 400 km into the erg past the Shield Wall after a Coriolis storm",
+        "threat": "a Harkonnen salvage team under a false banner, a sandworm and a spice blow",
+        "themes": "survival, awe, faith vs. pragmatism, betrayal in the open desert",
+        "avoid": "",
+        "lethality": "medium-high"
+      }
+    }
+  },
+  "briefing": {
+    "from": "MENTAT OF HOUSE OSKAREN — HADRATH STATION",
+    "to": "AGENTS OF THE HOUSE — ORNITHOPTER CINDER MOTH",
+    "classification": "URGENT — SEALED BY THE LORD STEWARD",
+    "text": "COMPUTATION BEGINS.\n\nFact: seven days ago a Coriolis storm crossed the erg four hundred and ten kilometres past the Shield Wall. The harvester Saltmother’s Due, crew of twelve, Crawler Boss Iselde Varn commanding, was working a fresh field in its path. Her last transmission was a routine yield report. Then nothing.\n\nFact: the carryall Kestrel Vane lifted from Hadrath Station to retrieve her ahead of the storm. It has not returned either.\n\nFact: at last report the harvester’s hold carried an estimated nine tonnes of melange. The House’s quarterly obligations cannot be met without it.\n\nFact: the harvester’s bridge holds a Guild-sealed yield register, which the Lord Steward wishes returned unopened. The reason has not been supplied to this computation.\n\nSurvival probability for a harvester crew after seven days on standard reserves: 0.04. Probability that the beacon failed from storm damage alone: 0.31. I note the discrepancy without resolving it.\n\nThe Lord Steward instructs you: fly the Cinder Moth to the last known position. Recover the crew, the spice and the register. The House cannot afford to lose all three. You may be required to choose. If so, choose the register first.\n\nWater aboard: 140 litres. Range: sufficient for the outbound flight and return with a reserve of eleven percent. Do not land on open sand without need. Do not raise shields beyond the Shield Wall.\n\nRISK ASSESSMENT: SEVERE. COMPUTATION PAUSED."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "STORM’S WAKE",
+      "summary": "The Cinder Moth crosses the Shield Wall into the storm-scoured erg, finds the downed carryall Kestrel Vane and its one survivor, and must pay a Fremen watch-post a price to land on the only safe rock near the wreck.",
+      "readAloud": [
+        "The Cinder Moth lifts from Hadrath Station before dawn, wings hammering the cold air, and the Shield Wall falls away beneath you like the edge of the world. Your stillsuit is already working: the faint pull at your nostrils, the warm weight of reclaimed water against your back, the catchpocket ticking at your hip. Behind you the pilot hums something tuneless. Ahead there is only sand, grey in the half-light, folded into dunes as tall as towers and as patient as the dead.",
+        "The storm passed this way seven days ago and the desert still remembers it. Whole dune ridges have walked kilometres east. Old rock has been scoured as bright as new bone. The air at altitude glitters with suspended dust that hisses against the canopy and finds its way into your teeth, into the seals of your suit, into the corners of your eyes. The paracompass needle wanders, settles, wanders again. Static fills every channel like slow breathing.",
+        "By midmorning the sun has become a weight. It presses through the canopy onto your shoulders and the backs of your hands. Below, the ornithopter’s shadow races across the sand, small and lonely, the only moving thing for a hundred kilometres. Then the pilot taps the glass and points: something angular on the slope of a dune, half buried, glinting. Metal. A wing. The long spine of a carryall lies broken in the sand like the bones of an enormous bird.",
+        "Beyond the wreck, a dark tooth of rock stands out of the erg. A line of smoke rises from it, thin as a thread, straight up into air too still to bend it. Someone lives out here. Someone has watched you coming for an hour already, and has decided, for now, to let you come."
+      ],
+      "gmNotes": "Act I runs on two visible clocks. Put the Cinder Moth’s water on the table (140 litres) and start a six-step WORM-SIGN clock at 0; it will not matter until Act II, but the players should see it exist. Start Threat at 2 per player. The act has three jobs: show the desert is hostile and beautiful, plant the clue that the harvester’s beacon was switched off by hand forty minutes before the storm (the Kestrel Vane’s flight recorder), and make the agents pay a Fremen price before they can reach the wreck. The Fremen of Sietch Umm Kareth already know the crew is alive; they have been carrying water to them every night. Ferrouk will not say so unless the price is paid or he is outplayed. If the table is slow, spend 3 Threat to bring in the Second Front storm cell and force the issue.",
+      "agendaNotes": "Act I agendas are private and plausible. Jessamy keeps her transponder on Lazlo Quint’s band; reward any agent who notices the stray carrier wave. Tahra steers the party toward Siq Abbar and says less than she knows. Bastien quietly watches Vesk. Hallam fusses over water discipline, which is useful and also hides how badly he wants to reach the wreck. Vesk should be tempted to promise Ferrouk something the House has not authorised.",
+      "scenes": [
+        {
+          "name": "Over the Shield Wall",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "At three hundred metres the dust haze thickens into a brown wall and the ornithopter bucks in the storm’s dying eddies. The paracompass disagrees with the sun, and the sun is winning.",
+          "checks": [
+            "MOVE + POWER, Difficulty 2 — the pilot holds the Cinder Moth steady through the storm’s tail without fouling the wing joints with grit",
+            "UNDERSTAND + TRUTH, Difficulty 2 — read dune drift and scoured rock to correct the paracompass toward the harvester’s last fix",
+            "DISCIPLINE + FAITH, Difficulty 1 — keep suit discipline in the heat of the cabin; on a failure the shared reserve loses 2 litres per agent"
+          ],
+          "events": [
+            "Static on the House channel resolves for three seconds into a clean carrier wave on an unregistered band, then vanishes. It is Jessamy’s transponder answering Lazlo Quint.",
+            "The harvester’s last fix proves to be six kilometres wrong; the storm moved landmarks, not the machine."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — every agent aboard if the pilot fails (the Cinder Moth drops eighty metres in a downdraft)",
+            "THREAT +1 — on any complication; bank it toward the worm-sign clock",
+            "MOMENTUM — surplus successes on the navigation test may be held to shorten the Act II survey by one scene"
+          ],
+          "npcGuidance": "Lord Steward Maddoc Oskaren comes on the House channel once, briefly, to ask whether the register has been sighted. He does not ask about the crew. Let the players notice the order of his questions.",
+          "gmTip": "Use this scene to teach the dice and the water clock, not to punish. If an agent notices the stray carrier wave, give them the choice to say so aloud or keep it.",
+          "outcomes": [
+            "On course: arrive with daylight to spare and Momentum in hand",
+            "Off course: arrive late; the sun costs 10 litres and the Act II worm-sign clock starts at 1",
+            "Carrier wave noticed: the seed of Jessamy’s exposure is planted"
+          ]
+        },
+        {
+          "name": "The Kestrel Vane",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The carryall lies on its back with one wing torn away, cargo clamps open and empty. The shaded crew compartment is empty of the dead, and a line of drag marks leads off toward the rock.",
+          "checks": [
+            "UNDERSTAND + TRUTH, Difficulty 2 — the flight recorder shows the harvester’s beacon went dark forty minutes before the storm front reached it",
+            "UNDERSTAND + DUTY, Difficulty 1 — stabilise co-pilot Tobin Ashe’s crushed leg (Field Surgery applies)",
+            "MOVE + JUSTICE, Difficulty 2 — read the drag marks: the dead were carried off by people on foot walking without rhythm, toward the rock",
+            "COMMUNICATE + JUSTICE, Difficulty 1 — calm Tobin, who has a maula pistol, a fever and three days of thirst"
+          ],
+          "events": [
+            "Tobin Ashe is wedged in the avionics bay where he has hidden for four days. He saw the Fremen take his crewmates’ bodies and believes they will come back for him.",
+            "Wing-pilot Odile Sarn is still strapped into her seat, dried to leather. Her water rings have been cut from her belt with care."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever finds Odile Sarn strapped in her seat",
+            "THREAT +2 — if the agents spend more than an hour here; the sun takes its due and the water clock drops 8 litres",
+            "MOMENTUM +1 — for recovering the flight recorder intact (it is evidence the Lord Steward will want, and so will others)"
+          ],
+          "npcGuidance": "Tobin is terrified, honest and heavy: eighty-five kilos the Cinder Moth will have to carry home. He knows Iselde Varn ordered the carryall to come early, before the storm, and that she sounded frightened of someone other than the weather.",
+          "gmTip": "Hand over the recorder log as a handout. The contradiction between a storm-killed beacon and a hand-killed one is the thread that leads to the truth in Act II; do not explain it.",
+          "outcomes": [
+            "Tobin rescued: one more passenger and one more mouth on the water clock",
+            "Recorder recovered: the agents know the beacon was turned off deliberately",
+            "Tobin left behind: Hallam’s conditioning makes him protest, loudly; Tahra notes how outsiders spend lives"
+          ]
+        },
+        {
+          "name": "The Price at Siq Abbar",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The rock is honeycombed with shade. Fremen in mottled cloaks watch from ledges you did not see until they moved. A grey-bearded man with a crysknife at his belt waits at a cave mouth, holding a cup of water he does not offer.",
+          "checks": [
+            "COMMUNICATE + JUSTICE, Difficulty 2 — bargain the price of landing on Kareth’s Thumb without promising the House’s spice",
+            "UNDERSTAND + FAITH, Difficulty 2 — follow water etiquette: decline the first cup, accept the second, never spill a drop",
+            "DISCIPLINE + TRUTH, Difficulty 3 — read Ferrouk’s stillness: he already knows the harvester crew is alive",
+            "COMMUNICATE + FAITH, Difficulty 1 — Tahra speaks for the agents in her own tongue (the others hear only her tone)"
+          ],
+          "events": [
+            "Ferrouk names his price: the water of the Kestrel Vane’s dead is already the sietch’s by right of finding. For landing on the Thumb, guidance across the basin and warning of worms, he asks for the Cinder Moth’s shield generator, left here on the rock, or a blood-promise that the harvester’s hold belongs to Umm Kareth.",
+            "Tahra and Ferrouk greet each other as strangers. They are brother and sister."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any off-worlder who wastes water in Fremen sight; also THREAT +1 and the sietch’s goodwill drops",
+            "MOMENTUM +2 — if an agent honours Ferrouk by spitting on the stone at the right moment (Tahra may coach them)",
+            "STRESS +1 — Vesk, if he makes a promise on the House’s behalf he knows the Steward will not keep"
+          ],
+          "npcGuidance": "Ferrouk is courteous, slow and immovable. He does not lie; he simply leaves out what he is not asked. Pressed hard, he lets one fact fall: “Your machine’s people drink better than you do.” He despises shields and will not deal with anyone wearing one switched on.",
+          "gmTip": "The shield generator is the clever price: giving it up makes the party weaker in a fight but safer from worms. Let them argue about it. Either payment earns Fremen help in Act II; refusing means the Fremen watch and let the desert decide.",
+          "outcomes": [
+            "Shield generator given: Fremen guidance in Act II and the Cinder Moth is lighter by 40 kg",
+            "Hold promised: Fremen guidance, and a blood-debt the House now owes whether it likes it or not",
+            "Price refused: no guidance; the worm-sign clock starts Act II at 2"
+          ]
+        },
+        {
+          "name": "The Second Front",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "A daughter cell of the Coriolis storm sweeps across the route. Treat it as a smaller Coriolis Sandstorm: Difficulty 3 to outrun, 2 to land in the lee of rock and shelter. Caught in the open, the Cinder Moth loses one wing joint (lift capacity drops by 200 kg for the rest of the scenario) and every agent outside gains the exposed condition.",
+          "narration": "A brown wall rises on the southern horizon and walks toward you faster than anything that size should move. The light goes the colour of old blood.",
+          "checks": [
+            "MOVE + POWER, Difficulty 3 — outrun the cell to the lee of Kareth’s Thumb",
+            "UNDERSTAND + JUSTICE, Difficulty 1 — the Planetologist predicts its track (Reading the Land)",
+            "DISCIPLINE + FAITH, Difficulty 2 — endure the blow in a stilltent if grounded on open sand"
+          ],
+          "stressTriggers": [
+            "STRESS +2 — any agent caught outside without shelter",
+            "THREAT — the Narrator pays 3 Threat to bring this scene in; a complication on the pilot’s roll damages the wing joint",
+            "MOMENTUM — the Planetologist may spend 1 to have predicted it a scene early, turning the escape into a Difficulty 1 test"
+          ],
+          "gmTip": "Use this only if the act drags or the table is too comfortable. A crippled wing joint makes the Act III weight choice far sharper.",
+          "outcomes": [
+            "Outrun: the agents arrive shaken but whole",
+            "Caught: wing joint damaged, lift reduced, water clock down 10 litres"
+          ]
+        },
+        {
+          "name": "The Unregistered Band",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "In the shade of the Thumb, with the rotors cooling and ticking, the Cinder Moth’s transponder light blinks once, twice, on a pattern none of you set.",
+          "checks": [
+            "UNDERSTAND + TRUTH, Difficulty 3 — trace the carrier wave to the Cinder Moth’s own transmitter and an off-register frequency",
+            "COMMUNICATE + POWER, Difficulty 2 — Jessamy talks it away as a Guild weather relay",
+            "DISCIPLINE + JUSTICE, Difficulty 2 — watch Jessamy without accusing her and note whose eyes she avoids"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — Jessamy, if confronted in front of the whole party",
+            "THREAT +2 — if the transponder is left running; Quint arrives one scene earlier in Act II"
+          ],
+          "gmTip": "Do not force this scene. It exists so a sharp table can catch Jessamy early, which turns Act II into an interrogation instead of an ambush. Both are good games.",
+          "outcomes": [
+            "Transponder disabled: Quint loses the trail and arrives late, angry and guessing",
+            "Jessamy exposed: the party must decide whether to trust their only pilot four hundred kilometres from home",
+            "Nobody notices: Quint arrives exactly on schedule"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "THE WRECK",
+      "summary": "At the split harvester the agents find four survivors kept alive by Fremen water, a murdered crewman, and the Guild-sealed register that proves the tithe fraud, while worm-sign closes and a Harkonnen salvage team arrives under a false CHOAM banner.",
+      "readAloud": [
+        "From the crown of the Thumb you see her at last: the Saltmother’s Due, a harvester the size of a city block, lying broken-backed on the floor of a wide sand basin. The storm lifted her and set her down hard. Her hull has split clean across the middle, and the two halves sit forty metres apart with a river of sand poured between them. Her scoops hang open. Her treads point at the sky. Nothing moves on her at all.",
+        "Then something does. A hatch on the forward hull swings open, and a figure climbs into the light and raises one arm. Then another. Then two more. They cross the open sand toward your rock slowly, unevenly, the careful gait of people who have learned that the desert is listening. When they reach you, they are smiling. Their lips are not cracked. Their eyes, in the shade of their hoods, are touched with blue.",
+        "Inside the hull the air is hot, thick and sweet: cinnamon and scorched plastic and something underneath, older and darker. Spice dust coats every surface in a fine orange fur. It rises around your boots with each step and hangs in the shafts of light from the torn plating. You taste it on your tongue. It makes your thoughts feel very clear and very far away.",
+        "Under your feet, faint and slow, the sand is humming. Not the harvester; her engines are long dead. Something deeper. A low vibration you feel more in your teeth than your ears, rising and falling like a tide. Out on the basin a ripple moves through the dune crests, kilometres off, and stops. Then it moves again, a little closer.",
+        "At the edge of hearing, from the north, comes the beat of heavy rotors. A carryall crests the far ridge, wings a blur, a salvage banner snapping beneath its belly in the colours of a combine you have never heard of. It is flying with its shields up. They shimmer in the heat like water, bright enough to see from the ground. Bright enough, you think, to be seen from below."
+      ],
+      "gmNotes": "The truth of the wreck: when the storm warning came, Crawler Boss Iselde Varn switched off the beacon because she knew the yield register could hang her, and she wanted to bargain before anyone from the House arrived. The driver Hesk tried to turn it back on during the storm; she struck him with a tread-wrench and he died in the engine section. Eight crew died in the crash. The four survivors (Iselde, the young hand Pell Dorrin, the driver Sefa Lund and the old spotter Domas Ghent) lived because Fremen of Umm Kareth came on the second night, took the dead for the sietch’s deathstill, and since then have carried water to the living every night, in exchange for Iselde’s promise of the spice hold. The survivors have also been breathing raw spice for a week: their eyes are turning blue and Pell has begun to see things. The register core sits in a Guild-sealed housing on the bridge; it weighs 90 kg and cannot be copied without breaking the seal, which voids it as evidence. Iselde has pulled its key-plate and hidden it on her body. Lazlo Quint’s Harkonnen salvagers arrive in the fifth scene. Under Imperial salvage law a harvester with no living crew aboard after seven days may be claimed, which means Quint needs the survivors dead.\n\nRun the WORM-SIGN clock in the open: six steps. It advances 1 at the start of each scene, 1 for every Threat the Narrator spends on it, and 2 the instant any shield is switched on within the basin. At 6 a grown worm surfaces under whatever is loudest.",
+      "agendaNotes": "Deliver the Act II agendas as private dispatches as the wreck comes into view. Agendas now collide: Vesk and Bastien both want the register; Tahra wants the hold kept for the sietch and Jessamy wants Quint to get something; Hallam wants the truth about Hesk’s death and dreads the answer. By the end of the act every agent should suspect at least one other.",
+      "scenes": [
+        {
+          "name": "Survey the Split Hull",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Six hundred metres of open sand lie between the Thumb and the hull. The Fremen cross it in a broken, stuttering walk, and they expect you to do the same.",
+          "checks": [
+            "MOVE + FAITH, Difficulty 2 — cross the open sand without rhythm (Walk Without Rhythm reduces it); failure advances the worm-sign clock by 1",
+            "UNDERSTAND + JUSTICE, Difficulty 2 — the humming sand is a pre-spice mass building under the basin, days or hours from a blow",
+            "UNDERSTAND + POWER, Difficulty 1 — assess the hull: the fore half has the bridge and crew deck, the aft half the spice hold and engine section, and only the scoops give a way in aft"
+          ],
+          "events": [
+            "The worm-sign clock advances to its starting value (1, or 2 if the Fremen price was refused).",
+            "Ferrouk’s people, if paid, plant a silent marker on a dune crest: a cloth flag that will drop when they see worm-sign."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any agent who stumbles into rhythm on open sand and feels the hum answer",
+            "THREAT +1 — Narrator spends it to advance the worm-sign clock if the party splits across the sand river",
+            "MOMENTUM — reading the pre-spice mass correctly lets the Planetologist bank a prediction (Reading the Land) for Act III"
+          ],
+          "gmTip": "Make crossing the sand feel like a ritual: ask each player how their character walks. The clock is now real, and the players should feel it tick.",
+          "outcomes": [
+            "Safe crossing: the agents reach the forward hatch with the clock low",
+            "Noisy crossing: the clock jumps, and Tahra says nothing, which is worse"
+          ]
+        },
+        {
+          "name": "Those Who Should Be Dead",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The crew deck is a cave of stilltents rigged from cargo sheeting, dew-traps hung from every strut. Four people sit among them, well-watered, calm and smiling with blue-shadowed eyes.",
+          "checks": [
+            "UNDERSTAND + DUTY, Difficulty 2 — the survivors are not dehydrated at all; they have had at least four litres each per day",
+            "UNDERSTAND + TRUTH, Difficulty 3 — the water in their literjons carries the faint mineral taint of a Fremen deathstill",
+            "COMMUNICATE + JUSTICE, Difficulty 2 — get Iselde Varn to admit who has been keeping them alive and what she promised",
+            "DISCIPLINE + FAITH, Difficulty 2 — resist the spice-thick air of the crew deck long enough to think clearly (failure: EXHAUSTED)"
+          ],
+          "events": [
+            "Iselde greets the agents as rescuers and immediately asks who sent them and what the Lord Steward told them about the register.",
+            "Pell Dorrin, eyes almost fully blue, tells Tahra that the Old Man is coming and that he has seen it swallow the sky."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — Hallam, on recognising Iselde’s face",
+            "STRESS +1 — any off-worlder who works out they have been drinking the water of their dead crewmates",
+            "MOMENTUM +1 — for each survivor who trusts the agents enough to speak alone with them"
+          ],
+          "npcGuidance": "Iselde is charming, exhausted and negotiating from the first word. She lies about Hesk (“the crash”) and about the beacon (“storm damage”). She tells the truth about the Fremen if pressed, because she thinks it makes her valuable. Pell is sweet, frightened and spice-drunk. Sefa Lund is loyal to Iselde. Domas Ghent saw the killing and is waiting to see which way the wind blows.",
+          "gmTip": "Do not let this become a medical procedure. The survivors are the scenario’s heart: give each one a line, and give Hallam a quiet moment with Iselde before the guns arrive.",
+          "outcomes": [
+            "The deal with Umm Kareth is revealed: the hold is promised to the sietch",
+            "Iselde learns she is bargaining with Hallam, and must decide what that changes",
+            "The survivors are counted: four more passengers, if anyone chooses them"
+          ]
+        },
+        {
+          "name": "The Engine Section",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Through the open scoops and up a slope of spilled melange, the aft hull is a furnace. In the engine section a body lies wrapped in a cargo sheet the Fremen did not take.",
+          "checks": [
+            "UNDERSTAND + DUTY, Difficulty 1 — driver Hesk died of a blow to the skull from a tread-wrench, not the crash",
+            "UNDERSTAND + TRUTH, Difficulty 2 — the beacon breaker beside him is half thrown; he died reaching for it",
+            "COMMUNICATE + JUSTICE, Difficulty 2 — get Domas Ghent, who saw it, to name Iselde",
+            "MOVE + JUSTICE, Difficulty 2 — climb the spice-slick scoops to the hold without a fall"
+          ],
+          "events": [
+            "Hesk’s body was left by the Fremen on purpose. Ferrouk will say only that a murdered man’s water is unclean until his killer answers for it."
+          ],
+          "stressTriggers": [
+            "STRESS +2 — Hallam, if he learns his daughter is the killer",
+            "STRESS +1 — whoever unwraps Hesk",
+            "THREAT +1 — a fall on the scoops is loud; advance the worm-sign clock"
+          ],
+          "gmTip": "This is optional because the murder is a lever, not a requirement. If nobody comes here, Domas will whisper it to the most sympathetic agent in Act III, at the worst possible moment.",
+          "outcomes": [
+            "The murder is proven, and Iselde becomes a prisoner as well as a patient",
+            "The murder stays hidden, and Bastien’s order looks almost merciful to him"
+          ]
+        },
+        {
+          "name": "The Register",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The bridge tilts twenty degrees to port. Behind a cracked plaz panel sits the yield register: a grey Guild-sealed housing the size of a footlocker, its seal lamp a steady, unblinking amber.",
+          "checks": [
+            "UNDERSTAND + TRUTH, Difficulty 2 — the housing’s key-plate has been pulled; whoever has it can read the register without breaking the seal",
+            "COMMUNICATE + POWER, Difficulty 3 — talk Iselde out of the key-plate she wears under her stillsuit",
+            "UNDERSTAND + JUSTICE, Difficulty 2 — read the register and compare its yield figures to the House’s declared tithe (it shows an 18 percent skim over three years)",
+            "BATTLE + DUTY, Difficulty 2 — force the housing open (breaks the Guild seal and voids the register as evidence, which may be the point)"
+          ],
+          "events": [
+            "The moment the key-plate is fitted, the register prints a summary to its own glass. Deliver the yield register handout.",
+            "Bastien’s sealed order and Vesk’s Imperial cipher now point at the same 90-kilogram box."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — Jessamy, on seeing the Cinder Moth’s tail code in the courier column",
+            "THREAT +2 — if two agents draw weapons over the register; the Narrator also gains the right to bring Quint in immediately",
+            "MOMENTUM +2 — for reading the register intact without breaking the seal"
+          ],
+          "npcGuidance": "Iselde trades the key-plate only for a guarantee: she flies home on the Cinder Moth and does not stand trial alone. She will name the Lord Steward as the man who ordered the skim, which is true.",
+          "gmTip": "Let the register sit in the open on the bridge for a while. Agents who want it will have to act in front of each other, and that is the scene.",
+          "outcomes": [
+            "Register read intact: proof that can destroy House Oskaren or buy its life",
+            "Register broken open: the proof is gone, and so is the House’s risk; Vesk has failed his patron",
+            "Register unopened: everyone still wants a box nobody has read"
+          ]
+        },
+        {
+          "name": "Under a False Banner",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Lazlo Quint lands his shielded carryall on the basin floor with eight “salvagers” who are Harkonnen house troops in sand-grey (evade 3, stress 4 as one group; Captain Rask Morrow leads). Quint opens with law: under Imperial salvage code the wreck is his if no crew are aboard. If talk fails he tries to take the register and kill the survivors quietly; open battle is his last choice because his shields are already advancing the worm-sign clock by 2 the moment they light.",
+          "narration": "The salvage carryall settles on the basin floor in a hissing skirt of sand. A neat man in a CHOAM factor’s grey steps down under a striped banner and raises an open hand. Behind him eight men in sand-grey fan out with practised spacing, shields humming.",
+          "checks": [
+            "COMMUNICATE + JUSTICE, Difficulty 3 — argue salvage law: the crew is alive, so the claim is void",
+            "UNDERSTAND + TRUTH, Difficulty 2 — the salvagers march like soldiers, and their boots are Giedi Prime issue",
+            "BATTLE + DUTY, Difficulty 3 — fight shielded troops with the slow blade (The Slow Blade and Guardian’s Step apply)",
+            "MOVE + FAITH, Difficulty 2 — lure the salvagers’ shielded line onto open sand, where the hum is loudest"
+          ],
+          "events": [
+            "Quint broadcasts his salvage claim on the open band. Deliver the Brannoch-Vey handout.",
+            "Quint greets Jessamy by name, warmly, in front of everyone.",
+            "If any fight starts, the Fremen on the dunes vanish. They will not die for outsiders’ quarrels."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — every agent, when the shields light and the sand’s hum rises in answer",
+            "STRESS +2 — any agent struck in the fight (as a successful Harkonnen attack)",
+            "THREAT +2 — the Narrator may spend to Keep the Initiative for the salvagers once",
+            "MOMENTUM — the agents may spend 2 to Keep the Initiative; exposing the false banner on the open band generates 2"
+          ],
+          "npcGuidance": "Quint is patient, polite and has done this before. He offers each faction what it wants: the spice to Jessamy, the register to whoever will sell it, safe passage to the survivors he has already decided to kill. Rask Morrow is a professional who does not know worms and does not want to learn.",
+          "gmTip": "A standoff is better than a battle. Keep pointing at the worm-sign clock. The correct answer may be to let the desert fight for you.",
+          "outcomes": [
+            "Quint bluffed off: he withdraws to his carryall to wait for night, which is when he will try again",
+            "Fight: casualties, and the worm-sign clock jumps to 5 or 6",
+            "Deal struck: someone sells Quint something; the party now has a traitor in the open"
+          ]
+        },
+        {
+          "name": "Worm Sign",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "When the worm-sign clock fills, a grown worm (evade 3, stress 6) rises under the loudest thing on the basin: shields first, then engines, then people running in rhythm. It cannot be fought. Anyone on open sand makes a MOVE test at Difficulty 3 to reach rock or the hull; a thumper planted at a distance pulls it away for ten minutes.",
+          "narration": "The cloth flag on the dune crest drops. Then the dune itself begins to move: a long ridge of sand rising, rolling, coming straight across the basin with a sound like a world clearing its throat.",
+          "checks": [
+            "MOVE + FAITH, Difficulty 3 — reach the Thumb or the hull before the worm arrives",
+            "MOVE + JUSTICE, Difficulty 2 — plant a thumper on the far side of the basin as a decoy",
+            "DISCIPLINE + FAITH, Difficulty 2 — stand utterly still on open sand as it passes"
+          ],
+          "stressTriggers": [
+            "STRESS +2 — every non-Fremen who sees the worm surface",
+            "STRESS +4 — anyone caught in its path who fails to escape (WOUNDED or taken, as the Narrator decides)",
+            "THREAT — this scene is the clock paying out; reset the worm-sign clock to 2 afterwards"
+          ],
+          "gmTip": "The worm should take something big: Quint’s shielded carryall is ideal, or the aft hull with three tonnes of spice. Make the loss visible and permanent, and let a Fremen character name it.",
+          "outcomes": [
+            "The salvage carryall is swallowed: Quint and his survivors are stranded and desperate",
+            "The aft hull is swallowed: most of the spice is gone, and the Act III choice narrows",
+            "An agent is lost: the desert has taken its tithe"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT III",
+      "subtitle": "RIDE HOME",
+      "summary": "The overloaded Cinder Moth cannot carry everything home. With a thumper, a worm and the Fremen route as the only alternative, the agents choose between the crew, the spice and the truth while Quint makes one last attempt and the Old Man of the basin rises.",
+      "readAloud": [
+        "Night falls on the basin like a blade. The heat goes out of the sand in minutes and the cold comes up through your boots, sharp enough to make your teeth ache. Overhead the stars are thick and close, and the first moon lifts over the dunes, washing the broken harvester in pale light. Somewhere below the rock, the sand is still humming, steady now, patient, like something that has all the time in the world.",
+        "The pilot stands at the Cinder Moth’s open cargo door with a slate in one hand, writing numbers, rubbing them out, writing them again. People. Water. Spice. A grey box that weighs as much as a grown man. The figures do not change no matter how many times they are added. Behind you the survivors are talking quietly among themselves, and they stop when you look at them.",
+        "The thumper goes into the sand with a hiss and a click, and then it begins: a deep, regular knock, knock, knock that you feel in the rock under your palms. For a long moment there is nothing. Then, far out across the basin, the dunes begin to ripple toward it, and you understand that you have just rung a bell and something is answering.",
+        "Dawn comes red. The Shield Wall is a dark line on the edge of the world, and every kilometre toward it costs water, fuel and nerve. Below you the desert is perfectly still and perfectly empty, as if nothing that happened out there ever happened at all. Whatever you are carrying home, you will have to explain it. Whatever you left behind, the sand has already covered."
+      ],
+      "gmNotes": "The arithmetic: the Cinder Moth lifts the five agents and their gear plus 400 kg (200 kg if the wing joint was damaged; 440 kg if the shield generator was left at Siq Abbar). Four survivors and Tobin weigh about 380 kg. The register core weighs 90 kg. Fifty-kilo sacks of the purest melange, scraped from the hold near the pre-spice mass, are worth a fortune each; four sacks cover the House’s quarterly shortfall. Water is its own weight: every 50 litres left behind is 50 kg of lift. Nothing fits. The alternative is the Fremen route: Tahra can take riders on a worm called by thumper to Siq Abbar and then by sietch paths toward the Shield Wall, at a cost of days, water and the sietch’s goodwill, and only if the sietch’s price has been honoured.\n\nQuint makes one last attempt at moonset, by hunter-seeker against Iselde (she holds the key-plate and the testimony) and with whatever troops he has left. Then, whatever the agents have chosen, the pre-spice mass blows and the Old Man of the basin rises to it. Let the Fremen treat it as a judgment. Let the off-worlders feel very small.",
+      "agendaNotes": "Act III agendas are open betrayal. Bastien must try to destroy the register and stop Iselde reaching Hadrath; Hallam must stop him. Jessamy wants to fly the spice out; Tahra must stop her or let the worm judge. Vesk must choose his master. Any two agents who end the night pointing knives at each other are playing this act correctly.",
+      "scenes": [
+        {
+          "name": "Weight and Water",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Everything you might carry home lies on the rock in the moonlight: people, sacks, water skins and a grey box. The pilot reads the lift figures aloud, and no one likes the total.",
+          "checks": [
+            "UNDERSTAND + TRUTH, Difficulty 2 — compute the exact lift margin, including fuel burn and the cold night air",
+            "COMMUNICATE + POWER, Difficulty 3 — persuade the party that your choice is the right one",
+            "COMMUNICATE + FAITH, Difficulty 2 — Tahra bargains with Ferrouk for the worm route for some of the passengers",
+            "DISCIPLINE + DUTY, Difficulty 2 — choose against your own agenda without breaking (failure: STRESS +2)"
+          ],
+          "events": [
+            "Iselde offers the key-plate to whoever guarantees her a seat.",
+            "Pell Dorrin asks, very simply, to be left with the Fremen. He believes he belongs to the desert now."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — every agent, when the first person is named to stay behind",
+            "STRESS +2 — whoever speaks the choice aloud",
+            "THREAT +1 — for every hour spent arguing; the moons move and Quint gets closer",
+            "MOMENTUM — the party may spend Momentum to Obtain Information about another agent’s true intention before they vote"
+          ],
+          "gmTip": "Put the weights on index cards on the table and let the players physically move them. The decision should take time and cost something; do not rescue them with a convenient fix.",
+          "outcomes": [
+            "Crew first: the spice stays, and the House misses its quota",
+            "Spice first: survivors go by worm route or not at all",
+            "Register first: the truth flies, and someone does not"
+          ]
+        },
+        {
+          "name": "The Thumper",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "A grown worm (evade 3, stress 6) answers the thumper within minutes. Used as a decoy it buys ten minutes of loading time; used as a call, it brings a mount for Tahra’s riders. Either way the thumper must be planted on open sand 300 metres from the rock and the planter must walk back without rhythm (MOVE + FAITH, Difficulty 2), or run and pray (MOVE + JUSTICE, Difficulty 4).",
+          "narration": "Knock. Knock. Knock. The sound goes out across the basin and the basin goes quiet to listen.",
+          "checks": [
+            "MOVE + FAITH, Difficulty 2 — plant the thumper and walk back without rhythm",
+            "UNDERSTAND + JUSTICE, Difficulty 1 — time the worm’s approach from the hiss of the sand",
+            "DISCIPLINE + FAITH, Difficulty 2 — stand on the rock edge and watch it come without flinching"
+          ],
+          "stressTriggers": [
+            "STRESS +2 — the planter, if they fail the walk back and must run",
+            "STRESS +1 — every non-Fremen watching the worm take the thumper",
+            "THREAT — the Narrator may spend 2 to make the worm arrive one step early"
+          ],
+          "gmTip": "This is the scenario’s awe beat. Slow down, describe the sound, and let the players hold their breath.",
+          "outcomes": [
+            "Decoy works: the loading window opens",
+            "A mount is called: the worm route is possible tonight",
+            "The planter is caught: run Worm Sign rules for one agent"
+          ]
+        },
+        {
+          "name": "Knives on the Thumb",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "At moonset Quint’s hunter-seeker (evade 3, stress 5) comes for Iselde out of the dark, and Rask Morrow brings whatever salvagers survived up the back of the rock. If the agents have already turned on each other, Quint waits for them to finish and offers the winner a deal.",
+          "narration": "Something whines in the dark like a mosquito the size of a finger. Iselde, wrapped in a stilltent by the ornithopter, sits up very slowly.",
+          "checks": [
+            "DISCIPLINE + FAITH, Difficulty 3 — Iselde (or whoever it targets) stays perfectly still while the hunter-seeker hunts",
+            "BATTLE + DUTY, Difficulty 3 — snatch the hunter-seeker from the air",
+            "UNDERSTAND + TRUTH, Difficulty 2 — find the operator: Quint, with a control pad, on the ledge above the pad",
+            "BATTLE + JUSTICE, Difficulty 2 — fight the remaining salvagers on rock, where shields draw nothing"
+          ],
+          "events": [
+            "If Bastien has decided to let Iselde die, all he has to do is nothing. Make sure the table notices."
+          ],
+          "stressTriggers": [
+            "STRESS +2 — anyone struck by the hunter-seeker (POISONED unless Hallam treats it)",
+            "STRESS +1 — Hallam, for every round his daughter is in danger and he cannot reach her",
+            "THREAT +2 — the Narrator may Keep the Initiative for Quint once",
+            "MOMENTUM +2 — capturing Quint alive (he is worth more to the Landsraad than he is dead)"
+          ],
+          "npcGuidance": "Quint surrenders the moment he is cornered, offering information: the name of the Harkonnen factor who wants House Oskaren’s concession, and proof that Jessamy sold the coordinates. He is telling the truth about both.",
+          "gmTip": "Run this only if the party has not already broken apart. If they have, use Quint as a voice in the dark offering each faction a way out.",
+          "outcomes": [
+            "Hunter-seeker stopped and Quint taken: a living witness against House Harkonnen",
+            "Iselde killed: the key-plate and her testimony go to whoever reaches her body first",
+            "Jessamy exposed by Quint: the pilot’s seat becomes the most contested place on Arrakis"
+          ]
+        },
+        {
+          "name": "Riding the Maker",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Tahra can raise a grown worm with maker hooks (MOVE + FAITH, Difficulty 3) and carry up to six riders toward Siq Abbar and beyond. Each rider makes one MOVE + FAITH test at Difficulty 2 to mount and hold on; a failure costs 2 Stress and a second failure means a fall onto open sand.",
+          "narration": "The worm comes up beside the rock like a moving wall. Tahra runs at it with hooks in both hands and does not hesitate, and then she is above you, on its back, reaching down.",
+          "checks": [
+            "MOVE + FAITH, Difficulty 3 — Tahra sets the hooks and opens a ring segment",
+            "MOVE + FAITH, Difficulty 2 — each rider mounts and holds on",
+            "DISCIPLINE + FAITH, Difficulty 2 — endure a night and a day on the worm’s back"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — every off-worlder who climbs onto a living worm",
+            "STRESS +2 — any rider who slips",
+            "MOMENTUM +2 — for any off-worlder who completes the ride; the sietch will remember them"
+          ],
+          "gmTip": "This turns the weight problem into a faith problem: the only way to save everyone may be to trust the Fremen with half of them. Let that cost the House something in pride and debt.",
+          "outcomes": [
+            "Riders reach Siq Abbar: survivors are safe, and owe Umm Kareth their lives",
+            "A rider falls: the desert takes them, unless the party spends everything to go back"
+          ]
+        },
+        {
+          "name": "The Old Man Rises",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "The pre-spice mass blows at dawn in a fountain of orange sand (spice blow, evade 2, stress 3), and the Old Man of the basin (evade 5, stress 8) rises to it, swallowing the forward hull, the aft hull, and anything left on the basin floor. It cannot be fought or evaded on sand. Anyone on the rock is safe; anyone still at the wreck makes MOVE + FAITH at Difficulty 4 or is taken.",
+          "narration": "The basin erupts. Orange sand climbs into the dawn in a column a kilometre high, and the smell of spice rolls over the rock like a wave. Then the ground behind the wreck rises, and keeps rising, until it blocks the sun.",
+          "checks": [
+            "UNDERSTAND + JUSTICE, Difficulty 1 — the Planetologist watches the blow and records what no living scholar has seen (worth a lifetime)",
+            "MOVE + FAITH, Difficulty 4 — anyone still at the wreck runs for the rock",
+            "COMMUNICATE + FAITH, Difficulty 2 — speak to Sayyadina Imra as she names the worm and claims its judgment",
+            "MOVE + POWER, Difficulty 3 — the pilot gets the Cinder Moth off the rock through the spice cloud, overloaded"
+          ],
+          "events": [
+            "The Old Man swallows the Saltmother’s Due whole. Whatever was not taken off her is gone forever.",
+            "Sayyadina Imra, on the crown of the Thumb, declares that the desert has collected its tithe and that the House’s debt to Umm Kareth is now paid or doubled, depending on whether the sietch’s price was honoured."
+          ],
+          "stressTriggers": [
+            "STRESS +3 — every non-Fremen who sees the Old Man rise",
+            "STRESS +1 — Tahra, if the sietch’s price was broken by her party",
+            "THREAT — spend everything that remains; this is the last scene where Threat matters"
+          ],
+          "gmTip": "Do not let the worm solve the plot for them. Their choices about who and what is on the ornithopter must already be made; the worm only removes the option of changing their minds.",
+          "outcomes": [
+            "The wreck is gone: only what is on the rock, on the worm or in the air survives",
+            "The Planetologist has his data, and a reason to lie about it"
+          ]
+        },
+        {
+          "name": "Dispatch to Hadrath",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The Shield Wall rises out of the morning haze, and the House channel crackles to life. The Lord Steward’s voice is calm. He asks, first, about the register.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 2 — report in a way that protects what you carried home",
+            "COMMUNICATE + TRUTH, Difficulty 3 — tell the Lord Steward the whole truth and make him hear it",
+            "DISCIPLINE + DUTY, Difficulty 2 — keep your story straight while another agent tells a different one"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any agent who lies to the House on the open channel",
+            "MOMENTUM — spend any that remains to shape the ending: each 2 points lets the party name one consequence the Narrator must honour"
+          ],
+          "npcGuidance": "Lord Steward Maddoc Oskaren wants the register, then the spice, then the crew. If he learns Iselde lives and the register was read, he begins at once to bargain with whoever holds it.",
+          "gmTip": "Let every agent speak to the Steward, in turn, on the open channel. The ending is decided by who says what first.",
+          "outcomes": [
+            "Proceed to the ending that fits what came home and who knows the truth"
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Crawler Boss Iselde Varn",
+      "role": "Commander of the harvester Saltmother’s Due",
+      "agenda": "Survive, avoid becoming the House’s scapegoat for the tithe skim, and keep the sietch bargain that kept her crew alive.",
+      "behavior": "Warm, quick, practical and always negotiating. Under pressure she gets calmer, which is when she is most dangerous.",
+      "secret": "She switched off the beacon herself and killed the driver Hesk with a tread-wrench when he tried to turn it back on. She wears the register’s key-plate under her stillsuit. She knows Hallam Oro is her father and has never forgiven him.",
+      "stats": {
+        "battle": 5,
+        "communicate": 7,
+        "discipline": 6,
+        "stress": 6
+      }
+    },
+    {
+      "name": "Lord Steward Maddoc Oskaren",
+      "role": "Steward and acting head of House Oskaren, on the House channel from Hadrath Station",
+      "agenda": "Bury the evidence of the tithe skim and keep the House’s concession, at whatever cost to people he will never meet.",
+      "behavior": "Courteous, clipped, distant over the comm. He asks about the register before he asks about the crew.",
+      "secret": "He ordered the skim, pressured the planetologist to clear the harvester in storm season, and gave Bastien Rhol a sealed order that Iselde must not return."
+    },
+    {
+      "name": "Lazlo Quint",
+      "role": "Salvage factor of the Brannoch-Vey Salvage Combine (a Harkonnen front)",
+      "agenda": "Take the register for House Harkonnen, which will use it to make House Oskaren a puppet or hand its concession to the throne for a reward.",
+      "behavior": "Neat, unhurried, legalistic; quotes salvage code chapter and verse. Offers everyone a deal and means every one of them, until it is time not to.",
+      "secret": "He is a Harkonnen intelligencer; the combine has no CHOAM licence; he bought the harvester’s coordinates from Jessamy Kort; and under salvage law he needs every survivor dead.",
+      "stats": {
+        "communicate": 7,
+        "understand": 6,
+        "battle": 4
+      }
+    },
+    {
+      "name": "Captain Rask Morrow",
+      "role": "Commander of Quint’s “salvagers”, in truth a Harkonnen house-troop officer",
+      "agenda": "Complete the job and get his men off this sand alive.",
+      "behavior": "Blunt, competent, contemptuous of desert lore. He keeps his shield lit because he has never seen a worm.",
+      "secret": "He despises Quint and will defect to whoever can get him home once he has seen a worm feed.",
+      "stats": {
+        "battle": 7,
+        "move": 5,
+        "stress": 5
+      }
+    },
+    {
+      "name": "Ferrouk of Umm Kareth",
+      "role": "Watch-captain of Siq Abbar on Kareth’s Thumb",
+      "agenda": "Collect the water and spice his sietch is owed, and see that the off-worlders leave the deep desert as debtors rather than masters.",
+      "behavior": "Slow, courteous and immovable. Never lies; simply answers only what is asked.",
+      "secret": "He is Tahra’s brother. His people have kept the harvester crew alive for six nights, and he left Hesk’s body behind because a murdered man’s water is unclean until his killer answers."
+    },
+    {
+      "name": "Sayyadina Imra",
+      "role": "Fremen holy woman of Sietch Umm Kareth",
+      "agenda": "Read the will of the desert in what happens at the wreck, and bind the outsiders to the sietch by the judgment she pronounces.",
+      "behavior": "Ancient, amused, unafraid. Speaks to off-worlders as if to clever children and to Tahra as if to a daughter.",
+      "secret": "She knows the Old Man of the basin rises whenever a great spice blow comes, and has timed the sietch’s bargain so that the worm, not the Fremen, will settle the dispute."
+    },
+    {
+      "name": "Pell Dorrin",
+      "role": "Youngest harvester hand, survivor",
+      "agenda": "Stay in the desert with the Fremen; he believes the spice has shown him where he belongs.",
+      "behavior": "Gentle, frightened, spice-drunk. His eyes are nearly fully blue and he says unsettlingly accurate things about the next few minutes.",
+      "secret": "He heard the fight on the night of the storm and knows Iselde killed Hesk, but loves her too much to say it."
+    },
+    {
+      "name": "Tobin Ashe",
+      "role": "Co-pilot of the downed carryall Kestrel Vane",
+      "agenda": "Get home alive and never fly past the Shield Wall again.",
+      "behavior": "Feverish, jumpy, armed with a maula pistol he waves when frightened. Clings to whoever gave him water first.",
+      "secret": "Iselde called the Kestrel Vane out early and asked it to bring her alone, not the crew; Tobin heard the call and thinks it means she planned to desert them."
+    }
+  ],
+  "threats": [
+    {
+      "name": "The Storm’s Daughter",
+      "ref": "sandstorm",
+      "description": "A smaller cell spun off the great Coriolis storm, a brown wall walking across the erg at the speed of a running carryall.",
+      "stats": {
+        "evade": 3,
+        "stress": 4,
+        "threat": 3
+      },
+      "tactics": "Act I only: the Narrator brings it in for 3 Threat to punish delay. It damages wing joints, strips water from the clock and leaves agents exposed."
+    },
+    {
+      "name": "Worm of the Basin",
+      "ref": "sandworm-grown",
+      "description": "A grown sandworm drawn by the humming pre-spice mass, first seen as a ripple through distant dune crests.",
+      "stats": {
+        "evade": 3,
+        "stress": 6,
+        "threat": 3
+      },
+      "tactics": "Act I: a distant tremor. Act II: the six-step worm-sign clock, accelerated by shields and rhythm, pays out under whatever is loudest. Act III: called by thumper, as a decoy or as a mount for Fremen riders."
+    },
+    {
+      "name": "The Old Man Rises",
+      "ref": "sandworm-ancient",
+      "description": "A worm so old the Fremen of Umm Kareth have a name for it, rising only to great spice blows.",
+      "stats": {
+        "evade": 5,
+        "stress": 8,
+        "threat": 5
+      },
+      "tactics": "Act III finale only. It swallows the entire wreck and ends every choice that has not already been made. It is a judgment, not a fight."
+    },
+    {
+      "name": "Brannoch-Vey “Salvagers”",
+      "description": "Eight Harkonnen house troops in sand-grey coveralls under a striped salvage banner, shielded and well drilled.",
+      "stats": {
+        "evade": 3,
+        "stress": 4,
+        "threat": 2,
+        "count": 8
+      },
+      "tactics": "Act II: arrive behind law and a smile, shields lit. They try for the register and the quiet deaths of the survivors. Act III: whatever is left comes up the back of the Thumb at moonset, desperate and stranded."
+    },
+    {
+      "name": "Quint’s Hunter-Seeker",
+      "ref": "hunter-seeker",
+      "description": "A finger-length poisoned drone launched by Lazlo Quint from the ledge above the ornithopter pad.",
+      "stats": {
+        "evade": 3,
+        "stress": 5,
+        "threat": 2
+      },
+      "tactics": "Act III: hunts Iselde Varn because she carries the key-plate and the testimony; if she is out of reach it chooses whoever is holding the register."
+    },
+    {
+      "name": "The Pre-Spice Mass",
+      "ref": "spice-blow",
+      "description": "A vast fermenting pocket under the basin floor, felt as a hum in the teeth from the moment the agents arrive.",
+      "stats": {
+        "evade": 2,
+        "stress": 3,
+        "threat": 1
+      },
+      "tactics": "Act II: a hum and a clue. Act III: blows at dawn in a kilometre-high column of orange sand, calling the Old Man of the Basin and burying the wreck."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "Hadrath Station",
+      "description": "House Oskaren’s ornithopter pad and spice depot on the inner face of the Shield Wall. Cold at dawn, smelling of lubricant and dust; the Lord Steward’s voice reaches the agents from here and nowhere else."
+    },
+    {
+      "name": "The Cinder Moth",
+      "description": "Jessamy Kort’s battered six-seat ornithopter: patched canopy, wing joints that grind when sand gets in, 140 litres of water racked behind the seats. Its transponder can be set to bands that are not on any House register."
+    },
+    {
+      "name": "Wreck of the Kestrel Vane",
+      "description": "An upturned carryall 1.2 km southeast of the harvester, one wing torn away. Inside: an empty crew bay, a desiccated pilot strapped in her seat, a feverish survivor in the avionics bay and a flight recorder that remembers the beacon."
+    },
+    {
+      "name": "Kareth’s Thumb and Siq Abbar",
+      "description": "A black rock outcrop rising from the erg, the only ground in the basin worms cannot reach. Fremen of Umm Kareth keep a watch-post in its caves; the Cinder Moth can land on its flat western shoulder only with their leave."
+    },
+    {
+      "name": "Saltmother’s Due — Forward Hull",
+      "description": "The front half of the split harvester: a canted bridge holding the Guild-sealed yield register, and a crew deck turned into a cave of stilltents and dew-traps where four survivors have lived for a week. Thick with spice dust."
+    },
+    {
+      "name": "Saltmother’s Due — Aft Hull",
+      "description": "The rear half, reached only by climbing the spice-slick scoops: a hold holding nine tonnes of melange and, beyond it, the dead engine section where Hesk lies wrapped in a cargo sheet beside a half-thrown beacon breaker."
+    },
+    {
+      "name": "The Sand River",
+      "description": "Forty metres of drifted sand poured between the two halves of the hull. Open ground, soft and loud underfoot; crossing it is the most dangerous walk in the scenario once the worm-sign clock passes 3."
+    },
+    {
+      "name": "The Humming Basin",
+      "description": "A wide bowl of sand around the wreck where the pre-spice mass ferments below. The ground vibrates faintly, spice dust hangs in the air at dawn, and every rhythm on its surface carries a very long way down."
+    }
+  ],
+  "maps": [
+    {
+      "id": "saltmothers-due-wreck",
+      "title": "SALTMOTHER’S DUE — WRECK SITE",
+      "subtitle": "House Oskaren spice harvester, deep erg, 410 km past the Shield Wall",
+      "description": "The split harvester, the downed carryall, the Fremen rock and the open basin. Only the Thumb is safe from worms; everything else is open sand.",
+      "kind": "ascii",
+      "ascii": "╔══════════════════════════════════════════════════════════════════╗\n║  SALTMOTHER'S DUE — WRECK SITE   (House Oskaren spice harvester) ║\n║  Deep erg, 410 km past the Shield Wall · north is up · ~3 km     ║\n╠══════════════════════════════════════════════════════════════════╣\n║                                                                  ║\n║   ▲▲▲▲▲▲▲▲▲▲▲▲▲▲      ∴ ∴ ∴ ∴ ∴   DUNE FIELD   ∴ ∴ ∴ ∴ ∴ ∴ ∴     ║\n║  ▲ KARETH'S     ▲       ∴ ∴ ∴  (worm country)  ∴ ∴ ∴ ∴ ∴         ║\n║  ▲ THUMB        ▲                                                ║\n║  ▲ [Siq Abbar   ▲                                                ║\n║  ▲  watch-post] ▲▲▲▲▲  rock spit                                 ║\n║  ▲ [thopter pad]    ▲ . . . . . . . . . . . . . .                ║\n║   ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲     open sand, 600 m to the hull   .        ║\n║                                                       .          ║\n║        FORWARD HULL                      AFT HULL                ║\n║   ┌────────────┬─────────────┐ ≈≈≈≈ ┌─────────────┬──────────┐   ║\n║   │  BRIDGE    │  CREW DECK  │ SAND │ SPICE HOLD  │  ENGINE  │   ║\n║   │ [register  │ [stilltents,│RIVER │ [~9 t       │  SECTION │   ║\n║   │  housing]  │  survivors] │ ≈≈≈≈ │  melange]   │  [Hesk]  │   ║\n║   └─────┬──────┴─────────────┘ 40 m └─────────────┴──────────┘   ║\n║         │ hatch (only way in fore)        ▼ scoops (way in aft)  ║\n║                                                                  ║\n║   ∴ ∴ ∴ ∴ ∴ ∴ ∴ ∴ ∴ ∴        ✕ KESTREL VANE (carryall wreck)     ║\n║  ∴ ∴   DUNE FIELD   ∴ ∴         wing torn away, 1.2 km SE        ║\n║   ∴ ∴ ∴ ∴ ∴ ∴ ∴ ∴ ∴ ∴      ~~~ drum sand: the pre-spice mass ~~~ ║\n║                                                                  ║\n╚══════════════════════════════════════════════════════════════════╝",
+      "rooms": [
+        {
+          "name": "Bridge",
+          "note": "Canted twenty degrees to port. The Guild-sealed yield register (90 kg) sits behind cracked plaz; its key-plate is missing."
+        },
+        {
+          "name": "Crew Deck",
+          "note": "Stilltents, dew-traps and four smiling survivors with blue-tinged eyes. Spice-thick air: DISCIPLINE + FAITH to think clearly."
+        },
+        {
+          "name": "Sand River",
+          "note": "Forty metres of open sand between the hull halves. Crossing it in rhythm advances the worm-sign clock."
+        },
+        {
+          "name": "Spice Hold",
+          "note": "About nine tonnes of melange, the purest near the floor where the pre-spice mass breathes. Promised to Sietch Umm Kareth by Iselde."
+        },
+        {
+          "name": "Engine Section",
+          "note": "Dead engines, a half-thrown beacon breaker and the murdered driver Hesk in a cargo sheet. The way in is up the spice-slick scoops."
+        },
+        {
+          "name": "Kareth’s Thumb",
+          "note": "Fremen rock outcrop with the Siq Abbar watch-post and the only safe landing pad. Worms cannot reach it."
+        },
+        {
+          "name": "Kestrel Vane",
+          "note": "Carryall wreck 1.2 km southeast: Odile Sarn’s body, Tobin Ashe in the avionics bay, and the flight recorder."
+        },
+        {
+          "name": "Dune Field",
+          "note": "Open erg in every direction. Drum sand over the pre-spice mass to the southeast hums at dawn."
+        }
+      ]
+    }
+  ],
+  "handouts": [
+    {
+      "id": "mentat-departure-computation",
+      "title": "MENTAT COMPUTATION — DEPARTURE",
+      "from": "MENTAT OF HOUSE OSKAREN",
+      "to": "ALL AGENTS",
+      "priority": "URGENT",
+      "text": "COMPUTATION BEGINS. Harvester Saltmother’s Due: silent seven days, 410 km past the Shield Wall. Carryall Kestrel Vane: silent six days. Crew at risk: twelve, plus three aboard the carryall. Melange at risk: nine tonnes. Guild-sealed yield register: to be returned unopened by order of the Lord Steward. Water aboard Cinder Moth: 140 litres. Each additional passenger reduces return reserve by four litres per hour of flight. PROBABILITY ANY CREW SURVIVE: 0.04. PROBABILITY THIS COMPUTATION IS MISSING A VARIABLE: 0.62. Recommendation: shields off beyond the Wall, suits sealed, questions saved for return. RISK ASSESSMENT: SEVERE. COMPUTATION PAUSED.",
+      "when": "Act I, at lift-off from Hadrath Station (the opening briefing)"
+    },
+    {
+      "id": "kestrel-vane-recorder",
+      "title": "FLIGHT RECORDER — CARRYALL KESTREL VANE",
+      "from": "Automatic recorder, carryall Kestrel Vane",
+      "to": "ALL AGENTS",
+      "priority": "URGENT",
+      "text": "06:41 — Lift from Hadrath. Pilot O. Sarn, co-pilot T. Ashe, hookman R. Daal. 08:12 — Harvester Due beacon acquired, bearing steady. 08:14 — Due requests early lift, crawler boss only, crew to follow. Request logged, refused. 08:53 — Due beacon lost. No storm contact at Due position for a further 40 minutes (weather feed attached). 09:33 — Storm front reaches Due position. 09:47 — Storm contact, Kestrel Vane. Wing joint failure. 09:49 — Recorder sealed on impact.",
+      "when": "Act I, when the carryall’s flight recorder is recovered"
+    },
+    {
+      "id": "imperial-survey-cipher",
+      "title": "IMPERIAL ECOLOGICAL SURVEY — PRIVATE CIPHER",
+      "from": "Office of the Patron, Imperial Ecological Survey, Kaitain",
+      "to": "Ilan Vesk",
+      "priority": "IMPERIAL",
+      "text": "To our servant on Arrakis. It has come to the attention of the Throne’s auditors that certain minor Houses of the spice concessions declare harvests below their true measure. Guild-sealed yield registers are the only evidence the Throne accepts. Should such a register come within your reach, intact and unopened, its delivery to this office would be remembered generously at the Survey’s next appointment. Should it be destroyed in your presence, that too would be remembered. Your work on the Arrakeen water cycle continues to interest the Patron. Burn this.",
+      "when": "Act II, as the wreck comes into view (delivers Vesk’s Act II agenda)"
+    },
+    {
+      "id": "steward-sealed-order",
+      "title": "SEALED ORDER — TO BE OPENED AT THE WRECK",
+      "from": "Lord Steward Maddoc Oskaren, by his own hand",
+      "to": "Bastien Rhol",
+      "priority": "SEALED",
+      "text": "Swordmaster. You will find the register on the bridge. It is not to leave the desert whole. Break it, burn it, let the sand have it, but no eye is to read it and no other hand is to carry it. If Crawler Boss Varn lives, she must not reach Hadrath. She knows what the register knows, and she is not loyal. I do not ask you to enjoy this. I ask you to remember whose bread you have eaten for nineteen years. Destroy this order with the register.",
+      "when": "Act II, as the wreck comes into view (delivers Bastien’s Act II agenda)"
+    },
+    {
+      "id": "sietch-knot-cord",
+      "title": "KNOT-CORD LEFT IN YOUR STILLTENT",
+      "from": "Ferrouk of Umm Kareth",
+      "to": "Tahra of Umm Kareth",
+      "priority": "SEALED",
+      "text": "Sister. The machine-woman swore the hold to us in water before witnesses, and we have kept her people alive six nights on the strength of it. Their dead are already in the sietch. If your off-worlders take the spice, they break her word and ours. If they raise shields, the Old Man will come to the blow before his time. The Sayyadina is watching. Whatever you choose, choose it as one of us.",
+      "when": "Act II, first night at the wreck or when the survivors are found (delivers Tahra’s Act II agenda)"
+    },
+    {
+      "id": "iselde-crew-journal",
+      "title": "CREW DECK JOURNAL — I. VARN",
+      "from": "Personal journal of Crawler Boss Iselde Varn",
+      "to": "Whoever searches the crew deck",
+      "priority": "ROUTINE",
+      "text": "Day 2. Eight dead. The desert people came in the night and took them. I could not stop them and did not try. They brought water back in their place. God help me, it tasted clean. Day 3. Told the crew the Fremen want the hold. Told the Fremen yes. Day 5. Pell talks to the sand now. Domas will not look at me. Day 6. If the House sends anyone, it will send someone to bury the register and me with it. I have the plate. Let them come and ask nicely.",
+      "when": "Act II, if the crew deck is searched"
+    },
+    {
+      "id": "suk-assay",
+      "title": "SUK FIELD ASSAY — SURVIVOR BLOOD",
+      "from": "Suk diagnostic kit, field reading",
+      "to": "Hallam Oro",
+      "priority": "SEALED",
+      "text": "Subjects: four. Hydration: normal; inconsistent with seven days on wreck reserves. Water source: reclaimed, mineral signature typical of a Fremen deathstill. Melange saturation: high in all; subject Dorrin critical, sclera colour change irreversible. Subject Varn: inherited blood markers match the examiner’s own reference sample. Recommendation: withdrawal protocol on return. Note: the examiner may wish to recuse himself from Subject Varn.",
+      "when": "Act II, after the survivors are examined (delivers Hallam’s Act II agenda)"
+    },
+    {
+      "id": "brannoch-vey-claim",
+      "title": "OPEN BAND — NOTICE OF SALVAGE CLAIM",
+      "from": "Lazlo Quint, Factor, Brannoch-Vey Salvage Combine",
+      "to": "ALL STATIONS, THIS BASIN",
+      "priority": "URGENT",
+      "text": "Under the Imperial salvage code as administered by CHOAM, the harvester registered Saltmother’s Due, having emitted no crew signal for seven standard days, is declared abandoned property. Brannoch-Vey Salvage Combine hereby enters claim to hull, cargo and records. Any persons found aboard are trespassers on a lawful claim and are invited to withdraw. We have water to share with anyone in need. Shields will remain active for the safety of our personnel. Quint out.",
+      "when": "Act II, when the salvage carryall lands"
+    },
+    {
+      "id": "yield-register-extract",
+      "title": "GUILD YIELD REGISTER — SUMMARY READ",
+      "from": "Yield register, harvester Saltmother’s Due (Guild seal intact)",
+      "to": "Whoever holds the key-plate",
+      "priority": "IMPERIAL",
+      "text": "GUILD-CALIBRATED MELANGE FLOW, 36 MONTHS: 412.6 tonnes. HOUSE DECLARATION TO IMPERIAL TITHE OFFICE, SAME PERIOD: 338.3 tonnes. VARIANCE: 74.3 tonnes (18.0 percent). Undeclared consignments transferred at sea of dunes, courier tail code CM-0417 (ornithopter Cinder Moth), 31 transfers. Authorising seal on transfer manifests: Steward, House Oskaren. Seal integrity: verified. This register is admissible before the Landsraad and the Throne.",
+      "when": "Act II, when the register is read with the key-plate"
+    },
+    {
+      "id": "quint-private-band",
+      "title": "PRIVATE BAND — FOR THE PILOT ONLY",
+      "from": "Lazlo Quint",
+      "to": "Jessamy Kort",
+      "priority": "SEALED",
+      "text": "Pilot. Your debt is cancelled on delivery, as agreed, and delivery means the register or two tonnes of melange at Siq Abbar’s western shoulder by moonset. I will not be particular about which. Your friends need not know; if they learn, I would prefer they learned from you. You will notice your tail code is in the register. So will the Throne. We are the only buyer who will not mind. Q.",
+      "when": "Act II, after the standoff with Quint, or Act III at nightfall (delivers Jessamy’s Act III agenda)"
+    }
+  ],
+  "endings": [
+    {
+      "title": "THE WATER RETURNED",
+      "condition": "The survivors come home alive by ornithopter or worm route, the sietch’s price is honoured, and the register is destroyed or kept by the House rather than handed to Harkonnen or the Throne.",
+      "text": "The Cinder Moth comes down on Hadrath’s pad lighter than it left, and the people who climb out of it are thin, blue-eyed and alive. The spice is gone, swallowed with the wreck or carried into the deep desert on a promise. House Oskaren misses its quarter and will spend a year borrowing from CHOAM at ruinous rates to cover it. But it is still a House. Weeks later, a Fremen of Umm Kareth walks into Hadrath Station unannounced, sets a single literjon of water on the Steward’s table, and walks out again. Nobody in the House is quite sure whether it is a gift or a reminder of what is owed."
+    },
+    {
+      "title": "THE EMPEROR’S ARITHMETIC",
+      "condition": "The register reaches the Imperial Ecological Survey or the Throne intact, whatever else is saved.",
+      "text": "Three months later a Sardaukar officer in plain grey walks into Hadrath Station with a writ and the register’s figures, and House Oskaren ends in an afternoon. Its concession passes to the Throne, its Steward to a cell, its banners into a storeroom. The survivors testify, and the truth is entered into the record exactly as the register measured it: seventy-four tonnes, eighteen percent, thirty-one transfers. House Harkonnen gets nothing, and knows exactly whom to thank. Somewhere on Kaitain, a patron of the Imperial Survey remembers a planetologist generously. Somewhere in the deep erg, the Old Man of the basin sleeps on nine tonnes of spice no ledger will ever count."
+    },
+    {
+      "title": "SAND OVER ALL",
+      "condition": "Lazlo Quint leaves the basin with the register or the spice, or the party breaks apart and the survivors are lost to the worm, the hunter-seeker or the agents themselves.",
+      "text": "The ornithopter that reaches the Shield Wall carries less than it should and fewer people than it left with. By the end of the season House Oskaren’s Steward is taking his instructions from a polite factor of a salvage combine that does not exist, and every quarter the House declares exactly what Giedi Prime tells it to declare. The spice still flows. It simply flows somewhere else. Out in the basin the sand has smoothed over everything: the wreck, the dead, the bargain sworn in water and the agents’ own broken trust. Only the Fremen remember what happened there, and they tell it as a story about off-worlders who could not stop counting."
+    }
+  ],
+  "characters": [
+    {
+      "id": "ilan-vesk",
+      "name": "Ilan Vesk",
+      "career": "Planetologist",
+      "appearance": "Lean and sun-cured, fifty, with the squint of a man who reads horizons and a habit of crumbling sand between his fingers while he thinks. Speaks softly and precisely, and lights up only when talking about water. DRIVE STATEMENTS — Duty: I serve the planet first and the patron who pays me second. · Faith: I do not believe in prophecy, but I believe in the Fremen. · Justice: A world that kills its people for want of water can be changed, and should be. · Power: Power is knowing what the land will do before anyone else. · Truth: I will see what lies under the sand, whatever it costs me.",
+      "attributes": {
+        "duty": 5,
+        "faith": 5,
+        "justice": 7,
+        "power": 5,
+        "truth": 8
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 4,
+        "discipline": 4,
+        "move": 6,
+        "understand": 8
+      },
+      "talent": "Reading the Land — Spend 1 Momentum to predict a sandstorm, spice blow or worm sign one scene before it happens.",
+      "gear": [
+        "Paracompass",
+        "Spice samples",
+        "Filmbook reader",
+        "Stillsuit",
+        "Green-glass rain vial"
+      ],
+      "signatureItem": "Green-glass rain vial — sealed with wax, it holds the only rain he has ever seen fall on Arrakis, caught on the Shield Wall when he was nine.",
+      "personalAgenda": "Recover the harvester’s deep soundings: the storm has exposed something under the basin you have waited twenty years to see. Keep the Fremen as friends; they are the only people on Arrakis who understand what you are trying to do.",
+      "agendaByAct": {
+        "1": "Read the storm’s wake and guide the Cinder Moth true. Win Ferrouk’s trust at Siq Abbar, even if it means offering him something the House has not authorised.",
+        "2": "The yield register is proof of fraud against the Throne, exactly what your patron wants. Get it into your hands intact before Bastien Rhol can destroy it, and make sure nobody learns you signed the storm waiver.",
+        "3": "Choose your master: carry the register to the Imperial Survey and bring House Oskaren down, or bury the truth and keep your name. When the pre-spice mass blows, every minute you spend watching is a minute the others are not leaving."
+      },
+      "buddy": "Tahra of Umm Kareth",
+      "rival": "Bastien Rhol",
+      "secret": "You hold an Imperial appointment, and your patron at court has asked you to bring back proof of any House defrauding the Emperor’s tithe. You also signed the storm-risk waiver that sent the Saltmother’s Due past the Shield Wall in storm season; the Lord Steward leaned on you, and eight of her crew died for it."
+    },
+    {
+      "id": "tahra-umm-kareth",
+      "name": "Tahra of Umm Kareth",
+      "career": "Fremen Guide",
+      "appearance": "Small, still and sun-dark, her face hidden behind a stillsuit mask until she chooses to lower it. Moves without a sound and watches how every outsider handles water. DRIVE STATEMENTS — Duty: My sietch first, my word second, my employer a distant third. · Faith: The desert judges; I only carry its verdicts. · Justice: Water given in trust is a law older than any Emperor. · Power: Out here, power is knowing where to stand. · Truth: I tell no lies, and I volunteer nothing.",
+      "attributes": {
+        "duty": 6,
+        "faith": 8,
+        "justice": 6,
+        "power": 4,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 6,
+        "communicate": 4,
+        "discipline": 4,
+        "move": 8,
+        "understand": 4
+      },
+      "talent": "Walk Without Rhythm — On open sand, reduce the Difficulty of MOVE tests to avoid drawing a worm by 1.",
+      "gear": [
+        "Crysknife",
+        "Maker hooks",
+        "Thumper",
+        "Stillsuit",
+        "Cord of eleven water rings"
+      ],
+      "signatureItem": "Cord of eleven water rings — her mother’s, each one a life given to or owed by the sietch, and she can name all eleven.",
+      "personalAgenda": "Guide these off-worlders to their broken machine and bring them back alive, as you were paid to. Watch how they treat water; the sietch will ask you.",
+      "agendaByAct": {
+        "1": "Bring the agents to Siq Abbar and make sure the price Ferrouk names is paid. Do not tell them the crew lives until they have promised something.",
+        "2": "The hold is sworn to Umm Kareth. Keep the off-worlders’ hands off it, and keep shields down; the salvagers’ shields are already calling the worm.",
+        "3": "If the pilot tries to fly the spice out, she breaks a promise made in water. Stop her, with the thumper, the worm or your knife. The Old Man has come; whatever he takes, he takes by right."
+      },
+      "buddy": "Ilan Vesk",
+      "rival": "Jessamy Kort",
+      "secret": "Your sietch has carried water to the harvester survivors every night for six days. Crawler Boss Iselde Varn swore the spice hold to the sietch in return, and the water of the dead is already in the sietch’s deathstill. Ferrouk of Siq Abbar is your brother. You knew all of this before you took the House’s money."
+    },
+    {
+      "id": "bastien-rhol",
+      "name": "Bastien Rhol",
+      "career": "Swordmaster",
+      "appearance": "Broad, grey-cropped and scarred across both forearms, with a soldier’s economy of movement and a courtier’s good manners. Keeps one hand on his rapier hilt and the other open. DRIVE STATEMENTS — Duty: I have eaten House Oskaren’s bread for nineteen years and I will earn every crumb. · Faith: I believe in the drill, the blade and the man beside me. · Justice: There are orders I will not follow; I learned which ones on Salusa. · Power: A guard’s power is to decide who passes. · Truth: I prefer not to know what I am protecting.",
+      "attributes": {
+        "duty": 8,
+        "faith": 5,
+        "justice": 6,
+        "power": 6,
+        "truth": 5
+      },
+      "skills": {
+        "battle": 8,
+        "communicate": 4,
+        "discipline": 5,
+        "move": 5,
+        "understand": 4
+      },
+      "talent": "Guardian’s Step — When an ally within reach is attacked, spend 1 Momentum to take the attack yourself.",
+      "gear": [
+        "Rapier",
+        "Kindjal",
+        "Shield belt",
+        "Stillsuit",
+        "Black-and-scarlet drill cord"
+      ],
+      "signatureItem": "Black-and-scarlet drill cord — given to the only levy recruit who ever finished the Sardaukar’s Salusan march; he has never told the House where he earned it.",
+      "personalAgenda": "Protect the expedition and carry out the Lord Steward’s orders to the letter. You have never failed House Oskaren and you will not begin in the deep desert.",
+      "agendaByAct": {
+        "1": "Keep the agents alive and the Cinder Moth intact. Watch the Imperial planetologist; the Lord Steward does not trust him.",
+        "2": "Secure the register before anyone reads it, and find out how much Iselde Varn has already told the others.",
+        "3": "Destroy the register and see that Iselde Varn does not reach Hadrath. If the Suk doctor stands between you and her, decide whether your oath outweighs your friend."
+      },
+      "buddy": "Hallam Oro",
+      "rival": "Ilan Vesk",
+      "secret": "Before lift-off the Lord Steward gave you a sealed order: the register is to be destroyed unread, and Iselde Varn, who ran the skim, must not return to testify. You trained beside Sardaukar on Salusa Secundus and were sent home for refusing to kill prisoners. This order sits badly."
+    },
+    {
+      "id": "jessamy-kort",
+      "name": "Jessamy Kort",
+      "career": "Smuggler",
+      "appearance": "Wiry, quick-grinning, forty, with a flight jacket worn over her stillsuit against all good sense and a voice made for haggling. Talks to the Cinder Moth more kindly than to people. DRIVE STATEMENTS — Duty: I owe the ship, and the ship owes me. · Faith: I believe in fuel, water and a fast exit. · Justice: Everybody skims; I just get caught less. · Power: Debt is a leash, and I am chewing through mine. · Truth: The truth is whatever gets you home.",
+      "attributes": {
+        "duty": 4,
+        "faith": 5,
+        "justice": 6,
+        "power": 8,
+        "truth": 7
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 6,
+        "discipline": 4,
+        "move": 8,
+        "understand": 4
+      },
+      "talent": "A Price for Everything — Reduce the Difficulty of bribes, haggling and favor-trading by 1.",
+      "gear": [
+        "Maula pistol",
+        "Ornithopter access codes",
+        "Solari purse",
+        "Forged travel papers",
+        "Cracked control yoke"
+      ],
+      "signatureItem": "Cracked control yoke — the Cinder Moth’s original, taped together, which she refitted because the new one did not know her hands.",
+      "personalAgenda": "Fly the job, get paid, keep the Cinder Moth in the air. The House’s bonus for recovered spice would clear every debt you have.",
+      "agendaByAct": {
+        "1": "Keep the course steady and the transponder on Quint’s band. Nobody needs to know who else is coming.",
+        "2": "Quint has arrived early and armed. Make sure he gets something, the register or the spice, so your debt is cancelled, without your name surfacing.",
+        "3": "Load as much spice as the Cinder Moth can lift and get out, with or without passengers. If the Fremen want the hold, they can have whatever you leave."
+      },
+      "buddy": "Bastien Rhol",
+      "rival": "Tahra of Umm Kareth",
+      "secret": "You owe forty thousand solari to a Harkonnen credit-house, and before lift-off you sold the harvester’s last fix to a salvage factor named Lazlo Quint to cancel it. You have also flown House Oskaren’s skimmed spice to the Guild port for three years; the register names your ornithopter’s tail code."
+    },
+    {
+      "id": "hallam-oro",
+      "name": "Hallam Oro",
+      "career": "Suk Doctor",
+      "appearance": "Tall, stooped and silver-bearded, the Suk diamond on his brow and a stillsuit he refits obsessively. His hands are the steadiest thing in any room; his voice is the gentlest. DRIVE STATEMENTS — Duty: The patient in front of me is my whole duty. · Faith: My conditioning is the only faith I was allowed to keep. · Justice: No one dies on my table because of what they are worth. · Power: I have none, and I am grateful. · Truth: I lied once, to a child, and I have been paying for it ever since.",
+      "attributes": {
+        "duty": 7,
+        "faith": 6,
+        "justice": 7,
+        "power": 4,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 5,
+        "discipline": 6,
+        "move": 4,
+        "understand": 7
+      },
+      "talent": "Field Surgery — After a scene, remove 2 Stress from an ally you treat, or clear WOUNDED with an UNDERSTAND test (Difficulty 2).",
+      "gear": [
+        "Suk medical kit",
+        "Poison snooper",
+        "Chaumurky antidote kit",
+        "Stillsuit",
+        "Child’s water ring on a chain"
+      ],
+      "signatureItem": "Child’s water ring on a chain — he says it belonged to a patient, which is half true; it was his daughter’s.",
+      "personalAgenda": "Treat every survivor you find and bring all of them home. Your conditioning does not let you choose who lives, and you would not choose even if it did.",
+      "agendaByAct": {
+        "1": "Keep the agents’ bodies working: water discipline, heat, injuries. Save the carryall’s crew if any of them live.",
+        "2": "The survivors are alive by a miracle you cannot explain. Learn the truth of it, and learn whether your daughter killed a man to make it happen.",
+        "3": "Iselde is your patient. Someone in this party means her harm. Bring her home alive, even if it costs the spice, the register or your oldest friend’s trust."
+      },
+      "buddy": "Bastien Rhol",
+      "rival": "Jessamy Kort",
+      "secret": "Crawler Boss Iselde Varn is your daughter, born before your conditioning at the Suk School. She does not know you are on this flight. You asked for this assignment the hour you heard her harvester had gone silent."
+    }
+  ],
+  "tips": [
+    "Make water discipline a visible clock: track the Cinder Moth’s 140 litres on the table, deduct 2 litres per agent for every scene of heat without suit discipline and 4 per hour for each extra passenger, and announce when the return reserve is gone.",
+    "Run worm-sign as a Threat spend: a six-step clock the players can see, advanced 1 per scene, 1 per Threat spent, and at once by rhythm on open sand; at 6 a grown worm surfaces under the loudest thing in the basin.",
+    "Shields attract worms: any shield lit in the basin advances the worm-sign clock by 2 immediately, so let Quint’s salvagers learn this the hard way and let the agents decide whether to use it against them.",
+    "Start Threat at 2 per agent and let Momentum build in Act I; the Act III weight argument and the final dispatch to the Steward both need Momentum to spend.",
+    "Send each agent’s new agenda as a private dispatch at the start of Acts II and III, and give Jessamy’s Quint message the moment the standoff ends.",
+    "Never price Fremen help in solari: they want water, spice, a promise or the shield generator, and they remember every broken word.",
+    "Put the lift figures on index cards in Act III and make the players move them; the choice between crew, spice and truth is the scenario, so do not solve it for them."
+  ]
+}

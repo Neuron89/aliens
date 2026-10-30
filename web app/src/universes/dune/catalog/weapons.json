@@ -1,0 +1,637 @@
+[
+  {
+    "id": "crysknife",
+    "name": "Crysknife",
+    "source": "custom",
+    "category": "blade",
+    "stats": {
+      "bonus": 1,
+      "damage": 3,
+      "range": "close",
+      "weight": 0.5,
+      "cost": 0,
+      "quality": 3
+    },
+    "tags": [
+      "sacred",
+      "shield-piercing",
+      "fremen"
+    ],
+    "notes": "A blade grown from a sandworm tooth. Never sold; given, earned or taken. Must be kept in contact with its owner’s body or it decays.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "damage",
+        "text": "+1 Stress against shielded foes when used with a slow strike",
+        "value": 1
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Drawing it in front of Fremen without cause is an insult that starts a conflict"
+      }
+    ],
+    "art": "/art/dune/weapons/crysknife.webp"
+  },
+  {
+    "id": "kindjal",
+    "name": "Kindjal",
+    "source": "custom",
+    "category": "blade",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "close",
+      "weight": 0.5,
+      "cost": 200,
+      "quality": 2
+    },
+    "tags": [
+      "concealable",
+      "shield-piercing",
+      "off-hand"
+    ],
+    "notes": "A short noble’s dagger, worn openly at court and used as an off-hand blade in duels.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:battle",
+        "text": "Off-hand: spend 1 Momentum to parry a blade attack"
+      }
+    ],
+    "art": "/art/dune/weapons/kindjal.webp"
+  },
+  {
+    "id": "rapier",
+    "name": "Dueling Rapier",
+    "source": "custom",
+    "category": "blade",
+    "stats": {
+      "bonus": 0,
+      "damage": 3,
+      "range": "close",
+      "weight": 1,
+      "cost": 400,
+      "quality": 2
+    },
+    "tags": [
+      "shield-piercing",
+      "duel"
+    ],
+    "notes": "A long, light blade built for shield-fighting: fast feints, then a slow thrust that slides through the field.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:battle",
+        "text": "+1 free d20 in a formal duel",
+        "value": 1,
+        "when": "formal duel"
+      }
+    ],
+    "art": "/art/dune/weapons/rapier.webp"
+  },
+  {
+    "id": "slip-tip",
+    "name": "Slip-Tip",
+    "source": "custom",
+    "category": "assassination",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "close",
+      "weight": 0,
+      "cost": 300,
+      "quality": 2
+    },
+    "tags": [
+      "poisoned",
+      "concealable",
+      "shield-piercing"
+    ],
+    "notes": "A needle-thin poisoned stiletto meant to be hidden in a sleeve or a kindjal sheath.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "On a hit, the target also gains the poisoned condition"
+      }
+    ],
+    "art": "/art/dune/weapons/slip-tip.webp"
+  },
+  {
+    "id": "sword",
+    "name": "Soldier’s Sword",
+    "source": "custom",
+    "category": "blade",
+    "stats": {
+      "bonus": 0,
+      "damage": 3,
+      "range": "close",
+      "weight": 1,
+      "cost": 150,
+      "quality": 1
+    },
+    "tags": [
+      "shield-piercing",
+      "military"
+    ],
+    "notes": "A heavy blade issued to House troops. Plain, reliable, and the reason shield-fighting is still taught.",
+    "effects": [],
+    "art": "/art/dune/weapons/sword.webp"
+  },
+  {
+    "id": "sardaukar-blade",
+    "name": "Sardaukar Blade",
+    "source": "custom",
+    "category": "blade",
+    "stats": {
+      "bonus": 1,
+      "damage": 4,
+      "range": "close",
+      "weight": 1,
+      "cost": 1200,
+      "quality": 3
+    },
+    "tags": [
+      "shield-piercing",
+      "military",
+      "imperial"
+    ],
+    "notes": "A heavy curved blade carried by Imperial terror troops. Owning one without having taken it from a Sardaukar is a dangerous claim.",
+    "effects": [],
+    "art": "/art/dune/weapons/sardaukar-blade.webp"
+  },
+  {
+    "id": "maula-pistol",
+    "name": "Maula Pistol",
+    "source": "custom",
+    "category": "projectile",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 250,
+      "quality": 1
+    },
+    "tags": [
+      "spring-fired",
+      "silent",
+      "blocked-by-shield"
+    ],
+    "notes": "A spring-powered dart pistol. Quiet and cheap, but useless against an active shield.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot harm a target whose shield is active"
+      }
+    ],
+    "art": "/art/dune/weapons/maula-pistol.webp"
+  },
+  {
+    "id": "fremen-maula",
+    "name": "Desert-Worn Maula",
+    "source": "custom",
+    "category": "projectile",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 0,
+      "quality": 1
+    },
+    "tags": [
+      "spring-fired",
+      "poisoned",
+      "blocked-by-shield"
+    ],
+    "notes": "A maula pistol kept running with sand-proof wraps and fed with poisoned darts.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "On a hit, the target gains the poisoned condition"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Cannot harm a target whose shield is active"
+      }
+    ],
+    "art": "/art/dune/weapons/fremen-maula.webp"
+  },
+  {
+    "id": "stunner",
+    "name": "Stunner",
+    "source": "custom",
+    "category": "projectile",
+    "stats": {
+      "bonus": 0,
+      "damage": 1,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 200,
+      "quality": 1
+    },
+    "tags": [
+      "non-lethal",
+      "blocked-by-shield"
+    ],
+    "notes": "Fires a slow dart loaded with a fast sedative. Favored for kidnappings.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "damage",
+        "text": "A hit that inflicts any Stress also makes the target exhausted"
+      }
+    ],
+    "art": "/art/dune/weapons/stunner.webp"
+  },
+  {
+    "id": "flip-dart",
+    "name": "Flip-Darts",
+    "source": "custom",
+    "category": "projectile",
+    "stats": {
+      "bonus": 0,
+      "damage": 1,
+      "range": "close",
+      "weight": 0,
+      "cost": 120,
+      "quality": 1
+    },
+    "tags": [
+      "concealable",
+      "thrown",
+      "poisoned"
+    ],
+    "notes": "Wrist-flicked darts, usually poisoned, hidden in a sleeve sheath.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Attack without a weapon being seen; +1 free d20 on the first surprise throw",
+        "value": 1
+      }
+    ],
+    "art": "/art/dune/weapons/flip-dart.webp"
+  },
+  {
+    "id": "lasgun-pistol",
+    "name": "Lasgun Pistol",
+    "source": "custom",
+    "category": "lasgun",
+    "stats": {
+      "bonus": 0,
+      "damage": 3,
+      "range": "medium",
+      "weight": 0.5,
+      "cost": 1500,
+      "quality": 2
+    },
+    "tags": [
+      "energy",
+      "shield-catastrophe"
+    ],
+    "notes": "A compact continuous-beam laser sidearm.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "A lasgun beam meeting a shield causes a pseudo-atomic blast: both are destroyed and everyone in the zone suffers 6 Stress"
+      }
+    ],
+    "art": "/art/dune/weapons/lasgun-pistol.webp"
+  },
+  {
+    "id": "lasgun-carbine",
+    "name": "Lasgun Carbine",
+    "source": "custom",
+    "category": "lasgun",
+    "stats": {
+      "bonus": 0,
+      "damage": 4,
+      "range": "long",
+      "weight": 1,
+      "cost": 2500,
+      "quality": 2
+    },
+    "tags": [
+      "energy",
+      "shield-catastrophe",
+      "military"
+    ],
+    "notes": "A short military laser for troops fighting where shields are not worn.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Shield interaction: catastrophic pseudo-atomic blast (see Lasgun Pistol)"
+      }
+    ],
+    "art": "/art/dune/weapons/lasgun-carbine.webp"
+  },
+  {
+    "id": "lasgun-rifle",
+    "name": "Lasgun Rifle",
+    "source": "custom",
+    "category": "lasgun",
+    "stats": {
+      "bonus": 1,
+      "damage": 4,
+      "range": "extreme",
+      "weight": 2,
+      "cost": 4000,
+      "quality": 3
+    },
+    "tags": [
+      "energy",
+      "shield-catastrophe",
+      "cutting"
+    ],
+    "notes": "A long laser that can cut rock and armor at distance. Officers forbid it near shielded allies.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Can cut through doors and walls in one scene"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Shield interaction: catastrophic pseudo-atomic blast"
+      }
+    ],
+    "art": "/art/dune/weapons/lasgun-rifle.webp"
+  },
+  {
+    "id": "cutteray",
+    "name": "Cutteray",
+    "source": "custom",
+    "category": "lasgun",
+    "stats": {
+      "bonus": 0,
+      "damage": 2,
+      "range": "close",
+      "weight": 0.5,
+      "cost": 300,
+      "quality": 1
+    },
+    "tags": [
+      "tool",
+      "energy",
+      "shield-catastrophe"
+    ],
+    "notes": "A short-range cutting laser for mining and repairs. Desperate people use it as a weapon.",
+    "effects": [],
+    "art": "/art/dune/weapons/cutteray.webp"
+  },
+  {
+    "id": "hunter-seeker",
+    "name": "Hunter-Seeker",
+    "source": "custom",
+    "category": "assassination",
+    "stats": {
+      "bonus": 1,
+      "damage": 5,
+      "range": "medium",
+      "weight": 0,
+      "cost": 5000,
+      "quality": 3
+    },
+    "tags": [
+      "poisoned",
+      "remote",
+      "tracks-motion"
+    ],
+    "notes": "A floating poison needle steered by a nearby operator. It hunts movement and slips under slow shields.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Ignores cover; target must make DISCIPLINE (D3) to stay perfectly still"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Destroyed if the operator loses line of control"
+      }
+    ],
+    "art": "/art/dune/weapons/hunter-seeker.webp"
+  },
+  {
+    "id": "gom-jabbar",
+    "name": "Gom Jabbar",
+    "source": "custom",
+    "category": "assassination",
+    "stats": {
+      "bonus": 1,
+      "damage": 8,
+      "range": "close",
+      "weight": 0,
+      "cost": 0,
+      "quality": 4
+    },
+    "tags": [
+      "poisoned",
+      "ritual",
+      "lethal"
+    ],
+    "notes": "A needle tipped with a near-instant poison, held at the neck during a ritual test of humanity.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "A hit is lethal unless the Narrator offers a cost"
+      },
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Holding it at someone’s throat counts as an asset of Quality 4 for threats"
+      }
+    ],
+    "art": "/art/dune/weapons/gom-jabbar.webp"
+  },
+  {
+    "id": "shigawire-garrote",
+    "name": "Shigawire Garrote",
+    "source": "custom",
+    "category": "assassination",
+    "stats": {
+      "bonus": 0,
+      "damage": 4,
+      "range": "close",
+      "weight": 0,
+      "cost": 800,
+      "quality": 2
+    },
+    "tags": [
+      "concealable",
+      "silent",
+      "shield-piercing"
+    ],
+    "notes": "Impossibly thin metal-vine wire with two grips. It cuts deep and makes no sound.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "damage",
+        "text": "+1 Stress if the target was unaware",
+        "value": 1
+      }
+    ],
+    "art": "/art/dune/weapons/shigawire-garrote.webp"
+  },
+  {
+    "id": "heavy-lascannon",
+    "name": "Heavy Lascannon",
+    "source": "custom",
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 6,
+      "range": "extreme",
+      "weight": 4,
+      "cost": 20000,
+      "quality": 3
+    },
+    "tags": [
+      "vehicle-scale",
+      "crewed",
+      "shield-catastrophe"
+    ],
+    "notes": "A tripod or turret laser for fortifications and ornithopter gunships.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Damages vehicles and structures"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Needs a crew of two to fire and move"
+      }
+    ],
+    "art": "/art/dune/weapons/heavy-lascannon.webp"
+  },
+  {
+    "id": "thopter-rockets",
+    "name": "Ornithopter Rocket Pods",
+    "source": "custom",
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 6,
+      "range": "extreme",
+      "weight": 0,
+      "cost": 15000,
+      "quality": 3
+    },
+    "tags": [
+      "vehicle-mounted",
+      "explosive",
+      "area"
+    ],
+    "notes": "Wing-mounted rockets on a military ornithopter. Each salvo blankets a zone.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "damage",
+        "text": "Inflicts Stress on every target in one zone"
+      }
+    ],
+    "art": "/art/dune/weapons/thopter-rockets.webp"
+  },
+  {
+    "id": "artillery-battery",
+    "name": "Artillery Battery",
+    "source": "custom",
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 8,
+      "range": "extreme",
+      "weight": 0,
+      "cost": 50000,
+      "quality": 4
+    },
+    "tags": [
+      "emplacement",
+      "explosive",
+      "area",
+      "shield-ignoring"
+    ],
+    "notes": "Old-fashioned projectile cannon. Shields cannot stop a shell slow enough, so armies have rediscovered them.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Ignores personal shields; can seal cave mouths"
+      },
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Requires a full scene to set up and range"
+      }
+    ],
+    "art": "/art/dune/weapons/artillery-battery.webp"
+  },
+  {
+    "id": "atomics",
+    "name": "Family Atomics",
+    "source": "custom",
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 12,
+      "range": "extreme",
+      "weight": 3,
+      "cost": 0,
+      "quality": 4
+    },
+    "tags": [
+      "forbidden",
+      "house-heirloom",
+      "catastrophic"
+    ],
+    "notes": "A House’s ancestral atomic arsenal. Using one against people brings the whole Imperium down on the user.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Use against humans makes the House an outlaw (Narrator gains 10 Threat)"
+      }
+    ],
+    "art": "/art/dune/weapons/atomics.webp"
+  },
+  {
+    "id": "stone-burner",
+    "name": "Stone Burner",
+    "source": "custom",
+    "category": "heavy",
+    "stats": {
+      "bonus": 1,
+      "damage": 10,
+      "range": "long",
+      "weight": 2,
+      "cost": 0,
+      "quality": 4
+    },
+    "tags": [
+      "forbidden",
+      "blinding",
+      "area"
+    ],
+    "notes": "A forbidden atomic device whose burn depth is set by a timer. Survivors nearby are often blinded.",
+    "effects": [
+      {
+        "kind": "debuff",
+        "target": "other",
+        "text": "Anyone in the zone without eye protection gains a lasting injury"
+      }
+    ],
+    "art": "/art/dune/weapons/stone-burner.webp"
+  }
+]

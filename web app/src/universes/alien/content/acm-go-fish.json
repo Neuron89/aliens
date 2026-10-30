@@ -1,0 +1,94 @@
+{
+  "packVersion": 1,
+  "id": "acm-go-fish",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Operation Go Fish",
+    "tagline": "A frontier spaceport. Evacuees, smugglers, and something hunting in the shadows.",
+    "type": "Campaign",
+    "players": "3–5",
+    "playtime": "4–6 hours",
+    "difficulty": "Hard",
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "MU/TH/UR 9000",
+    "to": "KILO COMPANY, 2ND PLATOON",
+    "classification": "MISSION BRIEFING — OPERATION GO FISH",
+    "text": "MISSION OBJECTIVE: Morgan Bluff Spaceport has become an evacuation point for frontier colonists fleeing the war zone. Intelligence reports indicate a Marine Special Ops unit and Blackguard operatives are conducting covert operations in the area.\n\nYour platoon is to secure the spaceport, assist with evacuation operations, and investigate reports of xenoanthropologist disappearances. The Mariculture Complex and surrounding facilities require thorough sweep.\n\nWarning: hostile elements may be embedded among the evacuee population."
+  },
+  "acts": [
+    {
+      "title": "OPERATION",
+      "subtitle": "MISSION BRIEFING",
+      "summary": "A frontier spaceport. Evacuees, smugglers, and something hunting in the shadows.",
+      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "MORGAN BLUFF SPACEPORT — Landing Pads",
+      "description": "Multiple spacecraft berths. Evacuation transports loading."
+    },
+    {
+      "name": "MORGAN BLUFF SPACEPORT — Terminal Building",
+      "description": "Main spaceport terminal. Processing center for evacuees."
+    },
+    {
+      "name": "MORGAN BLUFF SPACEPORT — Mariculture Complex",
+      "description": "Adjacent aquaculture facility. Reported disappearances in this area."
+    },
+    {
+      "name": "MORGAN BLUFF SPACEPORT — Cargo Warehouses",
+      "description": "Storage facilities. Smuggling operations suspected."
+    },
+    {
+      "name": "MORGAN BLUFF SPACEPORT — Control Tower",
+      "description": "Air traffic control and communications. Observation point."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "MISSION BRIEFING — OPERATION GO FISH",
+      "from": "MU/TH/UR 9000",
+      "to": "KILO COMPANY, 2ND PLATOON",
+      "priority": "PRIORITY",
+      "text": "MISSION OBJECTIVE: Morgan Bluff Spaceport has become an evacuation point for frontier colonists fleeing the war zone. Intelligence reports indicate a Marine Special Ops unit and Blackguard operatives are conducting covert operations in the area.\n\nYour platoon is to secure the spaceport, assist with evacuation operations, and investigate reports of xenoanthropologist disappearances. The Mariculture Complex and surrounding facilities require thorough sweep.\n\nWarning: hostile elements may be embedded among the evacuee population.",
+      "when": "Start of the session, before Act I"
+    }
+  ],
+  "maps": [
+    {
+      "id": "morgan-bluff-spaceport",
+      "title": "MORGAN BLUFF SPACEPORT",
+      "subtitle": "Frontier Evacuation Point",
+      "description": "Frontier spaceport turned evacuation point. Overflowing with refugees, smugglers, and covert operatives. Something is hunting in the shadows.",
+      "kind": "image",
+      "src": "/maps/acm/morgan-bluff-spaceport.webp",
+      "rooms": [
+        {
+          "name": "Landing Pads",
+          "note": "Multiple spacecraft berths. Evacuation transports loading."
+        },
+        {
+          "name": "Terminal Building",
+          "note": "Main spaceport terminal. Processing center for evacuees."
+        },
+        {
+          "name": "Mariculture Complex",
+          "note": "Adjacent aquaculture facility. Reported disappearances in this area."
+        },
+        {
+          "name": "Cargo Warehouses",
+          "note": "Storage facilities. Smuggling operations suspected."
+        },
+        {
+          "name": "Control Tower",
+          "note": "Air traffic control and communications. Observation point."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1566 @@
+[
+  {
+    "id": "colonial-marine",
+    "name": "Colonial Marine",
+    "source": "CRB",
+    "page": 38,
+    "keyAttribute": "str",
+    "keySkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat"
+    ],
+    "talents": [
+      "banter",
+      "overkill",
+      "past-the-limit"
+    ],
+    "startingGear": {
+      "fixed": [],
+      "choices": [
+        [
+          "m41a-pulse-rifle",
+          "m56a2-smart-gun"
+        ],
+        [
+          "m314-motion-tracker",
+          "g2-electroshock-grenade"
+        ],
+        [
+          "irc-mk35-pressure",
+          "m3-personnel-armor"
+        ],
+        [
+          "signal-flare",
+          "deck-of-cards"
+        ]
+      ],
+      "pick": 2,
+      "rule": "Choose two of the lines below and take one item from each chosen line. Each weapon comes with two full reloads; you also have clothing/uniform.",
+      "cash": "D6x100",
+      "quantities": {
+        "g2-electroshock-grenade": 2
+      }
+    },
+    "description": "A USCMC grunt who enlisted young for steady bunks and big guns, and has since seen things that took the shine off the Corps.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "typicalNames": [
+      "Marcus Mullaney",
+      "Nik Elson",
+      "Vic Pasengrau",
+      "Kimi Diem",
+      "Tara Zanelli",
+      "Chrissy Lopez"
+    ],
+    "signatureItemHints": [
+      "The bullet you survived",
+      "A lost friend's dog tags",
+      "A trophy from a beaten enemy"
+    ],
+    "kind": "career"
+  },
+  {
+    "id": "colonial-marshal",
+    "name": "Colonial Marshal",
+    "source": "CRB",
+    "page": 40,
+    "keyAttribute": "wit",
+    "keySkills": [
+      "observation",
+      "rangedCombat",
+      "manipulation"
+    ],
+    "talents": [
+      "authority",
+      "investigator",
+      "subdue"
+    ],
+    "startingGear": {
+      "fixed": [],
+      "choices": [
+        [
+          "357-magnum-revolver",
+          "armat-37a2-shotgun"
+        ],
+        [
+          "binoculars",
+          "hi-beam-flashlight"
+        ],
+        [
+          "personal-medkit",
+          "stun-baton"
+        ],
+        [
+          "neversleep-pills",
+          "hand-radio"
+        ]
+      ],
+      "pick": 2,
+      "rule": "Choose two of the lines below and take one item from each chosen line. Each weapon comes with two full reloads; you also have clothing/uniform.",
+      "cash": "D6x100",
+      "quantities": {
+        "neversleep-pills": "D6"
+      }
+    },
+    "description": "An incorruptible frontier lawman in a place where most badges are bought by a corporation, making enemies on both sides of the law.",
+    "appearanceHints": [
+      "Chewing a toothpick",
+      "Cigarette in mouth",
+      "Impressive mustache",
+      "Worn cap",
+      "Scar across face",
+      "Graying hair",
+      "Crew cut",
+      "Inquisitive gaze",
+      "Old leather jacket"
+    ],
+    "agendaHints": [
+      "Your old partner betrayed you for a crime syndicate; settle the score.",
+      "You want to hand in the badge and live quietly; work toward it.",
+      "A past misdeed has caught up with you; find out who you really are."
+    ],
+    "typicalNames": [
+      "Jack Kitani",
+      "Barrell Klein",
+      "Ivan Mankov",
+      "Akira Kano",
+      "Angela Harris",
+      "Lee-Ann Jenkins"
+    ],
+    "signatureItemHints": [
+      "Photo of a loved one",
+      "Dented, engraved flask",
+      "Clipping about an unsolved case"
+    ],
+    "kind": "career"
+  },
+  {
+    "id": "company-agent",
+    "name": "Company Agent",
+    "source": "CRB",
+    "page": 42,
+    "keyAttribute": "wit",
+    "keySkills": [
+      "comtech",
+      "observation",
+      "manipulation"
+    ],
+    "talents": [
+      "cunning",
+      "personal-safety",
+      "take-control"
+    ],
+    "startingGear": {
+      "fixed": [],
+      "choices": [
+        [
+          "leather-briefcase",
+          "chrome-briefcase"
+        ],
+        [
+          "gold-plated-pen",
+          "rolex-watch"
+        ],
+        [
+          "data-transmitter-cards",
+          "m4a3-service-pistol"
+        ],
+        [
+          "neversleep-pills",
+          "naproleve"
+        ]
+      ],
+      "pick": 2,
+      "rule": "Choose two of the lines below and take one item from each chosen line. Each weapon comes with two full reloads; you also have clothing/uniform.",
+      "cash": "2D6x100",
+      "quantities": {
+        "neversleep-pills": "D6",
+        "naproleve": "D6"
+      },
+      "notes": "The data transmitter card option comes with a corporate clearance level."
+    },
+    "description": "A hungry corporate operator hunting the next big find for the Company, treating everyone as an asset on the way up the ladder.",
+    "appearanceHints": [
+      "Icy glare",
+      "Disarming smile",
+      "Expensive Rolex",
+      "Unique signet ring",
+      "Tanned",
+      "Elaborate hairstyle",
+      "Emotionless stare",
+      "Monogrammed silk tie"
+    ],
+    "agendaHints": [
+      "You crave power and grab every chance to get ahead.",
+      "The Company is keeping secrets from you; learn what and why.",
+      "The Company blackmails you into its dirty work; get even."
+    ],
+    "typicalNames": [
+      "Conrad Schmidt",
+      "Alexander Balconi",
+      "Ryan Middlebrook",
+      "Michiko Nogumi",
+      "Sheridan Lamara",
+      "Mercedes Prince"
+    ],
+    "signatureItemHints": [
+      "Letter of corporate authorization",
+      "Divorce papers",
+      "Employee of the Year award"
+    ],
+    "kind": "career"
+  },
+  {
+    "id": "kid",
+    "name": "Kid",
+    "source": "CRB",
+    "page": 44,
+    "keyAttribute": "agi",
+    "keySkills": [
+      "mobility",
+      "survival",
+      "observation"
+    ],
+    "talents": [
+      "beneath-notice",
+      "dodge",
+      "nimble"
+    ],
+    "startingGear": {
+      "fixed": [],
+      "choices": [
+        [
+          "fishing-line",
+          "laser-pointer"
+        ],
+        [
+          "magnet",
+          "radio-controlled-car"
+        ],
+        [
+          "yo-yo",
+          "electronic-handheld-game"
+        ],
+        [
+          "personal-locator-beacon",
+          "coloring-pens"
+        ]
+      ],
+      "pick": 2,
+      "rule": "Choose two of the lines below and take one item from each chosen line. Each weapon comes with two full reloads; you also have clothing/uniform.",
+      "cash": "D6"
+    },
+    "description": "A frontier child who never chose colony life, bored by tired adults and making fun out of crawlspaces and air vents.",
+    "appearanceHints": [
+      "Grubby and unkempt",
+      "Light-up sneakers",
+      "Jeans torn at the knees",
+      "Band T-shirt",
+      "Cargo shorts",
+      "Ponytail",
+      "Bored expression",
+      "Baseball cap"
+    ],
+    "agendaHints": [
+      "Find a grown-up you can truly trust.",
+      "Your family is gone; make sure you are never left alone again.",
+      "Nobody gives you anything to do, so explore and make your own fun."
+    ],
+    "typicalNames": [
+      "Chip Harrington",
+      "Hugo Turner",
+      "Jakey Myers",
+      "Meggie Wu",
+      "Maisie Kelly",
+      "Becca David"
+    ],
+    "signatureItemHints": [
+      "Sticker-covered lunchbox",
+      "Favorite doll or action figure",
+      "Bracelet from an older sibling"
+    ],
+    "kind": "career"
+  },
+  {
+    "id": "medic",
+    "name": "Medic",
+    "source": "CRB",
+    "page": 46,
+    "keyAttribute": "emp",
+    "keySkills": [
+      "mobility",
+      "observation",
+      "medicalAid"
+    ],
+    "talents": [
+      "calming-presence",
+      "compassion",
+      "field-surgeon"
+    ],
+    "startingGear": {
+      "fixed": [],
+      "choices": [
+        [
+          "surgical-kit",
+          "irc-mk50-compression"
+        ],
+        [
+          "naproleve",
+          "neversleep-pills"
+        ],
+        [
+          "personal-medkit",
+          "x-drugs"
+        ],
+        [
+          "samani-e-series-watch",
+          "hand-radio"
+        ]
+      ],
+      "pick": 2,
+      "rule": "Choose two of the lines below and take one item from each chosen line. Each weapon comes with two full reloads; you also have clothing/uniform.",
+      "cash": "D6x100",
+      "quantities": {
+        "naproleve": "D6",
+        "neversleep-pills": "D6",
+        "x-drugs": "D6"
+      },
+      "notes": "The X-drugs option is described as experimental."
+    },
+    "description": "The one carrying bandages and adrenaline when someone gets hurt out here, once idealistic, now worn down by an endless stream of casualties.",
+    "appearanceHints": [
+      "Sympathetic smile",
+      "Short, tidy hair",
+      "Warm, caring eyes",
+      "Dark bags under the eyes",
+      "Fidgeting hands",
+      "Calm, gentle voice",
+      "Cold, unsympathetic stare",
+      "Spectacles",
+      "White coat"
+    ],
+    "agendaHints": [
+      "You are hooked on a strong painkiller; guard your supply and your secret.",
+      "You hold classified medical reports the Company wants; learn why they matter.",
+      "You swore never to take a life, and you meant it."
+    ],
+    "typicalNames": [
+      "Cho Hadfield",
+      "Ken Ibana",
+      "Sullivan Ward",
+      "Ana Kasnavik",
+      "Juno Blanchard",
+      "Katie Aberly"
+    ],
+    "signatureItemHints": [
+      "Framed medical certificate",
+      "Letter from your child",
+      "Psych evaluation marked all clear"
+    ],
+    "kind": "career"
+  },
+  {
+    "id": "officer",
+    "name": "Officer",
+    "source": "CRB",
+    "page": 48,
+    "keyAttribute": "emp",
+    "keySkills": [
+      "rangedCombat",
+      "command",
+      "manipulation"
+    ],
+    "talents": [
+      "field-commander",
+      "influence",
+      "pull-rank"
+    ],
+    "startingGear": {
+      "fixed": [],
+      "choices": [
+        [
+          "m4a3-service-pistol",
+          "rexim-rxf-m5-eva-pistol"
+        ],
+        [
+          "samani-e-series-watch",
+          "binoculars"
+        ],
+        [
+          "m314-motion-tracker",
+          "irc-mk50-compression"
+        ],
+        [
+          "seegson-p-dat",
+          "iff-transponder"
+        ]
+      ],
+      "pick": 2,
+      "rule": "Choose two of the lines below and take one item from each chosen line. Each weapon comes with two full reloads; you also have clothing/uniform.",
+      "cash": "2D6x100"
+    },
+    "description": "The trained authority figure who speaks for command and for the crew, mocked in the mess hall until everything falls apart and all eyes turn to you.",
+    "appearanceHints": [
+      "Crew cut or tied-back hair",
+      "Serious, intense look",
+      "Spotless uniform",
+      "Overworked and strung out",
+      "Stiff posture",
+      "Relaxed, soothing voice",
+      "Jumpsuit with mission patch",
+      "Impatient foot-tapping"
+    ],
+    "agendaHints": [
+      "You come from an officer family and need a promotion or medal soon.",
+      "You botched things before; avoid the blame for any more failures.",
+      "Mistakes kill, so nobody under you gets to make one, and they will know why."
+    ],
+    "typicalNames": [
+      "Eugene Proctor",
+      "Oliver Bryant",
+      "Lloyd T. Darrington",
+      "Wendy Stern",
+      "Julia Kwang",
+      "Camille Kirschner"
+    ],
+    "signatureItemHints": [
+      "Ship's cat",
+      "Letter of recommendation",
+      "ICC commercial flight officer license"
+    ],
+    "kind": "career"
+  },
+  {
+    "id": "pilot",
+    "name": "Pilot",
+    "source": "CRB",
+    "page": 50,
+    "keyAttribute": "agi",
+    "keySkills": [
+      "mobility",
+      "rangedCombat",
+      "comtech"
+    ],
+    "talents": [
+      "full-throttle",
+      "like-the-back-of-your-hand",
+      "reckless"
+    ],
+    "startingGear": {
+      "fixed": [],
+      "choices": [
+        [
+          "m4a3-service-pistol",
+          "pr-put-uplink-terminal"
+        ],
+        [
+          "hand-radio",
+          "signal-flare"
+        ],
+        [
+          "maintenance-jack",
+          "seegson-p-dat"
+        ],
+        [
+          "seegson-system-diagnostic-device",
+          "irc-mk50-compression"
+        ]
+      ],
+      "pick": 2,
+      "rule": "Choose two of the lines below and take one item from each chosen line. Each weapon comes with two full reloads; you also have clothing/uniform.",
+      "cash": "D6x100",
+      "quantities": {
+        "signal-flare": "D6"
+      }
+    },
+    "description": "A thrill-seeking flyer who will take the stick of anything from dropship to frigate and lives for the stunt nobody else can pull off.",
+    "appearanceHints": [
+      "Arrogant walk",
+      "Steely blue eyes",
+      "Multi-pocket flight suit",
+      "Sunglasses",
+      "Old mission patches",
+      "Deadpan expression",
+      "Chews gum",
+      "Skeptical look"
+    ],
+    "agendaHints": [
+      "Push the limit: when there is a risk, take it.",
+      "You are stubborn and never back down, even if friends get hurt.",
+      "You are a loner and prefer to get jobs done without anyone's help."
+    ],
+    "typicalNames": [
+      "Casper Edmonton",
+      "Sven Stackman",
+      "Kiel Avari",
+      "Fiona O'Neill",
+      "Constance Navona",
+      "Igraine Turner"
+    ],
+    "signatureItemHints": [
+      "Dashboard dancer",
+      "Pilot's logbook",
+      "Pilot shades"
+    ],
+    "kind": "career"
+  },
+  {
+    "id": "roughneck",
+    "name": "Roughneck",
+    "source": "CRB",
+    "page": 52,
+    "keyAttribute": "str",
+    "keySkills": [
+      "heavyMachinery",
+      "stamina",
+      "closeCombat"
+    ],
+    "talents": [
+      "resilient",
+      "the-long-haul",
+      "true-grit"
+    ],
+    "startingGear": {
+      "fixed": [],
+      "choices": [
+        [
+          "cutting-torch",
+          "watatsumi-dv303-bolt-gun"
+        ],
+        [
+          "hydr8tion",
+          "maintenance-jack"
+        ],
+        [
+          "hard-liquor",
+          "irc-mk50-compression"
+        ],
+        [
+          "hi-beam-flashlight",
+          "seegson-c-series-tape-recorder"
+        ]
+      ],
+      "pick": 2,
+      "rule": "Choose two of the lines below and take one item from each chosen line. Each weapon comes with two full reloads; you also have clothing/uniform.",
+      "cash": "D6x100",
+      "quantities": {
+        "hydr8tion": "D6"
+      },
+      "notes": "The book's 'stash of hard liquor' option maps to hard-liquor."
+    },
+    "description": "The calloused manual laborer who keeps the frontier running: crude, brawling, hardworking, and harder partying.",
+    "appearanceHints": [
+      "Tattoos",
+      "Scar",
+      "Broken nose",
+      "Mirthless eyes",
+      "Smirk",
+      "Loud laugh",
+      "Bruised, calloused hands",
+      "Safety goggles",
+      "Filthy clomping boots",
+      "Wild hair"
+    ],
+    "agendaHints": [
+      "You are a compulsive thrill-seeker; if there is a risk, you step up.",
+      "You once put the job before your family; now you never let friends down.",
+      "Downtime matters: a cold beer and some time alone keep you happy."
+    ],
+    "typicalNames": [
+      "Mac Masterton",
+      "Kip Tranter",
+      "Charlie Stead",
+      "Sassy Diaz",
+      "Kat Longridge",
+      "Jayden Pace"
+    ],
+    "signatureItemHints": [
+      "Tool belt",
+      "Photo of your partner",
+      "Crucifix or other religious symbol"
+    ],
+    "kind": "career"
+  },
+  {
+    "id": "scientist",
+    "name": "Scientist",
+    "source": "CRB",
+    "page": 54,
+    "keyAttribute": "wit",
+    "keySkills": [
+      "observation",
+      "survival",
+      "comtech"
+    ],
+    "talents": [
+      "analysis",
+      "breakthrough",
+      "inquisitive"
+    ],
+    "startingGear": {
+      "fixed": [],
+      "choices": [
+        [
+          "digital-video-camera",
+          "hand-radio"
+        ],
+        [
+          "seegson-p-dat",
+          "neuro-visor"
+        ],
+        [
+          "seegson-system-diagnostic-device",
+          "personal-data-transmitter"
+        ],
+        [
+          "m314-motion-tracker",
+          "personal-medkit"
+        ]
+      ],
+      "pick": 2,
+      "rule": "Choose two of the lines below and take one item from each chosen line. Each weapon comes with two full reloads; you also have clothing/uniform.",
+      "cash": "D6x100"
+    },
+    "description": "A researcher one paper away from recognition, driven by knowledge in whatever field the frontier offers, and often seen as cold.",
+    "appearanceHints": [
+      "Unkempt appearance",
+      "Stained lab coat",
+      "Nervous manner",
+      "Hands jammed in pockets",
+      "Tidy, trimmed hair",
+      "Thoughtful gaze",
+      "Clears throat before speaking",
+      "Bleary, overworked eyes"
+    ],
+    "agendaHints": [
+      "Your last project was stolen, so you hide your findings.",
+      "You loathe authority and are as uncooperative as you can get away with.",
+      "You struggle to delegate, even if it doubles your workload."
+    ],
+    "typicalNames": [
+      "Viggo Kowalski",
+      "Drew Lancaster",
+      "Travis Torrence",
+      "Elena Sanchez",
+      "Louise Mallory",
+      "Karima Yusef"
+    ],
+    "signatureItemHints": [
+      "Albert Einstein Award",
+      "Unfinished scientific paper",
+      "Blackmail letters"
+    ],
+    "kind": "career"
+  },
+  {
+    "id": "afv-marine",
+    "name": "AFV Marine",
+    "source": "ACM",
+    "page": 55,
+    "keyAttribute": "agi",
+    "keySkills": [
+      "piloting",
+      "rangedCombat"
+    ],
+    "talents": [
+      "all-terrain-driver",
+      "banter",
+      "heavy-weapons",
+      "overkill",
+      "past-the-limit"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "m41a-pulse-rifle",
+        "electronic-tools"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4
+      }
+    },
+    "description": "Driver or gunner of an APC or tank who rolls in to bail the squad out and shares the upkeep of the vehicle.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ]
+  },
+  {
+    "id": "assault-marine",
+    "name": "Assault Marine (Breacher)",
+    "source": "ACM",
+    "page": 55,
+    "keyAttribute": "str",
+    "keySkills": [
+      "rangedCombat",
+      "closeCombat"
+    ],
+    "talents": [
+      "banter",
+      "subdue",
+      "overkill",
+      "past-the-limit",
+      "weapon-specialist"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "m41a-pulse-rifle",
+        "m230-baton-rounds",
+        "stun-baton",
+        "m5a3-rpg-launcher",
+        "armat-cm4-riot-shield"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4
+      }
+    },
+    "description": "Shock trooper for assaults and riot control, equally at home with stun batons and a rocket launcher used as a door knocker.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ],
+    "talentNotes": {
+      "weapon-specialist": "m5a3-rpg-launcher"
+    }
+  },
+  {
+    "id": "automatic-rifleman",
+    "name": "Automatic Rifleman (Smartgunner)",
+    "source": "ACM",
+    "page": 55,
+    "keyAttribute": "str",
+    "keySkills": [
+      "rangedCombat",
+      "stamina"
+    ],
+    "talents": [
+      "banter",
+      "machine-gunner",
+      "overkill",
+      "past-the-limit",
+      "weapon-specialist"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "m56a2-smart-gun",
+        "head-mounted-sight"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4
+      }
+    },
+    "description": "Muscle behind the squad's smart gun, holding the line with fire support while buddies flush out targets.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ],
+    "talentNotes": {
+      "weapon-specialist": "m56a2-smart-gun"
+    }
+  },
+  {
+    "id": "comtech-marine",
+    "name": "Comtech Marine",
+    "source": "ACM",
+    "page": 55,
+    "keyAttribute": "wit",
+    "keySkills": [
+      "comtech",
+      "observation"
+    ],
+    "talents": [
+      "bypass",
+      "banter",
+      "overkill",
+      "past-the-limit",
+      "remote"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "m41a-pulse-rifle",
+        "electronic-tools",
+        "seegson-system-diagnostic-device"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4
+      }
+    },
+    "description": "The squad's tech specialist for radios, sentries, remote drones and hacking locked doors.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ]
+  },
+  {
+    "id": "cbrn-specialist",
+    "name": "CBRN Specialist",
+    "source": "ACM",
+    "page": 56,
+    "keyAttribute": "wit",
+    "keySkills": [
+      "observation",
+      "heavyMachinery"
+    ],
+    "talents": [
+      "banter",
+      "inquisitive",
+      "nerves-of-steel",
+      "overkill",
+      "weapon-specialist"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "m41a-pulse-rifle",
+        "u4-qtc-firebomb",
+        "cbrn-kit",
+        "udep-poncho",
+        "military-hazmat-suit"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4
+      }
+    },
+    "description": "Part field scientist, part rifleman, trained to contain chemical, biological, radiological and nuclear hazards.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ],
+    "talentNotes": {
+      "weapon-specialist": "m240-incinerator (book prints 'M230 Incinerator')"
+    }
+  },
+  {
+    "id": "dedicated-marksman",
+    "name": "Dedicated Marksman",
+    "source": "ACM",
+    "page": 56,
+    "keyAttribute": "agi",
+    "keySkills": [
+      "rangedCombat",
+      "observation"
+    ],
+    "talents": [
+      "banter",
+      "killer",
+      "overkill",
+      "past-the-limit",
+      "weapon-specialist"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "m42a-scope-rifle",
+        "muzzle-suppressor",
+        "ghillie-suit"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4
+      }
+    },
+    "description": "Camouflaged platoon sniper picking off targets at long range with a suppressed M42A.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ],
+    "talentNotes": {
+      "weapon-specialist": "m42a-scope-rifle"
+    }
+  },
+  {
+    "id": "dropship-crew-chief",
+    "name": "Dropship Crew Chief",
+    "source": "ACM",
+    "page": 56,
+    "keyAttribute": "str",
+    "keySkills": [
+      "comtech",
+      "heavyMachinery"
+    ],
+    "talents": [
+      "banter",
+      "fast-reflexes",
+      "heavy-weapons",
+      "overkill",
+      "past-the-limit"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "g-suit",
+        "life-vest",
+        "survival-kit",
+        "m4a3-service-pistol",
+        "irc-mk50-compression"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4
+      }
+    },
+    "description": "Back-seater of a dropship or gunship: maintenance and loading on the ground, sensors and weapons in the air.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ]
+  },
+  {
+    "id": "hospital-corpsman",
+    "name": "Hospital Corpsman",
+    "source": "ACM",
+    "page": 56,
+    "keyAttribute": "emp",
+    "keySkills": [
+      "medicalAid",
+      "observation"
+    ],
+    "talents": [
+      "banter",
+      "bodyguard",
+      "hug-the-dirt",
+      "overkill",
+      "past-the-limit"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "m41a-pulse-rifle",
+        "surgical-kit",
+        "naproleve",
+        "neversleep-pills"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4,
+        "naproleve": 5,
+        "neversleep-pills": 10
+      }
+    },
+    "description": "Rifleman and combat medic who patches up the platoon under fire, which is why the squad always has your back.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ]
+  },
+  {
+    "id": "forward-observer",
+    "name": "Forward Observer",
+    "source": "ACM",
+    "page": 57,
+    "keyAttribute": "wit",
+    "keySkills": [
+      "observation",
+      "mobility"
+    ],
+    "talents": [
+      "banter",
+      "watchful",
+      "stealthy",
+      "remote",
+      "hug-the-dirt"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "m41a-pulse-rifle",
+        "f3s-spotter-scope",
+        "pups-mapping-device",
+        "ghillie-suit"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4
+      }
+    },
+    "description": "Advanced scout who slips ahead to secure vantage points and call in snipers, artillery or air strikes.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ]
+  },
+  {
+    "id": "rifleman",
+    "name": "Rifleman",
+    "source": "ACM",
+    "page": 57,
+    "keyAttribute": "agi",
+    "keySkills": [
+      "survival",
+      "mobility"
+    ],
+    "talents": [
+      "banter",
+      "overkill",
+      "past-the-limit",
+      "stealthy",
+      "watchful"
+    ],
+    "startingGear": {
+      "fixed": [
+        "military-id-tags",
+        "battledress-utilities",
+        "m3b-standard-boots",
+        "imp-marine-pack",
+        "personal-medkit",
+        "m10-ballistic-helmet",
+        "m3-personnel-armor",
+        "tnr-shoulder-lamp",
+        "m41a-pulse-rifle",
+        "m314-motion-tracker"
+      ],
+      "choices": [
+        [
+          "signal-flare",
+          "knife",
+          "pdt-locator-set",
+          "bimex-shades",
+          "polymer-climbing-rope",
+          "folding-winch",
+          "folding-entrenching-spade",
+          "electronic-tools",
+          "handcuffs",
+          "maintenance-jack",
+          "udep-poncho",
+          "samani-e-series-watch"
+        ],
+        [
+          "m4a3-service-pistol",
+          "vp70ma6-pistol",
+          "g2-electroshock-grenade",
+          "asso400-harpoon",
+          "m240-incinerator",
+          "m40-hedp-grenade",
+          "cutting-torch"
+        ]
+      ],
+      "pick": "all",
+      "rule": "Every Marine gets the basic gear plus their MOS specialty gear (fixed), then one item from List A and one from List B. Extra gear stays in the bunk; choose what to carry before each mission. MOS skills include the four mandatory Marine skills (see rules.json acm-*).",
+      "quantities": {
+        "signal-flare": 6,
+        "handcuffs": 3,
+        "g2-electroshock-grenade": 2,
+        "m40-hedp-grenade": 4
+      }
+    },
+    "description": "Frontline grunt walking point, watching for ambushes and traps; the core of the Corps' close combat strength.",
+    "appearanceHints": [
+      "Crew cut",
+      "Arm tattoo",
+      "Scar",
+      "Cold eyes",
+      "Cocky grin",
+      "Personalized body armor"
+    ],
+    "agendaHints": [
+      "Protect your reputation as a decorated hero, whatever it takes.",
+      "Keep buried the war crime you once helped hide.",
+      "Since your buddy died you secretly dread combat; conquer that fear."
+    ],
+    "parentCareer": "colonial-marine",
+    "kind": "mos",
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ]
+  }
+]

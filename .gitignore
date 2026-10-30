@@ -32,3 +32,4 @@ scenarios/**/*.pdf
 
 # Cursor IDE project files
 .cursor/
+scripts/.scratch/

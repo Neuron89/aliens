@@ -1,0 +1,585 @@
+{
+  "packVersion": 1,
+  "id": "destroyer-of-worlds",
+  "universe": "alien",
+  "kind": "scenario",
+  "meta": {
+    "title": "Destroyer of Worlds",
+    "tagline": "You were trained for war. Nothing trained you for this.",
+    "synopsis": "Colonial Marines are deployed to the Frontier colony of Ariaricus during the UPP/UA Frontier War. A routine evacuation becomes a nightmare when a crashed UPP ship releases something terrible, corporate black ops teams move in, and the colony becomes a warzone.",
+    "type": "Cinematic",
+    "players": "3–5",
+    "playtime": "5–7 hours",
+    "difficulty": "Advanced Cinematic",
+    "tone": [
+      "military action",
+      "paranoia",
+      "escalation"
+    ],
+    "contentWarnings": [
+      "graphic violence",
+      "body horror",
+      "character death"
+    ],
+    "source": "bundled"
+  },
+  "briefing": {
+    "from": "USCM COMMAND — FORT NEBRASKA",
+    "to": "FIRETEAM ALPHA, 4TH BATTALION",
+    "classification": "CLASSIFIED — OPERATION COBALT VALKYRIE",
+    "text": "ATTENTION MARINES. COMBAT DEPLOYMENT ORDER.\n\nYou are being deployed to Ariarcus, a moon in the Kruger 60 system, designated a Forward Operating Base during the current territorial dispute between the United Americas and the Union of Progressive Peoples.\n\nIntelligence reports indicate UPP forces have established a covert research installation on Ariarcus in violation of the Frontier Accord. Your mission is to locate, assess, and if necessary neutralize this installation. Rules of engagement: weapons free on confirmed hostile contacts.\n\nBe advised: civilian population present. A small mining colony — Fort Nebraska — operates on the moon's surface under UA charter. Minimize civilian casualties. Collateral damage will be reviewed by JAG.\n\nAtmospheric conditions on Ariarcus are harsh but survivable. Gravity: 0.8G. Temperature: minus 12 to plus 4 Celsius. Intermittent electrical storms may disrupt communications and sensor equipment.\n\nTransport vessel USCSS Erebos will deliver your fireteam to the LZ at 0300 local time. Full combat loadout authorized. Smartgun teams: approved.\n\nAdditional briefing materials have been uploaded to your squad tactical network. Review en route.\n\nOne more thing, Marines: there have been... unconfirmed reports from the colony. Seismic activity. Missing personnel. Probably nothing. Stay focused on the mission.\n\nSemper fi."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "DROP ZONE",
+      "summary": "BOOTS ON THE GROUND — Marines deploy to Ariarcus colony for emergency evacuation. A UPP ship has crashed nearby. Corporate interests are already in play.",
+      "readAloud": [
+        "The dropship hits atmosphere like a hammer hitting an anvil. Ariarcus reaches up with storms and turbulence, shaking the hull until your teeth rattle. Through the narrow viewport, you can see nothing but cloud — thick, dark, shot through with veins of lightning.",
+        "You're Colonial Marines. 4th Battalion. The best of the worst, trained to drop into hostile environments and make them more hostile. Your pulse rifles are locked and loaded. Your motion trackers are cycling. The smartgun operators are running final diagnostics. Everything by the book.",
+        "Fort Nebraska materializes out of the storm like a ghost — a cluster of industrial modules and mining equipment huddled in a shallow crater, surrounded by jagged ice formations. The colony looks small from up here. Fragile. The kind of place the universe could swallow without noticing.",
+        "The LZ is cold and exposed. Wind cuts through your armor's seals as you dismount. The colony administrator meets you on the pad — nervous, sweating despite the cold. Something's wrong. You can see it in the faces of the miners who've come out to watch the military arrive. They're not curious. They're afraid.",
+        "Missing people, the administrator says. Three survey teams in the last month. And sounds from underground. Like something moving through the old mine shafts that riddle the moon's crust.",
+        "Welcome to Ariarcus. Your war is about to become something else entirely."
+      ],
+      "gmNotes": "Establish the military atmosphere. Let marines be marines — bravado, equipment checks, chain of command. Fort Nebraska is tense: the civilian miners are scared, the colony admin is hiding things. UPP agents are somewhere nearby. Layer the threats: political (UPP), environmental (storms, mines), and the unknown horror below. Let players do recon, interact with colonists, and discover early clues. Missing people. Strange sounds. Acid-scarred rock in the mine tunnels.",
+      "agendaNotes": "Marines focus on the mission. Corporate agent observes.",
+      "scenes": [
+        {
+          "name": "Drop",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Dropship descent through atmospheric turbulence. The colony of Fort Nebraska comes into view — prefab buildings, perimeter fencing, thousands of anxious colonists.",
+          "checks": [
+            "PILOTING — turbulent landing"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — combat drop nerves"
+          ],
+          "gmTip": "Establish the military tone. These are Marines — disciplined, professional, scared underneath."
+        },
+        {
+          "name": "Situation Report",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Briefing from colonial administration. A UPP ship crashed 20km from the colony. UPP ground forces may be en route. Evacuate the colony before the shooting starts.",
+          "checks": [
+            "COMMAND — organize evacuation"
+          ],
+          "gmTip": "Give PCs command decisions. Who guards what? Where do they set up defenses? Make them plan."
+        },
+        {
+          "name": "The Crash Site",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Evidence of xenomorph activity but no direct encounter yet.",
+          "narration": "Recon of the UPP crash site reveals a ship carrying biological cargo. Containment has been breached. Something got out.",
+          "checks": [
+            "OBSERVATION — assess crash site",
+            "COMTECH — analyze ship systems",
+            "SURVIVAL — track what left the ship"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — evidence of alien life"
+          ],
+          "gmTip": "Build tension. Acid burns on bulkheads. Empty cryo pods with claw marks. Let them realize what they're dealing with."
+        },
+        {
+          "name": "Contact with UPP",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "UPP Special Forces — professional soldiers, potential ally against alien threat.",
+          "narration": "UPP special forces make contact — either hostile or requesting parley. They want their ship back. The situation is diplomatically complex.",
+          "checks": [
+            "COMMAND — negotiate/confront UPP",
+            "MANIPULATION — diplomacy"
+          ],
+          "gmTip": "The UPP soldiers are not villains. They're scared too. A temporary alliance against the aliens is possible."
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "CONTACT",
+      "summary": "THINGS FALL APART — The xenomorph infestation spreads to the colony. Military operations fail. Corporate agents make their move. The colony becomes a warzone.",
+      "readAloud": [
+        "The UPP installation is real — buried in the mine complex three klicks north of the colony. Your recon team finds it sealed tight, running on its own power. Military-grade locks. Bio-containment warnings on every door. Whatever they're researching down there, they don't want it getting out.",
+        "But something already has.",
+        "The first contact comes in the mines. Motion tracker goes wild — multiple fast-moving contacts, converging from side tunnels that aren't on any map. The point man opens fire on instinct. Muzzle flash illuminates something impossible — dark, skeletal, moving on the walls and ceiling with a speed that defies physics.",
+        "The screaming starts. Acid blood sprays. Your squad formation dissolves into a fighting retreat through tunnels that amplify every shot, every scream, every wet tearing sound into a cathedral of noise.",
+        "By the time you reach the surface, you've lost people. Good Marines. And the motion trackers are showing more contacts, rising from deep in the mine shafts. Dozens. Maybe hundreds. The UPP didn't just find specimens down there — they found a hive. And the Marines just kicked the hornet's nest.",
+        "Fort Nebraska's perimeter alarms start wailing. The colonists are screaming. The storm is getting worse, cutting off air support and orbital comms. You're on your own, surrounded, and the things in the dark are just getting started."
+      ],
+      "gmNotes": "First full combat encounter with xenomorphs in the mines. This should be brutal and disorienting — tight corridors, darkness, acid splash. Marines should take casualties. Reveal the UPP lab contents: specimens, research data, failed containment. The political situation escalates: UPP soldiers are also in the mines and may be hostile, neutral, or desperate allies. Back at Fort Nebraska, the creatures are emerging. Run a siege scenario.",
+      "agendaNotes": "Survival vs orders. The Company pushes for specimens. Marines push back.",
+      "scenes": [
+        {
+          "name": "First Blood",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Xenomorph Scouts and Drones. 3-5 creatures testing defenses.",
+          "narration": "Xenomorphs hit the colony perimeter. Sentries go dark. Motion trackers light up. The first wave hits the barricades.",
+          "checks": [
+            "RANGED COMBAT — defensive fire",
+            "COMMAND — coordinate defense"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — first alien encounter",
+            "PANIC ROLL — if casualties"
+          ],
+          "gmTip": "First encounter should be intense but survivable. Marines have firepower. But the aliens are smart — they're probing, not committed."
+        },
+        {
+          "name": "Corporate Interference",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Eckford reveals she has orders from the Company. She wants live specimens captured. She has authorization codes that override local command.",
+          "checks": [
+            "MANIPULATION — resist Eckford's authority",
+            "COMMAND — maintain unit cohesion"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — chain of command conflict"
+          ],
+          "gmTip": "This is the classic Company betrayal. Eckford will push PCs to capture instead of kill. Marines know this is insane."
+        },
+        {
+          "name": "Overrun",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Major xenomorph assault. 6+ creatures. Possible Soldier-class.",
+          "narration": "The colony's outer defenses fall. Xenomorphs are inside the perimeter. Colonists are panicking. Barricades are being tested. Sentry guns are running low.",
+          "checks": [
+            "HEAVY MACHINERY — reinforce barricades",
+            "COMMAND — prevent civilian panic",
+            "RANGED COMBAT — hold the line"
+          ],
+          "stressTriggers": [
+            "STRESS +2 — colony overrun"
+          ],
+          "gmTip": "This is the breaking point. The Marines cannot hold everything. They must choose what to protect and what to abandon."
+        },
+        {
+          "name": "The Queen",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Xenomorph Queen + hive guards. Do NOT fight — retreat and report.",
+          "narration": "Recon discovers a hive forming in the colony's lower levels. A Queen has established herself. The infestation will only grow.",
+          "checks": [
+            "OBSERVATION — locate the hive",
+            "SURVIVAL — approach without detection"
+          ],
+          "stressTriggers": [
+            "STRESS +2 — seeing the Queen"
+          ],
+          "gmTip": "Seeing the Queen should terrify even hardened Marines. This is not something they can shoot their way through."
+        }
+      ]
+    },
+    {
+      "title": "ACT III",
+      "subtitle": "NO WAY OUT",
+      "summary": "SCORCHED EARTH — Final evacuation. The colony is lost. Marines must fight through xenomorphs, possibly UPP, and corporate treachery to reach the dropship.",
+      "readAloud": [
+        "Fort Nebraska is under siege. The perimeter lights cut cones of white through the driving snow, and in that light, you can see them moving — dark shapes, low and fast, pouring from the mine entrances like oil from a ruptured pipe. The motion tracker is useless now — too many contacts, too close.",
+        "The colonists have been herded into the operations center. Children crying. Adults praying. A miner loads a shotgun with shaking hands. The Marines who are still standing form a perimeter, but you all know the math. You're outnumbered. Out-evolved. Fighting something that doesn't know fear, doesn't feel pain, and wants you alive — not dead. Alive is worse.",
+        "The dropship. That's the play. It's still on the landing pad, engines cold. Someone has to get to it, power it up, hold the pad long enough to get survivors aboard. The creatures are between you and the LZ, and the storm is trying to tear the colony apart.",
+        "There's another option. The UPP lab has an emergency beacon — military grade, powerful enough to punch through the storm. But reaching it means going back into the mines. Back into the hive. And whoever goes probably isn't coming back.",
+        "You're Colonial Marines. This is what you signed up for. Time to earn your combat pay. Move out."
+      ],
+      "gmNotes": "Desperate last stand. Two possible escape routes: the dropship (fighting through the colony) or the UPP beacon (going back into the mines). Both are near-suicidal. Run simultaneous threats: creatures attacking, UPP forces with their own agenda, colony infrastructure failing. This is where heroic sacrifices happen. Let players make impossible choices. High body count. Anyone who survives should feel like they earned it.",
+      "agendaNotes": "Get out alive. Anyone still talking about specimens is the enemy.",
+      "scenes": [
+        {
+          "name": "Evacuation Order",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Command orders full evacuation. The colony is being abandoned. But there aren't enough dropships for everyone.",
+          "checks": [
+            "COMMAND — organize evacuation priority",
+            "PILOTING — prep dropships"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — evacuation chaos"
+          ],
+          "gmTip": "Force hard choices. Who gets on the ships? Civilians? Wounded? The PCs? There isn't room for everyone."
+        },
+        {
+          "name": "Fighting Retreat",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Running battle against Xenomorph Drones and Soldiers.",
+          "narration": "Marines fight their way to the landing pad. Every corridor is contested. Xenomorphs attack from ducts, ceilings, and floor grates.",
+          "checks": [
+            "RANGED COMBAT — covering fire",
+            "MOBILITY — navigate wreckage",
+            "CLOSE COMBAT — hand-to-hand in corridors"
+          ],
+          "stressTriggers": [
+            "STRESS +1 per encounter"
+          ],
+          "gmTip": "This should feel desperate. Ammo is running low. Wounded are slowing you down. The aliens keep coming."
+        },
+        {
+          "name": "Final Stand",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Massive xenomorph assault including Praetorian or Queen.",
+          "narration": "At the landing pad, the last dropship is loading. Xenomorphs mass for a final assault. Someone has to hold the line.",
+          "checks": [
+            "RANGED COMBAT — hold the perimeter",
+            "COMMAND — last stand"
+          ],
+          "stressTriggers": [
+            "STRESS +2 — final stand"
+          ],
+          "gmTip": "Heroic sacrifice moment. Someone may need to stay behind to ensure the dropship launches."
+        },
+        {
+          "name": "Dust-Off",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Possible stowaway xenomorph on the dropship.",
+          "narration": "The dropship lifts off. The colony shrinks below. Fire and xenomorphs consume what's left. But is everyone really safe aboard?",
+          "checks": [
+            "PILOTING — escape",
+            "OBSERVATION — check for stowaways"
+          ],
+          "gmTip": "One last scare. The classic \"we made it... wait, what was that sound?\" moment."
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Captain Shipp",
+      "role": "USCM Company Commander",
+      "agenda": "Follow orders, evacuate colony",
+      "behavior": "By-the-book officer. Cracks under pressure."
+    },
+    {
+      "name": "Eckford",
+      "role": "Weyland-Yutani Representative",
+      "agenda": "Recover alien specimens",
+      "behavior": "Manipulative. Knows more than she reveals.",
+      "secret": "Holds Company authorization codes that override local military command; her orders are to bring back live specimens."
+    },
+    {
+      "name": "UPP Forces",
+      "role": "Rival Military Faction",
+      "agenda": "Recover crashed ship, deny enemy intel",
+      "behavior": "Professional soldiers. Potential ceasefire against alien threat."
+    },
+    {
+      "name": "Colonial Administration",
+      "role": "Fort Nebraska Civil Authority",
+      "agenda": "Save their colonists",
+      "behavior": "Bureaucrats in over their heads."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "Landing Pad",
+      "description": "Exposed platform. The dropship is here. Getting to it is the problem."
+    },
+    {
+      "name": "Fort Nebraska — Ops Center",
+      "description": "Colony command. The last defensible position."
+    },
+    {
+      "name": "Fort Nebraska — Barracks",
+      "description": "Marine quarters. Weapon lockers and equipment."
+    },
+    {
+      "name": "Mine Entrance Alpha",
+      "description": "Primary shaft. Descends 200 meters. The creatures come from here."
+    },
+    {
+      "name": "UPP Research Lab",
+      "description": "Hidden installation in the deep mines. Bio-containment. The origin point."
+    },
+    {
+      "name": "The Hive",
+      "description": "Deep in the mine complex. Resin walls, cocooned victims, eggs. Hell."
+    },
+    {
+      "name": "Colony Perimeter",
+      "description": "Fence line with motion sensors and floodlights. Won't hold forever."
+    }
+  ],
+  "handouts": [
+    {
+      "id": "opening-briefing",
+      "title": "CLASSIFIED — OPERATION COBALT VALKYRIE",
+      "from": "USCM COMMAND — FORT NEBRASKA",
+      "to": "FIRETEAM ALPHA, 4TH BATTALION",
+      "priority": "PRIORITY",
+      "text": "ATTENTION MARINES. COMBAT DEPLOYMENT ORDER.\n\nYou are being deployed to Ariarcus, a moon in the Kruger 60 system, designated a Forward Operating Base during the current territorial dispute between the United Americas and the Union of Progressive Peoples.\n\nIntelligence reports indicate UPP forces have established a covert research installation on Ariarcus in violation of the Frontier Accord. Your mission is to locate, assess, and if necessary neutralize this installation. Rules of engagement: weapons free on confirmed hostile contacts.\n\nBe advised: civilian population present. A small mining colony — Fort Nebraska — operates on the moon's surface under UA charter. Minimize civilian casualties. Collateral damage will be reviewed by JAG.\n\nAtmospheric conditions on Ariarcus are harsh but survivable. Gravity: 0.8G. Temperature: minus 12 to plus 4 Celsius. Intermittent electrical storms may disrupt communications and sensor equipment.\n\nTransport vessel USCSS Erebos will deliver your fireteam to the LZ at 0300 local time. Full combat loadout authorized. Smartgun teams: approved.\n\nAdditional briefing materials have been uploaded to your squad tactical network. Review en route.\n\nOne more thing, Marines: there have been... unconfirmed reports from the colony. Seismic activity. Missing personnel. Probably nothing. Stay focused on the mission.\n\nSemper fi.",
+      "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "company-override",
+      "title": "COMPANY AUTHORIZATION OVERRIDE",
+      "from": "WEYLAND-YUTANI — SPECIAL PROJECTS",
+      "to": "FIRETEAM ALPHA",
+      "priority": "PRIORITY",
+      "text": "BY AUTHORITY OF THE COLONIAL ADMINISTRATION CHARTER AND STANDING USCM CONTRACT W-Y/2183-C, OPERATIONAL CONTROL OF RECOVERY ASSETS TRANSFERS TO COMPANY REPRESENTATIVE ECKFORD. LIVE SPECIMEN RECOVERY IS PRIORITY ONE. LETHAL FORCE AGAINST BIOLOGICAL ASSETS IS NOT AUTHORIZED.",
+      "when": "Act II — \"Corporate Interference\""
+    }
+  ],
+  "maps": [
+    {
+      "id": "fort-nebraska",
+      "title": "FORT NEBRASKA",
+      "subtitle": "UA Mining Colony & Forward Operating Base — Ariarcus",
+      "description": "Small mining colony repurposed as military FOB during UPP territorial dispute. Mine complex extends deep underground.",
+      "kind": "ascii",
+      "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║              FORT NEBRASKA — TACTICAL MAP                    ║\n    ║              Ariarcus — Kruger 60 System                     ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║                 N                                             ║\n    ║                 ↑                                             ║\n    ║                                                               ║\n    ║   .............[MINE ENTRANCE ALPHA]..............            ║\n    ║   .            (3km north)                      .            ║\n    ║   .    ┌──────────────────────────┐             .            ║\n    ║   .    │     MINE COMPLEX         │             .            ║\n    ║   .    │  ┌────┐  ┌──────────┐   │             .            ║\n    ║   .    │  │UPP │  │ DEEP     │   │             .            ║\n    ║   .    │  │LAB │  │ SHAFTS   │   │             .            ║\n    ║   .    │  │████│  │ ░░░░░░░░ │   │             .            ║\n    ║   .    │  └────┘  │ THE HIVE │   │             .            ║\n    ║   .    │          └──────────┘   │             .            ║\n    ║   .    └────────────┬────────────┘             .            ║\n    ║   .                 │ tunnel                    .            ║\n    ║   .                 │                           .            ║\n    ║   ..........━━━━━━━━━━━━━━━[PERIMETER]━━━━━━━..            ║\n    ║   .         ┌───────┴──────────────┐           .            ║\n    ║   .         │    LANDING PAD       │           .            ║\n    ║   . ┌────┐  │    [DROPSHIP]        │  ┌─────┐ .            ║\n    ║   . │BAR-│  └──────────────────────┘  │MINE │ .            ║\n    ║   . │RACK│                            │ADMIN│ .            ║\n    ║   . │[WPN│  ┌──────────────────────┐  └─────┘ .            ║\n    ║   . │LCKR│  │    OPS CENTER        │           .            ║\n    ║   . └────┘  │    [COMMAND]         │  ┌─────┐ .            ║\n    ║   .         │    [COMMS]           │  │POWER│ .            ║\n    ║   .         └──────────────────────┘  │PLANT│ .            ║\n    ║   . ┌────┐  ┌──────────────────────┐  └─────┘ .            ║\n    ║   . │MED │  │    COLONY HABITATS   │           .            ║\n    ║   . │BAY │  │    [CIVILIANS]       │           .            ║\n    ║   . └────┘  └──────────────────────┘           .            ║\n    ║   .                                             .            ║\n    ║   ..━━━━━━━━━━━━━━━[PERIMETER FENCE]━━━━━━━━━━..            ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
+      "rooms": [
+        {
+          "name": "Landing Pad",
+          "note": "Open platform for the dropship. Exposed to Ariarcus storms. The dropship is your primary extraction vehicle — protect it."
+        },
+        {
+          "name": "Ops Center",
+          "note": "Colony command, repurposed as Marine tactical ops. Communications, sensor feeds, colony admin. The last defensible strong point."
+        },
+        {
+          "name": "Barracks",
+          "note": "Marine quarters with weapon lockers, ammo storage, and equipment. Armored walls. Can be sealed and held as a fallback position."
+        },
+        {
+          "name": "Med Bay",
+          "note": "Colony medical facility. Basic but functional. Doc Holliday has set up a combat triage station here."
+        },
+        {
+          "name": "Colony Habitats",
+          "note": "Civilian housing modules. Miners and their families. 60+ civilians who need protection and evacuation."
+        },
+        {
+          "name": "Power Plant",
+          "note": "Colony power generation. Fusion reactor. If this goes down, the perimeter lights and sensors go dark."
+        },
+        {
+          "name": "Mine Admin",
+          "note": "Mining company offices. Colony records, mine shaft maps, geological surveys. Intel on the underground layout."
+        },
+        {
+          "name": "Perimeter Fence",
+          "note": "Chain-link and razor wire with motion sensors and floodlights. Designed to keep wildlife out. Not designed for what's coming."
+        },
+        {
+          "name": "Mine Entrance Alpha",
+          "note": "3km north of colony. Primary shaft descending 200+ meters. Multiple side tunnels branch into the mine complex. The creatures emerge from here."
+        },
+        {
+          "name": "UPP Research Lab",
+          "note": "Hidden installation deep in the mine complex. Military-grade bio-containment. Whatever they were studying, it got out. Emergency beacon located here."
+        },
+        {
+          "name": "The Hive",
+          "note": "Deep mine shafts transformed into alien architecture. Resin walls, cocooned victims, egg clusters. The source of the infestation. Going in is near-suicide."
+        }
+      ]
+    }
+  ],
+  "characters": [
+    {
+      "id": "lt-reid",
+      "name": "Lt. Joanna Reid",
+      "career": "Colonial Marine (Officer)",
+      "appearance": "Lean, intense, regulation haircut. Academy ring on her finger. Moves with coiled precision. First real command.",
+      "attributes": {
+        "str": 3,
+        "agi": 4,
+        "wit": 4,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 2,
+        "closeCombat": 2,
+        "mobility": 2,
+        "piloting": 1,
+        "rangedCombat": 3,
+        "observation": 3,
+        "comtech": 2,
+        "survival": 2,
+        "manipulation": 2,
+        "medicalAid": 0,
+        "command": 4
+      },
+      "talent": "Pull Rank — You can order any military NPC to follow commands without a roll, unless it contradicts a direct superior's orders.",
+      "gear": [
+        "M41A Pulse Rifle",
+        "M4A3 Pistol (sidearm)",
+        "TNR Shoulder Lamp",
+        "Dog tags (Signature Item)",
+        "Tactical data pad"
+      ],
+      "signatureItem": "Dog tags — hers and her brother's. He didn't make it back from his last deployment.",
+      "personalAgenda": "This is your first command in a live fire zone. If you screw this up, your career is over. The mission comes first — recover the UPP intel. Bring your marines home if you can, but the intel is priority one.",
+      "buddy": "Doc Holliday",
+      "rival": "Sgt. Aguilar"
+    },
+    {
+      "id": "sgt-aguilar",
+      "name": "Sgt. Marco Aguilar",
+      "career": "Colonial Marine",
+      "appearance": "Battle-scarred, muscular, quiet intensity. Three combat drops. More kills than he admits. The squad's backbone.",
+      "attributes": {
+        "str": 5,
+        "agi": 4,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "heavyMachinery": 1,
+        "stamina": 4,
+        "closeCombat": 4,
+        "mobility": 2,
+        "piloting": 0,
+        "rangedCombat": 5,
+        "observation": 2,
+        "comtech": 0,
+        "survival": 3,
+        "manipulation": 0,
+        "medicalAid": 1,
+        "command": 2
+      },
+      "talent": "Overkill — When you hit with Ranged Combat and have extra successes, each extra success adds +2 damage instead of +1.",
+      "gear": [
+        "M56 Smartgun",
+        "Combat knife",
+        "M3 Personnel Armor",
+        "Rosary (Signature Item)",
+        "Frag grenades x3"
+      ],
+      "signatureItem": "Rosary beads — his grandmother's. Prays before every drop.",
+      "personalAgenda": "The Lieutenant is green and going to get people killed. If it comes to it, you'll take command. The squad trusts you more than her anyway. Keep your people alive — by any means necessary.",
+      "buddy": "Cpl. Shusett",
+      "rival": "Lt. Reid"
+    },
+    {
+      "id": "cpl-shusett",
+      "name": "Cpl. Kai Shusett",
+      "career": "Colonial Marine",
+      "appearance": "Young, eager, nervous energy. Tech specialist. Always tinkering. Talks too much when scared — which is always.",
+      "attributes": {
+        "str": 3,
+        "agi": 4,
+        "wit": 5,
+        "emp": 2
+      },
+      "skills": {
+        "heavyMachinery": 1,
+        "stamina": 1,
+        "closeCombat": 1,
+        "mobility": 2,
+        "piloting": 1,
+        "rangedCombat": 3,
+        "observation": 2,
+        "comtech": 5,
+        "survival": 1,
+        "manipulation": 0,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "Hacker — Comtech rolls to bypass electronic security get +3 modification.",
+      "gear": [
+        "M41A Pulse Rifle",
+        "M3 Personnel Armor",
+        "Electronic countermeasures kit",
+        "Drone controller",
+        "Vintage gaming console (Signature Item)"
+      ],
+      "signatureItem": "Pocket gaming console — plays it in every spare moment. Connection to a normal life.",
+      "personalAgenda": "The UPP lab has tech worth billions. If you can download their research data to your personal drive, you could sell it and never have to drop into another hellhole again. Just need a few minutes alone with their servers.",
+      "buddy": "Sgt. Aguilar",
+      "rival": "Pvt. Chen"
+    },
+    {
+      "id": "pvt-chen",
+      "name": "Pvt. Wei Chen",
+      "career": "Colonial Marine",
+      "appearance": "Compact, focused, speaks only when necessary. Best shot in the squad. Cold eyes that have seen things they don't talk about.",
+      "attributes": {
+        "str": 4,
+        "agi": 5,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 3,
+        "closeCombat": 2,
+        "mobility": 3,
+        "piloting": 0,
+        "rangedCombat": 5,
+        "observation": 3,
+        "comtech": 0,
+        "survival": 2,
+        "manipulation": 0,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "Sniper — When you aim (slow action) before shooting, gain +3 modification instead of +2.",
+      "gear": [
+        "M42A Scope Rifle",
+        "M4A3 Pistol (sidearm)",
+        "M3 Personnel Armor",
+        "Family photo (Signature Item)",
+        "Ghillie netting"
+      ],
+      "signatureItem": "Creased photo of parents and siblings back on Earth. Looks at it before every mission.",
+      "personalAgenda": "You're UPP. Deep cover. Your real mission is to ensure the research data from the lab is destroyed — NOT recovered by the Americans. If your cover is blown, you won't survive. Trust no one.",
+      "buddy": "Doc Holliday",
+      "rival": "Cpl. Shusett"
+    },
+    {
+      "id": "doc-holliday",
+      "name": "Corpsman \"Doc\" Holliday",
+      "career": "Medic (Combat)",
+      "appearance": "Lanky, sardonic grin, steady hands even under fire. Named after the gunslinger, lives up to the reputation. Gallows humor is a coping mechanism.",
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 4,
+        "emp": 4
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 2,
+        "closeCombat": 1,
+        "mobility": 2,
+        "piloting": 0,
+        "rangedCombat": 2,
+        "observation": 2,
+        "comtech": 1,
+        "survival": 2,
+        "manipulation": 1,
+        "medicalAid": 5,
+        "command": 1
+      },
+      "talent": "Combat Medic — You can perform Medical Aid as a fast action instead of a slow action during combat.",
+      "gear": [
+        "M41A Pulse Rifle",
+        "M3 Personnel Armor",
+        "Advanced trauma kit",
+        "Surgical tools",
+        "Bourbon flask (Signature Item)"
+      ],
+      "signatureItem": "Flask of Kentucky bourbon — \"for medicinal purposes.\" Actually for coping purposes.",
+      "personalAgenda": "You've seen three squads get wiped out in your career. You're the one who always survives, and the guilt is crushing. This time, you've promised yourself: everyone comes home. Even if you don't.",
+      "buddy": "Lt. Reid",
+      "rival": "Sgt. Aguilar"
+    }
+  ],
+  "tips": [
+    "This scenario is LONG — 6-8 hours minimum. Plan for multiple sessions.",
+    "Balance military action with horror. Marines are tough but not invincible.",
+    "The three-faction conflict (Marines vs UPP vs Xenomorphs) creates complex situations.",
+    "Let the PCs make command decisions — they are Marines, not helpless civilians.",
+    "Use the colony map extensively. Position matters in military operations."
+  ]
+}

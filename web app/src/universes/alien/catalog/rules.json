@@ -1,0 +1,386 @@
+[
+  {
+    "id": "creation-steps",
+    "source": "CRB",
+    "page": 27,
+    "text": "Campaign creation order: career, attributes, skills, talent, name, appearance, personal agenda, buddy and rival, gear and signature item, roll cash.",
+    "value": [
+      "career",
+      "attributes",
+      "skills",
+      "talent",
+      "name",
+      "appearance",
+      "agenda",
+      "buddy-rival",
+      "gear",
+      "cash"
+    ]
+  },
+  {
+    "id": "attribute-points",
+    "source": "CRB",
+    "page": 28,
+    "text": "Distribute 14 points among STRENGTH, AGILITY, WITS and EMPATHY.",
+    "value": 14
+  },
+  {
+    "id": "attribute-min",
+    "source": "CRB",
+    "page": 28,
+    "text": "No attribute may start below 2.",
+    "value": 2
+  },
+  {
+    "id": "attribute-max",
+    "source": "CRB",
+    "page": 28,
+    "text": "No attribute may start above 4, except your career's key attribute.",
+    "value": 4
+  },
+  {
+    "id": "key-attribute-max",
+    "source": "CRB",
+    "page": 28,
+    "text": "Your career's key attribute may start at 5.",
+    "value": 5
+  },
+  {
+    "id": "attribute-scale",
+    "source": "CRB",
+    "page": 27,
+    "text": "Attributes are rated 1-5 for humans.",
+    "value": {
+      "min": 1,
+      "max": 5
+    }
+  },
+  {
+    "id": "skill-points",
+    "source": "CRB",
+    "page": 28,
+    "text": "Distribute 10 points among your skills.",
+    "value": 10
+  },
+  {
+    "id": "key-skill-max",
+    "source": "CRB",
+    "page": 28,
+    "text": "Each of your career's key skills may start at up to 3.",
+    "value": 3
+  },
+  {
+    "id": "other-skill-max",
+    "source": "CRB",
+    "page": 28,
+    "text": "Any other skill may start at most at 1.",
+    "value": 1
+  },
+  {
+    "id": "skill-scale",
+    "source": "CRB",
+    "page": 28,
+    "text": "Skill levels run 0-5; with level 0 you roll just the attribute (plus gear).",
+    "value": {
+      "min": 0,
+      "max": 5
+    }
+  },
+  {
+    "id": "starting-talents",
+    "source": "CRB",
+    "page": 29,
+    "text": "Choose one of your career's three talents at creation.",
+    "value": 1
+  },
+  {
+    "id": "health",
+    "source": "CRB",
+    "page": 30,
+    "text": "Maximum Health equals STRENGTH (talents such as Tough can raise it).",
+    "value": "str",
+    "formula": "health = str (+2 with Tough)"
+  },
+  {
+    "id": "stress-start",
+    "source": "CRB",
+    "page": 30,
+    "text": "Stress Level starts at 0 and rises from pushing, full-auto fire, damage, deprivation, coup de grace and horrors; add one Stress Die per Stress Level to every skill roll.",
+    "value": 0
+  },
+  {
+    "id": "stress-relief",
+    "source": "CRB",
+    "page": 104,
+    "text": "Each full Turn resting in a secured safe area lowers Stress by 1; once per session (campaign) using your signature item lowers it by 1 (usually a slow action).",
+    "value": -1
+  },
+  {
+    "id": "panic-trigger",
+    "source": "CRB",
+    "page": 104,
+    "text": "Make a Panic Roll (D6 + Stress Level) when a Stress Die shows a facehugger, when pinned down, on a critical injury, on meeting a never-seen alien creature, on certain panic results of friends, or on a truly horrifying event. Results of 10+ force a panic action."
+  },
+  {
+    "id": "permanent-trauma",
+    "source": "CRB",
+    "page": 104,
+    "text": "If you rolled 13+ on a Panic Roll during a session, roll EMPATHY afterwards; on a success you gain a permanent mental trauma (D6 table).",
+    "value": 13
+  },
+  {
+    "id": "starting-gear",
+    "source": "CRB",
+    "page": 33,
+    "text": "Campaign: pick starting items from your career list (core careers: choose two of the four lines, one item from each). Every weapon comes with two full reloads; you also have a uniform or civilian clothes."
+  },
+  {
+    "id": "starting-cash",
+    "source": "CRB",
+    "page": 33,
+    "text": "Roll cash as listed by your career (e.g. D6x100 dollars; Agents and Officers 2D6x100; Kids just D6 dollars)."
+  },
+  {
+    "id": "signature-item",
+    "source": "CRB",
+    "page": 33,
+    "text": "Choose a small sentimental signature item; it is usually tiny and does not encumber. Androids do not need one."
+  },
+  {
+    "id": "encumbrance",
+    "source": "CRB",
+    "page": 34,
+    "text": "You can carry regular items up to STRENGTH x2 without trouble. Heavy items count as 2 (some 3-4), light items as 1/2, some as 1/4; tiny items don't count.",
+    "value": "str*2",
+    "formula": "capacity = str * 2"
+  },
+  {
+    "id": "over-encumbrance",
+    "source": "CRB",
+    "page": 34,
+    "text": "You can carry up to STRENGTH x4 temporarily, but must pass MOBILITY to run or crawl in combat (or drop the load / stay put).",
+    "value": "str*4"
+  },
+  {
+    "id": "consumables",
+    "source": "CRB",
+    "page": 34,
+    "text": "Air, food, water and power are tracked as Supply ratings. A Supply roll rolls Stress Dice equal to the rating (max 6); each facehugger result lowers it by 1. Air: every Turn and after exertion; water: daily and after exertion; food: daily; power: per gear."
+  },
+  {
+    "id": "supply-encumbrance",
+    "source": "CRB",
+    "page": 35,
+    "text": "Food and water each count as one item at Supply 1-4, two items at 5-8, and one more item per extra 4; nothing at 0."
+  },
+  {
+    "id": "armor",
+    "source": "CRB",
+    "page": 98,
+    "text": "Armor: roll Base Dice equal to the Armor Rating when hit; each success removes 1 damage. Only one suit at a time; not an action. Armor piercing halves the rating (round up); armor doubled doubles it."
+  },
+  {
+    "id": "armor-vs-fire",
+    "source": "CRB",
+    "page": 291,
+    "text": "Xenomorph armor has a separate, lower rating against fire damage (e.g. 10, or 5 vs fire). Fire armor against PCs works normally (armor protects against fire)."
+  },
+  {
+    "id": "recovery",
+    "source": "CRB",
+    "page": 98,
+    "text": "Once no longer Broken, recover 1 Health per Turn of rest.",
+    "value": 1
+  },
+  {
+    "id": "death-roll",
+    "source": "CRB",
+    "page": 99,
+    "text": "A fatal critical injury demands a Death Roll (STAMINA, no push, no Stress Dice) when its time limit runs out, repeating each interval; failure means death. First aid before then saves you."
+  },
+  {
+    "id": "crit-healing",
+    "source": "CRB",
+    "page": 101,
+    "text": "Critical injuries heal over the listed days; a carer's daily MEDICAL AID success halves the remaining time."
+  },
+  {
+    "id": "xp",
+    "source": "CRB",
+    "page": 35,
+    "text": "Earn 1 XP per yes to each end-of-session question (attended, risked something for your agenda, risked your life for your buddy, stood up to your rival, made a Panic Roll, overcame a danger, made a discovery, did something extraordinary, earned money)."
+  },
+  {
+    "id": "xp-costs",
+    "source": "CRB",
+    "page": 36,
+    "text": "Raising a skill one step or learning a new skill (level 1) costs 5 XP; a new talent costs 5 XP, a day of practice and a WITS roll (automatic with a teacher who has it).",
+    "value": 5
+  },
+  {
+    "id": "android-attributes",
+    "source": "CRB",
+    "page": 28,
+    "text": "Android PCs add +3 to two attributes after spending the 14 points; those two can reach 8.",
+    "value": {
+      "bonus": 3,
+      "count": 2,
+      "max": 8
+    }
+  },
+  {
+    "id": "android-limits",
+    "source": "CRB",
+    "page": 29,
+    "text": "Androids cannot push rolls, have no Stress Level, never panic, need no signature item, don't need air/food/water/sleep, ignore vacuum, cold and disease, and use the synthetic critical injury table."
+  },
+  {
+    "id": "supply-roll-food-water",
+    "source": "CRB",
+    "page": 35,
+    "text": "Supply rolls are guidelines; the GM decides when resources are scarce enough to track."
+  },
+  {
+    "id": "acm-creation-steps",
+    "source": "ACM",
+    "page": 52,
+    "text": "Marine creation order: pick the unit commander, MOS, attributes, skills, MOS talent, field events, rank, name, appearance, agenda, buddy/rival, gear and signature item.",
+    "value": [
+      "commander",
+      "mos",
+      "attributes",
+      "skills",
+      "talent",
+      "field-events",
+      "rank",
+      "name",
+      "appearance",
+      "agenda",
+      "buddy-rival",
+      "gear"
+    ]
+  },
+  {
+    "id": "acm-attribute-points",
+    "source": "ACM",
+    "page": 54,
+    "text": "Marines also distribute 14 attribute points; MOS key attribute up to 5, others up to 4.",
+    "value": 14
+  },
+  {
+    "id": "acm-skill-points",
+    "source": "ACM",
+    "page": 54,
+    "text": "Marines distribute 10 skill points and must put at least 1 into CLOSE COMBAT, STAMINA, RANGED COMBAT, MOBILITY and each MOS skill.",
+    "value": 10,
+    "requiredSkills": [
+      "closeCombat",
+      "stamina",
+      "rangedCombat",
+      "mobility"
+    ]
+  },
+  {
+    "id": "acm-mos-skill-max",
+    "source": "ACM",
+    "page": 54,
+    "text": "MOS skills may start at up to 4.",
+    "value": 4
+  },
+  {
+    "id": "acm-other-skill-max",
+    "source": "ACM",
+    "page": 54,
+    "text": "Non-MOS skills may start at up to 3.",
+    "value": 3
+  },
+  {
+    "id": "acm-talent",
+    "source": "ACM",
+    "page": 54,
+    "text": "Choose one talent from your MOS list; NCOs may instead take an Officer career talent.",
+    "value": 1
+  },
+  {
+    "id": "acm-field-events",
+    "source": "ACM",
+    "page": 57,
+    "text": "Roll D66 on field event table A (enlisted); NCOs also roll on table B; pilots and crew chiefs use table C. Re-roll duplicates; events can never raise a skill or attribute above 5."
+  },
+  {
+    "id": "acm-starting-gear",
+    "source": "ACM",
+    "page": 62,
+    "text": "Every Marine gets the basic gear (ID tags, BDUs, M3B boots, IMP pack with medkit, M10 helmet, M3 armor with PDT, TNR lamp), their MOS specialty gear, and one item each from bonus lists A and B."
+  },
+  {
+    "id": "acm-specialty-gear-nco",
+    "source": "ACM",
+    "page": 62,
+    "text": "Sergeant/Staff NCO specialty gear: M41A Pulse Rifle, Binoculars.",
+    "value": [
+      "m41a-pulse-rifle",
+      "binoculars"
+    ]
+  },
+  {
+    "id": "acm-specialty-gear-officer",
+    "source": "ACM",
+    "page": 62,
+    "text": "Officer specialty gear: M41A Pulse Rifle, Binoculars, Seegson P-DAT.",
+    "value": [
+      "m41a-pulse-rifle",
+      "binoculars",
+      "seegson-p-dat"
+    ]
+  },
+  {
+    "id": "acm-specialty-gear-pilot",
+    "source": "ACM",
+    "page": 62,
+    "text": "Pilot specialty gear: G-Suit, Life Vest, Survival Kit, M4A3 Pistol, Mk.50 Compression Suit.",
+    "value": [
+      "g-suit",
+      "life-vest",
+      "survival-kit",
+      "m4a3-service-pistol",
+      "irc-mk50-compression"
+    ]
+  },
+  {
+    "id": "acm-rank",
+    "source": "ACM",
+    "page": 61,
+    "text": "Choose a rank fitting your MOS and position; most PCs are Privates or PFCs, the unit commander a Corporal or Sergeant. Rank grants little real authority.",
+    "value": [
+      "Private",
+      "Private First Class",
+      "Lance Corporal",
+      "Corporal",
+      "Sergeant",
+      "Staff Sergeant",
+      "Gunnery Sergeant",
+      "Master Sergeant",
+      "First Sergeant",
+      "Master Gunnery Sergeant",
+      "Sergeant Major",
+      "Second Lieutenant",
+      "First Lieutenant",
+      "Captain",
+      "Major",
+      "Lieutenant Colonel",
+      "Colonel",
+      "Brigadier General",
+      "Major General",
+      "Lieutenant General",
+      "General"
+    ]
+  },
+  {
+    "id": "acm-ammo-cost",
+    "source": "CRB",
+    "page": 124,
+    "text": "A full reload for a firearm costs about 5% of the weapon's price.",
+    "value": 0.05
+  }
+]

@@ -1,0 +1,229 @@
+import React, { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import TokenChip from './TokenChip';
+import RoomLayer from './RoomLayer';
+import EngineLayer from './EngineLayer';
+import { engineConfig } from './mapDefs';
+
+/* ═══════════════════════════════════════════════════════════════
+   MapCanvas — the board map, shared by BoardView (TV), MapController
+   (GM tablet), the player MAP tab and the Room Editor.
+
+   Coordinates: tokens/rooms are normalized 0..1 of the map; the SVG
+   draws in map px (mapDef.size, the image's natural size, the engine
+   canvas, or the ASCII text box). view.rotation (0/90/180/270) and
+   view.flipX rotate the map inside a viewBox that fits the viewport;
+   token chips and room labels are counter-rotated to stay upright.
+
+   Pointer: one pointer-captured gesture at a time (touch + mouse).
+   Tap token → onTokenTap(id, pt); drag token (editable) →
+   onTokenMove(id, x, y, final); tap elsewhere → onTap(pt, roomId);
+   drag background → onBackgroundDrag(phase, start, pt) if provided.
+   ═══════════════════════════════════════════════════════════════ */
+
+const KIND_ORDER = { marker: 0, hazard: 0, item: 1, npc: 2, creature: 3, pc: 4 };
+const clamp01 = (n) => Math.min(1, Math.max(0, n));
+
+function asciiBox(text) {
+  const lines = String(text || '').replace(/\r/g, '').split('\n');
+  const cols = Math.max(10, ...lines.map((l) => l.length));
+  return { lines, W: cols * 12 + 40, H: lines.length * 24 + 40 };
+}
+
+function useImageSize(src, known) {
+  const [size, setSize] = useState(null);
+  useEffect(() => {
+    if (!src || known) return undefined;
+    let alive = true;
+    const img = new Image();
+    img.onload = () => { if (alive && img.naturalWidth) setSize([img.naturalWidth, img.naturalHeight]); };
+    img.src = src;
+    return () => { alive = false; };
+  }, [src, known]);
+  return known || size;
+}
+
+const MapCanvas = forwardRef(function MapCanvas({
+  mapDef, board, role = 'board', universe, view, editable = false, selectedTokenId = null, selectedRoomId = null,
+  highlightPlayerId = null, pings = [], onTokenTap, onTokenMove, onTap, onBackgroundDrag, snap = false,
+  showRoomLabels = false, showTokens = true, overlay, className = '', cursor,
+}, ref) {
+  const uid = 'mc' + useId().replace(/[^a-zA-Z0-9]/g, '');
+  const svgRef = useRef(null);
+  const innerRef = useRef(null);
+  const dragRef = useRef(null);
+  const [dragPos, setDragPos] = useState(null);
+
+  const level = board?.level || mapDef?.levels?.[0]?.id || null;
+  const levelDef = mapDef?.levels?.find((l) => l.id === level) || null;
+  const imgSrc = mapDef?.kind === 'image' ? (levelDef?.src || mapDef.src) : null;
+  const ascii = mapDef?.kind === 'ascii' ? asciiBox(mapDef.ascii) : null;
+  const imgSize = useImageSize(imgSrc, mapDef?.size);
+  const [W, H] = ascii ? [ascii.W, ascii.H] : (mapDef?.size || imgSize || [1000, 750]);
+  const unit = (mapDef?.grid || 1 / 40) * W;
+
+  /* Visible window (crop → zoom → pan) and rotation/flip transform. */
+  const crop = mapDef?.crop || { x: 0, y: 0, w: 1, h: 1 };
+  const zoom = view?.zoom || 1;
+  const pan = view?.pan || [0, 0];
+  const Wc = (crop.w * W) / zoom;
+  const Hc = (crop.h * H) / zoom;
+  const X = crop.x * W + (crop.w * W - Wc) / 2 + pan[0] * crop.w * W;
+  const Y = crop.y * H + (crop.h * H - Hc) / 2 + pan[1] * crop.h * H;
+  const rot = [0, 90, 180, 270].includes(view?.rotation) ? view.rotation : 0;
+  const flip = !!view?.flipX;
+  let transform = `translate(${-X},${-Y})`;
+  if (flip) transform = `translate(${Wc},0) scale(-1,1) ${transform}`;
+  if (rot === 90) transform = `translate(${Hc},0) rotate(90) ${transform}`;
+  else if (rot === 180) transform = `translate(${Wc},${Hc}) rotate(180) ${transform}`;
+  else if (rot === 270) transform = `translate(0,${Wc}) rotate(270) ${transform}`;
+  const VW = rot % 180 ? Hc : Wc;
+  const VH = rot % 180 ? Wc : Hc;
+  const counter = `${flip ? 'scale(-1,1) ' : ''}rotate(${-rot})`;
+
+  const engCfg = useMemo(() => (mapDef?.kind === 'engine' && universe ? engineConfig(universe, mapDef) : null), [mapDef, universe]);
+
+  const rooms = useMemo(
+    () => (mapDef?.rooms || []).filter((r) => !level || !r.level || r.level === level),
+    [mapDef, level],
+  );
+
+  const toMap = useCallback((clientX, clientY) => {
+    const g = innerRef.current;
+    const svg = svgRef.current;
+    if (!g || !svg) return null;
+    const m = g.getScreenCTM();
+    if (!m) return null;
+    const p = new DOMPoint(clientX, clientY).matrixTransform(m.inverse());
+    return { x: p.x / W, y: p.y / H };
+  }, [W, H]);
+
+  useImperativeHandle(ref, () => ({
+    clientToMap: toMap,
+    contains: (clientX, clientY) => {
+      const r = svgRef.current?.getBoundingClientRect();
+      return !!r && clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom;
+    },
+    size: [W, H],
+  }), [toMap, W, H]);
+
+  const snapPoint = useCallback((x, y) => {
+    if (!snap) return { x, y };
+    const g = mapDef?.grid || 1 / 40;
+    const gy = (g * W) / H;
+    return { x: clamp01((Math.floor(x / g) + 0.5) * g), y: clamp01((Math.floor(y / gy) + 0.5) * gy) };
+  }, [snap, mapDef, W, H]);
+
+  const tokens = board?.tokens || {};
+
+  const onPointerDown = (e) => {
+    if (e.button !== undefined && e.button !== 0) return;
+    const pt = toMap(e.clientX, e.clientY);
+    if (!pt) return;
+    const tokEl = showTokens ? e.target.closest?.('[data-token]') : null;
+    const roomEl = e.target.closest?.('[data-room]');
+    const tokenId = tokEl?.getAttribute('data-token') || null;
+    const tok = tokenId ? tokens[tokenId] : null;
+    dragRef.current = {
+      pointerId: e.pointerId, sx: e.clientX, sy: e.clientY, moved: false, start: pt,
+      tokenId, roomId: roomEl?.getAttribute('data-room') || null,
+      grab: tok ? { dx: pt.x - tok.x, dy: pt.y - tok.y } : null, bg: false,
+    };
+    try { svgRef.current.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+  };
+
+  const onPointerMove = (e) => {
+    const d = dragRef.current;
+    if (!d || d.pointerId !== e.pointerId) return;
+    if (!d.moved && Math.hypot(e.clientX - d.sx, e.clientY - d.sy) < 6) return;
+    d.moved = true;
+    const pt = toMap(e.clientX, e.clientY);
+    if (!pt) return;
+    if (d.tokenId && editable && d.grab) {
+      const x = clamp01(pt.x - d.grab.dx);
+      const y = clamp01(pt.y - d.grab.dy);
+      setDragPos({ id: d.tokenId, x, y });
+      onTokenMove?.(d.tokenId, x, y, false);
+    } else if (!d.tokenId && onBackgroundDrag) {
+      if (!d.bg) { d.bg = true; onBackgroundDrag('start', d.start, d.start); }
+      onBackgroundDrag('move', d.start, { x: clamp01(pt.x), y: clamp01(pt.y) });
+    }
+  };
+
+  const finish = (e, cancelled) => {
+    const d = dragRef.current;
+    if (!d || d.pointerId !== e.pointerId) return;
+    dragRef.current = null;
+    try { svgRef.current.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+    const pt = toMap(e.clientX, e.clientY) || d.start;
+    if (d.tokenId && d.moved && editable && d.grab) {
+      const p = snapPoint(clamp01(pt.x - d.grab.dx), clamp01(pt.y - d.grab.dy));
+      onTokenMove?.(d.tokenId, p.x, p.y, true);
+      setDragPos(null);
+      return;
+    }
+    setDragPos(null);
+    if (cancelled) { if (d.bg) onBackgroundDrag?.('cancel', d.start, pt); return; }
+    if (d.bg) { onBackgroundDrag?.('end', d.start, { x: clamp01(pt.x), y: clamp01(pt.y) }); return; }
+    if (d.moved) return;
+    if (d.tokenId) onTokenTap?.(d.tokenId, pt);
+    else onTap?.(pt, d.roomId);
+  };
+
+  const tokenList = useMemo(() => Object.values(tokens)
+    .filter((t) => !level || !t.level || t.level === level)
+    .sort((a, b) => (KIND_ORDER[a.kind] ?? 1) - (KIND_ORDER[b.kind] ?? 1) || (a.id === selectedTokenId) - (b.id === selectedTokenId)),
+  [tokens, level, selectedTokenId]);
+
+  const now = Date.now();
+  const outlineOpacity = role === 'dm' ? 0.35 : 0.72;
+
+  if (!mapDef) return <div className={`map-canvas map-canvas-empty ${className}`} />;
+
+  return (
+    <div className={`map-canvas ${className}`} style={cursor ? { cursor } : undefined}>
+      <svg ref={svgRef} viewBox={`0 0 ${VW} ${VH}`} preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"
+        onPointerDown={onPointerDown} onPointerMove={onPointerMove}
+        onPointerUp={(e) => finish(e, false)} onPointerCancel={(e) => finish(e, true)}
+        onContextMenu={(e) => e.preventDefault()}>
+        <g ref={innerRef} transform={transform}>
+          <rect x={X - W} y={Y - H} width={W * 3} height={H * 3} fill="#000" />
+          {engCfg && <EngineLayer config={engCfg} level={level} />}
+          {mapDef.kind === 'engine' && !engCfg && (
+            <text x={W / 2} y={H / 2} fill="#556" fontSize={unit} textAnchor="middle">DECK PLAN UNAVAILABLE ({mapDef.engine})</text>
+          )}
+          {imgSrc && <image href={imgSrc} x="0" y="0" width={W} height={H} preserveAspectRatio="none" />}
+          {ascii && (
+            <g fontFamily="ui-monospace, 'Courier New', monospace" fontSize="20" fill="#7fd4b8">
+              <rect width={W} height={H} fill="#05080a" />
+              {ascii.lines.map((l, i) => <text key={i} x="20" y={44 + i * 24} xmlSpace="preserve">{l}</text>)}
+            </g>
+          )}
+          {mapDef.outline && (
+            <path d={`M0 0 H1 V1 H0 Z ${mapDef.outline}`} transform={`scale(${W},${H})`} fillRule="evenodd"
+              fill="#000" opacity={outlineOpacity} pointerEvents="none" />
+          )}
+          <RoomLayer rooms={rooms} roomState={board?.rooms} fog={board ? board.fog : true} role={role} W={W} H={H} uid={uid}
+            selectedRoomId={selectedRoomId} showLabels={showRoomLabels} counter={counter} unit={unit} />
+          {showTokens && tokenList.map((t) => {
+            const dp = dragPos?.id === t.id ? dragPos : null;
+            return (
+              <TokenChip key={t.id} token={t} x={(dp ? dp.x : t.x) * W} y={(dp ? dp.y : t.y) * H} unit={unit} counter={counter} uid={uid}
+                selected={t.id === selectedTokenId} mine={!!highlightPlayerId && t.ownerPlayerId === highlightPlayerId}
+                ghost={role === 'dm' && t.hidden} dragging={!!dp} />
+            );
+          })}
+          {pings.filter((p) => now - (p.rx || p.at) < 4000).map((p) => (
+            <g key={p.key || `${p.at}-${p.x}`} transform={`translate(${p.x * W},${p.y * H})`} pointerEvents="none" style={{ color: p.color || '#fff' }}>
+              <circle className="ping-ring" r={unit * 1.4} fill="none" stroke="currentColor" strokeWidth={unit * 0.14} />
+              <circle className="ping-ring ping-ring-2" r={unit * 1.4} fill="none" stroke="currentColor" strokeWidth={unit * 0.1} />
+              <circle className="ping-dot" r={unit * 0.22} fill="currentColor" />
+            </g>
+          ))}
+          {overlay?.({ W, H, unit, counter })}
+        </g>
+      </svg>
+    </div>
+  );
+});
+
+export default MapCanvas;

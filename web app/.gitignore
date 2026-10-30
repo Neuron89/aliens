@@ -1,0 +1,11 @@
+# Runtime content packs (written by the app / generator). Only the
+# examples folder and the .gitkeep are tracked.
+content/*/
+!content/examples/
+
+# Session snapshots (server/sessions.js persistence)
+data/sessions/
+
+# Runtime data (session snapshots); keep the folder
+data/*
+!data/.gitkeep

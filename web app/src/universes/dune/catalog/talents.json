@@ -1,0 +1,566 @@
+[
+  {
+    "id": "projection-engine",
+    "name": "Projection Engine",
+    "source": "custom",
+    "career": "mentat",
+    "text": "Once per scene, state a conclusion about a person or plan. If the Narrator confirms it, gain 2 Momentum; if not, the Narrator gains 1 Threat.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "+2 Momentum on a confirmed projection",
+        "when": "once per scene"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "data-without-context",
+    "name": "Data Without Context",
+    "source": "custom",
+    "career": "mentat",
+    "text": "After an hour with records, ledgers or testimony, reduce the Difficulty of your next UNDERSTAND test about them by 1.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:understand",
+        "text": "-1 Difficulty on the next UNDERSTAND test about studied records",
+        "value": -1
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "cold-tally",
+    "name": "Cold Tally",
+    "source": "custom",
+    "career": "mentat",
+    "text": "In a conflict you did not start, ignore the first point of Stress you would suffer each scene.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "Ignore the first Stress each scene in conflicts you did not start",
+        "value": -1
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "the-voice",
+    "name": "The Voice",
+    "source": "custom",
+    "career": "bene-gesserit",
+    "text": "Spend 2 Momentum after a successful COMMUNICATE test to compel one simple, immediate action from a listener untrained against it.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:communicate",
+        "text": "Compel one simple action (2 Momentum)"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "prana-bindu-calm",
+    "name": "Prana-Bindu Calm",
+    "source": "custom",
+    "career": "bene-gesserit",
+    "text": "When you resist fear, pain or poison, re-roll one d20 on the DISCIPLINE test.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:discipline",
+        "text": "Re-roll one d20 when resisting fear, pain or poison"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "truthsense",
+    "name": "Truthsense",
+    "source": "custom",
+    "career": "bene-gesserit",
+    "text": "When someone lies to you face to face, the Narrator must tell you a lie was spoken (but not which part).",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Always know when a face-to-face lie is spoken"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "the-slow-blade",
+    "name": "The Slow Blade",
+    "source": "custom",
+    "career": "swordmaster",
+    "text": "Against a shielded foe, the first complication on your BATTLE test is ignored.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:battle",
+        "text": "Ignore the first complication on BATTLE vs shielded foes"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "guardians-step",
+    "name": "Guardian’s Step",
+    "source": "custom",
+    "career": "swordmaster",
+    "text": "When an ally within reach is attacked, spend 1 Momentum to take the attack yourself.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Intercept an attack on an adjacent ally (1 Momentum)"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "read-the-feint",
+    "name": "Read the Feint",
+    "source": "custom",
+    "career": "swordmaster",
+    "text": "In a duel, after your opponent rolls, spend 1 Momentum to force them to re-roll their best die.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Force an opponent to re-roll their best die in a duel (1 Momentum)"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "name-and-seal",
+    "name": "Name and Seal",
+    "source": "custom",
+    "career": "noble-scion",
+    "text": "Once per session, invoke your House to open a door, an audience or a ledger that would otherwise stay shut.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Open one closed door, audience or ledger per session"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "courtly-poise",
+    "name": "Courtly Poise",
+    "source": "custom",
+    "career": "noble-scion",
+    "text": "In an intrigue conflict, your first COMMUNICATE test each scene gains one bonus d20 at no cost.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:communicate",
+        "text": "+1 free d20 on the first COMMUNICATE test in intrigue",
+        "value": 1
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "heirs-burden",
+    "name": "Heir’s Burden",
+    "source": "custom",
+    "career": "noble-scion",
+    "text": "When you take Stress protecting your House’s honor, gain 1 Momentum.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "+1 Momentum when taking Stress for your House"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "walk-without-rhythm",
+    "name": "Walk Without Rhythm",
+    "source": "custom",
+    "career": "fremen-guide",
+    "text": "On open sand, reduce the Difficulty of MOVE tests to avoid drawing a worm by 1.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:move",
+        "text": "-1 Difficulty on MOVE tests to avoid worms",
+        "value": -1
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "water-discipline",
+    "name": "Water Discipline",
+    "source": "custom",
+    "career": "fremen-guide",
+    "text": "You and anyone you lead ignore the dehydrated condition for one extra day.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Delay the dehydrated condition by one day for your group"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "desert-power",
+    "name": "Desert Power",
+    "source": "custom",
+    "career": "fremen-guide",
+    "text": "When you fight on ground you chose, spend 1 Momentum to inflict 2 extra Stress.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "damage",
+        "text": "+2 Stress on ground you chose (1 Momentum)",
+        "value": 2
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "imperial-conditioning",
+    "name": "Imperial Conditioning",
+    "source": "custom",
+    "career": "suk-doctor",
+    "text": "Any attempt to compel you to harm a patient automatically fails.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Immune to compulsion to harm a patient"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "field-surgery",
+    "name": "Field Surgery",
+    "source": "custom",
+    "career": "suk-doctor",
+    "text": "After a scene, remove 2 Stress from an ally you treat, or clear WOUNDED with an UNDERSTAND test (Difficulty 2).",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Remove 2 Stress from a treated ally, or clear WOUNDED (D2)"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "diagnose-poison",
+    "name": "Diagnose Poison",
+    "source": "custom",
+    "career": "suk-doctor",
+    "text": "Name the poison in any victim you examine; the Narrator also tells you the likeliest way it was given.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Automatically identify poisons and their delivery"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "cover-identity",
+    "name": "Cover Identity",
+    "source": "custom",
+    "career": "spy-agent",
+    "text": "Once per adventure, reveal a prepared false identity that fits where you are; it is accepted without a test.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "One accepted false identity per adventure"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "dead-drop",
+    "name": "Dead Drop",
+    "source": "custom",
+    "career": "spy-agent",
+    "text": "Spend 1 Momentum to have already hidden a small item (blade, message, vial) where you now stand.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Retroactively stash a small item (1 Momentum)"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "shadows-patience",
+    "name": "Shadow’s Patience",
+    "source": "custom",
+    "career": "spy-agent",
+    "text": "After watching a full scene without acting, the Narrator reveals one hidden agenda of someone present.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Learn one hidden agenda after a silent scene"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "a-price-for-everything",
+    "name": "A Price for Everything",
+    "source": "custom",
+    "career": "smuggler",
+    "text": "Reduce the Difficulty of bribes, haggling and favor-trading by 1.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:communicate",
+        "text": "-1 Difficulty on bribes and haggling",
+        "value": -1
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "blind-routes",
+    "name": "Blind Routes",
+    "source": "custom",
+    "career": "smuggler",
+    "text": "You know an unpatrolled way in or out of any settlement on Arrakis; using it costs time, not tests.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Enter or leave settlements unseen at the cost of time"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "cut-and-run",
+    "name": "Cut and Run",
+    "source": "custom",
+    "career": "smuggler",
+    "text": "When a scene turns violent, spend 1 Momentum to leave before anyone can act against you.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Exit a violent scene before anyone acts (1 Momentum)"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "reading-the-land",
+    "name": "Reading the Land",
+    "source": "custom",
+    "career": "planetologist",
+    "text": "Spend 1 Momentum to predict a sandstorm, spice blow or worm sign one scene before it happens.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Predict a desert hazard one scene ahead (1 Momentum)"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "ecological-mind",
+    "name": "Ecological Mind",
+    "source": "custom",
+    "career": "planetologist",
+    "text": "UNDERSTAND tests about water, plants, weather and the spice cycle gain one bonus d20 at no cost.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:understand",
+        "text": "+1 free d20 on ecological UNDERSTAND tests",
+        "value": 1
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "friend-of-the-sietch",
+    "name": "Friend of the Sietch",
+    "source": "custom",
+    "career": "planetologist",
+    "text": "Fremen treat you as a guest rather than a stranger until you give them cause otherwise.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Fremen start as hosts, not strangers"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "the-guild-remembers",
+    "name": "The Guild Remembers",
+    "source": "custom",
+    "career": "guild-envoy",
+    "text": "Once per session, call in a favor of passage, transport or silence that no House may openly refuse.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "One unrefusable favor of passage or silence per session"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "prescient-hedge",
+    "name": "Prescient Hedge",
+    "source": "custom",
+    "career": "guild-envoy",
+    "text": "Before rolling, spend 2 Momentum to declare one die a success whatever it shows.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Set one die to a success before rolling (2 Momentum)"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "neutral-ground",
+    "name": "Neutral Ground",
+    "source": "custom",
+    "career": "guild-envoy",
+    "text": "While you speak for the Guild, anyone starting a physical conflict in your presence must first pay 2 Threat.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Starting violence near you costs 2 Threat"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "hardened",
+    "name": "Hardened",
+    "source": "custom",
+    "career": "general",
+    "text": "Your Stress track is one point longer than normal.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "stress",
+        "text": "+1 maximum Stress",
+        "value": 1
+      }
+    ],
+    "notes": "Pick once."
+  },
+  {
+    "id": "sharp-eyed",
+    "name": "Sharp-Eyed",
+    "source": "custom",
+    "career": "general",
+    "text": "When you search a room or watch a crowd, re-roll one d20 that did not score a success.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:understand",
+        "text": "Re-roll one failed d20 when searching or observing"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "well-connected",
+    "name": "Well-Connected",
+    "source": "custom",
+    "career": "general",
+    "text": "Once per adventure, name a contact in the current city who owes you a small favor. The Narrator decides what they want next time.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "One favor-owing contact per adventure"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "spice-tolerance",
+    "name": "Spice Tolerance",
+    "source": "custom",
+    "career": "general",
+    "text": "You ignore the first dose of spice each day when tracking addiction, and treat spice withdrawal as one step less severe.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Spice withdrawal is one step milder"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "shield-trained",
+    "name": "Shield-Trained",
+    "source": "custom",
+    "career": "general",
+    "text": "While wearing a shield belt, you do not suffer the +1 Difficulty for fighting in a shield, and slow strikes against you need 1 extra Momentum.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:battle",
+        "text": "No shield penalty; slow blades need +1 Momentum against you"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "desert-wise",
+    "name": "Desert-Wise",
+    "source": "custom",
+    "career": "general",
+    "text": "You know the basics of stillsuit care and water discipline. The first exposure or dehydrated consequence each adventure is downgraded to a complication.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "other",
+        "text": "Downgrade the first desert consequence to a complication"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "silver-tongue",
+    "name": "Silver Tongue",
+    "source": "custom",
+    "career": "general",
+    "text": "When you spend Momentum to Obtain Information during a conversation, ask one extra question.",
+    "effects": [
+      {
+        "kind": "buff",
+        "target": "skill:communicate",
+        "text": "+1 question when spending Momentum to Obtain Information"
+      }
+    ],
+    "notes": ""
+  }
+]
