@@ -95,3 +95,9 @@ export function derivedDisplay(universe, char) {
 
 /** Indefinite article for a word ("an Audience", "a Session"). */
 export const article = (word) => (/^[aeiou]/i.test(String(word || '').trim()) ? 'an' : 'a');
+
+/** English plural for a universe term ("Transmission" → "Transmissions", "Dispatch" → "Dispatches"). */
+export function plural(word) {
+  const w = String(word || '');
+  return /(s|sh|ch|x|z)$/i.test(w) ? `${w}${w === w.toUpperCase() ? 'ES' : 'es'}` : `${w}${w === w.toUpperCase() ? 'S' : 's'}`;
+}

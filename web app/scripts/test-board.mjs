@@ -59,6 +59,12 @@ const center = (id) => {
   b.tokens.p = { id: 'p', kind: 'pc', hidden: false, roomId: null, note: 'gm only' };
   const v = viewFor(b, 'board');
   ok(!v.tokens.h && v.tokens.p && v.tokens.p.note === undefined, 'viewFor drops hidden tokens and notes');
+  // QA 2026-10-30: fog only covers room shapes, so a non-PC token outside every room (or on a map
+  // with no rooms at all, e.g. ASCII maps) is visible; one inside an unrevealed room is not.
+  b.tokens.c = { id: 'c', kind: 'creature', hidden: false, roomId: null };
+  b.tokens.f = { id: 'f', kind: 'creature', hidden: false, roomId: 'deck-a-galley' };
+  const v2 = viewFor(b, 'board');
+  ok(b.fog && v2.tokens.c && !v2.tokens.f, 'fog: out-of-room creature visible, creature in unrevealed room hidden');
   // The universe map validates against the extended pack schema (as a map inside a maps overlay pack).
   const pack = { packVersion: 1, id: 'board-test-maps', universe: 'alien', kind: 'maps', meta: { title: 'T', tagline: 't' }, maps: [{ ...MAPDEF }] };
   const res = validatePack(pack);

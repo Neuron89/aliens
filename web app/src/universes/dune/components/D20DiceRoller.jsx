@@ -36,7 +36,7 @@ const selectStyle = {
 };
 
 const CSS = `
-.d20-tray{display:flex;flex-wrap:wrap;gap:.9rem 1rem;align-items:center;min-height:4.8rem;margin:.5rem 0 1rem}
+.d20-tray{display:flex;flex-wrap:wrap;gap:1.4rem 1.7rem;align-items:center;min-height:4.8rem;margin:.5rem 0 1.4rem}
 .d20{position:relative;width:3.6rem;height:3.6rem;display:grid;place-items:center}
 .d20-face{position:absolute;inset:0;clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
   background:linear-gradient(160deg,var(--border-bright),var(--border) 70%)}
@@ -59,7 +59,7 @@ const CSS = `
 .d20.comp .d20-face::before{background:color-mix(in srgb,var(--danger) 18%,var(--bg-card))}
 .d20.comp .d20-num{color:#ff8a7a}
 .d20.comp.settled{animation:d20-settle .42s cubic-bezier(.2,1.4,.4,1) both,d20-flash .5s .42s ease-in-out 2}
-.d20-tag{position:absolute;bottom:-1.1rem;left:50%;transform:translateX(-50%);font-size:.62rem;letter-spacing:.12em;color:var(--text-dim);white-space:nowrap}
+.d20-tag{position:absolute;bottom:-1.1rem;left:50%;transform:translateX(-50%);font-size:.56rem;letter-spacing:.05em;color:var(--text-dim);white-space:nowrap}
 .d20.success .d20-tag,.d20.crit .d20-tag{color:var(--accent)}
 .d20.comp .d20-tag{color:var(--danger)}
 .d20-pills{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1rem 0 .5rem}

@@ -29,6 +29,7 @@ export function buildRecap({ title, universeName, code, players, table, log = []
   // Scene-by-scene: a 'scene: Scene: …' or 'act' entry opens a new section.
   out.push('## Scene by scene');
   let open = false;
+  let lastTrack = null;
   const notes = [];
   const endings = [];
   for (const e of log) {
@@ -39,8 +40,19 @@ export function buildRecap({ title, universeName, code, players, table, log = []
     if (e.type === 'scene') continue; // "Scene completed" markers
     if (e.type === 'roll' || e.type === 'safety') continue;
     if (!open) { out.push(''); out.push('#### Opening'); open = true; }
+    // Collapse runs of +1/-1 clicks on one track ("X STRESS 0 → 1", "X STRESS 1 → 2" → "X STRESS 0 → 2")
+    // and an identical narration re-sent (caption, then AS CARD) into one line.
+    const tm = e.type === 'track' && /^(.*) (\d+) → (\d+)$/.exec(e.text);
+    const last = out[out.length - 1];
+    if (tm && lastTrack && lastTrack.key === tm[1] && last === lastTrack.line) {
+      lastTrack.line = `- ${tm[1]} ${lastTrack.from} → ${tm[3]}`;
+      out[out.length - 1] = lastTrack.line;
+      continue;
+    }
+    if (e.type === 'narration' && last === `- **Narrated:** ${e.text}`) continue;
     const prefix = { handout: 'Handout', clue: 'Clue', clock: 'Clock', track: '', kill: '☠', fog: 'Map', pause: 'Table', note: 'GM note', loot: 'Loot', narration: 'Narrated', character: '' }[e.type] ?? '';
     out.push(`- ${prefix ? `**${prefix}:** ` : ''}${e.text}`);
+    lastTrack = tm ? { key: tm[1], from: tm[2], line: out[out.length - 1] } : null;
   }
   if (!log.length) out.push('- (no events logged)');
   out.push('');
@@ -49,6 +61,17 @@ export function buildRecap({ title, universeName, code, players, table, log = []
   if (clocks.length) {
     out.push('## Clocks');
     for (const c of clocks) out.push(`- ${c.label}: ${c.filled}/${c.segments}${c.filled === c.segments ? ' — **full**' : ''}${c.visibility === 'gm' ? ' (GM only)' : ''}`);
+    out.push('');
+  }
+  const handouts = table?.handouts || [];
+  if (handouts.length) {
+    out.push('## Handouts');
+    const nameOf = (id) => players?.[id]?.character?.name || players?.[id]?.name || '?';
+    for (const h of handouts) {
+      const to = h.recipients === 'all' ? 'everyone' : (h.recipients || []).map(nameOf).join(', ');
+      const seen = (h.seenBy || []).map(nameOf).join(', ');
+      out.push(`- ${h.title || 'Handout'} → ${to}${seen ? ` (opened by ${seen})` : ' (not opened yet)'}`);
+    }
     out.push('');
   }
   const clues = (table?.clues || []).filter((c) => c.status === 'revealed');

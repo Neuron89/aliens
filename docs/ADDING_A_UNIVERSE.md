@@ -18,9 +18,10 @@ src/universes/<id>/
   rules.js             attributes, skills, tracks, derived stats, dice kind, creation budget
   careers.js           careers (archetypes) and the gear pick-list
   generator.js         system prompt + defaults + parameter hints for scenario generation
-  maps/index.js        data-only universe maps (may be an empty array)
+  catalog/*.json       character-builder / sheet / board data: careers talents weapons armor gear conditions injuries creatures rules (+ panic for a Year Zero game). REQUIRED (smoke asserts every key)
+  maps/index.js        data-only universe maps (may be an empty array); geometry modules (e.g. montero.geometry.js) stay JSX-free
   reference/*.js       optional: bestiary/weapons data (bestiary ids are valid `threats[].ref`)
-  components/*.jsx     optional: dice Roller, reference tabs (JSX lives only here and in index.js)
+  components/*.jsx     optional: dice Roller, reference tabs (JSX lives only here, in maps/*.jsx and in index.js)
   content/*.json       bundled content packs (optional; none required)
 ```
 
@@ -28,8 +29,8 @@ Start with `cp -r src/universes/alien src/universes/<id>`, then strip ALIEN spec
 
 ## 2. The core / index split rule
 
-- `universe.core.js` default-exports `{ id, name, tagline, terminal, theme, terms, rules, careers, gear, maps, generator }` and may import only plain JS
-  (no React, no JSX, no `import.meta.glob`, no `.jsx` files, no CSS). `scripts/smoke.mjs` and the server-side generator
+- `universe.core.js` default-exports `{ id, name, tagline, terminal, theme, terms, rules, careers, gear, maps, generator, catalog }` and may import only plain JS and JSON
+  (no React, no JSX, no `import.meta.glob`, no `.jsx` files, no CSS). JSON is imported with `import x from './catalog/x.json' with { type: 'json' }`; `catalog` is `{ careers, talents, weapons, armor, gear, conditions, injuries, creatures, rules }` (plus `panic`). `scripts/smoke.mjs` and the server-side generator
   (`server/generator/universes.js`) import it in plain Node, so a stray JSX import breaks both.
 - `index.js` does `import core from './universe.core.js'` and returns
   `{ ...core, rules: { ...core.rules, dice: { ...core.rules.dice, Roller } }, navSections, maps: core.maps.map(attach engine components), content: { packs } }`.
@@ -56,11 +57,23 @@ Start with `cp -r src/universes/alien src/universes/<id>`, then strip ALIEN spec
 | `rules.statusEffects` | `string[]` | DMDashboard status buttons, PlayerView |
 | `rules.conditions` | `string[]` (lowercase) | per-player condition toggles (`GameContext`, `rulesUtils`, `sessions.js`) |
 | `rules.dice` | `{ kind: string, Roller }` (`Roller` is attached in `index.js`) | `DiceRoller.jsx` renders `Roller`; `kind` shown on the landing card and in the generator prompt |
-| `rules.creation` | `{ attrPoints, attrMin, attrMax, skillPoints, skillMax }` | CharacterCreator; the Claude Code skill and generator use it for legality |
+| `rules.creation` | `{ attrPoints, attrMin, attrMax, skillPoints, skillMax }` plus the builder caps `keyAttrMax`, `otherAttrMax`, `skillMin`, `keySkillMax`, `otherSkillMax`, `talents` (how many), `allowGeneralTalents`, `careerKinds: { <career.kind>: { keySkillMax, otherSkillMax, requiredSkillMin } }` | CharacterCreator / CharacterBuilder (`builder/builderState.js`); the Claude Code skill and generator use `attrPoints...skillMax` for legality |
+| `rules.encumbrance` | `{ formula: 'str*2', overFormula: 'str*4' }` or `null` (no carrying rule) | sheet and builder gear step (`catalogUtils.encumbrance`) |
+| `rules.panic` | `{ die, table: 'catalog.panic', stressAdd, statusAt, actionAt, statusEffect }` (Year Zero) | `mechanicsUtils.panicOutcome`, the phone PANIC ROLL, `server/mechanics.js` (the phone sends the looked-up entry) |
+| `rules.supplies`, `supplyMax`, `supplyDanger` | `['air','power','food','water']`, `12`, `2` | SupplyPanel, supply rolls, TV supply strip |
+| `rules.pools` | `[{ key, label, max?, initial, owner: 'players'\|'gm', visibleToPlayers, playerAdd, initialPerPlayer?, resetOnNewSession }]` (2d20 Momentum/Threat) | PoolCounters, TV meters, `pools-init`; the 2d20 roller adds Momentum when `playerAdd` |
+| `rules.initiative` | `{ mode: 'cards', deck, actions }` or `{ mode: 'nominate', keepCost }` | InitiativePanel, `init-*` events |
+| `catalog` | `{ careers, talents, weapons, armor, gear, conditions, injuries, creatures, rules, panic? }` | `engine/catalogUtils.js` (`getCatalog`): builder, sheet effects, board palette (creatures/weapons/gear), threat cards (`token.ref`), injury picker. Shapes: `docs/BOARD_AND_BUILDER.md` section 6 and `src/universes/alien/catalog/README.md` |
+| `terms.sessionArticle`, `career`, `attributes`, `skills`, `talent`, `gear` | strings (`'a'`/`'an'`; DUNE: `'Archetype'`, `'Drives'`) | SessionScreen grammar, builder and sheet headings |
+| `theme.motif` | `'deckplan'` \| `'contours'` | UniverseSelect card art (`fx/Motifs.jsx`) |
+| `theme.overlay`, `theme.overlayCss` | `'crt'` \| `'grain'` \| unset; optional CSS string | `UniverseContext` adds `html.overlay-<name>` (and `crt`) and injects `<style id="universe-overlay">`; `crt: true` alone means `'crt'` |
+| `theme.favicon` | inline SVG string | `UniverseContext` sets the tab icon per universe |
+| `theme.sfx` | `{ '<sound id>': [ { wave, freq, to?, at?, dur, gain, attack?, filter? } ] }` ids `ui.tap ui.confirm alert.incoming dice.settle dice.crit dice.botch clock.tick` | `engine/sfx.js`; respects the player's MUTE |
+| `theme.board` | `{ levelNoun, backdrop: 'space'\|'sand'\|'none', bg, fog, fogEdge, fogHatch, revealedEdge, label, labelStroke, ascii, asciiBg, door, reveal: 'scan'\|'dust'..., statusStyle: 'segments'\|'arcs', chipFill, font }` | `board/mapDefs.js` palette for the TV, controller and phone map; a map may override any key via `map.palette` |
 | `careers` | `[{ name, keyAttribute, keySkills[], talents[] }]` | CharacterCreator, generator prompt |
 | `gear` | `string[]` | CharacterCreator pick-list, generator prompt |
 | `navSections` (`index.js`) | `[{ id, label, Component }]` | `Nav.jsx` appends tabs after the core ones (Scenarios, Characters, Maps, Dice Roller) |
-| `maps` | `[{ id, title, subtitle, scenario, description, ascii?, engine?, rooms? }]` | Maps tab; a pack map whose `id` or `engine` matches gets the interactive `engine` component (attached in `index.js`) |
+| `maps` | `[{ id, title, subtitle, scenario, description, ascii?, engine?, rooms? }]`, plus board geometry (below) | Maps tab; a pack map whose `id` or `engine` matches gets the interactive `engine` component (attached in `index.js`); the table board reads the geometry |
 | `content.packs` (`index.js`) | bundled pack objects | `ContentContext`, merged with runtime packs |
 | `generator` | `{ systemPrompt, defaults, parameterHints }` | `server/generator/*`, the CLI generator and the Claude Code skill |
 
@@ -71,15 +84,31 @@ Smoke checks a subset (`--bg-dark --bg-panel --bg-card --border --text --text-di
 
 `rules.tracks` is the only place health-like bars are defined. Every key becomes an entry in each player's `tracks` and `trackMax`;
 `danger(value, max)` turns the bar red. ALIEN: `health` (max = STR via `derived.health`) and `stress` (max 10, initial 0).
-A 2d20 universe such as Dune might use `vigor` and `determination`.
+A 2d20 universe such as Dune might use `vigor` and `determination` (the shipped DUNE module has a single `stress` track and the Momentum/Threat `pools`).
+
+### Maps with board geometry
+
+A universe map becomes usable on the TV (fog, tokens) when it also carries `kind: 'engine'|'image'`, `size: [W, H]`, `levels[{ id, label }]`, normalized `rooms[{ id, name, level?, shape }]` (`rect {x,y,w,h}` or `poly {points}` in 0..1), optional `doors[{ from, to, locked? }]`, `spawn { pc, levels? }`, `grid`, `outline` (SVG path), `crop {x,y,w,h}`, and the universe-only `levelNoun` / `backdrop` / `palette`. Field meanings: `docs/CONTENT_PACKS.md` (maps) and `docs/BOARD_AND_BUILDER.md` section 3.
+Keep the geometry in a JSX-free module (ALIEN: `maps/montero.geometry.js` exports `W`, `H`, `MONTERO_LEVELS`, `monteroRooms`, `monteroOutline`, `monteroCrop`, `monteroSpawn`; DUNE: `maps/geometry.js`, `residency.geometry.js`, `sietch.geometry.js`, `imageMaps.js`) and import it from both `maps/index.js` and the `.jsx` MapEngine definition, so the deck plan and the board overlay render from one source.
+`index.js` attaches the engine component: `maps: core.maps.map((m) => (ENGINE_MAPS[m.id] ? { ...m, engine: ENGINE_MAPS[m.id] } : m))`; the component exposes its MapEngine config as `Component.config`.
 
 ## 4. Write the content-facing rules
 
-`rules.js` (no JSX) exports `attributes`, `skills`, `derived`, `tracks`, `statusEffects`, `conditions`, `dice: { kind }`, `creation`, and a `rules` object bundling them (see ALIEN).
+`rules.js` (no JSX) exports `attributes`, `skills`, `derived`, `tracks`, `statusEffects`, `conditions`, `dice: { kind }`, `creation`, `encumbrance`, `initiative`, and whichever of `panic`, `supplies` (+ `supplyMax`, `supplyDanger`) or `pools` the system needs, bundled in a `rules` object (see ALIEN for Year Zero, DUNE for 2d20).
+A skill's `attr` may be `null` when any attribute pairs with any skill (2d20); then give it a `suggestedAttr`.
 `derived.health(char)` must return a positive integer for every bundled character (smoke asserts it). Skill and attribute `key`s are what
 packs use in `characters[].attributes` and `characters[].skills`, so choose camelCase keys once and keep them stable.
 
 `careers.js` exports `careers` and `gear`. Talent strings use the form `"Name — one-sentence effect"`.
+
+## 4b. Write the catalog
+
+`catalog/*.json` is data for the character builder, sheets, board palette and threat cards. Required files (smoke checks the keys): `careers`, `talents`, `weapons`, `armor`, `gear`, `conditions`, `injuries`, `creatures`, `rules`; a Year Zero game adds `panic.json` (rows with `roll` ranges and `panicAction`) referenced by `rules.panic.table: 'catalog.panic'`.
+Item shape, effects and talent/condition shapes are in `docs/BOARD_AND_BUILDER.md` section 6; ids are kebab-case and unique across weapons/armor/gear; skill and attribute keys must exist in `rules.js`; `art` is a path under `web app/public/` (or `null`). `careers[]` entries carry `kind` (`career`, or e.g. `mos`/`parentCareer` for variants), `startingGear { fixed, choices, pick }` and may feed `rules.creation.careerKinds`.
+`creatures[]` ids can be used as `threats[].ref` and as `token.ref` for the threat cards. Write original or paraphrased text only. Then:
+
+1. Add a `PROFILES` entry for the universe in `scripts/validate-catalog.mjs` (allowed sources, categories, ranges, injury tables, minimum counts) and run `node scripts/validate-catalog.mjs <id>`.
+2. Put item art in `web app/public/art/<id>/...` (or generate it: `scripts/gen-dune-art.py` is the model for a ComfyUI-driven set) and run `node scripts/check-art.mjs` from `web app/`.
 
 ## 5. Write the generator prompt
 
@@ -109,7 +138,12 @@ Set `rules.dice.kind` in `rules.js` to a short string (`'yze'`, `'2d20'`) descri
 
 ## 7. Theme
 
-Copy `theme.js`: choose a palette, define every var in section 3, set `fonts.googleCss` to a Google Fonts CSS URL for the two families, and `crt: true|false`.
+Copy `theme.js`: choose a palette, define every var in section 3, set `fonts.googleCss` to a Google Fonts CSS URL for the two families, and `crt: true|false`. Then set the newer keys:
+
+- `overlay` (`'crt'` or `'grain'`) and, for a custom look, `overlayCss` (CSS scoped to `html.overlay-<name>`; skip it for `'crt'`, which `index.css` provides); `motif` (`'deckplan'` or `'contours'`); `favicon` (inline SVG).
+- `board`: the TV palette and level word (see the interface table). `levelNoun` is what a level is called (`DECK`, `LEVEL`, `FLOOR`); `backdrop` is drawn behind engine maps.
+- `sfx`: synthesized sound recipes for `ui.tap`, `ui.confirm`, `alert.incoming`, `dice.settle`, `dice.crit`, `dice.botch`, `clock.tick`. Match the mood (ALIEN: square-wave terminal blips; DUNE: wooden knocks and bells).
+
 `index.css` keeps the ALIEN values as first-paint defaults only.
 
 ## 8. Register it
@@ -144,19 +178,25 @@ node scripts/smoke.mjs                         # npm run smoke
 node scripts/validate-content.mjs              # npm run validate
 npm run dev                                    # open http://localhost:3000, pick the new card
 ```
-Smoke imports every `universe.core.js` in Node and asserts: core keys, `terminal.*`, `terms.*`, `rules.*`, required theme vars, `theme.fonts`, `theme.crt` boolean,
+```bash
+node scripts/validate-catalog.mjs <id>        # from the repo root: catalog ids, references, art
+node scripts/check-art.mjs                    # from web app/: every /art/... path exists
+```
+Smoke imports every `universe.core.js` in Node and asserts: core keys, `terminal.*`, `terms.*`, `rules.*`, `rules.pools` shape when present, `catalog` and every catalog key, ALIEN panic/initiative and DUNE initiative checks, required theme vars, `theme.fonts`, `theme.crt` boolean,
 `derived.health` function (and a positive integer for each bundled character), `dice.kind` string, track shape, every skill maps to an attribute, generator prompt is 300-600 words,
 `maps` is an array, `index.js` contains `navSections`/`Roller`/`import.meta.glob`, registry reference exists, plus content validation.
 
 ## Checklist
 
 - [ ] `src/universes/<id>/` created from the ALIEN module; folder name == `id`.
-- [ ] `universe.core.js` default-exports all of: `id name tagline terminal theme terms rules careers gear maps generator` and imports no JSX/React/`import.meta`.
+- [ ] `universe.core.js` default-exports all of: `id name tagline terminal theme terms rules careers gear maps generator catalog` and imports no JSX/React/`import.meta`.
 - [ ] `index.js` adds `navSections`, `rules.dice.Roller`, attaches map engines, and `content.packs` via `import.meta.glob`.
 - [ ] `terminal` has `name`, `subtitle`, `statusLines`.
-- [ ] `terms` has `gm gmShort player players session message broadcast joinPrompt priorities`.
-- [ ] `rules` has `attributes skills derived tracks statusEffects conditions dice creation`; every skill's `attr` exists; `derived.health` returns a positive integer.
-- [ ] `theme.vars` defines all 24 variables; `fonts` has `display mono googleCss`; `crt` is a boolean.
+- [ ] `terms` has `gm gmShort player players session message broadcast joinPrompt priorities` (+ `sessionArticle career attributes skills talent gear`).
+- [ ] `rules` has `attributes skills derived tracks statusEffects conditions dice creation` (+ `encumbrance initiative`, and `panic supplies` or `pools` as the system needs); every skill's `attr` exists (or is `null`); `derived.health` returns a positive integer.
+- [ ] `theme.vars` defines all 24 variables; `fonts` has `display mono googleCss`; `crt` is a boolean; `overlay`, `motif`, `favicon`, `board` and `sfx` set.
+- [ ] `catalog/*.json` written (all nine keys), a `PROFILES` entry added in `scripts/validate-catalog.mjs`, `node scripts/validate-catalog.mjs <id>` passes.
+- [ ] Maps that should work on the TV carry board geometry (`kind size levels rooms ...`) from a JSX-free geometry module.
 - [ ] `careers` entries have `name keyAttribute keySkills talents`; `gear` list present.
 - [ ] `generator.systemPrompt` is 300-600 words and ends by listing skill names and bestiary ids; `defaults` and `parameterHints` filled.
 - [ ] Dice roller component written (or deliberately omitted).

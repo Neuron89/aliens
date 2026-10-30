@@ -220,7 +220,8 @@ export default function SessionScreen() {
                 placeholder="XXXX"
                 maxLength={4}
                 style={inputStyle}
-                autoFocus
+                autoFocus={joinCode.length !== 4}
+                autoComplete="off"
               />
             </div>
             <div style={{ marginBottom: '1rem' }}>
@@ -231,6 +232,9 @@ export default function SessionScreen() {
                 onChange={(e) => setPlayerName(e.target.value)}
                 placeholder="Enter your name"
                 style={inputStyle}
+                autoFocus={joinCode.length === 4}
+                autoComplete="nickname"
+                maxLength={40}
               />
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -386,7 +390,7 @@ function TakeoverPanel({ terms, connected, resumeGame, onError }) {
   if (!open) {
     return (
       <button type="button" className="resume-take ss-takeover-open" onClick={() => setOpen(true)} disabled={!connected}>
-        TAKE OVER A {terms.session.toUpperCase()} FROM ANOTHER TERMINAL (GM PIN)
+        TAKE OVER {/^[AEIOU]/i.test(terms.session) ? 'AN' : 'A'} {terms.session.toUpperCase()} FROM ANOTHER TERMINAL (GM PIN)
       </button>
     );
   }
@@ -402,7 +406,7 @@ function TakeoverPanel({ terms, connected, resumeGame, onError }) {
   };
   return (
     <form className="panel resume-panel ss-takeover" onSubmit={submit}>
-      <h3 className="resume-title">TAKE OVER A {terms.session.toUpperCase()}</h3>
+      <h3 className="resume-title">TAKE OVER {/^[AEIOU]/i.test(terms.session) ? 'AN' : 'A'} {terms.session.toUpperCase()}</h3>
       <p className="resume-meta">
         THE GM PIN WAS SHOWN WHEN THE {terms.session.toUpperCase()} STARTED (SHOW PIN ON THE {terms.gmShort} HEADER).
         THE OTHER TERMINAL IS SIGNED OUT.

@@ -19,11 +19,11 @@ A minimal valid pack to copy lives at `.claude/skills/gamenight/references/pack-
 | `packVersion` | yes | `1` | Always the integer 1. |
 | `id` | yes | string | kebab-case (`^[a-z0-9]+(-[a-z0-9]+)*$`), 3-64 chars, unique per universe. **The file must be named `<id>.json`.** |
 | `universe` | yes | string | Registry id (`alien`, `dune`...). Must equal the folder the file lives in. |
-| `kind` | yes | enum | `scenario`, `campaign` (both need >= 1 act) or `characters` (acts optional). |
+| `kind` | yes | enum | `scenario`, `campaign` (both need >= 1 act), `characters` (acts optional) or `maps` (a map overlay pack with id `<packId>-maps`, written by the room editor for bundled packs; its `maps[]` merge into `<packId>` by map id and it is not listed as a pack). |
 | `meta` | yes | object | Catalogue info (below). |
 | `briefing` | no | object | In-world opening message. |
 | `acts` | cond. | array | See Acts. |
-| `npcs`, `threats`, `keyLocations`, `handouts`, `maps`, `endings`, `characters`, `tips` | no | arrays | See below. |
+| `npcs`, `threats`, `keyLocations`, `handouts`, `clues`, `clocks`, `maps`, `endings`, `characters`, `tips` | no | arrays | See below. |
 
 ## meta
 
@@ -56,10 +56,14 @@ Only `title` is required. Typical act:
 { "title": "ACT I", "subtitle": "HOPE", "summary": "GM one-liner",
   "readAloud": ["Second-person, present tense, 40-120 words.", "..."],
   "gmNotes": "Private guidance.", "agendaNotes": "How personal agendas move this act.",
+  "sceneArt": "/art/scenes/pad-b.webp",
   "scenes": [ ... ] }
 ```
+- `sceneArt` (optional): a site path (served from `web app/public/`) or an `https://` URL. In **THEATRE** mode the TV shows it full-bleed behind the act and scene title while this act runs.
 - `readAloud`: 2-6 paragraphs per the schema (house standard 3-6). The Scenarios tab can read these via text-to-speech, so keep them pure narration.
-- `scenes[]` feed the **scene runner** (`ScenarioPlayer`): `name` (required), `mandatory`, `encounter`, `encounterDetail`, `narration`, `checks[]`, `events[]`, `stressTriggers[]`, `npcGuidance`, `gmTip`, `outcomes[]`.
+- `scenes[]` feed the **scene runner** (`ScenarioPlayer`) and the GM **RUN** view: `name` (required), `mandatory`, `encounter`, `encounterDetail`, `narration`, `checks[]`, `events[]`, `stressTriggers[]`, `npcGuidance`, `gmTip`, `outcomes[]`, plus:
+  - `clueRefs[]`: ids of entries in the pack's `clues[]` that can be found here; the RUN scene card lists them with a one-tap reveal.
+  - `ambient`: a universe audio preset id (ALIEN: `ship-hum`, `tension`, `alert`, `dread`, `space`; DUNE: `wind`, `bazaar`, `sietch`, `court`) or a site path to an audio file. Moving to the scene switches the GM's AudioPanel (and the TV when opened with `&audio=1`).
 - Check strings: `"OBSERVATION — notice the elongated forearms"` or `"PILOTING at −2 — avoid collision"`; use the universe's skill names in upper case.
 - Stress strings: `"STRESS +1 — all PCs present"`, `"IMMEDIATE PANIC ROLL — witnesses"`.
 
@@ -79,25 +83,58 @@ so the GM can open full stats. Locations require `name` and `description`.
 ```json
 { "id": "company-claim", "title": "COMPANY CARGO CLAIM", "from": "WEYLAND-YUTANI — SPECIAL PROJECTS",
   "to": "BOARDING TEAM", "priority": "PRIORITY", "text": "...teletype body, 20-200 words...",
-  "when": "Act I, after the crate is found" }
+  "when": "Act I, after the crate is found", "image": "/art/handouts/manifest.webp" }
 ```
-Required: `id` (kebab-case, unique in the pack), `title`, `text`. `priority` should be one of the universe's `terms.priorities`
+Required: `id` (kebab-case, unique in the pack), `title`, `text`. `image` (optional): a site path or `https://` URL shown with the handout on the phone, and full-bleed on the TV when the GM presses **SHOW ON TV** in the RUN handouts tab. `priority` should be one of the universe's `terms.priorities`
 (ALIEN: STANDARD, PRIORITY, EYES ONLY, EMERGENCY).
 
-### How handouts become in-session transmissions
+### How handouts reach players
 
-In the DM's Scenarios tab, the **HANDOUTS** panel lists each handout with its `from/to/priority` and the `when` cue. During a live
-session the DM picks a target (all players = broadcast, or one player) and presses **SEND AS TRANSMISSION** (the label comes from
-`terms.message`). The engine builds the message text as `TITLE`, `FROM: ...`, `TO: ...`, blank line, then `text`, and sends it with the
-handout's `priority` (falling back to the first universe priority when the handout's value is not a known one). It shows on the player's phone
-Comms tab and in the DM message log like any other transmission. Outside a session the buttons are disabled. `to` is informational: the DM still chooses the target.
+In the GM **RUN** view (rail tab **HANDOUTS**) and in the Scenarios tab, each handout shows its `from/to/priority` and the `when` cue. During a live session the GM presses **PUSH TO PHONES** and chooses everyone or specific players
+(socket `handout-send`). Players get a sealed card ("TAP TO OPEN"); opening it counts as seen (`handout-seen`) and the GM sees receipts such as "SEEN 2/4". Handouts can be re-opened from the phone's **FILES** tab; re-sending widens the recipient list and keeps receipts.
+The `priority` is shown on the card; it should be one of the universe's `terms.priorities` (ALIEN: STANDARD, PRIORITY, EYES ONLY, EMERGENCY; DUNE: ROUTINE, URGENT, SEALED, IMPERIAL). `to` is informational: the GM chooses the recipients. Outside a session the buttons are disabled.
+Bundled packs live only in the client, so the GM's browser sends the resolved handout with its pack id.
+
+## clues[]
+
+Secrets and clues the GM can reveal with one tap (Three Clue Rule: give every important conclusion at least three clues). 0-12 per scenario.
+
+```json
+{ "id": "maintenance-log", "text": "Abram logged the reactor purge three hours before the alarm.", "source": "Abram's maintenance log", "scene": "Engine Room", "status": "hidden" }
+```
+Required: `id` (kebab-case, unique in the pack) and `text` (one or two sentences, what the players learn, no rules text). Optional: `source` (where or from whom), `scene` (the scene most likely to hold it; scenes can also list it in `clueRefs`),
+`status` (`hidden` default, or `revealed` for something known from the start). At session start the RUN view seeds `clues[]` into the session once (`session-seed`; later GM edits stay). The GM reveals a clue to all or chosen players, who are credited as finders; players see revealed clues under **FILES**.
+
+## clocks[]
+
+Progress clocks the GM ticks during play. 0-6 per scenario.
+
+```json
+{ "id": "reactor-meltdown", "label": "REACTOR MELTDOWN", "segments": 6, "filled": 1, "kind": "danger", "visibility": "all", "note": "At 6 the reactor breaches Deck C." }
+```
+Required: `id`, `label` (short upper-case), `segments` (2-12; 4 soon, 6 a while, 8 long haul). Optional: `filled` (0-12, default 0), `kind` (`danger` strikes when full, `racing` is the players' progress racing a danger, `tug` moves both ways), `visibility` (`all` = TV and phones, `gm` = GM only),
+`note` (what happens when it fills; GM-facing). Seeded into the session once, like clues. Clocks are not attached to scenes: the GM ticks them from the RUN rail.
 
 ## maps[]
 
-Required: `id` (kebab-case), `title`, `kind`. `kind: "ascii"` requires `ascii` (monospace, <= ~70 columns, box-drawing characters);
-`kind: "image"` requires `src` (URL path such as `/maps/acm/talos-station.png`, served from `web app/public/`). Optional `subtitle`,
-`description`, `rooms[{name, note}]` and `engine`: the id of an interactive MapEngine deck plan registered by the universe
-(ALIEN: `uscss-montero`). The Maps tab shows pack maps plus the universe's own maps.
+Required: `id` (kebab-case), `title`, `kind`: `ascii` (requires `ascii`: monospace, <= ~70 columns, box-drawing characters), `image` (requires `src`: a URL path such as `/maps/acm/talos-station.webp`, served from `web app/public/`) or `engine` (requires `engine`: the id of an interactive MapEngine deck plan registered by the universe, ALIEN: `uscss-montero`).
+Optional descriptive fields: `subtitle`, `description`, `ascii`, `src`, `engine` (also allowed on `image`/`ascii` maps: the GM screen then offers the interactive plan alongside).
+
+The same object drives the **table board** (fog, tokens, controller). All coordinates are **normalized 0..1** of the map's width and height. Optional board fields:
+
+| Field | Meaning |
+|---|---|
+| `size` | `[width, height]` px of the source (image natural size); rooms stay normalized |
+| `levels[]` | `{ id, label, src?, engine? }`: decks or floors (`id` kebab-case); rooms and tokens carry a level id; `src`/`engine` give a per-level image or engine deck |
+| `rooms[]` | `{ name, id?, note?, level?, shape? }`. `name` is required; `id` (kebab-case, unique in the map) is **needed for fog**; `note` is 1-3 sentences of GM info (never sent to the table); `level` is a level id; `shape` is `{ type: "rect", x, y, w, h }` or `{ type: "poly", points: [[x,y], ...] }` (3+ points). Named rooms without `shape` are "unplaced": the Room Editor (EDIT ROOMS) can draw them |
+| `doors[]` | `{ from, to, locked? }` room ids |
+| `spawn` | `{ pc: [x, y], levels?: { "<levelId>": { pc: [x, y] } } }`: where PC tokens drop |
+| `grid` | cell size as a fraction of the map width (token size 1 = one cell); default 1/40 |
+| `outline` | SVG path string in normalized coordinates (hull); the board dims everything outside it |
+| `crop` | `{ x, y, w, h }` normalized region the board fits to the screen |
+
+Universe maps (`src/universes/<id>/maps/index.js`, not packs) may also carry `levelNoun` (`DECK`, `LEVEL`, `FLOOR`: the word for a level), `backdrop` (`space`, `sand`, `none`) and `palette` (partial override of the universe's `theme.board`); the pack schema's `maps[]` does not accept those three, so a pack map with the same id or `engine` inherits them (`board/mapDefs.js`).
+A pack map whose `engine` names a universe engine map uses that map's rooms, levels and outline. Details and the socket events: `docs/BOARD_AND_BUILDER.md`. The Maps tab shows pack maps plus the universe's own maps.
 
 ## endings[], tips[]
 
@@ -106,12 +143,13 @@ Required: `id` (kebab-case), `title`, `kind`. `kind: "ascii"` requires `ascii` (
 ## characters[]
 
 Required: `id`, `name`, `career`, `appearance`, `attributes`, `skills`, `talent`, `gear[]`, `signatureItem`, `personalAgenda`, `buddy`, `rival`.
-Optional: `agendaByAct` (keys `"1"`..`"99"`), `secret`, `health`.
+Optional: `agendaByAct` (keys `"1"`..`"99"`), `secret`, `health`, `driveStatements`.
 
 - `attributes` and `skills` are keyed by the universe's keys (`web app/src/universes/<id>/rules.js`). The schema does not check the keys; `scripts/smoke.mjs` does, for bundled packs only.
 - `skills` should list every skill (0 for untrained).
 - `health` is informational: the engine recomputes it with `universe.rules.derived.health(char)` when a character is assigned. Omit it.
-- `agendaByAct` is listed on the character sheet (CharacterSheet.jsx); the engine does not push it automatically when the act changes, so the DM sends the new act's agenda as a private transmission (author a matching handout with a `when` cue). Escalate toward betrayal.
+- `agendaByAct` is listed on the character sheet (CharacterSheet.jsx) and **pushed to each assigned player as a private NEW ORDERS card when the GM presses ADVANCE ACT** in the RUN view (moving to act N reads key `"N"`, counting from 1; SEND AGENDA CARDS re-sends the current act's). Escalate toward betrayal.
+- `driveStatements` (optional): `{ "<attributeKey>": "one sentence in the character's voice" }`, keyed by the universe's attribute keys (DUNE drives: `duty`, `faith`, `justice`, `power`, `truth`). Players write them in the character builder; the sheet shows them. Pre-gens may include a few.
 - Characters made in the in-app creator are saved to a runtime pack with id `custom-characters`, `kind: "characters"`.
 
 ## Bundled vs runtime vs generated
@@ -141,7 +179,7 @@ files from the repo (robocopy `/XO`, never deleting) so packs saved in the deplo
 | PUT | `/api/content/:universe/:id` | validate and write; 422 `{ error, errors[] }` on failure |
 | DELETE | `/api/content/:universe/:id` | remove |
 
-`generate` (`POST /api/generate`) returns a validated pack when the generator is installed; see the README.
+`POST /api/generate` returns a validated pack (and `GET /api/generate/status` reports whether the generator is configured); see the README. With `API_TOKEN` set, `PUT`/`DELETE` and `POST /api/generate` need the `x-api-token` header.
 
 ## Import / export in the UI
 

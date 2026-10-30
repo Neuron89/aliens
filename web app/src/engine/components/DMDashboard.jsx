@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
-import { characterGroups, initialCharacterState, withDerived, attributeLabel, trackMaxFor } from '../rulesUtils';
+import { characterGroups, initialCharacterState, withDerived, attributeLabel, trackMaxFor, plural } from '../rulesUtils';
 import CharacterBuilder from './CharacterBuilder';
 import RollFeed from './run/RollFeed';
 import InitiativePanel from './run/InitiativePanel';
@@ -18,7 +18,7 @@ export default function DMDashboard() {
     broadcastMessage, killCharacter, unreadCount, clearUnread, lastSaved, boardLinked,
     table, unreadBy, clearUnreadFor, resolveSubmission,
     supplySet, supplyRoll, injuryAdd, injuryRemove, on,
-    gmPin, pinFresh, hidePin, seatClaims, resolveSeatClaim,
+    gmPin, pinFresh, hidePin,
   } = useGame();
   const [showPin, setShowPin] = useState(false);
   const [supplyLast, setSupplyLast] = useState(null);
@@ -231,35 +231,23 @@ export default function DMDashboard() {
           )}
         </div>
         <PoolCounters />
-        <button onClick={leaveGame} style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }}>
+        <button onClick={() => {
+          // Ending deletes the saved session for everyone (phones and TV are sent away): never on a single tap.
+          if (confirm(`END THIS ${terms.session.toUpperCase()} FOR EVERYONE?
+
+Phones and the TV are disconnected and the saved session is deleted. Export the recap first (RUN → LOG → EXPORT RECAP) if you want it.
+
+To stop for tonight and continue later, just close this tab instead.`)) leaveGame();
+        }} style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }}>
           END {terms.session.toUpperCase()}
         </button>
       </div>
-
-      {/* Seat claims: a device asks for an existing seat by name */}
-      {seatClaims.length > 0 && (
-        <div className="panel dm-claims" role="alert">
-          {seatClaims.map(c => (
-            <div key={c.claimId} className="dm-claim">
-              <span>
-                A DEVICE ASKS FOR <b>{String(c.name).toUpperCase()}</b>'S SEAT
-                {c.seatConnected ? ` — THAT ${terms.player.toUpperCase()} IS STILL ONLINE` : ''}
-              </span>
-              <span className="dm-claim-actions">
-                <button type="button" className="run-btn primary sm" onClick={() => resolveSeatClaim(c.claimId, true)}>APPROVE</button>
-                <button type="button" className="run-btn sm danger" onClick={() => resolveSeatClaim(c.claimId, false)}>REJECT</button>
-              </span>
-            </div>
-          ))}
-          <p className="dm-claim-hint">APPROVE ONLY IF IT IS REALLY THEM: THE SEAT'S CHARACTER AND PRIVATE MESSAGES MOVE TO THE NEW DEVICE.</p>
-        </div>
-      )}
 
       {/* Panel tabs */}
       <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
         {[
           ['players', `${PLAYERS} STATUS (${playerList.length})`],
-          ['message', `${MESSAGE}S`],
+          ['message', plural(MESSAGE)],
           ['log', `MESSAGE LOG${unreadCount > 0 ? ` (${unreadCount})` : ''}`],
           ['rolls', `ROLLS${table?.rolls?.length ? ` (${table.rolls.length})` : ''}`],
           ['initiative', table?.initiative?.active ? `INITIATIVE · R${table.initiative.round}` : 'INITIATIVE'],
@@ -315,6 +303,12 @@ export default function DMDashboard() {
                           onClick={(e) => { e.stopPropagation(); replyTo(p.id); }}>{unreadBy[p.id]} NEW</button>
                       )}
                       {subFor(p.id) && <span className="dm-sub-badge">PLAYER-BUILT</span>}
+                      {table?.safety?.enabled && (
+                        <span className={`dm-s0${table.safety.confirmed?.includes(p.id) ? ' ok' : ''}`}
+                          title="Session zero (BEFORE WE BEGIN card)">
+                          {table.safety.confirmed?.includes(p.id) ? 'S0 ✓ READY' : 'S0 PENDING'}
+                        </span>
+                      )}
                     </div>
                     <div style={{ color: 'var(--accent)', fontSize: '0.7rem' }}>
                       {p.character ? p.character.name : 'NO CHARACTER ASSIGNED'}
@@ -495,7 +489,7 @@ export default function DMDashboard() {
       {panel === 'message' && (
         <div className="panel">
           <h3 style={{ color: 'var(--accent)', marginBottom: '0.75rem', letterSpacing: '0.1em' }}>
-            TRANSMIT {MESSAGE}
+            SEND {MESSAGE}
           </h3>
           <form onSubmit={handleSendMsg}>
             <div style={{ marginBottom: '0.5rem' }}>
@@ -521,7 +515,7 @@ export default function DMDashboard() {
                 style={{ ...inputStyle, resize: 'vertical' }} />
             </div>
             <button type="submit" disabled={!msgTarget || !msgText.trim()} style={smallBtn}>
-              TRANSMIT
+              SEND {MESSAGE}
             </button>
           </form>
         </div>
@@ -534,7 +528,7 @@ export default function DMDashboard() {
             {MESSAGE} LOG
           </h3>
           {messages.length === 0 && (
-            <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>No {terms.message.toLowerCase()}s yet.</p>
+            <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>No {plural(terms.message.toLowerCase())} yet.</p>
           )}
           {[...messages].reverse().map(m => {
             const fromGm = m.type === 'gm';

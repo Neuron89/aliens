@@ -94,7 +94,8 @@ export const STATUS_DEFS = {
   hidden: { label: 'HIDDEN', color: '#9fb4c0', glyph: <g {...SG}><path d="M-0.8 0 Q0 -0.65 0.8 0 Q0 0.65 -0.8 0 Z" /><circle r="0.2" fill="currentColor" stroke="none" /><path d="M-0.7 0.7 L0.7 -0.7" strokeWidth="0.18" /></g> },
   wounded: { label: 'WOUNDED', color: '#e0453a', glyph: GLYPHS.blood },
 };
-STATUS_DEFS.panicked = STATUS_DEFS.panicking;
+/* Alias for the ALIEN panic status; non-enumerable so status pickers list PANICKING once. */
+Object.defineProperty(STATUS_DEFS, 'panicked', { value: STATUS_DEFS.panicking, enumerable: false });
 
 /** Normalize token.status to [{ key, count }]. */
 export function tokenStatuses(status) {

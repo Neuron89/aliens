@@ -29,8 +29,11 @@ const clampI = (n, lo, hi) => Math.max(lo, Math.min(hi, Number.isInteger(n) ? n 
 export default function RunView({ tts, audio }) {
   const {
     table, packId, players, runSet, advanceAct, narrate, narrateClear, setBoardMode, sessionSeed, clueReveal,
-    boardLinked, gameCode,
+    boardLinked, gameCode, gmPin, pinFresh, hidePin,
   } = useGame();
+  const [copied, setCopied] = useState(false);
+  const joinUrl = typeof window !== 'undefined' ? `${window.location.origin}/?join=${gameCode}` : '';
+  const copyJoin = () => { navigator.clipboard?.writeText(joinUrl).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); }, () => {}); };
   const { universe } = useUniverse();
   const { byId } = useContent();
   const { terms } = universe;
@@ -104,8 +107,20 @@ export default function RunView({ tts, audio }) {
       {/* ─── Table strip ─── */}
       <div className="run-top">
         <div className="run-top-title">
-          <span className="run-kicker">RUN · {gameCode}</span>
+          <span className="run-kicker">RUN</span>
           <span className="run-pack">{pack ? pack.meta.title : 'SANDBOX'}</span>
+        </div>
+        {/* The GM lands here right after INITIALIZE: the join code (what players type) and, once,
+            the GM PIN must be visible without visiting the Session tab. */}
+        <div className="run-code">
+          <b className="run-code-val" title={joinUrl}>{gameCode}</b>
+          <button type="button" className="run-btn sm" onClick={copyJoin}>{copied ? 'COPIED' : 'COPY JOIN LINK'}</button>
+          {pinFresh && gmPin && (
+            <span className="dm-pin" title="Lets another terminal take over as GM. Never share it with players.">
+              GM PIN <b>{gmPin}</b>
+              <button type="button" className="run-btn sm" onClick={hidePin}>NOTED</button>
+            </span>
+          )}
         </div>
         <div className="run-row">
           <PoolCounters />

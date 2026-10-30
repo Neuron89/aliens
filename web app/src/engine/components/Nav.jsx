@@ -14,8 +14,12 @@ export const CORE_SECTIONS = [
 /* DM-wide banner for the anonymous X-card: neutral wording, a soft chime, nothing
    about who pressed it. Also flags pending player-built characters. */
 function DmAlerts({ onChange }) {
-  const { table, pauseClear, on, poolDelta } = useGame();
+  const { table, pauseClear, on, poolDelta, seatClaims = [], resolveSeatClaim } = useGame();
+  const { universe } = useUniverse();
   const { play } = useFx();
+  /* A seat claim waits ~2 min for an answer: chime once per new claim so the GM notices it from any tab. */
+  const claimIds = seatClaims.map((c) => c.claimId).join(',');
+  useEffect(() => { if (claimIds) play('alert'); }, [claimIds, play]);
   const [prompts, setPrompts] = useState([]); // { id, kind:'complication'|'panic', who, text }
   useEffect(() => on('pause-requested', () => play('pause')), [on, play]);
   useEffect(() => on('character-submitted', () => play('seen')), [on, play]);
@@ -24,7 +28,7 @@ function DmAlerts({ onChange }) {
   /* Dune complication → red flash + "THREAT +1?" (never auto-applied). */
   useEffect(() => on('roll', ({ roll } = {}) => {
     if (!roll || roll.secret || !roll.roll?.flags?.includes('complication')) return;
-    push({ id: roll.id, kind: 'complication', who: roll.characterName || roll.playerName, text: roll.roll.label || '' });
+    push({ id: roll.id, kind: 'complication', who: roll.characterName || roll.playerName, text: roll.roll.label || '', n: Math.max(1, Math.min(5, Number(roll.roll.complications) || 1)) });
     play('alert');
   }), [on, play]);
   /* Panic result → GM sees the effect (public to the GM, private on the table). */
@@ -38,6 +42,25 @@ function DmAlerts({ onChange }) {
   const pending = (table?.submissions || []).filter((s) => s.status === 'pending').length;
   return (
     <>
+      {/* Seat claims: a device asks for an existing seat by name (shown on every DM tab — the RUN tab is
+          where the GM lives during play, and an unanswered claim expires). */}
+      {seatClaims.length > 0 && (
+        <div className="panel dm-claims" role="alert">
+          {seatClaims.map((c) => (
+            <div key={c.claimId} className="dm-claim">
+              <span>
+                A DEVICE ASKS FOR <b>{String(c.name).toUpperCase()}</b>'S SEAT
+                {c.seatConnected ? ` — THAT ${universe.terms.player.toUpperCase()} IS STILL ONLINE` : ''}
+              </span>
+              <span className="dm-claim-actions">
+                <button type="button" className="run-btn primary sm" onClick={() => resolveSeatClaim(c.claimId, true)}>APPROVE</button>
+                <button type="button" className="run-btn sm danger" onClick={() => resolveSeatClaim(c.claimId, false)}>REJECT</button>
+              </span>
+            </div>
+          ))}
+          <p className="dm-claim-hint">APPROVE ONLY IF IT IS REALLY THEM: THE SEAT'S CHARACTER AND PRIVATE MESSAGES MOVE TO THE NEW DEVICE.</p>
+        </div>
+      )}
       {table?.pause && (
         <div className="dm-pause" role="alert">
           <span className="dm-pause-mark" aria-hidden="true">❚❚</span>
@@ -51,9 +74,9 @@ function DmAlerts({ onChange }) {
             <div key={p.id} className={`dm-prompt k-${p.kind}`}>
               {p.kind === 'complication' ? (
                 <>
-                  <span><b>COMPLICATION</b> — {p.who}{p.text ? ` · ${p.text}` : ''}. {hasThreat ? 'THREAT +1?' : ''}</span>
-                  {hasThreat && <button type="button" className="run-btn sm primary" onClick={() => { poolDelta('threat', 1, `complication (${p.who})`); drop(p.id); }}>+1 THREAT</button>}
-                  {hasThreat && <button type="button" className="run-btn sm" onClick={() => { poolDelta('threat', 2, `complication converted (${p.who})`); drop(p.id); }}>+2 (CONVERT)</button>}
+                  <span><b>{p.n > 1 ? `${p.n} COMPLICATIONS` : 'COMPLICATION'}</b> — {p.who}{p.text ? ` · ${p.text}` : ''}. {hasThreat ? `THREAT +${p.n}?` : ''}</span>
+                  {hasThreat && <button type="button" className="run-btn sm primary" onClick={() => { poolDelta('threat', p.n, `complication (${p.who})`); drop(p.id); }}>+{p.n} THREAT</button>}
+                  {hasThreat && <button type="button" className="run-btn sm" onClick={() => { poolDelta('threat', 2 * p.n, `complication converted (${p.who})`); drop(p.id); }}>+{2 * p.n} (CONVERT)</button>}
                 </>
               ) : (
                 <span><b>PANIC</b> — {p.who} {p.text}{p.detail ? <small> {p.detail}</small> : null}</span>

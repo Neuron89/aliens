@@ -94,7 +94,7 @@ export default function ScenarioDetail({ pack, tts, onBack, onPlay }) {
       </div>
 
       {pack.briefing && (
-        <div className="briefing-box">
+        <div className="briefing-box" data-label={(universe?.terms?.message || "Transmission").toUpperCase()}>
           <div className="briefing-header">
             {pack.briefing.from && <>FROM: {pack.briefing.from}<br /></>}
             {pack.briefing.to && <>TO: {pack.briefing.to}<br /></>}

@@ -278,10 +278,13 @@ export function isRoomRevealed(board, roomId) {
   return !board.fog || !!board.rooms[roomId]?.revealed;
 }
 
-/** Spec rule: !hidden && (pc || !fog || rooms[roomId].revealed). */
+/** Spec rule: !hidden && (pc || !fog || outside every room || rooms[roomId].revealed).
+ *  Space outside the room shapes is never drawn as fog, so a token standing there is
+ *  visible (maps without room shapes — ASCII/plain images — would otherwise hide every
+ *  non-PC token whenever fog is on, while the GM's sheet says VISIBLE). */
 export function isTokenVisible(board, t) {
   if (t.hidden) return false;
-  if (t.kind === 'pc' || !board.fog) return true;
+  if (t.kind === 'pc' || !board.fog || !t.roomId) return true;
   return !!(t.roomId && board.rooms[t.roomId]?.revealed);
 }
 

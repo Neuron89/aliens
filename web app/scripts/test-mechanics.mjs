@@ -139,6 +139,11 @@ try {
   await call(pA, 'panic-result', { total: 12, effect: { id: 'scream', name: 'Scream', stressDelta: -1, panicAction: true, status: ['PANICKED', 'SCREAM'] } });
   await sleep(120);
   ok(!aPlayer.p.statusEffects.includes('FREEZE') && aPlayer.p.statusEffects.includes('SCREAM'), 'new panic replaces the old effect');
+  // QA 2026-10-30: a PC token placed AFTER the panic (the PC was not on the map yet) still shows the ring.
+  await call(dm, 'board-token-upsert', { gameCode: code, token: { id: 'pc-alice-2', kind: 'pc', label: 'Ripley', ownerPlayerId: A, x: 0.35, y: 0.3 } });
+  await sleep(120);
+  ok(tvBoard.b.tokens['pc-alice-2']?.status?.includes('panicking'), 'PC token placed while its player panics carries the panic ring');
+  await call(dm, 'board-token-remove', { gameCode: code, id: 'pc-alice-2' });
   // Keeping it together: text only
   const kt = await call(pB, 'panic-result', { total: 4, effect: { id: 'keeping-it-together', name: 'Keeping It Together', status: [] } });
   ok(kt.success && kt.panic === null, 'low panic result applies no status');

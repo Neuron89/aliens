@@ -384,6 +384,9 @@ export default function MapController() {
                   </select>
                 )}
                 <span className="mc-meta">{tok.roomId ? (mapDef?.rooms.find((r) => r.id === tok.roomId)?.name || tok.roomId) : 'NO ROOM'}</span>
+                {!tok.hidden && tok.kind !== 'pc' && board.fog && tok.roomId && !board.rooms?.[tok.roomId]?.revealed && (
+                  <span className="mc-meta mc-fogged" title="The table sees it once the room is revealed">IN FOG — NOT ON TV YET</span>
+                )}
               </div>
               {tok.kind !== 'marker' && tok.kind !== 'hazard' && tok.kind !== 'item' && (
                 <div className="mc-sheet-row" role="group" aria-label="Token status">

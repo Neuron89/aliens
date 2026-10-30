@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useUniverse } from '../UniverseContext';
 import Motif from './fx/Motifs';
 import BootSequence from './fx/BootSequence';
@@ -88,6 +88,8 @@ export default function UniverseSelect() {
   const { universes, universeId, setUniverseId } = useUniverse();
   const refs = useRef([]);
   usePreviewFonts(universes);
+  /* Only claim "LAST USED" when this device really booted a universe before (fresh device = default id). */
+  const [hasHistory] = useState(() => { try { return !!localStorage.getItem('engine.universe'); } catch { return false; } });
 
   /* Focus the last-used card so Enter boots it straight away. */
   useEffect(() => {
@@ -113,7 +115,7 @@ export default function UniverseSelect() {
       </div>
       <div className="us-grid" role="group" aria-label="Universes">
         {universes.map((u, i) => (
-          <UniverseCard key={u.id} u={u} lastUsed={u.id === universeId} cardRef={(el) => { refs.current[i] = el; }}
+          <UniverseCard key={u.id} u={u} lastUsed={hasHistory && u.id === universeId} cardRef={(el) => { refs.current[i] = el; }}
             onKeyDown={onKeyDown(i)} onSelect={() => setUniverseId(u.id, { boot: true })} />
         ))}
       </div>

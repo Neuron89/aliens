@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useGame, boardCodeForTab } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import MapCanvas from './board/MapCanvas';
 import Overlays from './board/Overlays';
 import { useAmbientAudio } from '../hooks/useAmbientAudio';
 import { ambientPreset } from '../mechanicsUtils';
+import { qrPath } from './board/qr';
 
 /* ═══════════════════════════════════════════════════════════════
    BoardView — the `board` role: a TV lying flat on the table
@@ -14,6 +15,23 @@ import { ambientPreset } from '../mechanicsUtils';
    edge, screen wake lock, any tap → fullscreen. Reconnects on its
    own (GameContext re-sends join-board on every socket connect).
    ═══════════════════════════════════════════════════════════════ */
+
+/* Before a map is up, the table screen doubles as the join screen: players scan this
+   with their phone (the TV was opened on the host's LAN address, so origin is reachable). */
+function JoinQr({ code }) {
+  const url = `${window.location.origin}/?join=${code}`;
+  const qr = useMemo(() => { try { return qrPath(url); } catch { return null; } }, [url]);
+  if (!qr) return null;
+  return (
+    <div className="bv-join">
+      <svg className="bv-join-qr" viewBox={`0 0 ${qr.size} ${qr.size}`} shapeRendering="crispEdges" role="img" aria-label={`QR code for ${url}`}>
+        <rect width={qr.size} height={qr.size} fill="#fff" />
+        <path d={qr.d} fill="#000" />
+      </svg>
+      <div className="bv-join-text">SCAN TO JOIN<small>{url}</small></div>
+    </div>
+  );
+}
 
 function useWakeLock(active) {
   useEffect(() => {
@@ -123,8 +141,11 @@ export default function BoardView() {
     );
   }
 
+  /* Clocks / pools stack on the right edge: keep the map out from under them (an ASCII map fills the
+     whole TV and its right column was unreadable behind the clock cards). */
+  const hasRail = role === 'board' && table?.boardMode !== 'theatre' && ((table?.clocks?.length || 0) + (table?.pools?.length || 0)) > 0;
   return (
-    <div className="bv-root" ref={rootRef} onPointerDown={goFullscreen}>
+    <div className={`bv-root${hasRail ? ' bv-has-rail' : ''}`} ref={rootRef} onPointerDown={goFullscreen}>
       <div className="bv-stage">
         {board?.mapId && mapDef ? (
           <MapCanvas className="bv-canvas" mapDef={mapDef} board={board} role="board" universe={universe}
@@ -134,6 +155,7 @@ export default function BoardView() {
             <div className="bv-term">{terminalName}</div>
             <div className="bv-big-code">{code || '----'}</div>
             <div className="bv-sub">{role === 'board' ? 'BOARD LINKED — WAITING FOR THE GAME MASTER TO SELECT A MAP' : 'CONNECTING…'}</div>
+            {role === 'board' && code && <JoinQr code={code} />}
           </div>
         )}
         {role === 'board' && <Overlays terminalName={terminalName} />}

@@ -788,7 +788,7 @@ export function attachSessions(io) {
       seat.playerToken = token(); // the previous device's token stops working
       detachIfMoving(claimant, game.code, 'player', seat.id);
       seatPlayer(claimant, game, seat);
-      logTo(game, 'note', `Seat "${seat.name}" handed to a new device (GM approved)`);
+      logTo(game, 'character', `Seat "${seat.name}" handed to a new device (GM approved)`);
       claimant.emit('seat-claim-result', { claimId: claim.claimId, approved: true, ...seatPayload(game, seat) });
       console.log(`[SESSION] Seat "${seat.name}" reassigned in game ${game.code} (GM approved)`);
       callback?.({ success: true, approved: true, playerId: seat.id });
@@ -1083,6 +1083,12 @@ export function attachSessions(io) {
       const token = sanitizeToken(input, prev, tokenCtx(game));
       if (!token) return callback?.({ error: 'Invalid token.' });
       if (token.kind === 'pc' && token.ownerPlayerId && !token.color) token.color = playerColor(game, token.ownerPlayerId);
+      // A PC token placed while its player is still panicking carries the panic ring (the ring is
+      // normally set by panic-result, which found no token to mark if the PC was not on the map yet).
+      if (!prev && token.kind === 'pc' && game.players.get(token.ownerPlayerId)?.panic) {
+        const st = Array.isArray(token.status) ? token.status.filter((s) => !String(s).startsWith('panicking')) : [];
+        token.status = ['panicking', ...st].slice(0, 6);
+      }
       b.tokens[token.id] = token;
       placeToken(b, game.mapDef, token);
       touch(game);

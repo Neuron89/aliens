@@ -11,6 +11,9 @@ import PauseButton from './player/PauseButton';
 import BuildCharacter from './player/BuildCharacter';
 import PanicOverlay from './player/PanicOverlay';
 import SupplyPanel from './SupplyPanel';
+import { ItemArt } from './sheet/parts';
+import { getCatalog, itemById } from '../catalogUtils';
+import { plural } from '../rulesUtils';
 
 /* ═══════════════════════════════════════════════════════════════
    PlayerView — phone-first player terminal.
@@ -57,6 +60,7 @@ export default function PlayerView() {
   } = useGame();
   const { universe } = useUniverse();
   const { terms, terminal, rules } = universe;
+  const catalog = getCatalog(universe);
   const [tab, setTab] = useState('sheet');
   const [alertQueue, setAlertQueue] = useState([]);
   const seenIds = useRef(null);
@@ -335,13 +339,17 @@ export default function PlayerView() {
                 <p className="pv-text dim">No items.</p>
               ) : (
                 <div className="pv-items">
-                  {myPlayer.inventory.map((item, i) => (
-                    <div key={i} className="pv-item">
-                      <span className="pv-item-mark">▸</span>
-                      <span>{item}</span>
-                      {item === c.signatureItem && <small>SIGNATURE</small>}
-                    </div>
-                  ))}
+                  {myPlayer.inventory.map((item, i) => {
+                    const entry = itemById(catalog, item);
+                    const sig = item === c.signatureItem || /signature item/i.test(item);
+                    return (
+                      <div key={i} className="pv-item">
+                        <ItemArt item={entry} size={36} />
+                        <span className="pv-item-name">{item}{entry?.notes ? <em>{String(entry.notes)}</em> : null}</span>
+                        {sig && <small>SIGNATURE</small>}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </section>
@@ -351,7 +359,7 @@ export default function PlayerView() {
         {tab === 'messages' && (
           <>
             <div className="pv-chat">
-              {chat.length === 0 && <p className="pv-text dim" style={{ textAlign: 'center' }}>No {terms.message.toLowerCase()}s received.</p>}
+              {chat.length === 0 && <p className="pv-text dim" style={{ textAlign: 'center' }}>No {plural(terms.message.toLowerCase())} received.</p>}
               {chat.map(m => {
                 const mine = m.fromId === myId;
                 const kind = m.type === 'gm' ? 'gm' : m.type === 'p2p' ? 'p2p' : 'dm-bound';

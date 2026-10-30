@@ -14,63 +14,76 @@ Read it fully before touching `web app/`.
 3. **Game Night flow.** DM picks a universe, picks or generates a scenario pack, players join on
    phones, play, pause, resume.
 
-## Directory layout (target)
+## Directory layout
 
 ```
 web app/
+  package.json  vite.config.js  index.html  .env.example
   content/                      # runtime content packs (git-ignored except .gitkeep + examples/)
-    alien/<pack-id>.json
-    dune/<pack-id>.json
+    <universe>/<pack-id>.json   # written by the app / generator / skill
+    examples/example-cold-storage.json
+  data/sessions/                # session snapshots <CODE>.json (git-ignored)
+  public/
+    art/                        # alien-art-map.json, weapons/ vehicles/ xenomorphs/ (cropped/), dune/{archetypes,creatures,factions,gear,places,weapons}
+    maps/                       # image maps (WebP); Deck A-D.jpg deck plans at the top level
   server/
-    index.js                    # bootstrap only: express, static, socket.io wiring, listen
-    sessions.js                 # in-memory game sessions + socket handlers (+ persistence hooks)
-    content.js                  # content pack read/write/validate on disk (REST: /api/content)
-    generate.js                 # Claude-backed pack generator (REST: /api/generate)
+    index.js                    # express, static, API token gate, socket.io wiring, listen, crash logging
+    sessions.js                 # in-memory games + every socket handler (create/join/resume/seat claims, table state)
+    guard.js                    # safeOn wrapper + EVENT_NAMES (client -> server events)
+    persistence.js              # debounced atomic snapshots under DATA_DIR/sessions, load/sweep
+    sessionLog.js               # per-game session log (auto entries + notes)
+    board.js                    # board state, map-def sanitising, room hit-testing, role views (viewFor)
+    mechanics.js                # rolls, panic, supplies, pools, initiative, injuries (sanitising only; no universe imports)
+    content.js                  # runtime pack read/write/validate (REST: /api/content), CONTENT_DIR
+    generate.js                 # POST /api/generate (SSE), GET /api/generate/status
+    generator/                  # core.js prompt.js params.js params.schema.json outputSchema.js universes.js env.js __mock__.js
     schema/
       content-pack.schema.json  # JSON Schema (draft 2020-12) for content packs
-      validate.js               # ajv wrapper used by content.js and generate.js
-  scripts/
-    validate-content.mjs        # validates bundled + runtime + example packs; exit 1 on failure
-    smoke.mjs                   # imports each universe.core.js, asserts the interface, validates packs
+      validate.js               # ajv wrapper used by content.js, generate.js and the scripts
+  scripts/                      # validate-content, smoke, check-art, generate-pack, test-sessions, test-session-features,
+                                #   test-mechanics, test-board, test-hardening (.mjs)
   src/
-    main.jsx, App.jsx, index.css
+    main.jsx  App.jsx  index.css
     engine/                     # shared, universe-agnostic
-      UniverseContext.jsx       # active universe + theme application (CSS vars on :root), landing/boot state
-      ContentContext.jsx        # merged bundled + runtime packs, CRUD via /api/content
-      GameContext.jsx           # socket session state (moved from src/context)
-      rulesUtils.js             # helpers: initialCharacterState, withDerived, skill/attr labels, quickCheckPack, downloadJson
+      UniverseContext.jsx       # active universe + theme application (CSS vars, overlay, favicon), landing/boot state
+      ContentContext.jsx        # merged bundled + runtime packs (+ map overlay packs), CRUD via /api/content
+      GameContext.jsx           # socket session state, table state, outbox, DM and player actions
+      apiToken.js               # localStorage API token for /api fetches
+      rulesUtils.js             # initialCharacterState, withDerived, labels, quickCheckPack, downloadJson
+      mechanicsUtils.js         # panic/injury range lookups, d66, pool defs/starts, ambient ids
+      catalogUtils.js           # normalised catalog access: items, careers, talents, starting gear, encumbrance, armor, skill pools, effects
+      sfx.js                    # per-universe synthesized UI/dice sounds (theme.sfx)
+      hooks/                    # useAmbientAudio.js useTTS.js
       components/
-        UniverseSelect.jsx      # full-screen landing: one card per registry universe (+ BootOverlay)
-        Header.jsx Nav.jsx SessionScreen.jsx DMDashboard.jsx PlayerView.jsx
-        ScenarioLibrary.jsx     # list/filter packs (replaces Scenarios.jsx list)
-        ScenarioDetail.jsx      # briefing + acts + locations (universe-agnostic rendering)
-        ScenarioPlayer.jsx      # scene-by-scene DM runner (reads pack.acts[].scenes)
-        ScenarioPanels.jsx      # shared panels: TTS, tips, NPC tracker, threats, handouts (send), maps, endings, characters
-        Characters.jsx          # Characters tab: pack characters grouped by pack + custom-characters pack
-        CharacterSheet.jsx      # renders a character using universe.rules
-        CharacterCreator.jsx    # builds a character using universe.rules + careers
-        GameNightWizard.jsx     # (NOT YET BUILT) parameter form → /api/generate → preview → save → start
-        PackImportExport.jsx    # paste/upload/download JSON
+        UniverseSelect.jsx SessionScreen.jsx Header.jsx Nav.jsx DMDashboard.jsx PlayerView.jsx BoardView.jsx
+        ScenarioLibrary.jsx ScenarioDetail.jsx ScenarioPlayer.jsx ScenarioPanels.jsx PackImportExport.jsx GameNightWizard.jsx
+        Characters.jsx CharacterSheet.jsx CharacterCreator.jsx CharacterBuilder.jsx InjuryPicker.jsx SupplyPanel.jsx
         AudioPanel.jsx DiceRoller.jsx (dispatches to universe.rules.dice.Roller)
-        MapEngine.jsx           # SVG deck-plan toolkit
-        MapRenderer.jsx         # renders one map (engine | image | ascii); resolveEngine(universe, map)
-        Maps.jsx                # Maps tab: all pack maps + universe.maps
-      hooks/ useAmbientAudio.js useTTS.js
+        MapEngine.jsx MapRenderer.jsx Maps.jsx MapController.jsx
+        run/       RunView RunScene ClocksPanel ClockRing CluesPanel HandoutsPanel InitiativePanel ThreatsPanel PoolCounters
+                   RollFeed SessionLogPanel SessionZeroPanel TargetPicker recap.js          # GM RUN tab
+        player/    PhoneLayer PauseButton PanicOverlay HandoutsPane HandoutViewer ClocksRow BuildCharacter fx.js   # phone extras
+        board/     MapCanvas RoomLayer EngineLayer Overlays TokenChip RoomEditor PlayerMapPane mapDefs.js qr.js     # TV + controller
+        builder/   steps.jsx GearStep.jsx builderState.js                                   # character builder steps
+        sheet/     parts.jsx
+        wizard/    generateClient.js
+        fx/        BootSequence.jsx Motifs.jsx
     universes/
-      index.js                  # registry: { alien, ... }, getUniverse(id), DEFAULT_UNIVERSE
-      alien/
-        universe.core.js        # JSX-free core (everything except navSections, dice.Roller, content) — node-importable
-        index.js                # the universe module = core + components + bundled packs (shape below)
-        theme.js  terms.js  rules.js  careers.js  generator.js
-        reference/ weapons.js vehicles.js bestiary.js   # bestiary entries have ids usable as threats[].ref
-        components/ XenoReference.jsx WeaponsReference.jsx VehiclesReference.jsx CheatSheets.jsx YzeDiceRoller.jsx
-        maps/ index.js (data-only universe maps)  montero.jsx (MapEngine definition + MonteroMap component)
-        content/ *.json         # bundled packs (converted from the old data/*.js)
-      dune/ (same shape, 2d20 ruleset, no bundled scenarios required)
+      index.js                  # registry: { alien, dune }, getUniverse(id), DEFAULT_UNIVERSE
+      alien/ and dune/          # same shape:
+        universe.core.js        # JSX-free core (node-importable): id name tagline terminal theme terms rules careers gear maps generator catalog
+        index.js                # the universe module = core + components + bundled packs
+        theme.js terms.js rules.js careers.js generator.js
+        catalog/*.json          # careers talents weapons armor gear conditions injuries creatures rules (+ panic.json for alien); alien/catalog/README.md
+        reference/              # alien: weapons.js vehicles.js bestiary.js; dune: factions.js houses.js threats.js
+        components/             # alien: XenoReference WeaponsReference VehiclesReference CheatSheets YzeDiceRoller
+                                # dune: DuneReference DuneCheatSheets D20DiceRoller
+        maps/                   # index.js (data-only maps); alien: montero.geometry.js montero.jsx;
+                                #   dune: geometry.js duneMapKit.jsx imageMaps.js residency.* sietch.*
+        content/*.json          # bundled packs (alien 15, dune 4)
 ```
 
-Note: cheat sheets stay a JSX component (`components/CheatSheets.jsx`); there is no
-`reference/cheatSheets.js` data file.
+Note: cheat sheets stay JSX components; there is no `reference/cheatSheets.js` data file.
 
 **Ports.** `npm run dev` runs Vite on :3000 and the Node server on :3002; Vite proxies `/api` and
 `/socket.io` to :3002. In production `npm start` serves `dist/` + API + sockets on `PORT` (default 3002).
@@ -118,8 +131,18 @@ provide both files.
   content: { packs: [ ...bundled ContentPack objects ] },
   generator: { systemPrompt: string, defaults: { players: 4, playtime: '3-4 hours', tone: ['dread','corporate betrayal'], type: 'Cinematic' },
                parameterHints: { setting:[], threat:[], tone:[], type:[], crew:[] } },
+  catalog: { careers, talents, weapons, armor, gear, conditions, injuries, creatures, rules, panic? },  // from catalog/*.json, see below
 }
 ```
+
+Newer keys, all optional unless noted (full field lists in `docs/ADDING_A_UNIVERSE.md`; each shipped universe provides what it needs):
+
+- `catalog` (in core): data from `catalog/*.json`, read through `src/engine/catalogUtils.js` (`getCatalog`, `startingGearFor`, `encumbrance`, `armorRating`, `skillPool`, `effectsFor`). ALIEN also has `catalog.panic`. Used by the character builder/sheet, the board palette and the threat cards.
+- `rules`: `panic { die, table, stressAdd, statusAt, actionAt, statusEffect }`, `supplies[]` + `supplyMax` + `supplyDanger` (ALIEN), `pools[]` (DUNE: `key label max initial owner visibleToPlayers playerAdd initialPerPlayer resetOnNewSession`),
+  `initiative { mode: 'cards'|'nominate', ... }`, `encumbrance { formula, overFormula } | null`, `creation` caps (`keyAttrMax otherAttrMax skillMin keySkillMax otherSkillMax talents allowGeneralTalents careerKinds`).
+- `terms`: `sessionArticle career attributes skills talent gear` (the builder and sheet use them; DUNE: Archetype, Drives).
+- `theme`: `motif` (`deckplan`|`contours`, landing card art), `overlay` (`crt`|`grain`, sets `html.overlay-<name>`), `overlayCss` (injected as `<style id="universe-overlay">`), `favicon` (inline SVG), `board` (table-board palette, `levelNoun`, `backdrop`), `sfx` (synth recipes per sound id).
+- `maps[]`: board geometry per `docs/BOARD_AND_BUILDER.md` section 3 (`kind size levels rooms doors spawn grid outline crop levelNoun backdrop palette`).
 
 `theme.vars` must define at least: `--bg-dark --bg-panel --bg-card --bg-input --border --border-bright
 --border-glow --text --text-dim --text-bright --accent --accent-dim --accent-glow --accent-bright --warn
@@ -138,7 +161,7 @@ self-contained. Required fields marked with `*`.
   "packVersion": 1,                          // *
   "id": "derelict-signal-7c",                // * kebab-case, unique per universe
   "universe": "alien",                       // * registry id
-  "kind": "scenario",                        // * "scenario" | "characters" | "campaign"
+  "kind": "scenario",                        // * "scenario" | "campaign" | "characters" | "maps" (overlay pack "<packId>-maps")
   "meta": {
     "title": "...", "tagline": "...",        // *
     "synopsis": "GM-facing overview",
@@ -155,18 +178,24 @@ self-contained. Required fields marked with `*`.
     "readAloud": ["para", "para"],           // narration paragraphs (TTS reads these)
     "gmNotes": "...",
     "agendaNotes": "how personal agendas develop this act",
+    "sceneArt": "/art/scenes/pad-b.webp",    // optional image shown full-bleed on the TV in theatre mode while this act runs
     "scenes": [ {                            // optional structured runner data
       "name": "...", "mandatory": true, "encounter": false, "encounterDetail": "what attacks",
       "narration": "...", "checks": ["OBSERVATION vs ..."], "events": ["..."],
-      "stressTriggers": ["..."], "npcGuidance": "...", "gmTip": "...", "outcomes": ["..."]
+      "stressTriggers": ["..."], "npcGuidance": "...", "gmTip": "...", "outcomes": ["..."],
+      "clueRefs": ["clue-id"],               // clues[] entries findable here (shown on the RUN scene card)
+      "ambient": "tension"                   // universe audio preset id (or a site audio path); the RUN view switches to it
     } ]
   } ],
   "npcs": [ { "name", "role", "agenda", "behavior", "secret"?, "stats"?: {} } ],   // name/role/agenda/behavior required
   "threats": [ { "name", "ref"?: "bestiary id", "description"?, "stats"?: {}, "tactics"?: "..." } ],
   "keyLocations": [ { "name", "description" } ],
-  "handouts": [ { "id", "title", "from", "to", "priority", "text", "when": "Act II, after the logs" } ],
-  "maps": [ { "id", "title", "subtitle"?, "description"?, "kind": "ascii"|"image", "ascii"?, "src"?,
-              "engine"?: "universe map id with an interactive MapEngine", "rooms"?: [ {name, note} ] } ],
+  "handouts": [ { "id", "title", "from", "to", "priority", "text", "when": "Act II, after the logs", "image"?: "/art/handouts/x.webp" } ],
+  "clues": [ { "id", "text", "source"?, "scene"?, "status"?: "hidden"|"revealed" } ],            // 0-12; seeded into the session once
+  "clocks": [ { "id", "label", "segments": 2-12, "filled"?, "kind"?: "danger"|"racing"|"tug", "visibility"?: "all"|"gm", "note"? } ],   // 0-6
+  "maps": [ { "id", "title", "subtitle"?, "description"?, "kind": "ascii"|"image"|"engine", "ascii"?, "src"?,
+              "engine"?: "universe map id with an interactive MapEngine", "size"?, "levels"?, "rooms"?: [ {id?, name, note?, level?, shape?} ],
+              "doors"?, "spawn"?, "grid"?, "outline"?, "crop"? } ],   // board geometry: docs/BOARD_AND_BUILDER.md section 3
   "endings": [ { "title", "condition", "text" } ],
   "characters": [ /* universe character objects; see below */ ],
   "tips": ["..."]
@@ -179,7 +208,8 @@ Character object (universe-shaped, but these keys are always present):
   "attributes": { "<attrKey>": n }, "skills": { "<skillKey>": n },
   "talent": "...", "gear": ["..."], "signatureItem": "...",
   "personalAgenda": "...", "buddy": "...", "rival": "...",
-  "secret"?: "...", "agendaByAct"?: { "1": "...", "2": "...", "3": "..." } }
+  "secret"?: "...", "agendaByAct"?: { "1": "...", "2": "...", "3": "..." },
+  "driveStatements"?: { "<attrKey>": "one sentence in the character's voice" } }       // DUNE drives
 ```
 `health` is derived by `universe.rules.derived.health(char)` at assignment time; packs may
 include it (optional integer) but the engine recomputes. Bundled ALIEN packs omit it.
@@ -373,16 +403,23 @@ doc and the schema in sync. Validation runs on every save and on every generator
 - Note: the pack schema uses `if/then` (acts required for scenario/campaign; ascii/src required by
   map kind), `pattern`, `format: date-time` and open maps. If the structured-output feature rejects
   any of these, send a simplified copy to the model and keep full ajv validation on the result.
-- Currently `server/generate.js` is a stub returning 501 `{ error: 'generator not installed' }`.
-- Also usable from the CLI: `node scripts/generate-pack.mjs --universe alien --players 4 ...`
+- Implemented in `server/generate.js` + `server/generator/` (`core.js`, `prompt.js`, `params.js`, `outputSchema.js`, `universes.js`, `env.js`, `__mock__.js`). Config: `ANTHROPIC_API_KEY`,
+  `GENERATOR_MODEL`, `GENERATOR_EFFORT`, `GENERATOR_MAX_TOKENS`, `GENERATOR_FALLBACKS`, `GENERATOR_MOCK`, `GENERATOR_MOCK_DELAY`, `GENERATOR_MAX_CONCURRENT` (see README). `GET /api/generate/status`
+  reports `{ configured, mock, model, effort, fallbacks }`; without a key and not in mock mode `POST` answers 400 `generator_not_configured`. The client is `GameNightWizard.jsx` + `wizard/generateClient.js`.
+- Also usable from the CLI (run in `web app/`): `node scripts/generate-pack.mjs --universe alien --players 4 ...` (`--dry-run` prints the request).
 - Also usable from Claude Code: `.claude/skills/gamenight/SKILL.md` documents how to write a pack
   by hand from the schema without the API (for sessions where the author is Claude itself).
 
 ## Theming
 
 `UniverseContext` sets every `theme.vars` entry on `document.documentElement.style` when the
-active universe changes, swaps the Google Fonts `<link id="universe-fonts">`, and toggles the CRT
-overlay with the `crt` class on `<html>`. Components use only CSS vars and
+active universe changes, swaps the Google Fonts `<link id="universe-fonts">`, applies the overlay
+hook (`theme.overlay` `'crt'` | `'grain'` toggles `html.overlay-<name>`, plus the legacy `crt` class;
+`theme.overlayCss` is injected as `<style id="universe-overlay">`), sets the document title and the
+inline-SVG favicon (`theme.favicon`) and hands `theme.sfx` to `engine/sfx.js`. Per-device
+REDUCE FX / MUTE toggles (`html.fx-reduced`, `localStorage`) switch overlays, animation and sound off.
+The table board reads its palette from `theme.board` (a map definition may override it).
+Components use only CSS vars and
 `var(--font-display)` / `var(--font-mono)`; never hard-code `'Orbitron'` or `#00d4aa` again
 (use `color-mix(in srgb, var(--accent) N%, transparent)` for translucent tints).
 
@@ -403,3 +440,19 @@ where `display` is the neutral pseudo-universe until one is chosen (use it for c
 - Keep the terminal aesthetic; universes change palette/fonts/wording, not layout.
 - Mobile first for `PlayerView` (phones at the table). DM views are desktop/tablet.
 - Every new feature ships with a smoke check in `scripts/smoke.mjs` (node, no browser) where it can.
+
+## Deviations from the original plan
+
+Where the code differs from what earlier versions of this document (or `docs/BOARD_AND_BUILDER.md`) promised. Check here before assuming.
+
+- **Scripts location.** The target layout put the validator and smoke script in `web app/scripts/`; that is where they are. Repo-level tooling (deploy, art pipeline, catalog validator) is in the root `scripts/`.
+- **Cheat sheets** are JSX components (`components/CheatSheets.jsx`, `DuneCheatSheets.jsx`), not a `reference/cheatSheets.js` data file.
+- **Wizard and generator** are built (`GameNightWizard.jsx`, `server/generator/`); the earlier "not yet built" and "501 stub" notes are obsolete.
+- **Board level** is a separate `board.level` field, not part of `mapId` (`docs/BOARD_AND_BUILDER.md` section 2).
+- **Name rejoin** no longer re-attaches automatically: a player's phone re-attaches with its private seat token only; a name-only rejoin is a seat claim the GM approves (`docs/REVIEW_2026-10-30.md` #3). Section 19 of the research backlog said "reconnect by name".
+- **GM takeover** needs the per-game 6-digit `gmPin` (not just "no DM connected") and rotates `dmToken`.
+- **Bundled packs** are validated with `meta.source: "bundled"` and live in the client bundle; runtime packs override them by id. Map overlay packs (`kind: "maps"`, id `<packId>-maps`, written by the room editor for bundled packs) are a fourth schema `kind`; `ContentContext` merges their `maps[]` into `<packId>` by map id and does not list them as packs.
+- **Pack schema vs. universe map data.** Universe maps (`universes/*/maps/index.js`) may carry `levelNoun`, `backdrop` and `palette`; the pack schema's `maps[]` object has `kind`/`size`/`levels`/`rooms`/`doors`/`spawn`/`grid`/`outline`/`crop` but not those three (`additionalProperties: false`), so pack maps take them from the universe map or engine config with the same id (`board/mapDefs.js`).
+- **Initiative deck range** for ALIEN (cards 1-10) is flagged VERIFY in `universes/alien/rules.js`; it is not in the catalog rules.
+- **No QR for the join link.** The only QR is the TV link in the Board tab (`board/qr.js`).
+- **Not built** (see `docs/FEATURES.md`): `tables[]` in packs, calibration, zone overlay, party view, XP, undo, "previously on" screen, Dune conflict runner, traits and assets.

@@ -79,7 +79,7 @@ export default function GearStep({ universe, catalog, career, char, cart, setCar
           {career && <button type="button" className="cb-btn primary" onClick={() => setKitOpen((o) => !o)}>{kitOpen ? 'CLOSE KIT' : 'STARTING KIT'}</button>}
           {cart.length > 0 && <button type="button" className="cb-btn" onClick={() => setCart([])}>CLEAR</button>}
         </div>
-        {kitOpen && career && <KitPicker career={career} catalog={catalog} onApply={(items, qtys) => { items.forEach((it) => add(it, qtys[it.id] || 1)); setKitOpen(false); }} />}
+        {kitOpen && career && <KitPicker career={career} catalog={catalog} onApply={(items, qtys) => { items.forEach((it) => add(it, resolveQty(qtys[it.id]))); setKitOpen(false); }} />}
         <div className="cb-custom">
           <input className="cb-input" value={custom} onChange={(e) => setCustom(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addCustom()} placeholder="Custom item…" aria-label="Custom item name" />
           <button type="button" className="cb-btn" onClick={addCustom} disabled={!custom.trim()}>ADD</button>
@@ -123,6 +123,22 @@ export default function GearStep({ universe, catalog, career, char, cart, setCar
 
 /* Starting kit: fixed items + one radio group per choice line.
    pick = number → choose that many lines (one item each); 'all' → one item from every line. */
+/** Kit quantities are numbers or dice ("D6", "2D6" — the rulebook's "Naproleve ×D6"): dice are rolled
+    when the kit is applied, so the cart always holds a whole number (a string qty made "CARRIED (1D6)" and NaN weights). */
+export function resolveQty(q) {
+  if (Number.isFinite(q) && q > 0) return Math.floor(q);
+  const m = String(q ?? '').trim().match(/^(\d*)\s*D\s*(\d+)$/i);
+  if (m) {
+    const n = Math.min(10, Number(m[1]) || 1);
+    const sides = Math.max(2, Math.min(100, Number(m[2])));
+    let total = 0;
+    for (let i = 0; i < n; i++) total += 1 + Math.floor(Math.random() * sides);
+    return total;
+  }
+  const num = Number.parseInt(q, 10);
+  return Number.isFinite(num) && num > 0 ? num : 1;
+}
+
 function KitPicker({ career, catalog, onApply }) {
   const sg = startingGearFor(career, catalog);
   const need = requiredPicks(sg);

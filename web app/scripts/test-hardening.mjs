@@ -282,7 +282,7 @@ try {
   /* ── 9. Prototype-key ids + isolation ── */
   ok((await call(lockDm, 'board-set-map', { gameCode: g2.code, mapId: 'test-map', mapDef: MAPDEF })).success, 'map set (game 2)');
   ok((await call(back, 'board-set-map', { gameCode: lg.code, mapId: 'test-map', mapDef: MAPDEF })).success, 'map set (game 1)');
-  const hid = await call(back, 'board-token-upsert', { gameCode: lg.code, token: { id: 'alien-1', kind: 'creature', x: 0.7, y: 0.2 } });
+  const hid = await call(back, 'board-token-upsert', { gameCode: lg.code, token: { id: 'alien-1', kind: 'creature', x: 0.7, y: 0.7 } });
   ok(hid.success, 'creature placed in an unrevealed room (game 1)');
   for (const id of ['__proto__', 'constructor', 'prototype']) {
     ok((await call(lockDm, 'board-token-upsert', { gameCode: g2.code, token: { id, kind: 'npc' } })).error, `token id ${id} rejected`);
