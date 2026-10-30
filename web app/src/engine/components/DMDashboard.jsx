@@ -3,12 +3,14 @@ import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
 import { characterGroups, initialCharacterState, withDerived, attributeLabel, trackMaxFor } from '../rulesUtils';
+import CharacterBuilder from './CharacterBuilder';
 
 export default function DMDashboard() {
   const {
     gameCode, players, messages, leaveGame, packId,
     assignCharacter, updatePlayer, sendMessage,
     broadcastMessage, killCharacter, unreadCount, clearUnread, lastSaved, boardLinked,
+    table, unreadBy, clearUnreadFor, resolveSubmission,
   } = useGame();
   const { universe } = useUniverse();
   const { packs, byId } = useContent();
@@ -23,6 +25,9 @@ export default function DMDashboard() {
   const [msgTarget, setMsgTarget] = useState('');
   const [msgPriority, setMsgPriority] = useState(priorities[0]);
   const [newItem, setNewItem] = useState('');
+  const [editingSub, setEditingSub] = useState(null); // player-built submission open in the builder
+  const pendingSubs = (table?.submissions || []).filter(s => s.status === 'pending');
+  const subFor = (playerId) => pendingSubs.find(s => s.playerId === playerId);
 
   const playerList = Object.values(players);
   const selected = selectedPlayer ? players[selectedPlayer] : null;
@@ -57,6 +62,22 @@ export default function DMDashboard() {
   const doAssign = (playerId, char) => {
     const character = withDerived(universe, char);
     assignCharacter(playerId, character, initialCharacterState(universe, character));
+  };
+
+  /* Player-built characters (character-submit): ASSIGN / EDIT / REJECT. */
+  const assignSub = (sub, char = sub.character) => {
+    if (!players[sub.playerId]) return;
+    doAssign(sub.playerId, char); // server marks the submission assigned
+  };
+  const rejectSub = (sub) => {
+    const reason = prompt(`Reject ${sub.character?.name || 'this character'}? Optional note for ${sub.playerName}:`, '');
+    if (reason === null) return;
+    resolveSubmission(sub.id, 'reject', reason);
+  };
+  const replyTo = (playerId) => {
+    setMsgTarget(playerId);
+    setPanel('message');
+    clearUnreadFor(playerId);
   };
 
   const handleSendMsg = (e) => {
@@ -124,6 +145,37 @@ export default function DMDashboard() {
     ))
   );
 
+  if (editingSub) {
+    return (
+      <div className="panel">
+        <h3 style={{ color: 'var(--accent)', marginBottom: '0.5rem', letterSpacing: '0.1em' }}>
+          EDITING PLAYER-BUILT CHARACTER — {editingSub.playerName}
+        </h3>
+        <CharacterBuilder
+          initial={editingSub.character}
+          onBack={() => setEditingSub(null)}
+          onSave={(char) => { assignSub(editingSub, { ...char, id: editingSub.character.id || char.id }); setEditingSub(null); return true; }}
+          connectedPlayers={playerList.map(p => p.name)}
+        />
+      </div>
+    );
+  }
+
+  const subCard = (sub) => (
+    <div key={sub.id} className="dm-sub">
+      <div className="dm-sub-main">
+        <span className="dm-sub-badge">PLAYER-BUILT</span>
+        <b>{sub.character?.name || 'Unnamed'}</b>
+        <span className="run-dim">{sub.character?.career || ''} · by {sub.playerName}</span>
+      </div>
+      <div className="run-row">
+        <button type="button" className="run-btn primary sm" onClick={() => assignSub(sub)} disabled={!players[sub.playerId]}>ASSIGN</button>
+        <button type="button" className="run-btn sm" onClick={() => setEditingSub(sub)}>EDIT</button>
+        <button type="button" className="run-btn sm danger" onClick={() => rejectSub(sub)}>REJECT</button>
+      </div>
+    </div>
+  );
+
   return (
     <div>
       {/* Session header */}
@@ -165,13 +217,14 @@ export default function DMDashboard() {
           ['players', `${PLAYERS} STATUS (${playerList.length})`],
           ['message', `${MESSAGE}S`],
           ['log', `MESSAGE LOG${unreadCount > 0 ? ` (${unreadCount})` : ''}`],
-        ].map(([id, label]) => (
-          <button key={id} style={{
+          ...(pendingSubs.length ? [['players', `PLAYER-BUILT (${pendingSubs.length})`]] : []),
+        ].map(([id, label], i) => (
+          <button key={`${id}-${i}`} style={{
             ...smallBtn,
             background: panel === id ? 'var(--accent-glow)' : 'transparent',
             borderColor: panel === id ? 'var(--accent)' : 'var(--border)',
             color: panel === id ? 'var(--accent)' : 'var(--text-dim)',
-          }} onClick={() => { setPanel(id); if (id === 'log') clearUnread(); }}>
+          }} onClick={() => { setPanel(id); if (id === 'log') { clearUnread(); playerList.forEach(p => clearUnreadFor(p.id)); } }}>
             {label}
           </button>
         ))}
@@ -180,6 +233,14 @@ export default function DMDashboard() {
       {/* ─── Players Panel ──────────────────────────── */}
       {panel === 'players' && (
         <div>
+          {pendingSubs.length > 0 && (
+            <div className="panel dm-subs-panel">
+              <h3 style={{ color: 'var(--accent)', marginBottom: '0.5rem', letterSpacing: '0.1em', fontSize: '0.8rem' }}>
+                PLAYER-BUILT CHARACTERS ({pendingSubs.length})
+              </h3>
+              {pendingSubs.map(subCard)}
+            </div>
+          )}
           {playerList.length === 0 && (
             <div className="panel" style={{ textAlign: 'center', color: 'var(--text-dim)' }}>
               <p>AWAITING {PLAYERS} CONNECTIONS...</p>
@@ -202,6 +263,11 @@ export default function DMDashboard() {
                     <div style={{ color: 'var(--text)', fontWeight: 'bold', fontSize: '0.85rem' }}>
                       {p.name}
                       {p.connected === false && <span className="offline-tag">OFFLINE</span>}
+                      {unreadBy[p.id] > 0 && (
+                        <button type="button" className="dm-unread" title="Unread messages — reply privately"
+                          onClick={(e) => { e.stopPropagation(); replyTo(p.id); }}>{unreadBy[p.id]} NEW</button>
+                      )}
+                      {subFor(p.id) && <span className="dm-sub-badge">PLAYER-BUILT</span>}
                     </div>
                     <div style={{ color: 'var(--accent)', fontSize: '0.7rem' }}>
                       {p.character ? p.character.name : 'NO CHARACTER ASSIGNED'}
@@ -240,6 +306,7 @@ export default function DMDashboard() {
 
               {!selected.character ? (
                 <div>
+                  {subFor(selected.id) && subCard(subFor(selected.id))}
                   <p style={{ color: 'var(--text-dim)', marginBottom: '0.5rem' }}>Assign a character:</p>
                   {characterPicker(selected.id, false)}
                 </div>
@@ -413,6 +480,9 @@ export default function DMDashboard() {
                   </span>
                 </div>
                 <div style={{ color: 'var(--text)', fontSize: '0.8rem', whiteSpace: 'pre-wrap' }}>{m.text}</div>
+                {m.type === 'player' && m.fromId && players[m.fromId] && (
+                  <button type="button" className="run-btn sm" style={{ marginTop: '0.35rem' }} onClick={() => replyTo(m.fromId)}>REPLY PRIVATELY</button>
+                )}
               </div>
             );
           })}

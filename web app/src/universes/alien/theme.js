@@ -1,6 +1,12 @@
-/* ALIEN RPG theme — MU/TH/UR green-phosphor terminal.
+/* ALIEN RPG theme — MU/TH/UR green-phosphor terminal (1979 lo-fi tech).
    Every key in `vars` is applied to :root by UniverseContext. index.css
-   carries the same values as defaults so the first paint is correct. */
+   carries the same values as defaults so the first paint is correct.
+
+   Contrast (WCAG 2.x, against --bg-card #101820, the lightest surface):
+     --text 12.1:1 · --text-dim 6.0:1 · --text-bright 14.7:1 · --accent 9.4:1
+     --accent-dim 5.6:1 · --warn 8.5:1 · --danger 4.8:1 · --blue 6.1:1
+   One colour = one meaning: phosphor teal = interface, amber = caution /
+   stress, red = danger / panic only (research §(d)). */
 
 export const theme = {
   vars: {
@@ -8,26 +14,29 @@ export const theme = {
     '--bg-panel': '#0c1015',
     '--bg-card': '#101820',
     '--bg-input': '#080c10',
-    '--border': '#152030',
-    '--border-bright': '#1e3a55',
+    '--border': '#1a2836',
+    '--border-bright': '#2a4a66',
     '--border-glow': '#00d4aa33',
-    '--text': '#b8c8d4',
-    '--text-dim': '#4a6070',
-    '--text-bright': '#e0eaf0',
+    '--text': '#c8d6e0',
+    '--text-dim': '#8299a8',
+    '--text-bright': '#e8f0f4',
     '--accent': '#00d4aa',
-    '--accent-dim': '#007a5e',
+    '--accent-dim': '#00a383',
     '--accent-glow': 'rgba(0, 212, 170, 0.12)',
-    '--accent-bright': '#33ffd4',
-    '--warn': '#d4a020',
+    '--accent-bright': '#5effdc',
+    '--subhead': '#9fd8ca',
+    '--warn': '#e0aa2a',
     '--warn-dim': '#8a6800',
-    '--danger': '#c94040',
+    '--danger': '#e5534b',
     '--danger-dim': '#7a2020',
-    '--danger-glow': 'rgba(201, 64, 64, 0.15)',
+    '--danger-glow': 'rgba(229, 83, 75, 0.14)',
     '--success': '#40c970',
-    '--blue': '#4080c9',
-    '--purple': '#8040c9',
+    '--blue': '#5a9ae0',
+    '--purple': '#9a6ae0',
     '--font-display': "'Orbitron', sans-serif",
     '--font-mono': "'Share Tech Mono', monospace",
+    '--font-body': "'Share Tech Mono', monospace",
+    '--fx-speed': '1',
   },
   fonts: {
     display: 'Orbitron',
@@ -35,6 +44,67 @@ export const theme = {
     googleCss: 'https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700&display=swap',
   },
   crt: true,
+  /* UniverseContext toggles html.overlay-<overlay>; .crt-overlay draws faint scanlines + vignette. */
+  overlay: 'crt',
+  /* Boot: typed terminal lines from terminal.statusLines (fx/BootSequence.jsx). */
+  boot: 'terminal',
+  /* Landing / library art motif (fx/Motifs.jsx). */
+  motif: 'deckplan',
+  /* Generator wizard log style. */
+  logStyle: 'terminal',
+  favicon: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='#050709'/><rect x='3.5' y='3.5' width='25' height='25' rx='3' fill='none' stroke='#00d4aa' stroke-width='1.5'/><path d='M8 22V10l8 7 8-7v12' fill='none' stroke='#00d4aa' stroke-width='2.4' stroke-linejoin='round'/><path d='M6 26h20' stroke='#e0aa2a' stroke-width='1.4'/></svg>",
+  /* Table-board palette (board/*). Maps may override any key via map.palette. */
+  board: {
+    levelNoun: 'DECK',
+    backdrop: 'space',
+    bg: '#000000',
+    fog: '#020304',
+    fogEdge: 'rgba(150, 170, 190, 0.32)',
+    fogHatch: '#8899aa',
+    revealedEdge: 'rgba(120, 220, 190, 0.4)',
+    label: '#e8f0f0',
+    labelStroke: '#000000',
+    ascii: '#7fd4b8',
+    asciiBg: '#05080a',
+    door: '#50b898',
+    reveal: 'scan',          // stepped CRT-style dissolve
+    statusStyle: 'segments', // square-cut ring ticks
+    chipFill: '#0a0c10',
+    font: "'Share Tech Mono', ui-monospace, monospace",
+  },
+  /* Terminal blips: square waves and short noise ticks. */
+  sfx: {
+    'ui.tap': [{ wave: 'square', freq: 1760, dur: 0.025, gain: 0.035, filter: { type: 'lowpass', freq: 3200 } }],
+    'ui.confirm': [
+      { wave: 'square', freq: 1320, dur: 0.04, gain: 0.04, filter: { type: 'lowpass', freq: 3000 } },
+      { wave: 'square', freq: 1760, at: 0.06, dur: 0.06, gain: 0.04, filter: { type: 'lowpass', freq: 3000 } },
+    ],
+    'alert.incoming': [
+      { wave: 'square', freq: 990, dur: 0.09, gain: 0.05, filter: { type: 'lowpass', freq: 2400 } },
+      { wave: 'square', freq: 990, at: 0.14, dur: 0.09, gain: 0.05, filter: { type: 'lowpass', freq: 2400 } },
+      { wave: 'square', freq: 1320, at: 0.28, dur: 0.18, gain: 0.05, filter: { type: 'lowpass', freq: 2400 } },
+    ],
+    'dice.settle': [
+      { wave: 'noise', dur: 0.03, gain: 0.08, filter: { type: 'highpass', freq: 2500 } },
+      { wave: 'square', freq: 2200, at: 0.03, dur: 0.02, gain: 0.025 },
+    ],
+    'dice.crit': [
+      { wave: 'square', freq: 1046, dur: 0.06, gain: 0.04, filter: { type: 'lowpass', freq: 3500 } },
+      { wave: 'square', freq: 1318, at: 0.07, dur: 0.06, gain: 0.04, filter: { type: 'lowpass', freq: 3500 } },
+      { wave: 'square', freq: 1568, at: 0.14, dur: 0.06, gain: 0.04, filter: { type: 'lowpass', freq: 3500 } },
+      { wave: 'square', freq: 2093, at: 0.21, dur: 0.16, gain: 0.04, filter: { type: 'lowpass', freq: 3500 } },
+    ],
+    /* Panic stinger: one low two-tone klaxon, reserved for panic/botch. */
+    'dice.botch': [
+      { wave: 'sawtooth', freq: 330, to: 220, dur: 0.32, gain: 0.07, filter: { type: 'lowpass', freq: 1400 } },
+      { wave: 'sawtooth', freq: 330, to: 220, at: 0.36, dur: 0.32, gain: 0.07, filter: { type: 'lowpass', freq: 1400 } },
+    ],
+    'clock.tick': [{ wave: 'square', freq: 2400, dur: 0.012, gain: 0.03, filter: { type: 'bandpass', freq: 2400, q: 4 } }],
+    reveal: [
+      { wave: 'noise', dur: 0.25, gain: 0.04, filter: { type: 'bandpass', freq: 3000, q: 0.8 } },
+      { wave: 'square', freq: 880, to: 1760, at: 0.05, dur: 0.2, gain: 0.025, filter: { type: 'lowpass', freq: 2600 } },
+    ],
+  },
 };
 
 export default theme;

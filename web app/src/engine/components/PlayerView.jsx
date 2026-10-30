@@ -1,70 +1,26 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
-import { attributeLabel, skillInfo } from '../rulesUtils';
 import PlayerMapPane from './board/PlayerMapPane';
+import CharacterSheet from './CharacterSheet';
+import { useFx } from './player/fx';
+import PhoneLayer from './player/PhoneLayer';
+import HandoutsPane from './player/HandoutsPane';
+import ClocksRow from './player/ClocksRow';
+import PauseButton from './player/PauseButton';
+import BuildCharacter from './player/BuildCharacter';
 
 /* ═══════════════════════════════════════════════════════════════
    PlayerView — phone-first player terminal.
-   Layout: sticky top bar (name + compact tracks) / scrolling tab body /
-   bottom tab bar (SHEET · INVENTORY · COMMS · DICE). 100dvh, safe-area aware.
-   Styling lives in index.css under "Player view (mobile)".
+   Layout: sticky top bar (name, PAUSE, sound, compact tracks, clocks,
+   connection banners) / scrolling tab body / bottom tab bar
+   (SHEET · GEAR · COMMS · HANDOUTS · MAP · DICE). 100dvh, safe-area aware.
+   Session effects (handouts, orders, clues, loot, narration, session zero)
+   live in player/PhoneLayer. Styling: index.css "Player view (mobile)" and
+   "Session features".
    ═══════════════════════════════════════════════════════════════ */
 
-const MUTE_KEY = 'muthur.muted';
-const readMuted = () => { try { return localStorage.getItem(MUTE_KEY) === '1'; } catch { return false; } };
-
-/* Short beep (Web Audio) + vibration for incoming transmissions. */
-function useAlertFx() {
-  const [muted, setMuted] = useState(readMuted);
-  const mutedRef = useRef(muted);
-  const ctxRef = useRef(null);
-
-  useEffect(() => {
-    mutedRef.current = muted;
-    try { localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); } catch { /* ignore */ }
-  }, [muted]);
-
-  // Browsers only allow audio after a user gesture: unlock on first touch.
-  useEffect(() => {
-    const unlock = () => {
-      try {
-        const AC = window.AudioContext || window.webkitAudioContext;
-        if (!AC) return;
-        if (!ctxRef.current) ctxRef.current = new AC();
-        if (ctxRef.current.state === 'suspended') ctxRef.current.resume();
-      } catch { /* audio unavailable */ }
-    };
-    window.addEventListener('pointerdown', unlock, { passive: true });
-    return () => window.removeEventListener('pointerdown', unlock);
-  }, []);
-
-  const fire = useCallback(() => {
-    if (mutedRef.current) return;
-    try { navigator.vibrate?.(200); } catch { /* ignore */ }
-    try {
-      const ctx = ctxRef.current;
-      if (!ctx || ctx.state !== 'running') return;
-      const t0 = ctx.currentTime;
-      [[880, 0], [660, 0.14]].forEach(([freq, at]) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'square';
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.0001, t0 + at);
-        gain.gain.exponentialRampToValueAtTime(0.12, t0 + at + 0.01);
-        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + at + 0.12);
-        osc.connect(gain).connect(ctx.destination);
-        osc.start(t0 + at);
-        osc.stop(t0 + at + 0.13);
-      });
-    } catch { /* ignore */ }
-  }, []);
-
-  return { muted, setMuted, fire };
-}
-
-function IncomingAlert({ message, onDismiss, terminal, terms }) {
+function IncomingAlert({ message, onDismiss, onReply, terminal, terms }) {
   useEffect(() => {
     const timer = setTimeout(onDismiss, 12000);
     return () => clearTimeout(timer);
@@ -82,7 +38,10 @@ function IncomingAlert({ message, onDismiss, terminal, terms }) {
           <span>PRIORITY: {message.priority} &nbsp;|&nbsp; {new Date(message.timestamp).toLocaleTimeString()}</span>
         </div>
         <div className="pv-alert-text">{message.text}</div>
-        <button className="pv-btn pv-alert-ack" onClick={onDismiss}>ACKNOWLEDGE</button>
+        <div className="ph-alert-btns">
+          <button className="pv-btn" onClick={() => { onDismiss(); onReply(fromGm ? 'dm' : message.fromId); }}>REPLY PRIVATELY</button>
+          <button className="pv-btn pv-alert-ack" onClick={onDismiss}>ACKNOWLEDGE</button>
+        </div>
       </div>
     </div>
   );
@@ -91,7 +50,7 @@ function IncomingAlert({ message, onDismiss, terminal, terms }) {
 export default function PlayerView() {
   const {
     myPlayer, messages, sendPlayerMessage, sendPlayerToPlayer, leaveGame, unreadCount, clearUnread,
-    gameCode, connectedPlayers, connected, dmOnline,
+    gameCode, connectedPlayers, connected, dmOnline, table, outboxCount, sendRoll,
   } = useGame();
   const { universe } = useUniverse();
   const { terms, terminal, rules } = universe;
@@ -101,12 +60,17 @@ export default function PlayerView() {
   const [target, setTarget] = useState('dm');
   const [text, setText] = useState('');
   const chatEnd = useRef(null);
-  const { muted, setMuted, fire } = useAlertFx();
+  const inputRef = useRef(null);
+  const fx = useFx();
+  const { muted, setMuted, play } = fx;
+  const [viewer, setViewer] = useState(null);     // handout open in the reader
+  const [order, setOrder] = useState(null);       // orders card open
+  const [pulseId, setPulseId] = useState(null);   // clock that just ticked
+  const [building, setBuilding] = useState(false);
+  const [rollPreset, setRollPreset] = useState(null);
 
   const c = myPlayer?.character;
   const PLAYER = terms.player.toUpperCase();
-  const PLAYERS = terms.players.toUpperCase();
-  const MESSAGE = terms.message.toUpperCase();
   const GM = terms.gm.toUpperCase();
   const myId = myPlayer?.id;
 
@@ -124,11 +88,20 @@ export default function PlayerView() {
     const incoming = fresh.filter(m => (m.toId === myId || m.toId === 'broadcast') && m.fromId !== myId).slice(-3);
     if (incoming.length) {
       setAlertQueue(prev => [...prev, ...incoming]);
-      fire();
+      play('alert');
     }
-  }, [messages, myId, fire]);
+  }, [messages, myId, play]);
 
   const dismissAlert = useCallback(() => setAlertQueue(prev => prev.slice(1)), []);
+  const reply = useCallback((to = 'dm') => {
+    setTarget(to || 'dm');
+    setTab('messages');
+    setTimeout(() => inputRef.current?.focus(), 80);
+  }, []);
+  const onClockTick = useCallback((id) => {
+    setPulseId(id);
+    setTimeout(() => setPulseId(p => (p === id ? null : p)), 1600);
+  }, []);
 
   useEffect(() => {
     if (tab === 'messages') {
@@ -146,20 +119,46 @@ export default function PlayerView() {
   };
 
   const otherPlayers = (connectedPlayers || []).filter(p => p.id !== myId);
+  const layer = (
+    <PhoneLayer fx={fx} viewer={viewer} setViewer={setViewer} order={order} setOrder={setOrder}
+      onClockTick={onClockTick} onReply={() => reply('dm')} />
+  );
+  const lostBanner = !connected && (
+    <div className="ph-lost" role="status">
+      CONNECTION LOST — RECONNECTING…{outboxCount > 0 ? ` ${outboxCount} ACTION${outboxCount > 1 ? 'S' : ''} QUEUED` : ''}
+    </div>
+  );
 
-  /* Waiting screen — no character assigned yet */
+  /* Waiting screen — no character assigned yet (build one, or wait for the GM) */
   if (!c) {
+    const sub = table?.submission;
+    if (building) {
+      return (
+        <div className="app pv-root ph-build-root">
+          {layer}
+          {lostBanner}
+          <BuildCharacter onDone={() => setBuilding(false)} />
+        </div>
+      );
+    }
     return (
       <div className="app pv-screen">
         <div className="crt-overlay" />
+        {layer}
+        <div className="ph-wait-top"><PauseButton /></div>
         <h1 className="pv-title">{terminal.name}</h1>
         <div className="panel pv-center-card">
           <div className="pulse-line" style={{ height: '2px', background: 'var(--accent)', marginBottom: '1rem', animation: 'pulse 2s infinite' }} />
           <h2 style={{ fontSize: '0.9rem', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>AUTHENTICATION CONFIRMED</h2>
           <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem', marginBottom: '1rem' }}>
-            Welcome, {myPlayer?.name}. Stand by for character assignment from {terms.gm}.
+            Welcome, {myPlayer?.name}. Stand by for character assignment from {terms.gm}, or build your own.
           </p>
-          <p style={{ color: 'var(--text-dim)', fontSize: '0.7rem' }}>AWAITING ASSIGNMENT...</p>
+          {sub?.status === 'pending' && <p className="ph-sub-status">SUBMITTED: {sub.name || 'your character'} — AWAITING {terms.gmShort || GM} APPROVAL</p>}
+          {sub?.status === 'rejected' && <p className="ph-sub-status rejected">{terms.gmShort || GM} RETURNED YOUR CHARACTER{sub.reason ? `: “${sub.reason}”` : ''} — EDIT AND RESUBMIT</p>}
+          <button type="button" className="pv-btn primary ph-wide" onClick={() => setBuilding(true)}>
+            {sub?.status === 'pending' ? 'EDIT MY CHARACTER' : 'BUILD YOUR CHARACTER'}
+          </button>
+          <p style={{ color: 'var(--text-dim)', fontSize: '0.7rem', marginTop: '0.75rem' }}>AWAITING ASSIGNMENT...</p>
           {!connected && <p className="pv-offline">RECONNECTING…</p>}
         </div>
         <button className="pv-btn" onClick={leaveGame}>DISCONNECT</button>
@@ -186,21 +185,37 @@ export default function PlayerView() {
     );
   }
 
+  const unseenHandouts = (table?.handouts || []).filter(h => !h.seen).length;
   const tabs = [
     ['sheet', 'SHEET'],
-    ['inventory', 'INVENTORY'],
-    ['messages', `${MESSAGE}S`],
+    ['inventory', 'GEAR'],
+    ['messages', 'COMMS'],
+    ['handouts', 'FILES'],
     ['map', 'MAP'],
     ['dice', 'DICE'],
   ];
   const Roller = rules?.dice?.Roller;
+  const activeConditions = Object.entries(myPlayer.conditions || {}).filter(([, on]) => on).map(([k]) => k);
+
+  /* Tap-to-roll: the sheet's ROLL opens the universe roller pre-filled (preset prop). */
+  const onRoll = (skillKey, pool) => {
+    setRollPreset({
+      skillKey, attrKey: pool.attrKey, kind: pool.kind,
+      attr: pool.attr, skill: pool.skill, bonus: pool.bonus, total: pool.total,
+      label: `${skillKey.toUpperCase()} — ${pool.label}`,
+      stress: Number(myPlayer.tracks?.stress) || 0,
+      at: Date.now(),
+    });
+    setTab('dice');
+  };
 
   return (
     <div className="app pv-root">
       <div className="crt-overlay" />
+      {layer}
 
       {alertQueue.length > 0 && (
-        <IncomingAlert message={alertQueue[0]} onDismiss={dismissAlert} terminal={terminal} terms={terms} />
+        <IncomingAlert message={alertQueue[0]} onDismiss={dismissAlert} onReply={reply} terminal={terminal} terms={terms} />
       )}
 
       {/* ─── Sticky top bar ─── */}
@@ -210,7 +225,8 @@ export default function PlayerView() {
             <span className="pv-name">{c.name}</span>
             <span className="pv-sub">{c.career} · {terms.session.toUpperCase()} {gameCode}</span>
           </div>
-          <span className={`pv-link ${connected ? 'up' : 'down'}`}><span className="link-dot" />{connected ? 'LINK' : 'RECONNECTING…'}</span>
+          <span className={`pv-link ${connected ? 'up' : 'down'}`}><span className="link-dot" />{connected ? 'LINK' : 'LOST'}</span>
+          <PauseButton />
           <button className="pv-icon-btn" aria-label={muted ? 'Unmute alerts' : 'Mute alerts'} aria-pressed={muted}
             onClick={() => setMuted(m => !m)}>
             {muted ? 'MUTED' : 'SOUND'}
@@ -224,67 +240,18 @@ export default function PlayerView() {
             return <TrackBar key={t.key} label={t.short || t.label} value={value} max={max} color={t.color || 'var(--accent)'} danger={danger} />;
           })}
         </div>
-        {!dmOnline && <div className="pv-banner">{GM} OFFLINE — YOUR STATE IS SAVED</div>}
+        <ClocksRow clocks={table?.clocks || []} pulseId={pulseId} />
+        {lostBanner}
+        {table?.paused && <div className="pv-banner ph-paused">TABLE PAUSED — TAKE A BREATH</div>}
+        {!dmOnline && connected && <div className="pv-banner">{GM} OFFLINE — YOUR STATE IS SAVED</div>}
       </header>
 
       {/* ─── Tab body ─── */}
       <main className={`pv-body${tab === 'messages' ? ' pv-body-chat' : ''}${tab === 'map' ? ' pv-body-map' : ''}`}>
         {tab === 'sheet' && (
-          <div className="pv-pane">
-            <section className="panel">
-              <label className="pv-label">ATTRIBUTES</label>
-              <div className="pv-attrs">
-                {Object.entries(c.attributes || {}).map(([attr, val]) => (
-                  <div key={attr} className="pv-attr">
-                    <div className="pv-attr-k">{attributeLabel(universe, attr, { short: true })}</div>
-                    <div className="pv-attr-v">{val}</div>
-                  </div>
-                ))}
-              </div>
-              {myPlayer.statusEffects?.length > 0 && (
-                <>
-                  <label className="pv-label" style={{ marginTop: '0.75rem' }}>ACTIVE CONDITIONS</label>
-                  <div className="pv-chips">
-                    {myPlayer.statusEffects.map(e => <span key={e} className="pv-chip danger">{e}</span>)}
-                  </div>
-                </>
-              )}
-            </section>
-
-            {c.talent && (
-              <section className="panel">
-                <label className="pv-label">TALENT</label>
-                <p className="pv-text">{c.talent}</p>
-              </section>
-            )}
-
-            <section className="panel">
-              <label className="pv-label">SKILLS</label>
-              <div className="pv-skills">
-                {Object.entries(c.skills || {}).map(([key, val]) => {
-                  const info = skillInfo(universe, key);
-                  return (
-                    <div key={key} className="pv-skill">
-                      <span>{info.label}{info.attr && <small> ({info.attr})</small>}</span>
-                      <b className={val > 0 ? 'on' : ''}>{val}</b>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-
-            <section className="panel">
-              <label className="pv-label">DOSSIER</label>
-              {c.appearance && <><label className="pv-sublabel">APPEARANCE</label><p className="pv-text">{c.appearance}</p></>}
-              {c.personalAgenda && <><label className="pv-sublabel">PERSONAL AGENDA</label><p className="pv-text">{c.personalAgenda}</p></>}
-              {c.secret && <><label className="pv-sublabel">SECRET</label><p className="pv-text" style={{ color: 'var(--warn)' }}>{c.secret}</p></>}
-              <div className="pv-two">
-                {c.buddy && <div><label className="pv-sublabel">BUDDY</label><p className="pv-text" style={{ color: 'var(--accent)' }}>{c.buddy}</p></div>}
-                {c.rival && <div><label className="pv-sublabel">RIVAL</label><p className="pv-text" style={{ color: 'var(--danger)' }}>{c.rival}</p></div>}
-              </div>
-              {c.signatureItem && <><label className="pv-sublabel">SIGNATURE ITEM</label><p className="pv-text">{c.signatureItem}</p></>}
-            </section>
-
+          <div className="pv-pane ph-sheet-pane">
+            <CharacterSheet character={c} statusEffects={myPlayer.statusEffects || []} conditions={activeConditions}
+              injuries={[]} onRoll={onRoll} />
             <button className="pv-btn danger" onClick={leaveGame}>DISCONNECT FROM {terms.session.toUpperCase()}</button>
           </div>
         )}
@@ -318,15 +285,18 @@ export default function PlayerView() {
                 const mine = m.fromId === myId;
                 const kind = m.type === 'gm' ? 'gm' : m.type === 'p2p' ? 'p2p' : 'dm-bound';
                 return (
-                  <div key={m.id} className={`pv-bubble ${mine ? 'mine' : 'theirs'} ${kind}`}>
+                  <div key={m.id} className={`pv-bubble ${mine ? 'mine' : 'theirs'} ${kind}${m.pending ? ' pending' : ''}`}>
                     <div className="pv-bubble-meta">
                       {mine
                         ? `TO ${m.type === 'p2p' ? String(m.to).toUpperCase() : GM}`
                         : m.type === 'gm' ? `${GM}${m.toId === 'broadcast' ? ` · ${terms.broadcast?.toUpperCase() || 'BROADCAST'}` : ''}` : `${String(m.from).toUpperCase()} · ${PLAYER}`}
                       {m.type === 'gm' && m.priority && m.priority !== 'STANDARD' && <b> · {m.priority}</b>}
-                      {' · '}{new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {' · '}{m.pending ? 'QUEUED' : new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                     <div className="pv-bubble-text">{m.text}</div>
+                    {!mine && (
+                      <button type="button" className="ph-reply" onClick={() => reply(m.type === 'gm' ? 'dm' : m.fromId)}>REPLY PRIVATELY</button>
+                    )}
                   </div>
                 );
               })}
@@ -340,7 +310,7 @@ export default function PlayerView() {
                 ))}
               </select>
               <div className="pv-compose-row">
-                <input value={text} onChange={e => setText(e.target.value)} placeholder={`Type ${terms.message.toLowerCase()}...`}
+                <input ref={inputRef} value={text} onChange={e => setText(e.target.value)} placeholder={`Type ${terms.message.toLowerCase()}...`}
                   enterKeyHint="send" autoComplete="off" />
                 <button type="submit" className="pv-btn primary" disabled={!text.trim()}>SEND</button>
               </div>
@@ -348,11 +318,23 @@ export default function PlayerView() {
           </>
         )}
 
+        {tab === 'handouts' && (
+          <HandoutsPane table={table} onOpen={setViewer} onOpenOrder={(o) => setOrder({ ...o, fresh: false })} />
+        )}
+
         {tab === 'map' && <PlayerMapPane />}
 
         {tab === 'dice' && (
           <div className="pv-pane pv-dice">
-            {Roller ? <Roller /> : <div className="panel"><p className="pv-text dim">No dice roller is registered for {universe.name}.</p></div>}
+            {rollPreset && (
+              <div className="ph-preset" role="status">
+                <span>ROLLING <b>{rollPreset.label}</b>{rollPreset.kind !== '2d20' && rollPreset.stress ? ` + ${rollPreset.stress} STRESS` : ''}</span>
+                <button type="button" className="ph-preset-x" aria-label="Clear preset" onClick={() => setRollPreset(null)}>✕</button>
+              </div>
+            )}
+            {Roller
+              ? <Roller key={rollPreset?.at || 'free'} preset={rollPreset} onResult={sendRoll} />
+              : <div className="panel"><p className="pv-text dim">No dice roller is registered for {universe.name}.</p></div>}
           </div>
         )}
       </main>
@@ -364,6 +346,7 @@ export default function PlayerView() {
             onClick={() => setTab(id)}>
             {label}
             {id === 'messages' && unreadCount > 0 && tab !== 'messages' && <span className="pv-badge">{unreadCount}</span>}
+            {id === 'handouts' && unseenHandouts > 0 && tab !== 'handouts' && <span className="pv-badge">{unseenHandouts}</span>}
           </button>
         ))}
       </nav>

@@ -245,9 +245,10 @@ export function CharactersPanel({ characters, packTitle }) {
   );
 }
 
-/* Handouts with "SEND AS TRANSMISSION" via GameContext.broadcastMessage / sendMessage. */
+/* Handouts pushed to phones via GameContext.sendHandout (socket handout-send: phone drawer,
+   open animation, per-player SEEN receipts — the same data the RUN view shows). */
 export function HandoutsPanel({ handouts, defaultOpen = false }) {
-  const { role, players, broadcastMessage, sendMessage } = useGame();
+  const { role, players, sendHandout, table } = useGame();
   const { universe } = useUniverse();
   const { terms } = universe;
   const priorities = terms.priorities || [];
@@ -257,16 +258,17 @@ export function HandoutsPanel({ handouts, defaultOpen = false }) {
 
   const live = role === 'dm';
   const playerList = Object.values(players || {});
-  const MESSAGE = terms.message.toUpperCase();
-
   const send = (h) => {
     const target = targets[h.id] || 'broadcast';
-    const header = [h.title, h.from ? `FROM: ${h.from}` : null, h.to ? `TO: ${h.to}` : null].filter(Boolean).join('\n');
-    const text = `${header}\n\n${h.text}`;
     const priority = priorities.includes(h.priority) ? h.priority : (h.priority || priorities[0] || 'STANDARD');
-    if (target === 'broadcast') broadcastMessage(text, priority);
-    else sendMessage(target, text, priority);
+    sendHandout({ handoutId: h.id, handout: { title: h.title, from: h.from, to: h.to, priority, text: h.text, image: h.image } },
+      target === 'broadcast' ? 'all' : [target]);
     setSent(prev => ({ ...prev, [h.id]: (prev[h.id] || 0) + 1 }));
+  };
+  const receipt = (id) => {
+    const r = (table?.handouts || []).find(x => x.id === id);
+    if (!r?.seenBy) return null;
+    return `SEEN ${r.seenBy.length}/${r.recipients === 'all' ? playerList.length : (r.recipients || []).length}`;
   };
 
   return (
@@ -298,9 +300,9 @@ export function HandoutsPanel({ handouts, defaultOpen = false }) {
               ))}
             </select>
             <button style={S.btn(live)} disabled={!live} onClick={() => send(h)}>
-              SEND AS {MESSAGE}
+              PUSH TO PHONES
             </button>
-            {sent[h.id] > 0 && <span style={{ fontSize: '0.6rem', color: 'var(--success)' }}>✓ SENT{sent[h.id] > 1 ? ` ×${sent[h.id]}` : ''}</span>}
+            {(sent[h.id] > 0 || receipt(h.id)) && <span style={{ fontSize: '0.6rem', color: 'var(--success)' }}>✓ {receipt(h.id) || 'SENT'}</span>}
           </div>
         </div>
       ))}

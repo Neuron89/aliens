@@ -497,6 +497,8 @@ export const monteroConfig = {
   width: W,
   height: H,
   stars: { count: 200, seed: 1979 },
+  backdrop: "space",
+  levelNoun: "DECK",
   scenarioTag: 'CHARIOT OF THE GODS',
   hull: {
     path: HULL,

@@ -66,6 +66,19 @@ const PENDING_MOVE_MS = 600;   // keep the local drag position over stale server
 const PING_TTL_MS = 4000;
 const tokenUid = (kind) => `${kind}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 
+/* ─── Session features (ARCHITECTURE.md "Sessions") ───────────────
+   table      role-filtered game.table from `table-state` (run, narration, handouts, clues, clocks, safety, pause…)
+   sessionLog DM only: append-only log (`log-entry`)
+   on(event, fn) subscribe to one-shot effects: handout-received, clue-revealed, clock-ticked, new-orders,
+              item-received, board-flash, pause-requested, roll, character-submitted, submission-updated, handout-seen
+   Outbox (players): rolls and messages are queued in localStorage (muthur.outbox) and re-sent on every
+   (re)connect until the server acks them; the server dedupes by clientId, so a roll is never lost or doubled. */
+const OUTBOX_KEY = 'muthur.outbox';
+const OUTBOX_ACK_MS = 6000;
+const TABLE_EVENTS = ['handout-received', 'clue-revealed', 'clock-ticked', 'new-orders', 'item-received', 'board-flash',
+  'pause-requested', 'roll', 'character-submitted', 'submission-updated', 'handout-seen'];
+const clientUid = () => `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+
 export function GameProvider({ children }) {
   const { setUniverseId } = useUniverse();
   const setUniverseIdRef = useRef(setUniverseId);
@@ -93,6 +106,13 @@ export function GameProvider({ children }) {
   const [boardError, setBoardError] = useState(null);
   const pendingMoves = useRef({});                   // tokenId -> { x, y, until }
   const moveThrottle = useRef({});                   // tokenId -> { last, timer, next }
+  /* Session features */
+  const [table, setTable] = useState(null);
+  const [sessionLog, setSessionLog] = useState([]);  // DM
+  const [unreadBy, setUnreadBy] = useState({});      // DM: playerId -> unread player messages
+  const listeners = useRef(new Map());               // event -> Set<fn>
+  const outbox = useRef(readJSON(OUTBOX_KEY, []).filter((x) => x && x.clientId && x.event));
+  const [outboxCount, setOutboxCount] = useState(outbox.current.length);
 
   useEffect(() => { codeRef.current = gameCode; }, [gameCode]);
   const roleRef = useRef(null);
@@ -115,7 +135,56 @@ export function GameProvider({ children }) {
     setMapDef(null);
     setBoardLinked(0);
     setPings([]);
+    setTable(null);
+    setSessionLog([]);
+    setUnreadBy({});
   }, []);
+
+  const fireEvent = useCallback((name, payload) => {
+    for (const fn of listeners.current.get(name) || []) {
+      try { fn(payload); } catch (e) { console.error(`[${name}] listener failed`, e); }
+    }
+  }, []);
+  /** Subscribe to a one-shot session event. Returns an unsubscribe function. */
+  const on = useCallback((name, fn) => {
+    if (!listeners.current.has(name)) listeners.current.set(name, new Set());
+    listeners.current.get(name).add(fn);
+    return () => listeners.current.get(name)?.delete(fn);
+  }, []);
+
+  /* ─── Player outbox: queued until acked, replayed on reconnect ─── */
+  const persistOutbox = useCallback(() => {
+    const list = outbox.current.map(({ inflight, ...x }) => x); // eslint-disable-line no-unused-vars
+    writeJSON(OUTBOX_KEY, list);
+    setOutboxCount(list.length);
+  }, []);
+  const flushOutbox = useCallback(() => {
+    const socket = socketRef.current;
+    if (!socket?.connected || roleRef.current !== 'player' || !codeRef.current) return;
+    // Items from another game can never be delivered.
+    const before = outbox.current.length;
+    outbox.current = outbox.current.filter((x) => x.code === codeRef.current);
+    if (outbox.current.length !== before) persistOutbox();
+    for (const item of outbox.current) {
+      if (item.inflight) continue;
+      item.inflight = true;
+      socket.timeout(OUTBOX_ACK_MS).emit(item.event, { ...item.payload, gameCode: item.code, clientId: item.clientId }, (err, r) => {
+        item.inflight = false;
+        if (err) return; // no ack: retry on next flush
+        if (r?.success || r?.duplicate || (r?.error && r.error !== 'NOT AUTHORIZED.')) {
+          outbox.current = outbox.current.filter((x) => x.clientId !== item.clientId);
+          persistOutbox();
+        }
+      });
+    }
+  }, [persistOutbox]);
+  const enqueue = useCallback((event, payload) => {
+    const item = { clientId: clientUid(), event, payload, code: codeRef.current, at: Date.now() };
+    outbox.current = [...outbox.current, item];
+    persistOutbox();
+    flushOutbox();
+    return item.clientId;
+  }, [persistOutbox, flushOutbox]);
 
   /* Attach this socket as the table board for `code`. */
   const joinBoardOn = useCallback((socket, code, callback) => {
@@ -138,6 +207,7 @@ export function GameProvider({ children }) {
       if (r.universeId) setUniverseIdRef.current(r.universeId);
       setBoard(r.board || null);
       setMapDef(r.mapDef || null);
+      setTable(r.table || null);
       writeJSON(BOARD_KEY, { code: r.code || upper, role: 'board' });
       callback?.(r);
     });
@@ -151,15 +221,20 @@ export function GameProvider({ children }) {
     setSessionUniverseId(universeId);
     setPackId(r.packId ?? null);
     setMessages(Array.isArray(r.messages) ? r.messages : []);
+    setTable(r.table || null);
     if (saved.role === 'dm') {
       setPlayers(r.players || {});
+      setSessionLog(Array.isArray(r.log) ? r.log : []);
       setRole('dm');
     } else {
       setMyPlayer(r.player || null);
       setDmOnline(r.dmConnected !== false);
       setRole('player');
+      codeRef.current = saved.code;
+      roleRef.current = 'player';
+      setTimeout(() => flushOutbox(), 0);
     }
-  }, []);
+  }, [flushOutbox]);
 
   /* Try to restore the saved session on this socket. */
   const autoResume = useCallback((socket) => {
@@ -224,6 +299,13 @@ export function GameProvider({ children }) {
     });
     socket.on('board-linked', ({ count } = {}) => setBoardLinked(Number(count) || 0));
 
+    /* Session features */
+    socket.on('table-state', ({ table: t } = {}) => { if (t) setTable(t); });
+    socket.on('log-entry', ({ entry } = {}) => {
+      if (entry) setSessionLog((prev) => (prev.some((e) => e.id === entry.id) ? prev : [...prev, entry].slice(-2000)));
+    });
+    for (const name of TABLE_EVENTS) socket.on(name, (payload) => fireEvent(name, payload));
+
     /* DM events */
     socket.on('player-joined', ({ players: p }) => {
       setPlayers(p);
@@ -252,6 +334,7 @@ export function GameProvider({ children }) {
     socket.on('player-message-received', ({ message }) => {
       setMessages(prev => [...prev, message]);
       setUnreadCount(prev => prev + 1);
+      if (message?.type === 'player' && message.fromId) setUnreadBy(prev => ({ ...prev, [message.fromId]: (prev[message.fromId] || 0) + 1 }));
     });
 
     /* Player events */
@@ -268,18 +351,19 @@ export function GameProvider({ children }) {
       setUnreadCount(prev => prev + 1);
     });
 
-    socket.on('message-confirmed', ({ message }) => {
-      setMessages(prev => [...prev, message]);
-    });
+    // Confirmed own messages replace their optimistic (queued) copy.
+    const confirmOwn = ({ message }) => {
+      if (!message) return;
+      setMessages(prev => [...prev.filter(m => !(message.clientId && m.clientId === message.clientId && m.pending) && m.id !== message.id), message]);
+    };
+    socket.on('message-confirmed', confirmOwn);
 
     socket.on('p2p-message', ({ message }) => {
       setMessages(prev => [...prev, message]);
       setUnreadCount(prev => prev + 1);
     });
 
-    socket.on('p2p-confirmed', ({ message }) => {
-      setMessages(prev => [...prev, message]);
-    });
+    socket.on('p2p-confirmed', confirmOwn);
 
     socket.on('player-list', ({ players: plist }) => {
       setConnectedPlayers(plist);
@@ -319,14 +403,15 @@ export function GameProvider({ children }) {
     return () => {
       socket.disconnect();
     };
-  }, [autoResume, resetState]);
+  }, [autoResume, resetState, fireEvent]);
 
   /* ─── DM Actions ─────────────────────────────────── */
   /** createGame({ universeId, packId? }, callback) */
   const createGame = useCallback((options, callback) => {
-    const { universeId, packId: pid = null } = options || {};
+    const { universeId, packId: pid = null, sessionZero = null } = options || {};
     socketRef.current?.emit('create-game', { universeId, packId: pid }, (response) => {
       if (response?.error) { callback?.(response); return; }
+      if (sessionZero?.enabled) socketRef.current?.emit('safety-set', { gameCode: response.code, ...sessionZero });
       setGameCode(response.code);
       setSessionUniverseId(response.universeId || universeId || null);
       setPackId(response.packId ?? pid ?? null);
@@ -399,7 +484,10 @@ export function GameProvider({ children }) {
         setMyPlayer(response.player || null);
         setRole('player');
         setMessages(Array.isArray(response.messages) ? response.messages : []);
-        setDmOnline(true);
+        setTable(response.table || null);
+        setDmOnline(response.dmConnected !== false);
+        codeRef.current = upper;
+        roleRef.current = 'player';
         if (response.playerToken) {
           saveSession({
             code: upper, role: 'player', playerToken: response.playerToken, playerName: playerName.slice(0, 40),
@@ -411,15 +499,86 @@ export function GameProvider({ children }) {
     });
   }, []);
 
+  /* Player messages go through the outbox (shown as pending until the server confirms). */
+  const queueOwnMessage = useCallback((event, payload, draft) => {
+    const clientId = enqueue(event, payload);
+    setMessages(prev => [...prev, { ...draft, id: clientId, clientId, pending: true, timestamp: Date.now(), read: true }]);
+  }, [enqueue]);
   const sendPlayerMessage = useCallback((text) => {
-    socketRef.current?.emit('player-message', { gameCode, text });
-  }, [gameCode]);
+    queueOwnMessage('player-message', { text }, { type: 'player', from: myPlayer?.name, fromId: myPlayer?.id, to: 'GM', toId: 'dm', text, priority: 'PLAYER' });
+  }, [queueOwnMessage, myPlayer]);
 
   const sendPlayerToPlayer = useCallback((targetId, text) => {
-    socketRef.current?.emit('player-to-player', { gameCode, targetId, text });
-  }, [gameCode]);
+    const target = connectedPlayers.find((p) => p.id === targetId);
+    queueOwnMessage('player-to-player', { targetId, text }, { type: 'p2p', from: myPlayer?.name, fromId: myPlayer?.id, to: target?.name || '', toId: targetId, text, priority: 'ENCRYPTED' });
+  }, [queueOwnMessage, myPlayer, connectedPlayers]);
+
+  /** Player: report a dice roll ({ summary, ...anything ≤ 4 KB }). Queued until acked — never lost. */
+  const sendRoll = useCallback((roll) => {
+    if (roleRef.current !== 'player' || !roll) return null;
+    return enqueue('player-roll', { roll, at: Date.now() });
+  }, [enqueue]);
 
   const clearUnread = useCallback(() => setUnreadCount(0), []);
+  const clearUnreadFor = useCallback((playerId) => setUnreadBy(prev => (prev[playerId] ? { ...prev, [playerId]: 0 } : prev)), []);
+
+  /* ─── Session features: DM actions (ack callbacks get { success } | { error }) ─── */
+  const emitTable = useCallback((event, payload, callback) => {
+    socketRef.current?.emit(event, { gameCode: codeRef.current, ...payload }, callback);
+  }, []);
+  const tableSync = useCallback((callback) => {
+    socketRef.current?.emit('table-sync', {}, (r) => {
+      if (r?.table) setTable(r.table);
+      if (Array.isArray(r?.log)) setSessionLog(r.log);
+      callback?.(r);
+    });
+  }, []);
+  const sessionSeed = useCallback((seed, cb) => emitTable('session-seed', seed, cb), [emitTable]);
+  /** run = { actIndex, sceneIndex, completed?, actTitle?, sceneTitle? } (optimistic) */
+  const runSet = useCallback((run, cb) => {
+    setTable((t) => (t ? { ...t, run: { ...t.run, ...run } } : t));
+    emitTable('run-set', run, cb);
+  }, [emitTable]);
+  const advanceAct = useCallback((actIndex, extra, cb) => emitTable('advance-act', { actIndex, ...extra }, cb), [emitTable]);
+  /** narrate(text, { title, mode:'caption'|'card', art }) */
+  const narrate = useCallback((text, opts, cb) => emitTable('narrate', { text, ...opts }, cb), [emitTable]);
+  const narrateClear = useCallback((cb) => emitTable('narrate-clear', {}, cb), [emitTable]);
+  /** setBoardMode('map'|'theatre', { title?, subtitle?, art? }) */
+  const setBoardMode = useCallback((mode, theatre, cb) => {
+    setTable((t) => (t ? { ...t, boardMode: mode || t.boardMode } : t));
+    emitTable('board-mode', { mode, ...theatre }, cb);
+  }, [emitTable]);
+  /** sendHandout({ handoutId?, handout?: {title,from,to,priority,text,image} }, to:'all'|[playerIds]) */
+  const sendHandout = useCallback((h, to, cb) => emitTable('handout-send', { ...h, to }, cb), [emitTable]);
+  const clueUpsert = useCallback((clue, cb) => emitTable('clue-upsert', { clue }, cb), [emitTable]);
+  /** clueReveal(clueId, to:'all'|[ids], { clue?, foundBy? }) */
+  const clueReveal = useCallback((clueId, to, extra, cb) => emitTable('clue-reveal', { clueId, to, ...extra }, cb), [emitTable]);
+  const clueHide = useCallback((clueId, cb) => emitTable('clue-hide', { clueId }, cb), [emitTable]);
+  const clockUpsert = useCallback((clock, cb) => emitTable('clock-upsert', { clock }, cb), [emitTable]);
+  const clockTick = useCallback((id, delta, cb) => {
+    setTable((t) => (t ? { ...t, clocks: t.clocks.map((c) => (c.id === id ? { ...c, filled: Math.max(0, Math.min(c.segments, c.filled + delta)) } : c)) } : t));
+    emitTable('clock-tick', { id, delta }, cb);
+  }, [emitTable]);
+  const clockRemove = useCallback((id, cb) => emitTable('clock-remove', { id }, cb), [emitTable]);
+  /** safetySet({ enabled, tone[], warnings[], linesVeils }) */
+  const safetySet = useCallback((zero, cb) => emitTable('safety-set', zero, cb), [emitTable]);
+  const pauseClear = useCallback((cb) => emitTable('pause-clear', {}, cb), [emitTable]);
+  const logNote = useCallback((text, cb) => emitTable('log-note', { text }, cb), [emitTable]);
+  /** resolveSubmission(id, 'reject'|'assigned', reason?) */
+  const resolveSubmission = useCallback((id, action, reason, cb) => emitTable('submission-resolve', { id, action, reason }, cb), [emitTable]);
+
+  /* ─── Session features: player actions ─── */
+  const handoutSeen = useCallback((handoutId) => {
+    setTable((t) => (t?.handouts ? { ...t, handouts: t.handouts.map((h) => (h.id === handoutId ? { ...h, seen: true } : h)) } : t));
+    socketRef.current?.emit('handout-seen', { handoutId });
+  }, []);
+  const safetyConfirm = useCallback((cb) => {
+    setTable((t) => (t?.safety ? { ...t, safety: { ...t.safety, confirmed: true } } : t));
+    socketRef.current?.emit('safety-confirm', {}, cb);
+  }, []);
+  /** Anonymous X-card / pause. */
+  const requestPause = useCallback((cb) => socketRef.current?.emit('pause-request', {}, cb), []);
+  const submitCharacter = useCallback((character, cb) => socketRef.current?.emit('character-submit', { character }, cb), []);
 
   /* ─── Table board ────────────────────────────────── */
   /** Board (TV) role: attach to a game by code (no token needed). */
@@ -534,6 +693,9 @@ export function GameProvider({ children }) {
     }
   }, [resetState]);
 
+  // Replay queued phone actions whenever the link comes back.
+  useEffect(() => { if (connected && role === 'player') flushOutbox(); }, [connected, role, flushOutbox]);
+
   const value = {
     connected,
     reconnecting: !connected || resuming,
@@ -582,6 +744,36 @@ export function GameProvider({ children }) {
     boardPing,
     boardReset,
     boardSync,
+    // Session features
+    table,
+    sessionLog,
+    unreadBy,
+    clearUnreadFor,
+    on,
+    outboxCount,
+    tableSync,
+    sessionSeed,
+    runSet,
+    advanceAct,
+    narrate,
+    narrateClear,
+    setBoardMode,
+    sendHandout,
+    clueUpsert,
+    clueReveal,
+    clueHide,
+    clockUpsert,
+    clockTick,
+    clockRemove,
+    safetySet,
+    pauseClear,
+    logNote,
+    resolveSubmission,
+    handoutSeen,
+    safetyConfirm,
+    requestPause,
+    submitCharacter,
+    sendRoll,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

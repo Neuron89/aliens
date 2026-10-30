@@ -21,13 +21,17 @@ export const maps = [
     "outline": monteroOutline,
     "crop": monteroCrop,
     "spawn": monteroSpawn,
-    "grid": 1 / 50
+    "grid": 1 / 50,
+    "levelNoun": "DECK",
+    "backdrop": "space"
   },
   {
     "id": "generic-starship",
     "title": "GENERIC COMMERCIAL VESSEL",
     "subtitle": "Standard Freight/Tow Configuration",
     "scenario": "Custom",
+    "levelNoun": "DECK",
+    "backdrop": "space",
     "description": "A standard commercial vessel layout for custom scenarios. Adaptable to various ship types and sizes.",
     "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║           STANDARD COMMERCIAL VESSEL — DECK PLAN             ║\n    ║                 [CUSTOMIZABLE TEMPLATE]                       ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║                    ┌───────────┐                              ║\n    ║                    │  BRIDGE   │                              ║\n    ║                    │  [NAV]    │                              ║\n    ║                    │  [COMMS]  │                              ║\n    ║                    └─────┬─────┘                              ║\n    ║               ┌─────────┴─────────┐                          ║\n    ║               │  UPPER CORRIDOR   │                          ║\n    ║         ┌─────┴─────┐  ┌──────────┴─┐                       ║\n    ║         │ OFFICERS  │  │ COMPUTER   │                        ║\n    ║         │ QUARTERS  │  │ CORE       │                        ║\n    ║         └─────┬─────┘  └──────────┬─┘                       ║\n    ║               │  ┌─────────┐      │                          ║\n    ║               ├──┤ GALLEY  ├──────┤                          ║\n    ║               │  └─────────┘      │                          ║\n    ║         ┌─────┴─────┐  ┌──────────┴─┐                       ║\n    ║         │ CREW      │  │ MED BAY    │                        ║\n    ║         │ QUARTERS  │  │            │                        ║\n    ║         └─────┬─────┘  └──────────┬─┘                       ║\n    ║               │  ┌─────────┐      │                          ║\n    ║               ├──┤ ARMORY  ├──────┤                          ║\n    ║               │  └─────────┘      │                          ║\n    ║         ┌─────┴─────┐  ┌──────────┴─┐                       ║\n    ║         │ CRYO      │  │ STORAGE    │                        ║\n    ║         │ CHAMBER   │  │            │                        ║\n    ║         └─────┬─────┘  └──────────┬─┘                       ║\n    ║               └─────────┬─────────┘                          ║\n    ║               ┌─────────┴─────────┐                          ║\n    ║               │   ENGINE ROOM     │                          ║\n    ║               │   [REACTOR]       │                          ║\n    ║               │   [DRIVES]        │                          ║\n    ║               └─────────┬─────────┘                          ║\n    ║               ┌─────────┴─────────┐                          ║\n    ║               │   CARGO BAY       │                          ║\n    ║               │   [AIRLOCK]       │                          ║\n    ║               │   [DOCKING PORT]  │                          ║\n    ║               └───────────────────┘                          ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
     "rooms": [

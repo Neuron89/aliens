@@ -43,14 +43,17 @@ Vite serves the UI on **:3000** with hot reload, the Node server runs on **:3002
    - Or **IMPORT PACK** in the Scenarios tab (paste or upload JSON). See `docs/CONTENT_PACKS.md`.
 4. Pick the scenario and press **INITIALIZE**. You receive a **4-letter access code** and a join link `http://<host>:<port>/?join=CODE`. The Session tab has a copy button for the link.
 5. Share the link or the code. (The app does not draw a QR code; paste the link into any QR generator and show it on a screen if you want players to scan it.)
-6. Brief the table with the scenario's content warnings (Scenarios tab, pack header) before anyone starts.
+6. **Session zero (optional, before INITIALIZE).** Tick **SESSION ZERO** under the scenario list: the pack's tone and content warnings pre-fill a checklist (untick or add your own) and you can write lines & veils. Every phone then shows a one-time **BEFORE WE BEGIN** card with these and an **I'M READY** button; the GM sees who has confirmed.
+7. Once the session is live the DM lands on the **RUN** tab (scenario sessions) or the session tab (sandbox).
 
 ## 3. Player flow (phones)
 
 1. Open the join link (or open the host URL, choose **JOIN**, and type the code). The phone themes itself to the DM's universe once connected.
 2. Enter a name and press **AUTHENTICATE** (the button label follows the universe's `joinPrompt`).
-3. Wait for the DM to assign a character. Then the phone shows tabs: **STATUS** (tracks such as health/stress, conditions, talent), **SKILLS**, **INVENTORY**, **COMMS** (transmissions from the DM, replies, messages to other players) and **DOSSIER** (appearance, personal agenda, buddy/rival, signature item, per-act agendas when the pack has them).
-4. Players never see DM tools, scenarios, maps or each other's dossiers.
+3. Wait for the DM to assign a character — or tap **BUILD YOUR CHARACTER** and submit one from the phone (the DM sees it with a **PLAYER-BUILT** badge and can ASSIGN, EDIT or REJECT it). Then the phone shows: a top bar (tracks, visible clocks, the **PAUSE** button, sound toggle) and tabs **SHEET** (full sheet; **ROLL** on a skill opens the dice tab pre-filled), **GEAR**, **COMMS** (messages; unread badge; **REPLY PRIVATELY** on any message), **FILES** (orders per act, handouts — re-openable — and clues found, with who found them), **MAP**, **DICE**.
+4. **PAUSE** (X-card) is on every phone: one tap + confirm. The DM sees a neutral "PAUSE REQUESTED" banner with a chime, the TV shows a calm PAUSE card, and nothing records who pressed it. The DM clears it with **RESUME PLAY**.
+5. If the link drops, the phone shows **CONNECTION LOST** with the number of queued actions; messages and dice results are kept on the phone and re-sent automatically on reconnect (never lost, never doubled).
+6. Players never see DM tools, scenarios, maps or each other's dossiers.
 
 ## 4. During play
 
@@ -58,10 +61,17 @@ Vite serves the UI on **:3000** with hot reload, the Node server runs on **:3002
 - **Tracks and status.** For each player use the +1 / -1 / MAX / CLEAR buttons on each track (ALIEN: health and stress), toggle status effects, and edit inventory. Values clamp to the track maximum and sync to the phone instantly.
 - **Kill / replace.** Mark a character dead, then assign a new one to the same player.
 - **Transmissions.** The **Transmissions** panel sends a private message to one player or a broadcast to everyone with a priority (ALIEN: STANDARD, PRIORITY, EYES ONLY, EMERGENCY). Players can message you back and each other; everything is in the Message Log.
-- **Handouts.** In the Scenarios tab open the pack, expand **HANDOUTS**, choose a target (everyone or one player), and press **SEND AS TRANSMISSION**. The `when` line on each handout is the author's cue. The handout title, from/to and body are sent as one transmission.
-- **Scene runner.** Use the scenario player to step through acts and scenes (checks, stress triggers, NPC guidance, GM tips). Read-aloud paragraphs can be narrated with text-to-speech; ambient audio presets are in the Audio panel. Runner progress and notes persist per pack in the browser's local storage.
+- **RUN tab (main screen during play).** Left: act switcher (with progress), act summary/agenda notes, ◂ PREV / scene picker / NEXT ▸, and the current scene card (read-aloud, events, checks, stress triggers, encounter, NPC guidance, outcomes, GM tip, clues findable here). Tick **DONE** per scene. Scene progress is saved on the server and survives a resume.
+  - **SEND TO TABLE** puts the read-aloud on the TV as a lower-third caption (typewriter reveal) and on every phone as a dismissible sheet; **AS CARD** shows it full-screen on the TV; **▶ TTS** reads it on the GM device. **NARRATE TO TABLE** (below the scene) sends free text. **CLEAR TABLE TEXT** removes it.
+  - **MAP / THEATRE** (top strip) switches the TV between the map and a theatre-of-mind title card (act + scene title, the act's `sceneArt` if the pack has one). The choice persists.
+  - **ADVANCE ACT ▸** moves to the next act and pushes each player's `agendaByAct` entry for that act as a private **NEW ORDERS** card (vibrate + sound); **SEND AGENDA CARDS** in the AGENDAS rail tab re-sends the current act's.
+  - Rail: **CLOCKS** (always visible; + CLOCK with 4/6/8/custom segments, danger/racing/tug, shown to the table or GM-only; tap + / − to tick — phones chime, TV clock stack updates), then tabs **AGENDAS** (each PC's agenda this act; NPC cards with "if ignored" behaviour and optional secrets), **HANDOUTS** (PUSH TO PHONES to everyone or chosen players, receipts "SEEN 2/4", SHOW ON TV for handouts with an image, + CUSTOM HANDOUT), **CLUES** (pack clues + ad-hoc ones; REVEAL to all or chosen players — they are credited as finders; FOUND/HIDDEN and found-by), **LOG** (filterable session log, ADD NOTE, mark the ending reached, **EXPORT RECAP** as Markdown), and the **ROLL FEED** (rolls reported by phones).
+- **Handouts** can also be pushed from the Scenarios tab (**PUSH TO PHONES**); both use the same receipts. Players get a sealed card ("TAP TO OPEN"); opening it counts as seen.
+- **Loot.** Adding an inventory item to a player (Session tab) pops an "ITEM RECEIVED" toast with the item art on their phone and flashes their token on the TV.
+- **Messages.** Player cards show an unread count (**N NEW**); tap it or **REPLY PRIVATELY** in the Message Log to answer that player.
+- **Scenario player** (Scenarios tab) still works as a reading view; its checklist is local to the browser, the RUN tab's is the session's.
 - **Maps, dice, reference.** Maps tab (pack maps plus the universe's maps), Dice Roller tab (the universe's own roller), and the universe's reference tabs (ALIEN: Weapons, Vehicles, Xenomorphs, Cheat Sheets).
-- **Agendas by act.** At each act change, send the players their new agenda from `agendaByAct` as a private transmission (the pack's handouts normally include one); it is also listed on the character sheet.
+- **Agendas by act.** Use **ADVANCE ACT** in the RUN tab; players can re-open their orders under FILES. They are also listed on the character sheet.
 
 ## 5. Pausing and resuming (intended behaviour)
 

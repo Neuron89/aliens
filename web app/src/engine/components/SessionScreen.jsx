@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
+import SessionZeroPanel, { emptySessionZero } from './run/SessionZeroPanel';
 
 export default function SessionScreen() {
   const { connected, createGame, joinGame, role, listResumable, resumeGame, hasDmToken } = useGame();
@@ -14,6 +15,7 @@ export default function SessionScreen() {
   const [playerName, setPlayerName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [sessionZero, setSessionZero] = useState(emptySessionZero);
 
   // Auto-detect join code from URL
   useEffect(() => {
@@ -34,7 +36,8 @@ export default function SessionScreen() {
   const handleCreate = () => {
     setLoading(true);
     setError('');
-    createGame({ universeId: universe.id, packId }, (response) => {
+    const { enabled, tone, warnings, linesVeils } = sessionZero;
+    createGame({ universeId: universe.id, packId, sessionZero: enabled ? { enabled, tone, warnings, linesVeils } : null }, (response) => {
       setLoading(false);
       if (response?.error) setError(response.error);
     });
@@ -124,6 +127,7 @@ export default function SessionScreen() {
                   badges={[p.meta.type, p.meta.source].filter(Boolean)} />
               ))}
             </div>
+            <SessionZeroPanel pack={packs.find(p => p.id === packId) || null} value={sessionZero} onChange={setSessionZero} terms={terms} />
             <ResumableSessions universe={universe} terms={terms} packs={packs} connected={connected}
               listResumable={listResumable} resumeGame={resumeGame} hasDmToken={hasDmToken} onError={setError} />
             <div style={{ display: 'flex', gap: '0.5rem' }}>

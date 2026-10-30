@@ -87,6 +87,11 @@ export function buildOutputSchema(universe, params, acts) {
   D.threat.properties.stats = statPairs(D.threat.properties.stats.description);
   D.threat.required = ['name', 'description', 'tactics', 'stats'];
   D.handout.required = ['id', 'title', 'from', 'to', 'priority', 'text', 'when'];
+  // Session-feature fields: art paths and audio cues are engine/GM-supplied, never model-written.
+  // clues[] / clocks[] / scene.clueRefs stay (authorable, optional).
+  delete D.act.properties.sceneArt;
+  delete D.scene.properties.ambient;
+  delete D.handout.properties.image;
 
   // Maps: generated maps are always ASCII schematics.
   delete D.map.properties.src; delete D.map.properties.engine;

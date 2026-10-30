@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useGame, boardCodeForTab } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import MapCanvas from './board/MapCanvas';
+import Overlays from './board/Overlays';
 
 /* ═══════════════════════════════════════════════════════════════
    BoardView — the `board` role: a TV lying flat on the table
@@ -102,6 +103,7 @@ export default function BoardView() {
             <div className="bv-sub">{role === 'board' ? 'BOARD LINKED — WAITING FOR THE GAME MASTER TO SELECT A MAP' : 'CONNECTING…'}</div>
           </div>
         )}
+        {role === 'board' && <Overlays terminalName={terminalName} />}
       </div>
       <div className="bv-strip">
         <span className="bv-strip-term">{terminalName}</span>

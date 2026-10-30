@@ -16,6 +16,7 @@ import {
   emptyBoard, sanitizeMapDef, publicMapDef, sanitizeToken, placeToken, relocateAll, viewFor,
   sanitizeView, isMapId, isLevelId, isTokenId, spawnPoint, MAX_TOKENS, MAX_PINGS,
 } from './board.js';
+import { appendLog, logOf } from './sessionLog.js';
 
 const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const GM = 'GM';
@@ -57,6 +58,8 @@ function createGame(dmSocketId, { universeId, packId } = {}) {
     assignedCharacterIds: new Set(),
     board: emptyBoard(),
     mapDef: null,
+    table: emptyTable(),
+    log: [],
   };
   games.set(code, game);
   return game;
@@ -118,6 +121,176 @@ function historyForPlayer(game, player) {
 function historyForDM(game) {
   return game.messages.slice(-HISTORY_LIMIT).map((m) =>
     m.type === 'p2p' ? { ...m, dmNote: `[P2P] ${m.from} → ${m.to}` } : m);
+}
+
+/* ═══ SESSION FEATURES (table) — contract: ARCHITECTURE.md "Sessions" ═══
+   game.table holds the run state (scene progress), narration / theatre
+   mode, handouts with receipts, clues, progress clocks, safety tools,
+   pause (anonymous X-card), act agenda orders, player-built character
+   submissions and the roll buffer. Persisted with the snapshot.
+   Each role gets a filtered view (tableView): the DM everything, the
+   board public pieces only, each player what was sent to them. */
+const CLOCK_KINDS = ['danger', 'racing', 'tug'];
+const NARRATE_MODES = ['caption', 'card'];
+const MAX_HANDOUTS = 200;
+const MAX_CLUES = 300;
+const MAX_CLOCKS = 30;
+const MAX_SUBMISSIONS = 50;
+const MAX_ROLLS = 100;
+const MAX_CLIENT_IDS = 400;
+const MAX_CHARACTER_BYTES = 64 * 1024;
+const MAX_ROLL_BYTES = 4096;
+const PAUSE_INTERVAL_MS = 3000;
+const ITEM_RE = /^[A-Za-z0-9_-]{1,64}$/;
+const sstr = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
+const urlish = (v) => (typeof v === 'string' && v.length <= 500 && /^(\/|https?:\/\/)/.test(v) ? v : null);
+const shortId = (prefix) => `${prefix}-${Date.now().toString(36)}${randomBytes(2).toString('hex')}`;
+const asId = (v, prefix) => (typeof v === 'string' && ITEM_RE.test(v) ? v : shortId(prefix));
+
+export function emptyTable() {
+  return {
+    run: { actIndex: 0, sceneIndex: 0, completed: {}, actTitle: '', sceneTitle: '' },
+    narration: null,        // { id, text, title, mode, art, at }
+    boardMode: 'map',       // 'map' | 'theatre'
+    theatre: { title: '', subtitle: '', art: null },
+    handouts: [],           // [{ id, title, from, to, priority, text, image, recipients:'all'|[ids], sentAt, seenBy[] }]
+    clues: [],              // [{ id, text, source, scene, status:'hidden'|'revealed', revealedTo:'all'|[ids]|null, foundBy[], revealedAt, adhoc }]
+    clocks: [],             // [{ id, label, segments, filled, kind, visibility }]
+    safety: { enabled: false, tone: [], warnings: [], linesVeils: '', confirmed: [] },
+    pause: null,            // { at } — never who
+    orders: {},             // playerId -> [{ actIndex, actTitle, text, at }]
+    submissions: [],        // [{ id, playerId, playerName, character, at, status:'pending'|'assigned'|'rejected', reason }]
+    rolls: [],              // [{ id, playerId, playerName, characterName, roll, at }]
+    clientIds: [],          // ids of replayed phone actions already applied (dedupe)
+    seeded: false,          // pack clocks/clues seeded (session-seed) — never re-seeded after GM edits
+  };
+}
+
+/** game.table, normalized (older snapshots have none or a partial one). */
+function tableOf(game) {
+  const base = emptyTable();
+  const t = game.table && typeof game.table === 'object' ? game.table : {};
+  for (const k of Object.keys(base)) {
+    if (t[k] === undefined || (Array.isArray(base[k]) && !Array.isArray(t[k]))) t[k] = base[k];
+  }
+  if (!t.run || typeof t.run !== 'object') t.run = base.run;
+  if (!t.run.completed || typeof t.run.completed !== 'object') t.run.completed = {};
+  if (!t.safety || typeof t.safety !== 'object') t.safety = base.safety;
+  if (!Array.isArray(t.safety.confirmed)) t.safety.confirmed = [];
+  if (!t.theatre || typeof t.theatre !== 'object') t.theatre = base.theatre;
+  if (!t.orders || typeof t.orders !== 'object') t.orders = {};
+  game.table = t;
+  return t;
+}
+
+const pcName = (p) => p?.character?.name || p?.name || 'Unknown';
+const sentTo = (recipients, playerId) => recipients === 'all' || (Array.isArray(recipients) && recipients.includes(playerId));
+
+/** Recipient list: 'all' or an array of known player ids (null when empty/invalid). */
+function recipientsOf(game, to) {
+  if (to === 'all' || to === undefined || to === null) return 'all';
+  const list = (Array.isArray(to) ? to : [to]).map(String).filter((id) => game.players.has(id));
+  return list.length ? Array.from(new Set(list)) : null;
+}
+function mergeRecipients(a, b) {
+  if (a === 'all' || b === 'all') return 'all';
+  return Array.from(new Set([...(a || []), ...(b || [])]));
+}
+const recipientCount = (game, r) => (r === 'all' ? game.players.size : (r || []).length);
+
+function sanitizeClock(input, prev) {
+  if (!input || typeof input !== 'object') return null;
+  const segRaw = Number(input.segments ?? prev?.segments ?? 4);
+  const segments = Math.max(2, Math.min(12, Number.isFinite(segRaw) ? Math.round(segRaw) : 4));
+  const filledRaw = Number(input.filled ?? prev?.filled ?? 0);
+  const label = sstr(input.label ?? prev?.label, 80).trim();
+  if (!label) return null;
+  const note = sstr(input.note ?? prev?.note, 300);
+  return {
+    id: prev?.id || asId(input.id, 'clock'),
+    label,
+    segments,
+    filled: Math.max(0, Math.min(segments, Number.isFinite(filledRaw) ? Math.round(filledRaw) : 0)),
+    kind: CLOCK_KINDS.includes(input.kind) ? input.kind : (prev?.kind || 'danger'),
+    visibility: input.visibility === 'gm' || input.visibility === 'all' ? input.visibility : (prev?.visibility || 'all'),
+    ...(note ? { note } : {}),
+  };
+}
+
+function sanitizeClue(input, prev) {
+  if (!input || typeof input !== 'object') return null;
+  const text = sstr(input.text ?? prev?.text, 1000).trim();
+  if (!text) return null;
+  return {
+    id: prev?.id || asId(input.id, 'clue'),
+    text,
+    source: sstr(input.source ?? prev?.source, 200),
+    scene: sstr(input.scene ?? prev?.scene, 120),
+    status: prev?.status || 'hidden',
+    revealedTo: prev?.revealedTo ?? null,
+    foundBy: prev?.foundBy || [],
+    revealedAt: prev?.revealedAt || null,
+    adhoc: prev ? !!prev.adhoc : !!input.adhoc,
+  };
+}
+
+function sanitizeHandout(input) {
+  if (!input || typeof input !== 'object') return null;
+  const text = sstr(input.text, 8000);
+  const title = sstr(input.title, 160).trim();
+  const image = urlish(input.image);
+  if (!title || (!text.trim() && !image)) return null;
+  return {
+    title, text, image,
+    from: sstr(input.from, 200), to: sstr(input.to, 200), priority: sstr(input.priority, 40),
+  };
+}
+
+/** Role-filtered table view. role: 'dm' | 'board' | 'player' (+ the player record). */
+function tableView(game, role, player = null) {
+  const t = tableOf(game);
+  const nameOf = (id) => pcName(game.players.get(id));
+  const publicClocks = t.clocks.filter((c) => c.visibility !== 'gm');
+  if (role === 'dm') {
+    const { clientIds, ...rest } = t; // eslint-disable-line no-unused-vars
+    return rest;
+  }
+  if (role === 'board') {
+    return {
+      narration: t.narration, boardMode: t.boardMode, theatre: t.theatre,
+      clocks: publicClocks, pause: t.pause ? { at: t.pause.at } : null,
+    };
+  }
+  const pid = player?.id;
+  const sub = [...t.submissions].reverse().find((s) => s.playerId === pid);
+  return {
+    narration: t.narration,
+    clocks: publicClocks,
+    paused: !!t.pause,
+    handouts: t.handouts
+      .filter((h) => sentTo(h.recipients, pid))
+      .map(({ recipients, seenBy, ...h }) => ({ ...h, seen: seenBy.includes(pid) })), // eslint-disable-line no-unused-vars
+    clues: t.clues
+      .filter((c) => c.status === 'revealed' && sentTo(c.revealedTo, pid))
+      .map((c) => ({ id: c.id, text: c.text, source: c.source, revealedAt: c.revealedAt, foundBy: c.foundBy.map(nameOf) })),
+    safety: t.safety.enabled
+      ? { enabled: true, tone: t.safety.tone, warnings: t.safety.warnings, linesVeils: t.safety.linesVeils, confirmed: t.safety.confirmed.includes(pid) }
+      : { enabled: false },
+    orders: t.orders[pid] || [],
+    submission: sub ? { id: sub.id, status: sub.status, reason: sub.reason || '', at: sub.at, name: sub.character?.name || '' } : null,
+  };
+}
+
+/** Multiset difference: entries of `next` that are not in `prev`. */
+function addedItems(prev, next) {
+  const counts = new Map();
+  for (const i of prev || []) counts.set(i, (counts.get(i) || 0) + 1);
+  const added = [];
+  for (const i of next || []) {
+    const n = counts.get(i) || 0;
+    if (n > 0) counts.set(i, n - 1); else added.push(i);
+  }
+  return added;
 }
 
 /** Wire all session socket handlers onto a Socket.io server. */
@@ -235,6 +408,27 @@ export function attachSessions(io) {
     };
   }
 
+  /* ─── Session-feature (table) helpers ───────────── */
+  const lastPause = new Map(); // socket.id -> ms (X-card spam guard)
+  function rememberClientId(t, id) {
+    t.clientIds.push(id);
+    if (t.clientIds.length > MAX_CLIENT_IDS) t.clientIds.splice(0, t.clientIds.length - MAX_CLIENT_IDS);
+  }
+  /** Push `table-state { table }` (role-filtered). opts.dmOnly → DM only; opts.only → that player only. */
+  function emitTable(game, { dmOnly = false, only = null } = {}) {
+    if (only) { toPlayer(only, 'table-state', { table: tableView(game, 'player', only) }); return; }
+    if (game.dmId) io.to(game.dmId).emit('table-state', { table: tableView(game, 'dm') });
+    if (dmOnly) return;
+    io.to(boardRoom(game.code)).emit('table-state', { table: tableView(game, 'board') });
+    for (const [, p] of game.players) toPlayer(p, 'table-state', { table: tableView(game, 'player', p) });
+  }
+  /** Append to the session log and stream the entry to the DM. */
+  const logTo = (game, type, text, extra) => {
+    const e = appendLog(game, type, text, extra);
+    if (e) toDM(game, 'log-entry', { entry: e });
+    return e;
+  };
+
   io.on('connection', (socket) => {
     console.log(`[SESSION] Connection: ${socket.id}`);
 
@@ -264,6 +458,7 @@ export function attachSessions(io) {
       callback?.({
         success: true, code: game.code, universeId: game.universeId, packId: game.packId,
         dmToken: game.dmToken, players: serializePlayers(game), messages: historyForDM(game),
+        table: tableView(game, 'dm'), log: logOf(game),
       });
       for (const [, p] of game.players) toPlayer(p, 'dm-reconnected', { code: game.code });
       sendBoardTo(socket, game, 'dm');
@@ -328,6 +523,7 @@ export function attachSessions(io) {
         success: true, playerId: player.id, playerToken: player.playerToken, rejoined,
         universeId: game.universeId, packId: game.packId,
         player: getPlayerData(player), messages: rejoined ? historyForPlayer(game, player) : [],
+        table: tableView(game, 'player', player), dmConnected: !!game.dmId,
       });
 
       toDM(game, 'player-joined', { player: getPlayerData(player), players: serializePlayers(game) });
@@ -363,7 +559,7 @@ export function attachSessions(io) {
         success: true, playerId: player.id, playerToken: player.playerToken,
         universeId: game.universeId, packId: game.packId,
         player: getPlayerData(player), messages: historyForPlayer(game, player),
-        dmConnected: !!game.dmId,
+        dmConnected: !!game.dmId, table: tableView(game, 'player', player),
       });
       toDM(game, 'player-joined', { player: getPlayerData(player), players: serializePlayers(game), rejoined: true });
       broadcastPlayerList(game);
@@ -389,7 +585,17 @@ export function attachSessions(io) {
       player.conditions = Object.fromEntries((Array.isArray(conditions) ? conditions : []).map((c) => [String(c), false]));
 
       game.assignedCharacterIds.add(character.id);
+      // A pending player-built submission from this seat (or for this character) is now resolved.
+      for (const sub of tableOf(game).submissions) {
+        if (sub.status === 'pending' && (sub.playerId === player.id || sub.character?.id === character.id)) {
+          sub.status = 'assigned';
+          const owner = game.players.get(sub.playerId);
+          if (owner) toPlayer(owner, 'submission-updated', { submission: { id: sub.id, status: sub.status, reason: '' } });
+        }
+      }
+      logTo(game, 'character', `${character.name} assigned to ${player.name}`);
       touch(game);
+      emitTable(game);
       console.log(`[SESSION] Character "${character.name}" assigned to "${player.name}"`);
 
       toPlayer(player, 'character-assigned', { player: getPlayerData(player) });
@@ -405,10 +611,32 @@ export function attachSessions(io) {
       if (!player) return;
 
       if (updates.tracks && typeof updates.tracks === 'object') {
-        for (const [k, v] of Object.entries(numberMap(updates.tracks))) player.tracks[k] = clampTrack(player, k, v);
+        for (const [k, v] of Object.entries(numberMap(updates.tracks))) {
+          const before = player.tracks[k];
+          player.tracks[k] = clampTrack(player, k, v);
+          if (before !== player.tracks[k]) logTo(game, 'track', `${pcName(player)} ${k.toUpperCase()} ${before ?? 0} → ${player.tracks[k]}`, { playerId: player.id, track: k });
+        }
       }
-      if (Array.isArray(updates.statusEffects)) player.statusEffects = updates.statusEffects.map(String);
-      if (Array.isArray(updates.inventory)) player.inventory = updates.inventory.map(String);
+      if (Array.isArray(updates.statusEffects)) {
+        const next = updates.statusEffects.map(String);
+        for (const e of addedItems(player.statusEffects, next)) logTo(game, 'track', `${pcName(player)} is now ${e}`, { playerId: player.id });
+        player.statusEffects = next;
+      }
+      if (Array.isArray(updates.inventory)) {
+        const next = updates.inventory.map(String);
+        const added = addedItems(player.inventory, next);
+        player.inventory = next;
+        // Loot moment: phone toast + a flash on the PC's board token.
+        for (const item of added) {
+          toPlayer(player, 'item-received', { item, at: Date.now() });
+          logTo(game, 'loot', `${pcName(player)} received ${item}`, { playerId: player.id });
+        }
+        const tok = added.length ? Object.values(boardOf(game).tokens).find((tk) => tk.kind === 'pc' && tk.ownerPlayerId === player.id) : null;
+        if (tok) {
+          io.to(boardRoom(game.code)).emit('board-flash', { tokenId: tok.id });
+          toDM(game, 'board-flash', { tokenId: tok.id });
+        }
+      }
       if (updates.alive !== undefined) player.alive = !!updates.alive;
       if (updates.conditions && typeof updates.conditions === 'object') {
         player.conditions = { ...player.conditions, ...updates.conditions };
@@ -438,35 +666,45 @@ export function attachSessions(io) {
     });
 
     /* ─── Player: Send Message to DM ───────────────── */
-    socket.on('player-message', ({ gameCode, text } = {}) => {
+    /* { gameCode, text, clientId? } (ack { success, id, duplicate? }) — clientId makes replays from the phone's offline queue idempotent. */
+    socket.on('player-message', ({ gameCode, text, clientId } = {}, callback) => {
       const game = games.get(gameCode);
-      if (!game || socket.data?.code !== game.code || socket.data.role !== 'player') return;
+      if (!game || socket.data?.code !== game.code || socket.data.role !== 'player') return callback?.({ error: 'NOT AUTHORIZED.' });
       const player = game.players.get(socket.data.playerId);
-      if (!player || !text) return;
+      if (!player || !text) return callback?.({ error: 'Empty message.' });
+      const t = tableOf(game);
+      const cid = typeof clientId === 'string' ? clientId.slice(0, 64) : null;
+      if (cid && t.clientIds.includes(cid)) return callback?.({ success: true, duplicate: true });
 
       const message = {
         id: msgId(), type: 'player', from: player.name, fromId: player.id,
-        to: GM, toId: 'dm', text: String(text),
-        priority: 'PLAYER', timestamp: Date.now(), read: false,
+        to: GM, toId: 'dm', text: String(text).slice(0, 4000),
+        priority: 'PLAYER', timestamp: Date.now(), read: false, ...(cid ? { clientId: cid } : {}),
       };
+      if (cid) rememberClientId(t, cid);
       pushMessage(game, message);
       touch(game);
       toDM(game, 'player-message-received', { message });
       socket.emit('message-confirmed', { message });
+      callback?.({ success: true, id: message.id });
     });
 
     /* ─── Player: Send Message to Another Player ───── */
-    socket.on('player-to-player', ({ gameCode: gc, targetId, text } = {}) => {
+    socket.on('player-to-player', ({ gameCode: gc, targetId, text, clientId } = {}, callback) => {
       const game = games.get(gc);
-      if (!game || socket.data?.code !== game.code || socket.data.role !== 'player') return;
+      if (!game || socket.data?.code !== game.code || socket.data.role !== 'player') return callback?.({ error: 'NOT AUTHORIZED.' });
       const sender = game.players.get(socket.data.playerId);
       const target = game.players.get(targetId);
-      if (!sender || !target || !text) return;
+      if (!sender || !target || !text) return callback?.({ error: 'Invalid message.' });
+      const t = tableOf(game);
+      const cid = typeof clientId === 'string' ? clientId.slice(0, 64) : null;
+      if (cid && t.clientIds.includes(cid)) return callback?.({ success: true, duplicate: true });
+      if (cid) rememberClientId(t, cid);
 
       const message = {
         id: msgId(), type: 'p2p', from: sender.name, fromId: sender.id,
-        to: target.name, toId: target.id, text: String(text),
-        priority: 'ENCRYPTED', timestamp: Date.now(), read: false,
+        to: target.name, toId: target.id, text: String(text).slice(0, 4000),
+        priority: 'ENCRYPTED', timestamp: Date.now(), read: false, ...(cid ? { clientId: cid } : {}),
       };
       pushMessage(game, message);
       touch(game);
@@ -474,6 +712,7 @@ export function attachSessions(io) {
       socket.emit('p2p-confirmed', { message });
       // DM always sees all player-to-player messages
       toDM(game, 'player-message-received', { message: { ...message, dmNote: `[P2P] ${sender.name} → ${target.name}` } });
+      callback?.({ success: true, id: message.id });
     });
 
     /* ─── DM: Kill Character ───────────────────────── */
@@ -485,6 +724,7 @@ export function attachSessions(io) {
 
       player.alive = false;
       if ('health' in player.tracks) player.tracks.health = 0;
+      logTo(game, 'kill', `${pcName(player)} (${player.name}) was killed`, { playerId: player.id });
       touch(game);
 
       toPlayer(player, 'character-died', { playerName: player.name, characterName: player.character?.name });
@@ -526,7 +766,7 @@ export function attachSessions(io) {
       socket.join(boardRoom(game.code));
       socket.data = { code: game.code, role: 'board' };
       console.log(`[BOARD] Board client attached to game ${game.code}`);
-      callback?.({ success: true, code: game.code, universeId: game.universeId, packId: game.packId, ...boardPayload(game, 'board', true) });
+      callback?.({ success: true, code: game.code, universeId: game.universeId, packId: game.packId, ...boardPayload(game, 'board', true), table: tableView(game, 'board') });
       notifyBoardLinked(game);
     });
 
@@ -627,7 +867,10 @@ export function attachSessions(io) {
       const room = (game.mapDef?.rooms || []).find((r) => r.id === payload.roomId);
       if (!room) return callback?.({ error: 'Unknown room.' });
       const st = b.rooms[room.id] || (b.rooms[room.id] = { revealed: false, entered: false });
-      if (payload.revealed !== undefined) st.revealed = !!payload.revealed;
+      if (payload.revealed !== undefined) {
+        if (!st.revealed && payload.revealed) logTo(game, 'fog', `Revealed: ${st.name || room.name || room.id}`, { roomId: room.id });
+        st.revealed = !!payload.revealed;
+      }
       if (typeof payload.name === 'string') st.name = payload.name.slice(0, 80);
       if (typeof payload.note === 'string') st.note = payload.note.slice(0, 1000);
       if (payload.hideTokens === true) {
@@ -694,9 +937,422 @@ export function attachSessions(io) {
       callback?.({ success: true });
     });
 
+    /* ═══ SESSION FEATURES (ARCHITECTURE.md "Sessions" → session features) ═══
+       DM events take { gameCode?, ... } (defaults to the DM socket's game) and ack
+       { success } | { error }. Every mutation re-sends `table-state { table }`
+       (role-filtered) to the DM, the board and each player. */
+    const dmTableGame = dmBoardGame;
+    /** Player socket's own game + player record (or {}). */
+    const playerCtx = () => {
+      const { code, role, playerId } = socket.data || {};
+      const game = code && role === 'player' ? games.get(code) : null;
+      const player = game?.players.get(playerId);
+      return game && player && player.socketId === socket.id ? { game, player } : {};
+    };
+    const done = (game, cb, extra = {}) => { touch(game); emitTable(game); cb?.({ success: true, ...extra }); };
+
+    /* ─── Any attached role: { table, log? } (log for the DM only) ─── */
+    socket.on('table-sync', (_p, callback) => {
+      const cb = typeof _p === 'function' ? _p : callback;
+      const { code, role } = socket.data || {};
+      const game = code ? games.get(code) : null;
+      if (!game || !role) return cb?.({ error: 'NOT IN A GAME.' });
+      if (role === 'dm') {
+        if (game.dmId !== socket.id) return cb?.({ error: 'NOT AUTHORIZED.' });
+        return cb?.({ table: tableView(game, 'dm'), log: logOf(game) });
+      }
+      if (role === 'board') return cb?.({ table: tableView(game, 'board') });
+      const player = game.players.get(socket.data.playerId);
+      return cb?.({ table: tableView(game, 'player', player) });
+    });
+
+    /* ─── DM: Seed pack clocks/clues { clocks[], clues[] } — idempotent by id ─── */
+    socket.on('session-seed', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      let added = 0;
+      for (const c of Array.isArray(payload.clocks) ? payload.clocks.slice(0, MAX_CLOCKS) : []) {
+        if (!c?.id || t.clocks.some((x) => x.id === c.id) || t.clocks.length >= MAX_CLOCKS) continue;
+        const clock = sanitizeClock(c);
+        if (clock) { t.clocks.push(clock); added++; }
+      }
+      for (const c of Array.isArray(payload.clues) ? payload.clues.slice(0, MAX_CLUES) : []) {
+        if (!c?.id || t.clues.some((x) => x.id === c.id) || t.clues.length >= MAX_CLUES) continue;
+        const clue = sanitizeClue({ ...c, adhoc: false });
+        if (!clue) continue;
+        if (c.status === 'revealed') Object.assign(clue, { status: 'revealed', revealedTo: 'all', revealedAt: Date.now() });
+        t.clues.push(clue);
+        added++;
+      }
+      t.seeded = true;
+      done(game, callback, { added });
+    });
+
+    /* ─── DM: Scene progress { actIndex, sceneIndex, completed?, actTitle?, sceneTitle? } ─── */
+    socket.on('run-set', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      const prev = { ...t.run };
+      const a = Number(payload.actIndex);
+      const s = Number(payload.sceneIndex);
+      if (Number.isInteger(a) && a >= 0 && a < 100) t.run.actIndex = a;
+      if (Number.isInteger(s) && s >= 0 && s < 500) t.run.sceneIndex = s;
+      if (typeof payload.actTitle === 'string') t.run.actTitle = payload.actTitle.slice(0, 120);
+      if (typeof payload.sceneTitle === 'string') t.run.sceneTitle = payload.sceneTitle.slice(0, 120);
+      if (payload.completed && typeof payload.completed === 'object') {
+        const c = {};
+        for (const [k, v] of Object.entries(payload.completed).slice(0, 1000)) if (/^\d+-\d+$/.test(k) && v) c[k] = true;
+        for (const k of Object.keys(c)) if (!prev.completed[k]) logTo(game, 'scene', `Scene completed: ${t.run.sceneTitle && k === `${t.run.actIndex}-${t.run.sceneIndex}` ? t.run.sceneTitle : k}`, { key: k });
+        t.run.completed = c;
+      }
+      if (prev.actIndex !== t.run.actIndex || prev.sceneIndex !== t.run.sceneIndex) {
+        logTo(game, 'scene', `Scene: ${t.run.actTitle ? t.run.actTitle + ' — ' : ''}${t.run.sceneTitle || `#${t.run.sceneIndex + 1}`}`);
+      }
+      done(game, callback, { run: t.run });
+    });
+
+    /* ─── DM: Advance act { actIndex, actTitle?, agendas?: { playerId: text } } ───
+       Pushes each assigned player's character.agendaByAct[actIndex+1] (or the override)
+       as a private NEW ORDERS card (`new-orders`); stored in table.orders for re-opening. */
+    socket.on('advance-act', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      const a = Number(payload.actIndex);
+      if (!Number.isInteger(a) || a < 0 || a >= 100) return callback?.({ error: 'Invalid actIndex.' });
+      const actTitle = sstr(payload.actTitle, 120) || `ACT ${a + 1}`;
+      t.run.actIndex = a;
+      t.run.sceneIndex = 0;
+      t.run.actTitle = actTitle;
+      t.run.sceneTitle = sstr(payload.sceneTitle, 120);
+      const overrides = payload.agendas && typeof payload.agendas === 'object' ? payload.agendas : {};
+      const sent = [];
+      const at = Date.now();
+      for (const [, p] of game.players) {
+        const text = sstr(overrides[p.id], 2000) || sstr(p.character?.agendaByAct?.[String(a + 1)], 2000);
+        if (!text || !p.character) continue;
+        const order = { actIndex: a, actTitle, text, at };
+        t.orders[p.id] = [...(t.orders[p.id] || []).filter((o) => o.actIndex !== a), order];
+        toPlayer(p, 'new-orders', order);
+        sent.push(p.id);
+      }
+      logTo(game, 'act', `${actTitle} begins${sent.length ? ` — new orders to ${sent.length}` : ''}`, { actIndex: a });
+      done(game, callback, { sent });
+    });
+
+    /* ─── DM: Narrate { text, title?, mode:'caption'|'card', art? } ─── */
+    socket.on('narrate', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const text = sstr(payload.text, 4000).trim();
+      const art = urlish(payload.art);
+      if (!text && !art) return callback?.({ error: 'Nothing to narrate.' });
+      const t = tableOf(game);
+      t.narration = {
+        id: shortId('n'), text, title: sstr(payload.title, 160), at: Date.now(),
+        mode: NARRATE_MODES.includes(payload.mode) ? payload.mode : 'caption', art,
+      };
+      logTo(game, 'narration', `${t.narration.title ? t.narration.title + ': ' : ''}${text || '[image]'}`.slice(0, 400));
+      done(game, callback, { id: t.narration.id });
+    });
+
+    /* ─── DM: Clear narration {} ─── */
+    socket.on('narrate-clear', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      tableOf(game).narration = null;
+      done(game, callback);
+    });
+
+    /* ─── DM: Board mode { mode:'map'|'theatre', title?, subtitle?, art? } (persists) ─── */
+    socket.on('board-mode', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      if (payload.mode === 'map' || payload.mode === 'theatre') t.boardMode = payload.mode;
+      if (payload.title !== undefined || payload.subtitle !== undefined || payload.art !== undefined) {
+        t.theatre = {
+          title: payload.title !== undefined ? sstr(payload.title, 160) : t.theatre.title,
+          subtitle: payload.subtitle !== undefined ? sstr(payload.subtitle, 160) : t.theatre.subtitle,
+          art: payload.art !== undefined ? urlish(payload.art) : t.theatre.art,
+        };
+      }
+      done(game, callback, { boardMode: t.boardMode });
+    });
+
+    /* ─── DM: Send handout { handoutId?, handout?|custom?: {title,from,to,priority,text,image?}, to:'all'|[playerIds] } ───
+       Bundled packs live client-side, so the DM sends the resolved handout with its pack id.
+       Re-sending the same id widens the recipients and keeps receipts. */
+    socket.on('handout-send', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      const content = sanitizeHandout(payload.handout || payload.custom);
+      const id = typeof payload.handoutId === 'string' && ITEM_RE.test(payload.handoutId) ? payload.handoutId : null;
+      const prev = id ? t.handouts.find((h) => h.id === id) : null;
+      if (!content && !prev) return callback?.({ error: 'Handout needs a title and text.' });
+      const recipients = recipientsOf(game, payload.to);
+      if (!recipients) return callback?.({ error: 'No recipients.' });
+      let h;
+      if (prev) {
+        Object.assign(prev, content || {}, { recipients: mergeRecipients(prev.recipients, recipients), sentAt: Date.now() });
+        h = prev;
+      } else {
+        if (t.handouts.length >= MAX_HANDOUTS) t.handouts.shift();
+        h = { id: id || shortId('h'), ...content, recipients, sentAt: Date.now(), seenBy: [], custom: !id };
+        t.handouts.push(h);
+      }
+      const { recipients: _r, seenBy: _s, ...pub } = h; // eslint-disable-line no-unused-vars
+      for (const [, p] of game.players) if (sentTo(recipients, p.id)) toPlayer(p, 'handout-received', { handout: { ...pub, seen: h.seenBy.includes(p.id) } });
+      logTo(game, 'handout', `Handout "${h.title}" → ${recipients === 'all' ? 'everyone' : recipients.map((x) => pcName(game.players.get(x))).join(', ')}`, { handoutId: h.id });
+      done(game, callback, { id: h.id });
+    });
+
+    /* ─── Player: Handout opened { handoutId } → DM sees receipts ─── */
+    socket.on('handout-seen', (payload = {}, callback) => {
+      const { game, player } = playerCtx();
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const h = tableOf(game).handouts.find((x) => x.id === payload.handoutId);
+      if (!h || !sentTo(h.recipients, player.id)) return callback?.({ error: 'Unknown handout.' });
+      if (!h.seenBy.includes(player.id)) {
+        h.seenBy.push(player.id);
+        touch(game);
+        toDM(game, 'handout-seen', { handoutId: h.id, playerId: player.id, seen: h.seenBy.length, of: recipientCount(game, h.recipients) });
+        emitTable(game, { dmOnly: true });
+      }
+      callback?.({ success: true });
+    });
+
+    /* ─── DM: Create/update a clue { clue: { id?, text, source?, scene? } } (ad-hoc when no pack id) ─── */
+    socket.on('clue-upsert', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      const prev = t.clues.find((c) => c.id === payload.clue?.id);
+      if (!prev && t.clues.length >= MAX_CLUES) return callback?.({ error: 'TOO MANY CLUES.' });
+      const clue = sanitizeClue({ adhoc: !payload.clue?.id, ...payload.clue }, prev);
+      if (!clue) return callback?.({ error: 'Clue needs text.' });
+      if (prev) Object.assign(prev, clue); else t.clues.push(clue);
+      done(game, callback, { id: clue.id });
+    });
+
+    /* ─── DM: Reveal a clue { clueId, clue?, to:'all'|[playerIds], foundBy?:[playerIds] } ─── */
+    socket.on('clue-reveal', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      let clue = t.clues.find((c) => c.id === payload.clueId);
+      if (!clue && payload.clue) {
+        clue = sanitizeClue({ ...payload.clue, id: payload.clueId || payload.clue.id });
+        if (!clue) return callback?.({ error: 'Clue needs text.' });
+        if (t.clues.length >= MAX_CLUES) return callback?.({ error: 'TOO MANY CLUES.' });
+        t.clues.push(clue);
+      }
+      if (!clue) return callback?.({ error: 'Unknown clue.' });
+      const recipients = recipientsOf(game, payload.to);
+      if (!recipients) return callback?.({ error: 'No recipients.' });
+      const finders = recipientsOf(game, payload.foundBy);
+      const credit = Array.isArray(finders) ? finders : (Array.isArray(recipients) ? recipients : []);
+      clue.status = 'revealed';
+      clue.revealedTo = mergeRecipients(clue.revealedTo === null ? [] : clue.revealedTo, recipients);
+      clue.foundBy = Array.from(new Set([...clue.foundBy, ...credit]));
+      clue.revealedAt = clue.revealedAt || Date.now();
+      const nameOf = (id) => pcName(game.players.get(id));
+      for (const [, p] of game.players) {
+        if (sentTo(recipients, p.id)) toPlayer(p, 'clue-revealed', { clue: { id: clue.id, text: clue.text, source: clue.source, revealedAt: clue.revealedAt, foundBy: clue.foundBy.map(nameOf) } });
+      }
+      logTo(game, 'clue', `Clue revealed: ${clue.text.slice(0, 160)}${credit.length ? ` (found by ${credit.map(nameOf).join(', ')})` : ''} → ${recipients === 'all' ? 'everyone' : recipients.map(nameOf).join(', ')}`, { clueId: clue.id });
+      done(game, callback, { id: clue.id });
+    });
+
+    /* ─── DM: Hide a clue again { clueId } (players lose it from their list) ─── */
+    socket.on('clue-hide', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const clue = tableOf(game).clues.find((c) => c.id === payload.clueId);
+      if (!clue) return callback?.({ error: 'Unknown clue.' });
+      Object.assign(clue, { status: 'hidden', revealedTo: null, foundBy: [], revealedAt: null });
+      done(game, callback);
+    });
+
+    /* ─── DM: Create/update a clock { clock: { id?, label, segments, filled?, kind, visibility } } ─── */
+    socket.on('clock-upsert', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      const prev = t.clocks.find((c) => c.id === payload.clock?.id);
+      if (!prev && t.clocks.length >= MAX_CLOCKS) return callback?.({ error: 'TOO MANY CLOCKS.' });
+      const clock = sanitizeClock(payload.clock, prev);
+      if (!clock) return callback?.({ error: 'Clock needs a label.' });
+      if (prev) Object.assign(prev, clock); else { t.clocks.push(clock); logTo(game, 'clock', `Clock started: ${clock.label} (${clock.segments})`, { clockId: clock.id }); }
+      done(game, callback, { id: clock.id, clock });
+    });
+
+    /* ─── DM: Tick a clock { id, delta: ±n } → `clock-ticked { clock, delta }` to everyone who can see it ─── */
+    socket.on('clock-tick', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const clock = tableOf(game).clocks.find((c) => c.id === payload.id);
+      const delta = Math.round(Number(payload.delta) || 0);
+      if (!clock) return callback?.({ error: 'Unknown clock.' });
+      const before = clock.filled;
+      clock.filled = Math.max(0, Math.min(clock.segments, clock.filled + delta));
+      const applied = clock.filled - before;
+      if (applied) {
+        const full = clock.filled === clock.segments;
+        logTo(game, 'clock', `${clock.label}: ${before} → ${clock.filled}/${clock.segments}${full ? ' — FULL' : ''}`, { clockId: clock.id });
+        if (clock.visibility !== 'gm') {
+          const evt = { clock, delta: applied };
+          for (const [, p] of game.players) toPlayer(p, 'clock-ticked', evt);
+          io.to(boardRoom(game.code)).emit('clock-ticked', evt);
+        }
+      }
+      done(game, callback, { clock });
+    });
+
+    /* ─── DM: Remove a clock { id } ─── */
+    socket.on('clock-remove', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      const before = t.clocks.length;
+      t.clocks = t.clocks.filter((c) => c.id !== payload.id);
+      if (t.clocks.length === before) return callback?.({ error: 'Unknown clock.' });
+      done(game, callback);
+    });
+
+    /* ─── DM: Session zero { enabled, tone[], warnings[], linesVeils } (re-arms the player card when changed) ─── */
+    socket.on('safety-set', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      const list = (v, n, m) => (Array.isArray(v) ? v : []).map((x) => sstr(String(x ?? ''), m).trim()).filter(Boolean).slice(0, n);
+      const next = {
+        enabled: payload.enabled !== false,
+        tone: list(payload.tone, 12, 60),
+        warnings: list(payload.warnings, 40, 120),
+        linesVeils: sstr(payload.linesVeils, 3000),
+      };
+      const changed = JSON.stringify(next) !== JSON.stringify({ enabled: t.safety.enabled, tone: t.safety.tone, warnings: t.safety.warnings, linesVeils: t.safety.linesVeils });
+      t.safety = { ...next, confirmed: changed ? [] : t.safety.confirmed };
+      if (changed && next.enabled) logTo(game, 'safety', `Session zero: ${next.warnings.length} content warning(s)${next.linesVeils ? ', lines & veils set' : ''}`);
+      done(game, callback);
+    });
+
+    /* ─── Player: Confirm the BEFORE WE BEGIN card {} ─── */
+    socket.on('safety-confirm', (_p, callback) => {
+      const cb = typeof _p === 'function' ? _p : callback;
+      const { game, player } = playerCtx();
+      if (!game) return cb?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      if (!t.safety.confirmed.includes(player.id)) t.safety.confirmed.push(player.id);
+      touch(game);
+      emitTable(game, { only: player });
+      emitTable(game, { dmOnly: true });
+      cb?.({ success: true });
+    });
+
+    /* ─── Player: Anonymous PAUSE / X-card {} → DM `pause-requested { at }` (no identity anywhere) ─── */
+    socket.on('pause-request', (_p, callback) => {
+      const cb = typeof _p === 'function' ? _p : callback;
+      const { game } = playerCtx();
+      if (!game) return cb?.({ error: 'NOT AUTHORIZED.' });
+      const now = Date.now();
+      if (now - (lastPause.get(socket.id) || 0) < PAUSE_INTERVAL_MS) return cb?.({ success: true, throttled: true });
+      lastPause.set(socket.id, now);
+      const t = tableOf(game);
+      const already = !!t.pause;
+      t.pause = { at: t.pause?.at || now };
+      if (!already) logTo(game, 'pause', 'Pause requested (anonymous)');
+      toDM(game, 'pause-requested', { at: t.pause.at });
+      done(game, cb);
+    });
+
+    /* ─── DM: Clear the pause {} ─── */
+    socket.on('pause-clear', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      if (t.pause) logTo(game, 'pause', 'Play resumed');
+      t.pause = null;
+      done(game, callback);
+    });
+
+    /* ─── DM: Log note { text } → `log-entry { entry }` ─── */
+    socket.on('log-note', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const e = logTo(game, 'note', sstr(payload.text, 2000));
+      if (!e) return callback?.({ error: 'Empty note.' });
+      touch(game);
+      callback?.({ success: true, entry: e });
+    });
+
+    /* ─── Player: Submit a player-built character { character } (from an unassigned seat) ─── */
+    socket.on('character-submit', (payload = {}, callback) => {
+      const { game, player } = playerCtx();
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const ch = payload.character;
+      if (!ch || typeof ch !== 'object' || Array.isArray(ch) || typeof ch.name !== 'string' || !ch.name.trim()) return callback?.({ error: 'Character needs a name.' });
+      let bytes = 0;
+      try { bytes = JSON.stringify(ch).length; } catch { return callback?.({ error: 'Character not serializable.' }); }
+      if (bytes > MAX_CHARACTER_BYTES) return callback?.({ error: 'Character too large.' });
+      const t = tableOf(game);
+      const character = { ...ch, id: typeof ch.id === 'string' && ID_RE.test(ch.id) ? ch.id : `pb-${randomBytes(4).toString('hex')}` };
+      // One pending submission per player: a new one replaces the old.
+      t.submissions = t.submissions.filter((s) => !(s.playerId === player.id && s.status === 'pending'));
+      const sub = { id: shortId('sub'), playerId: player.id, playerName: player.name, character, at: Date.now(), status: 'pending', reason: '' };
+      t.submissions.push(sub);
+      if (t.submissions.length > MAX_SUBMISSIONS) t.submissions.splice(0, t.submissions.length - MAX_SUBMISSIONS);
+      logTo(game, 'character', `${player.name} submitted a character: ${character.name}${character.career ? ` (${character.career})` : ''}`);
+      toDM(game, 'character-submitted', { submission: sub });
+      emitTable(game, { only: player });
+      emitTable(game, { dmOnly: true });
+      touch(game);
+      callback?.({ success: true, id: sub.id });
+    });
+
+    /* ─── DM: Resolve a submission { id, action:'reject'|'assigned', reason? } ─── */
+    socket.on('submission-resolve', (payload = {}, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const sub = tableOf(game).submissions.find((s) => s.id === payload.id);
+      if (!sub) return callback?.({ error: 'Unknown submission.' });
+      sub.status = payload.action === 'reject' ? 'rejected' : 'assigned';
+      sub.reason = sstr(payload.reason, 300);
+      const p = game.players.get(sub.playerId);
+      if (p) toPlayer(p, 'submission-updated', { submission: { id: sub.id, status: sub.status, reason: sub.reason } });
+      done(game, callback);
+    });
+
+    /* ─── Player: Roll result { clientId, roll } (queued on the phone until acked; deduped) → DM `roll { roll }` ─── */
+    socket.on('player-roll', (payload = {}, callback) => {
+      const { game, player } = playerCtx();
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      const clientId = typeof payload.clientId === 'string' ? payload.clientId.slice(0, 64) : null;
+      if (clientId && t.clientIds.includes(clientId)) return callback?.({ success: true, duplicate: true });
+      let roll = payload.roll;
+      try { if (!roll || typeof roll !== 'object' || JSON.stringify(roll).length > MAX_ROLL_BYTES) return callback?.({ error: 'Invalid roll.' }); } catch { return callback?.({ error: 'Invalid roll.' }); }
+      roll = JSON.parse(JSON.stringify(roll));
+      const entry = { id: shortId('r'), clientId, playerId: player.id, playerName: player.name, characterName: player.character?.name || '', roll, at: Number(payload.at) || Date.now() };
+      t.rolls.push(entry);
+      if (t.rolls.length > MAX_ROLLS) t.rolls.splice(0, t.rolls.length - MAX_ROLLS);
+      if (clientId) rememberClientId(t, clientId);
+      const summary = sstr(roll.summary || roll.label || '', 200);
+      logTo(game, 'roll', `${pcName(player)} rolled${summary ? `: ${summary}` : ''}`);
+      toDM(game, 'roll', { roll: entry });
+      emitTable(game, { dmOnly: true });
+      touch(game);
+      callback?.({ success: true, id: entry.id });
+    });
+
     /* ─── Disconnect: never deletes anything — games/players go dormant ─── */
     socket.on('disconnect', () => {
       lastPing.delete(socket.id);
+      lastPause.delete(socket.id);
       const { code, role, playerId } = socket.data || {};
       const game = code ? games.get(code) : null;
       if (!game) return;

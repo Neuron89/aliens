@@ -59,6 +59,8 @@ export const sietchConfig = {
   height: H,
   theme: DUNE_MAP_THEME,
   stars: { count: 0, seed: 10191 },
+  backdrop: "sand",
+  levelNoun: "LEVEL",
   scenarioTag: 'DEEP DESERT',
   hull: { path: OUTLINE, overlays: rockStrata },
   exteriorDetails: exterior,

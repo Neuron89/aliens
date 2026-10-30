@@ -1,8 +1,10 @@
 import React from 'react';
 import { useUniverse } from '../UniverseContext';
 
-/* Dispatches to the active universe's dice roller (universe.rules.dice.Roller). */
-export default function DiceRoller() {
+/* Dispatches to the active universe's dice roller (universe.rules.dice.Roller).
+   Every roller accepts `preset` { attr, skill, bonus, label, attrKey?, skillKey? }
+   (pre-fills the pool / target and shows the label) plus roller-specific props. */
+export default function DiceRoller(props) {
   const { universe } = useUniverse();
   const Roller = universe.rules?.dice?.Roller;
   if (!Roller) {
@@ -13,5 +15,5 @@ export default function DiceRoller() {
       </div>
     );
   }
-  return <Roller />;
+  return <Roller {...props} />;
 }

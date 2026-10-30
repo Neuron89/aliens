@@ -32,6 +32,7 @@ export default function ScenarioDetail({ pack, tts, onBack, onPlay }) {
   };
 
   const allReadAloud = acts.flatMap(a => a.readAloud || []);
+  const narrationLabel = universe.theme?.logStyle === 'mentat' ? 'Narration — read aloud' : 'Read aloud';
   let globalParagraphIndex = 0;
 
   return (
@@ -42,7 +43,7 @@ export default function ScenarioDetail({ pack, tts, onBack, onPlay }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
           <div>
             <h2>{meta.title}</h2>
-            <p style={{ color: 'var(--text-dim)', fontStyle: 'italic', marginBottom: '0.5rem' }}>{meta.tagline}</p>
+            <p style={{ color: 'var(--text)', fontStyle: 'italic', fontSize: '1.05rem', lineHeight: 1.5, marginBottom: '0.6rem' }}>{meta.tagline}</p>
           </div>
           <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexWrap: 'wrap' }}>
             <ExportPackButton pack={pack} />
@@ -71,7 +72,7 @@ export default function ScenarioDetail({ pack, tts, onBack, onPlay }) {
             </button>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.8rem', color: 'var(--text-dim)', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '0.4rem 1.5rem', fontSize: '0.85rem', color: 'var(--text-dim)', flexWrap: 'wrap', letterSpacing: '0.04em' }}>
           {meta.players && <span>Players: <span style={{ color: 'var(--accent)' }}>{meta.players}</span></span>}
           {meta.playtime && <span>Playtime: <span style={{ color: 'var(--accent)' }}>{meta.playtime}</span></span>}
           {meta.type && <span>Type: <span style={{ color: 'var(--accent)' }}>{meta.type}</span></span>}
@@ -80,14 +81,14 @@ export default function ScenarioDetail({ pack, tts, onBack, onPlay }) {
           {sessionPackId === pack.id && <span style={{ color: 'var(--success)' }}>● ACTIVE {universe.terms.session.toUpperCase()} SCENARIO</span>}
         </div>
         {(meta.tone?.length > 0 || meta.contentWarnings?.length > 0) && (
-          <div style={{ marginTop: '0.5rem', fontSize: '0.7rem', color: 'var(--text-dim)' }}>
+          <div style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: 'var(--text-dim)', letterSpacing: '0.04em' }}>
             {meta.tone?.length > 0 && <span>TONE: {meta.tone.join(', ')}</span>}
             {meta.contentWarnings?.length > 0 && <span style={{ color: 'var(--warn)', marginLeft: meta.tone?.length ? '1rem' : 0 }}>CONTENT WARNINGS: {meta.contentWarnings.join(', ')}</span>}
           </div>
         )}
-        {meta.synopsis && (
-          <p style={{ marginTop: '0.6rem', fontSize: '0.8rem', color: 'var(--text)', lineHeight: '1.5' }}>
-            <span style={{ color: 'var(--accent)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>GM SYNOPSIS: </span>{meta.synopsis}
+          {meta.synopsis && (
+          <p style={{ marginTop: '0.75rem', fontSize: '0.95rem', color: 'var(--text)', lineHeight: '1.55', paddingLeft: '0.75rem', borderLeft: '3px solid color-mix(in srgb, var(--warn) 55%, transparent)' }}>
+            <span style={{ color: 'var(--warn)', fontSize: '0.68rem', letterSpacing: '0.14em', marginRight: '0.4rem' }}>GM SYNOPSIS</span>{meta.synopsis}
           </p>
         )}
       </div>
@@ -119,32 +120,39 @@ export default function ScenarioDetail({ pack, tts, onBack, onPlay }) {
             {actIdx === firstWithText && <TTSControls tts={tts} paragraphs={allReadAloud} />}
 
             {act.summary && (
-              <p style={{ color: 'var(--text-dim)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>{act.summary}</p>
+              <p className="act-summary"><b>SUMMARY</b>{act.summary}</p>
             )}
 
-            {paragraphs.map((para, pIdx) => (
-              <div key={pIdx}
-                className={`read-aloud-paragraph${isSpeaking && currentIndex === actStartIdx + pIdx ? ' speaking' : ''}`}>
-                {para}
+            {paragraphs.length > 0 && (
+              <div className="narration" role="group" aria-label="Read-aloud narration">
+                <div className="narration-label">{narrationLabel}</div>
+                {paragraphs.map((para, pIdx) => (
+                  <p key={pIdx}
+                    className={`read-aloud-paragraph${isSpeaking && currentIndex === actStartIdx + pIdx ? ' speaking' : ''}`}>
+                    {para}
+                  </p>
+                ))}
               </div>
-            ))}
+            )}
 
             {(act.gmNotes || act.agendaNotes) && (
-              <>
-                <button className="gm-notes-toggle" onClick={() => toggleGm(actIdx)}>
-                  {showGmNotes[actIdx] ? 'HIDE GM NOTES' : 'SHOW GM NOTES'}
+              <div className={`gm-box${showGmNotes[actIdx] ? ' open' : ''}`}>
+                <button type="button" className="gm-box-head" onClick={() => toggleGm(actIdx)} aria-expanded={!!showGmNotes[actIdx]}>
+                  <span className="chev" aria-hidden="true">▸</span>
+                  {(universe.terms.gmShort || 'GM').toUpperCase()} NOTES — EYES ONLY
+                  <small>{showGmNotes[actIdx] ? 'TAP TO HIDE' : 'TAP TO SHOW'}</small>
                 </button>
                 {showGmNotes[actIdx] && (
                   <div className="gm-notes">
                     {act.gmNotes}
                     {act.agendaNotes && (
-                      <div style={{ marginTop: act.gmNotes ? '0.5rem' : 0 }}>
-                        <strong>AGENDAS: </strong>{act.agendaNotes}
+                      <div style={{ marginTop: act.gmNotes ? '0.6rem' : 0 }}>
+                        <strong>AGENDAS </strong>{act.agendaNotes}
                       </div>
                     )}
                   </div>
                 )}
-              </>
+              </div>
             )}
           </div>
         );

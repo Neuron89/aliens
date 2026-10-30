@@ -79,6 +79,8 @@ export const maps = [
     crop: RES.residencyCrop,
     spawn: RES.residencySpawn,
     grid: 1 / 50,
+    levelNoun: "FLOOR",
+    backdrop: "sand",
   },
   {
     id: 'sietch-qarrat',
@@ -96,6 +98,8 @@ export const maps = [
     crop: SIE.sietchCrop,
     spawn: SIE.sietchSpawn,
     grid: 1 / 50,
+    levelNoun: "LEVEL",
+    backdrop: "sand",
   },
   ...imageMaps,
   {
@@ -105,6 +109,8 @@ export const maps = [
     scenario: 'The Water Debt',
     description: 'A modest rock-and-plasteel keep on the Shield Wall edge. Its cistern vault holds the town’s water reserve and is the true heart of the House.',
     ascii: QARRAT_KEEP_ASCII,
+    levelNoun: "FLOOR",
+    backdrop: "none",
     rooms: [
       { name: 'Great Hall', note: 'Audience chamber with a raised dais. Where the Assessor will be received in Act III.' },
       { name: "Steward's Counting Room", note: 'Ledgers, spice tallies and water accounts. A second, hidden ledger sits behind a loose wall panel.' },
@@ -125,6 +131,8 @@ export const maps = [
     scenario: 'Custom',
     description: 'A template for any Fremen sietch: hidden entrance, moisture-sealed passages, council cavern and the deathstill where the water of the dead is reclaimed.',
     ascii: SIETCH_ASCII,
+    levelNoun: "LEVEL",
+    backdrop: "none",
     rooms: [
       { name: 'Hidden Entrance', note: 'Concealed in rock; outsiders brought here blindfolded.' },
       { name: 'Watch Gallery', note: 'Lookouts and thumpers. Anyone approaching is seen long before they arrive.' },

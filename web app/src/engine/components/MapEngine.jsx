@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useContext, createContext } from 'react';
+import { useUniverse } from '../UniverseContext';
 
 /* ═══════════════════════════════════════════════════════════════════════
    MAP ENGINE v1.0 — Reusable SVG deck-plan & blueprint generation toolkit
@@ -29,6 +30,10 @@ import React, { useMemo, useState, useContext, createContext } from 'react';
    {
      width, height,                  // SVG viewBox (default 1100×920)
      theme: {},                      // Color overrides merged with DEFAULT_THEME
+     backdrop: 'space'|'sand'|'none' // Behind the plan; stars only for 'space'
+                                     //   (default 'space' when stars.count > 0)
+     levelNoun: 'DECK',              // Level word ('DECK' | 'FLOOR' | 'LEVEL');
+                                     //   default universe.theme.board.levelNoun
      stars: { count, seed },         // Star-field (default 200 / 1979)
      frame: true,                    // Outer frame + corner marks
      scenarioTag: '',                // Vertical label on left edge
@@ -76,6 +81,42 @@ const MapThemeCtx = createContext(null);
 
 export function useMapTheme() {
   return useContext(MapThemeCtx) || DEFAULT_THEME;
+}
+
+/** Provide a map theme to primitives drawn outside <MapEngine> (e.g. board/EngineLayer). */
+export function MapThemeProvider({ theme, children }) {
+  const value = useMemo(() => (theme ? createTheme(theme) : DEFAULT_THEME), [theme]);
+  return <MapThemeCtx.Provider value={value}>{children}</MapThemeCtx.Provider>;
+}
+
+/** Backdrop kind for a MapEngine config: 'space' | 'sand' | 'none'. */
+export function configBackdrop(config) {
+  if (config?.backdrop) return config.backdrop;
+  return (config?.stars?.count ?? 200) > 0 ? 'space' : 'none';
+}
+
+/** Faint wind-ripple backdrop (desert exteriors) drawn in the map's own palette. */
+export function SandBackdrop({ W, H, seed = 7 }) {
+  const C = useMapTheme();
+  const lines = useMemo(() => {
+    const rng = seededRandom(seed);
+    const out = [];
+    const rows = Math.round(H / 26);
+    for (let i = 0; i < rows; i++) {
+      const y0 = (i + 0.5) * (H / rows);
+      const ph = rng() * Math.PI * 2;
+      const amp = 4 + rng() * 6;
+      let d = `M -20 ${y0.toFixed(1)}`;
+      for (let x = 0; x <= W + 40; x += 40) d += ` L ${x} ${(y0 + Math.sin(x / 140 + ph) * amp).toFixed(1)}`;
+      out.push({ d, o: 0.06 + rng() * 0.1 });
+    }
+    return out;
+  }, [W, H, seed]);
+  return (
+    <g pointerEvents="none">
+      {lines.map((l, i) => <path key={i} d={l.d} fill="none" stroke={C.equipLine} strokeWidth="0.8" opacity={l.o} />)}
+    </g>
+  );
 }
 
 
@@ -466,6 +507,9 @@ export default function MapEngine({ config }) {
     legend = 'default',
   } = config;
 
+  const ctx = useUniverse();
+  const levelNoun = (config.levelNoun || ctx?.universe?.theme?.board?.levelNoun || 'DECK').toUpperCase();
+  const backdrop = configBackdrop(config);
   const C = themeOverrides ? createTheme(themeOverrides) : DEFAULT_THEME;
   const [activeDeckId, setActiveDeckId] = useState(decks[0]?.id);
   const activeDeck = decks.find(d => d.id === activeDeckId) || decks[0];
@@ -495,7 +539,7 @@ export default function MapEngine({ config }) {
                 padding: '0.4rem 0.8rem', cursor: 'pointer', borderRadius: '2px',
                 letterSpacing: '0.08em',
               }} onClick={() => setActiveDeckId(d.id)}>
-                DECK {d.id} — {d.name}
+                {levelNoun} {d.id} — {d.name}
               </button>
             ))}
           </div>
@@ -508,7 +552,8 @@ export default function MapEngine({ config }) {
 
           {/* Background */}
           <rect width={W} height={H} fill={purl('bgGrad')} />
-          {starData.map((s, i) => <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#c8d8e8" opacity={s.o} />)}
+          {backdrop === 'space' && starData.map((s, i) => <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#c8d8e8" opacity={s.o} />)}
+          {backdrop === 'sand' && <SandBackdrop W={W} H={H} seed={stars.seed} />}
 
           {/* Frame */}
           {frame && (
@@ -536,7 +581,7 @@ export default function MapEngine({ config }) {
           {/* Deck label */}
           {activeDeck && decks.length > 1 && (
             <g transform={`translate(${W / 2 - 55},42)`}>
-              <text y="8" fill={C.textDim} fontSize="10" letterSpacing="0.18em" style={{ fontFamily: 'var(--font-display)' }}>DECK</text>
+              <text x="32" y="8" fill={C.textDim} fontSize="10" letterSpacing="0.18em" textAnchor="end" style={{ fontFamily: 'var(--font-display)' }}>{levelNoun}</text>
               <circle cx="52" cy="3" r="15" fill="none" stroke={C.hullOutline} strokeWidth="1.6" />
               <text x="52" y="9" fill={C.textBright} fontSize="17" fontWeight="bold" textAnchor="middle"
                 style={{ fontFamily: 'var(--font-display)' }}>{activeDeck.id}</text>

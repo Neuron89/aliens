@@ -61,6 +61,8 @@ export const residencyConfig = {
   height: H,
   theme: DUNE_MAP_THEME,
   stars: { count: 0, seed: 1965 },
+  backdrop: "sand",
+  levelNoun: "FLOOR",
   scenarioTag: 'HOUSE SEAT',
   hull: { path: OUTLINE },
   sidebar: duneSidebar({ title: 'ARRAKEEN RESIDENCY', subtitle: 'GOVERNOR’S RESIDENCE — ARRAKEEN' }),

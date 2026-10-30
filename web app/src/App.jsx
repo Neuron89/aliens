@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './engine/components/Header';
 import Nav from './engine/components/Nav';
 import AudioPanel from './engine/components/AudioPanel';
@@ -11,6 +11,7 @@ import DMDashboard from './engine/components/DMDashboard';
 import PlayerView from './engine/components/PlayerView';
 import BoardView from './engine/components/BoardView';
 import MapController from './engine/components/MapController';
+import RunView from './engine/components/run/RunView';
 import UniverseSelect, { BootOverlay } from './engine/components/UniverseSelect';
 import { UniverseProvider, useUniverse } from './engine/UniverseContext';
 import { ContentProvider } from './engine/ContentContext';
@@ -28,9 +29,14 @@ function AppContent() {
   const [activeSection, setActiveSection] = useState('scenarios');
   const audio = useAmbientAudio();
   const tts = useTTS();
-  const { role } = useGame();
+  const { role, gameCode, packId } = useGame();
   const { universe, chosen } = useUniverse();
   const [boardTab] = useState(() => !!boardCodeForTab());
+
+  // Session features: once a DM session is live, land on RUN (scenario) or the session tab (sandbox).
+  useEffect(() => {
+    if (role === 'dm' && gameCode) setActiveSection(packId ? 'run' : 'session');
+  }, [role, gameCode, packId]);
 
   // Table board (TV): ?board=CODE — full screen map, no chrome
   if (role === 'board' || boardTab) {
@@ -69,6 +75,7 @@ function AppContent() {
         <Header />
         <Nav active={activeSection} onChange={setActiveSection} isDM />
 
+        <Section id="run" active={activeSection}><RunView tts={tts} /></Section>
         <Section id="session" active={activeSection}><DMDashboard /></Section>
         <Section id="board" active={activeSection}><MapController /></Section>
         <Section id="scenarios" active={activeSection}><ScenarioLibrary tts={tts} /></Section>

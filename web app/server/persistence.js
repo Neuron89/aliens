@@ -9,6 +9,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { restoreLog } from './sessionLog.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const DATA_DIR = path.resolve(process.env.DATA_DIR || path.join(__dirname, '..', 'data'));
@@ -43,6 +44,8 @@ export function toSnapshot(game) {
     assignedCharacterIds: Array.from(game.assignedCharacterIds),
     board: game.board || null, // table board (server/board.js), plain JSON
     mapDef: game.mapDef || null,
+    table: game.table || null, // session features (sessions.js tableOf): run, narration, handouts, clues, clocks, safety…
+    log: Array.isArray(game.log) ? game.log : [], // server/sessionLog.js
   };
 }
 
@@ -67,6 +70,8 @@ export function fromSnapshot(s) {
     assignedCharacterIds: new Set(Array.isArray(s.assignedCharacterIds) ? s.assignedCharacterIds : []),
     board: s.board && typeof s.board === 'object' ? s.board : null, // sessions.js substitutes an empty board
     mapDef: s.mapDef && typeof s.mapDef === 'object' ? s.mapDef : null,
+    table: s.table && typeof s.table === 'object' ? s.table : null, // sessions.js normalizes (tableOf)
+    log: restoreLog(s.log),
   };
 }
 

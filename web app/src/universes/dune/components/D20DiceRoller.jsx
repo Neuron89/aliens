@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { rules } from '../rules.js';
+import { play, reducedFx } from '../../../engine/sfx';
 
 /* 2d20 test roller.
    Target number = drive + skill. Roll 2d20 (+ up to 3 bonus d20 bought with
@@ -7,7 +8,12 @@ import { rules } from '../rules.js';
    critical range = 2 successes (range 1 normally; with a relevant FOCUS the
    range extends to the skill rating). Each die within the complication range
    (20 by default, widening down to 16) is a complication. Successes beyond the
-   Difficulty become Momentum. Difficulty 0 always succeeds. */
+   Difficulty become Momentum. Difficulty 0 always succeeds.
+
+   Props: preset { attr, skill, bonus, label, attrKey?, skillKey? } pre-fills
+   Drive (attr) + Skill and the bonus d20s, selects attrKey/skillKey, and
+   shows the label. Settle-then-celebrate: dice tumble, settle, then a
+   result overlay + sfx (dice.settle → dice.crit / dice.botch). */
 
 const { attributes, skills, dice } = rules;
 const BASE = dice.baseDice || 2;
@@ -47,11 +53,11 @@ const CSS = `
 .d20.comp .d20-face::before{background:color-mix(in srgb,var(--danger) 18%,var(--bg-card))}
 .d20.comp .d20-num{color:#ff8a7a}
 .d20.comp.settled{animation:d20-settle .42s cubic-bezier(.2,1.4,.4,1) both,d20-flash .5s .42s ease-in-out 2}
-.d20-tag{position:absolute;bottom:-1.1rem;left:50%;transform:translateX(-50%);font-size:.52rem;letter-spacing:.12em;color:var(--text-dim);white-space:nowrap}
+.d20-tag{position:absolute;bottom:-1.1rem;left:50%;transform:translateX(-50%);font-size:.62rem;letter-spacing:.12em;color:var(--text-dim);white-space:nowrap}
 .d20.success .d20-tag,.d20.crit .d20-tag{color:var(--accent)}
 .d20.comp .d20-tag{color:var(--danger)}
 .d20-pills{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1rem 0 .5rem}
-.d20-pill{display:inline-flex;align-items:center;gap:.45rem;font-size:.72rem;letter-spacing:.14em;padding:.32rem .75rem;border-radius:999px;border:1px solid var(--border-bright);color:var(--text)}
+.d20-pill{display:inline-flex;align-items:center;gap:.45rem;font-size:.78rem;letter-spacing:.14em;padding:.32rem .75rem;border-radius:999px;border:1px solid var(--border-bright);color:var(--text)}
 .d20-pill.pass{border-color:var(--success);color:var(--success)}
 .d20-pill.fail{border-color:var(--danger);color:var(--danger)}
 .d20-pill.momentum{border-color:var(--accent);color:var(--accent-bright);background:var(--accent-glow);animation:d20-pop .4s .45s both}
@@ -66,7 +72,14 @@ const CSS = `
 `;
 
 const KIND_LABEL = { crit: '2 SUCCESSES', success: 'SUCCESS', comp: 'COMPLICATION', fail: '' };
-const reducedMotion = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const reducedMotion = () => reducedFx();
+
+function outcome(r) {
+  if (r.complications > 0 && !r.passed) return { kind: 'botch', text: 'COMPLICATION' };
+  if (!r.passed) return { kind: 'fail', text: 'FAILED' };
+  if (r.dieKinds.includes('crit') || r.momentum >= 2) return { kind: 'crit', text: r.momentum ? `+${r.momentum} MOMENTUM` : 'CRITICAL' };
+  return { kind: 'success', text: 'PASSED' };
+}
 
 function Die({ value, kind, rolling }) {
   const cls = rolling ? 'd20 rolling' : `d20 settled ${kind}`;
@@ -81,7 +94,7 @@ function Die({ value, kind, rolling }) {
   );
 }
 
-export default function D20DiceRoller() {
+export default function D20DiceRoller({ preset }) {
   const [driveKey, setDriveKey] = useState(attributes[0].key);
   const [skillKey, setSkillKey] = useState(skills[0].key);
   const [drive, setDrive] = useState(6);
@@ -93,8 +106,22 @@ export default function D20DiceRoller() {
   const [result, setResult] = useState(null);
   const [rollId, setRollId] = useState(0);
   const [tumble, setTumble] = useState(null); // random faces shown while the dice tumble
+  const [label, setLabel] = useState(null);
   const timer = useRef(null);
   useEffect(() => () => clearInterval(timer.current), []);
+
+  /* Apply a preset whenever its contents change. */
+  const presetKey = preset ? JSON.stringify(preset) : '';
+  useEffect(() => {
+    if (!preset) return;
+    if (preset.attrKey && attributes.some((a) => a.key === preset.attrKey)) setDriveKey(preset.attrKey);
+    if (preset.skillKey && skills.some((s) => s.key === preset.skillKey)) setSkillKey(preset.skillKey);
+    if (preset.attr != null) setDrive(clamp(Number(preset.attr) || 1, 1, 12));
+    if (preset.skill != null) setSkill(clamp(Number(preset.skill) || 1, 1, 12));
+    setBonus(clamp(Number(preset.bonus) || 0, 0, MAX_BONUS));
+    setLabel(preset.label || null);
+    setResult(null);
+  }, [presetKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const target = drive + skill;
   const critMax = focus ? skill : (dice.criticalRange || 1);
@@ -117,13 +144,19 @@ export default function D20DiceRoller() {
     clearInterval(timer.current);
     setRollId((n) => n + 1);
     setResult(final);
-    if (reducedMotion()) { setTumble(null); return; }
+    const celebrate = () => {
+      play('dice.settle');
+      const o = outcome(final);
+      if (o.kind === 'botch' || final.complications > 0) setTimeout(() => play('dice.botch'), 140);
+      else if (o.kind === 'crit') setTimeout(() => play('dice.crit'), 140);
+    };
+    if (reducedMotion()) { setTumble(null); celebrate(); return; }
     // short tumble (~450 ms) before the dice settle on their real faces
     let ticks = 0;
     setTumble(rolls.map(rollD20));
     timer.current = setInterval(() => {
       ticks += 1;
-      if (ticks >= 6) { clearInterval(timer.current); setTumble(null); return; }
+      if (ticks >= 6) { clearInterval(timer.current); setTumble(null); celebrate(); return; }
       setTumble(rolls.map(rollD20));
     }, 75);
   }, [bonus, critMax, target, compMin, difficulty]);
@@ -135,7 +168,14 @@ export default function D20DiceRoller() {
     <div className="panel">
       <style>{CSS}</style>
       <h2>2D20 TEST</h2>
-      <p style={{ color: 'var(--text-dim)', marginBottom: '1rem', fontSize: '0.85rem' }}>
+      {label && (
+        <div className="roll-preset">
+          <b>{label}</b>
+          <span>TARGET {target} · {BASE + bonus}D20</span>
+          <button type="button" onClick={() => setLabel(null)}>CLEAR</button>
+        </div>
+      )}
+      <p style={{ color: 'var(--text-dim)', marginBottom: '1rem', fontSize: '0.95rem', lineHeight: 1.5 }}>
         Target = Drive + Skill. Each d20 at or under the target is a success; within the critical range it counts twice.
         Meet the Difficulty to pass; every extra success becomes Momentum. Results in the complication range are complications.
       </p>
@@ -182,7 +222,7 @@ export default function D20DiceRoller() {
         <button className="btn" onClick={doRoll}>ROLL {BASE + bonus}d20</button>
       </div>
 
-      <div className="roll-result">
+      <div className="roll-result roll-stage">
         {result ? (
           <>
             <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
@@ -209,7 +249,8 @@ export default function D20DiceRoller() {
                     <span className="d20-pill comp">⚠ {result.complications} COMPLICATION{result.complications > 1 ? 'S' : ''}</span>
                   )}
                 </div>
-                <div className="roll-summary" style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
+                {(() => { const o = outcome(result); return <div key={`c${rollId}`} className={`roll-celebrate ${o.kind}`} aria-hidden="true"><span>{o.text}</span></div>; })()}
+                <div className="roll-summary" style={{ fontSize: '0.92rem', lineHeight: 1.5, color: 'var(--text-dim)' }}>
                   {result.complications > 0 && <div>The Narrator may take 2 Threat per complication instead of applying it.</div>}
                   {result.passed && result.momentum > 0 && <div>Momentum joins the shared pool (max 6): Obtain Information (1), Create a Trait (2), extra Stress (1), Keep the Initiative (2).</div>}
                   {!result.passed && (

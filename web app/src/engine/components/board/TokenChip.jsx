@@ -78,55 +78,148 @@ export function Glyph({ name, r, color }) {
   return <text y={r * 0.38} textAnchor="middle" fontSize={r * 1.2} fill={color} fontWeight="bold">{String(name).slice(0, 2)}</text>;
 }
 
+
+/* ─── Token status rings (backlog row 25) ──────────────────────────────
+   token.status: ['stress:3', 'wounded', …] (or a comma string). Each
+   status = one coloured ring segment + a small glyph badge (colour is
+   always paired with a shape for colour-blind safety). Unknown names get
+   a neutral segment and their first two letters. */
+
+const SG = { fill: 'none', stroke: 'currentColor', strokeWidth: 0.2, strokeLinecap: 'round', strokeLinejoin: 'round' };
+export const STATUS_DEFS = {
+  stress: { label: 'STRESS', color: '#f5b82e', glyph: <path d="M0.15 -0.85 L-0.45 0.08 L0 0.08 L-0.15 0.85 L0.45 -0.12 L0 -0.12 Z" fill="currentColor" /> },
+  broken: { label: 'BROKEN', color: '#ff5a4e', glyph: <g {...SG} strokeWidth="0.26"><path d="M-0.55 -0.55 L0.55 0.55 M0.55 -0.55 L-0.55 0.55" /></g> },
+  panicking: { label: 'PANICKING', color: '#ff3d7f', glyph: <g><path d="M0 -0.85 L0.85 0.7 L-0.85 0.7 Z" fill="currentColor" /><rect x="-0.08" y="-0.3" width="0.16" height="0.55" fill="#000" /><circle cy="0.48" r="0.09" fill="#000" /></g> },
+  burning: { label: 'BURNING', color: '#ff7a1a', glyph: GLYPHS.fire },
+  hidden: { label: 'HIDDEN', color: '#9fb4c0', glyph: <g {...SG}><path d="M-0.8 0 Q0 -0.65 0.8 0 Q0 0.65 -0.8 0 Z" /><circle r="0.2" fill="currentColor" stroke="none" /><path d="M-0.7 0.7 L0.7 -0.7" strokeWidth="0.18" /></g> },
+  wounded: { label: 'WOUNDED', color: '#e0453a', glyph: GLYPHS.blood },
+};
+
+/** Normalize token.status to [{ key, count }]. */
+export function tokenStatuses(status) {
+  const list = Array.isArray(status) ? status : typeof status === 'string' ? status.split(',') : [];
+  const out = [];
+  for (const raw of list) {
+    const [k, n] = String(raw).trim().toLowerCase().split(':');
+    if (!k || out.some((s) => s.key === k)) continue;
+    const count = Number.parseInt(n, 10);
+    out.push({ key: k, count: Number.isFinite(count) && count > 0 ? count : null });
+  }
+  return out.slice(0, 6);
+}
+
+function arcPath(R, a0, a1) {
+  const p = (a) => [Math.sin(a) * R, -Math.cos(a) * R];
+  const [x0, y0] = p(a0);
+  const [x1, y1] = p(a1);
+  return `M ${x0.toFixed(3)} ${y0.toFixed(3)} A ${R} ${R} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${x1.toFixed(3)} ${y1.toFixed(3)}`;
+}
+
+export function StatusRing({ statuses, r, ring, style = 'segments', chipFill = '#0a0c10' }) {
+  if (!statuses.length) return null;
+  const R = r + ring * 1.9;
+  const w = Math.max(ring * 1.25, r * 0.16);
+  const n = statuses.length;
+  const gap = n > 1 ? 0.16 : 0;
+  const seg = (Math.PI * 2) / n;
+  const arcs = style === 'arcs';
+  const badgeR = Math.max(r * 0.42, ring * 2.2);
+  return (
+    <g className={`tk-status tk-status-${style}`} pointerEvents="none">
+      {/* dark under-ring so segments read on any map colour */}
+      <circle r={R} fill="none" stroke="rgba(0,0,0,0.75)" strokeWidth={w + ring * 0.9} />
+      {statuses.map((s, i) => {
+        const def = STATUS_DEFS[s.key] || { color: '#cfd8dc' };
+        const a0 = i * seg + gap / 2;
+        const a1 = (i + 1) * seg - gap / 2;
+        return n === 1
+          ? <circle key={s.key} r={R} fill="none" stroke={def.color} strokeWidth={w} strokeDasharray={arcs ? undefined : `${R * 0.42} ${R * 0.1}`} />
+          : <path key={s.key} d={arcPath(R, a0, a1)} fill="none" stroke={def.color} strokeWidth={w} strokeLinecap={arcs ? 'round' : 'butt'} />;
+      })}
+      {arcs && <circle r={R + w / 2 + ring * 0.25} fill="none" stroke="#e8c070" strokeWidth={ring * 0.22} opacity="0.55" />}
+      {statuses.map((s, i) => {
+        const def = STATUS_DEFS[s.key] || { color: '#cfd8dc' };
+        // badges march around the upper-left so the label plate below stays clear
+        const a = -Math.PI / 2 - 0.35 - i * 0.78;
+        const bx = Math.cos(a) * (R + badgeR * 0.55);
+        const by = Math.sin(a) * (R + badgeR * 0.55);
+        return (
+          <g key={`b-${s.key}`} transform={`translate(${bx.toFixed(2)},${by.toFixed(2)})`} style={{ color: def.color }}>
+            {arcs
+              ? <circle r={badgeR} fill={chipFill} stroke={def.color} strokeWidth={ring * 0.55} />
+              : <rect x={-badgeR} y={-badgeR} width={badgeR * 2} height={badgeR * 2} rx={badgeR * 0.25} fill={chipFill} stroke={def.color} strokeWidth={ring * 0.55} />}
+            {def.glyph
+              ? <g transform={`scale(${badgeR * 0.62})`}>{def.glyph}</g>
+              : <text y={badgeR * 0.35} textAnchor="middle" fontSize={badgeR} fill={def.color} fontWeight="bold">{s.key.slice(0, 2).toUpperCase()}</text>}
+            {s.count && (
+              <g transform={`translate(${badgeR * 0.85},${badgeR * 0.85})`}>
+                <circle r={badgeR * 0.55} fill={def.color} />
+                <text y={badgeR * 0.2} textAnchor="middle" fontSize={badgeR * 0.75} fontWeight="bold" fill="#000">{s.count}</text>
+              </g>
+            )}
+          </g>
+        );
+      })}
+    </g>
+  );
+}
+
 /**
  * Props: token, unit (map px of size 1), counter (transform string that keeps
  * content upright on screen), uid (unique id prefix), selected, mine,
- * ghost (DM view of a hidden token), showLabel, dragging.
+ * ghost (DM view of a hidden token), showLabel, dragging,
+ * palette (board palette: chipFill, statusStyle, font), labelMin (min label
+ * font size in map px, so TV labels stay >= 20 screen px).
  */
-export default function TokenChip({ token: t, x, y, unit, counter = '', uid, selected, mine, ghost, showLabel = true, dragging }) {
-  const r = Math.max(4, (t.size || 1) * unit * 0.46);
+export default function TokenChip({ token: t, x, y, unit, counter = '', uid, selected, mine, ghost, showLabel = true, dragging, palette, labelMin = 0, minR = 0 }) {
+  const r = Math.max(4, (t.size || 1) * unit * 0.46, minR * (t.size || 1));
   const color = t.color || KIND_COLOR[t.kind] || '#b0bec5';
   const clipId = `${uid}-clip-${t.id}`;
   const isPc = t.kind === 'pc';
   const ring = isPc ? r * 0.2 : r * 0.12;
   const label = t.label || '';
-  const fs = Math.max(unit * 0.32, r * 0.5);
-  const plateW = Math.min(label.length * fs * 0.62 + fs, unit * 6);
+  const fs = Math.max(unit * 0.32, r * 0.5, labelMin);
+  const shown = label.length > 18 ? label.slice(0, 17) + '…' : label;
+  const plateW = Math.min(shown.length * fs * 0.62 + fs, Math.max(unit * 6, fs * 12));
   const facing = Number.isFinite(t.facing) ? t.facing : 0;
   const showFacing = isPc || t.kind === 'creature' || t.kind === 'npc' || facing !== 0;
-  const cls = `tk tk-${t.kind}${selected ? ' tk-selected' : ''}${mine ? ' tk-mine' : ''}${ghost ? ' tk-ghost' : ''}${dragging ? ' tk-dragging' : ''}`;
+  const statuses = tokenStatuses(t.status);
+  const chipFill = palette?.chipFill || '#0a0c10';
+  const ringOut = statuses.length ? ring * 1.9 + Math.max(ring * 1.25, r * 0.16) : 0;
+  const cls = `tk tk-${t.kind}${selected ? ' tk-selected' : ''}${mine ? ' tk-mine' : ''}${ghost ? ' tk-ghost' : ''}${dragging ? ' tk-dragging' : ''}${statuses.length ? ' tk-has-status' : ''}`;
 
   return (
     <g className={cls} transform={`translate(${x},${y})`} data-token={t.id} style={{ color }}>
-      {mine && <circle className="tk-mine-pulse" r={r * 1.35} fill="none" stroke={color} strokeWidth={ring * 0.8} />}
-      {selected && <circle r={r + ring * 2.2} fill="none" stroke="#ffffff" strokeWidth={ring * 0.7} strokeDasharray={`${r * 0.5} ${r * 0.3}`} />}
+      {mine && <circle className="tk-mine-pulse" r={r * 1.35 + ringOut} fill="none" stroke={color} strokeWidth={ring * 0.8} />}
+      {selected && <circle r={r + ring * 2.2 + ringOut} fill="none" stroke="#ffffff" strokeWidth={ring * 0.7} strokeDasharray={`${r * 0.5} ${r * 0.3}`} />}
       {showFacing && (
         <g transform={`rotate(${facing})`}>
-          <path d={`M ${-r * 0.32} ${-r - ring * 0.2} L 0 ${-r - ring * 2.6} L ${r * 0.32} ${-r - ring * 0.2} Z`} fill={color} />
+          <path d={`M ${-r * 0.32} ${-r - ring * 0.2 - ringOut} L 0 ${-r - ring * 2.6 - ringOut} L ${r * 0.32} ${-r - ring * 0.2 - ringOut} Z`} fill={color} />
         </g>
       )}
       <g transform={counter}>
-        <circle r={r} fill="#0a0c10" stroke={color} strokeWidth={ring} strokeDasharray={ghost ? `${r * 0.35} ${r * 0.25}` : undefined} />
+        <StatusRing statuses={statuses} r={r} ring={ring} style={palette?.statusStyle} chipFill={chipFill} />
+        <circle r={r} fill={chipFill} stroke={color} strokeWidth={ring} strokeDasharray={ghost ? `${r * 0.35} ${r * 0.25}` : undefined} />
         {t.icon ? (
           <>
             <clipPath id={clipId}><circle r={r - ring / 2} /></clipPath>
             <image href={t.icon} x={-r} y={-r} width={r * 2} height={r * 2} clipPath={`url(#${clipId})`} preserveAspectRatio="xMidYMid slice" />
           </>
         ) : isPc ? (
-          <text y={r * 0.34} textAnchor="middle" fontSize={r * 0.95} fontWeight="bold" fill="#ffffff" letterSpacing="0.02em">{initials(label)}</text>
+          <text y={r * 0.34} textAnchor="middle" fontSize={r * 0.95} fontWeight="bold" fill="#ffffff" letterSpacing="0.02em" fontFamily={palette?.font}>{initials(label)}</text>
         ) : (
           <Glyph name={t.glyph || (t.kind === 'npc' ? 'person' : t.kind === 'item' ? 'crate' : t.kind === 'creature' ? 'claw' : 'diamond')} r={r * 0.62} color={color} />
         )}
         {isPc && t.glyph && (
           <g transform={`translate(${r * 0.74},${r * 0.74})`}>
-            <circle r={r * 0.4} fill="#0a0c10" stroke={color} strokeWidth={ring * 0.5} />
+            <circle r={r * 0.4} fill={chipFill} stroke={color} strokeWidth={ring * 0.5} />
             <Glyph name={t.glyph} r={r * 0.26} color={color} />
           </g>
         )}
         {showLabel && label && (
-          <g transform={`translate(0,${r + ring + fs * 0.9})`}>
-            <rect x={-plateW / 2} y={-fs * 0.85} width={plateW} height={fs * 1.25} rx={fs * 0.35} fill="rgba(0,0,0,0.78)" stroke={color} strokeWidth={fs * 0.06} />
-            <text y={fs * 0.12} textAnchor="middle" fontSize={fs} fill="#f2f4f8" letterSpacing="0.04em">{label.length > 18 ? label.slice(0, 17) + '…' : label}</text>
+          <g transform={`translate(0,${r + ring + ringOut * 0.6 + fs * 0.9})`}>
+            <rect x={-plateW / 2} y={-fs * 0.85} width={plateW} height={fs * 1.25} rx={fs * 0.35} fill="rgba(0,0,0,0.82)" stroke={color} strokeWidth={fs * 0.06} />
+            <text y={fs * 0.12} textAnchor="middle" fontSize={fs} fill="#f2f4f8" letterSpacing="0.04em" fontFamily={palette?.font}>{shown}</text>
           </g>
         )}
       </g>

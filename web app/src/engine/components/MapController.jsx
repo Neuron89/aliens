@@ -4,7 +4,7 @@ import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
 import MapCanvas from './board/MapCanvas';
 import RoomEditor from './board/RoomEditor';
-import { Glyph, MARKERS, careerGlyph, initials } from './board/TokenChip';
+import { Glyph, MARKERS, careerGlyph, initials, STATUS_DEFS, tokenStatuses } from './board/TokenChip';
 import { boardMapOptions, findMapOption, resolveMapDef } from './board/mapDefs';
 import { qrPath } from './board/qr';
 
@@ -384,6 +384,33 @@ export default function MapController() {
                 )}
                 <span className="mc-meta">{tok.roomId ? (mapDef?.rooms.find((r) => r.id === tok.roomId)?.name || tok.roomId) : 'NO ROOM'}</span>
               </div>
+              {tok.kind !== 'marker' && tok.kind !== 'hazard' && tok.kind !== 'item' && (
+                <div className="mc-sheet-row" role="group" aria-label="Token status">
+                  <span className="mc-meta">STATUS</span>
+                  {Object.entries(STATUS_DEFS).map(([key, def]) => {
+                    const cur = tokenStatuses(tok.status);
+                    const on = cur.find((s) => s.key === key);
+                    const write = (next) => g.boardUpsertToken({ id: tok.id, status: next.map((s) => (s.count ? `${s.key}:${s.count}` : s.key)) });
+                    const toggle = () => write(on ? cur.filter((s) => s.key !== key) : [...cur, { key, count: null }]);
+                    if (key === 'stress' && on) {
+                      const set = (n) => write(n <= 0 ? cur.filter((s) => s.key !== key) : cur.map((s) => (s.key === key ? { ...s, count: Math.min(10, n) } : s)));
+                      return (
+                        <span key={key} className="mc-seg">
+                          <button onClick={() => set((on.count || 1) - 1)} aria-label="Less stress">−</button>
+                          <span className="mc-seg-val" style={{ color: def.color }}>STRESS {on.count || 1}</span>
+                          <button onClick={() => set((on.count || 1) + 1)} aria-label="More stress">+</button>
+                        </span>
+                      );
+                    }
+                    return (
+                      <button key={key} className={`mc-btn mc-status${on ? ' on' : ''}`} aria-pressed={!!on} onClick={toggle}
+                        style={on ? { borderColor: def.color, color: def.color, background: `color-mix(in srgb, ${def.color} 12%, transparent)` } : undefined}>
+                        {def.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               <div className="mc-sheet-row">
                 <textarea className="mc-input mc-grow" key={`n-${tok.id}`} rows={2} defaultValue={tok.note || ''} placeholder="GM note (never shown on the board)"
                   onBlur={(e) => e.target.value !== (tok.note || '') && g.boardUpsertToken({ id: tok.id, note: e.target.value })} />

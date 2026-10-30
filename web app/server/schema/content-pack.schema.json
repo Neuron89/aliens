@@ -147,6 +147,16 @@
       "type": "array",
       "items": { "$ref": "#/$defs/handout" }
     },
+    "clues": {
+      "description": "Secrets and clues the GM can reveal to one, several or all players with one tap (Three Clue Rule: give every important conclusion at least three clues). Scenes point at them with clueRefs. 0–12 per scenario.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/clue" }
+    },
+    "clocks": {
+      "description": "Progress clocks the GM ticks during play: a danger approaching, a race against time, or a tug-of-war. Visible clocks render on the table board and the players' phones. 0–6 per scenario.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/clock" }
+    },
     "maps": {
       "description": "Maps for the GM screen: ASCII schematics drawn with box-drawing characters, or images by URL.",
       "type": "array",
@@ -200,6 +210,7 @@
         },
         "gmNotes": { "description": "Private GM guidance for the act in 1–3 paragraphs: what is really happening, which events to trigger, how agendas should start to bite, and how to pace toward the next act.", "type": "string" },
         "agendaNotes": { "description": "How the characters' personal agendas should develop during this act (subtle in Act I, conflicting in Act II, open betrayal in Act III).", "type": "string" },
+        "sceneArt": { "description": "Optional image (site path such as \"/art/scenes/pad-b.webp\" or an https URL) shown full-bleed on the table board in theatre-of-mind mode while this act runs.", "type": "string" },
         "scenes": {
           "description": "Ordered scene-by-scene runner the GM checks off during play, typically 3–8 per act.",
           "type": "array",
@@ -239,7 +250,13 @@
           "description": "Likely results of the scene and where each leads.",
           "type": "array",
           "items": { "type": "string", "description": "One outcome and its consequence." }
-        }
+        },
+        "clueRefs": {
+          "description": "Ids of entries in the pack's clues[] that can be found in this scene.",
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "description": "A clue id from clues[]." }
+        },
+        "ambient": { "description": "Optional ambient audio cue for the scene: a universe audio preset id or a site path to an audio file.", "type": "string" }
       }
     },
     "npc": {
@@ -281,7 +298,36 @@
         "to": { "description": "Intended recipient: a character name, a role, or \"ALL CREW\".", "type": "string" },
         "priority": { "description": "Priority label shown on the player's phone; prefer one of the universe's priorities (ALIEN: STANDARD, PRIORITY, EYES ONLY, EMERGENCY).", "type": "string" },
         "text": { "description": "The message body, 20–200 words, fully in-world in teletype style. No GM notes.", "type": "string", "minLength": 1 },
-        "when": { "description": "When the GM should send it, e.g. \"Act II, after the logs are recovered\".", "type": "string" }
+        "when": { "description": "When the GM should send it, e.g. \"Act II, after the logs are recovered\".", "type": "string" },
+        "image": { "description": "Optional image shown with the handout on the phone (and full-bleed on the board when the GM pushes it there): a site path such as \"/art/handouts/manifest.webp\" or an https URL.", "type": "string" }
+      }
+    },
+    "clue": {
+      "description": "A secret or clue the players can discover.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text"],
+      "properties": {
+        "id": { "description": "kebab-case id unique within the pack.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "text": { "description": "What the players learn, as the GM would tell or show it, in one or two sentences (no rules text).", "type": "string", "minLength": 1 },
+        "source": { "description": "Where or from whom it can be found, e.g. \"Abram's maintenance log\".", "type": "string" },
+        "scene": { "description": "Name of the scene where it is most likely found (optional; scenes may also list it in clueRefs).", "type": "string" },
+        "status": { "description": "Initial status: \"hidden\" (default) or \"revealed\" for something the players know from the start.", "enum": ["hidden", "revealed"] }
+      }
+    },
+    "clock": {
+      "description": "A progress clock.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "segments"],
+      "properties": {
+        "id": { "description": "kebab-case id unique within the pack.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "label": { "description": "Short upper-case label shown on the board, e.g. \"REACTOR MELTDOWN\" or \"RESCUE SHIP ARRIVES\".", "type": "string", "minLength": 1 },
+        "segments": { "description": "Number of segments: 4 (soon), 6 (a while), 8 (long haul) or another count from 2 to 12.", "type": "integer", "minimum": 2, "maximum": 12 },
+        "filled": { "description": "Segments already filled at the start (default 0).", "type": "integer", "minimum": 0, "maximum": 12 },
+        "kind": { "description": "\"danger\" = strikes when full; \"racing\" = the players' progress racing a danger; \"tug\" = a tug-of-war that can move both ways.", "enum": ["danger", "racing", "tug"] },
+        "visibility": { "description": "\"all\" = shown on the board and phones; \"gm\" = the GM's eyes only.", "enum": ["all", "gm"] },
+        "note": { "description": "What happens when the clock fills, for the GM.", "type": "string" }
       }
     },
     "map": {

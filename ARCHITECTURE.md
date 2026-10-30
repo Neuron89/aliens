@@ -244,6 +244,46 @@ doc and the schema in sync. Validation runs on every save and on every generator
     Context additions: `reconnecting`, `dmOnline`, `lastSaved`, `resumeGame(code, {takeover}?, cb)`, `listResumable(cb)`,
     `hasDmToken(code)`. DM `leaveGame` = `end-game`; player `leaveGame` only clears local state (seat stays dormant).
   - Regression test: `node scripts/test-sessions.mjs` (spawns the server with a temp `DATA_DIR`, kills/restarts it).
+- Session features (wave 1 — `docs/RESEARCH_GM_PLAYER_EXPERIENCE.md` rows 1–6, 13, 14, 16, 34, 38, 48, 49, 58–60, 62).
+  State lives on `game.table` (+ `game.log`, `server/sessionLog.js`), persisted with the snapshot:
+  `{ run: { actIndex, sceneIndex, completed: {"a-s": true}, actTitle, sceneTitle }, narration: { id, text, title, mode, art, at } | null,
+  boardMode: 'map'|'theatre', theatre: { title, subtitle, art }, handouts: [{ id, title, from, to, priority, text, image, recipients: 'all'|[ids], sentAt, seenBy[], custom }],
+  clues: [{ id, text, source, scene, status: 'hidden'|'revealed', revealedTo: 'all'|[ids]|null, foundBy[], revealedAt, adhoc }],
+  clocks: [{ id, label, segments 2–12, filled, kind: 'danger'|'racing'|'tug', visibility: 'all'|'gm', note? }],
+  safety: { enabled, tone[], warnings[], linesVeils, confirmed[] }, pause: { at } | null, orders: { playerId: [{ actIndex, actTitle, text, at }] },
+  submissions: [{ id, playerId, playerName, character, at, status: 'pending'|'assigned'|'rejected', reason }], rolls: [≤100], seeded }`.
+  - Role views (`table-state { table }` after every mutation): DM = everything (minus the dedupe buffer); board =
+    `{ narration, boardMode, theatre, clocks (visible only), pause }`; player = `{ narration, clocks (visible), paused, handouts (sent to them,
+    + seen flag, no receipts), clues (revealed to them, foundBy as names), safety (+ confirmed bool), orders (own), submission (own latest) }`.
+    `resume-game` adds `table` + `log`; `join-game` / `rejoin-game` add `table` (+ `dmConnected` on join); `join-board` adds `table`.
+  - DM events (`{ gameCode?, … }`, ack `{ success, … } | { error }`):
+    `table-sync {}` (any role; `{ table, log? }`), `session-seed { clocks[], clues[] }` (idempotent; sets `seeded`; pack clue `status:'revealed'` → revealed to all),
+    `run-set { actIndex?, sceneIndex?, completed?, actTitle?, sceneTitle? }`, `advance-act { actIndex, actTitle?, sceneTitle?, agendas?: {playerId: text} }`
+    (pushes each assigned player's `character.agendaByAct[actIndex+1]` as `new-orders`; ack `{ sent: [ids] }`),
+    `narrate { text, title?, mode: 'caption'|'card', art? }`, `narrate-clear {}`, `board-mode { mode?, title?, subtitle?, art? }`,
+    `handout-send { handoutId?, handout?|custom?: { title, from, to, priority, text, image? }, to: 'all'|[playerIds] }` (bundled packs are client-side,
+    so the DM sends the resolved handout with its pack id; re-send widens recipients, keeps receipts; ack `{ id }`),
+    `clue-upsert { clue }`, `clue-reveal { clueId, clue?, to, foundBy? }` (finders default to the `to` list), `clue-hide { clueId }`,
+    `clock-upsert { clock }`, `clock-tick { id, delta }`, `clock-remove { id }`, `safety-set { enabled, tone[], warnings[], linesVeils }`
+    (a change re-arms the player card), `pause-clear {}`, `log-note { text }` (notes starting `ENDING:` feed the recap), `submission-resolve { id, action: 'reject'|'assigned', reason? }`.
+    URLs (`art`, `image`) must start with `/` or `http(s)://`.
+  - Player events: `handout-seen { handoutId }`, `safety-confirm {}`, `pause-request {}` (anonymous; 3 s per-socket guard),
+    `character-submit { character }` (one pending per seat; id becomes kebab `pb-…` if missing; ≤ 64 KB),
+    `player-roll { clientId, roll, at? }` (roll ≤ 4 KB; deduped by clientId), and `player-message` / `player-to-player` now take
+    `clientId` + an ack callback (dedupe of offline-queue replays; the dedupe buffer persists, so replays after a server restart are safe).
+  - Server → client one-shots: `handout-received { handout }`, `clue-revealed { clue }`, `clock-ticked { clock, delta }` (players + board, visible clocks only),
+    `new-orders { actIndex, actTitle, text, at }`, `item-received { item, at }` (from `update-player` when inventory grows, multiset diff),
+    `board-flash { tokenId }` (board + DM; the player's PC token), `pause-requested { at }` (DM; never contains who), `handout-seen { handoutId, playerId, seen, of }` (DM),
+    `character-submitted { submission }` (DM), `submission-updated { submission: { id, status, reason } }` (player), `roll { roll }` (DM), `log-entry { entry }` (DM).
+  - Session log entries `{ id, at, type, text, act, scene, … }`, types `scene act narration handout clue clock track kill fog pause note loot character roll safety`
+    (cap 2000). Auto-logged: scene/act changes, narration, handouts, clue reveals, clock start/ticks, track + status changes, kills, fog reveals,
+    pauses (anonymous), loot, character assign/submit, rolls, session zero.
+  - Client (`GameContext`): `table`, `sessionLog`, `unreadBy` / `clearUnreadFor`, `on(event, fn)` (one-shot effects), `outboxCount`, DM actions
+    (`runSet advanceAct narrate narrateClear setBoardMode sendHandout clueUpsert clueReveal clueHide sessionSeed clockUpsert clockTick clockRemove
+    safetySet pauseClear logNote resolveSubmission tableSync`), player actions (`handoutSeen safetyConfirm requestPause submitCharacter sendRoll`).
+    Player rolls/messages go through an outbox (`localStorage['muthur.outbox']`), replayed on every reconnect until acked.
+    `createGame({ …, sessionZero })` emits `safety-set` right after creation.
+  - Regression test: `node scripts/test-session-features.mjs`.
 
 ## Generator
 

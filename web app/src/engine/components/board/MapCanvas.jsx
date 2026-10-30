@@ -2,7 +2,13 @@ import React, { forwardRef, useCallback, useEffect, useId, useImperativeHandle, 
 import TokenChip from './TokenChip';
 import RoomLayer from './RoomLayer';
 import EngineLayer from './EngineLayer';
-import { engineConfig } from './mapDefs';
+import { engineConfig, mapVisuals } from './mapDefs';
+
+/* Burn-in-safe idle drift offsets (screen px), stepped every 60 s while idle. */
+const DRIFT = [[0, 0], [1, 1], [2, 0], [1, -1], [0, -2], [-1, -1], [-2, 0], [-1, 1]];
+const DRIFT_MS = 60000;
+const DIM_MS = 10 * 60000;
+const CURSOR_MS = 3000;
 
 /* ═══════════════════════════════════════════════════════════════
    MapCanvas — the board map, shared by BoardView (TV), MapController
@@ -18,6 +24,14 @@ import { engineConfig } from './mapDefs';
    Tap token → onTokenTap(id, pt); drag token (editable) →
    onTokenMove(id, x, y, final); tap elsewhere → onTap(pt, roomId);
    drag background → onBackgroundDrag(phase, start, pt) if provided.
+
+   Visuals come from mapVisuals(universe, mapDef): the board palette
+   (fog, edges, labels, ascii, status-ring style) and the backdrop are
+   read from the map definition / universe theme, never a constant.
+   role 'board' (TV): token/room labels are kept >= 20 screen px; the
+   cursor hides after 3 s without pointer movement; with `idleDrift`
+   (default on for the board) the whole map layer drifts 1-2 px every
+   60 s while nothing changes and dims after 10 min idle (burn-in).
    ═══════════════════════════════════════════════════════════════ */
 
 const KIND_ORDER = { marker: 0, hazard: 0, item: 1, npc: 2, creature: 3, pc: 4 };
@@ -45,8 +59,10 @@ function useImageSize(src, known) {
 const MapCanvas = forwardRef(function MapCanvas({
   mapDef, board, role = 'board', universe, view, editable = false, selectedTokenId = null, selectedRoomId = null,
   highlightPlayerId = null, pings = [], onTokenTap, onTokenMove, onTap, onBackgroundDrag, snap = false,
-  showRoomLabels = false, showTokens = true, overlay, className = '', cursor,
+  showRoomLabels = false, showTokens = true, overlay, className = '', cursor, idleDrift,
 }, ref) {
+  const isBoard = role === 'board';
+  const drift = idleDrift ?? isBoard;
   const uid = 'mc' + useId().replace(/[^a-zA-Z0-9]/g, '');
   const svgRef = useRef(null);
   const innerRef = useRef(null);
@@ -81,6 +97,49 @@ const MapCanvas = forwardRef(function MapCanvas({
   const counter = `${flip ? 'scale(-1,1) ' : ''}rotate(${-rot})`;
 
   const engCfg = useMemo(() => (mapDef?.kind === 'engine' && universe ? engineConfig(universe, mapDef) : null), [mapDef, universe]);
+  const visuals = useMemo(() => mapVisuals(universe, mapDef), [universe, mapDef]);
+  const { palette } = visuals;
+  const doors = useMemo(() => (mapDef?.kind === 'image' && Array.isArray(mapDef.doors)
+    ? mapDef.doors.filter((d) => !level || !d.level || d.level === level) : null), [mapDef, level]);
+
+  /* Screen px per map px (for >= 20 px TV labels). */
+  const [pxScale, setPxScale] = useState(0);
+  useEffect(() => {
+    const el = svgRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return undefined;
+    const measure = () => { const r = el.getBoundingClientRect(); if (r.width && VW && VH) setPxScale(Math.min(r.width / VW, r.height / VH)); };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [VW, VH, mapDef]);
+  const labelMin = isBoard && pxScale > 0 ? 20 / pxScale : 0;
+  const tokenMin = isBoard && pxScale > 0 ? 22 / pxScale : 0; // chip radius >= 22 screen px on the TV
+
+  /* Board idle handling: cursor hide (3 s), drift (every 60 s idle), dim (10 min idle). */
+  const [cursorHidden, setCursorHidden] = useState(false);
+  const [driftStep, setDriftStep] = useState(0);
+  const [dimmed, setDimmed] = useState(false);
+  const lastActivity = useRef(Date.now());
+  useEffect(() => { lastActivity.current = Date.now(); setDimmed(false); }, [board]);
+  useEffect(() => {
+    if (!isBoard) return undefined;
+    let t = setTimeout(() => setCursorHidden(true), CURSOR_MS);
+    const onMove = () => { setCursorHidden(false); clearTimeout(t); t = setTimeout(() => setCursorHidden(true), CURSOR_MS); lastActivity.current = Date.now(); setDimmed(false); };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerdown', onMove);
+    return () => { clearTimeout(t); window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerdown', onMove); };
+  }, [isBoard]);
+  useEffect(() => {
+    if (!drift) return undefined;
+    const iv = setInterval(() => {
+      const idle = Date.now() - lastActivity.current;
+      if (idle >= DRIFT_MS) setDriftStep((s) => (s + 1) % DRIFT.length);
+      if (isBoard && idle >= DIM_MS) setDimmed(true);
+    }, DRIFT_MS);
+    return () => clearInterval(iv);
+  }, [drift, isBoard]);
+  const [dx, dy] = drift ? DRIFT[driftStep] : [0, 0];
 
   const rooms = useMemo(
     () => (mapDef?.rooms || []).filter((r) => !level || !r.level || r.level === level),
@@ -179,37 +238,40 @@ const MapCanvas = forwardRef(function MapCanvas({
 
   if (!mapDef) return <div className={`map-canvas map-canvas-empty ${className}`} />;
 
+  const canvasCls = `map-canvas ${className}${drift ? ' mc-drift' : ''}${isBoard && cursorHidden ? ' mc-cursor-hidden' : ''}${dimmed ? ' mc-idle-dim' : ''}`;
   return (
-    <div className={`map-canvas ${className}`} style={cursor ? { cursor } : undefined}>
+    <div className={canvasCls} style={{ ...(cursor ? { cursor } : {}), background: palette.bg }}>
       <svg ref={svgRef} viewBox={`0 0 ${VW} ${VH}`} preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"
+        style={dx || dy ? { transform: `translate(${dx}px, ${dy}px)` } : undefined}
         onPointerDown={onPointerDown} onPointerMove={onPointerMove}
         onPointerUp={(e) => finish(e, false)} onPointerCancel={(e) => finish(e, true)}
         onContextMenu={(e) => e.preventDefault()}>
         <g ref={innerRef} transform={transform}>
-          <rect x={X - W} y={Y - H} width={W * 3} height={H * 3} fill="#000" />
-          {engCfg && <EngineLayer config={engCfg} level={level} />}
+          <rect x={X - W} y={Y - H} width={W * 3} height={H * 3} fill={palette.bg} />
+          {engCfg && <EngineLayer config={engCfg} level={level} backdrop={visuals.backdrop} />}
           {mapDef.kind === 'engine' && !engCfg && (
             <text x={W / 2} y={H / 2} fill="#556" fontSize={unit} textAnchor="middle">DECK PLAN UNAVAILABLE ({mapDef.engine})</text>
           )}
           {imgSrc && <image href={imgSrc} x="0" y="0" width={W} height={H} preserveAspectRatio="none" />}
           {ascii && (
-            <g fontFamily="ui-monospace, 'Courier New', monospace" fontSize="20" fill="#7fd4b8">
-              <rect width={W} height={H} fill="#05080a" />
+            <g fontFamily="ui-monospace, 'Courier New', monospace" fontSize="20" fill={palette.ascii}>
+              <rect width={W} height={H} fill={palette.asciiBg} />
               {ascii.lines.map((l, i) => <text key={i} x="20" y={44 + i * 24} xmlSpace="preserve">{l}</text>)}
             </g>
           )}
           {mapDef.outline && (
             <path d={`M0 0 H1 V1 H0 Z ${mapDef.outline}`} transform={`scale(${W},${H})`} fillRule="evenodd"
-              fill="#000" opacity={outlineOpacity} pointerEvents="none" />
+              fill={palette.bg} opacity={outlineOpacity} pointerEvents="none" />
           )}
           <RoomLayer rooms={rooms} roomState={board?.rooms} fog={board ? board.fog : true} role={role} W={W} H={H} uid={uid}
-            selectedRoomId={selectedRoomId} showLabels={showRoomLabels} counter={counter} unit={unit} />
+            selectedRoomId={selectedRoomId} showLabels={showRoomLabels} counter={counter} unit={unit}
+            palette={palette} doors={doors} labelMin={labelMin} />
           {showTokens && tokenList.map((t) => {
             const dp = dragPos?.id === t.id ? dragPos : null;
             return (
               <TokenChip key={t.id} token={t} x={(dp ? dp.x : t.x) * W} y={(dp ? dp.y : t.y) * H} unit={unit} counter={counter} uid={uid}
                 selected={t.id === selectedTokenId} mine={!!highlightPlayerId && t.ownerPlayerId === highlightPlayerId}
-                ghost={role === 'dm' && t.hidden} dragging={!!dp} />
+                ghost={role === 'dm' && t.hidden} dragging={!!dp} palette={palette} labelMin={labelMin} minR={tokenMin} />
             );
           })}
           {pings.filter((p) => now - (p.rx || p.at) < 4000).map((p) => (

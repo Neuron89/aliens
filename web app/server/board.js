@@ -195,6 +195,11 @@ export function sanitizeToken(input, prev, ctx = {}) {
   if (input.x !== undefined) t.x = isNum(input.x) ? clamp01(input.x) : 0.5;
   if (input.y !== undefined) t.y = isNum(input.y) ? clamp01(input.y) : 0.5;
   if (input.hidden !== undefined) t.hidden = !!input.hidden;
+  // Status rings (board/TokenChip): up to 6 short kebab names, optional ":n" count, e.g. ['stress:3', 'wounded'].
+  if (input.status !== undefined) {
+    const list = Array.isArray(input.status) ? input.status : [];
+    t.status = [...new Set(list.filter((s) => typeof s === 'string' && /^[a-z][a-z-]{0,15}(:\d{1,2})?$/.test(s)))].slice(0, 6);
+  }
   if (input.facing !== undefined) t.facing = isNum(input.facing) ? ((Math.round(input.facing) % 360) + 360) % 360 : 0;
   if (input.note !== undefined) t.note = str(input.note, 1000) || '';
   if (input.ownerPlayerId !== undefined) {

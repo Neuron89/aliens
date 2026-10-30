@@ -77,6 +77,7 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
   const { save } = useContent();
   const { createGame, players: sessionPlayers } = useGame();
   const { terms, terminal } = universe;
+  const logStyle = universe.theme?.logStyle || 'terminal';
   const hints = universe.generator?.parameterHints || {};
   const settingHints = hintList(hints, 'settings', 'setting');
   const threatHints = hintList(hints, 'threats', 'threat');
@@ -232,19 +233,19 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
           × CLOSE
         </button>
       </div>
-      <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+      <nav className="gnw-stepper" aria-label="Generator steps">
         {STEPS.map((s, i) => {
           const reachable = !running && (i < 2 || (s === 'generate' && (log.length || error)) || (s === 'preview' && pack));
+          const state = s === step ? 'current' : i < stepIdx ? 'done' : reachable ? '' : 'locked';
           return (
-            <button key={s} disabled={!reachable || s === step} onClick={() => setStep(s)} style={{
-              ...chip(s === step), flex: '1 1 6rem', opacity: i > stepIdx && !reachable ? 0.45 : 1,
-              cursor: reachable && s !== step ? 'pointer' : 'default',
-            }}>
-              {i + 1}. {STEP_LABEL[s]}
+            <button key={s} type="button" className={`gnw-step ${state}`} disabled={!reachable || s === step}
+              aria-current={s === step ? 'step' : undefined} onClick={() => setStep(s)}>
+              <span className="gnw-node">{i < stepIdx ? '✓' : i + 1}</span>
+              {STEP_LABEL[s]}
             </button>
           );
         })}
-      </div>
+      </nav>
       {genStatus?.mock && (
         <div style={{ marginTop: '0.5rem', fontSize: '0.65rem', color: 'var(--warn)', letterSpacing: '0.08em' }}>
           MOCK MODE (GENERATOR_MOCK=1) — RETURNS A MUTATED BUNDLED PACK, NO API CALL.
@@ -441,22 +442,28 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
       )}
 
       {log.length > 0 && (
-        <div style={terminalBox}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem', flexWrap: 'wrap', borderBottom: '1px solid var(--border)', paddingBottom: '0.35rem', marginBottom: '0.5rem', fontSize: '0.65rem', color: 'var(--text-dim)', letterSpacing: '0.08em' }}>
-            <span>{terminal.name} PROCESSING LOG</span>
+        <div className={`gnw-log gnw-log-${logStyle}`}>
+          <div className="gnw-log-head">
+            <span>{logStyle === 'mentat' ? `${terminal.name} — COMPUTATION` : `${terminal.name} PROCESSING LOG`}</span>
             <span>
               {String(Math.floor(elapsed / 60)).padStart(2, '0')}:{String(elapsed % 60).padStart(2, '0')}
               {' · '}{chars.toLocaleString()} CHARS (~{Math.round(chars / 4).toLocaleString()} TOKENS)
               {estTokens != null && estTokens > 0 ? ` · PROMPT ~${estTokens.toLocaleString()} TOKENS` : ''}
             </span>
           </div>
-          <div ref={logRef} style={{ maxHeight: '45vh', overflowY: 'auto' }}>
-            {log.map((l, i) => (
-              <div key={i} style={{ color: l.message.startsWith('ERROR') || l.message.startsWith('  !') ? 'var(--danger)' : i === log.length - 1 ? 'var(--accent)' : 'var(--text)' }}>
-                <span style={{ color: 'var(--text-dim)' }}>{new Date(l.at).toLocaleTimeString([], { hour12: false })} &gt; </span>{l.message}
-              </div>
-            ))}
-            {running && <div><span style={{ color: 'var(--text-dim)' }}>&gt; </span><span className="gnw-cursor">█</span></div>}
+          <div ref={logRef} className="gnw-log-body" aria-live="polite">
+            {log.map((l, i) => {
+              const err = l.message.startsWith('ERROR') || l.message.startsWith('  !');
+              const t = new Date(l.at).toLocaleTimeString([], { hour12: false });
+              return (
+                <div key={i} className={`gnw-log-line${err ? ' err' : i === log.length - 1 ? ' last' : ''}`}>
+                  {logStyle === 'mentat'
+                    ? <><span className="t">◇ {String(i + 1).padStart(2, '0')} · </span>{l.message.trim()}</>
+                    : <><span className="t">{t} &gt; </span>{l.message}</>}
+                </div>
+              );
+            })}
+            {running && <div className="gnw-log-line"><span className="t">{logStyle === 'mentat' ? '◇ ' : '> '}</span><span className="gnw-cursor">{logStyle === 'mentat' ? '…' : '█'}</span></div>}
           </div>
         </div>
       )}
@@ -540,8 +547,6 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
   return (
     <div style={{ maxWidth: '980px', margin: '0 auto' }}>
       <style>{`
-        @keyframes gnw-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-        .gnw-cursor { color: var(--accent); animation: gnw-blink 1s steps(1) infinite; }
         .gnw-preview .back-btn { display: none; }
       `}</style>
       {Header}
@@ -571,13 +576,13 @@ function ChipRow({ children, style }) {
 
 /* ── Styles (CSS vars only) ──────────────────────────────────── */
 
-const dim = { color: 'var(--text-dim)', fontSize: '0.8rem', lineHeight: 1.5 };
+const dim = { color: 'var(--text-dim)', fontSize: '0.92rem', lineHeight: 1.5 };
 const code = { color: 'var(--accent)', fontFamily: 'var(--font-mono)' };
 const stepTitle = { color: 'var(--accent)', marginTop: 0, marginBottom: '1rem', letterSpacing: '0.1em' };
-const labelStyle = { display: 'block', color: 'var(--text-dim)', fontSize: '0.65rem', letterSpacing: '0.1em', marginBottom: '0.35rem' };
+const labelStyle = { display: 'block', color: 'var(--text-dim)', fontSize: '0.7rem', letterSpacing: '0.12em', marginBottom: '0.35rem' };
 const inputStyle = {
   width: '100%', padding: '0.6rem 0.75rem', background: 'var(--bg-card)', border: '1px solid var(--border)',
-  color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: '0.9rem', letterSpacing: '0.04em', boxSizing: 'border-box',
+  color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: '16px', boxSizing: 'border-box',
 };
 const btnBase = {
   padding: '0.65rem 1rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.08em',
@@ -596,11 +601,6 @@ const chip = (active) => ({
 const chipX = { background: 'transparent', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '0.9rem', padding: 0, lineHeight: 1 };
 const grid2 = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(14rem, 1fr))', gap: '0 1rem' };
 const navRow = { display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', flexWrap: 'wrap', marginTop: '0.5rem' };
-const terminalBox = {
-  background: 'var(--bg-dark)', border: '1px solid var(--border-bright)', padding: '0.75rem',
-  fontFamily: 'var(--font-mono)', fontSize: '0.75rem', lineHeight: 1.6,
-  boxShadow: 'inset 0 0 18px var(--accent-glow)',
-};
 const errorBox = {
   padding: '0.6rem 0.75rem', border: '1px solid var(--danger)', color: 'var(--danger)',
   background: 'var(--danger-glow)', fontSize: '0.8rem',
