@@ -1,0 +1,1301 @@
+{
+  "packVersion": 1,
+  "id": "the-nine-days-of-silence",
+  "universe": "dune",
+  "kind": "scenario",
+  "meta": {
+    "title": "The Nine Days of Silence",
+    "tagline": "Nine days sealed in a Guild heighliner with a dozen rival Houses, a dead Guild liaison, and your House’s blade in his chest.",
+    "synopsis": "House Teshrin’s delegation travels from Kaitain to Arrakis in the sealed Lantern Ring of the heighliner Long Vesper. On night three the Guild liaison Ferrant Osk is found dead in his sealed berth with Ser Dannic Orwe’s kindjal in his chest, and the silent proctors invite the House to name the killer before the last fold, or be left behind in foldspace. The truth: Ferrant was paid by the ship’s own Navigator, born Avel Teshrin a century ago, to carry its pre-spice seed-record home to the House, and he tried to auction it instead. The CHOAM clerk Tamsin Hask is a Tleilaxu Face Dancer who stole the blade, killed Ferrant, and escaped through a reclamation duct no human could pass. The record is hidden in the House’s own cargo. Before the Navigator’s tank the agents must choose: the truth, a scapegoat, or a bargain.",
+    "type": "One-Shot",
+    "players": "4–5",
+    "playtime": "3–5 hours",
+    "difficulty": "Standard",
+    "tone": [
+      "locked-room mystery",
+      "dread of the inhuman",
+      "politics in a confined space",
+      "no exits",
+      "plans within plans"
+    ],
+    "contentWarnings": [
+      "murder",
+      "strangulation",
+      "examination of a corpse",
+      "claustrophobia and confinement",
+      "air and light deprivation",
+      "body horror (a shapeshifter and a mutated navigator)",
+      "a child given away to pay a debt (backstory)",
+      "scapegoating and abandonment as punishment",
+      "player-vs-player conflict",
+      "drug use (spice, sapho)"
+    ],
+    "source": "bundled",
+    "generated": {
+      "by": "claude-code",
+      "model": "claude-opus-5-5",
+      "at": "2026-10-30T20:39:50.028Z",
+      "params": {
+        "universe": "dune",
+        "players": 5,
+        "playerCount": "4-5",
+        "playtime": "session 3-5h",
+        "type": "One-Shot",
+        "difficulty": "Standard",
+        "tone": [
+          "locked-room mystery",
+          "dread of the inhuman",
+          "politics in a confined space",
+          "no exits"
+        ],
+        "setting": "the sealed passenger ring of a Spacing Guild heighliner in transit from Kaitain to Arrakis, nine days of foldspace, a dozen delegations in adjoining berths",
+        "threat": "a Tleilaxu Face Dancer hidden among the delegations, the Guild proctors’ silent ultimatum, and a Navigator’s stolen pre-spice record",
+        "crew": "the delegation of minor House Teshrin: Mentat, Swordmaster, Bene Gesserit-trained Noble Scion, Suk Doctor, Smuggler as trade factor",
+        "themes": "kinship and debt, truth versus scapegoat, the inhuman behind the familiar",
+        "lethality": "low-medium",
+        "authoring": "hand-written via the gamenight skill, no API calls"
+      }
+    }
+  },
+  "briefing": {
+    "from": "MENTAT OF HOUSE TESHRIN",
+    "to": "THE DELEGATION OF THE WREN — LANTERN RING, BERTH C",
+    "classification": "SEALED",
+    "text": "COMPUTATION BEGINS.\n\nFact: at the sixth hour of the third night of passage, the Guild liaison Ferrant Osk was found dead in Berth E of the Lantern Ring. The berth seal-board records the door closed from within by his own palm at the second hour, and opened by the proctors at the sixth. Probability of a sealed berth with no second exit: high. Probability that this is the whole truth: low.\n\nFact: the weapon is the off-hand kindjal of Ser Dannic Orwe, Swordmaster of this House. It bears the glass wren.\n\nFact: the proctors of the ring have issued an invitation. The House of the Wren is to name the one responsible before the last fold into Arrakis orbit. The alternative was not stated. It did not need to be.\n\nFact: twelve delegations share this ring. Among them are a Harkonnen attaché whose patron contests our Carriage Charter at Arrakeen, a Richese magister who does not let her luggage out of sight, a Reverend Mother who claims to travel privately, a CHOAM auditor, and a Fremen envoy who has not unsealed his door since Kaitain.\n\nFact: the air and light of the ring are controlled from the Guild gallery. They can be changed.\n\nCountess Aldis Teshrin entrusted the Charter to Lady Sorrel and to you. I compute that whoever killed the liaison chose our blade with care, and that some of what we need to know is already inside our own berth.\n\nRISK ASSESSMENT: SEVERE. SIX DAYS REMAIN. COMPUTATION PAUSED."
+  },
+  "acts": [
+    {
+      "title": "ACT I",
+      "subtitle": "THE BODY",
+      "summary": "The body in the sealed berth, the proctors’ invitation, the factions of the ring, and the first impossible clues.",
+      "readAloud": [
+        "The Lantern Ring turns around you without a sound. Nine days of sealed passage from Kaitain to Arrakis, and for three of them you have walked this curved promenade beneath glowglobes tuned to an evening that never ends. The air tastes of filtered cinnamon and old metal. A dozen Houses breathe it with you, berth beside berth, smiling across the fountain at people they would gladly bury. Beyond the hull there is nothing. Not darkness. Nothing.",
+        "The chime that wakes you is not the morning bell. It is three notes, falling, and then the soft slide of grey-robed figures along the promenade: the proctors, the Guild’s silent wardens, moving in single file toward Berth E. You smell it before the seal opens. Spice, stale sweat, and the copper edge of blood, wrong in this endlessly recycled air.",
+        "Liaison Ferrant Osk lies on his back beside his sleeping shelf, eyes open, one hand still curled as if around a cup. In his chest, buried to the guard, is a kindjal you know. The pommel is worked with a wren in a pane of glass. It is a Teshrin blade, and every face in the corridor has already turned to look at you.",
+        "The proctor at the door does not speak. She lifts a slate, and letters bloom across it in clean Guild script: THE HOUSE OF THE WREN IS INVITED TO NAME THE ONE WHO DID THIS BEFORE THE LAST FOLD. Beneath it, smaller: PASSAGE IS A COURTESY. Behind her mask something breathes, long and slow and measured, and waits for you to understand."
+      ],
+      "gmNotes": "Act I covers the third night and the fourth day. Start Threat at 2 per player. Show THE GUILD'S PATIENCE, AIR AND LIGHT and THE HARKONNEN STORY SPREADS to the table at the end of The Proctors’ Invitation; keep THE CLERK'S SEARCH hidden. The locked room has three answers the agents can reach: the duct grille bolted from the wrong side (the only exit), the wound made after death (the blade is a signature, not the weapon), and the Fremen envoy’s sighting of a man without a water smell. The clerk Tamsin Hask is helpful, present and harmless-seeming in every scene: let the agents like her. Ruul begins telling the ring that Teshrin killed the liaison over a freight bribe; tick his clock whenever the agents waste a scene or quarrel in public. Do not reveal the Navigator’s connection to the House in this act.",
+      "agendaNotes": "Act I agendas are private and plausible. Ser Dannic insists he never left his post; Auberon’s reading of the seal-board will eventually show Berth C’s door cycled at the second hour, which puts the two on course to collide. Tobin should hear about the body and quietly check his sample case; send him Ferrant’s Last Arrangement. Doctor Marsk holds Ferrant’s confidence: reward him for keeping it, but make it heavy.",
+      "scenes": [
+        {
+          "name": "The Sealed Berth",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Berth E is a narrow Guild cell of pale composite: a sleeping shelf, a writing ledge, a reclamation grille at ankle height, a seal-plate glowing amber beside the door. Ferrant lies where he fell. The proctors have touched nothing; they stand along the wall like grey pillars and watch what you touch.",
+          "checks": [
+            "UNDERSTAND + TRUTH, Difficulty 1 — read the seal-board: closed from within by Ferrant’s palm at the second hour, opened by the proctors at the sixth (investigation)",
+            "UNDERSTAND + JUSTICE, Difficulty 2 — notice the reclamation grille’s bolts are turned from the service-spine side, and the duct is barely wider than a forearm (investigation)",
+            "MOVE + TRUTH, Difficulty 3 — reach into the duct before the proctors stop you and find the smear of grey, oily residue on the lip (espionage conflict)",
+            "DISCIPLINE + FAITH, Difficulty 1 — hold your composure while a dozen delegations watch you study your own House’s blade (intrigue conflict)"
+          ],
+          "events": [
+            "Steward-of-Passage Ebbe Lunn hovers at the door with the seal-board slate, eager to explain and visibly terrified.",
+            "The CHOAM clerk Tamsin Hask arrives with a cup of spice coffee for whoever looks most shaken, and offers to take notes for the House."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — Ser Dannic Orwe, on seeing his own kindjal in the body",
+            "THREAT +1 — any agent touches the blade before the proctors permit it",
+            "MOMENTUM +1 — an agent names the duct aloud as the only possible second exit"
+          ],
+          "npcGuidance": "The proctors answer only by slate and only questions of fact (times, seals, who holds which codes). Ebbe Lunn babbles about seal logic and lies once: he says no one but the Guild can open the service spine, when he sold Ferrant a spine key two days ago. Tamsin Hask is all quiet usefulness and stays near the duct, gently in the way.",
+          "gmTip": "This is the locked-room set piece; let the players spend time here. If nobody looks at the floor, have a proctor’s lamp catch the grille. The residue is Face Dancer skin-oil; nobody can identify it yet, only remember it.",
+          "outcomes": [
+            "The seal-board times are recorded and the duct is identified as the only other way out",
+            "The agents notice the grille was fastened from outside the berth, which no human body could have done from inside the duct",
+            "The proctors note which agent touched the blade first"
+          ],
+          "clueRefs": [
+            "clue-seal-log",
+            "clue-duct-grille"
+          ]
+        },
+        {
+          "name": "The Body",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Ferrant Osk was fifty, lean, blue in the whites of his eyes from a lifetime of spice, wearing a liaison’s grey with the Guild infinity at the collar. His throat is darkened in a band no wider than two fingers. The kindjal wound in his chest has hardly bled at all.",
+          "checks": [
+            "UNDERSTAND + DUTY, Difficulty 2 — the kindjal went in after death; he was strangled by a single hand with impossible strength (investigation)",
+            "UNDERSTAND + TRUTH, Difficulty 2 — find the cipher tally rolled inside the hollow heel of his left boot (investigation)",
+            "COMMUNICATE + JUSTICE, Difficulty 3 — persuade the proctors to delay giving the body to foldspace until the House has finished (intrigue conflict)",
+            "COMMUNICATE + FAITH, Difficulty 2 — mediate between the proctors, who want the body spaced, and the Fremen envoy, who claims its water (negotiation)"
+          ],
+          "events": [
+            "The Senior Proctor signals that the body will be given to foldspace at the next ship’s noon.",
+            "Ammar Sheth sends word through his sealed door: a man’s water belongs to the living, and the Guild has no right to throw it into nothing."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever examines the throat and realises no human hand that size closes so hard",
+            "THREAT +2 — the body is jettisoned before the Suk examination is finished",
+            "MOMENTUM +1 — Doctor Marsk uses Diagnose Poison and names the sapho-laced sleeping draught in Ferrant’s blood"
+          ],
+          "npcGuidance": "Proctor Meridel Sarn regards the body as Guild property and a liability. She can be bargained with: a delay costs the House a favor, recorded on her slate. Ammar Sheth will not come out but speaks through his door grille; if the House helps him claim the water, he owes them a truth.",
+          "gmTip": "Doctor Marsk’s player knows Ferrant spoke to him on night two. Do not push; let the examination remind him. Send Ferrant’s Tally to whoever searches the boot heel, then the Computation of the Body to all agents once the examination is done.",
+          "outcomes": [
+            "Time of death fixed near the second hour; the blade is a frame",
+            "Ferrant’s Tally recovered: three buyers, three prices",
+            "The body is saved for the Fremen (an ally in Act III) or spaced (the Fremen close their door)"
+          ],
+          "clueRefs": [
+            "clue-dead-before-blade",
+            "clue-ferrant-tally"
+          ]
+        },
+        {
+          "name": "The Proctors’ Invitation",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Three proctors escort the delegation to the gallery lock at the spinward end of the promenade, where a slate the size of a door glows in the wall. The Senior Proctor writes slowly, so that every word arrives alone.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 3 — establish the House as a party to the inquiry rather than the accused: access to every berth and to the seal-board (intrigue conflict)",
+            "UNDERSTAND + TRUTH, Difficulty 2 — compute what the Guild fears: something was stolen, and the proctors want it back more than they want a killer (investigation)",
+            "DISCIPLINE + DUTY, Difficulty 2 — keep your voice level when the proctors ask the Swordmaster where he stood at the second hour (intrigue conflict)"
+          ],
+          "events": [
+            "The slate reads: NAME THE ONE. RETURN WHAT WAS CARRIED. THE LAST FOLD IS IN SIX DAYS.",
+            "Send The Guild’s Invitation to all agents.",
+            "The proctors ask, in writing, where Ser Dannic Orwe was at the second hour."
+          ],
+          "stressTriggers": [
+            "THE GUILD'S PATIENCE +1 — any agent raises a voice or threatens a proctor",
+            "STRESS +1 — Ser Dannic Orwe, if he lies to the proctors’ slate",
+            "THREAT +1 — the House demands rights instead of asking for them"
+          ],
+          "npcGuidance": "Proctor Sarn never explains “what was carried”. If asked directly, the slate goes dark for a long breath, then reads: THE HOUSE WILL KNOW IT WHEN IT IS FOUND. She is not cruel; she is a mechanism doing its work.",
+          "gmTip": "Reveal the three public clocks here. Make the stakes concrete: the House can be decoupled with its berth and left in a holding fold, and no one in the Landsraad will ever be told why.",
+          "outcomes": [
+            "The House wins inquiry rights: open access to the seal-board and the ring’s berths",
+            "The House is merely tolerated: every berth visit costs a tick on THE GUILD'S PATIENCE",
+            "The phrase “what was carried” enters the investigation"
+          ]
+        },
+        {
+          "name": "Walking the Ring",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "The promenade has become a court. Attaché Corvane Ruul holds a little salon by the fountain; Magister Vantroy has not left Berth B; the Reverend Mother walks the ring’s full circuit every hour, alone; Auditor Vayle sits with his ledgers while his clerk refills everyone’s cup.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 2 — draw Ruul into boasting that the House of the Wren will be “dealt with” at Arrakeen (intrigue conflict)",
+            "UNDERSTAND + TRUTH, Difficulty 2 — reconstruct the night-one reception: the only outsider who entered Berth C was the CHOAM clerk, carrying the auditor’s gift of spice wine (investigation)",
+            "DISCIPLINE + FAITH, Difficulty 3 — keep your face still when the Reverend Mother greets the Noble Scion by her old training name (intrigue conflict)",
+            "MOVE + TRUTH, Difficulty 3 — notice Magister Vantroy’s seal-plate is dark: she has spliced her door off the ring’s board (espionage conflict)"
+          ],
+          "events": [
+            "Ruul tells anyone listening that Teshrin had a freight bribe with the liaison and quarrelled over the price.",
+            "Auditor Vayle mentions, lightly, that his clerk has become wonderfully quick with sums this voyage."
+          ],
+          "stressTriggers": [
+            "THE HARKONNEN STORY SPREADS +1 — the agents leave Ruul’s salon without answering him",
+            "THREAT +1 — an agent openly accuses another delegation without evidence",
+            "MOMENTUM +1 — the agents link the clerk to the night-one weapon rack"
+          ],
+          "npcGuidance": "Ruul is charming and venomous, and he lies about his own movements on night three (he was with Mentat Kesh). Vantroy is curt and frightened. Thessaly Orn speaks in questions. Vayle is a dry, decent man who has begun to feel something is wrong. Tamsin Hask is everywhere at once, refilling cups.",
+          "gmTip": "Run this as a series of short vignettes, one per faction, and let the players split up. Each vignette should end with one fact and one lie.",
+          "outcomes": [
+            "The clerk’s visit to Berth C on night one is established",
+            "Ruul’s story is answered publicly (his clock slows) or not (it advances)",
+            "Vantroy’s spliced seal-plate becomes a lead for Act II"
+          ],
+          "clueRefs": [
+            "clue-reception-rack"
+          ]
+        },
+        {
+          "name": "The Water-Sealed Cabin",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Berth F’s door is gasketed with the Fremen’s own seal-tape, and the air inside is warm and close and smells of creosote and skin. Ammar Sheth sits cross-legged in a stillsuit with the mask hanging loose, and does not offer water.",
+          "checks": [
+            "COMMUNICATE + FAITH, Difficulty 2 — show respect for water and earn a hearing (negotiation)",
+            "UNDERSTAND + JUSTICE, Difficulty 1 — grasp what he means: the shape in the spine had no water smell, as if it had never sweated (investigation)",
+            "COMMUNICATE + JUSTICE, Difficulty 3 — persuade him to testify before the proctors, which he has sworn not to do (intrigue conflict)"
+          ],
+          "events": [
+            "Ammar describes rising at the second hour to empty his dew trap in the south spine, and seeing a man unfold from a duct “like wet cloth, then stand and become a man.”",
+            "He also saw a second figure at the far end of the spine, a big man with a sword hand, who saw the same thing and backed away."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all agents present, at the description of a body folding through a duct",
+            "STRESS +1 — Ser Dannic Orwe, when Ammar describes the second watcher",
+            "THREAT +1 — anyone in the delegation wastes water in this cabin, even a spilled cup"
+          ],
+          "npcGuidance": "Ammar despises the Guild’s waste and suspects every offworlder. He will not name the second watcher unless asked directly, and he looks straight at Ser Dannic when he says “sword hand.” If the agents saved Ferrant’s water in The Body, he trusts them.",
+          "gmTip": "The second watcher is Ser Dannic. Let that land without comment and see whether the Swordmaster’s player speaks.",
+          "outcomes": [
+            "The impossible exit is witnessed: something left through the duct",
+            "Ser Dannic’s absence from his post is half-exposed",
+            "Ammar agrees to speak in the gallery in Act III, if the House stands by him"
+          ],
+          "clueRefs": [
+            "clue-no-water-smell"
+          ]
+        },
+        {
+          "name": "Steel on the Promenade",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Skerrit Vol, Ruul’s bodyguard, provokes Ser Dannic with talk of a Swordmaster who cannot keep his own blade, aiming to draw steel in Guild space, where blood spilled by a guest is a crime. If blades come out it is a shielded duel with the slow blade: Vol fights to wound, not kill, and yields at 4 Stress; proctors converge within two rounds and both duellists lose ring privileges.",
+          "narration": "Vol stands across the fountain, idly turning a kindjal between his fingers, and asks the Swordmaster loudly whether House Teshrin issues spare blades to its guests.",
+          "checks": [
+            "DISCIPLINE + DUTY, Difficulty 3 — refuse the insult without losing face (intrigue conflict)",
+            "BATTLE + DUTY, Difficulty 2 — disarm Vol within the forms before the proctors arrive (duel)",
+            "COMMUNICATE + POWER, Difficulty 2 — turn the provocation back on Ruul before the watching delegations (intrigue conflict)"
+          ],
+          "stressTriggers": [
+            "THE GUILD'S PATIENCE +1 — blood is drawn on the promenade, whoever draws it",
+            "THE HARKONNEN STORY SPREADS +1 — the Swordmaster refuses and the ring calls it guilt",
+            "STRESS +1 — Ser Dannic Orwe, whichever choice he makes"
+          ],
+          "npcGuidance": "Ruul watches from his salon and does not intervene. Vol is a professional; he wants an incident, not a corpse.",
+          "gmTip": "Use this when the table is slow or the Swordmaster has had little spotlight. Lethality is low here: no one dies on the promenade.",
+          "outcomes": [
+            "The duel is refused gracefully, and Ruul looks petty",
+            "Steel is drawn, the proctors confiscate both blades, and THE GUILD'S PATIENCE ticks"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "THE DARK",
+      "summary": "The Guild tightens air and light, the shields fail, a second body is found, the factions are questioned, and the House discovers what Ferrant carried.",
+      "readAloud": [
+        "On the fifth day the light begins to change. The glowglobes dim by a breath at a time, so slowly that you only notice when you can no longer read a face across the fountain. The air thins and cools. Every stair feels one step longer than it was. Somewhere above the ring the Guild has turned a dial, and every delegation knows exactly whose fault that is.",
+        "Then the shields die. Every belt on the promenade coughs at once, a blue stutter that runs around the ring like a shiver along a spine, and for ninety heartbeats every noble here is naked to a blade. In the dark someone laughs too loudly. Someone else is running, bare feet slapping composite. When the glowglobes find their pale amber again, a woman is screaming in Berth D.",
+        "Auditor Osric Vayle sits upright in his own reading chair with his ledger open across his knees, as if he has paused in the middle of a sum. His throat carries one thin line, neat as a ruled margin. His clerk kneels beside him, weeping beautifully. You have heard many people weep. You have never heard anyone do it so correctly.",
+        "Along the promenade the other Houses have stopped greeting you. Doors close as you pass. A child of House Morvane is pulled out of your path by a nurse who will not meet your eyes. Two dead now, and the story in every berth has the same shape: the House of the Wren brought a blade into Guild space, and now the air is running out for everyone."
+      ],
+      "gmNotes": "Act II spans days five to seven. Tick AIR AND LIGHT at the start of the act and again whenever the agents take a scene that does not move the inquiry forward; at 2 the ring is dim and cold, at 3 every agent gains the EXHAUSTED status, and at 4 the Act III scenes are played in near-darkness with +1 Difficulty to every MOVE and UNDERSTAND test. The shield failure is caused by Magister Vantroy’s Ixian lattice drawing on the ring’s shield bus; the Face Dancer used the ninety heartbeats to kill Auditor Vayle, who had noticed his clerk knew things the real Tamsin Hask never learned. Tick THE CLERK'S SEARCH (hidden) each time the agents leave Berth C unwatched; when it fills, the Face Dancer has found the crystal and Act III becomes a recovery. The Factor’s Case is the turning point: the House learns it holds the Navigator’s seed-record, and that the Navigator was born Teshrin.",
+      "agendaNotes": "Deliver the second-act agendas now as private dispatches. The Reverend Mother commands Lady Sorrel to take the crystal; Tobin wants to sell it; Ruul blackmails Auberon to steer the computation toward the Richese or the Fremen; Doctor Marsk must decide whether Ferrant’s confidence still binds him; Ser Dannic wants to hunt the thing he saw. By the end of the act at least two agents should be quietly working against each other over the case.",
+      "scenes": [
+        {
+          "name": "The Lights Go Down",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "For ninety heartbeats every shield in the ring fails and the glowglobes go dark. Skerrit Vol moves to put himself between Ruul and the Teshrin delegation; a frightened retainer of House Morvane slashes at shadows with a slip-tip. Whoever is in the promenade must keep their footing and their heads; no one is meant to die here except Auditor Vayle, who is not with the agents.",
+          "narration": "The dimming has gone on for a day. Breath fogs faintly. Then the shield belts cough and stutter, the glowglobes snuff out, and the only light in the ring is the blue fizz of dying fields and the fountain’s faint phosphor.",
+          "checks": [
+            "MOVE + DUTY, Difficulty 2 — reach the Noble Scion in the dark before anyone else does (skirmish)",
+            "UNDERSTAND + TRUTH, Difficulty 2 — note that the shield stutter began at Berth B and ran outward around the ring (investigation)",
+            "BATTLE + JUSTICE, Difficulty 2 — disarm the panicking Morvane retainer without wounding him (skirmish)",
+            "DISCIPLINE + FAITH, Difficulty 2 — stay still and listen: a scraping in the south spine, moving fast toward Berth D (investigation)"
+          ],
+          "events": [
+            "Send the Guild Notice of Adjusted Provision to all agents as the dimming begins.",
+            "After ninety heartbeats the shields and glowglobes return; screaming begins in Berth D."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all agents in the promenade during the blackout",
+            "AIR AND LIGHT +1 — at the start of the scene",
+            "THREAT +2 — the agents are scattered when the lights return",
+            "MOMENTUM +1 — an agent traces the stutter to Berth B"
+          ],
+          "npcGuidance": "Ruul shelters behind Vol and later claims the House cut the shields. Vantroy is in her berth with her device, white-faced. The Reverend Mother stands perfectly still in the dark, listening, and is the first to say “Berth D.”",
+          "gmTip": "Keep it short and sensory. The point is the second death and the trail to Vantroy, not a fight.",
+          "outcomes": [
+            "The shield failure is traced to Berth B",
+            "The agents know something moved through the south spine during the blackout"
+          ],
+          "clueRefs": [
+            "clue-ixian-lattice"
+          ]
+        },
+        {
+          "name": "The Second Death",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Berth D smells of ink and cold tea. Vayle is still warm. His ledger lies open at a page of figures that end in a short line of private notation, and his clerk will not let go of his hand.",
+          "checks": [
+            "UNDERSTAND + DUTY, Difficulty 2 — the line on his throat is a shigawire garrote, drawn by someone standing behind his chair, inside the berth (investigation)",
+            "UNDERSTAND + TRUTH, Difficulty 3 — decipher Vayle’s last notation about his clerk (investigation)",
+            "UNDERSTAND + JUSTICE, Difficulty 3 — take the weeping clerk’s pulse on the pretext of comfort: there is none at the wrist, and her skin is as cool as the room (espionage conflict)",
+            "COMMUNICATE + POWER, Difficulty 2 — keep Ruul and the proctors from removing the body and the ledger (intrigue conflict)"
+          ],
+          "events": [
+            "Tamsin Hask says, through tears, that she was in the promenade during the blackout; nobody can confirm it and nobody can deny it.",
+            "Send The Auditor’s Last Notation to whoever reads the ledger."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever touches the clerk and finds no pulse",
+            "THE HARKONNEN STORY SPREADS +1 — unless an agent publicly proves the House was in the promenade during the blackout",
+            "THE GUILD'S PATIENCE +1 — a second death in the ring under the House’s inquiry"
+          ],
+          "npcGuidance": "Tamsin Hask performs grief flawlessly and leans on whichever agent seems kindest. If the agents grow suspicious she offers to submit to any test, a bluff the Face Dancer can survive briefly. Thessaly Orn watches the clerk with open interest and says nothing.",
+          "gmTip": "Doctor Marsk’s Diagnose Poison works on the auditor; if he examines the clerk too, tell him the body before him “does not answer like a patient.” The dread should come from something that looks entirely human and is not.",
+          "outcomes": [
+            "The clerk is suspected, but there is not yet proof the proctors will accept",
+            "Vayle’s notation links the clerk to knowledge she should not have",
+            "If the agents confront the clerk too early, she vanishes into the spine and The Service Spine follows"
+          ],
+          "clueRefs": [
+            "clue-clerk-not-human"
+          ]
+        },
+        {
+          "name": "Questions Under Guest-Right",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Under the proctors’ grant the House may question any delegation in its own berth, once. Each interview is an intrigue conflict fought across a tea service, with a proctor standing silent at the door.",
+          "checks": [
+            "COMMUNICATE + POWER, Difficulty 3 — break Ruul: he paid the CHOAM clerk to search Teshrin luggage for leverage, never to kill (intrigue conflict)",
+            "UNDERSTAND + TRUTH, Difficulty 3 — press Magister Vantroy: she visited Ferrant at the first hour to buy “a navigation ladder,” and left him alive (intrigue conflict)",
+            "DISCIPLINE + FAITH, Difficulty 4 — resist the Reverend Mother’s Voice while asking what she bought from Ferrant (intrigue conflict)",
+            "COMMUNICATE + JUSTICE, Difficulty 2 — make Steward Ebbe Lunn confess he sold Ferrant a service-spine key (intrigue conflict)"
+          ],
+          "events": [
+            "Ruul, cornered, tries to trade: he will withdraw his story if Mentat Kesh certifies the Richese as the killers. Send The Griffin-Sealed Letter to Auberon Kesh.",
+            "The Reverend Mother speaks privately to Lady Sorrel. Send The Sisterhood Remembers to Lady Sorrel Teshrin."
+          ],
+          "stressTriggers": [
+            "STRESS +2 — any agent who fails against the Reverend Mother’s Voice",
+            "THREAT +1 — per interview that ends in open insult",
+            "MOMENTUM +2 — Ruul admits hiring the clerk in front of a proctor"
+          ],
+          "npcGuidance": "Ruul is frightened under the polish: his hired searcher became a murderer and he does not understand what he hired. Vantroy denies the lattice until shown the shield trace, then pleads that the machine is “only arithmetic.” Thessaly Orn answers every question with a better one and never lies outright. Lunn collapses at the first firm push.",
+          "gmTip": "Run three interviews at most; let the players pick. Each successful interview should remove one suspect and add one reason to fear the clerk.",
+          "outcomes": [
+            "Ruul is revealed as the clerk’s paymaster, but not her master",
+            "Vantroy and the Reverend Mother are revealed as rival buyers",
+            "Lunn’s spine key explains how Ferrant moved contraband around the ring"
+          ],
+          "clueRefs": [
+            "clue-harkonnen-commission",
+            "clue-spine-key"
+          ]
+        },
+        {
+          "name": "The Factor’s Case",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "In Berth C, in a case of Vey Orrin shield-glass samples that should hold nothing but polished panes, something hums. The note is below hearing; you feel it in your teeth. Behind a false panel lies a sliver of blue crystal, warm as skin, and when the lid opens the hum rises as if it knows it has been found.",
+          "checks": [
+            "UNDERSTAND + TRUTH, Difficulty 3 — read the crystal’s outer index with a filmbook reader: a Guild seed-record, a genome, a protocol ladder and a sealed memory-letter (investigation)",
+            "UNDERSTAND + FAITH, Difficulty 3 — recognise the genome’s family marker as House Teshrin’s own (investigation)",
+            "COMMUNICATE + DUTY, Difficulty 2 — make Factor Saar admit the case is Ferrant’s, and what he was paid (intrigue conflict)",
+            "DISCIPLINE + POWER, Difficulty 2 — decide, as a delegation, who holds the crystal, without drawing blades (intrigue conflict)"
+          ],
+          "events": [
+            "The memory-letter opens to a Teshrin name: Avel Teshrin, second son of the House’s founder, given to the Guild as the price of passage four generations ago.",
+            "Far above the ring the hum is answered: every glowglobe in Berth C brightens for one heartbeat, then dims."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all agents present, when they understand the Navigator is their kin",
+            "STRESS +1 — Factor Saar, when the case is opened in front of the House",
+            "THREAT +2 — the crystal changes hands by force or theft",
+            "MOMENTUM +2 — the delegation agrees on who holds the crystal"
+          ],
+          "npcGuidance": "No NPC is present unless Berth C was left unwatched; if THE CLERK'S SEARCH stands at 3 or more, Tamsin Hask is already inside, kneeling by the case, and calmly asks if she may help.",
+          "gmTip": "This is the twist the whole scenario turns on. Let the table sit in it: Ferrant was not merely stealing from the Guild; the Navigator paid him to send its name home, and he tried to sell it to three buyers instead.",
+          "outcomes": [
+            "The House knows what was carried and why the proctors want it",
+            "The delegation splits over the crystal: the Sisterhood, Richese, the Navigator, or the Charter",
+            "The crystal’s hum makes it findable; the clerk will come for it"
+          ],
+          "clueRefs": [
+            "clue-courier-case",
+            "clue-pre-spice-record"
+          ]
+        },
+        {
+          "name": "The Service Spine",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "The Face Dancer, now wearing Steward Ebbe Lunn’s face and livery, waits in the south spine where the ducts meet. It fights only to escape: two actions per round, strikes for the throat with shigawire, and flows into a duct when it reaches 4 Stress. The real Lunn is bound and alive in a reclamation alcove. Shields work here, but the spine is so narrow that only one combatant can stand abreast.",
+          "narration": "The spine is a crawlway of warm pipes and dripping condensers, lit by service glows the color of weak tea. The ducts from every berth open into it at ankle height. Somewhere ahead, someone is humming the note Ferrant’s crystal makes.",
+          "checks": [
+            "MOVE + JUSTICE, Difficulty 3 — move silently through the spine to the duct junction behind Berth E (espionage conflict)",
+            "UNDERSTAND + TRUTH, Difficulty 2 — see that “Lunn” moves wrongly: the joints bend a little too far (investigation)",
+            "BATTLE + DUTY, Difficulty 3 — pin the shapeshifter before it reaches a duct (duel)",
+            "DISCIPLINE + FAITH, Difficulty 3 — keep fighting while the face in front of you melts into a friend’s face (duel)"
+          ],
+          "stressTriggers": [
+            "STRESS +2 — any agent who watches the Face Dancer change faces",
+            "STRESS +1 — Ser Dannic Orwe, facing the shape he once backed away from",
+            "THE CLERK'S SEARCH +1 — if the agents left Berth C empty to come here",
+            "MOMENTUM +2 — the real Lunn is freed alive, a witness the proctors will believe"
+          ],
+          "npcGuidance": "The Face Dancer speaks in Lunn’s voice, then the auditor’s, then Ferrant’s, trying to make the agents hesitate. It never pleads.",
+          "gmTip": "This scene is optional and exists for tables that want to hunt. Do not let the Face Dancer die here; at worst it is wounded and loses its mask, which makes Act III easier.",
+          "outcomes": [
+            "The real Steward Lunn is rescued and can testify",
+            "The Face Dancer escapes, wounded or not, and the House has seen it with its own eyes",
+            "Ser Dannic faces what he fled on night three"
+          ],
+          "clueRefs": [
+            "clue-duct-grille",
+            "clue-no-water-smell"
+          ]
+        },
+        {
+          "name": "The Doors Close",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Retainers of four delegations gather outside Berth C with lamps, led by a Morvane cousin who says the House should surrender its Swordmaster to the proctors “for the sake of the air.” No weapons are drawn yet. There will be.",
+          "checks": [
+            "COMMUNICATE + JUSTICE, Difficulty 3 — turn the crowd with evidence that the House was elsewhere during the blackout (intrigue conflict)",
+            "COMMUNICATE + POWER, Difficulty 2 — invoke the House’s name, seal and guest-right to send them home (intrigue conflict)",
+            "BATTLE + DUTY, Difficulty 1 — hold the door without drawing blood (skirmish)"
+          ],
+          "stressTriggers": [
+            "THE HARKONNEN STORY SPREADS +1 — if the House barricades itself in",
+            "THE GUILD'S PATIENCE +1 — if blood is spilled at the door",
+            "STRESS +1 — Ser Dannic Orwe, named by the crowd"
+          ],
+          "npcGuidance": "The Morvane cousin is Ruul’s creature but genuinely afraid of the dark. Ruul himself is absent and will claim he tried to stop it.",
+          "gmTip": "Use this if THE HARKONNEN STORY SPREADS reaches 4. If it fills, this scene happens with the proctors watching, and one agent must be surrendered to their custody until Act III.",
+          "outcomes": [
+            "The crowd disperses and the House gains a measure of the ring’s respect",
+            "The House holds the door by force and the ring turns fully against it"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT III",
+      "subtitle": "THE TANK",
+      "summary": "Before the proctors and the Navigator’s tank, the House makes its accusation: truth, scapegoat, or bargain.",
+      "readAloud": [
+        "On the eighth day the proctors come for you with lamps. The promenade is cold enough now to fog your breath, and every berth door stands open: a dozen Houses watching in silence as you are walked toward the gallery at the spinward end of the ring, where no passenger has ever been invited. The air grows warmer with every step, and sweeter, thick with cinnamon.",
+        "The Guild gallery is a long dim room of pale stone and one enormous window. Beyond the glass, in orange fog that coils like slow smoke, floats the Navigator. It is larger than a man and smaller than you feared. Its hands are webbed and drifting. Its eyes are entirely blue, and they are looking at you, and they have been looking at you, you realise, for nine days.",
+        "The delegations file in behind you: the Harkonnen attaché in black and blue, the Richese magister clutching her case, the Reverend Mother with her hands folded in her sleeves, the Fremen envoy masked against the waste of the spice-fog. The CHOAM clerk stands where the auditor should have stood. The proctors form a line before the glass, and their slates light as one.",
+        "THE LAST FOLD IS NEAR. THE HOUSE OF THE WREN WILL NOW SPEAK. Somewhere beneath your feet the heighliner gathers itself, and space prepares to bend. Whatever is said in this room becomes true the moment it is spoken, because there is no one beyond these walls to say otherwise. You have one accusation to make. The fog swirls, and the Navigator drifts closer to the glass."
+      ],
+      "gmNotes": "Act III is one long audience, played as a chain of intrigue conflicts. The proctors want three things: a name, the return of the seed-record, and silence about what it is. The Navigator wants one thing: its record delivered to the House as it intended, and its name spoken aloud. The agents can win by truth (unmask the Face Dancer with at least three of the clues), by scapegoat (name Ruul, Vantroy, Ammar, Lunn or one of their own; the proctors accept any name if the crystal comes back), or by bargain (offer the crystal to the Navigator directly, over the proctors’ heads). If THE GUILD'S PATIENCE fills at any point, run The Last Fold. If THE CLERK'S SEARCH filled in Act II, the clerk holds the crystal and threatens to crush it.",
+      "agendaNotes": "Every agenda now collides in public. Auberon must certify a computation; Ser Dannic may offer himself, or denounce Auberon’s Harkonnen correspondence; Lady Sorrel must choose between the Sisterhood and her kin; Doctor Marsk will not allow a living person to be given to the void for a lie; Tobin decides whether the crystal is a sale, a gift or a weapon. Make sure each player is asked, in the room, what they will do.",
+      "scenes": [
+        {
+          "name": "The Summons",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The proctors walk the House through the gallery lock. Spice-gas leaks around the tank seals in faint orange threads, and anyone who breathes too deeply tastes cinnamon and sees, for an instant, the room from slightly above.",
+          "checks": [
+            "DISCIPLINE + FAITH, Difficulty 2 — keep a clear head in the spice-saturated air (intrigue conflict)",
+            "UNDERSTAND + TRUTH, Difficulty 2 — order the evidence so that every clue stands on another before you speak (investigation)",
+            "COMMUNICATE + POWER, Difficulty 2 — claim the right to speak first, before Ruul can (intrigue conflict)"
+          ],
+          "events": [
+            "Send The Navigator’s Summons to all agents as they enter.",
+            "The Navigator’s fingers press once against the glass, opposite whoever carries the crystal."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any agent who fails the spice-air test, seeing the room from outside their body",
+            "AIR AND LIGHT +1 — if the clock is not yet full; the gallery is the only warm room left",
+            "THREAT +1 — per agent who arrives EXHAUSTED"
+          ],
+          "npcGuidance": "The proctors stand like statues. Ruul is grey with fear and talking too much. Thessaly Orn has moved to stand near Lady Sorrel. Tamsin Hask stands quietly at the back with her hands folded, smiling a little.",
+          "gmTip": "Let the players arrange their case aloud, in character. Award Momentum for a clean chain of three clues pointing at the same conclusion.",
+          "outcomes": [
+            "The House speaks first, with its evidence in order",
+            "Ruul seizes the floor and accuses the Swordmaster before the House is ready"
+          ]
+        },
+        {
+          "name": "The Accusation",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The Senior Proctor’s slate reads simply: NAME THE ONE. Every head in the gallery turns toward the House. The Navigator does not move at all.",
+          "checks": [
+            "COMMUNICATE + TRUTH, Difficulty 4 — name the clerk as a Face Dancer with proof: the duct, the strength, the missing water smell, the absent pulse; each clue presented lowers the Difficulty by 1, to a minimum of 1 (intrigue conflict)",
+            "COMMUNICATE + POWER, Difficulty 2 — name a scapegoat and make the proctors accept it (intrigue conflict)",
+            "DISCIPLINE + JUSTICE, Difficulty 3 — refuse to name anyone until the Navigator is heard (intrigue conflict)",
+            "UNDERSTAND + DUTY, Difficulty 2 — read which answer the proctors truly want: the crystal returned in silence (investigation)"
+          ],
+          "events": [
+            "Ruul offers, quietly, to confirm any accusation against the Richese in exchange for the Carriage Charter.",
+            "The Reverend Mother offers, aloud, to Truthsay the clerk if Lady Sorrel asks it of her, which binds Sorrel to the Sisterhood.",
+            "Ammar Sheth stands, if the House kept faith with him, and says what he saw in the spine."
+          ],
+          "stressTriggers": [
+            "STRESS +2 — any agent who accuses another agent before the proctors",
+            "THE GUILD'S PATIENCE +1 — for every false start or retraction",
+            "THREAT +2 — when a scapegoat is named and the gallery accepts it",
+            "MOMENTUM +2 — the real Steward Lunn or Ammar Sheth testifies for the House"
+          ],
+          "npcGuidance": "The proctors accept any name that comes with the crystal. Ruul and Vantroy each try to get the other named. Thessaly Orn’s offer is sincere and costly. Tamsin Hask says nothing unless named.",
+          "gmTip": "Make the scapegoat road easy and the truth road hard; that is the scenario’s moral weight. If the agents present three or more clues, the truth is within reach.",
+          "outcomes": [
+            "The clerk is named, and the Face Dancer acts (The Face Unmasked)",
+            "A scapegoat is named and taken by the proctors; the clerk walks free at Arrakeen",
+            "The House refuses to name anyone, and the Navigator chooses to speak"
+          ],
+          "clueRefs": [
+            "clue-no-water-smell",
+            "clue-clerk-not-human",
+            "clue-dead-before-blade"
+          ]
+        },
+        {
+          "name": "The Face Unmasked",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Named, the Face Dancer drops its mask: the clerk’s face slackens into a smooth grey blank, and it lunges for whoever carries the crystal, or seizes Lady Sorrel as a shield and hostage. It can take 7 Stress, attacks twice per round with shigawire, and tries to reach the gallery duct. The proctors do not intervene unless the tank glass is threatened. Lasguns are forbidden here: with shields active in the room, a lasgun is a bomb.",
+          "narration": "Tamsin Hask’s face goes still, then soft, then smooth, as if a thumb had been drawn across wet clay. The thing that wore her straightens a little taller and turns its blank face toward the crystal.",
+          "checks": [
+            "BATTLE + DUTY, Difficulty 3 — fight the Face Dancer with the slow blade under a dozen Houses’ eyes (duel)",
+            "MOVE + JUSTICE, Difficulty 2 — put yourself between the shapeshifter and the hostage or the crystal (skirmish)",
+            "DISCIPLINE + FAITH, Difficulty 2 — stop Magister Vantroy before she reaches for the lasgun pistol in her case (skirmish)",
+            "COMMUNICATE + POWER, Difficulty 3 — order it to yield before the Navigator, so that it is taken alive for the Guild (intrigue conflict)"
+          ],
+          "stressTriggers": [
+            "STRESS +2 — every witness, as the face goes blank",
+            "STRESS +1 — Ser Dannic Orwe, facing it again",
+            "THREAT +3 — Vantroy draws the lasgun while shields are active in the room",
+            "MOMENTUM +2 — the Face Dancer is taken alive"
+          ],
+          "npcGuidance": "The Face Dancer speaks once, in Ferrant’s voice: “He was selling your blood, little House.” Ruul flees toward the lock. The Reverend Mother uses the Voice to freeze Vantroy if no agent acts.",
+          "gmTip": "Lethality stays low-medium: the Face Dancer wants to escape, not to kill everyone. Agents defeated here are wounded or knocked down, not killed, unless they stand unshielded between it and the duct.",
+          "outcomes": [
+            "The Face Dancer is taken alive and given to the proctors: proof beyond argument",
+            "The Face Dancer is slain; the truth stands, but the Tleilaxu will remember the House",
+            "The Face Dancer escapes into the ducts; the proctors will hunt it, and the House is cleared but not thanked"
+          ]
+        },
+        {
+          "name": "The Navigator Speaks",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The fog thickens. A speaker grille in the gallery wall rasps, and a voice comes through it that is slow, wet and very old, with a cadence a little like Countess Aldis’s and a little like nothing human at all. It asks for the House of the Wren.",
+          "checks": [
+            "COMMUNICATE + FAITH, Difficulty 2 — answer the Navigator in a way it can follow: short, plain, certain words (negotiation)",
+            "UNDERSTAND + TRUTH, Difficulty 3 — grasp what it is asking for: not the genome or the protocol, but its name, spoken by its House (investigation)",
+            "COMMUNICATE + POWER, Difficulty 4 — bargain over the proctors’ heads: the crystal for the Charter, the House’s passage for a generation, or the Guild’s silence about the Face Dancer (negotiation)",
+            "DISCIPLINE + DUTY, Difficulty 3 — refuse the Reverend Mother’s last demand for the crystal in front of the Navigator (intrigue conflict)"
+          ],
+          "events": [
+            "The Navigator says, slowly, that it has seen this room in every fold for nine days, and that in most of them the House lied.",
+            "It asks the Noble Scion to read aloud the first line of the memory-letter."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — Lady Sorrel Teshrin, reading her kinsman’s letter aloud",
+            "THE GUILD'S PATIENCE −2 — if the House returns the crystal to the Navigator openly",
+            "THREAT +2 — if the crystal is sold or withheld in the Navigator’s presence"
+          ],
+          "npcGuidance": "The Navigator is not sentimental and not human, but a splinter of Avel Teshrin is still there. It will protect the House if the House speaks its name; it will forget the House if the House sells it. The proctors defer to it absolutely.",
+          "gmTip": "This is the true climax, whatever happened in The Accusation. Let the players decide the crystal’s fate in the room, and play the Navigator’s pauses for as long as the table can bear them.",
+          "outcomes": [
+            "The crystal returns to the Navigator, the name is spoken, and the House gains the Guild’s favor",
+            "The crystal is bargained for the Charter, and the House gains power and a dangerous patron",
+            "The crystal goes to the Sisterhood, Richese or Tleilax, and the Navigator turns away from the glass"
+          ],
+          "clueRefs": [
+            "clue-pre-spice-record"
+          ]
+        },
+        {
+          "name": "The Last Fold",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "If the Guild’s patience runs out, the gallery lock seals with the House outside it. A deep shudder runs through the ring, and the clamps holding Berth C to the hull begin, one by one, to release.",
+          "checks": [
+            "COMMUNICATE + FAITH, Difficulty 4 — speak to the Navigator through the gallery grille and beg, bargain or remind it of its name (negotiation)",
+            "UNDERSTAND + POWER, Difficulty 3 — use Ebbe Lunn’s spine key to reach the clamp housings in the service spine (espionage conflict)",
+            "MOVE + DUTY, Difficulty 3 — get every member of the delegation out of Berth C before the last clamp opens (skirmish)"
+          ],
+          "stressTriggers": [
+            "STRESS +2 — all agents, as the berth begins to drift",
+            "THREAT +3 — the moment the first clamp releases"
+          ],
+          "npcGuidance": "The proctors will not respond. Only the Navigator can stop this, and only if someone gives it a reason.",
+          "gmTip": "Run this only if THE GUILD'S PATIENCE fills. It is the road to the total-loss ending, but give the agents one real chance to bargain their way back.",
+          "outcomes": [
+            "The Navigator relents: the clamps re-engage and the House arrives disgraced but alive",
+            "The berth is set adrift in the fold, and the House of the Wren passes out of history"
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Proctor Meridel Sarn",
+      "role": "Senior Proctor of the Lantern Ring, Spacing Guild",
+      "agenda": "Recover the stolen seed-record and close the matter in silence before the last fold. A true killer is preferred; any killer will do.",
+      "behavior": "Never speaks aloud; writes on a slate in clean Guild script, slowly. Masked, grey-robed, utterly patient. Answers questions of fact and ignores everything else.",
+      "secret": "The proctors know exactly what Ferrant stole, and believe he stole it. They do not know the Navigator paid him to carry it, and would be shaken to learn it.",
+      "stats": {
+        "battle": 5,
+        "communicate": 6,
+        "discipline": 8,
+        "understand": 7
+      }
+    },
+    {
+      "name": "The Navigator of the Long Vesper",
+      "role": "Guild Navigator, born Avel Teshrin",
+      "agenda": "Have its pre-spice record carried home to House Teshrin and hear its human name spoken by its own blood before it forgets the name entirely.",
+      "behavior": "Silent for two acts; a presence felt as lights that brighten when the crystal hums. In Act III it speaks through a grille in slow, wet sentences, often answering a question before it is asked.",
+      "secret": "It paid Ferrant in spice to smuggle its own record out of the Guild archive. It foresaw his death in most of the paths it could see, and let the voyage proceed anyway."
+    },
+    {
+      "name": "Attaché Corvane Ruul",
+      "role": "Attaché of House Harkonnen, patron of House Morvane’s rival bid for the Carriage Charter",
+      "agenda": "See House Teshrin disgraced so the Arrakeen Carriage Charter passes to House Morvane, a Harkonnen client; and buy the seed-record if it can be had.",
+      "behavior": "Silk-voiced, generous with spice wine, venomous in the next sentence. Holds a salon by the fountain and tells the ring that Teshrin killed the liaison over a freight bribe.",
+      "secret": "He paid the CHOAM clerk to search Teshrin luggage for leverage, never to kill, and is now terrified of what he hired. At the second hour of night three he was in Berth A with Mentat Auberon Kesh, and will use that against the Mentat.",
+      "stats": {
+        "battle": 4,
+        "communicate": 7,
+        "discipline": 5,
+        "understand": 6
+      }
+    },
+    {
+      "name": "Magister Isel Vantroy",
+      "role": "Inventor of House Richese, travelling with a sealed instrument case",
+      "agenda": "Buy the Navigator’s Making ladder from Ferrant to calibrate her lattice, and keep the device hidden from the Guild at any cost.",
+      "behavior": "Brittle, brilliant, sleepless. Never more than an arm’s length from her case. Answers technical questions eagerly and personal ones not at all.",
+      "secret": "Her case holds an illegal Ixian folding lattice, a navigation engine forbidden under the old prohibitions. It draws on the ring’s shield bus and caused the shield failure. She visited Ferrant at the first hour of night three and left him alive.",
+      "stats": {
+        "battle": 4,
+        "communicate": 5,
+        "discipline": 5,
+        "understand": 8
+      }
+    },
+    {
+      "name": "Reverend Mother Thessaly Orn",
+      "role": "Bene Gesserit Reverend Mother, travelling “privately”",
+      "agenda": "Secure the Navigator’s genome for the Sisterhood’s breeding index, which has marked the Teshrin line for generations, and bind Lady Sorrel more tightly to the Sisterhood.",
+      "behavior": "Old, small, unhurried. Walks the full circuit of the ring every hour. Speaks in questions and smiles when she is lied to.",
+      "secret": "She Truthsaid Ferrant on night two and learned the crystal was hidden “with the Wren.” She has sensed that the CHOAM clerk is not human and is staying silent, because the chaos serves her.",
+      "stats": {
+        "battle": 4,
+        "communicate": 8,
+        "discipline": 8,
+        "understand": 7
+      }
+    },
+    {
+      "name": "Auditor Osric Vayle",
+      "role": "CHOAM auditor of passenger levies (killed in Act II)",
+      "agenda": "Finish his audit of the Guild’s passenger accounts and prove that Ferrant was skimming levies and trading in contraband.",
+      "behavior": "Dry, precise, decent, faintly comic. Fond of his clerk. Begins to notice, too late, that she no longer needs to consult the tables.",
+      "secret": "He has written in his ledger that his clerk knew figures from Kaitain he never told anyone. He meant to ask the Suk Doctor to examine her on day five."
+    },
+    {
+      "name": "Tamsin Hask",
+      "role": "Clerk to Auditor Vayle; in truth a Tleilaxu Face Dancer",
+      "agenda": "Recover the Navigator’s seed-record for the Bene Tleilax, using Ruul’s commission as cover, and leave the ship at Arrakeen wearing a new face.",
+      "behavior": "Meek, warm, endlessly useful: brings coffee, takes notes, volunteers to help the House’s inquiry. Grieves for the auditor with flawless, correct tears.",
+      "secret": "The real Tamsin Hask died on Kaitain. The Face Dancer stole Ser Dannic’s kindjal during the night-one reception, strangled Ferrant, stabbed the corpse to frame the House, and left through the reclamation duct. It killed Vayle during the blackout.",
+      "stats": {
+        "battle": 7,
+        "communicate": 6,
+        "discipline": 7,
+        "move": 8
+      }
+    },
+    {
+      "name": "Ammar Sheth",
+      "role": "Envoy of Sietch Qalbarra, returning from a petition at Kaitain",
+      "agenda": "Reach Arrakis without wasting a drop, and claim the water of the dead liaison for the living as the desert law demands.",
+      "behavior": "Keeps Berth F gasketed with seal-tape and speaks through the door grille. Courteous, contemptuous of waste, impossible to rush.",
+      "secret": "At the second hour of night three he saw something without a water smell fold out of a duct in the south spine, and saw Ser Dannic Orwe see it too and back away. He has sworn not to testify before the Guild, whom he despises.",
+      "stats": {
+        "battle": 6,
+        "communicate": 4,
+        "discipline": 7,
+        "move": 7
+      }
+    },
+    {
+      "name": "Steward-of-Passage Ebbe Lunn",
+      "role": "Human Guild steward of the passenger ring",
+      "agenda": "Survive the voyage without anyone learning that he sells access to the service spine.",
+      "behavior": "Round, sweating, eager to explain everything about seal logic. Brings meals, opens doors, and flinches whenever a proctor passes.",
+      "secret": "He sold Ferrant a service-spine key two days before the murder. In Act II the Face Dancer takes his face and leaves him bound in a reclamation alcove."
+    }
+  ],
+  "threats": [
+    {
+      "name": "The Face Dancer (“Tamsin Hask”)",
+      "ref": "face-dancer",
+      "description": "A Tleilaxu shapeshifter wearing a dead clerk’s face. Its body can thin and fold to pass a duct no wider than a forearm, its grip can crush a throat, and it has no water smell at all.",
+      "stats": {
+        "battle": 7,
+        "move": 8,
+        "stress": 7
+      },
+      "tactics": "Act I: the helpful clerk, always near the evidence, nudging the agents toward Ruul or Vantroy. Act II: kills the auditor in the blackout, searches Berth C whenever it is left unwatched, and hides in the spine wearing Lunn’s face. Act III: stands at the back of the gallery; if named, drops the mask, takes a hostage or the crystal, and runs for a duct."
+    },
+    {
+      "name": "The Proctors of the Ring",
+      "ref": "guild-agent",
+      "description": "Silent, masked Guild wardens who control every seal, every light and every breath in the ring.",
+      "stats": {
+        "battle": 5,
+        "discipline": 8
+      },
+      "tactics": "Act I: watch and record. Act II: tighten air and light, confiscate blades, take custody of anyone who spills blood. Act III: accept a name and the crystal, or begin the decoupling of Berth C."
+    },
+    {
+      "name": "Skerrit Vol",
+      "ref": "harkonnen-assassin",
+      "description": "Corvane Ruul’s bodyguard: a lean, scarred professional who wears a shield belt even to sleep.",
+      "stats": {
+        "battle": 6,
+        "move": 6,
+        "stress": 6
+      },
+      "tactics": "Act I: provokes Ser Dannic into drawing steel in Guild space. Act II: covers Ruul in the blackout and leads no one. Act III: protects Ruul’s retreat; he will not die for the attaché."
+    },
+    {
+      "name": "Sister Ione",
+      "ref": "bene-gesserit-sister",
+      "description": "The Reverend Mother’s silent acolyte, who carries her tea service and a poison snooper, and watches the Teshrin berth from the promenade.",
+      "stats": {
+        "battle": 5,
+        "discipline": 7
+      },
+      "tactics": "Act II: shadows Lady Sorrel and reports where the crystal is kept. Act III: steps between the Reverend Mother and any blade."
+    }
+  ],
+  "keyLocations": [
+    {
+      "name": "The Promenade",
+      "description": "A curved boulevard of pale composite under glowglobes tuned to endless evening, with a phosphor fountain at its center. Every berth door opens onto it. It is the ring’s court, marketplace and gallows, and in Act II it grows dim, cold and quiet."
+    },
+    {
+      "name": "Berth C — The Wren’s Berth",
+      "description": "House Teshrin’s suite, shared with the small House Abrel: four sleeping cells, a weapon rack by the door, a common room with a tea service, and the factor’s cargo niche holding the case of Vey Orrin shield-glass samples."
+    },
+    {
+      "name": "Berth E — The Liaison’s Cell",
+      "description": "A narrow Guild cell reserved for the ring’s liaison: sleeping shelf, writing ledge, amber seal-plate, and a reclamation grille at ankle height that opens into the south spine. Sealed from within at the second hour of night three."
+    },
+    {
+      "name": "The Service Spine",
+      "description": "Two crawlways of warm pipes and dripping condensers that run behind the berths, north and south. Every berth’s reclamation duct opens into it. Lit by tea-colored service glows; officially Guild-only, unofficially for sale."
+    },
+    {
+      "name": "The Guild Gallery",
+      "description": "A long room of pale stone at the spinward end of the ring, sealed to passengers. Its one great window looks into the Navigator’s tank of orange spice-fog. The proctors’ seal-board and the air and light controls are here."
+    },
+    {
+      "name": "Berth F — The Water-Sealed Cabin",
+      "description": "The Fremen envoy’s cabin, its door gasketed with seal-tape, its air warm and close and smelling of creosote. A dew trap is rigged in the duct to the south spine; Ammar rises at the second hour each night to empty it."
+    },
+    {
+      "name": "Berth B — The Richese Suite",
+      "description": "Shared by Magister Vantroy and the Reverend Mother in separate suites. Vantroy’s door seal-plate is spliced off the ring’s board. Her instrument case ticks faintly, like a cooling engine, and the glowglobes nearest it flicker when it works."
+    },
+    {
+      "name": "Berth A and Berth D",
+      "description": "Berth A holds Attaché Ruul and the House Morvane delegation, rich with Giedi Prime tapestries. Berth D holds the CHOAM auditor and his clerk among two minor Houses: ledgers, ink, cold tea, and in Act II a dead man in a reading chair."
+    }
+  ],
+  "maps": [
+    {
+      "id": "lantern-ring",
+      "title": "THE LANTERN RING",
+      "subtitle": "Sealed passenger ring of the heighliner Long Vesper",
+      "description": "Six berths, each shared by two or three delegations, open onto a curved promenade. The service spine runs behind both rows of berths and meets at the Guild gallery, where the Navigator’s tank fills the far wall. The gallery lock is sealed to passengers.",
+      "kind": "ascii",
+      "ascii": "╔════════════════════════════════════════════════════════════════════╗\n║ THE LANTERN RING — passenger ring, heighliner LONG VESPER          ║\n║ sealed for transit · ┄ service spine · ▓ glass · † the body        ║\n╠════════════════════════════════════════════════════════════════════╣\n║ ┄┄┄┄┄┄┄┄┄┄┄┄┄ NORTH SERVICE SPINE ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐                ║\n║ ┌──────────┐ ┌──────────┐ ┌──────────┐            ┊                ║\n║ │ BERTH A  │ │ BERTH B  │ │ BERTH C  │  ┌─────────┴──────┐         ║\n║ │ Harkonnen│ │ Richese  │ │ TESHRIN  │  │ GUILD GALLERY  │         ║\n║ │ Morvane  │ │ Rev. Mthr│ │ Abrel    │  │ proctor post   │         ║\n║ └────┬─────┘ └────┬─────┘ └────┬─────┘  │ seal-board     │         ║\n║ ═════╧════════════╧════════════╧══════  │ air and light  │         ║\n║   THE PROMENADE  · fountain · salon  ═══╡ lock (sealed)  │         ║\n║ ═════╤════════════╤════════════╤══════  │ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │         ║\n║ ┌────┴─────┐ ┌────┴─────┐ ┌────┴─────┐  │ ▓ NAVIGATOR’S ▓│         ║\n║ │ BERTH D  │ │ BERTH E  │ │ BERTH F  │  │ ▓ TANK  (fog) ▓│         ║\n║ │ CHOAM    │ │ liaison †│ │ Fremen   │  │ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │         ║\n║ │ 2 Houses │ │ sealed   │ │ water-   │  └─────────┬──────┘         ║\n║ │          │ │ duct ┄┐  │ │ sealed   │            ┊                ║\n║ └──────────┘ └───────┊──┘ └──────────┘            ┊                ║\n║ ┄┄┄┄┄┄┄┄┄┄┄┄┄ SOUTH SERVICE SPINE ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┘                ║\n║ every berth has a reclamation duct into the spine behind it        ║\n╚════════════════════════════════════════════════════════════════════╝",
+      "rooms": [
+        {
+          "id": "berth-a",
+          "name": "Berth A",
+          "note": "Attaché Ruul, Skerrit Vol and the House Morvane delegation. Ruul and Mentat Kesh met here at the second hour of night three."
+        },
+        {
+          "id": "berth-b",
+          "name": "Berth B",
+          "note": "Magister Vantroy’s suite (spliced seal-plate, the Ixian lattice) and the Reverend Mother’s suite. Source of the Act II shield failure."
+        },
+        {
+          "id": "berth-c",
+          "name": "Berth C",
+          "note": "House Teshrin and House Abrel. Weapon rack by the door; the factor’s cargo niche holds the humming case."
+        },
+        {
+          "id": "berth-d",
+          "name": "Berth D",
+          "note": "Auditor Vayle and his clerk among two minor Houses. Vayle dies here during the blackout."
+        },
+        {
+          "id": "berth-e",
+          "name": "Berth E",
+          "note": "The liaison’s cell. Sealed from within; Ferrant’s body; the reclamation duct to the south spine."
+        },
+        {
+          "id": "berth-f",
+          "name": "Berth F",
+          "note": "Ammar Sheth’s water-sealed cabin, with a dew trap rigged in its duct to the south spine."
+        },
+        {
+          "id": "promenade",
+          "name": "The Promenade",
+          "note": "Fountain, Ruul’s salon, the ring’s public court. Scene of the duel provocation and the blackout."
+        },
+        {
+          "id": "guild-gallery",
+          "name": "The Guild Gallery",
+          "note": "Proctor post, seal-board, air and light controls, and the window onto the Navigator’s tank. Act III."
+        },
+        {
+          "id": "service-spine",
+          "name": "The Service Spine",
+          "note": "North and south crawlways behind the berths, meeting at the gallery. The Face Dancer’s road, and Ebbe Lunn’s alcove."
+        }
+      ]
+    }
+  ],
+  "handouts": [
+    {
+      "id": "mentat-opening-computation",
+      "title": "Mentat Computation: The Sealed Berth",
+      "from": "MENTAT OF HOUSE TESHRIN",
+      "to": "ALL AGENTS OF THE HOUSE",
+      "priority": "URGENT",
+      "text": "COMPUTATION BEGINS. DATA: Berth E sealed from within at the second hour by the liaison’s palm. Opened by proctors at the sixth hour. One door. One reclamation duct, width eleven fingers. Weapon: Teshrin kindjal, glass wren on the pommel, property of Ser Dannic Orwe. INFERENCE: either a man sealed himself in with his killer, or the killer left by a way no man could take. Both are impossible. One of them is true. PROBABILITY THE BLADE WAS CHOSEN TO ACCUSE THIS HOUSE: 0.91. RECOMMENDATION: examine the duct before the proctors clean it; ask who entered our berth on the first night. RISK ASSESSMENT: SEVERE. COMPUTATION PAUSED.",
+      "when": "Act I opening, as the agents reach Berth E"
+    },
+    {
+      "id": "guild-invitation",
+      "title": "Notice of the Ring: An Invitation",
+      "from": "THE SPACING GUILD — PROCTORS OF THE LANTERN RING",
+      "to": "THE HOUSE OF THE WREN",
+      "priority": "IMPERIAL",
+      "text": "By the courtesy of the Guild, which carries all Houses and owes none, the House of the Wren is invited to name the one who ended the service of Liaison Ferrant Osk, and to return what he carried, before the last fold into the orbit of Arrakis. The House may move freely within the ring for this purpose. The House may question any passenger once, under guest-right. The air and light of the ring are provided at the Guild’s discretion. Passage is a courtesy. A courtesy may be withdrawn. The Guild does not explain. The Guild remembers.",
+      "when": "Act I, at the end of The Proctors’ Invitation"
+    },
+    {
+      "id": "ferrant-last-arrangement",
+      "title": "Ferrant’s Last Arrangement",
+      "from": "F. OSK (folded slip under the cargo niche door)",
+      "to": "Tobin Saar",
+      "priority": "SEALED",
+      "text": "Factor. As agreed: the glass case passes Arrakeen customs under your House’s seal and you hand it to no one but me, on the landing field, in daylight. Twenty thousand paid, twenty thousand on delivery. If I am not on the landing field, do not open it, do not sell it, do not speak of it to the Guild. Give it to the one in the glass. You will understand when you must. Burn this.",
+      "when": "Act I, privately to Tobin Saar once the body is found"
+    },
+    {
+      "id": "mentat-computation-body",
+      "title": "Mentat Computation: The Body",
+      "from": "MENTAT OF HOUSE TESHRIN",
+      "to": "ALL AGENTS OF THE HOUSE",
+      "priority": "URGENT",
+      "text": "DATA: bruising at the throat in a single band, consistent with one hand. Pressure required: beyond the grip of any trained man of the victim’s size. Chest wound shows no vital bleeding. Trace of a sleeping draught laced with sapho. CONCLUSION: the liaison was drugged, strangled, and stabbed after death. The kindjal is a signature, not a weapon. QUESTION: what has a grip like a vise and fits through a duct eleven fingers wide? PROBABILITY THE KILLER IS STILL IN THE RING: 0.97. There is nowhere else to go. RISK ASSESSMENT: SEVERE. COMPUTATION PAUSED.",
+      "when": "Act I, after The Body is examined"
+    },
+    {
+      "id": "ferrant-tally",
+      "title": "Cipher Tally from the Boot Heel",
+      "from": "Ferrant Osk (private hand)",
+      "to": "None",
+      "priority": "SEALED",
+      "text": "A strip of spice-paper rolled tight. Three marks, three figures. A closed hand in a circle: 300,000 solari, “the old woman pays in favors also.” A toothed wheel: 450,000, “wants the ladder, not the blood.” A griffin: 200,000 through the clerk, “the clerk asks too many questions.” Beneath, underlined twice: “Delivery by the Wren. The one in the glass must not know I sold it.”",
+      "when": "Act I, when the boot heel is searched in The Body"
+    },
+    {
+      "id": "griffin-sealed-letter",
+      "title": "The Griffin-Sealed Letter",
+      "from": "ATTACHÉ CORVANE RUUL, HOUSE HARKONNEN",
+      "to": "Auberon Kesh",
+      "priority": "SEALED",
+      "text": "My dear Mentat. We spent a pleasant hour together on the third night, discussing your House’s future under wiser patrons. I have told no one. Your Swordmaster would find the conversation instructive, I think, and the proctors would find it an alibi for us both. When you present your computation, let it fall on the Richese woman and her forbidden box. Everyone will believe it, and some of it is even true. Do this and I forget the third night. Fail, and I remember it aloud.",
+      "when": "Act II, privately to Auberon Kesh during Questions Under Guest-Right"
+    },
+    {
+      "id": "guild-notice-provision",
+      "title": "Guild Notice of Adjusted Provision",
+      "from": "THE SPACING GUILD — PROCTORS OF THE LANTERN RING",
+      "to": "ALL PASSENGERS OF THE RING",
+      "priority": "IMPERIAL",
+      "text": "Notice to all passengers. In view of irregularities within the ring, provision of air, light and warmth is adjusted to the minimum required for passage. Passengers are advised to rest, to speak little, and to remain within their berths between the tenth and the second hours. Shield belts will draw from the ring’s bus at reduced allowance. Adjustment will continue until the House of the Wren has answered the Guild’s invitation. The Guild regrets nothing. The Guild provides.",
+      "when": "Act II, at the start of The Lights Go Down"
+    },
+    {
+      "id": "sisterhood-remembers",
+      "title": "The Sisterhood Remembers",
+      "from": "REVEREND MOTHER THESSALY ORN",
+      "to": "Lady Sorrel Teshrin",
+      "priority": "SEALED",
+      "text": "Child. You wore the grey for six years at the school on Wallach and you still stand as we taught you. Good. A thing of great value to the Sisterhood is hidden in your House’s cargo. It concerns your blood more than you know. Bring it to me before the last fold, unopened if you can bear it, and the Sisterhood will see that the Charter is signed and your mother’s debts are forgotten. Refuse, and remember that we taught you everything you are. Burn this when you have read it twice.",
+      "when": "Act II, privately to Lady Sorrel Teshrin after the Reverend Mother’s interview"
+    },
+    {
+      "id": "auditor-last-notation",
+      "title": "The Auditor’s Last Notation",
+      "from": "AUDITOR OSRIC VAYLE (ledger margin, private hand)",
+      "to": "None",
+      "priority": "URGENT",
+      "text": "Day 5. Levy column reconciles at last; F.O. skimmed nine percent for three years. Note for my own peace: T. no longer consults the tables. T. quoted me the Kaitain warehouse figure this morning. I never gave her that figure. I never gave it to anyone. Have asked the Suk of the Wren to look at her tomorrow on some pretext. I am being foolish. I am being foolish.",
+      "when": "Act II, The Second Death, when the ledger is read"
+    },
+    {
+      "id": "navigator-summons",
+      "title": "Summons to the Gallery",
+      "from": "THE SPACING GUILD — BY THE WILL OF THE ONE WHO STEERS",
+      "to": "THE HOUSE OF THE WREN",
+      "priority": "IMPERIAL",
+      "text": "The last fold is near. The House of the Wren will come to the gallery and speak before the glass. All delegations of the ring will witness. The House will bring what was carried. The one who steers has asked to hear the House. This has not been asked of any passenger in the memory of the ring. The House is advised that whatever is spoken before the glass is entered in the Guild’s record, and the Guild’s record is the only truth that crosses the fold.",
+      "when": "Act III opening, at The Summons"
+    }
+  ],
+  "clues": [
+    {
+      "id": "clue-seal-log",
+      "text": "The seal-board shows Berth E closed from within by Ferrant’s own palm at the second hour and not opened again until the proctors came at the sixth; Berth C’s door cycled once at the same hour.",
+      "source": "Steward Ebbe Lunn’s seal-board slate",
+      "scene": "The Sealed Berth"
+    },
+    {
+      "id": "clue-duct-grille",
+      "text": "The reclamation grille in Berth E was bolted from the spine side after someone passed through a duct only eleven fingers wide, leaving a smear of grey, odorless oil on the lip.",
+      "source": "The reclamation duct in Berth E and the junction in the south spine",
+      "scene": "The Sealed Berth"
+    },
+    {
+      "id": "clue-dead-before-blade",
+      "text": "Ferrant was drugged with a sapho-laced draught and strangled by a single hand of impossible strength; the Teshrin kindjal went in after he was dead.",
+      "source": "Suk examination of the body",
+      "scene": "The Body"
+    },
+    {
+      "id": "clue-ferrant-tally",
+      "text": "Ferrant’s cipher tally names three buyers (the Sisterhood, Richese and a Harkonnen paying through “the clerk”) and says delivery is “by the Wren.”",
+      "source": "Hollow heel of Ferrant’s left boot",
+      "scene": "The Body"
+    },
+    {
+      "id": "clue-reception-rack",
+      "text": "On night one the only outsider to enter Berth C was the CHOAM clerk Tamsin Hask, bringing the auditor’s gift of spice wine; she stood beside the weapon rack while the Swordmaster escorted Lady Sorrel to the fountain.",
+      "source": "Steward Lunn’s service log and the House’s own servants",
+      "scene": "Walking the Ring"
+    },
+    {
+      "id": "clue-no-water-smell",
+      "text": "The Fremen envoy saw a figure with no water smell unfold from a duct in the south spine at the second hour, and a big man with a sword hand watch it and back away.",
+      "source": "Ammar Sheth of Sietch Qalbarra",
+      "scene": "The Water-Sealed Cabin"
+    },
+    {
+      "id": "clue-ixian-lattice",
+      "text": "The shield failure began at Berth B, where Magister Vantroy’s illegal Ixian lattice drew on the ring’s shield bus; the killer used the ninety dark heartbeats.",
+      "source": "The shield stutter traced around the ring; Vantroy’s spliced seal-plate",
+      "scene": "The Lights Go Down"
+    },
+    {
+      "id": "clue-clerk-not-human",
+      "text": "Auditor Vayle wrote that his clerk knew figures he never told anyone; her wrist has no pulse and her skin is as cool as the room.",
+      "source": "Vayle’s ledger and the clerk’s own body",
+      "scene": "The Second Death"
+    },
+    {
+      "id": "clue-harkonnen-commission",
+      "text": "Attaché Ruul paid the CHOAM clerk to search Teshrin luggage for leverage against the Charter; he never ordered a killing and fears what he hired.",
+      "source": "Corvane Ruul, broken in an intrigue conflict",
+      "scene": "Questions Under Guest-Right"
+    },
+    {
+      "id": "clue-spine-key",
+      "text": "Steward Lunn sold Ferrant a service-spine key two days before the murder, which is how the liaison moved the case into Berth C’s cargo niche unseen.",
+      "source": "Steward Ebbe Lunn",
+      "scene": "Questions Under Guest-Right"
+    },
+    {
+      "id": "clue-courier-case",
+      "text": "Factor Tobin Saar agreed to carry Ferrant’s sealed case through Arrakeen customs for forty thousand solari; it sits in the House’s own cargo niche.",
+      "source": "The case of shield-glass samples in Berth C; Factor Saar; Doctor Marsk’s confidence",
+      "scene": "The Factor’s Case"
+    },
+    {
+      "id": "clue-pre-spice-record",
+      "text": "The crystal is the Navigator’s pre-spice seed-record (its genome, the Making ladder and a memory-letter) and the Navigator was born Avel Teshrin, a son of the House given to the Guild four generations ago.",
+      "source": "The crystal’s index, read with a filmbook reader; the memory-letter",
+      "scene": "The Factor’s Case"
+    }
+  ],
+  "clocks": [
+    {
+      "id": "guilds-patience",
+      "label": "THE GUILD'S PATIENCE",
+      "segments": 6,
+      "filled": 0,
+      "kind": "danger",
+      "visibility": "all",
+      "note": "Ticks when blood is spilled, a proctor is threatened, a second death occurs, or the House retracts an accusation. When full, the gallery seals and the clamps on Berth C begin to release: run The Last Fold."
+    },
+    {
+      "id": "air-and-light",
+      "label": "AIR AND LIGHT",
+      "segments": 4,
+      "filled": 0,
+      "kind": "danger",
+      "visibility": "all",
+      "note": "Ticks at the start of Act II and whenever a scene passes without progress. At 2 the ring is dim and cold; at 3 every agent is EXHAUSTED; when full, Act III is played in near-darkness and every MOVE and UNDERSTAND test is +1 Difficulty."
+    },
+    {
+      "id": "harkonnen-story",
+      "label": "THE HARKONNEN STORY SPREADS",
+      "segments": 6,
+      "filled": 1,
+      "kind": "racing",
+      "visibility": "all",
+      "note": "Ruul’s tale that Teshrin killed the liaison over a freight bribe, racing the House’s inquiry. Ticks when the agents ignore his salon, quarrel in public, or barricade themselves in. When full, the ring demands a Teshrin agent be given to the proctors’ custody and every COMMUNICATE test in the gallery is +1 Difficulty."
+    },
+    {
+      "id": "clerks-search",
+      "label": "THE CLERK'S SEARCH",
+      "segments": 4,
+      "filled": 0,
+      "kind": "danger",
+      "visibility": "gm",
+      "note": "Ticks each time Berth C is left unwatched in Act II. When full, the Face Dancer has taken the crystal; Act III becomes a recovery, and the clerk threatens to crush it if named."
+    }
+  ],
+  "endings": [
+    {
+      "title": "The Name Spoken",
+      "condition": "The House unmasks the Face Dancer with evidence and returns the crystal to the Navigator, speaking the name Avel Teshrin before the glass.",
+      "text": "The proctors take the grey thing away in silence, and the slates go dark one by one. Then the Navigator lays its webbed hand flat against the glass, and Lady Sorrel reads the first line of a letter written by a boy a hundred years ago, to a mother long dust. When she speaks his name, the whole ring brightens: every glowglobe, every fountain, every breath of warm air restored at once. The last fold is gentle. At Arrakeen the Carriage Charter is signed before noon, because the Guild has let it be known, quietly, that the House of the Wren will never wait for passage again. Ruul leaves the landing field without a word. Somewhere above the planet, something vast remembers who it was."
+    },
+    {
+      "title": "A Convenient Guilt",
+      "condition": "The House names a scapegoat (Ruul, Vantroy, Ammar, Lunn or one of its own) and hands over the crystal to the proctors, the Sisterhood or a buyer.",
+      "text": "The proctors accept the name, as they said they would. The accused is led through the gallery lock and is not seen again, and the ring’s light returns by slow degrees, as if grudging it. The last fold comes. At Arrakeen the delegations scatter across the landing field without farewells, and among them walks a young clerk in CHOAM grey, who smiles at you once before the crowd takes her. The Charter is signed; the House survives; the price is written nowhere. Years later, when a Teshrin ship waits a month for a heighliner that never seems to have room, no one in the House can say why. The Navigator could. It does not answer letters."
+    },
+    {
+      "title": "Left in the Fold",
+      "condition": "THE GUILD'S PATIENCE fills and the House fails to bargain its way back in The Last Fold, or the House draws blood before the glass.",
+      "text": "The last clamp lets go with a sound like a held breath released. Through the berth’s single port you watch the heighliner draw away, not into distance but into something that has no direction, until there is no light left but your own glowglobes, and those are dimming. The air will last some days. Your Mentat computes how many. Lady Sorrel sits by the cargo niche with a humming crystal in her lap and talks to it softly, as if someone might be listening. Perhaps someone is. The Landsraad records will say that House Teshrin’s delegation never arrived on Arrakis. CHOAM will reassign the Charter within the month. And the Guild, which explains nothing, will remember."
+    }
+  ],
+  "characters": [
+    {
+      "id": "auberon-kesh",
+      "name": "Auberon Kesh",
+      "career": "Mentat",
+      "appearance": "Tall, stooped and very still, with sapho-stained lips and long fingers that tap out sums on his thigh. Speaks in probabilities when calm and in complete silence when frightened.",
+      "driveStatements": {
+        "duty": "I serve the House’s survival, which is not always the same as its pride.",
+        "faith": "Faith is what fills the space where the data ends; I keep that space small.",
+        "justice": "A just answer is one that would still balance if I were not the one presenting it.",
+        "power": "Power is knowing first and choosing who knows second.",
+        "truth": "Every lie costs something somewhere; I find where the cost was paid."
+      },
+      "attributes": {
+        "duty": 6,
+        "faith": 4,
+        "justice": 5,
+        "power": 7,
+        "truth": 8
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 4,
+        "discipline": 6,
+        "move": 4,
+        "understand": 8
+      },
+      "talent": "Projection Engine — Once per scene, state a conclusion about a person or plan. If the Narrator confirms it, gain 2 Momentum; if not, the Narrator gains 1 Threat.",
+      "gear": [
+        "Sapho juice",
+        "Filmbook reader",
+        "Poison snooper",
+        "Shield belt",
+        "Ledger of the Carriage Charter"
+      ],
+      "signatureItem": "Ledger of the Carriage Charter — every clause of the House’s Arrakeen petition in his own cramped hand, annotated with the probability of each one surviving the Landsraad.",
+      "personalAgenda": "Solve the locked room by computation alone and present the answer to Lady Sorrel before anyone else, while keeping your own whereabouts on the third night out of every equation.",
+      "agendaByAct": {
+        "1": "Solve the sealed berth from the seal-board and the body. Share only what you are certain of, and make sure no computation places you anywhere at the second hour of night three.",
+        "2": "Ruul is blackmailing you with the third night. Steer the inquiry toward Magister Vantroy without being seen to do it, and decide what you will do when the Swordmaster’s absence from his post becomes impossible to hide.",
+        "3": "Before the glass, your computation becomes the Guild’s truth. Certify the real killer and confess your talks with Ruul, certify the Richese and buy your silence, or name the Swordmaster whose absence you have already computed."
+      },
+      "buddy": "Doctor Ilyan Marsk",
+      "rival": "Ser Dannic Orwe",
+      "secret": "At the second hour of night three you were in Berth A with Attaché Ruul, privately negotiating a fallback in which House Teshrin becomes a Harkonnen sub-carrier if the Charter fails. It is your alibi and it is treason in Ser Dannic’s eyes, and the seal-board that clears you also shows the Swordmaster’s door opening at the same hour."
+    },
+    {
+      "id": "dannic-orwe",
+      "name": "Ser Dannic Orwe",
+      "career": "Swordmaster",
+      "appearance": "Broad and grey-bearded, with a burn scar along one forearm and a soldier’s habit of standing with his back to a wall. Bows precisely, speaks in short sentences, and touches his empty off-hand sheath when he thinks no one is looking.",
+      "driveStatements": {
+        "duty": "I stand between this House and every blade aimed at it, including my own.",
+        "faith": "The forms of honor are the only prayer I trust.",
+        "justice": "A killer who hides behind another man’s steel deserves no forms at all.",
+        "power": "Power belongs to the Lady I serve; I only hold the door.",
+        "truth": "I have never lied about a fight, until this voyage."
+      },
+      "attributes": {
+        "duty": 8,
+        "faith": 5,
+        "justice": 7,
+        "power": 4,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 8,
+        "communicate": 4,
+        "discipline": 5,
+        "move": 5,
+        "understand": 4
+      },
+      "talent": "Guardian’s Step — When an ally within reach is attacked, spend 1 Momentum to take the attack yourself.",
+      "gear": [
+        "Rapier",
+        "Shield belt",
+        "Stunner",
+        "Glowglobes",
+        "Empty wren sheath"
+      ],
+      "signatureItem": "Empty wren sheath — the off-hand scabbard that held the kindjal now buried in a dead man, carved by the Countess’s father with a glass wren on the locket.",
+      "personalAgenda": "Clear your blade’s name and keep Lady Sorrel safe, and let no one learn that you left your post at the second hour of night three.",
+      "agendaByAct": {
+        "1": "Insist you never left the door of Berth C. Find out who took your kindjal from the rack, and keep Lady Sorrel within reach at all times.",
+        "2": "Find the thing you saw in the spine and kill it, alone if you must, to wipe out the moment you backed away. Watch the Mentat: he was not in his cell on the third night either, and you mean to learn where he was.",
+        "3": "If the House must give the Guild a name, you may offer your own and die with your honor intact, or you may name the Mentat’s Harkonnen dealings before the glass. Choose which betrayal you can live with."
+      },
+      "buddy": "Lady Sorrel Teshrin",
+      "rival": "Auberon Kesh",
+      "secret": "At the second hour of night three you heard scraping behind Berth C, followed it into the south spine, and saw a man fold out of a duct like wet cloth and stand up. For the first time in your life you backed away. You have told everyone you never left your post, and the Fremen envoy saw you there."
+    },
+    {
+      "id": "sorrel-teshrin",
+      "name": "Lady Sorrel Teshrin",
+      "career": "Noble Scion",
+      "appearance": "Slender, dark-browed and unnervingly composed, with the Sisterhood’s trained stillness in her hands. Wears the glass-wren signet on a chain under her collar and smiles a breath too late, as she was taught.",
+      "driveStatements": {
+        "duty": "My mother sent me to sign a charter, and I will come home with it signed.",
+        "faith": "The Sisterhood taught me that every faith is a tool; I am not yet sure that includes theirs.",
+        "justice": "No one of my House will be thrown into the dark for a crime they did not commit.",
+        "power": "A minor House survives by being worth more alive than dead to everyone at the table.",
+        "truth": "I was raised on a lullaby about a son given to the stars, and I never asked whose son."
+      },
+      "attributes": {
+        "duty": 6,
+        "faith": 6,
+        "justice": 4,
+        "power": 8,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 7,
+        "discipline": 6,
+        "move": 4,
+        "understand": 5
+      },
+      "talent": "Courtly Poise — In an intrigue conflict, your first COMMUNICATE test each scene gains one bonus d20 at no cost.",
+      "gear": [
+        "House signet ring",
+        "Kindjal",
+        "Shield belt",
+        "Spice coffee service",
+        "Grey school veil"
+      ],
+      "signatureItem": "Grey school veil — the plain veil she wore for six years on Wallach, kept folded in her sleeve; she does not know whether it is a keepsake or a leash.",
+      "personalAgenda": "Bring the Carriage Charter home signed and the House’s name unstained, and keep your years with the Sisterhood out of the House’s business.",
+      "agendaByAct": {
+        "1": "Make the proctors treat the House as an ally to the inquiry, not the accused. Keep the Reverend Mother at a polite distance and say nothing of the training you share.",
+        "2": "The Reverend Mother has commanded you to bring her what Ferrant hid in the House’s cargo. Find it before Tobin can sell it, and decide whether you are still hers to command.",
+        "3": "The Navigator in the tank is your own blood. Give the crystal to the Sisterhood as you were ordered, to the Navigator as its maker intended, or to the Guild for the Charter, knowing Tobin and the Mentat each want it spent another way."
+      },
+      "buddy": "Ser Dannic Orwe",
+      "rival": "Tobin Saar",
+      "secret": "You spent six years at a Sisterhood school on Wallach and swore obedience to the Reverend Mothers; your mother believes you were at a Landsraad academy. Thessaly Orn knows it, and in Act II she uses it to command you to take the crystal that Tobin hides and that the Navigator wants home."
+    },
+    {
+      "id": "ilyan-marsk",
+      "name": "Doctor Ilyan Marsk",
+      "career": "Suk Doctor",
+      "appearance": "Small, neat and bald, with the diamond tattoo of Imperial Conditioning on his brow and spotless white gloves he changes after every handshake. Talks to the dead as politely as to the living.",
+      "driveStatements": {
+        "duty": "My first duty is to whoever lies on my table, and only then to the House that pays me.",
+        "faith": "I believe in the oath on my forehead, because I have seen what men are without one.",
+        "justice": "No living person goes into the dark for a lie while I can still speak.",
+        "power": "I want no power except the right to refuse.",
+        "truth": "The body always tells the truth; it is the living who need persuading."
+      },
+      "attributes": {
+        "duty": 8,
+        "faith": 6,
+        "justice": 6,
+        "power": 4,
+        "truth": 6
+      },
+      "skills": {
+        "battle": 4,
+        "communicate": 5,
+        "discipline": 6,
+        "move": 4,
+        "understand": 7
+      },
+      "talent": "Diagnose Poison — Name the poison in any victim you examine; the Narrator also tells you the likeliest way it was given.",
+      "gear": [
+        "Suk medical kit",
+        "Chaumurky antidote kit",
+        "Poison snooper",
+        "Glowglobes",
+        "Silver bone-saw"
+      ],
+      "signatureItem": "Silver bone-saw — the instrument his Suk master gave him on graduation, engraved with the oath he has never broken.",
+      "personalAgenda": "Establish exactly how Ferrant Osk died and claim the body before the Guild throws it into foldspace, while keeping the confidence the dead man gave you.",
+      "agendaByAct": {
+        "1": "Examine the body and fix the time and manner of death. Keep Ferrant’s confidence from the second night; a patient’s words are sealed, even after death.",
+        "2": "The second body, and the clerk who weeps over it, frighten you more than any wound. Prove what the clerk is. Ferrant’s confidence now points straight at Tobin; decide whether it still binds you when the Mentat asks for every datum.",
+        "3": "Before the glass, the House may offer a living scapegoat to the void. You will not certify a lie that kills, not for the Charter and not for your friends, even if it means opposing the Mentat and the factor in front of the Guild."
+      },
+      "buddy": "Tobin Saar",
+      "rival": "Lady Sorrel Teshrin",
+      "secret": "On night two Ferrant came to you for his spice-tremor and, half-drugged, told you: “If I die, the Wren’s factor carries my last delivery. It goes to the one in the glass.” You kept it as a patient’s confidence. It means your closest friend in the House has been carrying the reason for the murder all along."
+    },
+    {
+      "id": "tobin-saar",
+      "name": "Tobin Saar",
+      "career": "Smuggler",
+      "appearance": "Sun-darkened, quick-handed and always smiling, in a trade factor’s coat with too many pockets. Knows every steward’s name by the second day and remembers what each one drinks.",
+      "driveStatements": {
+        "duty": "I owe the House my wages and my discretion, and I deliver both, mostly.",
+        "faith": "I believe in contracts, cash and a back door.",
+        "justice": "Fair is what both sides agree to; anything else is a sermon.",
+        "power": "Everyone has a price, and knowing it is the only power that travels well.",
+        "truth": "I tell the truth whenever it is worth more than the lie."
+      },
+      "attributes": {
+        "duty": 4,
+        "faith": 5,
+        "justice": 6,
+        "power": 8,
+        "truth": 7
+      },
+      "skills": {
+        "battle": 5,
+        "communicate": 7,
+        "discipline": 4,
+        "move": 6,
+        "understand": 4
+      },
+      "talent": "A Price for Everything — Reduce the Difficulty of bribes, haggling and favor-trading by 1.",
+      "gear": [
+        "Solari purse",
+        "Forged travel papers",
+        "Maula pistol",
+        "Distrans",
+        "Case of shield-glass samples"
+      ],
+      "signatureItem": "Case of shield-glass samples — polished panes from the Vey Orrin glass-mills that open every trade door; this voyage it also holds a false panel and something that hums.",
+      "personalAgenda": "Keep the sealed case hidden, get it through Arrakeen customs, and collect the rest of your fee, without letting the House learn you took a private contract.",
+      "agendaByAct": {
+        "1": "Keep the case where it is and look surprised. Find out how much the Guild knows about Ferrant’s private deliveries, and whether anyone saw him visit Berth C.",
+        "2": "Three buyers wanted what is in your case, and they are all still aboard. Learn what it is worth and set a price, before Lady Sorrel or the Reverend Mother takes it from you for nothing.",
+        "3": "The crystal is the most valuable thing on the ship. Sell it to the highest bidder, give it to the one in the glass as Ferrant asked, or use it to buy the House’s life from the proctors, knowing the Scion and the Doctor will each try to stop at least one of those."
+      },
+      "buddy": "Doctor Ilyan Marsk",
+      "rival": "Auberon Kesh",
+      "secret": "For forty thousand solari, half paid, you agreed to carry Ferrant’s sealed case through Arrakeen customs under the House’s seal. He put it in the cargo niche himself, using a spine key. You are holding the thing the Guild will leave the House in foldspace to recover, and you have told no one."
+    }
+  ],
+  "tips": [
+    "Show three clocks to the table at the end of the Proctors’ Invitation and tick them visibly; the dread in this scenario comes from the air and the light, not from combat.",
+    "Play every proctor as silent: write their slates on a card or a phone screen and slide it across the table, and never let them speak aloud until the Navigator does.",
+    "Make the clerk Tamsin Hask genuinely likeable in Act I; the horror of the Face Dancer depends on the players having trusted her.",
+    "Keep the three locked-room answers (the duct, the post-mortem wound, the missing water smell) reachable by different agents so that no single failed roll stalls the mystery.",
+    "Send the private dispatches at the cue in each handout’s timing note; the agendas only collide if each player learns their new act agenda at the right moment.",
+    "Make the scapegoat easy and the truth hard in Act III, and ask each player directly, in the gallery, what they will do with the crystal.",
+    "Lethality is low-medium: agents defeated in a fight are wounded or captured by the proctors rather than killed, unless they fight unshielded between the Face Dancer and its escape."
+  ]
+}

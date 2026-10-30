@@ -9,6 +9,8 @@ import HandoutsPane from './player/HandoutsPane';
 import ClocksRow from './player/ClocksRow';
 import PauseButton from './player/PauseButton';
 import BuildCharacter from './player/BuildCharacter';
+import PanicOverlay from './player/PanicOverlay';
+import SupplyPanel from './SupplyPanel';
 
 /* ═══════════════════════════════════════════════════════════════
    PlayerView — phone-first player terminal.
@@ -51,6 +53,7 @@ export default function PlayerView() {
   const {
     myPlayer, messages, sendPlayerMessage, sendPlayerToPlayer, leaveGame, unreadCount, clearUnread,
     gameCode, connectedPlayers, connected, dmOnline, table, outboxCount, sendRoll,
+    supplyRoll, initPass, on,
   } = useGame();
   const { universe } = useUniverse();
   const { terms, terminal, rules } = universe;
@@ -68,6 +71,35 @@ export default function PlayerView() {
   const [pulseId, setPulseId] = useState(null);   // clock that just ticked
   const [building, setBuilding] = useState(false);
   const [rollPreset, setRollPreset] = useState(null);
+  const [panicPending, setPanicPending] = useState(null); // { rollId, stress } — PANIC ROLL overlay
+  const [redFlash, setRedFlash] = useState(0);            // complication flash key
+  const [supplyLast, setSupplyLast] = useState(null);
+  const myTurn = !!table?.initiative?.mine;
+  const wasMyTurn = useRef(false);
+
+  /* YOUR TURN: banner + vibrate + sound when the turn lands on this phone. */
+  useEffect(() => {
+    if (myTurn && !wasMyTurn.current) play('orders');
+    wasMyTurn.current = myTurn;
+  }, [myTurn, play]);
+  useEffect(() => on('supply-rolled', (e) => {
+    if (!e || e.playerId !== myPlayer?.id) return;
+    setSupplyLast(e);
+    if (e.after < e.before) play('tick');
+  }), [on, myPlayer?.id, play]);
+
+  /* Roller → session feed; panic (rules.panic) opens the PANIC ROLL; a complication flashes red. */
+  const onRollResult = useCallback((roll) => {
+    const rollId = sendRoll(roll);
+    if (roll?.flags?.includes('panic') && rules?.panic) {
+      setPanicPending({ rollId, stress: roll.pool?.stress ?? (Number(myPlayer?.tracks?.stress) || 0) });
+    }
+    if (roll?.flags?.includes('complication')) {
+      const k = Date.now();
+      setRedFlash(k);
+      setTimeout(() => setRedFlash((v) => (v === k ? 0 : v)), 900);
+    }
+  }, [sendRoll, rules, myPlayer?.tracks?.stress]);
 
   const c = myPlayer?.character;
   const PLAYER = terms.player.toUpperCase();
@@ -202,7 +234,7 @@ export default function PlayerView() {
     setRollPreset({
       skillKey, attrKey: pool.attrKey, kind: pool.kind,
       attr: pool.attr, skill: pool.skill, bonus: pool.bonus, total: pool.total,
-      label: `${skillKey.toUpperCase()} — ${pool.label}`,
+      label: (rules.skills || []).find(s => s.key === skillKey)?.label?.toUpperCase() || skillKey.toUpperCase(),
       stress: Number(myPlayer.tracks?.stress) || 0,
       at: Date.now(),
     });
@@ -213,6 +245,9 @@ export default function PlayerView() {
     <div className="app pv-root">
       <div className="crt-overlay" />
       {layer}
+
+      {panicPending && <PanicOverlay pending={panicPending} fx={fx} onClose={() => setPanicPending(null)} />}
+      {redFlash > 0 && <div key={redFlash} className="ph-redflash" aria-hidden="true" />}
 
       {alertQueue.length > 0 && (
         <IncomingAlert message={alertQueue[0]} onDismiss={dismissAlert} onReply={reply} terminal={terminal} terms={terms} />
@@ -240,7 +275,35 @@ export default function PlayerView() {
             return <TrackBar key={t.key} label={t.short || t.label} value={value} max={max} color={t.color || 'var(--accent)'} danger={danger} />;
           })}
         </div>
+        {table?.pools?.length > 0 && (
+          <div className="ph-pools" aria-label="Shared pools">
+            {table.pools.map(p => (
+              <span key={p.key} className={`ph-pool k-${p.key}`}>
+                <span className="ph-pool-label">{p.label}</span>
+                <span className="ph-pool-grains" aria-hidden="true">
+                  {Array.from({ length: p.max || Math.max(p.value, 1) }, (_, i) => <i key={i} className={i < p.value ? 'on' : ''} />)}
+                </span>
+                <b>{p.value}{p.max ? `/${p.max}` : ''}</b>
+              </span>
+            ))}
+          </div>
+        )}
         <ClocksRow clocks={table?.clocks || []} pulseId={pulseId} />
+        {myTurn && (
+          <div className="ph-yourturn" role="alert">
+            <span>YOUR TURN</span>
+            {table.initiative.round ? <small>ROUND {table.initiative.round}</small> : null}
+            {rules?.initiative?.mode === 'nominate' && table.initiative.allies?.length > 0 && (
+              <select aria-label="Pass the turn to" value="" onChange={(e) => e.target.value && initPass(e.target.value)}>
+                <option value="">PASS TO…</option>
+                {table.initiative.allies.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}
+              </select>
+            )}
+          </div>
+        )}
+        {!myTurn && table?.initiative?.active && table.initiative.current && (
+          <div className="ph-turnline">ROUND {table.initiative.round} · ACTING: {table.initiative.current.label}</div>
+        )}
         {lostBanner}
         {table?.paused && <div className="pv-banner ph-paused">TABLE PAUSED — TAKE A BREATH</div>}
         {!dmOnline && connected && <div className="pv-banner">{GM} OFFLINE — YOUR STATE IS SAVED</div>}
@@ -251,7 +314,11 @@ export default function PlayerView() {
         {tab === 'sheet' && (
           <div className="pv-pane ph-sheet-pane">
             <CharacterSheet character={c} statusEffects={myPlayer.statusEffects || []} conditions={activeConditions}
-              injuries={[]} onRoll={onRoll} />
+              injuries={myPlayer.injuries || []} onRoll={onRoll} />
+            {rules?.supplies?.length > 0 && myPlayer.supply && Object.keys(myPlayer.supply).length > 0 && (
+              <SupplyPanel keys={rules.supplies} supply={myPlayer.supply} danger={rules.supplyDanger ?? 2}
+                onRoll={(k) => supplyRoll(k)} last={supplyLast} />
+            )}
             <button className="pv-btn danger" onClick={leaveGame}>DISCONNECT FROM {terms.session.toUpperCase()}</button>
           </div>
         )}
@@ -326,14 +393,8 @@ export default function PlayerView() {
 
         {tab === 'dice' && (
           <div className="pv-pane pv-dice">
-            {rollPreset && (
-              <div className="ph-preset" role="status">
-                <span>ROLLING <b>{rollPreset.label}</b>{rollPreset.kind !== '2d20' && rollPreset.stress ? ` + ${rollPreset.stress} STRESS` : ''}</span>
-                <button type="button" className="ph-preset-x" aria-label="Clear preset" onClick={() => setRollPreset(null)}>✕</button>
-              </div>
-            )}
             {Roller
-              ? <Roller key={rollPreset?.at || 'free'} preset={rollPreset} onResult={sendRoll} />
+              ? <Roller key={rollPreset?.at || 'free'} preset={rollPreset} onResult={onRollResult} compact />
               : <div className="panel"><p className="pv-text dim">No dice roller is registered for {universe.name}.</p></div>}
           </div>
         )}

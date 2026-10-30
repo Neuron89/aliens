@@ -54,14 +54,21 @@ export const tracks = [
   },
 ];
 
-/* Shared pools — NOT yet rendered by the engine (reported gap).
+/* Shared pools (catalog/rules.json "momentum-cap", "threat-start"), rendered by the
+   engine (GM header counters, phone top bar, TV corner meters; server/mechanics.js).
    momentum: earned by players from surplus successes, capped at 6, spent by any
-   player. threat: the Narrator's pool, uncapped, fed by complications and by
-   players buying dice. */
+   player; public. threat: the Narrator's pool, uncapped, fed by complications and
+   by players buying dice; starts at 2 per player each session (initialPerPlayer);
+   hidden from the table unless visibleToPlayers. Both reset on a new session. */
 export const pools = [
-  { key: 'momentum', label: 'MOMENTUM', max: 6, initial: 0, owner: 'players' },
-  { key: 'threat', label: 'THREAT', initial: 0, owner: 'gm' },
+  { key: 'momentum', label: 'MOMENTUM', max: 6, initial: 0, owner: 'players', visibleToPlayers: true, playerAdd: true, resetOnNewSession: true },
+  { key: 'threat', label: 'THREAT', initial: 0, initialPerPlayer: 2, owner: 'gm', visibleToPlayers: false, resetOnNewSession: true },
 ];
+
+/* Initiative (catalog/rules.json "keep-the-initiative"): no cards — the acting side passes
+   the turn to the other side (the GM nominates / a player hands it to an ally), or keeps
+   it for 2 Momentum (players) / 2 Threat (GM). */
+export const initiative = { mode: 'nominate', keepCost: 2 };
 
 export const statusEffects = [
   'WOUNDED', 'EXHAUSTED', 'POISONED', 'SPICE-ADDICTED', 'DISGRACED',
@@ -99,6 +106,7 @@ export const rules = {
   statusEffects,
   conditions,
   dice,
+  initiative,
   creation,
   encumbrance,
 };

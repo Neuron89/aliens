@@ -49,6 +49,43 @@ const PRESETS = {
       { type: 'lfo', target: 'filter', rate: 0.03, depth: 30 },
     ],
   },
+  /* Dune scene moods (scene.ambient: wind · bazaar · sietch · court). */
+  wind: {
+    label: 'DESERT WIND',
+    nodes: [
+      { type: 'oscillator', wave: 'sawtooth', freq: 31, gain: 0.05, filterFreq: 140, filterQ: 0.7 },
+      { type: 'oscillator', wave: 'triangle', freq: 47, gain: 0.03, filterFreq: 260, filterQ: 0.5 },
+      { type: 'oscillator', wave: 'sawtooth', freq: 73, gain: 0.015, filterFreq: 420, filterQ: 0.4 },
+      { type: 'lfo', target: 'filter', rate: 0.07, depth: 90 },
+    ],
+  },
+  bazaar: {
+    label: 'BAZAAR',
+    nodes: [
+      { type: 'oscillator', wave: 'triangle', freq: 110, gain: 0.025, filterFreq: 600, filterQ: 1 },
+      { type: 'oscillator', wave: 'triangle', freq: 165, gain: 0.018, filterFreq: 700, filterQ: 1 },
+      { type: 'oscillator', wave: 'sawtooth', freq: 55, gain: 0.02, filterFreq: 200, filterQ: 2 },
+      { type: 'lfo', target: 'gain', rate: 0.6, depth: 0.012 },
+    ],
+  },
+  sietch: {
+    label: 'SIETCH',
+    nodes: [
+      { type: 'oscillator', wave: 'sine', freq: 41, gain: 0.05, filterFreq: 90, filterQ: 3 },
+      { type: 'oscillator', wave: 'sine', freq: 82, gain: 0.02, filterFreq: 160, filterQ: 4 },
+      { type: 'oscillator', wave: 'triangle', freq: 123, gain: 0.008, filterFreq: 240, filterQ: 6 },
+      { type: 'lfo', target: 'gain', rate: 0.09, depth: 0.01 },
+    ],
+  },
+  court: {
+    label: 'IMPERIAL COURT',
+    nodes: [
+      { type: 'oscillator', wave: 'sine', freq: 98, gain: 0.025, filterFreq: 400, filterQ: 8 },
+      { type: 'oscillator', wave: 'sine', freq: 147, gain: 0.018, filterFreq: 500, filterQ: 8 },
+      { type: 'oscillator', wave: 'sawtooth', freq: 49, gain: 0.02, filterFreq: 120, filterQ: 3 },
+      { type: 'lfo', target: 'filter', rate: 0.04, depth: 40 },
+    ],
+  },
 };
 
 export function useAmbientAudio() {

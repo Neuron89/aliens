@@ -2,8 +2,10 @@ import React from 'react';
 import { useUniverse } from '../UniverseContext';
 
 /* Dispatches to the active universe's dice roller (universe.rules.dice.Roller).
-   Every roller accepts `preset` { attr, skill, bonus, label, attrKey?, skillKey? }
-   (pre-fills the pool / target and shows the label) plus roller-specific props. */
+   Every roller accepts `preset` { attr, skill, bonus, label, attrKey?, skillKey?, stress?, kind?, total?, at? }
+   (pre-fills the pool / target and shows the label), `compact`, and `onResult(roll)`
+   — called once per settled roll with { kind, label, summary, successes, flags[], dice, … }
+   (ARCHITECTURE.md "Mechanics wave"). The GM's Dice Roller tab passes no onResult. */
 export default function DiceRoller(props) {
   const { universe } = useUniverse();
   const Roller = universe.rules?.dice?.Roller;

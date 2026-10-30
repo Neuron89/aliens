@@ -76,6 +76,27 @@ export const creation = {
 /* Carrying capacity (CRB p.34 encumbrance): regular items up to STRENGTH x2. */
 export const encumbrance = { formula: 'str*2', overFormula: 'str*4' };
 
+/* Panic (CRB p.104-105, catalog/rules.json "panic-trigger"; table catalog/panic.json):
+   a Stress Die showing 1 → Panic Roll = D6 + current Stress Level, looked up by the
+   table's `roll` ranges. Results >= statusAt are panic effects (status PANICKED);
+   >= actionAt force a panic action (the effect's own name is applied too). Stress
+   changes come from each entry's `effects` (target 'stress', the roller's own share). */
+export const panic = {
+  die: 6, table: 'catalog.panic', stressAdd: true,
+  statusAt: 7, actionAt: 10, statusEffect: 'PANICKED',
+};
+
+/* Consumables (CRB p.34, catalog/rules.json "consumables"): Supply ratings; a Supply roll
+   rolls Stress Dice equal to the rating (max 6) and each 1 lowers it one step. */
+export const supplies = ['air', 'power', 'food', 'water'];
+export const supplyMax = 12;
+export const supplyDanger = 2;
+
+/* Initiative: the Alien core rules draw initiative cards numbered 1–10 each Round
+   (lowest acts first); every combatant gets one fast + one slow action (or two fast).
+   VERIFY: not present in catalog/rules.json — the common published value is used. */
+export const initiative = { mode: 'cards', deck: 10, actions: ['fast', 'slow'] };
+
 export const rules = {
   attributes,
   skills,
@@ -86,6 +107,11 @@ export const rules = {
   dice: { kind: 'yze' },
   creation,
   encumbrance,
+  panic,
+  supplies,
+  supplyMax,
+  supplyDanger,
+  initiative,
 };
 
 export default rules;

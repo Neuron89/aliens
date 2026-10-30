@@ -60,6 +60,7 @@ const MapCanvas = forwardRef(function MapCanvas({
   mapDef, board, role = 'board', universe, view, editable = false, selectedTokenId = null, selectedRoomId = null,
   highlightPlayerId = null, pings = [], onTokenTap, onTokenMove, onTap, onBackgroundDrag, snap = false,
   showRoomLabels = false, showTokens = true, overlay, className = '', cursor, idleDrift,
+  flashTokens = null, activeTokenId = null, showHp = false,
 }, ref) {
   const isBoard = role === 'board';
   const drift = idleDrift ?? isBoard;
@@ -271,7 +272,8 @@ const MapCanvas = forwardRef(function MapCanvas({
             return (
               <TokenChip key={t.id} token={t} x={(dp ? dp.x : t.x) * W} y={(dp ? dp.y : t.y) * H} unit={unit} counter={counter} uid={uid}
                 selected={t.id === selectedTokenId} mine={!!highlightPlayerId && t.ownerPlayerId === highlightPlayerId}
-                ghost={role === 'dm' && t.hidden} dragging={!!dp} palette={palette} labelMin={labelMin} minR={tokenMin} />
+                ghost={role === 'dm' && t.hidden} dragging={!!dp} palette={palette} labelMin={labelMin} minR={tokenMin}
+                flash={flashTokens?.[t.id] || null} active={!!activeTokenId && t.id === activeTokenId} showHp={showHp && role === 'dm'} />
             );
           })}
           {pings.filter((p) => now - (p.rx || p.at) < 4000).map((p) => (

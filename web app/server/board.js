@@ -206,6 +206,11 @@ export function sanitizeToken(input, prev, ctx = {}) {
     t.ownerPlayerId = typeof input.ownerPlayerId === 'string' && (!ctx.playerIds || ctx.playerIds.has(input.ownerPlayerId)) ? input.ownerPlayerId : null;
   }
   if (input.level !== undefined) t.level = typeof input.level === 'string' && (!ctx.levels || ctx.levels.has(input.level)) ? input.level : null;
+  // GM-only creature/NPC tracking (mechanics wave, row 28): stripped from the board/player view.
+  if (input.hpMax !== undefined) t.hpMax = isNum(input.hpMax) && input.hpMax > 0 ? Math.min(999, Math.round(input.hpMax)) : null;
+  if (input.hp !== undefined) t.hp = isNum(input.hp) ? clamp(Math.round(input.hp), 0, t.hpMax ?? 999) : null;
+  else if (input.hpMax !== undefined && isNum(t.hp) && t.hpMax) t.hp = Math.min(t.hp, t.hpMax);
+  if (input.ref !== undefined) t.ref = typeof input.ref === 'string' && input.ref.length <= 80 && ID_RE.test(input.ref) ? input.ref : null;
   // Defaults for a new token
   if (t.label === undefined) t.label = '';
   if (t.sub === undefined) t.sub = '';
@@ -263,7 +268,7 @@ export function viewFor(board, role) {
   const tokens = {};
   for (const [id, t] of Object.entries(board.tokens)) {
     if (!isTokenVisible(board, t)) continue;
-    const { note, hidden, ...pub } = t; // eslint-disable-line no-unused-vars
+    const { note, hidden, hp, hpMax, ref, ...pub } = t; // eslint-disable-line no-unused-vars
     tokens[id] = pub;
   }
   const rooms = {};

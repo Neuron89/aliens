@@ -76,7 +76,9 @@ const tokenUid = (kind) => `${kind}-${Date.now().toString(36)}${Math.random().to
 const OUTBOX_KEY = 'muthur.outbox';
 const OUTBOX_ACK_MS = 6000;
 const TABLE_EVENTS = ['handout-received', 'clue-revealed', 'clock-ticked', 'new-orders', 'item-received', 'board-flash',
-  'pause-requested', 'roll', 'character-submitted', 'submission-updated', 'handout-seen'];
+  'pause-requested', 'roll', 'character-submitted', 'submission-updated', 'handout-seen',
+  // mechanics wave
+  'board-roll', 'panic', 'board-panic', 'supply-rolled', 'pool-changed', 'your-turn', 'turn-changed'];
 const clientUid = () => `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 
 export function GameProvider({ children }) {
@@ -408,10 +410,12 @@ export function GameProvider({ children }) {
   /* ─── DM Actions ─────────────────────────────────── */
   /** createGame({ universeId, packId? }, callback) */
   const createGame = useCallback((options, callback) => {
-    const { universeId, packId: pid = null, sessionZero = null } = options || {};
+    const { universeId, packId: pid = null, sessionZero = null, pools = null } = options || {};
     socketRef.current?.emit('create-game', { universeId, packId: pid }, (response) => {
       if (response?.error) { callback?.(response); return; }
       if (sessionZero?.enabled) socketRef.current?.emit('safety-set', { gameCode: response.code, ...sessionZero });
+      // Momentum/Threat (universe.rules.pools): fresh pools for every new session.
+      if (pools?.defs?.length) socketRef.current?.emit('pools-init', { gameCode: response.code, defs: pools.defs, values: pools.values || {}, reset: true });
       setGameCode(response.code);
       setSessionUniverseId(response.universeId || universeId || null);
       setPackId(response.packId ?? pid ?? null);
@@ -579,6 +583,36 @@ export function GameProvider({ children }) {
   /** Anonymous X-card / pause. */
   const requestPause = useCallback((cb) => socketRef.current?.emit('pause-request', {}, cb), []);
   const submitCharacter = useCallback((character, cb) => socketRef.current?.emit('character-submit', { character }, cb), []);
+
+  /* ─── Mechanics wave (server/mechanics.js) ───
+     DM: gmRoll(roll, who) secret roll · supplySet(playerId, supply) · supplyRoll(key, playerId?) ·
+     poolsInit(defs, values, reset) · poolSet(key, value) · poolDelta(key, delta, reason?) ·
+     initSet(initiative) · initStep(dir) · initGoto(index) · initRound() · initEnd() ·
+     injuryAdd(playerId, injury) · injuryRemove(playerId, uid)
+     Player: panicResult({ rollId, total, die, effect }) (queued until acked) · supplyRoll(key) · initPass(toId) */
+  const gmRoll = useCallback((roll, who, cb) => emitTable('gm-roll', { roll, who }, cb), [emitTable]);
+  const supplySet = useCallback((playerId, supply, cb) => emitTable('supply-set', { playerId, supply }, cb), [emitTable]);
+  const supplyRoll = useCallback((key, playerId, cb) => {
+    socketRef.current?.emit('supply-roll', { gameCode: codeRef.current, key, ...(playerId ? { playerId } : {}) }, cb);
+  }, []);
+  const poolsInit = useCallback((defs, values, reset, cb) => emitTable('pools-init', { defs, values, reset }, cb), [emitTable]);
+  const poolSet = useCallback((key, value, cb) => emitTable('pool-set', { key, value }, cb), [emitTable]);
+  const poolDelta = useCallback((key, delta, reason, cb) => {
+    setTable((t) => (t?.pools && key in t.pools ? { ...t, pools: { ...t.pools, [key]: Math.max(0, t.pools[key] + delta) } } : t));
+    emitTable('pool-delta', { key, delta, reason }, cb);
+  }, [emitTable]);
+  const initSet = useCallback((initiative, cb) => emitTable('init-set', { initiative }, cb), [emitTable]);
+  const initStep = useCallback((dir, cb) => emitTable('init-step', { dir }, cb), [emitTable]);
+  const initGoto = useCallback((index, cb) => emitTable('init-goto', { index }, cb), [emitTable]);
+  const initRound = useCallback((cb) => emitTable('init-round', {}, cb), [emitTable]);
+  const initEnd = useCallback((cb) => emitTable('init-end', {}, cb), [emitTable]);
+  const injuryAdd = useCallback((playerId, injury, cb) => emitTable('injury-add', { playerId, injury }, cb), [emitTable]);
+  const injuryRemove = useCallback((playerId, uid, cb) => emitTable('injury-remove', { playerId, uid }, cb), [emitTable]);
+  const panicResult = useCallback((result) => {
+    if (roleRef.current !== 'player' || !result) return null;
+    return enqueue('panic-result', result);
+  }, [enqueue]);
+  const initPass = useCallback((toId, cb) => socketRef.current?.emit('init-pass', { toId }, cb), []);
 
   /* ─── Table board ────────────────────────────────── */
   /** Board (TV) role: attach to a game by code (no token needed). */
@@ -774,6 +808,22 @@ export function GameProvider({ children }) {
     requestPause,
     submitCharacter,
     sendRoll,
+    // Mechanics wave
+    gmRoll,
+    supplySet,
+    supplyRoll,
+    poolsInit,
+    poolSet,
+    poolDelta,
+    initSet,
+    initStep,
+    initGoto,
+    initRound,
+    initEnd,
+    injuryAdd,
+    injuryRemove,
+    panicResult,
+    initPass,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

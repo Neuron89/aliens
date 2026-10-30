@@ -3,6 +3,8 @@ import { useGame, boardCodeForTab } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import MapCanvas from './board/MapCanvas';
 import Overlays from './board/Overlays';
+import { useAmbientAudio } from '../hooks/useAmbientAudio';
+import { ambientPreset } from '../mechanicsUtils';
 
 /* ═══════════════════════════════════════════════════════════════
    BoardView — the `board` role: a TV lying flat on the table
@@ -38,8 +40,39 @@ function useWakeLock(active) {
   }, [active]);
 }
 
+const wantsAudio = () => { try { return new URLSearchParams(window.location.search).get('audio') === '1'; } catch { return false; } };
+
+/* TV ambient (only with ?board=CODE&audio=1): follows table.ambient (the GM's scene preset). */
+function BoardAudio({ ambient }) {
+  const audio = useAmbientAudio();
+  const { applyPreset, presets, preset } = audio;
+  useEffect(() => {
+    const id = ambient ? ambientPreset(ambient, presets) : 'off';
+    if (id && id !== preset) applyPreset(id);
+  }, [ambient]); // eslint-disable-line react-hooks/exhaustive-deps
+  return null;
+}
+
 export default function BoardView() {
-  const { board, mapDef, gameCode, connected, reconnecting, pings, boardError, joinBoard, role } = useGame();
+  const { board, mapDef, gameCode, connected, reconnecting, pings, boardError, joinBoard, role, on, table } = useGame();
+  const [flash, setFlash] = useState({}); // tokenId -> key (TokenChip flash prop)
+  const [audioOn] = useState(wantsAudio);
+  useEffect(() => {
+    const hit = (tokenId) => {
+      if (!tokenId) return;
+      const k = Date.now();
+      setFlash((f) => ({ ...f, [tokenId]: k }));
+      setTimeout(() => setFlash((f) => {
+        if (f[tokenId] !== k) return f;
+        const next = { ...f };
+        delete next[tokenId];
+        return next;
+      }), 2600);
+    };
+    const offs = [on('board-flash', (e) => hit(e?.tokenId)), on('board-panic', (e) => hit(e?.tokenId))];
+    return () => offs.forEach((f) => f());
+  }, [on]);
+  const activeTokenId = table?.initiative?.active ? table.initiative.current?.tokenId || null : null;
   const { universe } = useUniverse();
   const [fullscreen, setFullscreen] = useState(() => typeof document !== 'undefined' && !!document.fullscreenElement);
   const [codeInput, setCodeInput] = useState('');
@@ -95,7 +128,7 @@ export default function BoardView() {
       <div className="bv-stage">
         {board?.mapId && mapDef ? (
           <MapCanvas className="bv-canvas" mapDef={mapDef} board={board} role="board" universe={universe}
-            view={board.view} pings={pings} />
+            view={board.view} pings={pings} flashTokens={flash} activeTokenId={activeTokenId} />
         ) : (
           <div className="bv-wait">
             <div className="bv-term">{terminalName}</div>
@@ -104,6 +137,7 @@ export default function BoardView() {
           </div>
         )}
         {role === 'board' && <Overlays terminalName={terminalName} />}
+        {role === 'board' && audioOn && <BoardAudio ambient={table?.ambient || null} />}
       </div>
       <div className="bv-strip">
         <span className="bv-strip-term">{terminalName}</span>

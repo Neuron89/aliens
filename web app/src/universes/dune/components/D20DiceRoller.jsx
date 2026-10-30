@@ -10,10 +10,16 @@ import { play, reducedFx } from '../../../engine/sfx';
    (20 by default, widening down to 16) is a complication. Successes beyond the
    Difficulty become Momentum. Difficulty 0 always succeeds.
 
-   Props: preset { attr, skill, bonus, label, attrKey?, skillKey? } pre-fills
-   Drive (attr) + Skill and the bonus d20s, selects attrKey/skillKey, and
-   shows the label. Settle-then-celebrate: dice tumble, settle, then a
-   result overlay + sfx (dice.settle → dice.crit / dice.botch). */
+   Props: preset { attr, skill, bonus, label, attrKey?, skillKey?, kind?, total?, stress?, at? }
+   pre-fills Drive (attr) + Skill and the bonus d20s, selects attrKey/skillKey,
+   and shows the label (the phone sheet sends the full session shape; extra
+   keys are ignored). Settle-then-celebrate: dice tumble, settle, then a
+   result overlay + sfx (dice.settle → dice.crit / dice.botch).
+   onResult(roll) is called once per settled roll with
+   { kind:'2d20', label, skillKey, attrKey, summary, successes, complications, passed,
+     momentum, difficulty, target, flags[], dice: { d20[] } }
+   flags: 'crit' (a die scored 2), 'complication', 'botch' (complication on a failure).
+   compact (phones) hides the rules blurb. */
 
 const { attributes, skills, dice } = rules;
 const BASE = dice.baseDice || 2;
@@ -94,7 +100,26 @@ function Die({ value, kind, rolling }) {
   );
 }
 
-export default function D20DiceRoller({ preset }) {
+function report(r, meta) {
+  const flags = [];
+  if (r.dieKinds.includes('crit')) flags.push('crit');
+  if (r.complications > 0) flags.push('complication');
+  if (r.complications > 0 && !r.passed) flags.push('botch');
+  const label = meta.label || `${meta.driveLabel} + ${meta.skillLabel}`.toUpperCase();
+  return {
+    kind: '2d20',
+    label,
+    skillKey: meta.skillKey, attrKey: meta.driveKey,
+    summary: `${label} — ${r.passed ? 'PASSED' : 'FAILED'} ${r.successes}/D${r.difficulty}${r.momentum ? ` +${r.momentum} MOMENTUM` : ''}${r.complications ? ` · ${r.complications} COMPLICATION${r.complications > 1 ? 'S' : ''}` : ''}`,
+    successes: r.successes, complications: r.complications, passed: r.passed, momentum: r.momentum,
+    difficulty: r.difficulty, target: r.target, flags, dice: { d20: r.rolls },
+  };
+}
+
+export default function D20DiceRoller({ preset, onResult, compact = false }) {
+  const onResultRef = useRef(onResult);
+  onResultRef.current = onResult;
+  const metaRef = useRef({});
   const [driveKey, setDriveKey] = useState(attributes[0].key);
   const [skillKey, setSkillKey] = useState(skills[0].key);
   const [drive, setDrive] = useState(6);
@@ -141,6 +166,7 @@ export default function D20DiceRoller({ preset }) {
     const passed = successes >= difficulty;
     const momentum = passed ? successes - difficulty : 0;
     const final = { rolls, dieKinds, successes, complications, passed, momentum, target, difficulty, bonus };
+    const meta = { ...metaRef.current };
     clearInterval(timer.current);
     setRollId((n) => n + 1);
     setResult(final);
@@ -149,6 +175,7 @@ export default function D20DiceRoller({ preset }) {
       const o = outcome(final);
       if (o.kind === 'botch' || final.complications > 0) setTimeout(() => play('dice.botch'), 140);
       else if (o.kind === 'crit') setTimeout(() => play('dice.crit'), 140);
+      try { onResultRef.current?.(report(final, meta)); } catch (e) { console.error('[roller] onResult failed', e); }
     };
     if (reducedMotion()) { setTumble(null); celebrate(); return; }
     // short tumble (~450 ms) before the dice settle on their real faces
@@ -163,6 +190,7 @@ export default function D20DiceRoller({ preset }) {
 
   const driveLabel = attributes.find((a) => a.key === driveKey)?.label || driveKey;
   const skillLabel = skills.find((s) => s.key === skillKey)?.label || skillKey;
+  metaRef.current = { label, driveKey, skillKey, driveLabel, skillLabel };
 
   return (
     <div className="panel">
@@ -175,10 +203,12 @@ export default function D20DiceRoller({ preset }) {
           <button type="button" onClick={() => setLabel(null)}>CLEAR</button>
         </div>
       )}
-      <p style={{ color: 'var(--text-dim)', marginBottom: '1rem', fontSize: '0.95rem', lineHeight: 1.5 }}>
-        Target = Drive + Skill. Each d20 at or under the target is a success; within the critical range it counts twice.
-        Meet the Difficulty to pass; every extra success becomes Momentum. Results in the complication range are complications.
-      </p>
+      {!compact && (
+        <p style={{ color: 'var(--text-dim)', marginBottom: '1rem', fontSize: '0.95rem', lineHeight: 1.5 }}>
+          Target = Drive + Skill. Each d20 at or under the target is a success; within the critical range it counts twice.
+          Meet the Difficulty to pass; every extra success becomes Momentum. Results in the complication range are complications.
+        </p>
+      )}
 
       <div className="dice-controls">
         <label>

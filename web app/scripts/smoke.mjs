@@ -9,6 +9,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import assert from 'assert/strict';
 import { validateAll } from './validate-content.mjs';
 import { getCatalog, startingGearFor, encumbrance, skillPool, CATALOG_KEYS } from '../src/engine/catalogUtils.js';
+import { panicOutcome, tableLookup, poolDefs, poolStart, inRange, ambientPreset } from '../src/engine/mechanicsUtils.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const UNIVERSES = join(ROOT, 'src', 'universes');
@@ -104,6 +105,25 @@ for (const id of ids) {
   if (id === 'alien') {
     const miller = chars.find((c) => c.id === 'cpt-miller');
     ok(miller && u.rules.derived.health(miller) === miller.attributes.str, 'alien: health == STR for cpt-miller');
+    // Mechanics wave: panic table + supplies + initiative cards
+    ok(u.rules.panic && u.rules.panic.die === 6 && u.rules.panic.table === 'catalog.panic', 'alien: rules.panic');
+    for (let t = 1; t <= 20; t++) ok(panicOutcome(u, t)?.entry, `alien: panic total ${t} resolves`);
+    ok(panicOutcome(u, 4).effect.status.length === 0, 'alien: panic 1-6 keeps it together (no status)');
+    const fr = panicOutcome(u, 10).effect;
+    ok(fr.id === 'freeze' && fr.status.includes('PANICKED') && fr.status.includes('FREEZE') && fr.stressDelta === 1, 'alien: panic 10 = Freeze (+1 stress, panic action)');
+    ok(panicOutcome(u, 11).effect.stressDelta === -1, 'alien: seek cover nets -1 stress to the roller');
+    ok(panicOutcome(u, 19).effect.id === 'catatonic', 'alien: 15+ = catatonic');
+    ok(Array.isArray(u.rules.supplies) && u.rules.supplies.includes('air'), 'alien: rules.supplies');
+    ok(u.rules.initiative?.mode === 'cards' && u.rules.initiative.deck === 10, 'alien: initiative cards 1-10');
+    const human = (u.catalog.injuries || []).filter((i) => i.table === 'human');
+    for (const r of [11, 36, 66]) ok(tableLookup(human, r), `alien: injury d66 ${r} resolves`);
+  }
+  if (id === 'dune') {
+    const defs = poolDefs(u);
+    ok(defs.find((d) => d.key === 'momentum')?.max === 6 && defs.find((d) => d.key === 'momentum').visibleToPlayers, 'dune: momentum pool public, max 6');
+    ok(defs.find((d) => d.key === 'threat')?.visibleToPlayers === false, 'dune: threat hidden from players');
+    ok(poolStart(u, 4).threat === 8, 'dune: starting threat = 2 x players');
+    ok(u.rules.initiative?.mode === 'nominate', 'dune: initiative nominate');
   }
   console.log(`✓ ${id}: interface OK, ${packs.length} bundled packs, ${chars.length} characters`);
 }
@@ -113,6 +133,9 @@ for (const id of ids) {
   const missing = themeVars.alien.filter((v) => !themeVars[id].includes(v));
   ok(missing.length === 0, `${id}: theme.vars missing ${missing.join(', ')}`);
 }
+
+ok(inRange('15+', 22) && inRange('1-6', 6) && !inRange('7', 8), 'mechanicsUtils.inRange');
+ok(ambientPreset('ship-hum') === 'ship' && ambientPreset('wind') === 'wind' && ambientPreset('nope') === null, 'mechanicsUtils.ambientPreset');
 
 const { total, failures } = validateAll({ quiet: true });
 ok(failures === 0, `${failures} invalid content pack(s) — run node scripts/validate-content.mjs`);

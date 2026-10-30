@@ -336,7 +336,8 @@ export default function MapController() {
           {mapDef ? (
             <MapCanvas ref={canvasRef} className="mc-canvas" mapDef={mapDef} board={board} role="dm" universe={universe}
               view={canvasView} editable selectedTokenId={selTok} selectedRoomId={selRoom} pings={g.pings} snap={snap}
-              showRoomLabels={mapDef.kind !== 'engine'} onTap={onTap} onTokenTap={onTokenTap} onTokenMove={onTokenMove} />
+              showRoomLabels={mapDef.kind !== 'engine'} onTap={onTap} onTokenTap={onTokenTap} onTokenMove={onTokenMove}
+              showHp activeTokenId={g.table?.initiative?.active ? g.table.initiative.order?.[g.table.initiative.turn]?.tokenId : null} />
           ) : (
             <div className="mc-empty">
               <h3>NO MAP ON THE BOARD</h3>

@@ -94,6 +94,7 @@ export const STATUS_DEFS = {
   hidden: { label: 'HIDDEN', color: '#9fb4c0', glyph: <g {...SG}><path d="M-0.8 0 Q0 -0.65 0.8 0 Q0 0.65 -0.8 0 Z" /><circle r="0.2" fill="currentColor" stroke="none" /><path d="M-0.7 0.7 L0.7 -0.7" strokeWidth="0.18" /></g> },
   wounded: { label: 'WOUNDED', color: '#e0453a', glyph: GLYPHS.blood },
 };
+STATUS_DEFS.panicked = STATUS_DEFS.panicking;
 
 /** Normalize token.status to [{ key, count }]. */
 export function tokenStatuses(status) {
@@ -170,8 +171,11 @@ export function StatusRing({ statuses, r, ring, style = 'segments', chipFill = '
  * ghost (DM view of a hidden token), showLabel, dragging,
  * palette (board palette: chipFill, statusStyle, font), labelMin (min label
  * font size in map px, so TV labels stay >= 20 screen px).
+ * flash: any changing truthy key (e.g. a timestamp) replays a ring flash (loot, panic);
+ * active: pulsing active-turn ring (initiative); showHp: GM-only health bar
+ * from token.hp / token.hpMax (never passed on the TV).
  */
-export default function TokenChip({ token: t, x, y, unit, counter = '', uid, selected, mine, ghost, showLabel = true, dragging, palette, labelMin = 0, minR = 0 }) {
+export default function TokenChip({ token: t, x, y, unit, counter = '', uid, selected, mine, ghost, showLabel = true, dragging, palette, labelMin = 0, minR = 0, flash = null, active = false, showHp = false }) {
   const r = Math.max(4, (t.size || 1) * unit * 0.46, minR * (t.size || 1));
   const color = t.color || KIND_COLOR[t.kind] || '#b0bec5';
   const clipId = `${uid}-clip-${t.id}`;
@@ -186,11 +190,15 @@ export default function TokenChip({ token: t, x, y, unit, counter = '', uid, sel
   const statuses = tokenStatuses(t.status);
   const chipFill = palette?.chipFill || '#0a0c10';
   const ringOut = statuses.length ? ring * 1.9 + Math.max(ring * 1.25, r * 0.16) : 0;
-  const cls = `tk tk-${t.kind}${selected ? ' tk-selected' : ''}${mine ? ' tk-mine' : ''}${ghost ? ' tk-ghost' : ''}${dragging ? ' tk-dragging' : ''}${statuses.length ? ' tk-has-status' : ''}`;
+  const cls = `tk tk-${t.kind}${selected ? ' tk-selected' : ''}${mine ? ' tk-mine' : ''}${ghost ? ' tk-ghost' : ''}${dragging ? ' tk-dragging' : ''}${statuses.length ? ' tk-has-status' : ''}${active ? ' tk-active' : ''}`;
+  const hpMax = Number(t.hpMax) || 0;
+  const hpPct = showHp && hpMax ? Math.max(0, Math.min(1, (Number(t.hp ?? hpMax) || 0) / hpMax)) : null;
 
   return (
     <g className={cls} transform={`translate(${x},${y})`} data-token={t.id} style={{ color }}>
       {mine && <circle className="tk-mine-pulse" r={r * 1.35 + ringOut} fill="none" stroke={color} strokeWidth={ring * 0.8} />}
+      {active && <circle className="tk-active-ring" r={r * 1.5 + ringOut} fill="none" stroke="#ffffff" strokeWidth={Math.max(ring, r * 0.14)} />}
+      {flash && <circle key={String(flash)} className="tk-flash-ring" r={r + ringOut + ring} fill="none" stroke={color} strokeWidth={ring * 1.6} />}
       {selected && <circle r={r + ring * 2.2 + ringOut} fill="none" stroke="#ffffff" strokeWidth={ring * 0.7} strokeDasharray={`${r * 0.5} ${r * 0.3}`} />}
       {showFacing && (
         <g transform={`rotate(${facing})`}>
@@ -214,6 +222,12 @@ export default function TokenChip({ token: t, x, y, unit, counter = '', uid, sel
           <g transform={`translate(${r * 0.74},${r * 0.74})`}>
             <circle r={r * 0.4} fill={chipFill} stroke={color} strokeWidth={ring * 0.5} />
             <Glyph name={t.glyph} r={r * 0.26} color={color} />
+          </g>
+        )}
+        {hpPct !== null && (
+          <g transform={`translate(0,${-r - ring - ringOut - r * 0.35})`} className="tk-hp">
+            <rect x={-r} y={-r * 0.12} width={r * 2} height={r * 0.24} rx={r * 0.08} fill="rgba(0,0,0,0.85)" stroke="#000" strokeWidth={r * 0.03} />
+            <rect x={-r} y={-r * 0.12} width={r * 2 * hpPct} height={r * 0.24} rx={r * 0.08} fill={hpPct > 0.5 ? '#7cc36a' : hpPct > 0.25 ? '#f5b82e' : '#ff5a4e'} />
           </g>
         )}
         {showLabel && label && (

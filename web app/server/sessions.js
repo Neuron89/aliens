@@ -17,6 +17,9 @@ import {
   sanitizeView, isMapId, isLevelId, isTokenId, spawnPoint, MAX_TOKENS, MAX_PINGS,
 } from './board.js';
 import { appendLog, logOf } from './sessionLog.js';
+import {
+  MAX_ROLLS, emptyInitiative, publicPools, publicInitiative, crewSupply, afterPlayerRoll, wireMechanics, clearPanicIfGone,
+} from './mechanics.js';
 
 const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const GM = 'GM';
@@ -84,6 +87,9 @@ function getPlayerData(player) {
     alive: player.alive,
     conditions: player.conditions,
     connected: !!player.connected,
+    supply: player.supply || {},
+    injuries: player.injuries || [],
+    panic: player.panic || null,
   };
 }
 
@@ -136,7 +142,6 @@ const MAX_HANDOUTS = 200;
 const MAX_CLUES = 300;
 const MAX_CLOCKS = 30;
 const MAX_SUBMISSIONS = 50;
-const MAX_ROLLS = 100;
 const MAX_CLIENT_IDS = 400;
 const MAX_CHARACTER_BYTES = 64 * 1024;
 const MAX_ROLL_BYTES = 4096;
@@ -160,7 +165,10 @@ export function emptyTable() {
     pause: null,            // { at } — never who
     orders: {},             // playerId -> [{ actIndex, actTitle, text, at }]
     submissions: [],        // [{ id, playerId, playerName, character, at, status:'pending'|'assigned'|'rejected', reason }]
-    rolls: [],              // [{ id, playerId, playerName, characterName, roll, at }]
+    rolls: [],              // [{ id, playerId, playerName, characterName, roll, at, secret?, panic? }] (≤ 200)
+    pools: {},              // { momentum: n, threat: n } (mechanics.js)
+    poolDefs: {},           // { key: { label, max, visible, playerAdd } }
+    initiative: emptyInitiative(), // { active, order[], turn, round }
     clientIds: [],          // ids of replayed phone actions already applied (dedupe)
     seeded: false,          // pack clocks/clues seeded (session-seed) — never re-seeded after GM edits
   };
@@ -179,6 +187,8 @@ function tableOf(game) {
   if (!Array.isArray(t.safety.confirmed)) t.safety.confirmed = [];
   if (!t.theatre || typeof t.theatre !== 'object') t.theatre = base.theatre;
   if (!t.orders || typeof t.orders !== 'object') t.orders = {};
+  for (const k of ['pools', 'poolDefs']) if (!t[k] || typeof t[k] !== 'object' || Array.isArray(t[k])) t[k] = {};
+  if (!t.initiative || typeof t.initiative !== 'object' || !Array.isArray(t.initiative.order)) t.initiative = emptyInitiative();
   game.table = t;
   return t;
 }
@@ -259,6 +269,8 @@ function tableView(game, role, player = null) {
     return {
       narration: t.narration, boardMode: t.boardMode, theatre: t.theatre,
       clocks: publicClocks, pause: t.pause ? { at: t.pause.at } : null,
+      pools: publicPools(t), initiative: publicInitiative(t), crew: crewSupply(game, pcName),
+      ambient: t.run.ambient || null,
     };
   }
   const pid = player?.id;
@@ -277,6 +289,8 @@ function tableView(game, role, player = null) {
       ? { enabled: true, tone: t.safety.tone, warnings: t.safety.warnings, linesVeils: t.safety.linesVeils, confirmed: t.safety.confirmed.includes(pid) }
       : { enabled: false },
     orders: t.orders[pid] || [],
+    pools: publicPools(t),
+    initiative: publicInitiative(t, pid),
     submission: sub ? { id: sub.id, status: sub.status, reason: sub.reason || '', at: sub.at, name: sub.character?.name || '' } : null,
   };
 }
@@ -511,7 +525,7 @@ export function attachSessions(io) {
         player = {
           id: newPlayerId(), playerToken: token(), socketId: null, connected: false,
           name, character: null, tracks: {}, trackMax: {}, statusEffects: [], inventory: [],
-          alive: true, conditions: {},
+          alive: true, conditions: {}, supply: {}, injuries: [], panic: null,
         };
         game.players.set(player.id, player);
       }
@@ -582,6 +596,8 @@ export function attachSessions(io) {
       player.inventory = [...(character.gear || [])];
       player.alive = true;
       player.statusEffects = [];
+      player.injuries = [];
+      player.panic = null;
       player.conditions = Object.fromEntries((Array.isArray(conditions) ? conditions : []).map((c) => [String(c), false]));
 
       game.assignedCharacterIds.add(character.id);
@@ -621,6 +637,7 @@ export function attachSessions(io) {
         const next = updates.statusEffects.map(String);
         for (const e of addedItems(player.statusEffects, next)) logTo(game, 'track', `${pcName(player)} is now ${e}`, { playerId: player.id });
         player.statusEffects = next;
+        if (clearPanicIfGone(game, player, boardOf)) emitBoard(game);
       }
       if (Array.isArray(updates.inventory)) {
         const next = updates.inventory.map(String);
@@ -1001,6 +1018,7 @@ export function attachSessions(io) {
       if (Number.isInteger(s) && s >= 0 && s < 500) t.run.sceneIndex = s;
       if (typeof payload.actTitle === 'string') t.run.actTitle = payload.actTitle.slice(0, 120);
       if (typeof payload.sceneTitle === 'string') t.run.sceneTitle = payload.sceneTitle.slice(0, 120);
+      if (payload.ambient !== undefined) t.run.ambient = typeof payload.ambient === 'string' && /^[a-z0-9][a-z0-9-]{0,39}$/.test(payload.ambient) ? payload.ambient : null;
       if (payload.completed && typeof payload.completed === 'object') {
         const c = {};
         for (const [k, v] of Object.entries(payload.completed).slice(0, 1000)) if (/^\d+-\d+$/.test(k) && v) c[k] = true;
@@ -1344,10 +1362,18 @@ export function attachSessions(io) {
       const summary = sstr(roll.summary || roll.label || '', 200);
       logTo(game, 'roll', `${pcName(player)} rolled${summary ? `: ${summary}` : ''}`);
       toDM(game, 'roll', { roll: entry });
-      emitTable(game, { dmOnly: true });
+      afterPlayerRoll(mech, game, player, entry); // push stress, Momentum, TV toast (board-roll)
+      emitTable(game, entry.roll.momentum ? {} : { dmOnly: true });
       touch(game);
       callback?.({ success: true, id: entry.id });
     });
+
+    /* ═══ MECHANICS WAVE (server/mechanics.js): gm-roll, panic-result, supply-*, pool-*, init-*, injury-* ═══ */
+    const mech = {
+      io, games, dmTableGame, playerCtx, touch, emitTable, logTo, toDM, toPlayer, boardRoom, boardOf, emitBoard,
+      serializePlayers, getPlayerData, tableOf, pcName,
+    };
+    wireMechanics(socket, mech);
 
     /* ─── Disconnect: never deletes anything — games/players go dormant ─── */
     socket.on('disconnect', () => {

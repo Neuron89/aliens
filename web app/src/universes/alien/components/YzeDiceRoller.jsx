@@ -8,10 +8,16 @@ import { play, reducedFx } from '../../../engine/sfx';
    PUSH: +1 Stress (one more Stress Die), re-roll every die not showing 6.
 
    Props:
-     preset { attr, skill, bonus, label, attrKey?, skillKey?, stress? }
-       pre-fills the pool (base = attr + skill + bonus; stress if given)
-       and shows the label. Changing the preset re-applies it.
+     preset { attr, skill, bonus, label, attrKey?, skillKey?, stress?, kind?, total?, at? }
+       pre-fills the pool (base = attr + skill + bonus, or `total` when the
+       parts are missing; stress if given) and shows the label. The phone's
+       sheet sends the full session shape; the simple shape still works.
+       Changing the preset re-applies it.
      compact  (phones) tighter layout.
+     onResult(roll)  called once per settled roll (and again after a push) with
+       { kind:'yze', label, skillKey, attrKey, summary, successes, stunts, pushed,
+         panic, stressGain, flags[], dice: { base[], stress[] }, pool: { base, stress } }
+       flags: 'panic' (Stress Die 1), 'push', 'crit' (2+ sixes), 'botch' (panic).
 
    Feedback is settle-then-celebrate: dice tumble ~0.5 s, settle, then a
    result overlay + sfx cue (dice.settle → dice.crit / dice.botch). With
@@ -34,7 +40,35 @@ function outcome(res) {
   return { kind: 'fail', text: 'NO SUCCESS' };
 }
 
-export default function DiceRoller({ preset, compact = false }) {
+/** Roll report for the session feed (onResult). */
+function report(final, meta) {
+  const stunts = Math.max(0, final.successes - 1);
+  const flags = [];
+  if (final.panic) flags.push('panic', 'botch');
+  if (final.pushed) flags.push('push');
+  if (final.successes >= 2) flags.push('crit');
+  const o = outcome(final);
+  return {
+    kind: 'yze',
+    label: final.label || 'ROLL',
+    skillKey: meta.skillKey || null,
+    attrKey: meta.attrKey || null,
+    summary: `${final.label || 'ROLL'} — ${o.text}${final.pushed ? ' (PUSHED)' : ''}`,
+    successes: final.successes,
+    stunts,
+    pushed: !!final.pushed,
+    panic: !!final.panic,
+    stressGain: final.pushed ? 1 : 0,
+    flags,
+    dice: { base: final.baseRolls, stress: final.stressRolls },
+    pool: { base: final.baseRolls.length, stress: final.stressRolls.length },
+  };
+}
+
+export default function DiceRoller({ preset, compact = false, onResult }) {
+  const onResultRef = useRef(onResult);
+  onResultRef.current = onResult;
+  const metaRef = useRef({});
   const [baseDice, setBaseDice] = useState(6);
   const [stressDice, setStressDice] = useState(0);
   const [label, setLabel] = useState(null);
@@ -48,7 +82,11 @@ export default function DiceRoller({ preset, compact = false }) {
   const presetKey = preset ? JSON.stringify(preset) : '';
   useEffect(() => {
     if (!preset) return;
-    const base = (Number(preset.attr) || 0) + (Number(preset.skill) || 0) + (Number(preset.bonus) || 0);
+    const hasParts = preset.attr != null || preset.skill != null;
+    const base = hasParts
+      ? (Number(preset.attr) || 0) + (Number(preset.skill) || 0) + (Number(preset.bonus) || 0)
+      : Number(preset.total) || 0;
+    metaRef.current = { skillKey: preset.skillKey, attrKey: preset.attrKey };
     setBaseDice(clamp(base, 0, 20));
     if (preset.stress != null) setStressDice(clamp(Number(preset.stress) || 0, 0, 10));
     setLabel(preset.label || null);
@@ -65,6 +103,7 @@ export default function DiceRoller({ preset, compact = false }) {
       const o = outcome(final);
       if (o.kind === 'botch') setTimeout(() => play('dice.botch'), 120);
       else if (o.kind === 'crit') setTimeout(() => play('dice.crit'), 120);
+      try { onResultRef.current?.(report(final, metaRef.current)); } catch (e) { console.error('[roller] onResult failed', e); }
     };
     if (reducedFx()) { setTumble(null); celebrate(); return; }
     let ticks = 0;
@@ -114,7 +153,7 @@ export default function DiceRoller({ preset, compact = false }) {
         <div className="roll-preset">
           <b>{label}</b>
           <span>{baseDice} BASE · {stressDice} STRESS</span>
-          <button type="button" onClick={() => setLabel(null)}>CLEAR</button>
+          <button type="button" onClick={() => { setLabel(null); metaRef.current = {}; }}>CLEAR</button>
         </div>
       )}
       <div className="dice-controls">

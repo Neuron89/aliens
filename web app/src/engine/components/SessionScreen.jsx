@@ -3,6 +3,7 @@ import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
 import SessionZeroPanel, { emptySessionZero } from './run/SessionZeroPanel';
+import { poolDefs, poolStart } from '../mechanicsUtils';
 
 export default function SessionScreen() {
   const { connected, createGame, joinGame, role, listResumable, resumeGame, hasDmToken } = useGame();
@@ -16,6 +17,8 @@ export default function SessionScreen() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [sessionZero, setSessionZero] = useState(emptySessionZero);
+  const [expectedPlayers, setExpectedPlayers] = useState(4);
+  const [poolOverrides, setPoolOverrides] = useState({}); // key -> starting value typed by the GM
 
   // Auto-detect join code from URL
   useEffect(() => {
@@ -37,7 +40,10 @@ export default function SessionScreen() {
     setLoading(true);
     setError('');
     const { enabled, tone, warnings, linesVeils } = sessionZero;
-    createGame({ universeId: universe.id, packId, sessionZero: enabled ? { enabled, tone, warnings, linesVeils } : null }, (response) => {
+    const pools = universe.rules?.pools?.length
+      ? { defs: poolDefs(universe), values: poolStart(universe, expectedPlayers, poolOverrides) }
+      : null;
+    createGame({ universeId: universe.id, packId, sessionZero: enabled ? { enabled, tone, warnings, linesVeils } : null, pools }, (response) => {
       setLoading(false);
       if (response?.error) setError(response.error);
     });
@@ -128,6 +134,26 @@ export default function SessionScreen() {
               ))}
             </div>
             <SessionZeroPanel pack={packs.find(p => p.id === packId) || null} value={sessionZero} onChange={setSessionZero} terms={terms} />
+            {universe.rules?.pools?.length > 0 && (
+              <div className="ss-pools">
+                <h3 style={stepTitle}>STARTING POOLS</h3>
+                <label className="ss-pool-row">
+                  <span>EXPECTED {terms.players.toUpperCase()}</span>
+                  <input type="number" min="1" max="12" value={expectedPlayers}
+                    onChange={e => setExpectedPlayers(Math.max(1, Math.min(12, parseInt(e.target.value) || 1)))} />
+                </label>
+                {universe.rules.pools.map(p => {
+                  const auto = poolStart(universe, expectedPlayers)[p.key];
+                  return (
+                    <label key={p.key} className="ss-pool-row">
+                      <span>{p.label}{p.initialPerPlayer ? ` (${p.initialPerPlayer} × ${terms.players.toLowerCase()})` : ''}</span>
+                      <input type="number" min="0" max={p.max || 99} placeholder={String(auto)} value={poolOverrides[p.key] ?? ''}
+                        onChange={e => setPoolOverrides(o => ({ ...o, [p.key]: e.target.value }))} />
+                    </label>
+                  );
+                })}
+              </div>
+            )}
             <ResumableSessions universe={universe} terms={terms} packs={packs} connected={connected}
               listResumable={listResumable} resumeGame={resumeGame} hasDmToken={hasDmToken} onError={setError} />
             <div style={{ display: 'flex', gap: '0.5rem' }}>

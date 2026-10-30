@@ -4,6 +4,12 @@ import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
 import { characterGroups, initialCharacterState, withDerived, attributeLabel, trackMaxFor } from '../rulesUtils';
 import CharacterBuilder from './CharacterBuilder';
+import RollFeed from './run/RollFeed';
+import InitiativePanel from './run/InitiativePanel';
+import ThreatsPanel from './run/ThreatsPanel';
+import PoolCounters from './run/PoolCounters';
+import SupplyPanel from './SupplyPanel';
+import InjuryPicker from './InjuryPicker';
 
 export default function DMDashboard() {
   const {
@@ -11,7 +17,10 @@ export default function DMDashboard() {
     assignCharacter, updatePlayer, sendMessage,
     broadcastMessage, killCharacter, unreadCount, clearUnread, lastSaved, boardLinked,
     table, unreadBy, clearUnreadFor, resolveSubmission,
+    supplySet, supplyRoll, injuryAdd, injuryRemove, on,
   } = useGame();
+  const [supplyLast, setSupplyLast] = useState(null);
+  React.useEffect(() => on('supply-rolled', (e) => e && setSupplyLast(e)), [on]);
   const { universe } = useUniverse();
   const { packs, byId } = useContent();
   const { terms, terminal, rules } = universe;
@@ -206,6 +215,7 @@ export default function DMDashboard() {
             )}
           </div>
         </div>
+        <PoolCounters />
         <button onClick={leaveGame} style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }}>
           END {terms.session.toUpperCase()}
         </button>
@@ -217,6 +227,9 @@ export default function DMDashboard() {
           ['players', `${PLAYERS} STATUS (${playerList.length})`],
           ['message', `${MESSAGE}S`],
           ['log', `MESSAGE LOG${unreadCount > 0 ? ` (${unreadCount})` : ''}`],
+          ['rolls', `ROLLS${table?.rolls?.length ? ` (${table.rolls.length})` : ''}`],
+          ['initiative', table?.initiative?.active ? `INITIATIVE · R${table.initiative.round}` : 'INITIATIVE'],
+          ['threats', 'THREATS'],
           ...(pendingSubs.length ? [['players', `PLAYER-BUILT (${pendingSubs.length})`]] : []),
         ].map(([id, label], i) => (
           <button key={`${id}-${i}`} style={{
@@ -351,6 +364,30 @@ export default function DMDashboard() {
                     </div>
                   </div>
 
+                  {/* Supplies (rules.supplies) */}
+                  {rules.supplies?.length > 0 && (
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <SupplyPanel keys={rules.supplies} supply={selected.supply || {}} danger={rules.supplyDanger ?? 2} max={rules.supplyMax ?? 12}
+                        onSet={(k, v) => supplySet(selected.id, { [k]: v })} onRoll={(k) => supplyRoll(k, selected.id)}
+                        last={supplyLast?.playerId === selected.id ? supplyLast : null} />
+                    </div>
+                  )}
+
+                  {/* Critical injuries (catalog injuries) */}
+                  {(universe.catalog?.injuries?.length > 0) && (
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={labelStyle}>CRITICAL INJURIES</label>
+                      <InjuryPicker universe={universe} injuries={selected.injuries || []}
+                        onApply={(inj) => injuryAdd(selected.id, inj)} onHeal={(uid) => injuryRemove(selected.id, uid)} />
+                    </div>
+                  )}
+
+                  {selected.panic && (
+                    <div style={{ gridColumn: '1 / -1' }} className="dm-panic-note">
+                      <b>PANIC {selected.panic.total}: {selected.panic.name.toUpperCase()}</b> — {selected.panic.text}
+                    </div>
+                  )}
+
                   {/* Inventory */}
                   <div style={{ gridColumn: '1 / -1' }}>
                     <label style={labelStyle}>INVENTORY</label>
@@ -415,6 +452,10 @@ export default function DMDashboard() {
           )}
         </div>
       )}
+
+      {panel === 'rolls' && <RollFeed limit={0} title="ROLL FEED" className="dm-rolls" />}
+      {panel === 'initiative' && <div className="panel"><InitiativePanel /></div>}
+      {panel === 'threats' && <div className="panel"><ThreatsPanel /></div>}
 
       {/* ─── Message Panel ──────────────────────────── */}
       {panel === 'message' && (

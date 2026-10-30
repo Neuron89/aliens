@@ -3,6 +3,7 @@ import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
 import { useGame } from '../GameContext';
 import { downloadJson } from '../rulesUtils';
+import { poolDefs, poolStart } from '../mechanicsUtils';
 import ScenarioDetail from './ScenarioDetail';
 import { runGeneration, fetchGeneratorStatus } from './wizard/generateClient';
 
@@ -209,7 +210,8 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
       ? `Start a NEW ${terms.session.toLowerCase()} with "${pack.meta.title}"? You get a new access code and the ${connected} connected ${terms.players.toLowerCase()} must rejoin.`
       : `Start a new ${terms.session.toLowerCase()} with "${pack.meta.title}"? A new access code will be issued.`;
     if (!confirm(msg)) return;
-    createGame({ universeId: universe.id, packId: pack.id }, (response) => {
+    const pools = universe.rules?.pools?.length ? { defs: poolDefs(universe), values: poolStart(universe, playerCount) } : null;
+    createGame({ universeId: universe.id, packId: pack.id, pools }, (response) => {
       if (response?.error) { setSaveErrors([response.error]); return; }
       onClose?.();
     });

@@ -75,7 +75,7 @@ function AppContent() {
         <Header />
         <Nav active={activeSection} onChange={setActiveSection} isDM />
 
-        <Section id="run" active={activeSection}><RunView tts={tts} /></Section>
+        <Section id="run" active={activeSection}><RunView tts={tts} audio={audio} /></Section>
         <Section id="session" active={activeSection}><DMDashboard /></Section>
         <Section id="board" active={activeSection}><MapController /></Section>
         <Section id="scenarios" active={activeSection}><ScenarioLibrary tts={tts} /></Section>

@@ -8,6 +8,10 @@ import HandoutsPanel from './HandoutsPanel';
 import CluesPanel from './CluesPanel';
 import SessionLogPanel from './SessionLogPanel';
 import RollFeed from './RollFeed';
+import InitiativePanel from './InitiativePanel';
+import ThreatsPanel from './ThreatsPanel';
+import PoolCounters from './PoolCounters';
+import { ambientPreset } from '../../mechanicsUtils';
 
 /* ═══════════════════════════════════════════════════════════════
    GM RUN VIEW (DM tab "RUN") — the GM's main screen during play
@@ -15,12 +19,14 @@ import RollFeed from './RollFeed';
    Left: act switcher + current scene card (read-aloud → table, checks,
    events, NPC guidance, outcomes, clues here), prev/next.
    Right rail: clocks, AGENDAS (NPC cards + each PC's agenda for this act,
-   SEND AGENDA CARDS) · HANDOUTS (receipts) · CLUES · LOG, roll feed.
+   SEND AGENDA CARDS) · HANDOUTS (receipts) · CLUES · INITIATIVE · THREATS
+   (creature cards) · LOG, roll feed. Pools (Momentum/Threat) in the top strip.
+   Scene change → scene.ambient switches the GM's ambient preset (audio prop).
    Scene progress lives in table.run on the server (survives resume).
    ═══════════════════════════════════════════════════════════════ */
 const clampI = (n, lo, hi) => Math.max(lo, Math.min(hi, Number.isInteger(n) ? n : lo));
 
-export default function RunView({ tts }) {
+export default function RunView({ tts, audio }) {
   const {
     table, packId, players, runSet, advanceAct, narrate, narrateClear, setBoardMode, sessionSeed, clueReveal,
     boardLinked, gameCode,
@@ -44,6 +50,16 @@ export default function RunView({ tts }) {
   const [actInfo, setActInfo] = useState(false);
   const seeding = useRef(false);
 
+  /* Scene ambient → the GM's AudioPanel preset (only when the scene names a known preset). */
+  const lastAmbient = useRef(null);
+  const sceneAmbient = scene?.ambient || null;
+  useEffect(() => {
+    if (!audio || !sceneAmbient || lastAmbient.current === `${key}:${sceneAmbient}`) return;
+    lastAmbient.current = `${key}:${sceneAmbient}`;
+    const id = ambientPreset(sceneAmbient, audio.presets);
+    if (id && id !== audio.preset) audio.applyPreset(id);
+  }, [audio, sceneAmbient, key]);
+
   /* Seed pack clocks/clues into the session once (server keeps GM edits afterwards). */
   useEffect(() => {
     if (!table || table.seeded || seeding.current || (packId && !pack)) return;
@@ -56,7 +72,8 @@ export default function RunView({ tts }) {
 
   const goScene = (a, s) => {
     const sc = acts[a]?.scenes?.[s];
-    runSet({ actIndex: a, sceneIndex: s, actTitle: actLabel(acts[a]), sceneTitle: sc?.name || '' });
+    const amb = ambientPreset(sc?.ambient);
+    runSet({ actIndex: a, sceneIndex: s, actTitle: actLabel(acts[a]), sceneTitle: sc?.name || '', ambient: amb || null });
     if (table?.boardMode === 'theatre') setBoardMode('theatre', theatreFor(a, s));
   };
   const toggleDone = () => runSet({ completed: { ...completed, [key]: !completed[key] }, actIndex, sceneIndex, sceneTitle: scene?.name || '' });
@@ -91,6 +108,7 @@ export default function RunView({ tts }) {
           <span className="run-pack">{pack ? pack.meta.title : 'SANDBOX'}</span>
         </div>
         <div className="run-row">
+          <PoolCounters />
           <span className={`mc-tv${boardLinked ? ' up' : ''}`}><span className="link-dot" />{boardLinked ? 'TV' : 'NO TV'}</span>
           <div className="run-seg" role="group" aria-label="Board mode">
             <button type="button" className={table?.boardMode !== 'theatre' ? 'on' : ''} onClick={() => table?.boardMode === 'theatre' && toggleTheatre()}>MAP</button>
@@ -186,6 +204,8 @@ export default function RunView({ tts }) {
                 ['agendas', 'AGENDAS'],
                 ['handouts', `HANDOUTS${unseen > 0 ? ` · ${unseen}` : ''}`],
                 ['clues', 'CLUES'],
+                ['init', table?.initiative?.active ? `INIT · R${table.initiative.round}` : 'INIT'],
+                ['threats', 'THREATS'],
                 ['log', 'LOG'],
               ].map(([id, label]) => (
                 <button key={id} type="button" role="tab" aria-selected={railTab === id} className={railTab === id ? 'on' : ''} onClick={() => setRailTab(id)}>{label}</button>
@@ -235,6 +255,8 @@ export default function RunView({ tts }) {
             )}
             {railTab === 'handouts' && <HandoutsPanel handouts={pack?.handouts || []} terms={terms} />}
             {railTab === 'clues' && <CluesPanel highlight={sceneClues.map((c) => c.id)} />}
+            {railTab === 'init' && <InitiativePanel />}
+            {railTab === 'threats' && <ThreatsPanel />}
             {railTab === 'log' && <SessionLogPanel pack={pack} />}
           </section>
           <RollFeed />

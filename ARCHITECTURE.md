@@ -251,7 +251,7 @@ doc and the schema in sync. Validation runs on every save and on every generator
   clues: [{ id, text, source, scene, status: 'hidden'|'revealed', revealedTo: 'all'|[ids]|null, foundBy[], revealedAt, adhoc }],
   clocks: [{ id, label, segments 2–12, filled, kind: 'danger'|'racing'|'tug', visibility: 'all'|'gm', note? }],
   safety: { enabled, tone[], warnings[], linesVeils, confirmed[] }, pause: { at } | null, orders: { playerId: [{ actIndex, actTitle, text, at }] },
-  submissions: [{ id, playerId, playerName, character, at, status: 'pending'|'assigned'|'rejected', reason }], rolls: [≤100], seeded }`.
+  submissions: [{ id, playerId, playerName, character, at, status: 'pending'|'assigned'|'rejected', reason }], rolls: [≤200], seeded } + mechanics wave below`.
   - Role views (`table-state { table }` after every mutation): DM = everything (minus the dedupe buffer); board =
     `{ narration, boardMode, theatre, clocks (visible only), pause }`; player = `{ narration, clocks (visible), paused, handouts (sent to them,
     + seen flag, no receipts), clues (revealed to them, foundBy as names), safety (+ confirmed bool), orders (own), submission (own latest) }`.
@@ -284,6 +284,43 @@ doc and the schema in sync. Validation runs on every save and on every generator
     Player rolls/messages go through an outbox (`localStorage['muthur.outbox']`), replayed on every reconnect until acked.
     `createGame({ …, sessionZero })` emits `safety-set` right after creation.
   - Regression test: `node scripts/test-session-features.mjs`.
+- Mechanics wave (`docs/RESEARCH_GM_PLAYER_EXPERIENCE.md` rows 8–11, 26–28, 40, 42, 44; `server/mechanics.js`). The server never
+  reads a universe module: tables and caps arrive from the client that owns them (the phone sends the looked-up panic entry,
+  the DM sends `universe.rules.pools`) and are sanitized. New persisted state:
+  `table.rolls` (≤ 200, phone + GM secret rolls; entry `{ id, clientId, playerId|'dm', playerName, characterName, roll, at, secret?, panic? }`),
+  `table.pools { key: n }` + `table.poolDefs { key: { label, max|null, visible, playerAdd } }`,
+  `table.initiative { active, order: [{ id, kind:'pc'|'npc'|'creature', label, tokenId?, playerId?, card?, done, fast, slow }], turn, round }`,
+  `table.run.ambient` (scene preset id from `run-set { ambient }`), `player.supply { air, power, food, water }` (0–12),
+  `player.injuries [{ id, uid, name, text, roll, fatal, healTime, at }]`, `player.panic { total, effectId, name, text, panicAction, statuses[], at } | null`
+  (player data/`players` maps carry `supply`, `injuries`, `panic`), and GM-only token fields `token.hp`, `token.hpMax`, `token.ref`
+  (catalog creature id; stripped from the board/player `board-state`, hp clamped to hpMax).
+  - Role views add: board `{ pools: [{ key, label, value, max }] (visible only), initiative: { active, round, current: { id, label, kind, tokenId, playerId } },
+    crew: [{ playerId, name, supply }], ambient }`; player `{ pools, initiative: { …, mine, allies: [{ id, label }] } }`. Rolls stay DM-only.
+  - Roll payload (what a universe roller passes to `onResult` and the phone sends as `player-roll`): `{ kind:'yze'|'2d20', label, skillKey, attrKey, summary,
+    successes, flags[] ('panic'|'push'|'crit'|'botch'|'complication'), dice: { base[], stress[], d20[] }, pool?: { base, stress }, pushed?, stressGain? (0–3 → tracks.stress),
+    momentum? (→ pools.momentum when its def has playerAdd, capped at max), complications?, passed?, difficulty?, target? }`.
+    Rollers accept `preset { attr, skill, bonus, label, attrKey?, skillKey?, stress?, kind?, total?, at? }` (phone re-mounts with `key=preset.at`) and `compact`.
+  - DM events (`{ gameCode?, … }`, ack `{ success, … } | { error }`): `gm-roll { roll, who }` (secret: GM feed + log only), `supply-set { playerId, supply }` (null removes a key),
+    `supply-roll { playerId, key }`, `pools-init { defs: rules.pools, values, reset }` (also sent by `createGame({ pools })`), `pool-set { key, value }`,
+    `pool-delta { key, delta, reason? }` (floor 0, capped at max), `init-set { initiative }`, `init-step { dir: 1|-1 }` (next marks the actor done; past the end = new round),
+    `init-goto { index }` (GM nominates), `init-round {}`, `init-end {}`, `injury-add { playerId, injury }`, `injury-remove { playerId, uid }`,
+    `panic-result { playerId, … }` (GM rolling for a player). `update-player` removing every panic status clears `player.panic` + the token's `panicking` ring.
+  - Player events: `panic-result { rollId (roll id or clientId), total, die, effect: { id, name, text, stressDelta, panicAction, status[] } }` (queued in the outbox;
+    idempotent per roll; a new panic replaces the old named status), `supply-roll { key }` (own seat), `init-pass { toId }` (acting PC → an ally who has not acted).
+  - Server → client: `board-roll { roll: { id, name, label, summary, kind, dice, flags, at } }` (TV), `panic { playerId, name, total, effect, rollId, at }` (DM),
+    `board-panic { tokenId, name, effect, panicAction }` (TV; effect text stays private), `supply-rolled { playerId, name, key, dice, ones, before, after, at }` (DM + player),
+    `pool-changed { key, value, delta, max }` (DM; board/players when visible), `your-turn { round, label, entryId }` (acting player), `turn-changed { round, label, tokenId }` (TV).
+  - Log types added: `panic supply pool initiative injury`.
+  - Client (`GameContext`): `gmRoll supplySet supplyRoll poolsInit poolSet poolDelta initSet initStep initGoto initRound initEnd injuryAdd injuryRemove panicResult initPass`;
+    `on()` also fires the new one-shots above. Helpers: `src/engine/mechanicsUtils.js` (panic/injury range lookups, d66, pool defs/starts, ambient ids).
+  - Universe rules: ALIEN `rules.panic { die:6, table:'catalog.panic', stressAdd:true, statusAt:7, actionAt:10, statusEffect:'PANICKED' }`,
+    `rules.supplies ['air','power','food','water']`, `supplyMax 12`, `supplyDanger 2`, `rules.initiative { mode:'cards', deck:10, actions:['fast','slow'] }`;
+    DUNE `rules.pools[]` gains `visibleToPlayers`, `playerAdd`, `initialPerPlayer` (threat 2), `resetOnNewSession`; `rules.initiative { mode:'nominate', keepCost:2 }`.
+  - UI: RUN rail tabs INIT + THREATS, roll feed in the rail, pool counters in the RUN strip and the Session header; Session tab ROLLS / INITIATIVE / THREATS;
+    player editor SUPPLY + CRITICAL INJURIES; phone PANIC ROLL overlay, complication red flash, MOMENTUM chip, YOUR TURN banner (+ PASS TO for Dune), SUPPLY on SHEET;
+    TV roll/panic toasts, pool meters, supply strip, turn strip, TokenChip `flash` / `active` props (GM controller adds `showHp` bars).
+    Scene `ambient` (ship-hum, tension, alert, dread, space, wind, bazaar, sietch, court) switches the GM AudioPanel; `?board=CODE&audio=1` makes the TV follow it.
+  - Regression test: `node scripts/test-mechanics.mjs`.
 
 ## Generator
 

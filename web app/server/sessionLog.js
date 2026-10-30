@@ -9,7 +9,8 @@
    ═══════════════════════════════════════════════════════════════ */
 import { randomBytes } from 'crypto';
 
-export const LOG_TYPES = ['scene', 'act', 'narration', 'handout', 'clue', 'clock', 'track', 'kill', 'fog', 'pause', 'note', 'loot', 'character', 'roll', 'safety'];
+export const LOG_TYPES = ['scene', 'act', 'narration', 'handout', 'clue', 'clock', 'track', 'kill', 'fog', 'pause', 'note', 'loot', 'character', 'roll', 'safety',
+  'panic', 'supply', 'pool', 'initiative', 'injury']; // + mechanics wave
 export const LOG_CAP = 2000;
 const TEXT_MAX = 2000;
 
