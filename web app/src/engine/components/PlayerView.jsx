@@ -104,6 +104,10 @@ export default function PlayerView() {
   const c = myPlayer?.character;
   const PLAYER = terms.player.toUpperCase();
   const GM = terms.gm.toUpperCase();
+  /* Leaving drops this device's seat token: coming back to the same seat then needs the GM's approval. */
+  const confirmLeave = () => {
+    if (typeof window === 'undefined' || window.confirm(`Disconnect? Returning to this seat later needs the ${terms.gm}'s approval.`)) leaveGame();
+  };
   const myId = myPlayer?.id;
 
   const chat = messages
@@ -193,7 +197,7 @@ export default function PlayerView() {
           <p style={{ color: 'var(--text-dim)', fontSize: '0.7rem', marginTop: '0.75rem' }}>AWAITING ASSIGNMENT...</p>
           {!connected && <p className="pv-offline">RECONNECTING…</p>}
         </div>
-        <button className="pv-btn" onClick={leaveGame}>DISCONNECT</button>
+        <button className="pv-btn" onClick={confirmLeave}>DISCONNECT</button>
       </div>
     );
   }
@@ -319,7 +323,7 @@ export default function PlayerView() {
               <SupplyPanel keys={rules.supplies} supply={myPlayer.supply} danger={rules.supplyDanger ?? 2}
                 onRoll={(k) => supplyRoll(k)} last={supplyLast} />
             )}
-            <button className="pv-btn danger" onClick={leaveGame}>DISCONNECT FROM {terms.session.toUpperCase()}</button>
+            <button className="pv-btn danger" onClick={confirmLeave}>DISCONNECT FROM {terms.session.toUpperCase()}</button>
           </div>
         )}
 

@@ -1,7 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════
    SESSION PERSISTENCE — one JSON snapshot per game in
    <DATA_DIR>/sessions/<CODE>.json (DATA_DIR defaults to <app>/data).
-   - Maps/Sets are serialized as arrays.
+   - Maps/Sets are serialized as arrays; null-prototype id maps (board
+     tokens/rooms) serialize as plain JSON objects and are converted back
+     by sessions.js boardOf → board.normalizeBoard on first use.
    - Writes are debounced (<= 1 per WRITE_INTERVAL_MS per game) and
      atomic (tmp file + rename).
    - Snapshots older than MAX_AGE_MS are deleted on load.
@@ -9,6 +11,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { randomInt } from 'crypto';
 import { restoreLog } from './sessionLog.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -39,9 +42,11 @@ export function toSnapshot(game) {
     createdAt: game.createdAt,
     updatedAt: game.updatedAt,
     dmToken: game.dmToken,
+    gmPin: game.gmPin,
     players: Array.from(game.players.values()).map(({ socketId, ...p }) => p), // eslint-disable-line no-unused-vars
     messages: game.messages,
-    assignedCharacterIds: Array.from(game.assignedCharacterIds),
+    // Informational only (recomputed from seats at runtime; never read back).
+    assignedCharacterIds: Array.from(new Set(Array.from(game.players.values()).map((p) => p.character?.id).filter(Boolean))),
     board: game.board || null, // table board (server/board.js), plain JSON
     mapDef: game.mapDef || null,
     table: game.table || null, // session features (sessions.js tableOf): run, narration, handouts, clues, clocks, safety…
@@ -65,9 +70,10 @@ export function fromSnapshot(s) {
     createdAt: s.createdAt || Date.now(),
     updatedAt: s.updatedAt || Date.now(),
     dmToken: s.dmToken,
+    // Older snapshots have no PIN: mint one (the DM sees it after resuming with the token).
+    gmPin: typeof s.gmPin === 'string' && /^\d{6}$/.test(s.gmPin) ? s.gmPin : String(randomInt(0, 1000000)).padStart(6, '0'),
     players,
     messages: Array.isArray(s.messages) ? s.messages : [],
-    assignedCharacterIds: new Set(Array.isArray(s.assignedCharacterIds) ? s.assignedCharacterIds : []),
     board: s.board && typeof s.board === 'object' ? s.board : null, // sessions.js substitutes an empty board
     mapDef: s.mapDef && typeof s.mapDef === 'object' ? s.mapDef : null,
     table: s.table && typeof s.table === 'object' ? s.table : null, // sessions.js normalizes (tableOf)

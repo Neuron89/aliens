@@ -8,7 +8,12 @@
    - placeToken(board, mapDef, token)  recompute roomId + PC auto-reveal
    - viewFor(board, role)       visibility filter (board/player never see hidden
                                 tokens or tokens in unrevealed rooms)
+   board.tokens / board.rooms are null-prototype objects (guard.nullObj)
+   and every id used as a key rejects '__proto__' / 'constructor' /
+   'prototype' (docs/REVIEW_2026-10-30.md #6). normalizeBoard() converts
+   a board loaded from a JSON snapshot.
    ═══════════════════════════════════════════════════════════════ */
+import { nullObj, isSafeKey } from './guard.js';
 
 export const TOKEN_KINDS = ['pc', 'npc', 'creature', 'item', 'marker', 'hazard'];
 export const MAX_TOKENS = 300;
@@ -17,7 +22,8 @@ export const MAX_POINTS = 128;
 export const MAX_PINGS = 5;
 export const MAX_MAPDEF_BYTES = 256 * 1024;
 
-const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const KEBAB_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const ID_RE = { test: (v) => isSafeKey(v) && KEBAB_RE.test(v) }; // kebab-case, never a prototype name
 const MAP_ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*(:[a-z0-9]+(-[a-z0-9]+)*)?$/;
 const TOKEN_ID_RE = /^[A-Za-z0-9_-]{1,40}$/;
 const COLOR_RE = /^#[0-9a-fA-F]{3,8}$/;
@@ -33,8 +39,25 @@ export function emptyBoard() {
   return {
     mapId: null, level: null, fog: true,
     view: { ...DEFAULT_VIEW, pan: [0, 0] },
-    rooms: {}, tokens: {}, pings: [], mapRev: 0,
+    rooms: nullObj(), tokens: nullObj(), pings: [], mapRev: 0,
   };
+}
+
+/** Board from a snapshot (plain JSON objects) → null-prototype id maps; drops reserved/invalid ids. */
+export function normalizeBoard(b) {
+  if (!b || typeof b !== 'object') return emptyBoard();
+  if (Object.getPrototypeOf(b.tokens ?? null) !== null || !b.tokens) {
+    const tokens = nullObj();
+    for (const [id, t] of Object.entries(b.tokens || {})) if (isTokenId(id) && t && typeof t === 'object') tokens[id] = t;
+    b.tokens = tokens;
+  }
+  if (Object.getPrototypeOf(b.rooms ?? null) !== null || !b.rooms) {
+    const rooms = nullObj();
+    for (const [id, r] of Object.entries(b.rooms || {})) if (ID_RE.test(id) && r && typeof r === 'object') rooms[id] = r;
+    b.rooms = rooms;
+  }
+  if (!Array.isArray(b.pings)) b.pings = [];
+  return b;
 }
 
 /* ─── Map definitions ───────────────────────────────────────── */
@@ -182,7 +205,7 @@ export function sanitizeToken(input, prev, ctx = {}) {
   if (!input || typeof input !== 'object') return null;
   const t = { ...(prev || {}) };
   const id = prev?.id || input.id;
-  if (typeof id !== 'string' || !TOKEN_ID_RE.test(id)) return null;
+  if (!isTokenId(id)) return null;
   t.id = id;
   if (input.kind !== undefined) { if (!TOKEN_KINDS.includes(input.kind)) return null; t.kind = input.kind; }
   if (!t.kind) t.kind = 'marker';
@@ -265,15 +288,17 @@ export function isTokenVisible(board, t) {
 /** Board state for a role: 'dm' gets everything; 'board' / 'player' get the filtered view. */
 export function viewFor(board, role) {
   if (role === 'dm') return board;
-  const tokens = {};
+  const tokens = nullObj();
   for (const [id, t] of Object.entries(board.tokens)) {
     if (!isTokenVisible(board, t)) continue;
     const { note, hidden, hp, hpMax, ref, ...pub } = t; // eslint-disable-line no-unused-vars
     tokens[id] = pub;
   }
-  const rooms = {};
+  const rooms = nullObj();
   for (const [id, r] of Object.entries(board.rooms)) {
     const { note, ...pub } = r; // eslint-disable-line no-unused-vars
+    // A GM rename of a room the table has not seen yet is a spoiler: keep the id, withhold the name.
+    if (pub.name !== undefined && !isRoomRevealed(board, id)) pub.name = null;
     rooms[id] = pub;
   }
   return { ...board, tokens, rooms };
@@ -291,7 +316,7 @@ export function sanitizeView(v, prev = DEFAULT_VIEW) {
 
 export const isMapId = (id) => typeof id === 'string' && id.length <= 140 && MAP_ID_RE.test(id);
 export const isLevelId = (id) => typeof id === 'string' && ID_RE.test(id);
-export const isTokenId = (id) => typeof id === 'string' && TOKEN_ID_RE.test(id);
+export const isTokenId = (id) => isSafeKey(id) && TOKEN_ID_RE.test(id);
 
 /** Spawn point for a PC on a level (falls back to the map's default, then centre). */
 export function spawnPoint(mapDef, level) {

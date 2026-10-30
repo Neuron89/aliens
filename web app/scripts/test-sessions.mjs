@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 /* Session persistence regression test. Spawns the server (temp DATA_DIR),
    exercises create/join/assign/mutate, kills + restarts the server, then
-   resumes as DM, rejoins players (token + name), and ends the game.
+   resumes as DM, rejoins players (token; by name = a seat claim the DM
+   approves), and ends the game.
+   Contract changes (hardening pass, docs/REVIEW_2026-10-30.md):
+   list-resumable needs { tokens: { CODE: dmToken } } (else []), and a
+   name-only rejoin is a pending seat claim, not an instant reattach.
    Usage: node scripts/test-sessions.mjs */
 import { spawn } from 'child_process';
 import { mkdtempSync, existsSync, rmSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
@@ -79,7 +83,9 @@ try {
   pB.emit('player-to-player', { gameCode: code, targetId: jA.playerId, text: 'bob to alice' });
   await sleep(900); // > debounce + a game-saved emit
 
-  const resumable = await call(dm, 'list-resumable', {});
+  eq(await call(dm, 'list-resumable', {}), [], 'list-resumable without tokens lists nothing');
+  const mine = { tokens: { [code]: created.dmToken } };
+  const resumable = await call(dm, 'list-resumable', mine);
   ok(resumable.some((g) => g.code === code && g.players === 2 && g.status === 'live'), 'list-resumable shows live game');
   ok(existsSync(join(DATA, 'sessions', `${code}.json`)), 'snapshot file written');
 
@@ -89,7 +95,7 @@ try {
   await startServer();
 
   const dm2 = await connect();
-  const list2 = await call(dm2, 'list-resumable', {});
+  const list2 = await call(dm2, 'list-resumable', mine);
   const entry = list2.find((g) => g.code === code);
   ok(entry && entry.status === 'dormant' && entry.players === 2 && entry.universeId === 'alien', 'restarted server lists dormant game');
 
@@ -124,17 +130,28 @@ try {
   eq(rjA.messages.length, 4, 'A history: gm + broadcast + own + p2p');
   ok(rjA.messages.every((m) => m.toId === jA.playerId || m.fromId === jA.playerId || m.toId === 'broadcast'), 'A history filtered');
 
-  // Player B: by name only (no token)
+  // Player B: by name only (no token) — a seat claim the DM must approve
   const pB2 = await connect();
   const rjBbad = await call(pB2, 'rejoin-game', { code, playerName: 'Nobody' });
   ok(rjBbad.error, 'unknown name rejected');
-  const rjB = await call(pB2, 'rejoin-game', { code, playerName: 'Bob' });
-  ok(rjB.success && rjB.playerId === jB.playerId, 'B rejoined by name');
+  const claimSeen = once(dm2, 'seat-claim');
+  const pending = await call(pB2, 'rejoin-game', { code, playerName: 'Bob' });
+  ok(pending.pending && pending.claimId && !pending.playerToken, 'name rejoin is a pending claim (no token yet)');
+  const claim = await claimSeen;
+  eq(claim.name, 'Bob', 'DM sees the claim');
+  const result = once(pB2, 'seat-claim-result');
+  ok((await call(dm2, 'seat-claim-resolve', { gameCode: code, claimId: claim.claimId, approve: true })).approved, 'DM approves');
+  const rjB = await result;
+  ok(rjB.approved && rjB.success && rjB.playerId === jB.playerId, 'B rejoined by name after approval');
   ok(rjB.playerToken && rjB.playerToken.length === 24 && rjB.playerToken !== jB.playerToken, 'fresh token issued to B');
   eq(rjB.messages.length, 2, 'B history: broadcast + own p2p');
   const dupe = await connect();
+  const claim2 = once(dm2, 'seat-claim');
   const rjDupe = await call(dupe, 'rejoin-game', { code, playerName: 'Bob' });
-  ok(rjDupe.error, 'cannot take over a connected player by name');
+  ok(rjDupe.pending, 'claim on a connected seat waits for the DM');
+  const denied = once(dupe, 'seat-claim-result');
+  await call(dm2, 'seat-claim-resolve', { gameCode: code, claimId: (await claim2).claimId, approve: false });
+  ok((await denied).error, 'DM rejection reaches the claimant');
   dupe.close();
 
   await sleep(100);
@@ -159,7 +176,7 @@ try {
   await dcNotice; checks++;
   await sleep(100);
   const dm3 = await connect();
-  const lst = await call(dm3, 'list-resumable', {});
+  const lst = await call(dm3, 'list-resumable', mine);
   ok(lst.find((g) => g.code === code)?.status === 'dormant', 'game dormant after DM drop');
   const back = once(pA2, 'dm-reconnected');
   const r3 = await call(dm3, 'resume-game', { code, dmToken: created.dmToken });
@@ -179,7 +196,7 @@ try {
   await endNotice; checks++;
   await sleep(500);
   ok(!existsSync(snap), 'snapshot removed after end-game');
-  ok((await call(dm3, 'list-resumable', {})).every((g) => g.code !== code), 'game gone from list');
+  ok((await call(dm3, 'list-resumable', mine)).every((g) => g.code !== code), 'game gone from list');
   ok((await call(pA2, 'rejoin-game', { code, playerToken: jA.playerToken })).error, 'rejoin after end fails');
 
   /* ── Phase C: stale snapshot pruning ── */
@@ -193,7 +210,7 @@ try {
   await startServer();
   ok(!existsSync(join(dir, 'OLDD.json')), 'snapshot older than 24h deleted on start');
   const dm4 = await connect();
-  const l4 = await call(dm4, 'list-resumable', {});
+  const l4 = await call(dm4, 'list-resumable', { tokens: { NEWW: 't', OLDD: 't' } });
   ok(l4.some((g) => g.code === 'NEWW') && !l4.some((g) => g.code === 'OLDD'), 'only fresh snapshot loaded');
   dm4.close();
   await killServer();

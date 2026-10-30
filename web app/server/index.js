@@ -2,6 +2,13 @@
    SERVER BOOTSTRAP — express, static files, Socket.io wiring, listen.
    Routes: /api/content (content.js), /api/generate (generate.js).
    Socket handlers: sessions.js.
+   API_TOKEN (env, optional): when set, every write to /api/content (PUT,
+   DELETE) and every POST /api/generate needs header `x-api-token`.
+   Reads stay open (phones/TVs load runtime packs without a token).
+   Unset = open LAN behaviour (a one-line notice is logged at start).
+   Process guards: uncaught exceptions / unhandled rejections are logged
+   and the server keeps serving; genuinely fatal errors (listen failures)
+   flush pending snapshots before exiting.
    ═══════════════════════════════════════════════════════════════ */
 import express from 'express';
 import { createServer } from 'http';
@@ -10,6 +17,8 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import cors from 'cors';
 import { attachSessions } from './sessions.js';
+import { flushAll } from './persistence.js';
+import { safeEqual } from './guard.js';
 import { createContentRouter } from './content.js';
 import { createGenerateRouter } from './generate.js';
 
@@ -24,8 +33,16 @@ const io = new Server(httpServer, {
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-app.use('/api/content', createContentRouter());
-app.use('/api/generate', createGenerateRouter());
+/** Shared-secret guard for mutating API calls (API_TOKEN env; read per request). */
+function requireApiToken(req, res, next) {
+  const secret = process.env.API_TOKEN;
+  if (!secret || req.method === 'GET' || req.method === 'HEAD' || req.method === 'OPTIONS') return next();
+  if (safeEqual(String(req.get('x-api-token') || ''), secret)) return next();
+  res.status(401).json({ error: 'API token required.', hint: 'Set it on the GM session screen (ADVANCED).' });
+}
+
+app.use('/api/content', requireApiToken, createContentRouter());
+app.use('/api/generate', requireApiToken, createGenerateRouter());
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.' }));
 
 attachSessions(io);
@@ -38,6 +55,24 @@ app.use(express.static(distPath));
 app.use((req, res) => {
   res.sendFile(join(distPath, 'index.html'));
 });
+
+/* ─── Process guards ─── */
+const FATAL_CODES = new Set(['EADDRINUSE', 'EACCES', 'EADDRNOTAVAIL']);
+function fatal(err) {
+  console.error(`[FATAL] ${err?.stack || err}`);
+  try { flushAll(); } catch (e) { console.error('[FATAL] snapshot flush failed:', e?.message); }
+  process.exit(1);
+}
+process.on('uncaughtException', (err, origin) => {
+  if (FATAL_CODES.has(err?.code)) return fatal(err);
+  console.error(`[ERROR] uncaught ${origin || 'exception'} (server keeps running): ${err?.stack || err}`);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error(`[ERROR] unhandled rejection (server keeps running): ${reason?.stack || reason}`);
+});
+httpServer.on('error', fatal);
+
+if (!process.env.API_TOKEN) console.log('[API] API_TOKEN not set — content/generate write APIs are open to the LAN.');
 
 httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`

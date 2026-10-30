@@ -2363,3 +2363,26 @@ html[data-universe="dune"] .ov-toast-name { letter-spacing: 0.24em; color: #f0e2
   .ph-redflash { opacity: 0.25; }
 }
 html.fx-reduced .tk-flash-ring, html.fx-reduced .tk-active-ring, html.fx-reduced .ph-yourturn, html.fx-reduced .ph-redflash { animation: none !important; }
+
+/* ── Seats, takeover, API token (hardening pass, docs/REVIEW_2026-10-30.md) ── */
+.dm-pin { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--warn); font-size: 0.7rem; letter-spacing: 0.1em; }
+.dm-pin b { font-size: 1rem; letter-spacing: 0.25em; color: var(--warn); }
+.dm-pin-hint { margin-top: 0.35rem; color: var(--warn); font-size: 0.6rem; letter-spacing: 0.06em; }
+.dm-claims { border-color: var(--warn); }
+.dm-claim { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; padding: 0.35rem 0; color: var(--text); font-size: 0.75rem; letter-spacing: 0.06em; }
+.dm-claim b { color: var(--warn); }
+.dm-claim-actions { display: flex; gap: 0.35rem; }
+.dm-claim-hint { color: var(--text-dim); font-size: 0.6rem; letter-spacing: 0.05em; margin-top: 0.25rem; }
+.ss-notice { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 1rem; padding: 0.6rem 0.75rem; border: 1px solid var(--warn); color: var(--warn); font-size: 0.75rem; letter-spacing: 0.06em; }
+.ss-notice button { background: transparent; border: 1px solid var(--warn); color: var(--warn); font-family: var(--font-mono); cursor: pointer; padding: 0.2rem 0.6rem; }
+.ss-claim-wait { border-color: var(--warn); text-align: center; }
+.ss-claim-wait p { color: var(--text); font-size: 0.8rem; margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+.ss-claim-wait .ss-claim-sub { color: var(--text-dim); font-size: 0.65rem; }
+.ss-claim-offer { margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.ss-claim-offer p { color: var(--text-dim); font-size: 0.7rem; letter-spacing: 0.05em; }
+.ss-takeover-open { display: block; width: 100%; margin-bottom: 1rem; }
+.ss-takeover .resume-meta { display: block; margin-bottom: 0.5rem; }
+.ss-takeover .resume-take-form { flex-wrap: wrap; }
+.ss-advanced { margin-top: 1rem; color: var(--text-dim); font-size: 0.7rem; letter-spacing: 0.08em; }
+.ss-advanced summary { cursor: pointer; margin-bottom: 0.5rem; }
+.ss-advanced .resume-meta { display: block; margin-top: 0.35rem; }

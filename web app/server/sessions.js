@@ -8,14 +8,24 @@
      is `player.socketId`. Messages use `fromId`/`toId` = stable player id,
      or 'dm' for the game master and 'broadcast' for everyone.
    - The DM socket is `game.dmId` (null while dormant). The DM authenticates
-     with `dmToken`, players with `playerToken` (both issued once).
+     with `dmToken`, players with `playerToken`. Each game also has a
+     6-digit `gmPin` (shown to the DM once) that lets another terminal
+     TAKE OVER the GM seat: the takeover rotates `dmToken`.
+   - A seat is never handed out by name alone: `rejoin-game { playerName }`
+     without a valid token becomes a seat CLAIM the DM approves/rejects.
+   - One socket holds one role in one game: any create/join/resume/rejoin/
+     join-board for another game detaches it from the previous one first.
+   - Every handler is registered through guard.safeOn (payload coercion,
+     try/catch) — see docs/REVIEW_2026-10-30.md.
    ═══════════════════════════════════════════════════════════════ */
-import { randomBytes } from 'crypto';
+import { randomBytes, randomInt } from 'crypto';
 import { loadSnapshots, scheduleSave, removeSnapshot, allowCode, MAX_AGE_MS } from './persistence.js';
 import {
-  emptyBoard, sanitizeMapDef, publicMapDef, sanitizeToken, placeToken, relocateAll, viewFor,
+  emptyBoard, normalizeBoard, sanitizeMapDef, publicMapDef, sanitizeToken, placeToken, relocateAll, viewFor,
   sanitizeView, isMapId, isLevelId, isTokenId, spawnPoint, MAX_TOKENS, MAX_PINGS,
 } from './board.js';
+import { safeOn, EVENT_NAMES, RESERVED_IDS, isSafeKey, isPlainObject, nullObj, safeEqual } from './guard.js';
+import { listUniverseIds, loadUniverseCore } from './generator/universes.js';
 import { appendLog, logOf } from './sessionLog.js';
 import {
   MAX_ROLLS, emptyInitiative, publicPools, publicInitiative, crewSupply, afterPlayerRoll, wireMechanics, clearPanicIfGone,
@@ -27,11 +37,48 @@ const HISTORY_LIMIT = 200;
 const MESSAGE_CAP = 1000;
 const SAVED_EMIT_MS = 1000;
 const PING_INTERVAL_MS = 1000;
+const MAX_TEXT = 4000;                 // GM / player message text cap (chars)
+export const MAX_GAMES = Math.max(1, Number(process.env.MAX_GAMES) || 50); // live + dormant games per server
+const MAX_PLAYERS = 40;
+const SEAT_CLAIM_MS = Math.max(500, Number(process.env.SEAT_CLAIM_MS) || 2 * 60 * 1000);
+const MAX_CLAIMS_PER_GAME = 10;
+const PIN_MAX_FAILS = 5;               // wrong PINs per game before a lockout
+const PIN_LOCK_MS = 60 * 1000;
+const NAME_IN_USE = 'NAME IN USE — PICK ANOTHER OR ASK THE GM TO RESEAT YOU.';
 const PC_COLORS = ['#4fc3f7', '#ffb74d', '#81c784', '#e57373', '#ba68c8', '#fff176', '#4db6ac', '#f06292'];
 
 export const games = new Map();
+export { EVENT_NAMES }; // every client → server event (guard.js)
 
 const token = () => randomBytes(18).toString('base64url'); // 24 chars
+const newPin = () => String(randomInt(0, 1000000)).padStart(6, '0');
+const normName = (n) => String(n ?? '').trim().toLowerCase();
+
+/* Message priorities per universe (terms.priorities), loaded once from the JSX-free
+   universe cores; 'STANDARD' is always accepted. */
+const PRIORITIES = new Map(); // universeId -> Set
+try {
+  for (const id of listUniverseIds()) {
+    try {
+      const core = await loadUniverseCore(id);
+      const list = core?.terms?.priorities;
+      if (Array.isArray(list)) PRIORITIES.set(id, new Set(list.filter((x) => typeof x === 'string')));
+    } catch (err) { console.warn(`[SESSION] priorities for ${id} unavailable: ${err.message}`); }
+  }
+} catch { /* no universes dir: STANDARD only */ }
+function priorityOf(game, p, fallback = 'STANDARD') {
+  if (p === undefined || p === null || p === '') return fallback;
+  if (typeof p === 'string' && (p === 'STANDARD' || PRIORITIES.get(game.universeId)?.has(p))) return p;
+  return 'STANDARD';
+}
+/** Message text: string (or number), trimmed non-empty, capped at MAX_TEXT. null when invalid. */
+const messageText = (t) => {
+  if (typeof t !== 'string' && typeof t !== 'number') return null;
+  const s = String(t).slice(0, MAX_TEXT);
+  return s.trim() ? s : null;
+};
+/** Character ids currently held by seats (recomputed — never drifts). */
+const assignedIdsOf = (game) => Array.from(new Set(Array.from(game.players.values()).map((p) => p.character?.id).filter(Boolean)));
 const newPlayerId = () => 'p_' + randomBytes(6).toString('hex');
 
 function generateCode() {
@@ -56,9 +103,9 @@ function createGame(dmSocketId, { universeId, packId } = {}) {
     createdAt: now,
     updatedAt: now,
     dmToken: token(),
+    gmPin: newPin(),
     players: new Map(),
     messages: [],
-    assignedCharacterIds: new Set(),
     board: emptyBoard(),
     mapDef: null,
     table: emptyTable(),
@@ -71,6 +118,7 @@ function createGame(dmSocketId, { universeId, packId } = {}) {
 /** Board state lives on the game record (persisted with the snapshot); older snapshots get an empty board. */
 function boardOf(game) {
   if (!game.board || typeof game.board !== 'object' || !game.board.tokens) game.board = emptyBoard();
+  else normalizeBoard(game.board); // snapshot JSON → null-prototype id maps (no-op once converted)
   if (game.mapDef === undefined) game.mapDef = null;
   return game.board;
 }
@@ -102,7 +150,8 @@ function serializePlayers(game) {
 function numberMap(obj) {
   const out = {};
   if (!obj || typeof obj !== 'object') return out;
-  for (const [k, v] of Object.entries(obj)) {
+  for (const [k, v] of Object.entries(obj).slice(0, 50)) {
+    if (!isSafeKey(k) || k.length > 40) continue;
     const n = Number(v);
     if (Number.isFinite(n)) out[k] = n;
   }
@@ -150,7 +199,8 @@ const ITEM_RE = /^[A-Za-z0-9_-]{1,64}$/;
 const sstr = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
 const urlish = (v) => (typeof v === 'string' && v.length <= 500 && /^(\/|https?:\/\/)/.test(v) ? v : null);
 const shortId = (prefix) => `${prefix}-${Date.now().toString(36)}${randomBytes(2).toString('hex')}`;
-const asId = (v, prefix) => (typeof v === 'string' && ITEM_RE.test(v) ? v : shortId(prefix));
+const isItemId = (v) => typeof v === 'string' && ITEM_RE.test(v) && !RESERVED_IDS.has(v);
+const asId = (v, prefix) => (isItemId(v) ? v : shortId(prefix));
 
 export function emptyTable() {
   return {
@@ -320,6 +370,9 @@ export function attachSessions(io) {
       if (g.status === 'dormant' && now - g.updatedAt > MAX_AGE_MS) {
         games.delete(code);
         removeSnapshot(code);
+        lastSavedEmit.delete(code);
+        pinFails.delete(code);
+        for (const c of [...claims.values()]) if (c.code === code) closeClaim(c, { approved: false, error: 'SESSION EXPIRED.' });
       }
     }
   }, 60 * 60 * 1000);
@@ -367,7 +420,7 @@ export function attachSessions(io) {
     if (previous && previous !== socket.id) {
       io.to(previous).emit('session-taken', { code: game.code });
       const old = io.sockets.sockets.get(previous);
-      if (old) old.data = {};
+      if (old) { old.data = {}; old.leave(game.code); }
     }
     game.dmId = socket.id;
     game.status = 'live';
@@ -443,100 +496,234 @@ export function attachSessions(io) {
     return e;
   };
 
+
+  /* ─── Seats: token rejoin + GM-approved claims ─────────── */
+  const seatPayload = (game, player) => ({
+    success: true, playerId: player.id, playerToken: player.playerToken,
+    universeId: game.universeId, packId: game.packId,
+    player: getPlayerData(player), messages: historyForPlayer(game, player),
+    dmConnected: !!game.dmId, table: tableView(game, 'player', player),
+  });
+  /** Put `socket` in `player`'s seat (retiring the previous device) and tell everyone. */
+  function seatPlayer(socket, game, player) {
+    if (player.socketId && player.socketId !== socket.id) {
+      const old = io.sockets.sockets.get(player.socketId);
+      if (old) { old.data = {}; old.leave(game.code); old.emit('session-taken', { code: game.code }); }
+    }
+    attachPlayerSocket(socket, game, player);
+    touch(game);
+    toDM(game, 'player-joined', { player: getPlayerData(player), players: serializePlayers(game), rejoined: true });
+    broadcastPlayerList(game);
+    sendBoardTo(socket, game, 'player');
+  }
+
+  const claims = new Map(); // claimId -> { claimId, code, playerId, name, socketId, at, timer }
+  const claimPublic = (c) => {
+    const seat = games.get(c.code)?.players.get(c.playerId);
+    return { claimId: c.claimId, name: c.name, playerId: c.playerId, at: c.at, seatConnected: !!seat?.connected, expiresAt: c.at + SEAT_CLAIM_MS };
+  };
+  /** Close a claim; `result` (if any) goes to the claimant as `seat-claim-result`. */
+  function closeClaim(claim, result) {
+    clearTimeout(claim.timer);
+    claims.delete(claim.claimId);
+    const game = games.get(claim.code);
+    if (game) toDM(game, 'seat-claim-closed', { claimId: claim.claimId });
+    if (result) io.to(claim.socketId).emit('seat-claim-result', { claimId: claim.claimId, ...result });
+  }
+  function cancelClaimsOf(socketId) {
+    for (const c of [...claims.values()]) if (c.socketId === socketId) closeClaim(c, null);
+  }
+  function sendClaimsToDM(game) {
+    for (const c of claims.values()) if (c.code === game.code) toDM(game, 'seat-claim', claimPublic(c));
+  }
+
+  /* ─── GM PIN (takeover / list-resumable): 5 wrong PINs lock the game's PIN for a minute ─── */
+  const pinFails = new Map(); // code -> { count, until }
+  function checkPin(game, pin) {
+    const now = Date.now();
+    const f = pinFails.get(game.code) || { count: 0, until: 0 };
+    if (f.until > now) return 'locked';
+    if ((typeof pin === 'string' || typeof pin === 'number') && safeEqual(String(pin).trim(), game.gmPin)) {
+      pinFails.delete(game.code);
+      return 'ok';
+    }
+    f.count += 1;
+    if (f.count >= PIN_MAX_FAILS) { f.count = 0; f.until = now + PIN_LOCK_MS; }
+    pinFails.set(game.code, f);
+    return 'bad';
+  }
+
+  /* ─── One socket, one role, one game ───────────────────── */
+  /** Detach `socket` from whatever it holds: DM → game dormant, player → seat disconnected, board → left. */
+  function detachSocket(socket, why = 'switched') {
+    cancelClaimsOf(socket.id);
+    const { code, role, playerId } = socket.data || {};
+    socket.data = {};
+    const game = code ? games.get(code) : null;
+    if (!game) return;
+    if (role === 'board') {
+      socket.leave(boardRoom(code));
+      console.log(`[BOARD] Board client left game ${game.code} (${why})`);
+      notifyBoardLinked(game);
+      return;
+    }
+    socket.leave(code);
+    if (role === 'player') {
+      const player = game.players.get(playerId);
+      if (!player || player.socketId !== socket.id) return; // already re-attached elsewhere
+      player.connected = false;
+      player.socketId = null;
+      touch(game);
+      console.log(`[SESSION] Player "${player.name}" went dormant in game ${game.code} (${why})`);
+      toDM(game, 'player-left', { playerId: player.id, playerName: player.name, dormant: true, players: serializePlayers(game) });
+      broadcastPlayerList(game);
+    } else if (role === 'dm') {
+      if (game.dmId !== socket.id) return;
+      game.dmId = null;
+      game.status = 'dormant';
+      touch(game);
+      console.log(`[SESSION] DM left game ${game.code} — game is dormant (${why})`);
+      for (const [, p] of game.players) toPlayer(p, 'dm-disconnected', { code: game.code });
+    }
+  }
+  /** Before taking `role` in game `code`: leave any other game/role this socket holds. */
+  function detachIfMoving(socket, code, role, playerId = null) {
+    const d = socket.data || {};
+    if (d.code === code && d.role === role && (role !== 'player' || d.playerId === playerId)) return;
+    detachSocket(socket);
+  }
+
+  let eventsChecked = false;
   io.on('connection', (socket) => {
     console.log(`[SESSION] Connection: ${socket.id}`);
+    /** Every handler goes through guard.safeOn (payload → plain object, ack only if a function, try/catch). */
+    const on = (event, handler) => safeOn(socket, event, handler);
 
-    /* ─── DM: Create Game { universeId, packId? } → { code, universeId, packId, dmToken } ───── */
-    socket.on('create-game', (opts, maybeCallback) => {
-      const callback = typeof opts === 'function' ? opts : maybeCallback;
-      const options = typeof opts === 'object' && opts ? opts : {};
+    /* ─── DM: Create Game { universeId, packId? } → { code, universeId, packId, dmToken, gmPin } ───
+       gmPin (6 digits) is shown to the DM once; it authorizes a TAKE OVER from another terminal. */
+    on('create-game', (options, callback) => {
+      if (games.size >= MAX_GAMES) return callback?.({ error: `SERVER FULL — ${MAX_GAMES} GAMES ALREADY HOSTED. END AN OLD ONE FIRST.` });
+      detachSocket(socket); // a socket holds one role in one game
       const game = createGame(socket.id, options);
       socket.join(game.code);
       socket.data = { code: game.code, role: 'dm' };
       touch(game);
       console.log(`[SESSION] Game ${game.code} created (${game.universeId}${game.packId ? ' / ' + game.packId : ''})`);
-      callback?.({ code: game.code, universeId: game.universeId, packId: game.packId, dmToken: game.dmToken });
+      callback?.({ code: game.code, universeId: game.universeId, packId: game.packId, dmToken: game.dmToken, gmPin: game.gmPin });
     });
 
-    /* ─── DM: Resume { code, dmToken } | { code, takeover: true } (only if no DM connected) ─── */
-    socket.on('resume-game', ({ code, dmToken, takeover } = {}, callback) => {
+    /* ─── DM: Resume { code, dmToken } | TAKE OVER { code, takeover: true, pin } ───
+       Takeover needs the game's GM PIN; it rotates dmToken (the old one stops working), the previous
+       DM socket gets `session-taken`, and the ack carries the NEW dmToken for this terminal. */
+    on('resume-game', ({ code, dmToken, takeover, pin }, callback) => {
       const game = games.get(String(code || '').toUpperCase());
       if (!game) return callback?.({ error: 'GAME NOT FOUND.' });
-      const tokenOk = typeof dmToken === 'string' && dmToken === game.dmToken;
-      const takeoverOk = takeover === true && !game.dmId;
-      if (!tokenOk && !takeoverOk) return callback?.({ error: 'NOT AUTHORIZED. ANOTHER TERMINAL HOLDS THIS SESSION.' });
+      const tokenOk = safeEqual(dmToken, game.dmToken);
+      let tookOver = false;
+      if (!tokenOk) {
+        if (takeover !== true) return callback?.({ error: 'NOT AUTHORIZED. ANOTHER TERMINAL HOLDS THIS SESSION.' });
+        const res = checkPin(game, pin);
+        if (res === 'locked') return callback?.({ error: 'TOO MANY WRONG PINS — WAIT A MINUTE.' });
+        if (res !== 'ok') return callback?.({ error: 'WRONG GM PIN.' });
+        game.dmToken = token(); // invalidate the old terminal's token
+        tookOver = true;
+      }
 
+      detachIfMoving(socket, game.code, 'dm');
       attachDMSocket(socket, game);
       touch(game);
-      console.log(`[SESSION] DM resumed game ${game.code}`);
+      console.log(`[SESSION] DM ${tookOver ? 'took over' : 'resumed'} game ${game.code}`);
       callback?.({
         success: true, code: game.code, universeId: game.universeId, packId: game.packId,
-        dmToken: game.dmToken, players: serializePlayers(game), messages: historyForDM(game),
+        dmToken: game.dmToken, gmPin: game.gmPin, takeover: tookOver,
+        players: serializePlayers(game), messages: historyForDM(game),
         table: tableView(game, 'dm'), log: logOf(game),
       });
       for (const [, p] of game.players) toPlayer(p, 'dm-reconnected', { code: game.code });
       sendBoardTo(socket, game, 'dm');
       notifyBoardLinked(game);
+      sendClaimsToDM(game);
     });
 
-    /* ─── DM: End Game { code, dmToken } ───────────── */
-    socket.on('end-game', ({ code, dmToken } = {}, callback) => {
+    /* ─── DM: End Game { code, dmToken } — every socket leaves the game's rooms, socket.data cleared ─── */
+    on('end-game', ({ code, dmToken }, callback) => {
       const key = String(code || '').toUpperCase();
       const game = games.get(key);
       if (!game) return callback?.({ success: true });
-      if (dmToken !== game.dmToken) return callback?.({ error: 'NOT AUTHORIZED.' });
-      for (const [, p] of game.players) toPlayer(p, 'game-ended', { reason: 'The game master has ended the session.' });
-      io.to(boardRoom(key)).emit('game-ended', { reason: 'The game master has ended the session.' });
-      io.in(boardRoom(key)).socketsLeave(boardRoom(key));
+      if (!safeEqual(dmToken, game.dmToken)) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const reason = { reason: 'The game master has ended the session.' };
+      for (const [, p] of game.players) toPlayer(p, 'game-ended', reason);
+      io.to(boardRoom(key)).emit('game-ended', reason);
+      for (const c of [...claims.values()]) if (c.code === key) closeClaim(c, { approved: false, error: 'SESSION ENDED.' });
+      for (const room of [key, boardRoom(key)]) {
+        for (const id of [...(io.sockets.adapter.rooms.get(room) || [])]) {
+          const s = io.sockets.sockets.get(id);
+          if (s?.data?.code === key) s.data = {};
+        }
+        io.in(room).socketsLeave(room);
+      }
+      for (const [, p] of game.players) {
+        const s = p.socketId ? io.sockets.sockets.get(p.socketId) : null;
+        if (s?.data?.code === key) s.data = {};
+      }
+      if (socket.data?.code === key) socket.data = {};
       games.delete(key);
       removeSnapshot(key);
-      if (socket.data?.code === key) socket.data = {};
-      socket.leave(key);
+      lastSavedEmit.delete(key);
+      pinFails.delete(key);
       console.log(`[SESSION] Game ${key} ended by DM`);
       callback?.({ success: true });
     });
 
-    /* ─── List resumable (no auth) ─────────────────── */
-    socket.on('list-resumable', (opts, maybeCallback) => {
-      const cb = typeof opts === 'function' ? opts : maybeCallback;
-      const list = Array.from(games.values())
+    /* ─── List resumable { tokens: { CODE: dmToken }, code?, pin? } ───
+       Only games the caller can prove it hosts (a valid dmToken, or code + GM PIN); otherwise []. */
+    on('list-resumable', ({ tokens, code, pin }, callback) => {
+      const held = isPlainObject(tokens) ? Object.entries(tokens).slice(0, MAX_GAMES * 2) : [];
+      const codes = new Set();
+      for (const [c, t] of held) {
+        const g = games.get(String(c).toUpperCase());
+        if (g && safeEqual(t, g.dmToken)) codes.add(g.code);
+      }
+      if (code && pin !== undefined) {
+        const g = games.get(String(code).toUpperCase());
+        if (g && checkPin(g, pin) === 'ok') codes.add(g.code);
+      }
+      const list = Array.from(codes, (c) => games.get(c))
         .sort((a, b) => b.updatedAt - a.updatedAt)
         .map((g) => ({
           code: g.code, universeId: g.universeId, packId: g.packId,
           players: g.players.size, updatedAt: g.updatedAt, status: g.status,
           dmConnected: !!g.dmId,
         }));
-      cb?.(list);
+      callback?.(list);
     });
 
-    /* ─── Player: Join Game { code, playerName } ───── */
-    socket.on('join-game', ({ code, playerName } = {}, callback) => {
+    /* ─── Player: Join Game { code, playerName } — always a NEW seat; a name already seated is refused ─── */
+    on('join-game', ({ code, playerName }, callback) => {
       const game = games.get(String(code || '').toUpperCase());
       if (!game) return callback?.({ error: 'GAME NOT FOUND. CHECK YOUR ACCESS CODE.' });
       if (socket.data?.role === 'player' && socket.data.code === game.code) return callback?.({ error: 'ALREADY CONNECTED.' });
 
-      const name = String(playerName || 'Player').slice(0, 40);
-      // A returning player whose seat is vacant gets their record back instead of a duplicate.
-      let player = Array.from(game.players.values()).find((p) => p.name === name && !p.connected);
-      const rejoined = !!player;
-      if (player) {
-        player.playerToken = token();
-      } else {
-        player = {
-          id: newPlayerId(), playerToken: token(), socketId: null, connected: false,
-          name, character: null, tracks: {}, trackMax: {}, statusEffects: [], inventory: [],
-          alive: true, conditions: {}, supply: {}, injuries: [], panic: null,
-        };
-        game.players.set(player.id, player);
+      const name = (typeof playerName === 'string' || typeof playerName === 'number' ? String(playerName).trim() : '').slice(0, 40) || 'Player';
+      if (Array.from(game.players.values()).some((p) => normName(p.name) === normName(name))) {
+        return callback?.({ error: NAME_IN_USE, code: 'NAME_IN_USE' });
       }
+      if (game.players.size >= MAX_PLAYERS) return callback?.({ error: 'TABLE FULL.' });
+      detachIfMoving(socket, game.code, 'player');
+      const player = {
+        id: newPlayerId(), playerToken: token(), socketId: null, connected: false,
+        name, character: null, tracks: {}, trackMax: {}, statusEffects: [], inventory: [],
+        alive: true, conditions: {}, supply: {}, injuries: [], panic: null,
+      };
+      game.players.set(player.id, player);
       attachPlayerSocket(socket, game, player);
       touch(game);
 
-      console.log(`[SESSION] Player "${player.name}" ${rejoined ? 're-' : ''}joined game ${game.code}`);
+      console.log(`[SESSION] Player "${player.name}" joined game ${game.code}`);
       callback?.({
-        success: true, playerId: player.id, playerToken: player.playerToken, rejoined,
+        success: true, playerId: player.id, playerToken: player.playerToken, rejoined: false,
         universeId: game.universeId, packId: game.packId,
-        player: getPlayerData(player), messages: rejoined ? historyForPlayer(game, player) : [],
+        player: getPlayerData(player), messages: [],
         table: tableView(game, 'player', player), dmConnected: !!game.dmId,
       });
 
@@ -545,86 +732,127 @@ export function attachSessions(io) {
       sendBoardTo(socket, game, 'player');
     });
 
-    /* ─── Player: Rejoin { code, playerToken } | { code, playerName } ───── */
-    socket.on('rejoin-game', ({ code, playerToken, playerName } = {}, callback) => {
+    /* ─── Player: Rejoin { code, playerToken } (ack: seat) | { code, playerName } (ack: { pending, claimId }) ───
+       Without a valid token the seat is only CLAIMED: the DM gets `seat-claim { claimId, name, playerId }`
+       and answers `seat-claim-resolve`; the claimant gets `seat-claim-result` (approved → a rotated
+       playerToken + the seat; the previous device gets `session-taken`). Unanswered claims fail after
+       SEAT_CLAIM_MS (2 min). */
+    on('rejoin-game', ({ code, playerToken, playerName }, callback) => {
       const game = games.get(String(code || '').toUpperCase());
       if (!game) return callback?.({ error: 'GAME NOT FOUND.' });
 
-      let player = null;
-      let issued = false;
-      if (typeof playerToken === 'string' && playerToken) {
-        player = Array.from(game.players.values()).find((p) => p.playerToken === playerToken);
-      } else if (playerName) {
-        player = Array.from(game.players.values()).find((p) => p.name === String(playerName) && !p.connected);
-        if (player) { player.playerToken = token(); issued = true; }
+      const byToken = typeof playerToken === 'string' && playerToken
+        ? Array.from(game.players.values()).find((p) => safeEqual(p.playerToken, playerToken))
+        : null;
+      if (byToken) {
+        detachIfMoving(socket, game.code, 'player', byToken.id);
+        seatPlayer(socket, game, byToken);
+        console.log(`[SESSION] Player "${byToken.name}" rejoined game ${game.code}`);
+        return callback?.(seatPayload(game, byToken));
       }
-      if (!player) return callback?.({ error: 'GAME NOT FOUND. PLAYER RECORD UNKNOWN.' });
-
-      // Same player reconnecting on a new socket: retire the stale one.
-      if (player.socketId && player.socketId !== socket.id) {
-        const old = io.sockets.sockets.get(player.socketId);
-        if (old) { old.data = {}; old.emit('session-taken', { code: game.code }); }
+      const wanted = typeof playerName === 'string' ? normName(playerName) : '';
+      const seat = wanted ? Array.from(game.players.values()).find((p) => normName(p.name) === wanted) : null;
+      if (!seat) return callback?.({ error: 'GAME NOT FOUND. PLAYER RECORD UNKNOWN.' });
+      if (seat.socketId === socket.id) return callback?.({ error: 'ALREADY CONNECTED.' });
+      cancelClaimsOf(socket.id); // one pending claim per socket
+      if ([...claims.values()].filter((c) => c.code === game.code).length >= MAX_CLAIMS_PER_GAME) {
+        return callback?.({ error: 'TOO MANY PENDING REQUESTS — TRY AGAIN SHORTLY.' });
       }
-      attachPlayerSocket(socket, game, player);
-      touch(game);
-
-      console.log(`[SESSION] Player "${player.name}" rejoined game ${game.code}${issued ? ' (by name)' : ''}`);
-      callback?.({
-        success: true, playerId: player.id, playerToken: player.playerToken,
-        universeId: game.universeId, packId: game.packId,
-        player: getPlayerData(player), messages: historyForPlayer(game, player),
-        dmConnected: !!game.dmId, table: tableView(game, 'player', player),
-      });
-      toDM(game, 'player-joined', { player: getPlayerData(player), players: serializePlayers(game), rejoined: true });
-      broadcastPlayerList(game);
-      sendBoardTo(socket, game, 'player');
+      const claim = {
+        claimId: 'sc_' + randomBytes(6).toString('hex'), code: game.code, playerId: seat.id, name: seat.name,
+        socketId: socket.id, at: Date.now(), timer: null,
+      };
+      claim.timer = setTimeout(() => {
+        if (claims.get(claim.claimId) === claim) closeClaim(claim, { approved: false, error: 'NO ANSWER FROM THE GM — JOIN UNDER A NEW NAME OR TRY AGAIN.' });
+      }, SEAT_CLAIM_MS);
+      claim.timer.unref?.();
+      claims.set(claim.claimId, claim);
+      console.log(`[SESSION] Seat claim for "${seat.name}" in game ${game.code} (${game.dmId ? 'asking DM' : 'DM offline — waiting'})`);
+      toDM(game, 'seat-claim', claimPublic(claim));
+      callback?.({ pending: true, claimId: claim.claimId, name: seat.name, dmConnected: !!game.dmId, expiresIn: SEAT_CLAIM_MS });
     });
 
-    /* ─── DM: Assign Character { character, tracks, trackMax, conditions[] } ─── */
-    socket.on('assign-character', ({ gameCode, playerId, character, tracks, trackMax, conditions } = {}) => {
+    /* ─── DM: Answer a seat claim { claimId, approve } ─── */
+    on('seat-claim-resolve', (payload, callback) => {
+      const game = dmBoardGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const claim = claims.get(String(payload.claimId || ''));
+      if (!claim || claim.code !== game.code) return callback?.({ error: 'Unknown request.' });
+      const seat = game.players.get(claim.playerId);
+      const claimant = io.sockets.sockets.get(claim.socketId);
+      if (!payload.approve || !seat || !claimant) {
+        closeClaim(claim, { approved: false, error: 'THE GM DECLINED — JOIN UNDER A NEW NAME.' });
+        return callback?.({ success: true, approved: false, ...(payload.approve ? { error: 'CLAIMANT GONE.' } : {}) });
+      }
+      closeClaim(claim, null);
+      seat.playerToken = token(); // the previous device's token stops working
+      detachIfMoving(claimant, game.code, 'player', seat.id);
+      seatPlayer(claimant, game, seat);
+      logTo(game, 'note', `Seat "${seat.name}" handed to a new device (GM approved)`);
+      claimant.emit('seat-claim-result', { claimId: claim.claimId, approved: true, ...seatPayload(game, seat) });
+      console.log(`[SESSION] Seat "${seat.name}" reassigned in game ${game.code} (GM approved)`);
+      callback?.({ success: true, approved: true, playerId: seat.id });
+    });
+
+    /* ─── DM: Assign Character { character, tracks, trackMax, conditions[] } (ack { success } | { error }) ───
+       character: plain object ≤ 64 KB with a string id; gear (if present) an array — non-strings dropped. */
+    on('assign-character', ({ gameCode, playerId, character, tracks, trackMax, conditions }, callback) => {
       const game = dmOf(socket, gameCode);
-      if (!game || !character) return;
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const player = game.players.get(playerId);
-      if (!player) return;
+      if (!player) return callback?.({ error: 'Unknown player.' });
+      if (!isPlainObject(character) || typeof character.id !== 'string' || !character.id || character.id.length > 120 || RESERVED_IDS.has(character.id)) {
+        return callback?.({ error: 'Invalid character.' });
+      }
+      if (character.gear !== undefined && !Array.isArray(character.gear)) return callback?.({ error: 'character.gear must be a list.' });
+      let copy;
+      try {
+        const json = JSON.stringify(character);
+        if (json.length > MAX_CHARACTER_BYTES) return callback?.({ error: 'Character too large.' });
+        copy = JSON.parse(json); // detached plain copy
+      } catch { return callback?.({ error: 'Character not serializable.' }); }
+      copy.gear = (copy.gear || []).filter((g) => typeof g === 'string').map((g) => g.slice(0, 200)).slice(0, 200);
+      if (typeof copy.name !== 'string') copy.name = String(copy.name ?? '').slice(0, 80) || 'Unnamed';
 
-      if (player.character?.id) game.assignedCharacterIds.delete(player.character.id);
-
-      player.character = character;
+      player.character = copy;
       player.trackMax = numberMap(trackMax);
       player.tracks = {};
       for (const [k, v] of Object.entries(numberMap(tracks))) player.tracks[k] = clampTrack(player, k, v);
-      player.inventory = [...(character.gear || [])];
+      player.inventory = [...copy.gear];
       player.alive = true;
       player.statusEffects = [];
       player.injuries = [];
       player.panic = null;
-      player.conditions = Object.fromEntries((Array.isArray(conditions) ? conditions : []).map((c) => [String(c), false]));
+      player.conditions = Object.fromEntries((Array.isArray(conditions) ? conditions : []).slice(0, 40)
+        .map((c) => String(c).slice(0, 60)).filter(isSafeKey).map((c) => [c, false]));
 
-      game.assignedCharacterIds.add(character.id);
       // A pending player-built submission from this seat (or for this character) is now resolved.
       for (const sub of tableOf(game).submissions) {
-        if (sub.status === 'pending' && (sub.playerId === player.id || sub.character?.id === character.id)) {
+        if (sub.status === 'pending' && (sub.playerId === player.id || sub.character?.id === copy.id)) {
           sub.status = 'assigned';
           const owner = game.players.get(sub.playerId);
           if (owner) toPlayer(owner, 'submission-updated', { submission: { id: sub.id, status: sub.status, reason: '' } });
         }
       }
-      logTo(game, 'character', `${character.name} assigned to ${player.name}`);
+      logTo(game, 'character', `${copy.name} assigned to ${player.name}`);
       touch(game);
       emitTable(game);
-      console.log(`[SESSION] Character "${character.name}" assigned to "${player.name}"`);
+      console.log(`[SESSION] Character "${copy.name}" assigned to "${player.name}"`);
 
       toPlayer(player, 'character-assigned', { player: getPlayerData(player) });
       toDM(game, 'players-updated', { players: serializePlayers(game) });
       broadcastPlayerList(game);
+      callback?.({ success: true });
     });
 
-    /* ─── DM: Update Player Status ─────────────────── */
-    socket.on('update-player', ({ gameCode, playerId, updates = {} } = {}) => {
+    /* ─── DM: Update Player Status { playerId, updates: { tracks?, statusEffects?, inventory?, alive?, conditions? } } ─── */
+    on('update-player', ({ gameCode, playerId, updates }, callback) => {
       const game = dmOf(socket, gameCode);
-      if (!game) return;
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const player = game.players.get(playerId);
-      if (!player) return;
+      if (!player) return callback?.({ error: 'Unknown player.' });
+      if (!isPlainObject(updates)) return callback?.({ error: 'updates must be an object.' });
+      const strList = (v) => v.slice(0, 200).map((x) => String(x ?? '').slice(0, 120));
 
       if (updates.tracks && typeof updates.tracks === 'object') {
         for (const [k, v] of Object.entries(numberMap(updates.tracks))) {
@@ -634,13 +862,13 @@ export function attachSessions(io) {
         }
       }
       if (Array.isArray(updates.statusEffects)) {
-        const next = updates.statusEffects.map(String);
+        const next = strList(updates.statusEffects);
         for (const e of addedItems(player.statusEffects, next)) logTo(game, 'track', `${pcName(player)} is now ${e}`, { playerId: player.id });
         player.statusEffects = next;
         if (clearPanicIfGone(game, player, boardOf)) emitBoard(game);
       }
       if (Array.isArray(updates.inventory)) {
-        const next = updates.inventory.map(String);
+        const next = strList(updates.inventory);
         const added = addedItems(player.inventory, next);
         player.inventory = next;
         // Loot moment: phone toast + a flash on the PC's board token.
@@ -655,47 +883,53 @@ export function attachSessions(io) {
         }
       }
       if (updates.alive !== undefined) player.alive = !!updates.alive;
-      if (updates.conditions && typeof updates.conditions === 'object') {
-        player.conditions = { ...player.conditions, ...updates.conditions };
+      if (isPlainObject(updates.conditions)) {
+        const next = { ...player.conditions };
+        for (const [k, v] of Object.entries(updates.conditions).slice(0, 40)) if (isSafeKey(k) && k.length <= 60) next[k] = !!v;
+        player.conditions = next;
       }
       touch(game);
 
       toPlayer(player, 'status-updated', { player: getPlayerData(player) });
       toDM(game, 'players-updated', { players: serializePlayers(game) });
+      callback?.({ success: true });
     });
 
-    /* ─── DM: Send Secret Message to Player ────────── */
-    socket.on('send-message', ({ gameCode, playerId, text, priority } = {}) => {
+    /* ─── DM: Send Secret Message to Player { playerId, text ≤ 4000, priority (universe terms.priorities | 'STANDARD') } ─── */
+    on('send-message', ({ gameCode, playerId, text, priority }, callback) => {
       const game = dmOf(socket, gameCode);
-      if (!game) return;
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const player = game.players.get(playerId);
-      if (!player || !text) return;
+      const body = messageText(text);
+      if (!player || !body) return callback?.({ error: 'Invalid message.' });
 
       const message = {
         id: msgId(), type: 'gm', from: GM, fromId: 'dm',
-        to: player.name, toId: player.id, text: String(text),
-        priority: priority || 'STANDARD', timestamp: Date.now(), read: false,
+        to: player.name, toId: player.id, text: body,
+        priority: priorityOf(game, priority), timestamp: Date.now(), read: false,
       };
       pushMessage(game, message);
       touch(game);
       toPlayer(player, 'secret-message', { message });
       toDM(game, 'message-sent', { message });
+      callback?.({ success: true, id: message.id });
     });
 
     /* ─── Player: Send Message to DM ───────────────── */
     /* { gameCode, text, clientId? } (ack { success, id, duplicate? }) — clientId makes replays from the phone's offline queue idempotent. */
-    socket.on('player-message', ({ gameCode, text, clientId } = {}, callback) => {
+    on('player-message', ({ gameCode, text, clientId }, callback) => {
       const game = games.get(gameCode);
       if (!game || socket.data?.code !== game.code || socket.data.role !== 'player') return callback?.({ error: 'NOT AUTHORIZED.' });
       const player = game.players.get(socket.data.playerId);
-      if (!player || !text) return callback?.({ error: 'Empty message.' });
+      const body = messageText(text);
+      if (!player || !body) return callback?.({ error: 'Empty message.' });
       const t = tableOf(game);
       const cid = typeof clientId === 'string' ? clientId.slice(0, 64) : null;
       if (cid && t.clientIds.includes(cid)) return callback?.({ success: true, duplicate: true });
 
       const message = {
         id: msgId(), type: 'player', from: player.name, fromId: player.id,
-        to: GM, toId: 'dm', text: String(text).slice(0, 4000),
+        to: GM, toId: 'dm', text: body,
         priority: 'PLAYER', timestamp: Date.now(), read: false, ...(cid ? { clientId: cid } : {}),
       };
       if (cid) rememberClientId(t, cid);
@@ -707,12 +941,13 @@ export function attachSessions(io) {
     });
 
     /* ─── Player: Send Message to Another Player ───── */
-    socket.on('player-to-player', ({ gameCode: gc, targetId, text, clientId } = {}, callback) => {
+    on('player-to-player', ({ gameCode: gc, targetId, text, clientId }, callback) => {
       const game = games.get(gc);
       if (!game || socket.data?.code !== game.code || socket.data.role !== 'player') return callback?.({ error: 'NOT AUTHORIZED.' });
       const sender = game.players.get(socket.data.playerId);
       const target = game.players.get(targetId);
-      if (!sender || !target || !text) return callback?.({ error: 'Invalid message.' });
+      const body = messageText(text);
+      if (!sender || !target || !body) return callback?.({ error: 'Invalid message.' });
       const t = tableOf(game);
       const cid = typeof clientId === 'string' ? clientId.slice(0, 64) : null;
       if (cid && t.clientIds.includes(cid)) return callback?.({ success: true, duplicate: true });
@@ -720,7 +955,7 @@ export function attachSessions(io) {
 
       const message = {
         id: msgId(), type: 'p2p', from: sender.name, fromId: sender.id,
-        to: target.name, toId: target.id, text: String(text).slice(0, 4000),
+        to: target.name, toId: target.id, text: body,
         priority: 'ENCRYPTED', timestamp: Date.now(), read: false, ...(cid ? { clientId: cid } : {}),
       };
       pushMessage(game, message);
@@ -733,11 +968,11 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Kill Character ───────────────────────── */
-    socket.on('kill-character', ({ gameCode, playerId } = {}) => {
+    on('kill-character', ({ gameCode, playerId }, callback) => {
       const game = dmOf(socket, gameCode);
-      if (!game) return;
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const player = game.players.get(playerId);
-      if (!player) return;
+      if (!player) return callback?.({ error: 'Unknown player.' });
 
       player.alive = false;
       if ('health' in player.tracks) player.tracks.health = 0;
@@ -746,28 +981,33 @@ export function attachSessions(io) {
 
       toPlayer(player, 'character-died', { playerName: player.name, characterName: player.character?.name });
       toDM(game, 'players-updated', { players: serializePlayers(game) });
+      callback?.({ success: true });
     });
 
-    /* ─── DM: Get Assigned Character IDs ───────────── */
-    socket.on('get-assigned-characters', ({ gameCode } = {}, callback) => {
-      const game = games.get(gameCode);
-      callback?.({ ids: game ? Array.from(game.assignedCharacterIds) : [] });
-    });
-
-    /* ─── DM: Broadcast to All Players ─────────────── */
-    socket.on('broadcast-message', ({ gameCode, text, priority } = {}) => {
+    /* ─── DM: Get Assigned Character IDs (DM only; recomputed from the seats) ─── */
+    on('get-assigned-characters', ({ gameCode }, callback) => {
       const game = dmOf(socket, gameCode);
-      if (!game || !text) return;
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.', ids: [] });
+      callback?.({ ids: assignedIdsOf(game) });
+    });
+
+    /* ─── DM: Broadcast to All Players { text ≤ 4000, priority? } ─── */
+    on('broadcast-message', ({ gameCode, text, priority }, callback) => {
+      const game = dmOf(socket, gameCode);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const body = messageText(text);
+      if (!body) return callback?.({ error: 'Empty message.' });
 
       const message = {
         id: msgId(), type: 'gm', from: GM, fromId: 'dm',
-        to: 'ALL', toId: 'broadcast', text: String(text),
-        priority: priority || 'BROADCAST', timestamp: Date.now(), read: false,
+        to: 'ALL', toId: 'broadcast', text: body,
+        priority: priorityOf(game, priority, 'BROADCAST'), timestamp: Date.now(), read: false,
       };
       pushMessage(game, message);
       touch(game);
       for (const [, p] of game.players) toPlayer(p, 'secret-message', { message });
       toDM(game, 'message-sent', { message });
+      callback?.({ success: true, id: message.id });
     });
 
     /* ═══ TABLE BOARD (docs/BOARD_AND_BUILDER.md §2) ═══════════════════
@@ -777,9 +1017,10 @@ export function attachSessions(io) {
        board-ping { x, y, at, by, color }, board-linked { count } (DM only). */
 
     /* ─── Board: Join { code } → { success, code, universeId, packId, board, mapDef } ─── */
-    socket.on('join-board', ({ code } = {}, callback) => {
+    on('join-board', ({ code }, callback) => {
       const game = games.get(String(code || '').toUpperCase());
       if (!game) return callback?.({ error: 'GAME NOT FOUND.' });
+      detachIfMoving(socket, game.code, 'board');
       socket.join(boardRoom(game.code));
       socket.data = { code: game.code, role: 'board' };
       console.log(`[BOARD] Board client attached to game ${game.code}`);
@@ -788,8 +1029,7 @@ export function attachSessions(io) {
     });
 
     /* ─── Anyone attached: re-request board state → { board, mapDef, boardClients? } ─── */
-    socket.on('board-sync', (_payload, callback) => {
-      const cb = typeof _payload === 'function' ? _payload : callback;
+    on('board-sync', (_payload, cb) => {
       const { code, role } = socket.data || {};
       const game = code ? games.get(code) : null;
       if (!game || !role) return cb?.({ error: 'NOT IN A GAME.' });
@@ -800,7 +1040,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Set map { mapId, level?, mapDef } — same mapId keeps tokens (level switch / room edit) ─── */
-    socket.on('board-set-map', (payload = {}, callback) => {
+    on('board-set-map', (payload, callback) => {
       const game = dmBoardGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       if (!isMapId(payload.mapId)) return callback?.({ error: 'Invalid mapId.' });
@@ -812,8 +1052,8 @@ export function attachSessions(io) {
       if (b.mapId !== payload.mapId) {
         // New map: keep PC tokens (moved to the spawn point), drop everything else.
         const pcs = Object.values(b.tokens).filter((t) => t.kind === 'pc');
-        b.tokens = {};
-        b.rooms = {};
+        b.tokens = nullObj();
+        b.rooms = nullObj();
         b.pings = [];
         const [sx, sy] = spawnPoint(mapDef, level);
         pcs.forEach((t, i) => {
@@ -833,7 +1073,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Create / update token { token } → { success, token } ─── */
-    socket.on('board-token-upsert', (payload = {}, callback) => {
+    on('board-token-upsert', (payload, callback) => {
       const game = dmBoardGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const b = boardOf(game);
@@ -851,7 +1091,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Move token { id, x, y } (client throttles to 30 Hz) ─── */
-    socket.on('board-token-move', (payload = {}) => {
+    on('board-token-move', (payload) => {
       const game = dmBoardGame(socket, payload);
       if (!game) return;
       const b = boardOf(game);
@@ -865,7 +1105,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Remove token { id } ─── */
-    socket.on('board-token-remove', (payload = {}, callback) => {
+    on('board-token-remove', (payload, callback) => {
       const game = dmBoardGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const b = boardOf(game);
@@ -877,7 +1117,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Room { roomId, revealed?, name?, note?, hideTokens? } ─── */
-    socket.on('board-room-set', (payload = {}, callback) => {
+    on('board-room-set', (payload, callback) => {
       const game = dmBoardGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const b = boardOf(game);
@@ -899,7 +1139,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Fog { fog } ─── */
-    socket.on('board-fog', (payload = {}) => {
+    on('board-fog', (payload) => {
       const game = dmBoardGame(socket, payload);
       if (!game) return;
       boardOf(game).fog = !!payload.fog;
@@ -908,7 +1148,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: TV orientation { view: { rotation, flipX, zoom, pan } } ─── */
-    socket.on('board-view', (payload = {}) => {
+    on('board-view', (payload) => {
       const game = dmBoardGame(socket, payload);
       if (!game) return;
       const b = boardOf(game);
@@ -918,7 +1158,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM / players: Ping { x, y } (max 1 per second per socket) ─── */
-    socket.on('board-ping', (payload = {}, callback) => {
+    on('board-ping', (payload, callback) => {
       const { code, role, playerId } = socket.data || {};
       const game = code ? games.get(code) : null;
       if (!game || (role !== 'dm' && role !== 'player')) return callback?.({ error: 'NOT AUTHORIZED.' });
@@ -941,12 +1181,12 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Reset {} — clears tokens, room reveals and pings; fog back on (map + view kept) ─── */
-    socket.on('board-reset', (payload = {}, callback) => {
+    on('board-reset', (payload, callback) => {
       const game = dmBoardGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const b = boardOf(game);
-      b.tokens = {};
-      b.rooms = {};
+      b.tokens = nullObj();
+      b.rooms = nullObj();
       b.pings = [];
       b.fog = true;
       touch(game);
@@ -969,8 +1209,7 @@ export function attachSessions(io) {
     const done = (game, cb, extra = {}) => { touch(game); emitTable(game); cb?.({ success: true, ...extra }); };
 
     /* ─── Any attached role: { table, log? } (log for the DM only) ─── */
-    socket.on('table-sync', (_p, callback) => {
-      const cb = typeof _p === 'function' ? _p : callback;
+    on('table-sync', (_p, cb) => {
       const { code, role } = socket.data || {};
       const game = code ? games.get(code) : null;
       if (!game || !role) return cb?.({ error: 'NOT IN A GAME.' });
@@ -984,18 +1223,19 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Seed pack clocks/clues { clocks[], clues[] } — idempotent by id ─── */
-    socket.on('session-seed', (payload = {}, callback) => {
+    on('session-seed', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
       let added = 0;
+      // Dedupe on the id as stored; entries without a valid pack id are skipped (never re-keyed randomly).
       for (const c of Array.isArray(payload.clocks) ? payload.clocks.slice(0, MAX_CLOCKS) : []) {
-        if (!c?.id || t.clocks.some((x) => x.id === c.id) || t.clocks.length >= MAX_CLOCKS) continue;
+        if (!isPlainObject(c) || !isItemId(c.id) || t.clocks.some((x) => x.id === c.id) || t.clocks.length >= MAX_CLOCKS) continue;
         const clock = sanitizeClock(c);
         if (clock) { t.clocks.push(clock); added++; }
       }
       for (const c of Array.isArray(payload.clues) ? payload.clues.slice(0, MAX_CLUES) : []) {
-        if (!c?.id || t.clues.some((x) => x.id === c.id) || t.clues.length >= MAX_CLUES) continue;
+        if (!isPlainObject(c) || !isItemId(c.id) || t.clues.some((x) => x.id === c.id) || t.clues.length >= MAX_CLUES) continue;
         const clue = sanitizeClue({ ...c, adhoc: false });
         if (!clue) continue;
         if (c.status === 'revealed') Object.assign(clue, { status: 'revealed', revealedTo: 'all', revealedAt: Date.now() });
@@ -1007,7 +1247,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Scene progress { actIndex, sceneIndex, completed?, actTitle?, sceneTitle? } ─── */
-    socket.on('run-set', (payload = {}, callback) => {
+    on('run-set', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1034,7 +1274,7 @@ export function attachSessions(io) {
     /* ─── DM: Advance act { actIndex, actTitle?, agendas?: { playerId: text } } ───
        Pushes each assigned player's character.agendaByAct[actIndex+1] (or the override)
        as a private NEW ORDERS card (`new-orders`); stored in table.orders for re-opening. */
-    socket.on('advance-act', (payload = {}, callback) => {
+    on('advance-act', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1061,7 +1301,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Narrate { text, title?, mode:'caption'|'card', art? } ─── */
-    socket.on('narrate', (payload = {}, callback) => {
+    on('narrate', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const text = sstr(payload.text, 4000).trim();
@@ -1077,7 +1317,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Clear narration {} ─── */
-    socket.on('narrate-clear', (payload = {}, callback) => {
+    on('narrate-clear', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       tableOf(game).narration = null;
@@ -1085,7 +1325,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Board mode { mode:'map'|'theatre', title?, subtitle?, art? } (persists) ─── */
-    socket.on('board-mode', (payload = {}, callback) => {
+    on('board-mode', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1103,7 +1343,7 @@ export function attachSessions(io) {
     /* ─── DM: Send handout { handoutId?, handout?|custom?: {title,from,to,priority,text,image?}, to:'all'|[playerIds] } ───
        Bundled packs live client-side, so the DM sends the resolved handout with its pack id.
        Re-sending the same id widens the recipients and keeps receipts. */
-    socket.on('handout-send', (payload = {}, callback) => {
+    on('handout-send', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1129,7 +1369,7 @@ export function attachSessions(io) {
     });
 
     /* ─── Player: Handout opened { handoutId } → DM sees receipts ─── */
-    socket.on('handout-seen', (payload = {}, callback) => {
+    on('handout-seen', (payload, callback) => {
       const { game, player } = playerCtx();
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const h = tableOf(game).handouts.find((x) => x.id === payload.handoutId);
@@ -1144,7 +1384,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Create/update a clue { clue: { id?, text, source?, scene? } } (ad-hoc when no pack id) ─── */
-    socket.on('clue-upsert', (payload = {}, callback) => {
+    on('clue-upsert', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1157,7 +1397,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Reveal a clue { clueId, clue?, to:'all'|[playerIds], foundBy?:[playerIds] } ─── */
-    socket.on('clue-reveal', (payload = {}, callback) => {
+    on('clue-reveal', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1186,7 +1426,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Hide a clue again { clueId } (players lose it from their list) ─── */
-    socket.on('clue-hide', (payload = {}, callback) => {
+    on('clue-hide', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const clue = tableOf(game).clues.find((c) => c.id === payload.clueId);
@@ -1196,7 +1436,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Create/update a clock { clock: { id?, label, segments, filled?, kind, visibility } } ─── */
-    socket.on('clock-upsert', (payload = {}, callback) => {
+    on('clock-upsert', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1209,7 +1449,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Tick a clock { id, delta: ±n } → `clock-ticked { clock, delta }` to everyone who can see it ─── */
-    socket.on('clock-tick', (payload = {}, callback) => {
+    on('clock-tick', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const clock = tableOf(game).clocks.find((c) => c.id === payload.id);
@@ -1231,7 +1471,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Remove a clock { id } ─── */
-    socket.on('clock-remove', (payload = {}, callback) => {
+    on('clock-remove', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1242,7 +1482,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Session zero { enabled, tone[], warnings[], linesVeils } (re-arms the player card when changed) ─── */
-    socket.on('safety-set', (payload = {}, callback) => {
+    on('safety-set', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1260,8 +1500,7 @@ export function attachSessions(io) {
     });
 
     /* ─── Player: Confirm the BEFORE WE BEGIN card {} ─── */
-    socket.on('safety-confirm', (_p, callback) => {
-      const cb = typeof _p === 'function' ? _p : callback;
+    on('safety-confirm', (_p, cb) => {
       const { game, player } = playerCtx();
       if (!game) return cb?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1273,8 +1512,7 @@ export function attachSessions(io) {
     });
 
     /* ─── Player: Anonymous PAUSE / X-card {} → DM `pause-requested { at }` (no identity anywhere) ─── */
-    socket.on('pause-request', (_p, callback) => {
-      const cb = typeof _p === 'function' ? _p : callback;
+    on('pause-request', (_p, cb) => {
       const { game } = playerCtx();
       if (!game) return cb?.({ error: 'NOT AUTHORIZED.' });
       const now = Date.now();
@@ -1289,7 +1527,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Clear the pause {} ─── */
-    socket.on('pause-clear', (payload = {}, callback) => {
+    on('pause-clear', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1299,7 +1537,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Log note { text } → `log-entry { entry }` ─── */
-    socket.on('log-note', (payload = {}, callback) => {
+    on('log-note', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const e = logTo(game, 'note', sstr(payload.text, 2000));
@@ -1309,7 +1547,7 @@ export function attachSessions(io) {
     });
 
     /* ─── Player: Submit a player-built character { character } (from an unassigned seat) ─── */
-    socket.on('character-submit', (payload = {}, callback) => {
+    on('character-submit', (payload, callback) => {
       const { game, player } = playerCtx();
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const ch = payload.character;
@@ -1333,7 +1571,7 @@ export function attachSessions(io) {
     });
 
     /* ─── DM: Resolve a submission { id, action:'reject'|'assigned', reason? } ─── */
-    socket.on('submission-resolve', (payload = {}, callback) => {
+    on('submission-resolve', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const sub = tableOf(game).submissions.find((s) => s.id === payload.id);
@@ -1346,7 +1584,7 @@ export function attachSessions(io) {
     });
 
     /* ─── Player: Roll result { clientId, roll } (queued on the phone until acked; deduped) → DM `roll { roll }` ─── */
-    socket.on('player-roll', (payload = {}, callback) => {
+    on('player-roll', (payload, callback) => {
       const { game, player } = playerCtx();
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const t = tableOf(game);
@@ -1373,40 +1611,24 @@ export function attachSessions(io) {
       io, games, dmTableGame, playerCtx, touch, emitTable, logTo, toDM, toPlayer, boardRoom, boardOf, emitBoard,
       serializePlayers, getPlayerData, tableOf, pcName,
     };
-    wireMechanics(socket, mech);
+    wireMechanics(socket, mech); // registers through guard.safeOn as well
 
     /* ─── Disconnect: never deletes anything — games/players go dormant ─── */
     socket.on('disconnect', () => {
-      lastPing.delete(socket.id);
-      lastPause.delete(socket.id);
-      const { code, role, playerId } = socket.data || {};
-      const game = code ? games.get(code) : null;
-      if (!game) return;
-
-      if (role === 'board') {
-        console.log(`[BOARD] Board client left game ${game.code}`);
-        notifyBoardLinked(game);
-        return;
-      }
-
-      if (role === 'player') {
-        const player = game.players.get(playerId);
-        if (!player || player.socketId !== socket.id) return; // already re-attached elsewhere
-        player.connected = false;
-        player.socketId = null;
-        touch(game);
-        console.log(`[SESSION] Player "${player.name}" went dormant in game ${game.code}`);
-        toDM(game, 'player-left', { playerId: player.id, playerName: player.name, dormant: true, players: serializePlayers(game) });
-        broadcastPlayerList(game);
-      } else if (role === 'dm') {
-        if (game.dmId !== socket.id) return;
-        game.dmId = null;
-        game.status = 'dormant';
-        touch(game);
-        console.log(`[SESSION] DM left game ${game.code} — game is dormant`);
-        for (const [, p] of game.players) toPlayer(p, 'dm-disconnected', { code: game.code });
-      }
+      try {
+        lastPing.delete(socket.id);
+        lastPause.delete(socket.id);
+        detachSocket(socket, 'disconnected');
+      } catch (err) { console.error(`[SOCKET] disconnect cleanup failed: ${err?.stack || err}`); }
     });
+
+    if (!eventsChecked) {
+      eventsChecked = true;
+      const registered = new Set(socket.eventNames().filter((e) => e !== 'disconnect' && e !== 'error'));
+      const missing = EVENT_NAMES.filter((e) => !registered.has(e));
+      const unlisted = [...registered].filter((e) => !EVENT_NAMES.includes(e));
+      if (missing.length || unlisted.length) console.warn(`[SESSION] EVENT_NAMES drift — not registered: ${missing.join(', ') || '-'}; not listed: ${unlisted.join(', ') || '-'}`);
+    }
   });
 }
 

@@ -4,9 +4,13 @@ import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
 import SessionZeroPanel, { emptySessionZero } from './run/SessionZeroPanel';
 import { poolDefs, poolStart } from '../mechanicsUtils';
+import { getApiToken, setApiToken } from '../apiToken';
 
 export default function SessionScreen() {
-  const { connected, createGame, joinGame, role, listResumable, resumeGame, hasDmToken } = useGame();
+  const {
+    connected, createGame, joinGame, role, listResumable, resumeGame, hasDmToken,
+    claimSeat, cancelSeatClaim, seatClaim, sessionNotice, clearSessionNotice,
+  } = useGame();
   const { universe, display, chosen, resetUniverse } = useUniverse();
   const { packs } = useContent();
   const { terms, terminal } = display;
@@ -19,6 +23,7 @@ export default function SessionScreen() {
   const [sessionZero, setSessionZero] = useState(emptySessionZero);
   const [expectedPlayers, setExpectedPlayers] = useState(4);
   const [poolOverrides, setPoolOverrides] = useState({}); // key -> starting value typed by the GM
+  const [nameTaken, setNameTaken] = useState(false);      // join answered NAME_IN_USE → offer a seat claim
 
   // Auto-detect join code from URL
   useEffect(() => {
@@ -57,13 +62,29 @@ export default function SessionScreen() {
     }
     setLoading(true);
     setError('');
+    setNameTaken(false);
+    clearSessionNotice();
     joinGame(joinCode, playerName, (response) => {
       setLoading(false);
-      if (response.error) setError(response.error);
+      if (response?.error) {
+        setError(response.error);
+        setNameTaken(response.code === 'NAME_IN_USE');
+      }
     });
   };
 
-  const cancel = () => { setMode(null); setError(''); };
+  /* "That's me on a new phone": ask the GM to hand over the seat with this name. */
+  const handleClaim = () => {
+    setLoading(true);
+    setError('');
+    claimSeat(joinCode, playerName.trim(), (r) => {
+      setLoading(false);
+      if (r?.error) setError(r.error);
+      else setNameTaken(false);
+    });
+  };
+
+  const cancel = () => { setMode(null); setError(''); setNameTaken(false); };
   const gmLabel = `${terms.gm.toUpperCase()} (${terms.gmShort})`;
   const playerLabel = `${terms.player.toUpperCase()} (PLAYER)`;
 
@@ -86,10 +107,32 @@ export default function SessionScreen() {
           }} />
         </div>
 
+        {sessionNotice && !seatClaim && (
+          <div className="ss-notice" role="status">
+            <span>{sessionNotice}</span>
+            <button type="button" onClick={clearSessionNotice}>OK</button>
+          </div>
+        )}
+
+        {seatClaim && (
+          <div className="panel ss-claim-wait" role="status">
+            <h3 style={stepTitle}>SEAT REQUEST SENT</h3>
+            <p>
+              WAITING FOR THE {terms.gm.toUpperCase()} TO CONFIRM YOU AS <b>{String(seatClaim.name).toUpperCase()}</b>
+              {' '}IN {terms.session.toUpperCase()} {seatClaim.code}…
+            </p>
+            {!seatClaim.dmConnected && (
+              <p className="ss-claim-sub">THE {terms.gm.toUpperCase()} IS OFFLINE — THE REQUEST WAITS UP TO 2 MINUTES.</p>
+            )}
+            <button type="button" onClick={cancelSeatClaim} style={btnSecondary}>CANCEL REQUEST</button>
+          </div>
+        )}
+
         {!mode && chosen && (
           <ResumableSessions universe={universe} terms={terms} packs={packs} connected={connected}
             listResumable={listResumable} resumeGame={resumeGame} hasDmToken={hasDmToken} onError={setError} />
         )}
+        {!mode && chosen && <TakeoverPanel terms={terms} connected={connected} resumeGame={resumeGame} onError={setError} />}
 
         {!mode && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -191,15 +234,25 @@ export default function SessionScreen() {
               />
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button type="submit" disabled={loading || !connected} style={btnStyle}>
+              <button type="submit" disabled={loading || !connected || !!seatClaim} style={btnStyle}>
                 {loading ? 'AUTHENTICATING...' : 'AUTHENTICATE'}
               </button>
               <button type="button" onClick={cancel} style={btnSecondary}>
                 CANCEL
               </button>
             </div>
+            {nameTaken && !seatClaim && (
+              <div className="ss-claim-offer">
+                <p>IS THIS YOUR SEAT ON A NEW DEVICE? THE {terms.gm.toUpperCase()} CAN HAND IT OVER.</p>
+                <button type="button" onClick={handleClaim} disabled={loading || !connected} style={btnStyle}>
+                  ASK THE {terms.gm.toUpperCase()} FOR THIS SEAT
+                </button>
+              </div>
+            )}
           </form>
         )}
+
+        {(!mode || mode === 'create') && chosen && <AdvancedFold />}
 
         {error && (
           <div style={{
@@ -278,8 +331,6 @@ function ago(ts) {
 
 function ResumableSessions({ universe, terms, packs, connected, listResumable, resumeGame, hasDmToken, onError }) {
   const [list, setList] = useState([]);
-  const [takeCode, setTakeCode] = useState(null);   // code whose TAKE OVER box is open
-  const [typed, setTyped] = useState('');
   const [busy, setBusy] = useState(null);
 
   useEffect(() => {
@@ -290,15 +341,16 @@ function ResumableSessions({ universe, terms, packs, connected, listResumable, r
     return () => clearInterval(t);
   }, [connected, listResumable]);
 
-  const rows = list.filter(g => g.universeId === universe.id);
+  // The server lists only games this browser holds a GM token for.
+  const rows = list.filter(g => g.universeId === universe.id && hasDmToken(g.code));
   if (rows.length === 0) return null;
 
   const packTitle = (id) => (id ? packs.find(p => p.id === id)?.meta?.title : null) || 'SANDBOX';
 
-  const go = (code, opts) => {
+  const go = (code) => {
     setBusy(code);
     onError('');
-    resumeGame(code, opts, (r) => {
+    resumeGame(code, null, (r) => {
       setBusy(null);
       if (r?.error) onError(r.error);
     });
@@ -307,43 +359,80 @@ function ResumableSessions({ universe, terms, packs, connected, listResumable, r
   return (
     <div className="panel resume-panel">
       <h3 className="resume-title">RESUMABLE {terms.session.toUpperCase()}S</h3>
-      {rows.map(g => {
-        const mine = hasDmToken(g.code);
-        return (
-          <div key={g.code} className="resume-card">
-            <div className="resume-card-main">
-              <span className="resume-code">{g.code}</span>
-              <span className="resume-meta">
-                {String(packTitle(g.packId)).toUpperCase()} · {g.players} {terms.players.toUpperCase()} · {ago(g.updatedAt)}
-                {' · '}{g.status === 'live' ? 'LIVE' : 'DORMANT'}
-              </span>
-            </div>
-            {mine ? (
-              <button className="resume-btn" disabled={busy === g.code} onClick={() => go(g.code)}>
-                {busy === g.code ? '…' : 'RESUME'}
-              </button>
-            ) : (
-              <div className="resume-foreign">
-                <span>ANOTHER TERMINAL HOLDS THIS {terms.session.toUpperCase()}</span>
-                {!g.dmConnected && takeCode !== g.code && (
-                  <button className="resume-take" onClick={() => { setTakeCode(g.code); setTyped(''); }}>TAKE OVER</button>
-                )}
-                {!g.dmConnected && takeCode === g.code && (
-                  <form className="resume-take-form" onSubmit={(e) => {
-                    e.preventDefault();
-                    if (typed.trim().toUpperCase() !== g.code) { onError('CODE DOES NOT MATCH.'); return; }
-                    go(g.code, { takeover: true });
-                  }}>
-                    <input value={typed} onChange={e => setTyped(e.target.value.toUpperCase().slice(0, 4))}
-                      placeholder={`TYPE ${g.code}`} maxLength={4} autoFocus />
-                    <button type="submit" className="resume-take">CONFIRM</button>
-                  </form>
-                )}
-              </div>
-            )}
+      {rows.map(g => (
+        <div key={g.code} className="resume-card">
+          <div className="resume-card-main">
+            <span className="resume-code">{g.code}</span>
+            <span className="resume-meta">
+              {String(packTitle(g.packId)).toUpperCase()} · {g.players} {terms.players.toUpperCase()} · {ago(g.updatedAt)}
+              {' · '}{g.status === 'live' ? (g.dmConnected ? 'OPEN ON ANOTHER TAB' : 'LIVE') : 'DORMANT'}
+            </span>
           </div>
-        );
-      })}
+          <button className="resume-btn" disabled={busy === g.code} onClick={() => go(g.code)}>
+            {busy === g.code ? '…' : 'RESUME'}
+          </button>
+        </div>
+      ))}
     </div>
+  );
+}
+
+/* ── TAKE OVER (DM): another terminal's session, authorized by its 6-digit GM PIN ── */
+function TakeoverPanel({ terms, connected, resumeGame, onError }) {
+  const [open, setOpen] = useState(false);
+  const [code, setCode] = useState('');
+  const [pin, setPin] = useState('');
+  const [busy, setBusy] = useState(false);
+  if (!open) {
+    return (
+      <button type="button" className="resume-take ss-takeover-open" onClick={() => setOpen(true)} disabled={!connected}>
+        TAKE OVER A {terms.session.toUpperCase()} FROM ANOTHER TERMINAL (GM PIN)
+      </button>
+    );
+  }
+  const submit = (e) => {
+    e.preventDefault();
+    if (!/^[A-Z]{4}$/.test(code) || !/^\d{6}$/.test(pin)) { onError('ENTER THE 4-LETTER CODE AND THE 6-DIGIT GM PIN.'); return; }
+    setBusy(true);
+    onError('');
+    resumeGame(code, { takeover: true, pin }, (r) => {
+      setBusy(false);
+      if (r?.error) onError(r.error);
+    });
+  };
+  return (
+    <form className="panel resume-panel ss-takeover" onSubmit={submit}>
+      <h3 className="resume-title">TAKE OVER A {terms.session.toUpperCase()}</h3>
+      <p className="resume-meta">
+        THE GM PIN WAS SHOWN WHEN THE {terms.session.toUpperCase()} STARTED (SHOW PIN ON THE {terms.gmShort} HEADER).
+        THE OTHER TERMINAL IS SIGNED OUT.
+      </p>
+      <div className="resume-take-form">
+        <input value={code} onChange={e => setCode(e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4))}
+          placeholder="CODE" maxLength={4} autoFocus aria-label="Session code" />
+        <input value={pin} onChange={e => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+          placeholder="PIN" inputMode="numeric" maxLength={6} aria-label="GM PIN" />
+        <button type="submit" className="resume-btn" disabled={busy || !connected}>{busy ? '…' : 'TAKE OVER'}</button>
+        <button type="button" className="resume-take" onClick={() => { setOpen(false); onError(''); }}>CANCEL</button>
+      </div>
+    </form>
+  );
+}
+
+/* ── ADVANCED: shared API token for the content / generate APIs (server env API_TOKEN) ── */
+function AdvancedFold() {
+  const [value, setValue] = useState(getApiToken);
+  const [saved, setSaved] = useState(false);
+  return (
+    <details className="ss-advanced">
+      <summary>ADVANCED</summary>
+      <label style={labelStyle}>API TOKEN (ONLY IF THE SERVER SETS API_TOKEN)</label>
+      <div className="resume-take-form">
+        <input type="password" value={value} autoComplete="off" onChange={e => { setValue(e.target.value); setSaved(false); }}
+          placeholder="NOT SET" aria-label="API token" style={{ width: '100%' }} />
+        <button type="button" className="resume-btn" onClick={() => { setApiToken(value); setSaved(true); }}>{saved ? 'SAVED' : 'SAVE'}</button>
+      </div>
+      <p className="resume-meta">Needed to save / delete content packs and run the generator when the server is locked.</p>
+    </details>
   );
 }

@@ -216,34 +216,75 @@ doc and the schema in sync. Validation runs on every save and on every generator
     git-ignored). Writes are debounced (<= 1 per 250 ms per game) and atomic (tmp + rename); Maps/Sets are
     stored as arrays. On start, snapshots newer than 24 h load as `status: 'dormant'` (no sockets); older
     ones are deleted. Dormant games with no activity for 24 h are swept hourly.
-  - Game record: `{ code, universeId, packId, status: 'live'|'dormant', createdAt, updatedAt, dmToken,
-    dmId (socket or null), players: Map<stableId, player>, messages, assignedCharacterIds }`.
+  - Game record: `{ code, universeId, packId, status: 'live'|'dormant', createdAt, updatedAt, dmToken, gmPin,
+    dmId (socket or null), players: Map<stableId, player>, messages }` (assigned character ids are recomputed from the
+    seats; the snapshot keeps an informational `assignedCharacterIds` array). `gmPin` is a 6-digit PIN minted at
+    `create-game` (older snapshots get one on load).
     Player `id` is a STABLE id (`p_<hex>`), not the socket id; the record also holds `playerToken`,
     `socketId`, `connected`. Message `fromId`/`toId` are stable player ids, `'dm'` or `'broadcast'`.
   - Events (client -> server, ack callback in parentheses):
-    - `create-game { universeId, packId? }` (`{ code, universeId, packId, dmToken }`)
-    - `resume-game { code, dmToken }` or `{ code, takeover: true }` (only allowed while no DM socket is
-      attached) (`{ success, code, universeId, packId, dmToken, players, messages<=200 }` | `{ error }`)
-    - `end-game { code, dmToken }` (`{ success }` | `{ error }`) — notifies players with `game-ended`, deletes snapshot
-    - `list-resumable {}` (`[ { code, universeId, packId, players, updatedAt, status, dmConnected } ]`, no auth)
-    - `join-game { code, playerName }` (`{ success, playerId, playerToken, rejoined, player, messages, universeId, packId }`);
-      a join whose exact name matches a disconnected seat re-attaches to it instead of duplicating.
-    - `rejoin-game { code, playerToken }` or `{ code, playerName }` (name must match a disconnected seat; a fresh
-      token is issued) (`{ success, playerId, playerToken, player, messages<=200, dmConnected, universeId, packId }` | `{ error }`)
+    - `create-game { universeId, packId? }` (`{ code, universeId, packId, dmToken, gmPin }` | `{ error }` when the server
+      already hosts `MAX_GAMES` live+dormant games — env, default 50)
+    - `resume-game { code, dmToken }` (`{ success, code, universeId, packId, dmToken, gmPin, takeover: false, players,
+      messages<=200, table, log }` | `{ error }`) or TAKE OVER `{ code, takeover: true, pin }`: the PIN must match the game's
+      `gmPin` (5 wrong PINs lock that game's PIN for 60 s); allowed even while another DM socket is attached. A takeover
+      ROTATES `dmToken` (the old one is rejected from then on), the previous DM socket gets `session-taken`, and the ack
+      carries the NEW `dmToken` (+ `takeover: true`). Pending seat claims are re-sent to the DM after any resume.
+    - `end-game { code, dmToken }` (`{ success }` | `{ error }`) — notifies players + board with `game-ended`, makes every
+      socket leave the game and board rooms, clears their `socket.data`, closes pending claims, deletes the snapshot
+    - `list-resumable { tokens: { CODE: dmToken }, code?, pin? }` (`[ { code, universeId, packId, players, updatedAt, status,
+      dmConnected } ]`) — only games whose `dmToken` (or code + GM PIN) the caller presents; otherwise `[]`
+    - `join-game { code, playerName }` (`{ success, playerId, playerToken, rejoined: false, player, messages: [], universeId, packId,
+      table, dmConnected }` | `{ error }`) — always a NEW seat. A name already seated (trimmed, case-insensitive) answers
+      `{ error: 'NAME IN USE — PICK ANOTHER OR ASK THE GM TO RESEAT YOU.', code: 'NAME_IN_USE' }`; max 40 seats.
+    - `rejoin-game { code, playerToken }` (`{ success, playerId, playerToken, player, messages<=200, dmConnected, universeId, packId, table }`)
+      or `{ code, playerName }` without a valid token = a SEAT CLAIM (`{ pending: true, claimId, name, dmConnected, expiresIn }`):
+      the DM gets `seat-claim`; the claimant later gets `seat-claim-result`. Claims wait for an offline DM and fail after
+      `SEAT_CLAIM_MS` (env, default 2 min); one pending claim per socket, ≤ 10 per game; a claimant disconnect cancels it.
+    - `seat-claim-resolve { gameCode?, claimId, approve }` (DM; `{ success, approved }`) — approve rotates the seat's
+      `playerToken`, moves the claimant into the seat and sends the previous device `session-taken`.
   - Events (server -> client): `game-saved { code, savedAt }` (DM, throttled 1/s), `dm-disconnected` / `dm-reconnected`
     (players), `player-left { playerId, playerName, dormant: true, players }`, `player-joined { player, players, rejoined? }`,
-    `session-taken` (another terminal attached the same DM/player seat), `player-list` entries gain `connected`.
-    Player data (`players` map, `player`) gains `connected`.
+    `session-taken` (a GM takeover or a GM-approved seat claim moved this DM/player seat elsewhere), `player-list` entries gain
+    `connected`, `seat-claim { claimId, name, playerId, seatConnected, at, expiresAt }` / `seat-claim-closed { claimId }` (DM),
+    `seat-claim-result { claimId, approved, error? | success, playerId, playerToken, player, messages, table, dmConnected,
+    universeId, packId }` (claimant). Player data (`players` map, `player`) gains `connected`.
+  - One socket, one role, one game: `create-game`, `join-game`, `join-board`, `resume-game`, `rejoin-game` (and an approved
+    claim) first detach the socket from any OTHER game/role it holds — a DM socket leaves its game dormant (`dmId = null`,
+    players get `dm-disconnected`), a player seat goes `connected: false` (`player-left` to that DM), a board leaves the board room.
+  - Hardening (`docs/REVIEW_2026-10-30.md`): every handler is registered through `server/guard.js` `safeOn` (non-plain-object
+    payloads become `{}`, the ack is used only if it is a function, try/catch logs `[SOCKET] handler "<event>" failed`).
+    `guard.EVENT_NAMES` (re-exported by `sessions.js`) lists every client → server event; the server warns on drift.
+    `server/index.js` logs `uncaughtException` / `unhandledRejection` and keeps serving (listen errors flush snapshots and exit).
+    Ids used as object keys never accept `__proto__` / `constructor` / `prototype` (`asId`, token/room/level/map ids, pool and
+    supply keys, condition/track names); `board.tokens` / `board.rooms` are null-prototype objects (snapshots are converted on load
+    by `board.normalizeBoard`). `assign-character` needs a plain-object `character` ≤ 64 KB with a string `id` (`gear`, if present,
+    an array; non-strings dropped) and now acks `{ success } | { error }`; `update-player` needs `updates` to be an object (ack too).
+    GM / player / p2p message text is capped at 4000 chars (non-string text rejected); GM `priority` must be one of the universe's
+    `terms.priorities` (loaded from `universe.core.js` at start) or `'STANDARD'` (else `'STANDARD'`; broadcast default `'BROADCAST'`).
+    `get-assigned-characters` is DM-only. Board/player `board-state` sends `rooms[id].name: null` for a GM rename of a room that
+    is not revealed yet.
+  - HTTP: `API_TOKEN` (env, optional) — when set, `PUT`/`DELETE /api/content/...` and `POST /api/generate` need header
+    `x-api-token` (401 otherwise); reads stay open. Unset = open LAN (one startup notice). The client sends
+    `localStorage.apiToken` (`src/engine/apiToken.js`, set from the session screen ADVANCED fold) on every `/api` fetch.
   - Disconnects never delete state: a player disconnect marks `connected:false` (character stays assigned); a
     DM disconnect makes the game `dormant` and players keep their state.
   - Message history on resume/rejoin: last 200 relevant messages (DM: all, with `dmNote` on p2p; player: addressed
     to them, broadcasts, their own).
   - Client (`GameContext.jsx`): `localStorage['muthur.session'] = { code, role, dmToken|playerToken, playerName,
-    universeId, packId }` and `muthur.dmTokens = { code: dmToken }`. On every socket `connect` the saved session is
-    resumed/rejoined automatically; an error clears it. A `?join=` code differing from a saved player seat wins.
-    Context additions: `reconnecting`, `dmOnline`, `lastSaved`, `resumeGame(code, {takeover}?, cb)`, `listResumable(cb)`,
-    `hasDmToken(code)`. DM `leaveGame` = `end-game`; player `leaveGame` only clears local state (seat stays dormant).
-  - Regression test: `node scripts/test-sessions.mjs` (spawns the server with a temp `DATA_DIR`, kills/restarts it).
+    universeId, packId }`, `muthur.dmTokens = { code: dmToken }` and `muthur.gmPins = { code: gmPin }`. On every socket `connect`
+    the saved session is resumed (DM token) / rejoined (player TOKEN only — never by name) automatically; an error clears it.
+    A `?join=` code differing from a saved player seat wins. The player outbox flushes only after the seat is re-attached on the
+    current connection, and queued own messages stay visible (pending) across a restore.
+    Context additions: `reconnecting`, `dmOnline`, `lastSaved`, `resumeGame(code, { takeover, pin }?, cb)`, `listResumable(cb)`
+    (sends the stored tokens), `hasDmToken(code)`, `gmPin` / `pinFresh` / `hidePin()` (DM header: PIN shown once after creation,
+    then behind SHOW PIN), `seatClaims` + `resolveSeatClaim(claimId, approve)` (DM banner APPROVE / REJECT), `claimSeat(code, name, cb)`
+    / `seatClaim` / `cancelSeatClaim()` (claimant waiting state), `sessionNotice` / `clearSessionNotice()` (seat taken, claim declined).
+    Session screen: TAKE OVER form (code + GM PIN), "ASK THE GM FOR THIS SEAT" after `NAME_IN_USE`, ADVANCED fold (API token).
+    DM `leaveGame` = `end-game`; player `leaveGame` (confirmed) only clears local state (seat stays dormant; coming back needs the GM).
+  - Regression tests: `node scripts/test-sessions.mjs` (spawns the server with a temp `DATA_DIR`, kills/restarts it) and
+    `node scripts/test-hardening.mjs` (garbage payloads on every event, takeover/PIN, seat claims, role detach, prototype ids,
+    seed dedupe, caps, API_TOKEN, end-game room cleanup).
 - Session features (wave 1 — `docs/RESEARCH_GM_PLAYER_EXPERIENCE.md` rows 1–6, 13, 14, 16, 34, 38, 48, 49, 58–60, 62).
   State lives on `game.table` (+ `game.log`, `server/sessionLog.js`), persisted with the snapshot:
   `{ run: { actIndex, sceneIndex, completed: {"a-s": true}, actTitle, sceneTitle }, narration: { id, text, title, mode, art, at } | null,
@@ -257,7 +298,8 @@ doc and the schema in sync. Validation runs on every save and on every generator
     + seen flag, no receipts), clues (revealed to them, foundBy as names), safety (+ confirmed bool), orders (own), submission (own latest) }`.
     `resume-game` adds `table` + `log`; `join-game` / `rejoin-game` add `table` (+ `dmConnected` on join); `join-board` adds `table`.
   - DM events (`{ gameCode?, … }`, ack `{ success, … } | { error }`):
-    `table-sync {}` (any role; `{ table, log? }`), `session-seed { clocks[], clues[] }` (idempotent; sets `seeded`; pack clue `status:'revealed'` → revealed to all),
+    `table-sync {}` (any role; `{ table, log? }`), `session-seed { clocks[], clues[] }` (idempotent by the stored id; entries whose id is not a valid
+    `[A-Za-z0-9_-]{1,64}` pack id are skipped; sets `seeded`; pack clue `status:'revealed'` → revealed to all),
     `run-set { actIndex?, sceneIndex?, completed?, actTitle?, sceneTitle? }`, `advance-act { actIndex, actTitle?, sceneTitle?, agendas?: {playerId: text} }`
     (pushes each assigned player's `character.agendaByAct[actIndex+1]` as `new-orders`; ack `{ sent: [ids] }`),
     `narrate { text, title?, mode: 'caption'|'card', art? }`, `narrate-clear {}`, `board-mode { mode?, title?, subtitle?, art? }`,

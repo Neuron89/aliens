@@ -7,9 +7,12 @@ export const useGame = () => useContext(GameContext);
 
 /* ─── Saved session (survives reloads / dropped links) ───────────
    muthur.session   = { code, role, dmToken | playerToken, playerName, universeId, packId }
-   muthur.dmTokens  = { [code]: dmToken }   (lets one browser resume several hosted games) */
+   muthur.dmTokens  = { [code]: dmToken }   (lets one browser resume several hosted games;
+                                             sent with list-resumable — the server lists only these)
+   muthur.gmPins    = { [code]: gmPin }     (6-digit GM PIN: TAKE OVER from another terminal) */
 const SESSION_KEY = 'muthur.session';
 const DM_TOKENS_KEY = 'muthur.dmTokens';
+const GM_PINS_KEY = 'muthur.gmPins';
 
 function readJSON(key, fallback) {
   try {
@@ -32,7 +35,12 @@ const forgetDmToken = (code) => {
   const t = readJSON(DM_TOKENS_KEY, {});
   delete t[code];
   writeJSON(DM_TOKENS_KEY, t);
+  const p = readJSON(GM_PINS_KEY, {});
+  delete p[code];
+  writeJSON(GM_PINS_KEY, p);
 };
+const gmPinFor = (code) => readJSON(GM_PINS_KEY, {})[code] || null;
+const rememberGmPin = (code, pin) => { if (pin) writeJSON(GM_PINS_KEY, { ...readJSON(GM_PINS_KEY, {}), [code]: pin }); };
 
 const joinParam = () => {
   try { return (new URLSearchParams(window.location.search).get('join') || '').toUpperCase(); } catch { return ''; }
@@ -115,6 +123,15 @@ export function GameProvider({ children }) {
   const listeners = useRef(new Map());               // event -> Set<fn>
   const outbox = useRef(readJSON(OUTBOX_KEY, []).filter((x) => x && x.clientId && x.event));
   const [outboxCount, setOutboxCount] = useState(outbox.current.length);
+  /* Seats & takeover (docs/REVIEW_2026-10-30.md) */
+  const [gmPin, setGmPin] = useState(null);          // DM: this game's GM PIN
+  const [pinFresh, setPinFresh] = useState(false);   // DM: just created → show the PIN once
+  const [seatClaims, setSeatClaims] = useState([]);  // DM: [{ claimId, name, playerId, seatConnected, at, expiresAt }]
+  const [seatClaim, setSeatClaim] = useState(null);  // claimant: { claimId, code, name, dmConnected, expiresAt }
+  const [sessionNotice, setSessionNotice] = useState(null); // shown on the session screen (seat taken, claim declined…)
+  const seatClaimRef = useRef(null);
+  const seatLive = useRef(false);                    // player seat confirmed on THIS connection (outbox may flush)
+  const applySeatRef = useRef(() => {});
 
   useEffect(() => { codeRef.current = gameCode; }, [gameCode]);
   const roleRef = useRef(null);
@@ -122,6 +139,7 @@ export function GameProvider({ children }) {
 
   /* Drop all in-memory session state (does not touch localStorage). */
   const resetState = useCallback(() => {
+    seatLive.current = false;
     setRole(null);
     setGameCode(null);
     setPlayers({});
@@ -140,6 +158,9 @@ export function GameProvider({ children }) {
     setTable(null);
     setSessionLog([]);
     setUnreadBy({});
+    setGmPin(null);
+    setPinFresh(false);
+    setSeatClaims([]);
   }, []);
 
   const fireEvent = useCallback((name, payload) => {
@@ -162,7 +183,8 @@ export function GameProvider({ children }) {
   }, []);
   const flushOutbox = useCallback(() => {
     const socket = socketRef.current;
-    if (!socket?.connected || roleRef.current !== 'player' || !codeRef.current) return;
+    // Never before rejoin-game has re-attached the seat on this connection (it would only bounce as NOT AUTHORIZED).
+    if (!socket?.connected || roleRef.current !== 'player' || !codeRef.current || !seatLive.current) return;
     // Items from another game can never be delivered.
     const before = outbox.current.length;
     outbox.current = outbox.current.filter((x) => x.code === codeRef.current);
@@ -227,6 +249,9 @@ export function GameProvider({ children }) {
     if (saved.role === 'dm') {
       setPlayers(r.players || {});
       setSessionLog(Array.isArray(r.log) ? r.log : []);
+      if (r.gmPin) rememberGmPin(saved.code, r.gmPin);
+      setGmPin(r.gmPin || gmPinFor(saved.code));
+      setSeatClaims([]); // pending claims are re-sent by the server after resume
       setRole('dm');
     } else {
       setMyPlayer(r.player || null);
@@ -234,6 +259,20 @@ export function GameProvider({ children }) {
       setRole('player');
       codeRef.current = saved.code;
       roleRef.current = 'player';
+      seatLive.current = true;
+      // Keep still-queued own messages visible (pending) on top of the server history.
+      const history = Array.isArray(r.messages) ? r.messages : [];
+      const confirmed = new Set(history.map((m) => m.clientId).filter(Boolean));
+      const drafts = outbox.current
+        .filter((x) => x.code === saved.code && (x.event === 'player-message' || x.event === 'player-to-player') && !confirmed.has(x.clientId))
+        .map((x) => {
+          const toDm = x.event === 'player-message';
+          return {
+            type: toDm ? 'player' : 'p2p', from: r.player?.name, fromId: r.player?.id, to: toDm ? 'GM' : '', toId: toDm ? 'dm' : x.payload?.targetId,
+            text: x.payload?.text, priority: toDm ? 'PLAYER' : 'ENCRYPTED', id: x.clientId, clientId: x.clientId, pending: true, timestamp: x.at, read: true,
+          };
+        });
+      if (drafts.length) setMessages([...history, ...drafts]);
       setTimeout(() => flushOutbox(), 0);
     }
   }, [flushOutbox]);
@@ -265,8 +304,12 @@ export function GameProvider({ children }) {
     if (saved.role === 'dm') {
       const dmToken = saved.dmToken || dmTokenFor(saved.code);
       socket.emit('resume-game', { code: saved.code, dmToken }, done);
+    } else if (saved.playerToken) {
+      // Token only: a name-only rejoin is a seat claim the GM must approve (claimSeat).
+      socket.emit('rejoin-game', { code: saved.code, playerToken: saved.playerToken }, done);
     } else {
-      socket.emit('rejoin-game', { code: saved.code, playerToken: saved.playerToken, playerName: saved.playerName }, done);
+      setResuming(false);
+      clearSession();
     }
   }, [applyRestore, resetState, joinBoardOn]);
 
@@ -276,7 +319,7 @@ export function GameProvider({ children }) {
     socketRef.current = socket;
 
     socket.on('connect', () => { setConnected(true); autoResume(socket); });
-    socket.on('disconnect', () => setConnected(false));
+    socket.on('disconnect', () => { seatLive.current = false; setConnected(false); });
 
     /* Table board (all roles; payload already filtered by the server) */
     socket.on('board-state', ({ board: b, mapDef: md } = {}) => {
@@ -378,10 +421,33 @@ export function GameProvider({ children }) {
     socket.on('dm-disconnected', () => setDmOnline(false));
     socket.on('dm-reconnected', () => setDmOnline(true));
 
-    /* Another terminal took over this seat/session. */
+    /* Another terminal took over this seat/session (GM takeover with the PIN, or a GM-approved seat claim). */
     socket.on('session-taken', () => {
+      const wasDm = roleRef.current === 'dm';
       clearSession();
       resetState();
+      setSessionNotice(wasDm
+        ? 'ANOTHER TERMINAL TOOK OVER THIS SESSION WITH THE GM PIN.'
+        : 'YOUR SEAT WAS HANDED TO ANOTHER DEVICE BY THE GM.');
+    });
+
+    /* Seat claims: DM side (approve/reject banner) */
+    socket.on('seat-claim', (c) => {
+      if (!c?.claimId) return;
+      setSeatClaims((prev) => [...prev.filter((x) => x.claimId !== c.claimId), c]);
+    });
+    socket.on('seat-claim-closed', ({ claimId } = {}) => setSeatClaims((prev) => prev.filter((x) => x.claimId !== claimId)));
+    /* Seat claims: claimant side */
+    socket.on('seat-claim-result', (r) => {
+      if (!r) return;
+      const pending = seatClaimRef.current;
+      setSeatClaim(null);
+      seatClaimRef.current = null;
+      if (r.approved && r.success && pending) {
+        applySeatRef.current(pending.code, r, pending.name);
+      } else if (!r.approved) {
+        setSessionNotice(r.error || 'SEAT REQUEST DECLINED.');
+      }
     });
 
     socket.on('game-ended', ({ reason }) => {
@@ -422,6 +488,11 @@ export function GameProvider({ children }) {
       setRole('dm');
       setPlayers({});
       setMessages([]);
+      setGmPin(response.gmPin || null);
+      setPinFresh(!!response.gmPin);
+      setSeatClaims([]);
+      setSessionNotice(null);
+      if (response.gmPin) rememberGmPin(response.code, response.gmPin);
       if (response.dmToken) {
         rememberDmToken(response.code, response.dmToken);
         saveSession({
@@ -433,12 +504,15 @@ export function GameProvider({ children }) {
     });
   }, []);
 
-  /** Resume a hosted game. opts.takeover=true skips the token (server only allows it when no GM is attached). */
+  /** Resume a hosted game. opts = { takeover: true, pin } takes the GM seat with the game's GM PIN
+      (another terminal's token is rotated; this browser stores the new one). */
   const resumeGame = useCallback((code, opts, callback) => {
     const takeover = !!opts?.takeover;
     const dmToken = takeover ? undefined : dmTokenFor(code);
-    socketRef.current?.emit('resume-game', { code, dmToken, takeover }, (r) => {
+    const payload = takeover ? { code, takeover: true, pin: String(opts?.pin ?? '').trim() } : { code, dmToken };
+    socketRef.current?.emit('resume-game', payload, (r) => {
       if (!r || r.error) { callback?.(r || { error: 'NO RESPONSE.' }); return; }
+      setSessionNotice(null);
       if (r.dmToken) rememberDmToken(code, r.dmToken);
       const saved = { code, role: 'dm', dmToken: r.dmToken || dmToken, playerName: null, universeId: r.universeId, packId: r.packId ?? null };
       saveSession(saved);
@@ -447,8 +521,16 @@ export function GameProvider({ children }) {
     });
   }, [applyRestore]);
 
+  /** Games this browser can prove it hosts (stored dmTokens); the server lists nothing else. */
   const listResumable = useCallback((callback) => {
-    socketRef.current?.emit('list-resumable', {}, (list) => callback?.(Array.isArray(list) ? list : []));
+    socketRef.current?.emit('list-resumable', { tokens: readJSON(DM_TOKENS_KEY, {}) }, (list) => callback?.(Array.isArray(list) ? list : []));
+  }, []);
+  const hidePin = useCallback(() => setPinFresh(false), []);
+
+  /** DM: answer a seat claim (approve → the claimant gets the seat, the old device is signed out). */
+  const resolveSeatClaim = useCallback((claimId, approve, cb) => {
+    setSeatClaims((prev) => prev.filter((x) => x.claimId !== claimId));
+    socketRef.current?.emit('seat-claim-resolve', { gameCode: codeRef.current, claimId, approve: !!approve }, cb);
   }, []);
 
   const hasDmToken = useCallback((code) => !!dmTokenFor(code), []);
@@ -475,33 +557,62 @@ export function GameProvider({ children }) {
   }, [gameCode]);
 
   /* ─── Player Actions ─────────────────────────────── */
+  /** Take a seat from a join-game ack or an approved seat-claim-result. */
+  const applySeat = useCallback((upper, response, playerName) => {
+    setSessionNotice(null);
+    setGameCode(upper);
+    setSessionUniverseId(response.universeId || null);
+    setPackId(response.packId || null);
+    if (response.universeId) setUniverseIdRef.current(response.universeId, { boot: true });
+    setMyPlayer(response.player || null);
+    setRole('player');
+    setMessages(Array.isArray(response.messages) ? response.messages : []);
+    setTable(response.table || null);
+    setDmOnline(response.dmConnected !== false);
+    codeRef.current = upper;
+    roleRef.current = 'player';
+    seatLive.current = true;
+    if (response.playerToken) {
+      saveSession({
+        code: upper, role: 'player', playerToken: response.playerToken, playerName: String(response.player?.name || playerName || '').slice(0, 40),
+        universeId: response.universeId || null, packId: response.packId || null,
+      });
+    }
+    setTimeout(() => flushOutbox(), 0);
+  }, [flushOutbox]);
+  applySeatRef.current = applySeat;
+
+  /** Join as a NEW seat. A taken name answers { error, code: 'NAME_IN_USE' } → offer claimSeat. */
   const joinGame = useCallback((code, playerName, callback) => {
     const upper = code.toUpperCase();
     socketRef.current?.emit('join-game', { code: upper, playerName }, (response) => {
-      if (response.error) {
-        callback?.(response);
-      } else {
-        setGameCode(upper);
-        setSessionUniverseId(response.universeId || null);
-        setPackId(response.packId || null);
-        if (response.universeId) setUniverseIdRef.current(response.universeId, { boot: true });
-        setMyPlayer(response.player || null);
-        setRole('player');
-        setMessages(Array.isArray(response.messages) ? response.messages : []);
-        setTable(response.table || null);
-        setDmOnline(response.dmConnected !== false);
-        codeRef.current = upper;
-        roleRef.current = 'player';
-        if (response.playerToken) {
-          saveSession({
-            code: upper, role: 'player', playerToken: response.playerToken, playerName: playerName.slice(0, 40),
-            universeId: response.universeId || null, packId: response.packId || null,
-          });
-        }
-        callback?.(response);
+      if (!response || response.error) { callback?.(response || { error: 'NO RESPONSE.' }); return; }
+      applySeat(upper, response, playerName);
+      callback?.(response);
+    });
+  }, [applySeat]);
+
+  /** Ask the GM for an existing seat by name (e.g. a new phone). Resolves via `seat-claim-result`. */
+  const claimSeat = useCallback((code, playerName, callback) => {
+    const upper = String(code || '').toUpperCase();
+    socketRef.current?.emit('rejoin-game', { code: upper, playerName }, (r) => {
+      if (r?.pending) {
+        const c = { claimId: r.claimId, code: upper, name: r.name || playerName, dmConnected: !!r.dmConnected, expiresAt: Date.now() + (Number(r.expiresIn) || 120000) };
+        seatClaimRef.current = c;
+        setSeatClaim(c);
+        setSessionNotice(null);
       }
+      callback?.(r || { error: 'NO RESPONSE.' });
     });
   }, []);
+  /** Withdraw a pending claim (dropping the link cancels it server-side). */
+  const cancelSeatClaim = useCallback(() => {
+    seatClaimRef.current = null;
+    setSeatClaim(null);
+    socketRef.current?.disconnect();
+    socketRef.current?.connect();
+  }, []);
+  const clearSessionNotice = useCallback(() => setSessionNotice(null), []);
 
   /* Player messages go through the outbox (shown as pending until the server confirms). */
   const queueOwnMessage = useCallback((event, payload, draft) => {
@@ -749,6 +860,11 @@ export function GameProvider({ children }) {
     resumeGame,
     listResumable,
     hasDmToken,
+    gmPin,
+    pinFresh,
+    hidePin,
+    seatClaims,
+    resolveSeatClaim,
     assignCharacter,
     updatePlayer,
     sendMessage,
@@ -756,6 +872,11 @@ export function GameProvider({ children }) {
     killCharacter,
     // Player
     joinGame,
+    claimSeat,
+    cancelSeatClaim,
+    seatClaim,
+    sessionNotice,
+    clearSessionNotice,
     sendPlayerMessage,
     sendPlayerToPlayer,
     connectedPlayers,

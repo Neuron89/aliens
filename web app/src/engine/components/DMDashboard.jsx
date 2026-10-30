@@ -18,7 +18,9 @@ export default function DMDashboard() {
     broadcastMessage, killCharacter, unreadCount, clearUnread, lastSaved, boardLinked,
     table, unreadBy, clearUnreadFor, resolveSubmission,
     supplySet, supplyRoll, injuryAdd, injuryRemove, on,
+    gmPin, pinFresh, hidePin, seatClaims, resolveSeatClaim,
   } = useGame();
+  const [showPin, setShowPin] = useState(false);
   const [supplyLast, setSupplyLast] = useState(null);
   React.useEffect(() => on('supply-rolled', (e) => e && setSupplyLast(e)), [on]);
   const { universe } = useUniverse();
@@ -213,13 +215,45 @@ export default function DMDashboard() {
                 {terms.session.toUpperCase()} SAVED {new Date(lastSaved).toLocaleTimeString([], { hour12: false })}
               </span>
             )}
+            {gmPin && (pinFresh || showPin ? (
+              <span className="dm-pin" title={`Lets another terminal take over this ${terms.session.toLowerCase()}`}>
+                GM PIN <b>{gmPin}</b>
+                <button type="button" style={smallBtn} onClick={() => { setShowPin(false); hidePin(); }}>HIDE</button>
+              </span>
+            ) : (
+              <button type="button" style={smallBtn} onClick={() => setShowPin(true)}>SHOW PIN</button>
+            ))}
           </div>
+          {pinFresh && gmPin && (
+            <p className="dm-pin-hint">
+              NOTE THIS PIN: IT LETS ANOTHER TERMINAL TAKE OVER AS {terms.gm.toUpperCase()} IF THIS ONE DIES. NEVER SHARE IT WITH {terms.players.toUpperCase()}.
+            </p>
+          )}
         </div>
         <PoolCounters />
         <button onClick={leaveGame} style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }}>
           END {terms.session.toUpperCase()}
         </button>
       </div>
+
+      {/* Seat claims: a device asks for an existing seat by name */}
+      {seatClaims.length > 0 && (
+        <div className="panel dm-claims" role="alert">
+          {seatClaims.map(c => (
+            <div key={c.claimId} className="dm-claim">
+              <span>
+                A DEVICE ASKS FOR <b>{String(c.name).toUpperCase()}</b>'S SEAT
+                {c.seatConnected ? ` — THAT ${terms.player.toUpperCase()} IS STILL ONLINE` : ''}
+              </span>
+              <span className="dm-claim-actions">
+                <button type="button" className="run-btn primary sm" onClick={() => resolveSeatClaim(c.claimId, true)}>APPROVE</button>
+                <button type="button" className="run-btn sm danger" onClick={() => resolveSeatClaim(c.claimId, false)}>REJECT</button>
+              </span>
+            </div>
+          ))}
+          <p className="dm-claim-hint">APPROVE ONLY IF IT IS REALLY THEM: THE SEAT'S CHARACTER AND PRIVATE MESSAGES MOVE TO THE NEW DEVICE.</p>
+        </div>
+      )}
 
       {/* Panel tabs */}
       <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>

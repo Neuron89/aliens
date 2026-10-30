@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
 import { useUniverse } from './UniverseContext';
+import { apiHeaders } from './apiToken';
 
 /* ═══════════════════════════════════════════════════════════════
    ContentContext — bundled packs (import.meta.glob) merged with
@@ -20,7 +21,7 @@ export const useContent = () => useContext(ContentContext);
 async function readError(res) {
   try {
     const body = await res.json();
-    const err = new Error(body.error || `HTTP ${res.status}`);
+    const err = new Error(`${body.error || `HTTP ${res.status}`}${body.hint ? ` ${body.hint}` : ''}`);
     err.errors = body.errors || [];
     return err;
   } catch {
@@ -38,7 +39,7 @@ export function ContentProvider({ children }) {
   const reload = useCallback(async (uid = universeId) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/content/${encodeURIComponent(uid)}`);
+      const res = await fetch(`/api/content/${encodeURIComponent(uid)}`, { headers: apiHeaders() });
       if (!res.ok) throw await readError(res);
       const body = await res.json();
       setRuntime((prev) => ({ ...prev, [uid]: Array.isArray(body.packs) ? body.packs : [] }));
@@ -86,7 +87,7 @@ export function ContentProvider({ children }) {
     if (!pack?.universe || !pack?.id) throw new Error('Pack needs universe and id.');
     const res = await fetch(`/api/content/${encodeURIComponent(pack.universe)}/${encodeURIComponent(pack.id)}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: apiHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(pack),
     });
     if (!res.ok) throw await readError(res);
@@ -96,7 +97,7 @@ export function ContentProvider({ children }) {
   }, [reload]);
 
   const remove = useCallback(async (id, uid = universeId) => {
-    const res = await fetch(`/api/content/${encodeURIComponent(uid)}/${encodeURIComponent(id)}`, { method: 'DELETE' });
+    const res = await fetch(`/api/content/${encodeURIComponent(uid)}/${encodeURIComponent(id)}`, { method: 'DELETE', headers: apiHeaders() });
     if (!res.ok && res.status !== 404) throw await readError(res);
     await reload(uid);
   }, [reload, universeId]);

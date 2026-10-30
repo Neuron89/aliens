@@ -18,13 +18,16 @@
      player.panic      { total, effectId, name, text, panicAction, at } | null
    ═══════════════════════════════════════════════════════════════ */
 import { randomBytes } from 'crypto';
+import { safeOn, isSafeKey } from './guard.js';
 
 export const MAX_ROLLS = 200;
 const MAX_INIT = 40;
 const MAX_INJURIES = 12;
 const SUPPLY_MAX = 12;
 const SUPPLY_DICE_MAX = 6;  // CRB p.34: a Supply roll uses at most 6 Stress Dice
-const KEY_RE = /^[a-z][a-z0-9-]{0,19}$/;
+const KEY_PATTERN = /^[a-z][a-z0-9-]{0,19}$/;
+const KEY_RE = { test: (k) => isSafeKey(k) && KEY_PATTERN.test(k) }; // never 'constructor' / 'prototype'
+const own = (o, k) => !!o && typeof o === 'object' && Object.hasOwn(o, k);
 const ENTRY_ID_RE = /^[A-Za-z0-9_-]{1,40}$/;
 const INIT_KINDS = ['pc', 'npc', 'creature'];
 
@@ -176,7 +179,7 @@ function tokenOf(game, boardOf, player) {
 
 /** Pool change with cap; returns applied delta. */
 function bumpPool(t, key, delta) {
-  const def = t.poolDefs?.[key];
+  const def = own(t.poolDefs, key) ? t.poolDefs[key] : null;
   if (!def) return 0;
   const before = Number(t.pools[key]) || 0;
   let next = Math.max(0, before + delta);
@@ -205,7 +208,7 @@ export function afterPlayerRoll(ctx, game, player, entry) {
     }
   }
   const mom = int(r.momentum, 0, 20, 0);
-  if (mom && t.poolDefs?.momentum?.playerAdd) {
+  if (mom && own(t.poolDefs, 'momentum') && t.poolDefs.momentum?.playerAdd) {
     const applied = bumpPool(t, 'momentum', mom);
     if (applied) {
       logTo(game, 'pool', `MOMENTUM +${applied} (${pcName(player)}) → ${t.pools.momentum}`);
@@ -234,6 +237,7 @@ function emitPoolChanged(ctx, game, key, delta) {
  */
 export function wireMechanics(socket, ctx) {
   const { io, dmTableGame, playerCtx, touch, emitTable, logTo, toDM, toPlayer, boardRoom, boardOf, emitBoard, serializePlayers, getPlayerData, tableOf, pcName } = ctx;
+  const on = (event, handler) => safeOn(socket, event, handler); // guard.js: payload coerced to {}, try/catch, ack only if a function
   const done = (game, cb, extra = {}) => { touch(game); emitTable(game); cb?.({ success: true, ...extra }); };
   const playerUpdated = (game, player) => {
     toPlayer(player, 'status-updated', { player: getPlayerData(player) });
@@ -272,7 +276,7 @@ export function wireMechanics(socket, ctx) {
   };
 
   /* ─── DM: secret roll { roll } (creature attacks etc.; never sent to the board or players) ─── */
-  socket.on('gm-roll', (payload = {}, callback) => {
+  on('gm-roll', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     let roll = payload.roll;
@@ -293,7 +297,7 @@ export function wireMechanics(socket, ctx) {
      The phone rolls d6 + Stress and looks the result up in the universe panic table; the server
      applies it: player.panic, status effect(s) (a new panic replaces the old), stress change,
      PC token ring 'panicking', log, `panic { … }` to the DM, `board-panic { tokenId, name }` to the TV. */
-  socket.on('panic-result', (payload = {}, callback) => {
+  on('panic-result', (payload, callback) => {
     const { game, player } = actorPlayer(payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const e = payload.effect && typeof payload.effect === 'object' ? payload.effect : {};
@@ -346,7 +350,7 @@ export function wireMechanics(socket, ctx) {
   });
 
   /* ─── DM: supplies { playerId, supply: { air, power, food, water } } (0–12; null removes a key) ─── */
-  socket.on('supply-set', (payload = {}, callback) => {
+  on('supply-set', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const player = game.players.get(payload.playerId);
@@ -357,11 +361,11 @@ export function wireMechanics(socket, ctx) {
   });
 
   /* ─── DM ({ playerId, key }) or player ({ key }): Supply roll — Stress Dice = rating (max 6), each 1 drops it a step ─── */
-  socket.on('supply-roll', (payload = {}, callback) => {
+  on('supply-roll', (payload, callback) => {
     const { game, player } = actorPlayer(payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const key = String(payload.key || '');
-    if (!KEY_RE.test(key) || !player.supply || !(key in player.supply)) return callback?.({ error: 'Unknown supply.' });
+    if (!KEY_RE.test(key) || !own(player.supply, key)) return callback?.({ error: 'Unknown supply.' });
     const before = player.supply[key];
     const dice = Array.from({ length: Math.min(before, SUPPLY_DICE_MAX) }, d6);
     const ones = dice.filter((d) => d === 1).length;
@@ -376,7 +380,7 @@ export function wireMechanics(socket, ctx) {
   });
 
   /* ─── DM: pool definitions + values { defs: universe.rules.pools, values?: { key: n }, reset? } ─── */
-  socket.on('pools-init', (payload = {}, callback) => {
+  on('pools-init', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const t = tableOf(game);
@@ -386,7 +390,7 @@ export function wireMechanics(socket, ctx) {
     const values = payload.values && typeof payload.values === 'object' ? payload.values : {};
     const next = {};
     for (const key of Object.keys(defs)) {
-      const v = payload.reset || t.pools[key] === undefined ? int(values[key], 0, 99, 0) : t.pools[key];
+      const v = payload.reset || !own(t.pools, key) ? int(own(values, key) ? values[key] : 0, 0, 99, 0) : t.pools[key];
       next[key] = defs[key].max ? Math.min(defs[key].max, v) : v;
     }
     t.pools = next;
@@ -400,7 +404,7 @@ export function wireMechanics(socket, ctx) {
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const t = tableOf(game);
     const key = String(payload.key || '');
-    if (!t.poolDefs?.[key]) return callback?.({ error: 'Unknown pool.' });
+    if (!KEY_RE.test(key) || !own(t.poolDefs, key)) return callback?.({ error: 'Unknown pool.' });
     const before = Number(t.pools[key]) || 0;
     const delta = absolute ? int(payload.value, 0, 99, before) - before : int(payload.delta, -99, 99, 0);
     const applied = bumpPool(t, key, delta);
@@ -410,8 +414,8 @@ export function wireMechanics(socket, ctx) {
     }
     done(game, callback, { key, value: t.pools[key], applied });
   };
-  socket.on('pool-set', (payload = {}, cb) => poolChange(payload, cb, true));
-  socket.on('pool-delta', (payload = {}, cb) => poolChange(payload, cb, false));
+  on('pool-set', (payload, cb) => poolChange(payload, cb, true));
+  on('pool-delta', (payload, cb) => poolChange(payload, cb, false));
 
   /* ─── Initiative (DM) ───
      init-set { initiative: { active?, order?, turn?, round? } } replace (sanitized)
@@ -420,7 +424,7 @@ export function wireMechanics(socket, ctx) {
      init-round {}            new round: round+1, turn 0, done/fast/slow cleared (cards kept)
      init-end {}              tracker off (order kept)
      Player: init-pass { toId } — the acting PC hands the turn to an ally who has not acted. */
-  socket.on('init-set', (payload = {}, callback) => {
+  on('init-set', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const t = tableOf(game);
@@ -428,7 +432,7 @@ export function wireMechanics(socket, ctx) {
     t.initiative = sanitizeInitiative(payload.initiative, game, t.initiative);
     iniDone(game, callback, !wasActive && t.initiative.active ? `Initiative: round ${t.initiative.round} — ${t.initiative.order.map((e) => `${e.card ? e.card + ' ' : ''}${e.label}`).join(', ')}` : null);
   });
-  socket.on('init-step', (payload = {}, callback) => {
+  on('init-step', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const ini = tableOf(game).initiative;
@@ -449,7 +453,7 @@ export function wireMechanics(socket, ctx) {
     }
     iniDone(game, callback, text);
   });
-  socket.on('init-goto', (payload = {}, callback) => {
+  on('init-goto', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const ini = tableOf(game).initiative;
@@ -461,7 +465,7 @@ export function wireMechanics(socket, ctx) {
     ini.order[i].done = false;
     iniDone(game, callback);
   });
-  socket.on('init-round', (payload = {}, callback) => {
+  on('init-round', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const ini = tableOf(game).initiative;
@@ -470,13 +474,13 @@ export function wireMechanics(socket, ctx) {
     for (const e of ini.order) Object.assign(e, { done: false, fast: false, slow: false });
     iniDone(game, callback, `Initiative: round ${ini.round}`);
   });
-  socket.on('init-end', (payload = {}, callback) => {
+  on('init-end', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     tableOf(game).initiative.active = false;
     iniDone(game, callback, 'Initiative ended');
   });
-  socket.on('init-pass', (payload = {}, callback) => {
+  on('init-pass', (payload, callback) => {
     const { game, player } = playerCtx();
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const ini = tableOf(game).initiative;
@@ -491,7 +495,7 @@ export function wireMechanics(socket, ctx) {
   });
 
   /* ─── DM: critical injuries { playerId, injury: { id?, name, text, roll?, fatal?, healTime? } } / remove { playerId, uid } ─── */
-  socket.on('injury-add', (payload = {}, callback) => {
+  on('injury-add', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const player = game.players.get(payload.playerId);
@@ -503,7 +507,7 @@ export function wireMechanics(socket, ctx) {
     playerUpdated(game, player);
     done(game, callback, { injury: inj });
   });
-  socket.on('injury-remove', (payload = {}, callback) => {
+  on('injury-remove', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     const player = game.players.get(payload.playerId);

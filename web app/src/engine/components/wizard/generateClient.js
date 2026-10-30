@@ -1,5 +1,6 @@
 /* Client for POST /api/generate (Server-Sent Events over fetch, so it can POST
-   a body and be cancelled with an AbortController). */
+   a body and be cancelled with an AbortController). Sends x-api-token (apiToken.js). */
+import { apiHeaders } from '../../apiToken';
 
 export class GenerateError extends Error {
   constructor(message, { code, status, errors, hint } = {}) {
@@ -14,7 +15,7 @@ export class GenerateError extends Error {
 /** GET /api/generate/status → { configured, mock, model, effort, fallbacks } (null on failure). */
 export async function fetchGeneratorStatus() {
   try {
-    const res = await fetch('/api/generate/status');
+    const res = await fetch('/api/generate/status', { headers: apiHeaders() });
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -30,7 +31,7 @@ export async function fetchGeneratorStatus() {
 export async function runGeneration({ universeId, params, signal, onStatus, onDelta }) {
   const res = await fetch('/api/generate', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
+    headers: apiHeaders({ 'Content-Type': 'application/json', Accept: 'text/event-stream' }),
     body: JSON.stringify({ universeId, params }),
     signal,
   });
