@@ -1,0 +1,1278 @@
+{
+ "_comment": "Item art selection for scripts/extract-art.py build. book = crb (Core Rule Book) | acm (Colonial Marines Operations) | art (Artwork.pdf); page = 1-based PDF page; imageIndex = index in page.get_images(full=True); stitch = right half of a two-page spread; crop = fractions of the (stitched) image; generated = ComfyUI flux1-schnell via scripts/gen-alien-art.py (prompt recorded).",
+ "items": {
+  "m4a3-service-pistol": {
+   "category": "weapons",
+   "out": "m4a3-service-pistol.webp",
+   "names": [
+    "M4A3 Service Pistol"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 123,
+   "imageIndex": 0
+  },
+  "357-magnum-revolver": {
+   "category": "weapons",
+   "out": "357-magnum-revolver.webp",
+   "names": [
+    ".357 Magnum Revolver"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 123,
+   "imageIndex": 1
+  },
+  "rexim-rxf-m5-eva-pistol": {
+   "category": "weapons",
+   "out": "rexim-rxf-m5-eva-pistol.webp",
+   "names": [
+    "Rexim RXF-M5 EVA Pistol"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 124,
+   "imageIndex": 0
+  },
+  "watatsumi-dv303-bolt-gun": {
+   "category": "weapons",
+   "out": "watatsumi-dv303-bolt-gun.webp",
+   "names": [
+    "Watatsumi DV-303 Bolt Gun"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 124,
+   "imageIndex": 1
+  },
+  "vp70-pistol": {
+   "category": "weapons",
+   "out": "vp70-pistol.webp",
+   "names": [
+    "VP-70 Pistol"
+   ],
+   "refIds": [],
+   "book": "acm",
+   "page": 71,
+   "imageIndex": 0,
+   "note": "VP-70MA6 Semi-Automatic Pistol"
+  },
+  "m41a-pulse-rifle": {
+   "category": "weapons",
+   "out": "m41a-pulse-rifle.webp",
+   "names": [
+    "Armat M41A Pulse Rifle"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 126,
+   "imageIndex": 0
+  },
+  "ak4047-pulse-assault-rifle": {
+   "category": "weapons",
+   "out": "ak4047-pulse-assault-rifle.webp",
+   "names": [
+    "AK-4047 Pulse Assault Rifle"
+   ],
+   "refIds": [],
+   "book": "acm",
+   "page": 73,
+   "imageIndex": 0,
+   "note": "Norcomm AK-4047"
+  },
+  "m42a-scope-rifle": {
+   "category": "weapons",
+   "out": "m42a-scope-rifle.webp",
+   "names": [
+    "M42A Scope Rifle"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 126,
+   "imageIndex": 2
+  },
+  "armat-37a2-shotgun": {
+   "category": "weapons",
+   "out": "armat-37a2-shotgun.webp",
+   "names": [
+    "Armat Model 37A2 12 Gauge Pump Action"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 126,
+   "imageIndex": 1
+  },
+  "asso400-harpoon": {
+   "category": "weapons",
+   "out": "asso400-harpoon.webp",
+   "names": [
+    "SpaceSub ASSO-400 Harpoon Grappling Gun"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 127,
+   "imageIndex": 0
+  },
+  "xm99a-plasma-rifle": {
+   "category": "weapons",
+   "out": "xm99a-plasma-rifle.webp",
+   "names": [
+    "Armat XM99A Phased Plasma Pulse Rifle"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 127,
+   "imageIndex": 1
+  },
+  "nsg23-assault-rifle": {
+   "category": "weapons",
+   "out": "nsg23-assault-rifle.webp",
+   "names": [
+    "NSG 23 Assault Rifle"
+   ],
+   "refIds": [],
+   "book": "acm",
+   "page": 74,
+   "imageIndex": 1,
+   "note": "Weyland-Yutani NSG23"
+  },
+  "m41ae2-heavy-pulse": {
+   "category": "weapons",
+   "out": "m41ae2-heavy-pulse.webp",
+   "names": [
+    "Armat M41AE2 Heavy Pulse Rifle"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 128,
+   "imageIndex": 0
+  },
+  "m56a2-smart-gun": {
+   "category": "weapons",
+   "out": "m56a2-smart-gun.webp",
+   "names": [
+    "M56A2 Smart Gun"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 130,
+   "imageIndex": 1
+  },
+  "m240-incinerator": {
+   "category": "weapons",
+   "out": "m240-incinerator.webp",
+   "names": [
+    "M240 Incinerator Unit"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 130,
+   "imageIndex": 0
+  },
+  "m5-rpg": {
+   "category": "weapons",
+   "out": "m5-rpg.webp",
+   "names": [
+    "M5 RPG"
+   ],
+   "refIds": [],
+   "book": "acm",
+   "page": 76,
+   "imageIndex": 0,
+   "note": "M5A3 RPG Launcher"
+  },
+  "p5000-power-loader": {
+   "category": "weapons",
+   "out": "p5000-power-loader.webp",
+   "names": [
+    "P-5000 Power Loader"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 133,
+   "imageIndex": 0,
+   "crop": [
+    0.0,
+    0.03,
+    0.97,
+    0.97
+   ],
+   "note": "full-page painting; loader occupies the page"
+  },
+  "cutting-torch": {
+   "category": "weapons",
+   "out": "cutting-torch.webp",
+   "names": [
+    "Cutting Torch"
+   ],
+   "refIds": [],
+   "book": "art",
+   "page": 51,
+   "imageIndex": 0,
+   "crop": [
+    0.575,
+    0.06,
+    0.955,
+    0.47
+   ],
+   "note": "Alien: Isolation plasma torch render"
+  },
+  "weyland-es4-pistol": {
+   "category": "weapons",
+   "out": "weyland-es4-pistol.webp",
+   "names": [
+    "Weyland ES-4 Semi-Automatic Electrostatic Pistol",
+    "Weyland ES-4"
+   ],
+   "refIds": [],
+   "book": "acm",
+   "page": 71,
+   "imageIndex": 1
+  },
+  "rmc-f903we-rifle": {
+   "category": "weapons",
+   "out": "rmc-f903we-rifle.webp",
+   "names": [
+    "RMC F903WE",
+    "RMC F903WE Rifle"
+   ],
+   "refIds": [],
+   "book": "acm",
+   "page": 74,
+   "imageIndex": 0
+  },
+  "norcomm-ak104s": {
+   "category": "weapons",
+   "out": "norcomm-ak104s.webp",
+   "names": [
+    "Norcomm AK-104s"
+   ],
+   "refIds": [],
+   "book": "acm",
+   "page": 74,
+   "imageIndex": 2
+  },
+  "berserker-suit": {
+   "category": "weapons",
+   "out": "berserker-suit.webp",
+   "names": [
+    "Berserker Suit",
+    "Typical USCMC Berserker"
+   ],
+   "refIds": [],
+   "book": "acm",
+   "page": 173,
+   "imageIndex": 0
+  },
+  "m4a4-pistol": {
+   "category": "weapons",
+   "out": "m4a4-pistol.webp",
+   "names": [
+    "M4A4 Pistol"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1715033525,
+   "file": "scripts/.scratch/generated/m4a4-pistol.png",
+   "prompt": "M4A4 9mm semi-automatic handgun, compact military sidearm pistol, short barrel, angular black steel slide, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "nsg23-assault-pistol": {
+   "category": "weapons",
+   "out": "nsg23-assault-pistol.webp",
+   "names": [
+    "NSG 23 Assault Pistol"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1320636724,
+   "file": "scripts/.scratch/generated/nsg23-assault-pistol.png",
+   "prompt": "NSG 23 assault pistol, compact machine pistol handgun with short barrel and pistol grip magazine, no stock, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m41a2-pulse-rifle": {
+   "category": "weapons",
+   "out": "m41a2-pulse-rifle.webp",
+   "names": [
+    "M41A/2 Pulse Rifle"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1630018143,
+   "file": "scripts/.scratch/generated/m41a2-pulse-rifle.png",
+   "prompt": "M41A/2 pulse rifle, chunky boxy colonial marine assault rifle with underslung grenade launcher and ammo counter, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m41a-mk2-pulse-rifle": {
+   "category": "weapons",
+   "out": "m41a-mk2-pulse-rifle.webp",
+   "names": [
+    "M41A Pulse Rifle (MK2)"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1229020086,
+   "file": "scripts/.scratch/generated/m41a-mk2-pulse-rifle.png",
+   "prompt": "M41A Mk2 pulse rifle, updated colonial marine assault rifle, olive drab boxy shroud, underslung pump grenade launcher, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m4ra-battle-rifle": {
+   "category": "weapons",
+   "out": "m4ra-battle-rifle.webp",
+   "names": [
+    "M4RA Battle Rifle"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1494737902,
+   "file": "scripts/.scratch/generated/m4ra-battle-rifle.png",
+   "prompt": "M4RA battle rifle, long scoped colonial marine marksman rifle, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "u1-grenade-launcher": {
+   "category": "weapons",
+   "out": "u1-grenade-launcher.webp",
+   "names": [
+    "Armat U1 Grenade Launcher"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 601590470,
+   "file": "scripts/.scratch/generated/u1-grenade-launcher.png",
+   "prompt": "Armat U1 30mm pump-action grenade launcher, standalone underbarrel launcher with pistol grip, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "ua571c-sentry": {
+   "category": "weapons",
+   "out": "ua571c-sentry.webp",
+   "names": [
+    "UA 571-C Sentry Gun"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1639705082,
+   "file": "scripts/.scratch/generated/ua571c-sentry.png",
+   "prompt": "UA 571-C automated sentry gun, heavy machine gun turret with long gun barrel and boxy receiver mounted on a tripod, side ammunition box, three-quarter view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "g2-electroshock-grenade": {
+   "category": "weapons",
+   "out": "g2-electroshock-grenade.webp",
+   "names": [
+    "G2 Electroshock Grenade"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 2063806682,
+   "file": "scripts/.scratch/generated/g2-electroshock-grenade.png",
+   "prompt": "G2 electroshock grenade, military flashbang style hand grenade, short metal cylinder canister standing upright with a pull ring and spoon lever on the side, perforated sides with copper electrode bands, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m78-pig": {
+   "category": "weapons",
+   "out": "m78-pig.webp",
+   "names": [
+    "M78 PIG"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 509808047,
+   "file": "scripts/.scratch/generated/m78-pig.png",
+   "prompt": "M78 phased plasma infantry gun, very large bulky heavy plasma cannon with thick cooling coils, glowing blue emitter and backpack power cable, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m83a2-sadar": {
+   "category": "weapons",
+   "out": "m83a2-sadar.webp",
+   "names": [
+    "M83A2 SADAR"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 873166285,
+   "file": "scripts/.scratch/generated/m83a2-sadar.png",
+   "prompt": "M83A2 SADAR anti-tank rocket launcher, long wide 84mm cylindrical bazooka tube, thick launcher tube much wider than a rifle barrel with shoulder rest, sighting optics and front grip, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "ua571d-sentry": {
+   "category": "weapons",
+   "out": "ua571d-sentry.webp",
+   "names": [
+    "UA 571-D Sentry Gun"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1803477219,
+   "file": "scripts/.scratch/generated/ua571d-sentry.png",
+   "prompt": "UA 571-D remote sentry weapon system, armored tripod autocannon with sensor head, three-quarter view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m40-hedp-grenade": {
+   "category": "weapons",
+   "out": "m40-hedp-grenade.webp",
+   "names": [
+    "M40 HEDP Grenade"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 2002920224,
+   "file": "scripts/.scratch/generated/m40-hedp-grenade.png",
+   "prompt": "M40 HEDP grenade cartridge ammunition, a single large stubby cartridge standing vertically, dome-nosed olive drab projectile seated in a short brass case, like an oversized rifle bullet, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m20-claymore": {
+   "category": "weapons",
+   "out": "m20-claymore.webp",
+   "names": [
+    "M20 Claymore Mine"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 695028848,
+   "file": "scripts/.scratch/generated/m20-claymore.png",
+   "prompt": "M20 claymore directional anti-personnel mine, curved olive box on folding legs, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m108-demolition": {
+   "category": "weapons",
+   "out": "m108-demolition.webp",
+   "names": [
+    "M108 Demolition Charge"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 2141597958,
+   "file": "scripts/.scratch/generated/m108-demolition.png",
+   "prompt": "M108 demolition charge, military plastic explosive block with timer detonator, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m3-personnel-armor": {
+   "category": "weapons",
+   "out": "m3-personnel-armor.webp",
+   "names": [
+    "M3 Personnel Armor"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 246496191,
+   "file": "scripts/.scratch/generated/m3-personnel-armor.png",
+   "prompt": "M3 colonial marine personnel armor, olive torso plate, shoulder pads and chest armor, on a stand, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "irc-mk50-compression": {
+   "category": "weapons",
+   "out": "irc-mk50-compression.webp",
+   "names": [
+    "IRC Mk.50 Compression Suit"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1693306339,
+   "file": "scripts/.scratch/generated/irc-mk50-compression.png",
+   "prompt": "IRC Mk.50 compression suit, sleek lightweight space suit with clear bubble helmet, full body front view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "irc-mk35-pressure": {
+   "category": "weapons",
+   "out": "irc-mk35-pressure.webp",
+   "names": [
+    "IRC Mk.35 Pressure Suit"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1289330608,
+   "file": "scripts/.scratch/generated/irc-mk35-pressure.png",
+   "prompt": "IRC Mk.35 pressure suit, bulky retro-futurist space suit with domed helmet, full body front view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "eco-all-world-suit": {
+   "category": "weapons",
+   "out": "eco-all-world-suit.webp",
+   "names": [
+    "Eco All-World Survival Suit"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 889267439,
+   "file": "scripts/.scratch/generated/eco-all-world-suit.png",
+   "prompt": "Eco All-World survival suit, one single empty rugged environmental hazard suit with sealed helmet and backpack displayed alone, full body front view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "wy-apesuit": {
+   "category": "weapons",
+   "out": "wy-apesuit.webp",
+   "names": [
+    "Weyland-Yutani APEsuit"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1991935537,
+   "file": "scripts/.scratch/generated/wy-apesuit.png",
+   "prompt": "Weyland-Yutani APEsuit atmospheric processing environment suit, industrial hazmat suit with respirator helmet, full body, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m10-ballistic-helmet": {
+   "category": "weapons",
+   "out": "m10-ballistic-helmet.webp",
+   "names": [
+    "M10 Ballistic Helmet"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 707157634,
+   "file": "scripts/.scratch/generated/m10-ballistic-helmet.png",
+   "prompt": "M10 colonial marine ballistic helmet with shoulder lamp camera and flip-down eyepiece, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m3a1-pattern-armor": {
+   "category": "weapons",
+   "out": "m3a1-pattern-armor.webp",
+   "names": [
+    "M3A1 Pattern Armor"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 1486714014,
+   "file": "scripts/.scratch/generated/m3a1-pattern-armor.png",
+   "prompt": "M3A1 pattern colonial marine body armor, upgraded olive plates, chest and shoulder pieces, on a stand, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "knife": {
+   "category": "weapons",
+   "out": "knife.webp",
+   "names": [
+    "Knife"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 977311784,
+   "file": "scripts/.scratch/generated/knife.png",
+   "prompt": "military combat knife, black blade with serrated spine, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "stun-baton": {
+   "category": "weapons",
+   "out": "stun-baton.webp",
+   "names": [
+    "Stun Baton"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 743388512,
+   "file": "scripts/.scratch/generated/stun-baton.png",
+   "prompt": "stun baton, electroshock cattle prod with insulated grip and twin electrodes, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "blunt-instrument": {
+   "category": "weapons",
+   "out": "blunt-instrument.webp",
+   "names": [
+    "Blunt Instrument"
+   ],
+   "refIds": [],
+   "generated": true,
+   "seed": 2050588032,
+   "file": "scripts/.scratch/generated/blunt-instrument.png",
+   "prompt": "heavy steel wrench and pipe, improvised blunt weapon, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "daihotai-tractor": {
+   "category": "vehicles",
+   "out": "daihotai-tractor.webp",
+   "names": [
+    "Daihotai Series 8x8 Tractor"
+   ],
+   "refIds": [
+    "daihotai-tractor"
+   ],
+   "book": "crb",
+   "page": 145,
+   "imageIndex": 0
+  },
+  "m570-apc": {
+   "category": "vehicles",
+   "out": "m570-apc.webp",
+   "names": [
+    "M570 Series APC"
+   ],
+   "refIds": [
+    "m570-apc"
+   ],
+   "book": "crb",
+   "page": 146,
+   "imageIndex": 0,
+   "stitch": [
+    {
+     "page": 147,
+     "imageIndex": 0
+    }
+   ]
+  },
+  "ud4-cheyenne": {
+   "category": "vehicles",
+   "out": "ud4-cheyenne.webp",
+   "names": [
+    "UD-4 Cheyenne Dropship"
+   ],
+   "refIds": [
+    "ud4-cheyenne"
+   ],
+   "book": "crb",
+   "page": 148,
+   "imageIndex": 0,
+   "stitch": [
+    {
+     "page": 149,
+     "imageIndex": 0
+    }
+   ]
+  },
+  "ox-hampv": {
+   "category": "vehicles",
+   "out": "ox-hampv.webp",
+   "names": [
+    "Mikoyan-Liu Ox Series 6x6 HAMPV"
+   ],
+   "refIds": [
+    "ox-hampv"
+   ],
+   "book": "acm",
+   "page": 86,
+   "imageIndex": 0
+  },
+  "stinger-fav": {
+   "category": "vehicles",
+   "out": "stinger-fav.webp",
+   "names": [
+    "Alphatech XT-37 Stinger 4x4"
+   ],
+   "refIds": [
+    "stinger-fav"
+   ],
+   "book": "acm",
+   "page": 88,
+   "imageIndex": 0
+  },
+  "ridgeway-tank": {
+   "category": "vehicles",
+   "out": "ridgeway-tank.webp",
+   "names": [
+    "M40-E Ridgeway Heavy Tank"
+   ],
+   "refIds": [
+    "ridgeway-tank"
+   ],
+   "book": "acm",
+   "page": 90,
+   "imageIndex": 0
+  },
+  "bp33-artillery": {
+   "category": "vehicles",
+   "out": "bp33-artillery.webp",
+   "names": [
+    "BP-33 Celestial Defense Artillery Gun"
+   ],
+   "refIds": [
+    "bp33-artillery"
+   ],
+   "book": "acm",
+   "page": 91,
+   "imageIndex": 0
+  },
+  "bearcat-strikeship": {
+   "category": "vehicles",
+   "out": "bearcat-strikeship.webp",
+   "names": [
+    "UA Northridge AD-19C/D Bearcat VTOL Strikeship"
+   ],
+   "refIds": [
+    "bearcat-strikeship"
+   ],
+   "book": "acm",
+   "page": 93,
+   "imageIndex": 0
+  },
+  "krokodil": {
+   "category": "vehicles",
+   "out": "krokodil.webp",
+   "names": [
+    "MI-220 Krokodil Series Armored Attack Dropship"
+   ],
+   "refIds": [
+    "krokodil"
+   ],
+   "book": "acm",
+   "page": 97,
+   "imageIndex": 0
+  },
+  "mig730": {
+   "category": "vehicles",
+   "out": "mig730.webp",
+   "names": [
+    "MiG-730 Series Aerospace Interceptor"
+   ],
+   "refIds": [
+    "mig730"
+   ],
+   "book": "acm",
+   "page": 98,
+   "imageIndex": 0
+  },
+  "evac3": {
+   "category": "vehicles",
+   "out": "evac3.webp",
+   "names": [
+    "Alphatech EVAC-3 Series Trans-Atmospheric Fighter"
+   ],
+   "refIds": [
+    "evac3"
+   ],
+   "book": "acm",
+   "page": 99,
+   "imageIndex": 0
+  },
+  "mantis": {
+   "category": "vehicles",
+   "out": "mantis.webp",
+   "names": [
+    "Model V-10A1113 Mantis"
+   ],
+   "refIds": [
+    "mantis"
+   ],
+   "book": "acm",
+   "page": 106,
+   "imageIndex": 0,
+   "stitch": [
+    {
+     "page": 107,
+     "imageIndex": 0
+    }
+   ]
+  },
+  "kremlin": {
+   "category": "vehicles",
+   "out": "kremlin.webp",
+   "names": [
+    "VP-153D Kremlin Class Hunter-Destroyer"
+   ],
+   "refIds": [
+    "kremlin"
+   ],
+   "book": "acm",
+   "page": 108,
+   "imageIndex": 0,
+   "stitch": [
+    {
+     "page": 109,
+     "imageIndex": 0
+    }
+   ]
+  },
+  "bougainville": {
+   "category": "vehicles",
+   "out": "bougainville.webp",
+   "names": [
+    "USCMC Bougainville Class Attack Transport"
+   ],
+   "refIds": [
+    "bougainville"
+   ],
+   "book": "acm",
+   "page": 110,
+   "imageIndex": 0,
+   "stitch": [
+    {
+     "page": 111,
+     "imageIndex": 0
+    }
+   ]
+  },
+  "cm90s-corvus": {
+   "category": "vehicles",
+   "out": "cm90s-corvus.webp",
+   "names": [
+    "CM-90S Corvus"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 178,
+   "imageIndex": 0,
+   "stitch": [
+    {
+     "page": 179,
+     "imageIndex": 0
+    }
+   ]
+  },
+  "cm88h-bison": {
+   "category": "vehicles",
+   "out": "cm88h-bison.webp",
+   "names": [
+    "CM-88H Bison"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 188,
+   "imageIndex": 0,
+   "stitch": [
+    {
+     "page": 189,
+     "imageIndex": 0
+    }
+   ]
+  },
+  "conestoga": {
+   "category": "vehicles",
+   "out": "conestoga.webp",
+   "names": [
+    "Conestoga",
+    "Conestoga Class Frigate"
+   ],
+   "refIds": [],
+   "book": "crb",
+   "page": 198,
+   "imageIndex": 0,
+   "stitch": [
+    {
+     "page": 199,
+     "imageIndex": 0
+    }
+   ]
+  },
+  "nr9-atv": {
+   "category": "vehicles",
+   "out": "nr9-atv.webp",
+   "names": [
+    "Weyland NR-9 Series ATV"
+   ],
+   "refIds": [
+    "nr9-atv"
+   ],
+   "generated": true,
+   "seed": 1162223860,
+   "file": "scripts/.scratch/generated/nr9-atv.png",
+   "prompt": "Weyland NR-9 all terrain vehicle, boxy six-wheeled frontier ATV with enclosed cab, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "aerodyne-vtol": {
+   "category": "vehicles",
+   "out": "aerodyne-vtol.webp",
+   "names": [
+    "Aerodyne Light VTOL Gyrocar"
+   ],
+   "refIds": [
+    "aerodyne-vtol"
+   ],
+   "generated": true,
+   "seed": 1509857198,
+   "file": "scripts/.scratch/generated/aerodyne-vtol.png",
+   "prompt": "Aerodyne light VTOL gyrocar, small four-seat flying car with ducted fans, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "wy37b-sled": {
+   "category": "vehicles",
+   "out": "wy37b-sled.webp",
+   "names": [
+    "WY-37B Cargo Lifter Sled"
+   ],
+   "refIds": [
+    "wy37b-sled"
+   ],
+   "generated": true,
+   "seed": 1541803562,
+   "file": "scripts/.scratch/generated/wy37b-sled.png",
+   "prompt": "WY-37B suborbital cargo lifter sled with crane arm, industrial hover transport, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m577-apc": {
+   "category": "vehicles",
+   "out": "m577-apc.webp",
+   "names": [
+    "M577 Armored Personnel Carrier"
+   ],
+   "refIds": [
+    "m577-apc"
+   ],
+   "generated": true,
+   "seed": 1042295958,
+   "file": "scripts/.scratch/generated/m577-apc.png",
+   "prompt": "M577 armored personnel carrier, low wedge-shaped six-wheeled colonial marine APC with twin gatling turret, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m579-air-defense": {
+   "category": "vehicles",
+   "out": "m579-air-defense.webp",
+   "names": [
+    "M579 Air Defense APC"
+   ],
+   "refIds": [
+    "m579-air-defense"
+   ],
+   "generated": true,
+   "seed": 767465705,
+   "file": "scripts/.scratch/generated/m579-air-defense.png",
+   "prompt": "M579 air defense APC, six-wheeled armored carrier with missile launcher turret, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "hovertread": {
+   "category": "vehicles",
+   "out": "hovertread.webp",
+   "names": [
+    "Seegson MX11A1 \"Hovertread\""
+   ],
+   "refIds": [
+    "hovertread"
+   ],
+   "generated": true,
+   "seed": 1652223340,
+   "file": "scripts/.scratch/generated/hovertread.png",
+   "prompt": "Seegson MX11A1 Hovertread light infantry vehicle, single-track hover motorbike, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "jackson-tank": {
+   "category": "vehicles",
+   "out": "jackson-tank.webp",
+   "names": [
+    "M22A3 Jackson Medium Tank"
+   ],
+   "refIds": [
+    "jackson-tank"
+   ],
+   "generated": true,
+   "seed": 349498417,
+   "file": "scripts/.scratch/generated/jackson-tank.png",
+   "prompt": "M22A3 Jackson medium tank, tracked battle tank with long cannon, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m292-artillery": {
+   "category": "vehicles",
+   "out": "m292-artillery.webp",
+   "names": [
+    "M292A2 Self Propelled Artillery"
+   ],
+   "refIds": [
+    "m292-artillery"
+   ],
+   "generated": true,
+   "seed": 198379657,
+   "file": "scripts/.scratch/generated/m292-artillery.png",
+   "prompt": "M292A2 self propelled artillery, tracked vehicle with huge howitzer gun, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "m201-mlrs": {
+   "category": "vehicles",
+   "out": "m201-mlrs.webp",
+   "names": [
+    "M201 Multiple Launch Rocket System"
+   ],
+   "refIds": [
+    "m201-mlrs"
+   ],
+   "generated": true,
+   "seed": 241015514,
+   "file": "scripts/.scratch/generated/m201-mlrs.png",
+   "prompt": "M201 multiple launch rocket system, tracked vehicle with rocket pod turret, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "ud4l-cheyenne": {
+   "category": "vehicles",
+   "out": "ud4l-cheyenne.webp",
+   "names": [
+    "UA Northridge UD-4L Cheyenne Dropship"
+   ],
+   "refIds": [
+    "ud4l-cheyenne"
+   ],
+   "generated": true,
+   "seed": 1643965598,
+   "file": "scripts/.scratch/generated/ud4l-cheyenne.png",
+   "prompt": "UD-4L Cheyenne VTOL dropship, olive drab colonial marine dropship with wing weapon pods, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "rf30f-skiff": {
+   "category": "vehicles",
+   "out": "rf30f-skiff.webp",
+   "names": [
+    "RF-30F Class B Service Skiff"
+   ],
+   "refIds": [
+    "rf30f-skiff"
+   ],
+   "generated": true,
+   "seed": 1378942026,
+   "file": "scripts/.scratch/generated/rf30f-skiff.png",
+   "prompt": "RF-30F class B service skiff, small short-range utility spacecraft, side view, industrial sci-fi prop illustration inspired by the 1979 and 1986 Alien films, Weyland-Yutani hardware, matte, muted teal and gunmetal palette, centered on plain dark background, product shot, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "drone": {
+   "category": "xenomorphs",
+   "out": "drone.webp",
+   "names": [
+    "Drone"
+   ],
+   "refIds": [
+    "drone"
+   ],
+   "book": "art",
+   "page": 135,
+   "imageIndex": 0,
+   "crop": [
+    0.1,
+    0.02,
+    0.64,
+    0.98
+   ],
+   "note": "Alien: Isolation XX121 render"
+  },
+  "neophyte": {
+   "category": "xenomorphs",
+   "out": "neophyte.webp",
+   "names": [
+    "Neophyte (Juvenile Neomorph)"
+   ],
+   "refIds": [
+    "neophyte-juvenile-neomorph"
+   ],
+   "book": "crb",
+   "page": 296,
+   "imageIndex": 0,
+   "crop": [
+    0.0,
+    0.04,
+    1.0,
+    0.96
+   ]
+  },
+  "lion-worms": {
+   "category": "xenomorphs",
+   "out": "lion-worms.webp",
+   "names": [
+    "Lion Worms"
+   ],
+   "refIds": [
+    "lion-worms"
+   ],
+   "book": "crb",
+   "page": 323,
+   "imageIndex": 0
+  },
+  "ovomorph": {
+   "category": "xenomorphs",
+   "out": "ovomorph.webp",
+   "names": [
+    "Ovomorph (Egg)"
+   ],
+   "refIds": [
+    "ovomorph-egg"
+   ],
+   "generated": true,
+   "seed": 590826987,
+   "file": "scripts/.scratch/generated/ovomorph.png",
+   "prompt": "xenomorph egg, tall oval leathery organic egg with cross-shaped four-lipped opening on top, veiny grey-brown surface, resting on floor, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "facehugger": {
+   "category": "xenomorphs",
+   "out": "facehugger.webp",
+   "names": [
+    "Facehugger"
+   ],
+   "refIds": [
+    "facehugger"
+   ],
+   "generated": true,
+   "seed": 1811690201,
+   "file": "scripts/.scratch/generated/facehugger.png",
+   "prompt": "facehugger parasite, pale spider-like creature with long finger legs and coiled tail, top view, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "chestburster": {
+   "category": "xenomorphs",
+   "out": "chestburster.webp",
+   "names": [
+    "Chestburster"
+   ],
+   "refIds": [
+    "chestburster"
+   ],
+   "generated": true,
+   "seed": 1356042937,
+   "file": "scripts/.scratch/generated/chestburster.png",
+   "prompt": "xenomorph chestburster, small pale eyeless serpent-like newborn alien with steel teeth, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "stalker": {
+   "category": "xenomorphs",
+   "out": "stalker.webp",
+   "names": [
+    "Stalker"
+   ],
+   "refIds": [
+    "stalker"
+   ],
+   "generated": true,
+   "seed": 1744758634,
+   "file": "scripts/.scratch/generated/stalker.png",
+   "prompt": "xenomorph stalker, lean juvenile black biomechanical alien crouching, elongated head, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "scout": {
+   "category": "xenomorphs",
+   "out": "scout.webp",
+   "names": [
+    "Scout"
+   ],
+   "refIds": [
+    "scout"
+   ],
+   "generated": true,
+   "seed": 392724836,
+   "file": "scripts/.scratch/generated/scout.png",
+   "prompt": "xenomorph scout, slender agile black biomechanical alien on all fours, long tail, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "soldier": {
+   "category": "xenomorphs",
+   "out": "soldier.webp",
+   "names": [
+    "Soldier"
+   ],
+   "refIds": [
+    "soldier"
+   ],
+   "generated": true,
+   "seed": 810495234,
+   "file": "scripts/.scratch/generated/soldier.png",
+   "prompt": "xenomorph warrior soldier, black biomechanical alien with ridged elongated head, standing, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "praetorian": {
+   "category": "xenomorphs",
+   "out": "praetorian.webp",
+   "names": [
+    "Praetorian"
+   ],
+   "refIds": [
+    "praetorian"
+   ],
+   "generated": true,
+   "seed": 1431626896,
+   "file": "scripts/.scratch/generated/praetorian.png",
+   "prompt": "xenomorph praetorian, huge black biomechanical alien guard with crested head shield, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "queen": {
+   "category": "xenomorphs",
+   "out": "queen.webp",
+   "names": [
+    "Queen"
+   ],
+   "refIds": [
+    "queen"
+   ],
+   "generated": true,
+   "seed": 586003642,
+   "file": "scripts/.scratch/generated/queen.png",
+   "prompt": "xenomorph queen, towering black biomechanical alien with enormous crown head crest and six limbs, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "neomorph-egg": {
+   "category": "xenomorphs",
+   "out": "neomorph-egg.webp",
+   "names": [
+    "Neomorphic Egg Sacs"
+   ],
+   "refIds": [
+    "neomorphic-egg-sacs"
+   ],
+   "generated": true,
+   "seed": 596070374,
+   "file": "scripts/.scratch/generated/neomorph-egg.png",
+   "prompt": "neomorph egg sacs, cluster of pale bulbous fungal pods on dark ground, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "bloodburster": {
+   "category": "xenomorphs",
+   "out": "bloodburster.webp",
+   "names": [
+    "Bloodburster"
+   ],
+   "refIds": [
+    "bloodburster"
+   ],
+   "generated": true,
+   "seed": 1522712019,
+   "file": "scripts/.scratch/generated/bloodburster.png",
+   "prompt": "small pale white eyeless newborn creature, smooth translucent skin, slender body and thin tail, wet and slick, crouching on the floor, dark sci-fi horror creature illustration, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "adult-neomorph": {
+   "category": "xenomorphs",
+   "out": "adult-neomorph.webp",
+   "names": [
+    "Adult Neomorph"
+   ],
+   "refIds": [
+    "adult-neomorph"
+   ],
+   "generated": true,
+   "seed": 949027090,
+   "file": "scripts/.scratch/generated/adult-neomorph.png",
+   "prompt": "adult neomorph, pale white translucent humanoid alien with smooth bulbous head, standing, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "swarm": {
+   "category": "xenomorphs",
+   "out": "swarm.webp",
+   "names": [
+    "The Swarm"
+   ],
+   "refIds": [
+    "the-swarm"
+   ],
+   "generated": true,
+   "seed": 1772573345,
+   "file": "scripts/.scratch/generated/swarm.png",
+   "prompt": "swarm of alien insects, dark cloud of small glowing beetle-like creatures, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "harvesters": {
+   "category": "xenomorphs",
+   "out": "harvesters.webp",
+   "names": [
+    "Harvesters"
+   ],
+   "refIds": [
+    "harvesters"
+   ],
+   "generated": true,
+   "seed": 325110765,
+   "file": "scripts/.scratch/generated/harvesters.png",
+   "prompt": "harvester, large alien grazing beast like an armored rhino-boar, thick grey hide, curved tusks, four sturdy legs, dark sci-fi horror creature illustration, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "tanakan-scorpionids": {
+   "category": "xenomorphs",
+   "out": "tanakan-scorpionids.webp",
+   "names": [
+    "Tanakan Scorpionids"
+   ],
+   "refIds": [
+    "tanakan-scorpionids"
+   ],
+   "generated": true,
+   "seed": 627108536,
+   "file": "scripts/.scratch/generated/tanakan-scorpionids.png",
+   "prompt": "tanakan scorpionid, large alien arthropod scorpion with segmented carapace and stinger, biomechanical creature illustration inspired by the Alien films, Giger-style, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "vitiate": {
+   "category": "xenomorphs",
+   "out": "vitiate.webp",
+   "names": [
+    "Vitiate \"Afflicted\""
+   ],
+   "refIds": [
+    "vitiate-afflicted"
+   ],
+   "generated": true,
+   "seed": 1221399113,
+   "file": "scripts/.scratch/generated/vitiate.png",
+   "prompt": "sick human colonist man in work overalls, grey skin with dark veins spreading across face and arms, bloodshot eyes, standing, dark sci-fi horror creature illustration, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "ague": {
+   "category": "xenomorphs",
+   "out": "ague.webp",
+   "names": [
+    "Ague \"Febrile\""
+   ],
+   "refIds": [
+    "ague-febrile"
+   ],
+   "generated": true,
+   "seed": 14060219,
+   "file": "scripts/.scratch/generated/ague.png",
+   "prompt": "feverish infected human colonist woman, sweating pale skin with black lesions, hunched posture, ragged colony clothes, dark sci-fi horror creature illustration, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "lusus": {
+   "category": "xenomorphs",
+   "out": "lusus.webp",
+   "names": [
+    "Lusus \"Freak\""
+   ],
+   "refIds": [
+    "lusus-freak"
+   ],
+   "generated": true,
+   "seed": 200427203,
+   "file": "scripts/.scratch/generated/lusus.png",
+   "prompt": "grotesque mutated human freak, distorted elongated limbs, swollen tumor growths, torn clothing, dark sci-fi horror creature illustration, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  },
+  "nocuous": {
+   "category": "xenomorphs",
+   "out": "nocuous.webp",
+   "names": [
+    "Nocuous \"Terminal\""
+   ],
+   "refIds": [
+    "nocuous-terminal"
+   ],
+   "generated": true,
+   "seed": 1710958930,
+   "file": "scripts/.scratch/generated/nocuous.png",
+   "prompt": "terminal stage infected human mutant, emaciated body fused with a black tumorous mass, barely human, dark sci-fi horror creature illustration, matte, muted teal and gunmetal palette, centered on plain dark background, full body, no text, no logos, no lettering, no title, no watermark, blank background"
+  }
+ }
+}

@@ -29,18 +29,12 @@ These are structured character-creation and reference data for the ALIEN univers
 
 ## Art
 
-`art` holds the name-matched thumbnail from `public/art/{weapons,xenomorphs}/cropped/` (50 items). **A visual audit
-found that every one of the 59 cropped thumbnails is mis-framed.** They show text pages, tables, chapter art or a
-different item's card, apparently because the crops were taken from page images offset by 4 pages and with guessed
-regions. Every mapped item therefore carries `artStatus:"crop-mismatch"`. `artPage` (60 items) points to the
-full-page scan (`/art/weapons/{crb|acm}-weapons-NNN.webp` or `/art/xenomorphs/{crb|acm}-xeno-NNN.webp`, NNN = printed
-page + 4). It shows the page that holds the item's stat card or the creature's stat block, which makes it the more
-reliable picture until the crops are redone. The old `bestiary.js` art paths are off by the same 4 pages: for
-example, `crb-xeno-300.webp` is printed page 296, the adult Neomorph, not the egg.
-
-Thumbnails not mapped to any catalog item, because the item does not exist in either book: `m4a4-pistol`,
-`nsg23-assault-pistol`, `m41a2-pulse-rifle`, `m41a-mk2-pulse-rifle`, `m4ra-battle-rifle`, `m83a2-sadar`,
-`ua571d-sentry`, `m3a1-pattern-armor`, `m108-demolition`.
+`art` points at a verified item picture under `public/art/{weapons,vehicles,xenomorphs}/cropped/`. The pictures were
+rebuilt on 2026-10-30 from the sourcebooks' embedded image objects (`scripts/extract-art.py`, selection recorded in
+`scripts/art-selection.json`); items the books never illustrate have a generated stand-in (`scripts/gen-alien-art.py`,
+marked `generated: true` in the selection file). `public/art/alien-art-map.json` maps item ids and name slugs to
+those files and is the source this catalog's `art` fields were reconciled against. Items without a picture have
+`art: null`.
 
 ## Fidelity notes (please double-check)
 

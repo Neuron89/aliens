@@ -10,9 +10,7 @@
     "signatureAttacks": [],
     "special": "Fungus-like pods (clutches of 2D6) formed when the pathogen meets spores and microbes; disturbing them releases Stage II motes.",
     "tactics": "Destroy with fire, or freeze inert with liquid nitrogen (until they thaw).",
-    "art": "/art/xenomorphs/cropped/neomorph-egg.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/xenomorphs/crb-xeno-297.webp"
+    "art": "/art/xenomorphs/cropped/neomorph-egg.webp"
   },
   {
     "id": "neomorphic-motes",
@@ -26,8 +24,7 @@
     "special": "A puff of near-invisible spore insects that enter an unprotected orifice or wound. Exposure is a disease with Virulence 9: if the first Sickness Roll fails, the host reaches Stage III within a Shift; no further rolls.",
     "tactics": "Smoke repels them and fire kills them; keep orifices and wounds covered.",
     "virulence": 9,
-    "art": null,
-    "artPage": "/art/xenomorphs/crb-xeno-298.webp"
+    "art": null
   },
   {
     "id": "bloodburster",
@@ -70,8 +67,7 @@
     ],
     "special": "Its birth kills the host outright. Takes one Round to struggle free of its sac, then attacks anything alive. Sprint as a slow action. Grows to a Neophyte after D6 Turns once it escapes (a few Turns).",
     "tactics": "Hit it in the Round it is still stuck in its sac; fire or heavy damage then makes it run and hide to grow.",
-    "art": "/art/xenomorphs/cropped/bloodburster.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/bloodburster.webp"
   },
   {
     "id": "neophyte-juvenile-neomorph",
@@ -124,8 +120,7 @@
     ],
     "special": "Sprint as a slow action. Becomes an adult Neomorph after one Shift. The book prints the adult attack table only; juveniles use it too (GM call).",
     "tactics": "Fixates on one victim and ignores damage until critical; only sustained concentrated fire stops it.",
-    "art": "/art/xenomorphs/cropped/neophyte.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/neophyte.webp"
   },
   {
     "id": "adult-neomorph",
@@ -178,8 +173,7 @@
     ],
     "special": "Sprint as a slow action. Burns out and dies naturally within about 24 hours (four Shifts), seeding new spore sacs. Blood is not acidic.",
     "tactics": "A full burst from an automatic weapon drops it; put a finishing shot in the head, as they rise again.",
-    "art": "/art/xenomorphs/cropped/adult-neomorph.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/adult-neomorph.webp"
   },
   {
     "id": "ovomorph-egg",
@@ -199,9 +193,7 @@
     "signatureAttacks": [],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. A potential host at ENGAGED range must pass MOBILITY each Round or the egg opens and releases a facehugger; at SHORT range roll a Stress Die each Round, a facehugger result opens it.",
     "tactics": "Bullets glance off; burn it or blow it up (it splashes acid when it bursts). Extreme cold makes it dormant.",
-    "art": "/art/xenomorphs/cropped/ovomorph.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/xenomorphs/crb-xeno-305.webp"
+    "art": "/art/xenomorphs/cropped/ovomorph.webp"
   },
   {
     "id": "queens-egg",
@@ -221,8 +213,7 @@
     "signatureAttacks": [],
     "special": "Queen-laid eggs are hardier than ovomorphed ones. Same opening rules as an Ovomorph.",
     "tactics": "Fire or explosives.",
-    "art": null,
-    "artPage": "/art/xenomorphs/crb-xeno-305.webp"
+    "art": null
   },
   {
     "id": "facehugger",
@@ -271,8 +262,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Automatically facehugs any immobilized host at ENGAGED range. Victim is unconscious; the hugger dies after a Shift; a Chestburster is born a Shift later, killing the host.",
     "tactics": "Nearly impossible to remove without killing the host; vulnerable to pulse rounds, lasers and fire.",
-    "art": "/art/xenomorphs/cropped/facehugger.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/facehugger.webp"
   },
   {
     "id": "praeto-facehugger",
@@ -414,9 +404,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Birth kills the host; first-time witnesses make a Panic Roll. Evolves to Stage IV within a Shift after feeding on metals and organics.",
     "tactics": "At its weakest now: guns, knives, explosives and fire all work, if you can catch it.",
-    "art": "/art/xenomorphs/cropped/chestburster.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/xenomorphs/crb-xeno-310.webp"
+    "art": "/art/xenomorphs/cropped/chestburster.webp"
   },
   {
     "id": "bambi-burster",
@@ -460,8 +448,7 @@
     ],
     "special": "Four-legged chestburster from a quadruped host; extremely fast.",
     "tactics": "As Chestburster.",
-    "art": null,
-    "artPage": "/art/xenomorphs/crb-xeno-310.webp"
+    "art": null
   },
   {
     "id": "imp",
@@ -505,8 +492,7 @@
     ],
     "special": "Immature Praetomorph that may mimic the nearest creature if unthreatened and matures faster than a chestburster. Note its armor is listed as 0 normally but 3 vs fire.",
     "tactics": "As Chestburster.",
-    "art": null,
-    "artPage": "/art/xenomorphs/crb-xeno-310.webp"
+    "art": null
   },
   {
     "id": "queenburster",
@@ -550,8 +536,7 @@
     ],
     "special": "Embryonic Queen that gestates over days; born with a partial crest, four arms and legs.",
     "tactics": "As Chestburster.",
-    "art": null,
-    "artPage": "/art/xenomorphs/crb-xeno-310.webp"
+    "art": null
   },
   {
     "id": "stalker",
@@ -605,9 +590,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Feral Hunger: whenever an attack deals damage it immediately makes a free extra attack (8 Base Dice, Damage 1) on the same target.",
     "tactics": "Feral, animalistic Praetomorph adult (no Queen stage); can be lured into hazards.",
-    "art": "/art/xenomorphs/cropped/stalker.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/xenomorphs/crb-xeno-313.webp"
+    "art": "/art/xenomorphs/cropped/stalker.webp"
   },
   {
     "id": "scout",
@@ -661,9 +644,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor.",
     "tactics": "Fast runner that finds hosts and alerts the hive; can be tricked into hazards.",
-    "art": "/art/xenomorphs/cropped/scout.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/xenomorphs/crb-xeno-313.webp"
+    "art": "/art/xenomorphs/cropped/scout.webp"
   },
   {
     "id": "drone",
@@ -717,9 +698,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Silent Assassin: targets get -2 OBSERVATION against its stealth rolls and sneak attacks from the same zone.",
     "tactics": "Methodical ambusher that keeps a routine and hibernates near warm machinery; hunt it there.",
-    "art": "/art/xenomorphs/cropped/drone.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/xenomorphs/crb-xeno-313.webp"
+    "art": "/art/xenomorphs/cropped/drone.webp"
   },
   {
     "id": "soldier",
@@ -773,9 +752,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor.",
     "tactics": "Attacks in numbers; pulse rifles and area weapons work best.",
-    "art": "/art/xenomorphs/cropped/soldier.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/xenomorphs/crb-xeno-314.webp"
+    "art": "/art/xenomorphs/cropped/soldier.webp"
   },
   {
     "id": "worker",
@@ -798,8 +775,7 @@
     "signatureAttacks": [],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Builds and tends the hive and ignores threats there; flees when threatened (the book gives it no attack table).",
     "tactics": "Easy to kill, offers little resistance.",
-    "art": null,
-    "artPage": "/art/xenomorphs/crb-xeno-314.webp"
+    "art": null
   },
   {
     "id": "sentry",
@@ -853,8 +829,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor.",
     "tactics": "Never leaves the inner hive unless the Queen does; will sacrifice itself for her.",
-    "art": null,
-    "artPage": "/art/xenomorphs/crb-xeno-314.webp"
+    "art": null
   },
   {
     "id": "praetorian",
@@ -908,8 +883,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor.",
     "tactics": "Royal guard and commander; killing it briefly disorients its Soldiers.",
-    "art": "/art/xenomorphs/cropped/praetorian.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/praetorian.webp"
   },
   {
     "id": "charger-crusher",
@@ -1017,8 +991,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Lays eggs en masse from an egg sac and directs the hive.",
     "tactics": "Don't.",
-    "art": "/art/xenomorphs/cropped/queen.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/queen.webp"
   },
   {
     "id": "the-swarm",
@@ -1066,8 +1039,7 @@
     ],
     "special": "Size is measured in zones; it cannot be killed, only driven off when its Health hits zero.",
     "tactics": "Fire, electricity and pesticides; in space, burn dormant swarms with engine exhaust.",
-    "art": "/art/xenomorphs/cropped/swarm.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/swarm.webp"
   },
   {
     "id": "harvesters",
@@ -1118,9 +1090,7 @@
     "special": "Six-legged burrowing behemoth that navigates by sonar. Underbelly armor is only 5. Hidden Behemoth: sleeps just under the surface; walkers get an OBSERVATION roll to spot weak ground or fall in and give it a free attack. Carries 2D6 young who defend her.",
     "tactics": "Strike the soft underbelly, if you can get close without being ground up.",
     "armorUnderbelly": 5,
-    "art": "/art/xenomorphs/cropped/harvesters.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/xenomorphs/crb-xeno-322.webp"
+    "art": "/art/xenomorphs/cropped/harvesters.webp"
   },
   {
     "id": "harvester-juvenile",
@@ -1145,8 +1115,7 @@
     ],
     "special": "Boar-sized young that ride under the adult's shell and attack if she is in real danger.",
     "tactics": "",
-    "art": null,
-    "artPage": "/art/xenomorphs/crb-xeno-322.webp"
+    "art": null
   },
   {
     "id": "lion-worms",
@@ -1197,8 +1166,7 @@
     ],
     "special": "Ambush Predator: in its own territory, prey get -2 OBSERVATION against it in stealth mode.",
     "tactics": "Confuse it with pollen, pollutants, or the scent of a rival lion worm.",
-    "art": "/art/xenomorphs/cropped/lion-worms.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/lion-worms.webp"
   },
   {
     "id": "tanakan-scorpionids",
@@ -1259,8 +1227,7 @@
       }
     },
     "armorVsBullets": 3,
-    "art": "/art/xenomorphs/cropped/tanakan-scorpionids.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/tanakan-scorpionids.webp"
   },
   {
     "id": "biodrone",
@@ -1315,8 +1282,7 @@
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. Gene-locked at Stage IV (no Queens) and meant to die after six days; when it collapses it has a 50% chance to get back up ('Reborn', no expiry). Still reproduces by ovomorphing captives.",
     "tactics": "Keep shooting after it falls.",
     "note": "Uses the Stage IV Drone attack table (CRB p309).",
-    "art": null,
-    "artPage": "/art/xenomorphs/acm-xeno-180.webp"
+    "art": null
   },
   {
     "id": "goreburster",
@@ -1365,8 +1331,7 @@
     ],
     "special": "XX121 traits: Acid Splash when wounded by blood-drawing damage (rating + damage taken in Base Dice, Damage 1, eats 1 armor per success, keeps burning at half dice each Round); sprint as a slow action (two zones, or straight to ENGAGED) except Stage I; immune to vacuum and cold; ignores the first 10 Rads; needs no air; invisible to IR/thermal; falling damage is meters/4 minus armor. After a damaging hit the victim rolls Sickness vs Virulence 6 every Turn or explodes, until sterilized with UV (AutoDoc, medpod, etc.). Does not mature; dies on its own after a Shift or two.",
     "tactics": "Hazmat gear; trap it or wait it out.",
-    "art": null,
-    "artPage": "/art/xenomorphs/acm-xeno-181.webp"
+    "art": null
   },
   {
     "id": "vitiate-afflicted",
@@ -1379,8 +1344,7 @@
     "signatureAttacks": [],
     "special": "Infected human: paranoia, delirium, endless tears (+1 Stress), worms visible in the eyes late in the stage. Touching one without a hazmat/compression suit: Sickness Roll vs Virulence 4. Each Shift roll vs Virulence 8 or advance to Stage II.",
     "tactics": "Isolation; avoid the contagious eye worms.",
-    "art": "/art/xenomorphs/cropped/vitiate.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/vitiate.webp"
   },
   {
     "id": "ague-febrile",
@@ -1399,8 +1363,7 @@
     ],
     "special": "Feverish, bleeding internally, black eyes, spreading veins (+1 Stress). Contact without protection: Sickness Roll vs Virulence 6. After a Shift, roll vs Virulence 8: success = Stage III, failure = Stage IV.",
     "tactics": "Fire, or nuke it from orbit.",
-    "art": "/art/xenomorphs/cropped/ague.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/ague.webp"
   },
   {
     "id": "lusus-freak",
@@ -1453,8 +1416,7 @@
     ],
     "special": "Rage-driven mutant that attacks all life but can use simple tools. Unprotected contact: Sickness Roll vs Virulence 7. Progresses to Stage IV within a Shift or two.",
     "tactics": "Treat as a full creature; burn it.",
-    "art": "/art/xenomorphs/cropped/lusus.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/lusus.webp"
   },
   {
     "id": "nocuous-terminal",
@@ -1467,8 +1429,7 @@
     "signatureAttacks": [],
     "special": "Disintegrating body loses 1 Health per Round and dies at zero (no Death Roll), releasing the accelerant into the air: unprotected people in the same zone roll Sickness vs Virulence 8, adjacent zone vs 4.",
     "tactics": "Too late: hold your breath, get indoors, bring incinerators.",
-    "art": "/art/xenomorphs/cropped/nocuous.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/xenomorphs/cropped/nocuous.webp"
   },
   {
     "id": "arctura",

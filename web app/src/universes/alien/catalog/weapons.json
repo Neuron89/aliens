@@ -15,9 +15,7 @@
     "tags": [],
     "notes": "Cheap 9mm USCMC sidearm; the classic backup gun.",
     "effects": [],
-    "art": "/art/weapons/cropped/m4a3-service-pistol.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-123.webp"
+    "art": "/art/weapons/cropped/m4a3-service-pistol.webp"
   },
   {
     "id": "357-magnum-revolver",
@@ -35,9 +33,7 @@
     "tags": [],
     "notes": "Heavy-calibre revolver favored by marshals and crooks alike.",
     "effects": [],
-    "art": "/art/weapons/cropped/357-magnum-revolver.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-123.webp"
+    "art": "/art/weapons/cropped/357-magnum-revolver.webp"
   },
   {
     "id": "rexim-rxf-m5-eva-pistol",
@@ -58,9 +54,7 @@
     ],
     "notes": "A laser welder turned self-defense sidearm, standard on W-Y commercial ships.",
     "effects": [],
-    "art": "/art/weapons/cropped/rexim-rxf-m5-eva-pistol.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-123.webp"
+    "art": "/art/weapons/cropped/rexim-rxf-m5-eva-pistol.webp"
   },
   {
     "id": "watatsumi-dv303-bolt-gun",
@@ -90,9 +84,7 @@
         "when": "used as a tool"
       }
     ],
-    "art": "/art/weapons/cropped/watatsumi-dv303-bolt-gun.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-123.webp"
+    "art": "/art/weapons/cropped/watatsumi-dv303-bolt-gun.webp"
   },
   {
     "id": "m41a-pulse-rifle",
@@ -114,9 +106,7 @@
     ],
     "notes": "USCMC standard 10mm caseless pulse rifle with an underslung U1 30mm grenade launcher. Can jam when fully loaded. (The illustration box on p122 lists $1,200 including the launcher; the table says $800.)",
     "effects": [],
-    "art": "/art/weapons/cropped/m41a-pulse-rifle.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-124.webp"
+    "art": "/art/weapons/cropped/m41a-pulse-rifle.webp"
   },
   {
     "id": "ak4047-pulse-assault-rifle",
@@ -136,9 +126,7 @@
     ],
     "notes": "Cheap, nearly indestructible UPP counterpart to the M41A. Restated in ACM p68-69 with the same stats.",
     "effects": [],
-    "art": "/art/weapons/cropped/ak4047-pulse-assault-rifle.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-124.webp"
+    "art": "/art/weapons/cropped/ak4047-pulse-assault-rifle.webp"
   },
   {
     "id": "m42a-scope-rifle",
@@ -158,9 +146,7 @@
     ],
     "notes": "USCMC semi-automatic pulse sniper rifle with bipod and flash suppressor.",
     "effects": [],
-    "art": "/art/weapons/cropped/m42a-scope-rifle.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-124.webp"
+    "art": "/art/weapons/cropped/m42a-scope-rifle.webp"
   },
   {
     "id": "armat-37a2-shotgun",
@@ -180,9 +166,7 @@
     ],
     "notes": "Reliable pump shotgun for close encounters.",
     "effects": [],
-    "art": "/art/weapons/cropped/armat-37a2-shotgun.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-124.webp"
+    "art": "/art/weapons/cropped/armat-37a2-shotgun.webp"
   },
   {
     "id": "asso400-harpoon",
@@ -203,9 +187,7 @@
     ],
     "notes": "Tethered grappling harpoon. On a hit the hook sticks: if the target is heavier you can reel yourself from MEDIUM to ENGAGED (slow action); if you are heavier you can drag it to you (opposed STRENGTH if it resists).",
     "effects": [],
-    "art": "/art/weapons/cropped/asso400-harpoon.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-124.webp"
+    "art": "/art/weapons/cropped/asso400-harpoon.webp"
   },
   {
     "id": "xm99a-plasma-rifle",
@@ -228,9 +210,7 @@
     ],
     "notes": "Prototype plasma rifle. Must be aimed (fast action) before each shot; Power Supply roll after every shot.",
     "effects": [],
-    "art": "/art/weapons/cropped/xm99a-plasma-rifle.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-124.webp"
+    "art": "/art/weapons/cropped/xm99a-plasma-rifle.webp"
   },
   {
     "id": "u1-grenade-launcher",
@@ -252,9 +232,7 @@
     ],
     "notes": "30mm pump launcher (usually under an M41A). Frag: the target takes Blast 9 plus 1 extra damage, everyone else in the zone takes the blast. Smoke blocks line of sight; flash forces a STAMINA roll or lose the next slow action. A miss lands in a random adjacent zone. Can fire other grenade types.",
     "effects": [],
-    "art": "/art/weapons/cropped/u1-grenade-launcher.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-128.webp"
+    "art": "/art/weapons/cropped/u1-grenade-launcher.webp"
   },
   {
     "id": "m41ae2-heavy-pulse",
@@ -275,9 +253,7 @@
     ],
     "notes": "Squad automatic version of the M41A with a long barrel instead of the launcher. (Illustration box p124 shows +2 / Damage 2 / $1,200; table values used.)",
     "effects": [],
-    "art": "/art/weapons/cropped/m41ae2-heavy-pulse.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-128.webp"
+    "art": "/art/weapons/cropped/m41ae2-heavy-pulse.webp"
   },
   {
     "id": "m56a2-smart-gun",
@@ -298,9 +274,7 @@
     ],
     "notes": "Harness-mounted, IR-tracking squad support gun with a head-mounted sight.",
     "effects": [],
-    "art": "/art/weapons/cropped/m56a2-smart-gun.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-128.webp"
+    "art": "/art/weapons/cropped/m56a2-smart-gun.webp"
   },
   {
     "id": "m240-incinerator",
@@ -321,9 +295,7 @@
     ],
     "notes": "Naphtha flamethrower. A target hit also catches fire (Intensity 9).",
     "effects": [],
-    "art": "/art/weapons/cropped/m240-incinerator.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-128.webp"
+    "art": "/art/weapons/cropped/m240-incinerator.webp"
   },
   {
     "id": "ua571c-sentry",
@@ -346,9 +318,7 @@
     ],
     "notes": "Tripod autocannon that is always on overwatch and fires with RANGED COMBAT 8 (no attribute). Can be remote-run via a Head-Mounted Sight. Too heavy to carry.",
     "effects": [],
-    "art": "/art/weapons/cropped/ua571c-sentry.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-128.webp"
+    "art": "/art/weapons/cropped/ua571c-sentry.webp"
   },
   {
     "id": "g2-electroshock-grenade",
@@ -369,9 +339,7 @@
     ],
     "notes": "Listed in the heavy weapons table. Medium range when thrown. Every human in the zone must pass a STAMINA roll at -2 (not an action) or be stunned for a Round.",
     "effects": [],
-    "art": "/art/weapons/cropped/g2-electroshock-grenade.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/crb-weapons-128.webp"
+    "art": "/art/weapons/cropped/g2-electroshock-grenade.webp"
   },
   {
     "id": "unarmed-attack",
@@ -409,7 +377,7 @@
     "tags": [],
     "notes": "Any improvised club: pipe, wrench, extinguisher.",
     "effects": [],
-    "art": null
+    "art": "/art/weapons/cropped/blunt-instrument.webp"
   },
   {
     "id": "knife",
@@ -427,7 +395,7 @@
     "tags": [],
     "notes": "Also covers the 'combat knife' in ACM gear lists.",
     "effects": [],
-    "art": null
+    "art": "/art/weapons/cropped/knife.webp"
   },
   {
     "id": "stun-baton",
@@ -449,7 +417,7 @@
     ],
     "notes": "Cattle prod. A target that takes damage must pass STAMINA (not an action) or be stunned for a Round. Power Supply roll after each attack.",
     "effects": [],
-    "art": null
+    "art": "/art/weapons/cropped/stun-baton.webp"
   },
   {
     "id": "cutting-torch",
@@ -480,7 +448,7 @@
         "when": "used as a tool"
       }
     ],
-    "art": null
+    "art": "/art/weapons/cropped/cutting-torch.webp"
   },
   {
     "id": "bionational-tx9-air-pistol",
@@ -501,8 +469,7 @@
     ],
     "notes": "Dart pistol that delivers drugs, toxins, bioweapons or tracers. Can never deal more than 1 damage, and must deal it to deliver the payload. Tracers last D6 days and can be found with a CBRN kit within 30 km.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-071.webp"
+    "art": null
   },
   {
     "id": "vp70ma6-pistol",
@@ -520,9 +487,7 @@
     "tags": [],
     "notes": "Old officers' sidearm now replacing the M4A3 as the standard Marine pistol.",
     "effects": [],
-    "art": "/art/weapons/cropped/vp70-pistol.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/acm-weapons-071.webp"
+    "art": "/art/weapons/cropped/vp70-pistol.webp"
   },
   {
     "id": "weyland-es4-pistol",
@@ -543,8 +508,7 @@
     ],
     "notes": "A human target that takes damage must pass STAMINA at -2 or be stunned for a Round. Needs a Turn of cleaning daily; if dirty, 2+ facehugger results on Stress Dice can stun the shooter.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-071.webp"
+    "art": "/art/weapons/cropped/weyland-es4-pistol.webp"
   },
   {
     "id": "norcomm-qsz203-pistol",
@@ -564,8 +528,7 @@
     ],
     "notes": "Rugged UPP standard sidearm firing 5.8mm rounds.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-071.webp"
+    "art": null
   },
   {
     "id": "armat-p9-sharp-rifle",
@@ -587,8 +550,7 @@
     ],
     "notes": "Fires sticky explosive darts. Shooting a dart into a zone needs no roll; it blows (Blast 9) after one Round, or at once if anyone but a PDT-tagged Marine moves there. A direct hit (normal attack) detonates immediately: +2 damage and the target's armor is halved.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-073.webp"
+    "art": null
   },
   {
     "id": "norcomm-ak104s-suit-gun",
@@ -610,8 +572,7 @@
     ],
     "notes": "Wrist-mounted rifle built into the CCC5 Combat Compression Suit. Hitting its ammo pack (-2) sets off a Blast 9 explosion that wrecks gun and suit.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-073.webp"
+    "art": null
   },
   {
     "id": "rmc-f903we-assault-rifle",
@@ -631,8 +592,7 @@
     ],
     "notes": "Century-old conventional rifle common with militias and mercenaries.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-073.webp"
+    "art": null
   },
   {
     "id": "nsg23-assault-rifle",
@@ -652,9 +612,7 @@
     ],
     "notes": "3WE Royal Marine service rifle with a drum magazine; includes an ID23 underbarrel incinerator.",
     "effects": [],
-    "art": "/art/weapons/cropped/nsg23-assault-rifle.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/acm-weapons-073.webp"
+    "art": "/art/weapons/cropped/nsg23-assault-rifle.webp"
   },
   {
     "id": "id23-underbarrel-incinerator",
@@ -676,8 +634,7 @@
     ],
     "notes": "Compact flamethrower that clips under a rifle (included with the NSG23). A target hit catches fire, Intensity 7.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-073.webp"
+    "art": null
   },
   {
     "id": "u4a2-grenade-launcher",
@@ -697,8 +654,7 @@
     ],
     "notes": "Rapid-fire dedicated launcher built for CBRN sterilization teams; usually loaded with U4 QTC firebombs. Damage depends on the grenade type.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-076.webp"
+    "art": null
   },
   {
     "id": "m5a3-rpg-launcher",
@@ -719,9 +675,7 @@
     ],
     "notes": "Shoulder-fired rocket launcher with telescopic sight. Listed as the 'M5 RPG' in Assault Marine gear.",
     "effects": [],
-    "art": "/art/weapons/cropped/m5-rpg.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/acm-weapons-076.webp"
+    "art": "/art/weapons/cropped/m5-rpg.webp"
   },
   {
     "id": "norcomm-rpg122",
@@ -742,8 +696,7 @@
     ],
     "notes": "Bare-bones UPP launcher without a proper sight; reload after every shot.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-076.webp"
+    "art": null
   },
   {
     "id": "weyland-72a-lew",
@@ -765,8 +718,7 @@
     ],
     "notes": "Shoulder-mounted directed-energy cannon. Damage drops by 1 per range band beyond SHORT. Must recharge two Rounds after each shot (fires every other Round).",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-076.webp"
+    "art": null
   },
   {
     "id": "m78-pig",
@@ -787,9 +739,7 @@
     ],
     "notes": "USCMC light energy weapon. Damage drops by 1 per range band beyond SHORT.",
     "effects": [],
-    "art": "/art/weapons/cropped/m78-pig.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/acm-weapons-076.webp"
+    "art": "/art/weapons/cropped/m78-pig.webp"
   },
   {
     "id": "ua-102-20-phalanx",
@@ -814,8 +764,7 @@
     ],
     "notes": "Twenty-beam close-in weapon system. Focused mode: Damage 7, EXTREME range, no full auto. Needs two Rounds to recharge between cycles on battery/vehicle power; firing anyway risks a Blast 12 self-destruction (Stress Die facehugger) and costs the user Stress. Illegal for civilians.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-076.webp"
+    "art": null
   },
   {
     "id": "m40-hedp-grenade",
@@ -838,9 +787,7 @@
     ],
     "notes": "Launcher round for U1/U4 that can also be hand-thrown (MEDIUM range): pull the cap, press, three seconds.",
     "effects": [],
-    "art": "/art/weapons/cropped/m40-hedp-grenade.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/acm-weapons-078.webp"
+    "art": "/art/weapons/cropped/m40-hedp-grenade.webp"
   },
   {
     "id": "m72a1-starshell-flare",
@@ -861,8 +808,7 @@
     ],
     "notes": "U1/U4 flare that lights one zone for D6 Rounds. A crit inflicted by firing it at a person is always #15.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-078.webp"
+    "art": null
   },
   {
     "id": "m230-baton-rounds",
@@ -884,8 +830,7 @@
     ],
     "notes": "Rubber riot rounds for U1/U4. Any crit is #16, #24 or #33 (equal odds).",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-078.webp"
+    "art": null
   },
   {
     "id": "m108-buckshot-canister",
@@ -906,8 +851,7 @@
     ],
     "notes": "Oversized shotgun shell for U1/U4; SHORT range.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-078.webp"
+    "art": null
   },
   {
     "id": "u4-qtc-firebomb",
@@ -929,8 +873,7 @@
     ],
     "notes": "Decontamination round that floods the target zone with Intensity 12 fire.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-078.webp"
+    "art": null
   },
   {
     "id": "type-4-breaching-charge",
@@ -952,8 +895,7 @@
     ],
     "notes": "Adhesive door/wall charge on timer or remote. Against the object it is stuck to, damage +2 and armor piercing.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-078.webp"
+    "art": null
   },
   {
     "id": "m20-claymore",
@@ -975,9 +917,7 @@
     ],
     "notes": "Laser-tripwire anti-personnel mine triggered at SHORT range; spotting it takes an OBSERVATION roll even when searching.",
     "effects": [],
-    "art": "/art/weapons/cropped/m20-claymore.webp",
-    "artStatus": "crop-mismatch",
-    "artPage": "/art/weapons/acm-weapons-078.webp"
+    "art": "/art/weapons/cropped/m20-claymore.webp"
   },
   {
     "id": "m111-anti-vehicle-mine",
@@ -1000,8 +940,7 @@
     ],
     "notes": "Pressure mine set off at ENGAGED range; against the triggering target damage +2 and armor piercing.",
     "effects": [],
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-078.webp"
+    "art": null
   },
   {
     "id": "cn20-nerve-agent",

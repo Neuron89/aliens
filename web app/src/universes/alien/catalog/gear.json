@@ -773,8 +773,7 @@
     "weight": null,
     "cost": null,
     "notes": "Costs four times normal ammo (a normal reload is ~5% of the weapon's price). Lowers target armor by 2 after piercing/doubling; each hit also gives 1 Rad; carrying a loaded weapon gives you 1 Rad per Shift.",
-    "art": null,
-    "artPage": "/art/weapons/crb-weapons-127.webp"
+    "art": null
   },
   {
     "id": "signal-flare",
@@ -1267,8 +1266,7 @@
     "weight": null,
     "cost": null,
     "notes": "Named only in ACM starting gear; no stat line given.",
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-066.webp"
+    "art": null
   },
   {
     "id": "survival-kit",
@@ -1279,7 +1277,6 @@
     "weight": null,
     "cost": null,
     "notes": "Named only in ACM starting gear; no stat line given.",
-    "art": null,
-    "artPage": "/art/weapons/acm-weapons-066.webp"
+    "art": null
   }
 ]

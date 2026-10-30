@@ -15,8 +15,7 @@
     "notes": "USCMC vest, abdomen pad and greaves with a built-in comm unit, PDT, webbing and vitals telemetry.",
     "effects": [],
     "airSupply": null,
-    "art": "/art/weapons/cropped/m3-personnel-armor.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/weapons/cropped/m3-personnel-armor.webp"
   },
   {
     "id": "irc-mk50-compression",
@@ -41,8 +40,7 @@
       }
     ],
     "airSupply": 5,
-    "art": "/art/weapons/cropped/irc-mk50-compression.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/weapons/cropped/irc-mk50-compression.webp"
   },
   {
     "id": "irc-mk35-pressure",
@@ -59,8 +57,7 @@
     "notes": "Cheap, bulky USCMC combat pressure suit; joints stiffen under strain and it needs decompression time after EVA. Heavy item.",
     "effects": [],
     "airSupply": 4,
-    "art": "/art/weapons/cropped/irc-mk35-pressure.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/weapons/cropped/irc-mk35-pressure.webp"
   },
   {
     "id": "eco-all-world-suit",
@@ -78,8 +75,7 @@
     "notes": "Articulated EVA hardsuit with HUD and maneuvering thrusters; its comm array is unshielded. Heavy item.",
     "effects": [],
     "airSupply": 6,
-    "art": "/art/weapons/cropped/eco-all-world-suit.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/weapons/cropped/eco-all-world-suit.webp"
   },
   {
     "id": "wy-apesuit",
@@ -103,8 +99,7 @@
       }
     ],
     "airSupply": 4,
-    "art": "/art/weapons/cropped/wy-apesuit.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/weapons/cropped/wy-apesuit.webp"
   },
   {
     "id": "p5000-power-loader",
@@ -134,8 +129,7 @@
       }
     ],
     "airSupply": null,
-    "art": "/art/weapons/cropped/p5000-power-loader.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/weapons/cropped/p5000-power-loader.webp"
   },
   {
     "id": "m10-ballistic-helmet",
@@ -153,8 +147,7 @@
     "notes": "Part of the M3 armor set: tactical camera feed, passive IR sight and an IFF transmitter that keeps sentry guns off you. No separate rating or price.",
     "effects": [],
     "airSupply": null,
-    "art": "/art/weapons/cropped/m10-ballistic-helmet.webp",
-    "artStatus": "crop-mismatch"
+    "art": "/art/weapons/cropped/m10-ballistic-helmet.webp"
   },
   {
     "id": "kevlar-riot-vest",
