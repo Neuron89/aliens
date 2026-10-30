@@ -29,6 +29,7 @@ import { listUniverseIds, loadUniverseCore } from './generator/universes.js';
 import { appendLog, logOf } from './sessionLog.js';
 import {
   MAX_ROLLS, emptyInitiative, publicPools, publicInitiative, crewSupply, afterPlayerRoll, wireMechanics, clearPanicIfGone,
+  sanitizeDetermination,
 } from './mechanics.js';
 
 const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -138,6 +139,7 @@ function getPlayerData(player) {
     supply: player.supply || {},
     injuries: player.injuries || [],
     panic: player.panic || null,
+    determination: player.determination || null,
   };
 }
 
@@ -796,7 +798,7 @@ export function attachSessions(io) {
 
     /* ─── DM: Assign Character { character, tracks, trackMax, conditions[] } (ack { success } | { error }) ───
        character: plain object ≤ 64 KB with a string id; gear (if present) an array — non-strings dropped. */
-    on('assign-character', ({ gameCode, playerId, character, tracks, trackMax, conditions }, callback) => {
+    on('assign-character', ({ gameCode, playerId, character, tracks, trackMax, conditions, determination }, callback) => {
       const game = dmOf(socket, gameCode);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const player = game.players.get(playerId);
@@ -823,6 +825,8 @@ export function attachSessions(io) {
       player.statusEffects = [];
       player.injuries = [];
       player.panic = null;
+      // Per-character DETERMINATION (universe rules.determination, sent by the DM client): { value, max } or none.
+      player.determination = sanitizeDetermination(determination);
       player.conditions = Object.fromEntries((Array.isArray(conditions) ? conditions : []).slice(0, 40)
         .map((c) => String(c).slice(0, 60)).filter(isSafeKey).map((c) => [c, false]));
 
@@ -1552,7 +1556,8 @@ export function attachSessions(io) {
       callback?.({ success: true, entry: e });
     });
 
-    /* ─── Player: Submit a player-built character { character } (from an unassigned seat) ─── */
+    /* ─── Player: Submit a player-built character { character } — any seat, any time (first character,
+       or a replacement after a death / by choice; the GM assigns it with assign-character) ─── */
     on('character-submit', (payload, callback) => {
       const { game, player } = playerCtx();
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });

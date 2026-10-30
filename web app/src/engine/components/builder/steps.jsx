@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { attributeLabel, derivedDisplay } from '../../rulesUtils';
 import { skillPool, startingGearFor, talentsFor, generalTalents, evalFormula } from '../../catalogUtils';
-import { attrCap, skillCap, skillFloor, sum, talentString, talentName } from './builderState';
+import { attrCap, skillCap, skillFloor, sum, talentString, talentName, unassignedValues, suggestedArray } from './builderState';
 import { EffectChip } from '../sheet/parts';
 
 /* ── Step 1: career / archetype ───────────────────────────────── */
@@ -83,7 +83,105 @@ function Budget({ used, total, unit = 'POINTS' }) {
 }
 
 /* ── Step 2: attributes / drives ──────────────────────────────── */
-export function AttributesStep({ universe, T, career, caps, char, setAttr, setStatement }) {
+export function AttributesStep(props) {
+  if (props.caps.attrArray && props.assignValue) return <ArrayAttributesStep {...props} />;
+  return <PointBuyAttributesStep {...props} />;
+}
+
+/* Fixed array (rules.creation.attrArray, e.g. DUNE 8/7/6/5/4): each value goes to exactly one
+   drive. Tap a value chip, then a drive (or drag the chip onto it); tap a placed value to pick it
+   up and move it (the two drives swap); × returns it to the tray. SUGGESTED fills the archetype's
+   spread (key attribute highest, then the drives its key skills lean on). */
+function ArrayAttributesStep({ universe, T, career, caps, char, assignValue, applySuggested, setStatement }) {
+  const rules = universe.rules;
+  const attrs = rules.attributes || [];
+  const keys = attrs.map((a) => a.key);
+  const left = unassignedValues(caps.attrArray, char.attributes, keys);
+  const [held, setHeld] = useState(null); // { value, from: key|null }
+  const [over, setOver] = useState(null);
+  const noun = T.attributes.toLowerCase().replace(/s$/, '');
+  const suggestion = career ? suggestedArray(universe, career, caps.attrArray) : null;
+  const sugText = suggestion ? attrs.slice().sort((a, b) => (suggestion[b.key] || 0) - (suggestion[a.key] || 0))
+    .map((a) => `${a.short || a.label.toUpperCase()} ${suggestion[a.key]}`).join(' · ') : '';
+
+  const drop = (key, value) => { assignValue(key, value); setHeld(null); setOver(null); };
+  const tapSlot = (key) => {
+    const cur = Number(char.attributes[key]) || 0;
+    if (held) { if (held.from !== key) drop(key, held.value); else setHeld(null); return; }
+    if (cur) setHeld({ value: cur, from: key });
+  };
+  const dragProps = (value, from) => ({
+    draggable: true,
+    onDragStart: (e) => { e.dataTransfer.setData('text/plain', JSON.stringify({ value, from })); e.dataTransfer.effectAllowed = 'move'; setHeld({ value, from }); },
+    onDragEnd: () => setOver(null),
+  });
+  const dropProps = (key) => ({
+    onDragOver: (e) => { e.preventDefault(); setOver(key); },
+    onDragLeave: () => setOver((o) => (o === key ? null : o)),
+    onDrop: (e) => {
+      e.preventDefault();
+      let d = null;
+      try { d = JSON.parse(e.dataTransfer.getData('text/plain')); } catch { /* ignore */ }
+      if (d?.value && d.from !== key) drop(key, d.value); else { setHeld(null); setOver(null); }
+    },
+  });
+
+  return (
+    <div className="panel">
+      <div className={`cb-budget${left.length === 0 ? ' done' : ''}`}>
+        <span>VALUES LEFT</span><b>{left.length}</b><span>/ {caps.attrArray.length}</span>
+      </div>
+      <p className="cb-hint">
+        Assign {caps.attrArray.join(' / ')} — exactly one value per {noun}. Tap a value, then a {noun} (or drag it there).
+        Tap a placed value to move it; the two {noun}s swap.
+      </p>
+      <div className="cb-array-tray" role="group" aria-label="Values to assign">
+        {left.length === 0 && <span className="cb-array-done">ALL VALUES PLACED</span>}
+        {left.map((v, i) => {
+          const isHeld = !!held && !held.from && held.value === v && left.indexOf(v) === i;
+          return (
+            <button type="button" key={`${v}-${i}`} className={`cb-array-chip${isHeld ? ' held' : ''}`} aria-pressed={isHeld}
+              aria-label={`Value ${v}`} onClick={() => setHeld(isHeld ? null : { value: v, from: null })} {...dragProps(v, null)}>{v}</button>
+          );
+        })}
+      </div>
+      {suggestion && (
+        <button type="button" className="cb-array-suggest" onClick={() => { applySuggested(); setHeld(null); }}>
+          <b>SUGGESTED</b><span>{career.name.toUpperCase()}: {sugText}</span>
+        </button>
+      )}
+      <div className="cb-rows">
+        {attrs.map((a) => {
+          const v = Number(char.attributes[a.key]) || 0;
+          const isKey = career?.keyAttribute === a.key;
+          const target = !!held && held.from !== a.key;
+          return (
+            <div key={a.key} className={`cb-row${isKey ? ' key' : ''}`}>
+              <div className="cb-row-main">
+                <span className="cb-row-label">{a.label}{isKey && <span className="cs-key">KEY</span>}{suggestion && <small>suggested {suggestion[a.key]}</small>}</span>
+                <span className="cb-array-slotwrap">
+                  <button type="button" className={`cb-array-slot${v ? ' filled' : ''}${target ? ' target' : ''}${over === a.key ? ' over' : ''}${held?.from === a.key ? ' held' : ''}`}
+                    onClick={() => tapSlot(a.key)} aria-label={`${a.label}: ${v || 'unassigned'}${target ? ` — place ${held.value}` : ''}`}
+                    {...dropProps(a.key)} {...(v ? dragProps(v, a.key) : {})}>
+                    {v || '—'}
+                  </button>
+                  <button type="button" className="cb-array-clear" aria-label={`Clear ${a.label}`} disabled={!v}
+                    onClick={() => { assignValue(a.key, 0); setHeld(null); }}>×</button>
+                </span>
+              </div>
+              {a.prompt && (
+                <input className="cb-input cb-statement" value={char.driveStatements?.[a.key] || ''} onChange={(e) => setStatement(a.key, e.target.value)}
+                  placeholder={a.prompt} aria-label={`${a.label} statement`} maxLength={160} />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PointBuyAttributesStep({ universe, T, career, caps, char, setAttr, setStatement }) {
   const rules = universe.rules;
   const used = sum(char.attributes);
   const derived = derivedDisplay(universe, char);

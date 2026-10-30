@@ -36,6 +36,8 @@ export const EVENT_NAMES = Object.freeze([
   // mechanics wave
   'gm-roll', 'panic-result', 'supply-set', 'supply-roll', 'pools-init', 'pool-set', 'pool-delta',
   'init-set', 'init-step', 'init-goto', 'init-round', 'init-end', 'init-pass', 'injury-add', 'injury-remove',
+  // builder gaps (determination)
+  'determination-spend', 'determination-grant',
 ]);
 
 export const RESERVED_IDS = Object.freeze(new Set(['__proto__', 'constructor', 'prototype']));

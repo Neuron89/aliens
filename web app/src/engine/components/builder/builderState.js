@@ -37,7 +37,60 @@ export function capsFor(universe, career) {
     requiredSkillMin: c.requiredSkillMin || 0,
     talents: c.talents ?? 1,
     allowGeneralTalents: !!c.allowGeneralTalents,
+    // Fixed array (e.g. DUNE drives 8/7/6/5/4): each value goes to exactly one attribute; no point-buy.
+    attrArray: Array.isArray(c.attrArray) && c.attrArray.length ? c.attrArray.map(Number) : null,
   };
+}
+
+/* ── Fixed attribute array helpers (rules.creation.attrArray) ── */
+const sortedDesc = (a) => [...a].map(Number).sort((x, y) => y - x);
+
+/** True when the attribute values are exactly a permutation of the array. */
+export function isArrayPermutation(attributes, array, keys) {
+  const vals = (keys || Object.keys(attributes || {})).map((k) => Number(attributes?.[k]) || 0);
+  return vals.length === array.length && sortedDesc(vals).join(',') === sortedDesc(array).join(',');
+}
+
+/** Array values not yet assigned (multiset difference), highest first. */
+export function unassignedValues(array, attributes, keys) {
+  const left = sortedDesc(array);
+  for (const k of keys) {
+    const i = left.indexOf(Number(attributes?.[k]) || 0);
+    if (i >= 0) left.splice(i, 1);
+  }
+  return left;
+}
+
+/** Assign `value` to `key` (0 clears). If every copy of the value is taken, the attribute
+    holding it swaps with `key`'s previous value, so each value stays on exactly one attribute. */
+export function assignArrayValue(attributes, array, keys, key, value) {
+  const next = { ...attributes };
+  const prev = Number(next[key]) || 0;
+  const v = Number(value) || 0;
+  if (!v) { next[key] = 0; return next; }
+  const free = unassignedValues(array, { ...next, [key]: 0 }, keys);
+  if (!free.includes(v)) {
+    const holder = keys.find((k) => k !== key && Number(next[k]) === v);
+    if (holder) next[holder] = prev; // swap
+  }
+  next[key] = v;
+  return next;
+}
+
+/** Suggested spread for an archetype: key attribute gets the highest value, the drives
+    suggested by its key skills (rules.skills[].suggestedAttr | attr) come next, then the rest in order. */
+export function suggestedArray(universe, career, array) {
+  const keys = (universe?.rules?.attributes || []).map((a) => a.key);
+  const order = [];
+  const push = (k) => { if (k && keys.includes(k) && !order.includes(k)) order.push(k); };
+  push(career?.keyAttribute);
+  for (const sk of career?.keySkills || []) {
+    const s = (universe?.rules?.skills || []).find((x) => x.key === sk);
+    push(s?.suggestedAttr || s?.attr);
+  }
+  keys.forEach(push);
+  const vals = sortedDesc(array);
+  return Object.fromEntries(order.map((k, i) => [k, vals[i] ?? 0]));
 }
 
 export const sum = (obj) => Object.values(obj || {}).reduce((a, b) => a + (Number(b) || 0), 0);
@@ -72,7 +125,8 @@ export function blankState(universe) {
       name: '',
       career: '',
       appearance: '',
-      attributes: Object.fromEntries((rules.attributes || []).map((a) => [a.key, caps.attrMin])),
+      // Array universes start unassigned (0); point-buy universes start every attribute at attrMin.
+      attributes: Object.fromEntries((rules.attributes || []).map((a) => [a.key, caps.attrArray ? 0 : caps.attrMin])),
       skills: Object.fromEntries((rules.skills || []).map((s) => [s.key, caps.skillMin])),
       talent: '',
       gear: [],
@@ -136,7 +190,13 @@ export function validateStep(stepId, state, universe, catalog) {
     if (catalog.careers.length && !career) errs.push('Choose one.');
     if (!catalog.careers.length && !String(char.career || '').trim()) errs.push('Enter a career.');
   }
-  if (stepId === 'attributes') {
+  if (stepId === 'attributes' && caps.attrArray) {
+    const keys = (rules.attributes || []).map((a) => a.key);
+    const left = unassignedValues(caps.attrArray, char.attributes, keys);
+    const missing = keys.filter((k) => !(Number(char.attributes[k]) > 0));
+    if (missing.length) errs.push(`${missing.length} unassigned — place ${left.length ? left.join(', ') : 'the remaining values'}.`);
+    else if (!isArrayPermutation(char.attributes, caps.attrArray, keys)) errs.push(`Values must be exactly ${caps.attrArray.join(' / ')} — one each.`);
+  } else if (stepId === 'attributes') {
     const used = sum(char.attributes);
     if (used !== caps.attrPoints) errs.push(used < caps.attrPoints ? `${caps.attrPoints - used} point(s) left to spend.` : `${used - caps.attrPoints} point(s) over budget.`);
     for (const a of rules.attributes || []) {

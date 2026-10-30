@@ -1166,11 +1166,11 @@
         "truth": "I was raised on a lullaby about a son given to the stars, and I never asked whose son."
       },
       "attributes": {
-        "duty": 6,
-        "faith": 6,
-        "justice": 4,
         "power": 8,
-        "truth": 6
+        "duty": 7,
+        "faith": 6,
+        "truth": 5,
+        "justice": 4
       },
       "skills": {
         "battle": 4,
@@ -1212,10 +1212,10 @@
       },
       "attributes": {
         "duty": 8,
-        "faith": 6,
+        "faith": 7,
         "justice": 6,
-        "power": 4,
-        "truth": 6
+        "truth": 5,
+        "power": 4
       },
       "skills": {
         "battle": 4,

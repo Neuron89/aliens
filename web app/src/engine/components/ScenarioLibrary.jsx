@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
 import { useGame } from '../GameContext';
@@ -6,6 +6,7 @@ import ScenarioDetail from './ScenarioDetail';
 import ScenarioPlayer from './ScenarioPlayer';
 import PackImportExport, { ExportPackButton } from './PackImportExport';
 import GameNightWizard from './GameNightWizard';
+import { onNavReselect } from './Nav';
 import Motif from './fx/Motifs';
 import { play } from '../sfx';
 
@@ -38,6 +39,8 @@ export default function ScenarioLibrary({ tts }) {
   const { packId: sessionPackId } = useGame();
   const [selected, setSelected] = useState(null);
   const [playing, setPlaying] = useState(false);
+  /* SCENARIOS tab clicked while already on it → back to the library (Nav NAV_RESELECT). */
+  useEffect(() => onNavReselect('scenarios', () => { setSelected(null); setPlaying(false); }), []);
   const [typeFilter, setTypeFilter] = useState('all');
   const [sourceFilter, setSourceFilter] = useState('all');
   const [showImport, setShowImport] = useState(false);

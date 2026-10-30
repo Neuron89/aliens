@@ -16,6 +16,7 @@
      player.supply     { air, power, food, water } (0–12)
      player.injuries   [{ id, name, text, roll, fatal, healTime, at }]
      player.panic      { total, effectId, name, text, panicAction, at } | null
+     player.determination { value, max } | null   (DUNE; determination-spend / determination-grant)
    ═══════════════════════════════════════════════════════════════ */
 import { randomBytes } from 'crypto';
 import { safeOn, isSafeKey } from './guard.js';
@@ -154,6 +155,20 @@ export function crewSupply(game, pcName) {
   return out;
 }
 
+/** Roll flags as the table sees them: PANIC supersedes BOTCH (botch = zero successes, no panic);
+    same rule as src/engine/rulesUtils.js displayFlags (feed + phone). */
+export function tableFlags(flags) {
+  const list = Array.isArray(flags) ? flags.filter((f) => typeof f === 'string').slice(0, 6).map((f) => f.slice(0, 20)) : [];
+  return list.includes('panic') ? list.filter((f) => f !== 'botch') : list;
+}
+
+/** Per-character DETERMINATION { value, max } (max 1–9, value clamped) or null. */
+export function sanitizeDetermination(input) {
+  if (!input || typeof input !== 'object') return null;
+  const max = int(input.max, 1, 9, 3);
+  return { value: int(input.value, 0, max, 0), max };
+}
+
 /** Board-safe roll for the TV toast. */
 export function boardRoll(entry, name) {
   const r = entry.roll || {};
@@ -166,7 +181,7 @@ export function boardRoll(entry, name) {
     summary: sstr(r.summary, 160),
     kind: sstr(r.kind, 12),
     dice: { base: nums(dice.base), stress: nums(dice.stress), d20: nums(dice.d20) },
-    flags: Array.isArray(r.flags) ? r.flags.filter((f) => typeof f === 'string').slice(0, 6).map((f) => f.slice(0, 20)) : [],
+    flags: tableFlags(r.flags),
     at: entry.at,
   };
 }
@@ -291,6 +306,54 @@ export function wireMechanics(socket, ctx) {
     touch(game);
     emitTable(game, { dmOnly: true });
     callback?.({ success: true, id: entry.id });
+  });
+
+  /* ─── Player (own seat): spend 1 DETERMINATION { reason? } ───
+     Validates value ≥ 1, logs it, and drops an entry into the GM roll feed (table.rolls, DM-only)
+     plus a one-shot `determination-spent { playerId, name, value, max, reason, at }` to the DM. */
+  on('determination-spend', (payload, callback) => {
+    const { game, player } = playerCtx();
+    if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+    const det = player.determination;
+    if (!player.character || !det) return callback?.({ error: 'No determination to spend.' });
+    if (player.alive === false) return callback?.({ error: 'Character is out of play.' });
+    if (!(det.value >= 1)) return callback?.({ error: 'NO DETERMINATION LEFT.' });
+    det.value -= 1;
+    const reason = sstr(payload.reason, 80).trim();
+    const t = tableOf(game);
+    const entry = {
+      id: uid('r'), clientId: null, playerId: player.id, playerName: player.name, characterName: pcName(player),
+      roll: { kind: 'determination', label: 'DETERMINATION', summary: `Spent 1 DETERMINATION (${det.value}/${det.max} left)${reason ? ` — ${reason}` : ''}`, flags: ['determination'] },
+      at: Date.now(),
+    };
+    t.rolls.push(entry);
+    if (t.rolls.length > MAX_ROLLS) t.rolls.splice(0, t.rolls.length - MAX_ROLLS);
+    logTo(game, 'pool', `${pcName(player)} spends DETERMINATION → ${det.value}/${det.max}${reason ? ` (${reason})` : ''}`, { playerId: player.id });
+    toDM(game, 'roll', { roll: entry });
+    toDM(game, 'determination-spent', { playerId: player.id, name: pcName(player), value: det.value, max: det.max, reason, at: entry.at });
+    playerUpdated(game, player);
+    touch(game);
+    emitTable(game, { dmOnly: true });
+    callback?.({ success: true, determination: { ...det } });
+  });
+
+  /* ─── DM: grant DETERMINATION { playerId, delta = +1, max? } (clamped 0–max; max from rules.determination
+     when the seat has none yet, e.g. a character assigned before the feature existed) ─── */
+  on('determination-grant', (payload, callback) => {
+    const game = dmTableGame(socket, payload);
+    if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+    const player = game.players.get(payload.playerId);
+    if (!player) return callback?.({ error: 'Unknown player.' });
+    if (!player.character) return callback?.({ error: 'No character assigned.' });
+    const det = player.determination || sanitizeDetermination({ value: 0, max: payload.max ?? 3 });
+    const before = det.value;
+    det.value = int(before + int(payload.delta ?? 1, -9, 9, 1), 0, det.max, before);
+    player.determination = det;
+    if (det.value !== before) {
+      logTo(game, 'pool', `${pcName(player)} DETERMINATION ${det.value > before ? '+' : ''}${det.value - before} → ${det.value}/${det.max} (GM)`, { playerId: player.id });
+    }
+    playerUpdated(game, player);
+    done(game, callback, { determination: { ...det } });
   });
 
   /* ─── Player (own) / DM ({ playerId }): panic result { rollId?, total, die?, effect: { id, name, text, stressDelta, panicAction, status? } } ───

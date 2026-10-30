@@ -1,8 +1,10 @@
 import React, { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import TokenChip from './TokenChip';
+import TokenChip, { chipMetrics } from './TokenChip';
 import RoomLayer from './RoomLayer';
 import EngineLayer from './EngineLayer';
+import AsciiLayer from './AsciiLayer';
 import { engineConfig, mapVisuals } from './mapDefs';
+import { parseAsciiMapCached, ASCII_CELL_PX } from '../../maps/asciiMap';
 
 /* Burn-in-safe idle drift offsets (screen px), stepped every 60 s while idle. */
 const DRIFT = [[0, 0], [1, 1], [2, 0], [1, -1], [0, -2], [-1, -1], [-2, 0], [-1, 1]];
@@ -37,10 +39,56 @@ const CURSOR_MS = 3000;
 const KIND_ORDER = { marker: 0, hazard: 0, item: 1, npc: 2, creature: 3, pc: 4 };
 const clamp01 = (n) => Math.min(1, Math.max(0, n));
 
-function asciiBox(text) {
-  const lines = String(text || '').replace(/\r/g, '').split('\n');
-  const cols = Math.max(10, ...lines.map((l) => l.length));
-  return { lines, W: cols * 12 + 40, H: lines.length * 24 + 40 };
+/* ASCII maps: parsed once per (map id, ascii); the map is cols·12 × rows·24 px. */
+function useAsciiGeometry(mapDef) {
+  return useMemo(() => (mapDef?.kind === 'ascii'
+    ? parseAsciiMapCached(mapDef.id, mapDef.ascii || '', mapDef.rooms || []) : null), [mapDef]);
+}
+
+/* Token label collision pass: labels sit under their chip; when two plates
+   overlap on screen the later one moves above its chip, then further down /
+   up in plate-height steps. Works in screen orientation (after rotation). */
+function staggerLabels(list, { W, H, unit, labelMin, minR, rot, flip, dragPos }) {
+  const out = {};
+  const placed = [];
+  const toScreen = (x, y) => {
+    let px = flip ? W - x : x; let py = y;
+    if (rot === 90) [px, py] = [H - py, px];
+    else if (rot === 180) [px, py] = [W - px, H - py];
+    else if (rot === 270) [px, py] = [py, W - px];
+    return [px, py];
+  };
+  const items = list.map((t) => {
+    const dp = dragPos?.id === t.id ? dragPos : null;
+    const m = chipMetrics(t, unit, { labelMin, minR });
+    const [sx, sy] = toScreen((dp ? dp.x : t.x) * W, (dp ? dp.y : t.y) * H);
+    return { t, m, sx, sy };
+  }).filter((it) => it.m.label).sort((a, b) => a.sy - b.sy || a.sx - b.sx);
+  const chips = list.map((t) => {
+    const dp = dragPos?.id === t.id ? dragPos : null;
+    const m = chipMetrics(t, unit, { labelMin, minR });
+    const [sx, sy] = toScreen((dp ? dp.x : t.x) * W, (dp ? dp.y : t.y) * H);
+    const r = m.r + m.ring;
+    return { id: t.id, x0: sx - r, x1: sx + r, y0: sy - r, y1: sy + r };
+  });
+  let self = null;
+  const over = (b, p) => b.x0 < p.x1 && b.x1 > p.x0 && b.y0 < p.y1 && b.y1 > p.y0;
+  const hit = (b) => placed.some((p) => over(b, p)) || chips.some((c) => c.id !== self && over(b, c));
+  for (const { t, m, sx, sy } of items) {
+    self = t.id;
+    const step = m.plateH * 1.08;
+    const below = m.plateDy;
+    const above = -(m.r + m.ring + m.ringOut + m.fs * 0.55);
+    const slots = [below, above, below + step, above - step, below + step * 2, above - step * 2];
+    let dy = below;
+    for (const s of slots) {
+      const b = { x0: sx - m.plateW / 2, x1: sx + m.plateW / 2, y0: sy + s - m.plateH * 0.7, y1: sy + s + m.plateH * 0.55 };
+      if (!hit(b)) { dy = s; break; }
+    }
+    placed.push({ x0: sx - m.plateW / 2, x1: sx + m.plateW / 2, y0: sy + dy - m.plateH * 0.7, y1: sy + dy + m.plateH * 0.55 });
+    if (dy !== below) out[t.id] = dy;
+  }
+  return out;
 }
 
 function useImageSize(src, known) {
@@ -73,9 +121,9 @@ const MapCanvas = forwardRef(function MapCanvas({
   const level = board?.level || mapDef?.levels?.[0]?.id || null;
   const levelDef = mapDef?.levels?.find((l) => l.id === level) || null;
   const imgSrc = mapDef?.kind === 'image' ? (levelDef?.src || mapDef.src) : null;
-  const ascii = mapDef?.kind === 'ascii' ? asciiBox(mapDef.ascii) : null;
+  const ascii = useAsciiGeometry(mapDef);
   const imgSize = useImageSize(imgSrc, mapDef?.size);
-  const [W, H] = ascii ? [ascii.W, ascii.H] : (mapDef?.size || imgSize || [1000, 750]);
+  const [W, H] = ascii ? [ascii.cols * ASCII_CELL_PX[0], ascii.rows * ASCII_CELL_PX[1]] : (mapDef?.size || imgSize || [1000, 750]);
   const unit = (mapDef?.grid || 1 / 40) * W;
 
   /* Visible window (crop → zoom → pan) and rotation/flip transform. */
@@ -115,7 +163,9 @@ const MapCanvas = forwardRef(function MapCanvas({
     return () => ro.disconnect();
   }, [VW, VH, mapDef]);
   const labelMin = isBoard && pxScale > 0 ? 20 / pxScale : 0;
-  const tokenMin = isBoard && pxScale > 0 ? 22 / pxScale : 0; // chip radius >= 22 screen px on the TV
+  // chip radius ≥ 22 screen px on the TV, ≥ 13 on the GM tablet / phones — the same base for every kind
+  const tokenMin = pxScale > 0 ? (isBoard ? 22 : 13) / pxScale : 0;
+  const tokenLabelMin = pxScale > 0 ? (isBoard ? 20 : 11) / pxScale : 0;
 
   /* Board idle handling: cursor hide (3 s), drift (every 60 s idle), dim (10 min idle). */
   const [cursorHidden, setCursorHidden] = useState(false);
@@ -234,6 +284,15 @@ const MapCanvas = forwardRef(function MapCanvas({
     .sort((a, b) => (KIND_ORDER[a.kind] ?? 1) - (KIND_ORDER[b.kind] ?? 1) || (a.id === selectedTokenId) - (b.id === selectedTokenId)),
   [tokens, level, selectedTokenId]);
 
+  const labelOffsets = useMemo(() => (showTokens
+    ? staggerLabels(tokenList, { W, H, unit, labelMin: tokenLabelMin, minR: tokenMin, rot, flip, dragPos }) : {}),
+  [showTokens, tokenList, W, H, unit, tokenLabelMin, tokenMin, rot, flip, dragPos]);
+  const roomNames = useMemo(() => {
+    const out = {};
+    for (const [id, st] of Object.entries(board?.rooms || {})) if (st?.name) out[id] = st.name;
+    return out;
+  }, [board]);
+
   const now = Date.now();
   const outlineOpacity = role === 'dm' ? 0.35 : 0.72;
 
@@ -249,18 +308,16 @@ const MapCanvas = forwardRef(function MapCanvas({
         onContextMenu={(e) => e.preventDefault()}>
         <g ref={innerRef} transform={transform}>
           <rect x={X - W} y={Y - H} width={W * 3} height={H * 3} fill={palette.bg} />
-          {engCfg && <EngineLayer config={engCfg} level={level} backdrop={visuals.backdrop} />}
+          {engCfg && <EngineLayer config={engCfg} level={level} backdrop={visuals.backdrop} hullStyle={palette.hullStyle} hullAlpha={palette.hullAlpha ?? 1} />}
           {mapDef.kind === 'engine' && !engCfg && (
             <text x={W / 2} y={H / 2} fill="#556" fontSize={unit} textAnchor="middle">DECK PLAN UNAVAILABLE ({mapDef.engine})</text>
           )}
           {imgSrc && <image href={imgSrc} x="0" y="0" width={W} height={H} preserveAspectRatio="none" />}
           {ascii && (
-            <g fontFamily="ui-monospace, 'Courier New', monospace" fontSize="20" fill={palette.ascii}>
-              <rect width={W} height={H} fill={palette.asciiBg} />
-              {ascii.lines.map((l, i) => <text key={i} x="20" y={44 + i * 24} xmlSpace="preserve">{l}</text>)}
-            </g>
+            <AsciiLayer mapDef={mapDef} parsed={ascii} rooms={rooms} W={W} H={H} palette={palette} role={role} uid={`${uid}-al`}
+              labelMin={labelMin} counter={counter} rot={rot} roomNames={roomNames} roomState={board?.rooms} fog={board ? board.fog : true} />
           )}
-          {mapDef.outline && (
+          {mapDef.outline && !ascii && (
             <path d={`M0 0 H1 V1 H0 Z ${mapDef.outline}`} transform={`scale(${W},${H})`} fillRule="evenodd"
               fill={palette.bg} opacity={outlineOpacity} pointerEvents="none" />
           )}
@@ -272,7 +329,8 @@ const MapCanvas = forwardRef(function MapCanvas({
             return (
               <TokenChip key={t.id} token={t} x={(dp ? dp.x : t.x) * W} y={(dp ? dp.y : t.y) * H} unit={unit} counter={counter} uid={uid}
                 selected={t.id === selectedTokenId} mine={!!highlightPlayerId && t.ownerPlayerId === highlightPlayerId}
-                ghost={role === 'dm' && t.hidden} dragging={!!dp} palette={palette} labelMin={labelMin} minR={tokenMin}
+                ghost={role === 'dm' && t.hidden} dragging={!!dp} palette={palette} labelMin={tokenLabelMin} minR={tokenMin}
+                labelDy={labelOffsets[t.id] ?? null}
                 flash={flashTokens?.[t.id] || null} active={!!activeTokenId && t.id === activeTokenId} showHp={showHp && role === 'dm'} />
             );
           })}

@@ -17,7 +17,8 @@ import { play, reducedFx } from '../../../engine/sfx';
      onResult(roll)  called once per settled roll (and again after a push) with
        { kind:'yze', label, skillKey, attrKey, summary, successes, stunts, pushed,
          panic, stressGain, flags[], dice: { base[], stress[] }, pool: { base, stress } }
-       flags: 'panic' (Stress Die 1), 'push', 'crit' (2+ sixes), 'botch' (panic).
+       flags: 'panic' (Stress Die 1), 'push', 'crit' (2+ sixes), 'botch' (zero successes and NO panic —
+       panic supersedes botch; the feed, TV toast and phone all show PANIC alone, in the botch styling).
 
    Feedback is settle-then-celebrate: dice tumble ~0.5 s, settle, then a
    result overlay + sfx cue (dice.settle → dice.crit / dice.botch). With
@@ -37,14 +38,15 @@ function outcome(res) {
   if (res.panic) return { kind: 'botch', text: 'PANIC' };
   if (res.successes >= 2) return { kind: 'crit', text: `SUCCESS +${res.successes - 1} STUNT${res.successes > 2 ? 'S' : ''}` };
   if (res.successes === 1) return { kind: 'success', text: 'SUCCESS' };
-  return { kind: 'fail', text: 'NO SUCCESS' };
+  return { kind: 'botch', text: 'BOTCH · NO SUCCESS' };
 }
 
 /** Roll report for the session feed (onResult). */
 function report(final, meta) {
   const stunts = Math.max(0, final.successes - 1);
   const flags = [];
-  if (final.panic) flags.push('panic', 'botch');
+  if (final.panic) flags.push('panic');
+  else if (final.successes === 0) flags.push('botch');
   if (final.pushed) flags.push('push');
   if (final.successes >= 2) flags.push('crit');
   const o = outcome(final);

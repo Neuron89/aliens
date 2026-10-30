@@ -3,7 +3,7 @@
 What is implemented, mapped to the research backlog in [`RESEARCH_GM_PLAYER_EXPERIENCE.md`](RESEARCH_GM_PLAYER_EXPERIENCE.md) section (b) (row numbers are that table's `#`).
 Status was decided by reading the code, not the plans: **done** = works end to end (UI plus server where it needs one), **partial** = part of the row exists (the gap is named), **not yet** = nothing in the code.
 Paths are under `web app/src/engine/components/` (client) or `web app/server/` unless stated. Event names are Socket.io events (`ARCHITECTURE.md`, Sessions).
-Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 48, 49, 58-60, 62), `test-mechanics.mjs` (10, 11, 26-28, 40, 42, 44), `test-board.mjs` (20, 25, 30, 33), `test-sessions.mjs` (19), `test-hardening.mjs` (security); the client UI has no automated tests.
+Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 48, 49, 58-60, 62), `test-mechanics.mjs` (10, 11, 26-28, 40, 42, 44, 45), `test-board.mjs` (20, 25, 30, 33), `test-sessions.mjs` (19), `test-hardening.mjs` (security); the client UI has no automated tests.
 
 | # | Feature | Status | Where |
 |---|---|---|---|
@@ -18,7 +18,7 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 9 | 2d20 roller (Focus, complications, Momentum, bought dice) | done | `universes/dune/components/D20DiceRoller.jsx`; roll payload `kind:'2d20'` |
 | 10 | Roll feed on GM and board | done | `run/RollFeed.jsx`, DMDashboard ROLLS; `player-roll`, `roll`, `board-roll`; TV toasts in `board/Overlays.jsx` |
 | 11 | Settle-then-celebrate feedback, crit/botch, reduce-motion and mute | done | `player/fx.js`, `sfx.js` (per-universe `theme.sfx`), `Header.jsx` `FxToggles` (REDUCE FX, MUTE, per device) |
-| 12 | GM secret roll | partial | `gm-roll` (GM feed and log only, never the TV) is wired only to the threat cards' ROLL ATTACK (SECRET) in `run/ThreatsPanel.jsx`; the dice-tab rollers have no secret mode, and there is no reveal option |
+| 12 | GM secret roll | done | `gm-roll` (GM feed and log only, never the TV): threat cards' ROLL ATTACK (SECRET) in `run/ThreatsPanel.jsx` logs the signature lookup plus the full attack pool (dice, successes, HIT/MISS, damage; `mechanicsUtils.resolveSignatureAttack`), and the GM DICE ROLLER tab has a SECRET (GM ONLY) toggle (`DiceRoller.jsx`). No reveal-to-table option |
 | 13 | Session zero screen (tone, warnings, lines and veils) | done | `run/SessionZeroPanel.jsx` (before INITIALIZE), `player/PhoneLayer.jsx` BEFORE WE BEGIN; `safety-set`, `safety-confirm` |
 | 14 | X-card / pause on every phone, anonymous | done | `player/PauseButton.jsx`; `pause-request`, `pause-requested`, `pause-clear`; TV PAUSE card. No rewind/fast-forward |
 | 15 | Pack content warnings in session zero | done | SessionZeroPanel pre-fills from `meta.contentWarnings` and `meta.tone` |
@@ -51,7 +51,7 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 42 | Panic flow | done | `player/PanicOverlay.jsx`; `panic-result`, `panic`, `board-panic`; `rules.panic`, `catalog/panic.json` |
 | 43 | Push and stress feedback | partial | Pushing adds stress to the track, tracks colour via `rules.tracks[].danger`; no dedicated animation or warning card |
 | 44 | Momentum and Threat pools | done | `run/PoolCounters.jsx`; `pools-init`, `pool-set`, `pool-delta`, `pool-changed`; `rules.pools`; TV pool meters |
-| 45 | Drive statements and Determination UI | partial | Drive statements: builder step and sheet (`builder/steps.jsx`, `CharacterSheet.jsx`, schema `driveStatements`); there is no Determination track or spend/refresh UI (DUNE tracks: Stress only) |
+| 45 | Drive statements and Determination UI | done | Drive statements: builder step and sheet (`builder/steps.jsx`, `CharacterSheet.jsx`, schema `driveStatements`); drives assigned from the fixed array 8/7/6/5/4 (`rules.creation.attrArray`, tap/drag-to-assign + SUGGESTED); Determination (`rules.determination`, 0–3, starts 1): phone top-bar chip with SPEND (`determination-spend`, GM roll feed), GM GRANT +1 in the player editor (`determination-grant`) |
 | 46 | Traits and Assets | not yet | No code |
 | 47 | Dune conflict runner | not yet | Cheat sheets only (`universes/dune/components/DuneCheatSheets.jsx`) |
 | 48 | NPC agenda cards by act ("if ignored") | done | RunView AGENDAS tab (NPC cards, SHOW SECRETS) |
@@ -77,14 +77,14 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 68 | Physics 3D dice | not yet | Not planned |
 | 69 | In-app voice/chat | not yet | Do not build (per the research) |
 
-Counts: 36 done, 13 partial, 20 not yet (of 69).
+Counts: 38 done, 11 partial, 20 not yet (of 69).
 
 ## Implemented beyond the backlog
 
 | Feature | Where |
 |---|---|
 | Multi-universe engine: landing page, per-universe theme (CRT or grain overlay, fonts, favicon, SFX, board palette), terms, boot overlay | `UniverseContext.jsx`, `UniverseSelect.jsx`, `fx/`, `universes/*/theme.js` |
-| Character builder (career, attributes, skills, talent, gear with encumbrance, identity, review) from the universe catalog, on the phone or GM side | `CharacterBuilder.jsx`, `builder/*`, `player/BuildCharacter.jsx`; `character-submit`, `submission-resolve`, `submission-updated` |
+| Character builder (career, attributes or fixed attribute array, skills, talent, gear with encumbrance, identity, review) from the universe catalog, on the phone or GM side; phones can submit a replacement at any time (SHEET menu, death screen) and the GM assigns it (KIA: ASSIGN PLAYER-BUILT) | `CharacterBuilder.jsx`, `builder/*`, `player/BuildCharacter.jsx`, `PlayerView.jsx`, `DMDashboard.jsx`; `character-submit`, `submission-resolve`, `submission-updated` |
 | Character sheets with active talent and condition effects | `CharacterSheet.jsx`, `sheet/parts.jsx`, `catalogUtils.js` |
 | Table board controller with levels, room editor, QR for the TV link | `MapController.jsx`, `board/RoomEditor.jsx`, `board/qr.js` |
 | Interactive deck plans (MapEngine) and image maps with room geometry | `MapEngine.jsx`, `MapRenderer.jsx`, `Maps.jsx`, `board/EngineLayer.jsx`; `universes/*/maps/` |

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { DEFAULT_BOARD_PALETTE } from './mapDefs';
 
 /* ═══════════════════════════════════════════════════════════════
@@ -69,9 +69,34 @@ export function doorPlacement(door, rooms) {
   return null;
 }
 
-function Shape({ shape, W, H, ...rest }) {
+function Shape({ shape, W, H, holes = null, ...rest }) {
+  if (holes?.length && shape.type === 'rect') {
+    // a room that contains other rooms (a corridor around cabins): fog it with the cabins cut out,
+    // so revealing a cabin is not hidden by the corridor's fog (and vice versa)
+    const rp = (s) => `M${s.x * W},${s.y * H}h${s.w * W}v${s.h * H}h${-s.w * W}Z`;
+    const pp = (s) => `M${s.points.map(([x, y]) => `${x * W},${y * H}`).join('L')}Z`;
+    const d = [rp(shape), ...holes.map((s) => (s.type === 'rect' ? rp(s) : pp(s)))].join(' ');
+    return <path d={d} fillRule="evenodd" {...rest} />;
+  }
   const { tag, props } = shapeProps(shape, W, H);
   return tag === 'rect' ? <rect {...props} {...rest} /> : <polygon {...props} {...rest} />;
+}
+
+const area = (s) => { const b = bbox(s); return (b.x1 - b.x0) * (b.y1 - b.y0); };
+
+/** For each room: the shapes of other rooms lying inside it (fog holes). */
+function nestedShapes(rooms) {
+  const out = new Map();
+  for (const r of rooms) {
+    if (r.shape?.type !== 'rect') continue;
+    const A = bbox(r.shape);
+    const inner = rooms.filter((o) => o !== r && o.shape && (() => {
+      const B = bbox(o.shape);
+      return B.x0 >= A.x0 - 1e-4 && B.x1 <= A.x1 + 1e-4 && B.y0 >= A.y0 - 1e-4 && B.y1 <= A.y1 + 1e-4 && area(o.shape) < area(r.shape) * 0.95;
+    })()).map((o) => o.shape);
+    if (inner.length) out.set(r.id, inner);
+  }
+  return out;
 }
 
 function DoorMarks({ doors, rooms, W, H, unit, palette, roomState, fog, dm }) {
@@ -110,6 +135,9 @@ export default function RoomLayer({
   const stroke = Math.max(0.6, unit * 0.05);
   const reveal = palette.reveal || 'fade';
   const dust = reveal === 'dust';
+  // big rooms first so nested rooms sit on top (taps hit the smaller room, like the server's roomAt)
+  const ordered = useMemo(() => [...rooms].sort((a, b) => area(b.shape) - area(a.shape)), [rooms]);
+  const holes = useMemo(() => nestedShapes(rooms), [rooms]);
   return (
     <g className={`rm-layer rm-${role} rm-reveal-${reveal}`}>
       <defs>
@@ -126,16 +154,17 @@ export default function RoomLayer({
           </pattern>
         )}
       </defs>
-      {rooms.map((r) => {
+      {ordered.map((r) => {
         const st = roomState[r.id];
         const revealed = !fog || !!st?.revealed;
         const selected = r.id === selectedRoomId;
+        const hole = holes.get(r.id) || null;
         return (
           <g key={r.id} data-room={r.id} className={`rm${revealed ? ' rm-revealed' : ''}${selected ? ' rm-selected' : ''}`}>
-            <Shape shape={r.shape} W={W} H={H} className="rm-fog" fill={palette.fog}
+            <Shape shape={r.shape} W={W} H={H} holes={hole} className="rm-fog" fill={palette.fog}
               style={{ opacity: revealed ? 0 : fogOpacity }} />
-            {dust && !dm && <Shape shape={r.shape} W={W} H={H} className="rm-fog-grain" fill={`url(#${uid}-fogdust)`} pointerEvents="none" style={{ opacity: revealed ? 0 : 1 }} />}
-            {dm && !revealed && <Shape shape={r.shape} W={W} H={H} fill={`url(#${uid}-foghatch)`} pointerEvents="none" />}
+            {dust && !dm && <Shape shape={r.shape} W={W} H={H} holes={hole} className="rm-fog-grain" fill={`url(#${uid}-fogdust)`} pointerEvents="none" style={{ opacity: revealed ? 0 : 1 }} />}
+            {dm && !revealed && <Shape shape={r.shape} W={W} H={H} holes={hole} fill={`url(#${uid}-foghatch)`} pointerEvents="none" />}
             <Shape shape={r.shape} W={W} H={H} className="rm-hit" fill="transparent"
               stroke={selected ? '#ffffff' : revealed ? (dm ? palette.revealedEdge : 'none') : palette.fogEdge}
               strokeWidth={selected ? 2.5 : 1} strokeDasharray={revealed ? undefined : '5 4'}

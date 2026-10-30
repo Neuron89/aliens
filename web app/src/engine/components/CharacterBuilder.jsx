@@ -4,7 +4,7 @@ import { getCatalog, careerById, talentsFor, termsFor } from '../catalogUtils';
 import CharacterSheet from './CharacterSheet';
 import {
   STEPS, capsFor, blankState, stateFromCharacter, finalCharacter, validateStep,
-  loadDraft, saveDraft, clearDraft, cartToGear,
+  loadDraft, saveDraft, clearDraft, cartToGear, assignArrayValue, suggestedArray,
 } from './builder/builderState';
 import { CareerStep, AttributesStep, SkillsStep, TalentStep, IdentityStep } from './builder/steps';
 import GearStep from './builder/GearStep';
@@ -66,7 +66,8 @@ export default function CharacterBuilder({ initial, onSave, onBack, saving, erro
     const nextCaps = capsFor(universe, c);
     const talents = talentsFor(c, catalog).map((t) => t.name);
     setState((s) => {
-      const attrs = Object.fromEntries(Object.entries(s.char.attributes).map(([k, v]) => {
+      // Fixed-array universes keep the assignment as is (no per-attribute caps to clamp to).
+      const attrs = nextCaps.attrArray ? { ...s.char.attributes } : Object.fromEntries(Object.entries(s.char.attributes).map(([k, v]) => {
         const max = c.keyAttribute === k ? nextCaps.attrKeyMax : nextCaps.attrOtherMax;
         return [k, Math.max(nextCaps.attrMin, Math.min(max, v))];
       }));
@@ -88,6 +89,10 @@ export default function CharacterBuilder({ initial, onSave, onBack, saving, erro
     const v = Math.max(caps.attrMin, Math.min(max, val));
     return { attributes: { ...c.attributes, [key]: v } };
   });
+  const attrKeys = (universe.rules?.attributes || []).map((a) => a.key);
+  /** Fixed array: put `value` on `key` (0 clears; a taken value swaps). */
+  const assignValue = (key, value) => setChar((c) => ({ attributes: assignArrayValue(c.attributes, caps.attrArray, attrKeys, key, value) }));
+  const applySuggested = () => setChar(() => ({ attributes: suggestedArray(universe, career, caps.attrArray) }));
   const setSkill = (key, val, min, max) => setChar((c) => ({ skills: { ...c.skills, [key]: Math.max(min, Math.min(max, val)) } }));
   const setStatement = (key, text) => setChar((c) => ({ driveStatements: { ...(c.driveStatements || {}), [key]: text } }));
   const setField = (key, value) => setChar(() => ({ [key]: value }));
@@ -148,7 +153,8 @@ export default function CharacterBuilder({ initial, onSave, onBack, saving, erro
             customCareer={state.char.career} onCustomCareer={(v) => setField('career', v)} />
         )}
         {step.id === 'attributes' && (
-          <AttributesStep universe={universe} T={T} career={career} caps={caps} char={state.char} setAttr={setAttr} setStatement={setStatement} />
+          <AttributesStep universe={universe} T={T} career={career} caps={caps} char={state.char} setAttr={setAttr} setStatement={setStatement}
+            assignValue={assignValue} applySuggested={applySuggested} />
         )}
         {step.id === 'skills' && <SkillsStep universe={universe} career={career} caps={caps} char={previewChar} setSkill={setSkill} />}
         {step.id === 'talent' && <TalentStep catalog={catalog} career={career} caps={caps} talent={state.char.talent} onPick={(t) => setField('talent', t)} T={T} />}

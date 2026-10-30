@@ -41,9 +41,10 @@ export function MapViewer({ map, onBack, backLabel = '← BACK TO MAPS' }) {
   const views = [
     Engine && ['engine', 'DECK PLAN'],
     (map.src || map.image) && ['image', 'IMAGE'],
-    map.ascii && ['ascii', 'ASCII SCHEMATIC'],
+    !Engine && map.ascii && ['vector', 'DECK PLAN'],
   ].filter(Boolean);
-  const [view, setView] = useState(views[0]?.[0]);
+  const [view, setView] = useState(views[0]?.[0] || (map.ascii ? 'ascii' : undefined));
+  const [showAscii, setShowAscii] = useState(false);
 
   return (
     <div className="map-viewer">
@@ -60,15 +61,21 @@ export function MapViewer({ map, onBack, backLabel = '← BACK TO MAPS' }) {
         )}
       </div>
 
-      {views.length > 1 && (
+      {(views.length > 1 || map.ascii) && (
         <div className="filter-bar" style={{ marginBottom: '0.75rem' }}>
-          {views.map(([id, label]) => (
-            <button key={id} className={view === id ? 'active' : ''} onClick={() => setView(id)}>{label}</button>
+          {views.length > 1 && views.map(([id, label]) => (
+            <button key={id} className={view === id && !showAscii ? 'active' : ''} onClick={() => { setView(id); setShowAscii(false); }}>{label}</button>
           ))}
+          {map.ascii && (
+            <button className={showAscii ? 'active' : ''} aria-pressed={showAscii} onClick={() => setShowAscii((v) => !v)}
+              title="The original ASCII schematic from the scenario pack" style={{ marginLeft: views.length > 1 ? 'auto' : undefined }}>
+              {showAscii ? 'HIDE ASCII' : 'SHOW ASCII'}
+            </button>
+          )}
         </div>
       )}
 
-      {view && <MapRenderer universe={universe} map={map} view={view} />}
+      {showAscii && map.ascii ? <MapRenderer universe={universe} map={map} view="ascii" /> : view && <MapRenderer universe={universe} map={map} view={view} />}
 
       {map.rooms?.length > 0 && (
         <div className="panel">
@@ -95,6 +102,7 @@ function MapCard({ m, onClick }) {
       <div className="map-desc">{m.description}</div>
       {(m.src || m.image) && <div style={{ fontSize: '0.65rem', color: 'var(--accent)', marginTop: '0.4rem', opacity: 0.7 }}>TACTICAL MAP</div>}
       {m.engine && <div style={{ fontSize: '0.65rem', color: 'var(--accent)', marginTop: '0.4rem', opacity: 0.7 }}>INTERACTIVE DECK PLAN</div>}
+      {!m.engine && !(m.src || m.image) && m.ascii && <div style={{ fontSize: '0.65rem', color: 'var(--accent)', marginTop: '0.4rem', opacity: 0.7 }}>VECTOR DECK PLAN · BOARD READY</div>}
     </div>
   );
 }

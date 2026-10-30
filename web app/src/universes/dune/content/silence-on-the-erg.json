@@ -877,11 +877,11 @@
       "career": "Planetologist",
       "appearance": "Lean and sun-cured, fifty, with the squint of a man who reads horizons and a habit of crumbling sand between his fingers while he thinks. Speaks softly and precisely, and lights up only when talking about water. DRIVE STATEMENTS — Duty: I serve the planet first and the patron who pays me second. · Faith: I do not believe in prophecy, but I believe in the Fremen. · Justice: A world that kills its people for want of water can be changed, and should be. · Power: Power is knowing what the land will do before anyone else. · Truth: I will see what lies under the sand, whatever it costs me.",
       "attributes": {
-        "duty": 5,
-        "faith": 5,
+        "truth": 8,
         "justice": 7,
-        "power": 5,
-        "truth": 8
+        "duty": 6,
+        "faith": 5,
+        "power": 4
       },
       "skills": {
         "battle": 4,
@@ -915,11 +915,11 @@
       "career": "Fremen Guide",
       "appearance": "Small, still and sun-dark, her face hidden behind a stillsuit mask until she chooses to lower it. Moves without a sound and watches how every outsider handles water. DRIVE STATEMENTS — Duty: My sietch first, my word second, my employer a distant third. · Faith: The desert judges; I only carry its verdicts. · Justice: Water given in trust is a law older than any Emperor. · Power: Out here, power is knowing where to stand. · Truth: I tell no lies, and I volunteer nothing.",
       "attributes": {
-        "duty": 6,
         "faith": 8,
+        "duty": 7,
         "justice": 6,
-        "power": 4,
-        "truth": 6
+        "truth": 5,
+        "power": 4
       },
       "skills": {
         "battle": 6,
@@ -954,10 +954,10 @@
       "appearance": "Broad, grey-cropped and scarred across both forearms, with a soldier’s economy of movement and a courtier’s good manners. Keeps one hand on his rapier hilt and the other open. DRIVE STATEMENTS — Duty: I have eaten House Oskaren’s bread for nineteen years and I will earn every crumb. · Faith: I believe in the drill, the blade and the man beside me. · Justice: There are orders I will not follow; I learned which ones on Salusa. · Power: A guard’s power is to decide who passes. · Truth: I prefer not to know what I am protecting.",
       "attributes": {
         "duty": 8,
-        "faith": 5,
-        "justice": 6,
+        "justice": 7,
         "power": 6,
-        "truth": 5
+        "faith": 5,
+        "truth": 4
       },
       "skills": {
         "battle": 8,
@@ -1029,11 +1029,11 @@
       "career": "Suk Doctor",
       "appearance": "Tall, stooped and silver-bearded, the Suk diamond on his brow and a stillsuit he refits obsessively. His hands are the steadiest thing in any room; his voice is the gentlest. DRIVE STATEMENTS — Duty: The patient in front of me is my whole duty. · Faith: My conditioning is the only faith I was allowed to keep. · Justice: No one dies on my table because of what they are worth. · Power: I have none, and I am grateful. · Truth: I lied once, to a child, and I have been paying for it ever since.",
       "attributes": {
-        "duty": 7,
-        "faith": 6,
+        "duty": 8,
         "justice": 7,
-        "power": 4,
-        "truth": 6
+        "faith": 6,
+        "truth": 5,
+        "power": 4
       },
       "skills": {
         "battle": 4,

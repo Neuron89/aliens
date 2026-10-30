@@ -86,6 +86,14 @@ export const theme = {
     statusStyle: 'arcs',     // smooth gold-edged arcs
     chipFill: '#120c07',
     font: "'IBM Plex Mono', ui-monospace, monospace",
+    /* Vector plans drawn from ASCII schematics (board/AsciiLayer.jsx): sand-and-stone, like the residency engine map. */
+    deck: {
+      style: 'stone',
+      hull: '#2a1e12', hullEdge: '#a57d4a', hullHatch: '#4a3622', zone: '#7a5a34', zoneFill: 'rgba(165, 125, 74, 0.06)',
+      floor: '#1c140b', floorAlt: '#221810', wall: '#d2a466', wallDim: '#74583a', corridor: '#120c06', corridorEdge: '#6a4c2c',
+      door: '#f0b860', text: '#f6ead0', textDim: '#b8a07a', accent: '#e2932e',
+      organic: '#7a8a3a', solid: '#4f9aa6', water: '#4fb3c4', sand: '#c8a06a', rock: '#a07a4a', fence: '#e8a850', dash: '#a08058', dots: '#a08058',
+    },
   },
   /* Low wooden knocks and bell tones. */
   sfx: {

@@ -100,9 +100,23 @@ engine map uses that map's rooms/levels/outline.
 `montero.jsx` reads its deck layout from `montero.geometry.js` (JSX-free, node-importable), which
 also exports the normalized `monteroRooms` (51 rooms over decks A/B/C, ids `deck-a-bridge`…),
 `monteroOutline`, `monteroCrop` and `monteroSpawn`; `maps/index.js` puts them on the universe map,
-so the board overlay and the MapEngine render from one source. For image
-maps with no rooms yet, the Map Controller offers a **Room Editor** (rectangles; named rooms without
-shapes are listed as "unplaced" and can be drawn), saved back via `PUT /api/content/:universe/:packId`
+so the board overlay and the MapEngine render from one source.
+
+**ASCII maps** (`kind:"ascii"`) get their geometry from `src/engine/maps/asciiMap.js`:
+`parseAsciiMap(ascii, rooms)` finds closed box-drawing rectangles (nested boxes = zones, the outer
+frame = hull; ±2-column jitter tolerated), reads each box's label, fuzzy-matches labels to
+`maps[].rooms` names (token overlap with IDF weights, prefixes, abbreviations, edit distance), splits a
+box whose `[TAGS]` match other room names ("ADMIN BLOCK [OPS] [BRIG]"), turns labels outside boxes
+into free-text rooms grown over adjacent texture (≈ lava tube, ∴ dune field), and turns connectors
+(`├──┤`, `│` shafts, `═══` tubes, `┬/┴` stubs) into corridors and doors. `resolveMapDef` sends
+`buildAsciiMapDef(map)` (rooms, doors, size, outline, crop, spawn = centre of the first hinted room);
+`board/AsciiLayer.jsx` draws the plan in the universe's `theme.board.deck` palette.
+
+The Map Controller's **Room Editor** works on image, ASCII and engine pack maps (draw a rectangle on
+empty map to add; select a room, drag inside to move, drag a corner to resize; rename / delete in the
+list; RESTORE GENERATED). A saved room list in which any room has a shape is authoritative
+(`mergeRooms`): overlay rooms override generated ones by id and deletions stick; named rooms without
+shapes are listed as "unplaced" and can be drawn. Saved back via `PUT /api/content/:universe/:packId`
 for runtime packs; bundled packs get an overlay pack `{ kind:"maps", id:"<packId>-maps", maps:[…] }`
 whose maps merge into `<packId>` by map id in `ContentContext` (overlay packs are not listed as packs).
 

@@ -4,7 +4,8 @@
    rolls stay off the TV, push stress, panic application (player status, stress, TV token ring +
    board-panic), supply roll decrement, Momentum/Threat caps + visibility filtering, initiative
    advance + "your turn" targeting + pass, creature hp on tokens (GM-only, persisted across a
-   restart), critical injury apply/remove.
+   restart), critical injury apply/remove, DUNE determination spend/grant (validation, GM feed, cap),
+   and the KIA → player-built replacement path (dead seat submits, GM assigns, seat revives).
    Usage: node scripts/test-mechanics.mjs */
 import { spawn } from 'child_process';
 import { mkdtempSync, rmSync } from 'fs';
@@ -114,6 +115,16 @@ try {
   const r2 = await call(pA, 'player-roll', { clientId: 'm-roll-2', roll: { ...roll1, pushed: true, stressGain: 1, flags: ['push', 'panic'], panic: true, dice: { base: [6, 1, 1], stress: [1, 5, 2, 3] } } });
   await sleep(150);
   eq(aPlayer.p.tracks.stress, 4, 'push adds one Stress server-side');
+  // An older client that sends both PANIC and BOTCH: the TV toast shows PANIC only (panic supersedes botch).
+  const tvPanicRoll = tvRolls[tvRolls.length - 1];
+  ok(tvPanicRoll.roll.flags.includes('panic') && !tvPanicRoll.roll.flags.includes('botch'), 'TV flags: panic present');
+  await call(pA, 'player-roll', { clientId: 'm-roll-2b', roll: { ...roll1, label: 'MOBILITY', flags: ['panic', 'botch'], panic: true } });
+  await sleep(120);
+  const tb = tvRolls[tvRolls.length - 1].roll;
+  ok(tb.label === 'MOBILITY' && tb.flags.includes('panic') && !tb.flags.includes('botch'), 'board-roll drops BOTCH when PANIC is present');
+  await call(pA, 'player-roll', { clientId: 'm-roll-2c', roll: { ...roll1, label: 'COMTECH', successes: 0, flags: ['botch'] } });
+  await sleep(120);
+  ok(tvRolls[tvRolls.length - 1].roll.flags.includes('botch'), 'board-roll keeps BOTCH without panic');
 
   /* ── Panic flow (row 42) ── */
   const dmPanic = once(dm, 'panic');
@@ -256,6 +267,71 @@ try {
   await sleep(120);
   ok(aPlayer.p.injuries.length === 1 && aPlayer.p.injuries[0].name === 'Broken Nose', 'phone sees the injury');
 
+  /* ── Determination (DUNE rules.determination): spend validates >= 1 and lands in the GM roll feed; GM grants ── */
+  const pC = await connect();
+  const jC = await call(pC, 'join-game', { code, playerName: 'Carol' });
+  const C = jC.playerId;
+  const cPlayer = lastPlayer(pC);
+  ok((await call(pC, 'determination-spend', {})).error, 'determination-spend without a character is rejected');
+  const cAssigned = once(pC, 'character-assigned');
+  const ca = await call(dm, 'assign-character', { gameCode: code, playerId: C, character: { id: 'carol-1', name: 'Carol Vane', gear: [] },
+    tracks: { stress: 0 }, trackMax: { stress: 8 }, conditions: [], determination: { value: 1, max: 3 } });
+  ok(ca.success, 'assign with determination');
+  eq((await cAssigned).player.determination, { value: 1, max: 3 }, 'phone gets determination 1/3 with the character');
+  const feedSpend = once(dm, 'roll', 3000, (d) => d.roll?.roll?.kind === 'determination');
+  const dmSpent = once(dm, 'determination-spent');
+  const sp1 = await call(pC, 'determination-spend', { reason: 'hold the line' });
+  ok(sp1.success && sp1.determination.value === 0, 'spend 1 → 0');
+  const fs1 = await feedSpend;
+  ok(fs1.roll.playerId === C && /DETERMINATION/.test(fs1.roll.roll.summary) && fs1.roll.roll.flags.includes('determination'), 'GM roll feed shows the spend');
+  ok(!fs1.roll.secret, 'spend entry is a normal (non-secret) feed row');
+  const ds = await dmSpent;
+  ok(ds.value === 0 && ds.reason === 'hold the line' && ds.name === 'Carol Vane', 'determination-spent one-shot to the DM');
+  const sp2 = await call(pC, 'determination-spend', {});
+  ok(sp2.error && /NO DETERMINATION/.test(sp2.error), 'spend at 0 is rejected');
+  ok((await call(pC, 'determination-grant', { playerId: C, delta: 1 })).error, 'players cannot grant determination');
+  const gr1 = await call(dm, 'determination-grant', { gameCode: code, playerId: C });
+  eq(gr1.determination, { value: 1, max: 3 }, 'GM grants +1 (default delta)');
+  await call(dm, 'determination-grant', { gameCode: code, playerId: C, delta: 1 });
+  await call(dm, 'determination-grant', { gameCode: code, playerId: C, delta: 1 });
+  const gr4 = await call(dm, 'determination-grant', { gameCode: code, playerId: C, delta: 1 });
+  eq(gr4.determination.value, 3, 'grant is capped at max 3');
+  await sleep(120);
+  eq(cPlayer.p.determination, { value: 3, max: 3 }, 'phone sees the granted determination');
+  ok(dmTable.t.rolls.some((r) => r.roll?.kind === 'determination' && r.playerId === C), 'spend persisted in table.rolls');
+  const grB = await call(dm, 'determination-grant', { gameCode: code, playerId: B, delta: 1, max: 3 });
+  eq(grB.determination, { value: 1, max: 3 }, 'grant on a seat assigned without determination starts it at 0/max');
+
+  /* ── KIA → player-built replacement ── */
+  const died = once(pC, 'character-died');
+  ok((await call(dm, 'kill-character', { gameCode: code, playerId: C })).success, 'GM kills Carol');
+  await died;
+  ok((await call(pC, 'determination-spend', {})).error, 'a dead character cannot spend determination');
+  const subDm = once(dm, 'character-submitted');
+  const sb = await call(pC, 'character-submit', { character: { name: 'Carol Two', career: 'Smuggler', attributes: { duty: 4, faith: 5, justice: 6, power: 8, truth: 7 }, gear: ['Maula pistol'] } });
+  ok(sb.success, 'a dead seat can submit a replacement (BUILD A NEW CHARACTER)');
+  const sub = (await subDm).submission;
+  ok(sub.playerId === C && sub.status === 'pending' && /^pb-/.test(sub.character.id), 'GM receives the pending player-built replacement');
+  await sleep(120);
+  ok(dmTable.t.submissions.some((s) => s.id === sub.id && s.status === 'pending'), 'DM table lists the pending submission (KIA flow: ASSIGN PLAYER-BUILT)');
+  const subUpd = once(pC, 'submission-updated');
+  const revived = once(pC, 'character-assigned');
+  const rea = await call(dm, 'assign-character', { gameCode: code, playerId: C, character: sub.character,
+    tracks: { stress: 0 }, trackMax: { stress: 8 }, conditions: [], determination: { value: 1, max: 3 } });
+  ok(rea.success, 'GM assigns the player-built replacement');
+  const rp = (await revived).player;
+  ok(rp.alive === true && rp.character.name === 'Carol Two' && rp.character.id === sub.character.id, 'seat is alive again with the replacement');
+  eq(rp.determination, { value: 1, max: 3 }, 'replacement starts with fresh determination');
+  eq(rp.inventory, ['Maula pistol'], 'replacement gear becomes the inventory');
+  eq((await subUpd).submission.status, 'assigned', 'player told the submission was assigned');
+  await sleep(120);
+  ok(dmTable.t.submissions.find((s) => s.id === sub.id)?.status === 'assigned', 'submission resolved on the DM table');
+  // Replacement by choice: an alive, assigned seat may submit again.
+  const sb2 = await call(pC, 'character-submit', { character: { name: 'Carol Three' } });
+  ok(sb2.success, 'an alive assigned seat can submit a replacement by choice');
+  await sleep(120);
+  ok(dmTable.t.submissions.some((s) => s.playerId === C && s.status === 'pending' && s.character.name === 'Carol Three'), 'by-choice replacement is pending for the GM');
+
   /* ── Restart: everything persisted ── */
   await sleep(400);
   await killServer();
@@ -270,6 +346,7 @@ try {
   eq(res.table.initiative.order.length, 3, 'initiative persisted');
   eq(res.players[A].injuries.length, 1, 'injuries persisted');
   eq(res.players[A].supply.power, 2, 'supply persisted');
+  eq(res.players[C].determination, { value: 1, max: 3 }, 'determination persisted across a restart');
   const ir = await call(dm2, 'injury-remove', { gameCode: code, playerId: A, uid: res.players[A].injuries[0].uid });
   ok(ir.success, 'injury healed');
   const after = await once(dm2, 'players-updated', 2000, () => true).catch(() => null);

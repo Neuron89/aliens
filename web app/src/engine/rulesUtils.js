@@ -17,7 +17,33 @@ export function initialCharacterState(universe, char) {
     if (max !== undefined) trackMax[t.key] = max;
     tracks[t.key] = t.initial === 'max' ? (max ?? 0) : Number(t.initial) || 0;
   }
-  return { tracks, trackMax, conditions: [...(universe.rules?.conditions || [])] };
+  const out = { tracks, trackMax, conditions: [...(universe.rules?.conditions || [])] };
+  const det = determinationDef(universe);
+  if (det) out.determination = { value: det.initial, max: det.max };
+  return out;
+}
+
+/** Per-character DETERMINATION (rules.determination { label, max, initial }) or null. */
+export function determinationDef(universe) {
+  const d = universe?.rules?.determination;
+  if (!d) return null;
+  const max = Math.max(1, Number(d.max) || 3);
+  return { label: d.label || 'DETERMINATION', max, initial: Math.max(0, Math.min(max, Number(d.initial ?? 1) || 0)) };
+}
+
+/** 24-hour clock for every rendered time: "HH:MM" (or "HH:MM:SS" with { seconds: true }). */
+export function fmtTime(at, { seconds = false } = {}) {
+  const d = at instanceof Date ? at : new Date(Number(at) || at || Date.now());
+  if (Number.isNaN(d.getTime())) return '--:--';
+  const p = (n) => String(n).padStart(2, '0');
+  return `${p(d.getHours())}:${p(d.getMinutes())}${seconds ? `:${p(d.getSeconds())}` : ''}`;
+}
+
+/** Roll flags as shown everywhere (feed, TV, phone): PANIC supersedes BOTCH (a botch = zero successes
+    with no panic). Older rolls that carry both keep only 'panic' (styled like a botch). */
+export function displayFlags(flags) {
+  const list = Array.isArray(flags) ? flags.filter((f) => typeof f === 'string') : [];
+  return list.includes('panic') ? list.filter((f) => f !== 'botch') : list;
 }
 
 /** Character copy with engine-derived health (packs may omit or carry a stale value). */

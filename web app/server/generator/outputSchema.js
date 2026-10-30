@@ -95,6 +95,8 @@ export function buildOutputSchema(universe, params, acts) {
 
   // Maps: generated maps are always ASCII schematics.
   delete D.map.properties.src; delete D.map.properties.engine;
+  // Board presentation / geometry is engine-supplied (the ASCII parser draws the plan), never model-written.
+  for (const k of ['levelNoun', 'backdrop', 'palette', 'grid', 'outline', 'crop']) delete D.map.properties[k];
   D.map.properties.kind = { ...D.map.properties.kind, enum: ['ascii'] };
   D.map.required = ['id', 'title', 'subtitle', 'description', 'kind', 'ascii', 'rooms'];
 

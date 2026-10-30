@@ -54,6 +54,7 @@ web app/
       catalogUtils.js           # normalised catalog access: items, careers, talents, starting gear, encumbrance, armor, skill pools, effects
       sfx.js                    # per-universe synthesized UI/dice sounds (theme.sfx)
       hooks/                    # useAmbientAudio.js useTTS.js
+      maps/asciiMap.js          # ASCII schematic parser (JSX-free): box-drawing art → room rects, corridors, doors, hull, crop, spawn; buildAsciiMapDef, mergeRooms
       components/
         UniverseSelect.jsx SessionScreen.jsx Header.jsx Nav.jsx DMDashboard.jsx PlayerView.jsx BoardView.jsx
         ScenarioLibrary.jsx ScenarioDetail.jsx ScenarioPlayer.jsx ScenarioPanels.jsx PackImportExport.jsx GameNightWizard.jsx
@@ -63,7 +64,7 @@ web app/
         run/       RunView RunScene ClocksPanel ClockRing CluesPanel HandoutsPanel InitiativePanel ThreatsPanel PoolCounters
                    RollFeed SessionLogPanel SessionZeroPanel TargetPicker recap.js          # GM RUN tab
         player/    PhoneLayer PauseButton PanicOverlay HandoutsPane HandoutViewer ClocksRow BuildCharacter fx.js   # phone extras
-        board/     MapCanvas RoomLayer EngineLayer Overlays TokenChip RoomEditor PlayerMapPane mapDefs.js qr.js     # TV + controller
+        board/     MapCanvas RoomLayer EngineLayer AsciiLayer Overlays TokenChip RoomEditor PlayerMapPane mapDefs.js qr.js     # TV + controller
         builder/   steps.jsx GearStep.jsx builderState.js                                   # character builder steps
         sheet/     parts.jsx
         wizard/    generateClient.js
@@ -452,7 +453,8 @@ Where the code differs from what earlier versions of this document (or `docs/BOA
 - **Name rejoin** no longer re-attaches automatically: a player's phone re-attaches with its private seat token only; a name-only rejoin is a seat claim the GM approves (`docs/REVIEW_2026-10-30.md` #3). Section 19 of the research backlog said "reconnect by name".
 - **GM takeover** needs the per-game 6-digit `gmPin` (not just "no DM connected") and rotates `dmToken`.
 - **Bundled packs** are validated with `meta.source: "bundled"` and live in the client bundle; runtime packs override them by id. Map overlay packs (`kind: "maps"`, id `<packId>-maps`, written by the room editor for bundled packs) are a fourth schema `kind`; `ContentContext` merges their `maps[]` into `<packId>` by map id and does not list them as packs.
-- **Pack schema vs. universe map data.** Universe maps (`universes/*/maps/index.js`) may carry `levelNoun`, `backdrop` and `palette`; the pack schema's `maps[]` object has `kind`/`size`/`levels`/`rooms`/`doors`/`spawn`/`grid`/`outline`/`crop` but not those three (`additionalProperties: false`), so pack maps take them from the universe map or engine config with the same id (`board/mapDefs.js`).
+- **Pack schema vs. universe map data.** Pack `maps[]` may now carry `levelNoun`, `backdrop` (`space`|`sand`|`none`) and `palette` like universe maps (additive; the generator output schema strips them together with `grid`/`outline`/`crop`). Without them a pack map still takes them from the universe map or engine config with the same id (`board/mapDefs.js`).
+- **ASCII maps are vector maps on the board.** `kind:"ascii"` maps are parsed by `src/engine/maps/asciiMap.js` (rooms matched to `maps[].rooms` names, ids = hint id or kebab of the name) and drawn by `board/AsciiLayer.jsx` (TV, GM controller, Room Editor, GM Maps tab with a SHOW ASCII toggle). The DM client sends the parsed room rects in `board-set-map`, so fog / auto-reveal / hit-testing need no server change. A cell is 12 × 24 map px; the parser pads the grid (1 row above, 2 below, 2 columns each side). Coverage: `node scripts/test-ascii-maps.mjs`.
 - **Initiative deck range** for ALIEN (cards 1-10) is flagged VERIFY in `universes/alien/rules.js`; it is not in the catalog rules.
 - **No QR for the join link.** The only QR is the TV link in the Board tab (`board/qr.js`).
 - **Not built** (see `docs/FEATURES.md`): `tables[]` in packs, calibration, zone overlay, party view, XP, undo, "previously on" screen, Dune conflict runner, traits and assets.

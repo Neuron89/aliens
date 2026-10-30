@@ -86,7 +86,9 @@ const OUTBOX_ACK_MS = 6000;
 const TABLE_EVENTS = ['handout-received', 'clue-revealed', 'clock-ticked', 'new-orders', 'item-received', 'board-flash',
   'pause-requested', 'roll', 'character-submitted', 'submission-updated', 'handout-seen',
   // mechanics wave
-  'board-roll', 'panic', 'board-panic', 'supply-rolled', 'pool-changed', 'your-turn', 'turn-changed'];
+  'board-roll', 'panic', 'board-panic', 'supply-rolled', 'pool-changed', 'your-turn', 'turn-changed',
+  // builder gaps
+  'determination-spent'];
 const clientUid = () => `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 
 export function GameProvider({ children }) {
@@ -724,6 +726,10 @@ export function GameProvider({ children }) {
     return enqueue('panic-result', result);
   }, [enqueue]);
   const initPass = useCallback((toId, cb) => socketRef.current?.emit('init-pass', { toId }, cb), []);
+  /** Player: spend 1 DETERMINATION (server validates >= 1; GM sees it in the roll feed). */
+  const determinationSpend = useCallback((reason, cb) => socketRef.current?.emit('determination-spend', { reason: reason || '' }, cb), []);
+  /** DM: grant DETERMINATION (delta default +1; max from rules.determination for seats without one). */
+  const determinationGrant = useCallback((playerId, delta = 1, max, cb) => emitTable('determination-grant', { playerId, delta, max }, cb), [emitTable]);
 
   /* ─── Table board ────────────────────────────────── */
   /** Board (TV) role: attach to a game by code (no token needed). */
@@ -945,6 +951,8 @@ export function GameProvider({ children }) {
     injuryRemove,
     panicResult,
     initPass,
+    determinationSpend,
+    determinationGrant,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

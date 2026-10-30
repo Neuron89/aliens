@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import { useFx } from './player/fx';
@@ -10,6 +10,43 @@ export const CORE_SECTIONS = [
   { id: 'maps', label: 'Maps' },
   { id: 'dice', label: 'Dice Roller' },
 ];
+
+/** Clicking the tab that is already active fires this window event ({ detail: sectionId }) so a
+    section can return to its root view (ScenarioLibrary: back from a scenario detail to the library). */
+export const NAV_RESELECT = 'engine:nav-reselect';
+export const onNavReselect = (id, fn) => {
+  const h = (e) => { if (e.detail === id) fn(); };
+  window.addEventListener(NAV_RESELECT, h);
+  return () => window.removeEventListener(NAV_RESELECT, h);
+};
+
+/* A new session replaced the one this terminal was running (e.g. Game Night wizard START SESSION):
+   the code everyone joined with is dead — show the new one with COPY NEW CODE until dismissed. */
+function NewCodeBanner() {
+  const { gameCode } = useGame();
+  const prev = useRef(gameCode);
+  const [notice, setNotice] = useState(null); // { code, old }
+  const [copied, setCopied] = useState(null);
+  useEffect(() => {
+    if (prev.current && gameCode && prev.current !== gameCode) setNotice({ code: gameCode, old: prev.current });
+    if (!gameCode) setNotice(null);
+    prev.current = gameCode;
+  }, [gameCode]);
+  if (!notice || notice.code !== gameCode) return null;
+  const link = typeof window !== 'undefined' ? `${window.location.origin}?join=${notice.code}` : '';
+  const copy = (text, what) => {
+    navigator.clipboard?.writeText(text).then(() => setCopied(what), () => setCopied('fail'));
+    setTimeout(() => setCopied(null), 2500);
+  };
+  return (
+    <div className="dm-newcode" role="status">
+      <span><b>NEW ACCESS CODE {notice.code}</b> — {notice.old} is closed; every player rejoins with the new code.</span>
+      <button type="button" className="run-btn sm primary" onClick={() => copy(notice.code, 'code')}>{copied === 'code' ? 'COPIED' : 'COPY NEW CODE'}</button>
+      <button type="button" className="run-btn sm" onClick={() => copy(link, 'link')}>{copied === 'link' ? 'COPIED' : 'COPY JOIN LINK'}</button>
+      <button type="button" className="run-btn sm" onClick={() => setNotice(null)} aria-label="Dismiss">✕</button>
+    </div>
+  );
+}
 
 /* DM-wide banner for the anonymous X-card: neutral wording, a soft chime, nothing
    about who pressed it. Also flags pending player-built characters. */
@@ -30,6 +67,14 @@ function DmAlerts({ onChange }) {
     if (!roll || roll.secret || !roll.roll?.flags?.includes('complication')) return;
     push({ id: roll.id, kind: 'complication', who: roll.characterName || roll.playerName, text: roll.roll.label || '', n: Math.max(1, Math.min(5, Number(roll.roll.complications) || 1)) });
     play('alert');
+  }), [on, play]);
+  /* DUNE Determination spent on a phone → short notice (also in the roll feed). */
+  useEffect(() => on('determination-spent', (d) => {
+    if (!d) return;
+    const id = `det-${d.playerId}-${d.at}`;
+    push({ id, kind: 'determination', who: d.name, text: `${d.value}/${d.max} left${d.reason ? ` · ${d.reason}` : ''}` });
+    play('seen');
+    setTimeout(() => drop(id), 10000);
   }), [on, play]);
   /* Panic result → GM sees the effect (public to the GM, private on the table). */
   useEffect(() => on('panic', (p) => {
@@ -78,6 +123,8 @@ function DmAlerts({ onChange }) {
                   {hasThreat && <button type="button" className="run-btn sm primary" onClick={() => { poolDelta('threat', p.n, `complication (${p.who})`); drop(p.id); }}>+{p.n} THREAT</button>}
                   {hasThreat && <button type="button" className="run-btn sm" onClick={() => { poolDelta('threat', 2 * p.n, `complication converted (${p.who})`); drop(p.id); }}>+{2 * p.n} (CONVERT)</button>}
                 </>
+              ) : p.kind === 'determination' ? (
+                <span><b>DETERMINATION SPENT</b> — {p.who} · {p.text}</span>
               ) : (
                 <span><b>PANIC</b> — {p.who} {p.text}{p.detail ? <small> {p.detail}</small> : null}</span>
               )}
@@ -134,12 +181,17 @@ export default function Nav({ active, onChange, isDM }) {
           <button
             key={s.id}
             className={active === s.id ? 'active' : ''}
-            onClick={() => onChange(s.id)}
+            onClick={() => {
+              // Re-clicking the active tab resets that section to its root (e.g. SCENARIOS → library).
+              if (active === s.id) window.dispatchEvent(new CustomEvent(NAV_RESELECT, { detail: s.id }));
+              onChange(s.id);
+            }}
           >
             {s.label}
           </button>
         ))}
       </nav>
+      {isDM && <NewCodeBanner />}
       {isDM && <DmAlerts onChange={onChange} />}
     </>
   );

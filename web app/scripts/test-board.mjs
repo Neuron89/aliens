@@ -12,6 +12,8 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import assert from 'assert/strict';
 import { io } from 'socket.io-client';
 import { roomAt, sanitizeMapDef, viewFor, emptyBoard } from '../server/board.js';
+import { buildAsciiMapDef } from '../src/engine/maps/asciiMap.js';
+import { readFileSync } from 'fs';
 import { validatePack } from '../server/schema/validate.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -69,6 +71,27 @@ const center = (id) => {
   const pack = { packVersion: 1, id: 'board-test-maps', universe: 'alien', kind: 'maps', meta: { title: 'T', tagline: 't' }, maps: [{ ...MAPDEF }] };
   const res = validatePack(pack);
   ok(res.ok, 'maps overlay pack with Montero rooms is schema-valid: ' + res.errors.join('; '));
+}
+
+/* ── ASCII map → parsed mapDef (what resolveMapDef sends for kind:'ascii') ── */
+const tartarusPack = JSON.parse(readFileSync(join(ROOT, 'src/universes/alien/content/tartarus-reach.json'), 'utf8'));
+const tartarusMap = tartarusPack.maps.find((m) => m.kind === 'ascii');
+const ASCII_DEF = buildAsciiMapDef(tartarusMap);
+const ASCII_MAP_ID = `${tartarusPack.id}:${tartarusMap.id}`;
+const aCenter = (id) => { const s = ASCII_DEF.rooms.find((r) => r.id === id).shape; return { x: s.x + s.w / 2, y: s.y + s.h / 2 }; };
+{
+  const { mapDef, error } = sanitizeMapDef(ASCII_DEF);
+  ok(!error, 'parsed ASCII mapDef sanitizes: ' + error);
+  ok(mapDef.rooms.length === ASCII_DEF.rooms.length && mapDef.rooms.length >= tartarusMap.rooms.length * 0.8, 'every parsed room survives sanitizing');
+  ok(mapDef.kind === 'ascii' && mapDef.ascii && mapDef.size && mapDef.crop && mapDef.outline, 'ascii mapDef carries text, size, crop, outline');
+  const sl = aCenter('survey-lab');
+  eq(roomAt(mapDef, sl.x, sl.y), 'survey-lab', 'hit-test a parsed room');
+  const pa = ASCII_DEF.spawn.pc;
+  eq(roomAt(mapDef, pa[0], pa[1]), 'pad-a', 'spawn is inside the first hinted room');
+  // Room Editor overlay: shaped rooms are authoritative (move one, drop one)
+  const moved = { ...tartarusMap, rooms: ASCII_DEF.rooms.filter((r) => r.id !== 'quiet-room').map((r) => (r.id === 'pad-b' ? { ...r, shape: { ...r.shape, y: 0.5 } } : r)) };
+  const od = buildAsciiMapDef(moved);
+  ok(!od.rooms.some((r) => r.id === 'quiet-room') && od.rooms.find((r) => r.id === 'pad-b').shape.y === 0.5, 'overlay rooms override parsed ones by id; deletions stick');
 }
 
 /* ── Server ── */
@@ -259,6 +282,26 @@ try {
   // Reset keeps map, clears tokens.
   ok((await call(dm2, 'board-reset', { gameCode: code })).success, 'reset');
   await until(board2, (b) => Object.keys(b.tokens).length === 0 && b.mapId === 'uscss-montero', 'reset clears tokens, keeps map');
+
+  // ASCII pack map with parsed room geometry: fog, hit-testing and auto-reveal with no server changes.
+  {
+    const sa = await call(dm2, 'board-set-map', { gameCode: code, mapId: ASCII_MAP_ID, mapDef: ASCII_DEF });
+    ok(sa.success, 'ascii map set: ' + sa.error);
+    await until(board2, (b, s) => b.mapId === ASCII_MAP_ID && s.mapDef?.kind === 'ascii', 'board got the ascii map');
+    eq(board2.mapDef.rooms.length, ASCII_DEF.rooms.length, 'board mapDef has the parsed rooms');
+    const lab = aCenter('survey-lab');
+    const cr = await call(dm2, 'board-token-upsert', { gameCode: code, token: { id: 'xeno-a', kind: 'creature', label: 'Lurker', x: lab.x, y: lab.y } });
+    ok(cr.success && cr.token.roomId === 'survey-lab', 'creature lands in the parsed Survey Lab');
+    await sleep(150);
+    ok(!board2.boardState.tokens['xeno-a'], 'creature in an unrevealed parsed room is hidden from the board');
+    const pcA = await call(dm2, 'board-token-upsert', { gameCode: code, token: { id: 'pc-a2', kind: 'pc', label: 'Ripley', ownerPlayerId: jA.playerId, x: ASCII_DEF.spawn.pc[0], y: ASCII_DEF.spawn.pc[1] } });
+    ok(pcA.success && pcA.token.roomId === 'pad-a', 'PC spawns in Pad A');
+    await until(board2, (b) => b.rooms['pad-a']?.revealed, 'spawn room auto-revealed');
+    ok(!board2.boardState.rooms['survey-lab']?.revealed, 'survey lab still fogged');
+    dm2.emit('board-token-move', { gameCode: code, id: 'pc-a2', x: lab.x - 0.02, y: lab.y });
+    await until(board2, (b) => b.tokens['xeno-a'] && b.rooms['survey-lab']?.revealed, 'PC entering the survey lab reveals it and the creature');
+    eq(board2.boardState.tokens['pc-a2'].roomId, 'survey-lab', 'PC hit-tested into the parsed room');
+  }
 
   // End game reaches the board.
   const ended = new Promise((res) => board2.once('game-ended', res));

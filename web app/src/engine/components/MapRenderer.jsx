@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { AsciiDeckPlan } from './board/AsciiLayer';
+import { mapVisuals } from './board/mapDefs';
 
 /**
  * Resolve the interactive MapEngine component for a map entry.
@@ -17,12 +19,25 @@ export function resolveEngine(universe, map) {
 
 /**
  * MapRenderer — renders one map in a given view: 'engine' (interactive
- * MapEngine deck plan), 'image', or 'ascii'. With no view, picks the best.
+ * MapEngine deck plan), 'image', 'vector' (the ASCII schematic drawn as a
+ * themed deck plan, board/AsciiLayer) or 'ascii' (the original text).
+ * With no view, picks the best.
  */
 export default function MapRenderer({ universe, map, view }) {
   const Engine = resolveEngine(universe, map);
   const src = map.src || map.image;
-  const v = view || (Engine ? 'engine' : src ? 'image' : 'ascii');
+  const v = view || (Engine ? 'engine' : src ? 'image' : map.ascii ? 'vector' : 'ascii');
+  const palette = useMemo(() => mapVisuals(universe, { id: map.id, kind: 'ascii' }).palette, [universe, map.id]);
+
+  if (v === 'vector' && map.ascii) {
+    return (
+      <div className="panel map-vector-panel" style={{ padding: '0.5rem' }}>
+        <div style={{ border: '1px solid var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
+          <AsciiDeckPlan map={map} palette={palette} />
+        </div>
+      </div>
+    );
+  }
 
   if (v === 'engine' && Engine) {
     return (

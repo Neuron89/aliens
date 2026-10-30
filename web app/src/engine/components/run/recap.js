@@ -1,7 +1,9 @@
 /* Session recap as Markdown, built client-side from the session log
    (server/sessionLog.js entries) + table state. Pure (no DOM) except download(). */
 
-const time = (ms) => new Date(ms).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+import { fmtTime } from '../../rulesUtils';
+
+const time = (ms) => fmtTime(ms);
 const ENDING_RE = /^ENDING:\s*/i;
 
 /**

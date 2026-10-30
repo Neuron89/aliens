@@ -55,7 +55,9 @@ export function rulesText(universe) {
   }
   if (r.creation) {
     lines.push(`Creation budget: ${fmtCreation(r.creation)}.`);
-    if (r.creation.attrPoints !== undefined) {
+    if (Array.isArray(r.creation.attrArray)) {
+      lines.push(`Attribute scores MUST be exactly the values ${r.creation.attrArray.join('/')} assigned one each to the ${r.attributes.length} attributes (a permutation of that array, no repeats, no other values).`);
+    } else if (r.creation.attrPoints !== undefined) {
       lines.push(`Attribute scores should total ${r.creation.attrPoints} (±1). Pre-generated characters are seasoned: skill totals may exceed skillPoints by up to 10, and individual skills may go up to ${(r.creation.skillMax ?? 3) + 2} in the career's key skills only.`);
     }
   }

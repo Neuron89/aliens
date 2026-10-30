@@ -543,11 +543,11 @@
       "career": "Bene Gesserit",
       "appearance": "Still as poured water, grey-eyed, dressed as a lady-in-waiting. Her smile arrives a moment after everyone else’s. DRIVE STATEMENTS — Duty: The Sisterhood placed me here; I will not leave its work half done. · Faith: The long plan is wiser than any single life, including mine. · Justice: Fairness is a luxury of those who will not live long. · Power: The hand that guides is stronger than the hand that strikes. · Truth: I hear every lie spoken in this keep. I choose which ones to answer.",
       "attributes": {
-        "duty": 5,
-        "faith": 7,
-        "justice": 5,
+        "faith": 8,
         "power": 7,
-        "truth": 6
+        "truth": 6,
+        "duty": 5,
+        "justice": 4
       },
       "skills": {
         "battle": 4,
@@ -581,10 +581,10 @@
       "appearance": "Grey-bearded, heavy-shouldered, moves like a much younger man. Three dueling scars, one he will not explain. DRIVE STATEMENTS — Duty: I swore to the old Lord on his deathbed. The oath outlives him. · Faith: I believe in the blade, the shield and the slow, sure stroke. · Justice: A murderer under this roof answers to me before any court. · Power: Power is for lords. I want only to be ready. · Truth: A man’s guard tells you more than his tongue.",
       "attributes": {
         "duty": 8,
+        "justice": 7,
+        "truth": 6,
         "faith": 5,
-        "justice": 6,
-        "power": 5,
-        "truth": 6
+        "power": 4
       },
       "skills": {
         "battle": 8,
@@ -657,11 +657,11 @@
       "career": "Noble Scion",
       "appearance": "Lady Senna’s younger brother: handsome, restless, overdressed for the desert, sharper than he lets anyone see. DRIVE STATEMENTS — Duty: My sister rules. I was raised to be her shadow — I will not be her ghost. · Faith: I believe in luck, and in making it. · Justice: The Harkonnens have bled this town for a decade. Someone should make them pay. · Power: A minor House is only minor until it makes the right alliance. · Truth: Everyone at court is acting. The trick is knowing which play they are in.",
       "attributes": {
-        "duty": 6,
-        "faith": 5,
-        "justice": 5,
         "power": 8,
-        "truth": 6
+        "duty": 7,
+        "truth": 6,
+        "faith": 5,
+        "justice": 4
       },
       "skills": {
         "battle": 5,

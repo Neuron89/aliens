@@ -65,6 +65,11 @@ export const pools = [
   { key: 'threat', label: 'THREAT', initial: 0, initialPerPlayer: 2, owner: 'gm', visibleToPlayers: false, resetOnNewSession: true },
 ];
 
+/* DETERMINATION: a personal resource (0–3, every character starts with 1). The phone
+   shows it in the top bar with SPEND (`determination-spend`, server validates ≥ 1 and logs
+   it into the GM's roll feed); the GM grants +1 from the player editor (`determination-grant`). */
+export const determination = { label: 'DETERMINATION', short: 'DET', max: 3, initial: 1 };
+
 /* Initiative (catalog/rules.json "keep-the-initiative"): no cards — the acting side passes
    the turn to the other side (the GM nominates / a player hands it to an ally), or keeps
    it for 2 Momentum (players) / 2 Threat (GM). */
@@ -87,7 +92,12 @@ export const dice = {
   complicationRange: 1,  // natural 20 is a complication; can widen to 16–20
 };
 
+/* Drives are not bought with points: the rulebook hands every character the fixed
+   array 8/7/6/5/4, each value assigned to exactly one drive (CharacterBuilder
+   presents it as tap/drag-to-assign chips; attrPoints/attrMin/attrMax remain as
+   the derived bounds for older code paths). */
 export const creation = {
+  attrArray: [8, 7, 6, 5, 4],
   attrPoints: 30, attrMin: 4, attrMax: 8,
   skillPoints: 26, skillMax: 8,
   skillMin: 4, // honored by CharacterBuilder
@@ -103,6 +113,7 @@ export const rules = {
   derived,
   tracks,
   pools,
+  determination,
   statusEffects,
   conditions,
   dice,

@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import { buildRecap, downloadText } from './recap';
+import { fmtTime } from '../../rulesUtils';
 
 const FILTERS = [
   ['all', 'ALL'], ['scene', 'SCENES'], ['handout', 'HANDOUTS'], ['clue', 'CLUES'], ['clock', 'CLOCKS'],
@@ -56,7 +57,7 @@ export default function SessionLogPanel({ pack }) {
         {rows.length === 0 && <li className="run-empty">Nothing logged yet.</li>}
         {rows.map((e) => (
           <li key={e.id} className={`run-log-row t-${e.type}`}>
-            <time>{new Date(e.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</time>
+            <time>{fmtTime(e.at)}</time>
             <span className="run-log-type">{e.type.toUpperCase()}</span>
             <span className="run-log-text">{e.text}</span>
           </li>

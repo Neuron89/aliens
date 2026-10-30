@@ -9,12 +9,16 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import assert from 'assert/strict';
 import { validateAll } from './validate-content.mjs';
 import { getCatalog, startingGearFor, encumbrance, skillPool, CATALOG_KEYS } from '../src/engine/catalogUtils.js';
-import { panicOutcome, tableLookup, poolDefs, poolStart, inRange, ambientPreset } from '../src/engine/mechanicsUtils.js';
+import { panicOutcome, tableLookup, poolDefs, poolStart, inRange, ambientPreset, resolveSignatureAttack, attackDamage } from '../src/engine/mechanicsUtils.js';
+import { fmtTime, displayFlags, determinationDef, initialCharacterState } from '../src/engine/rulesUtils.js';
+import { parseAsciiMap, buildAsciiMapDef } from '../src/engine/maps/asciiMap.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const UNIVERSES = join(ROOT, 'src', 'universes');
 let checks = 0;
 const ok = (cond, msg) => { assert.ok(cond, msg); checks++; };
+const warnings = [];
+const eq = (a, b, msg) => { assert.deepEqual(a, b, msg); checks++; };
 
 /* Keys every universe core must provide (index.js adds navSections,
    rules.dice.Roller and content.packs on top — those need JSX/Vite). */
@@ -124,6 +128,27 @@ for (const id of ids) {
     ok(defs.find((d) => d.key === 'threat')?.visibleToPlayers === false, 'dune: threat hidden from players');
     ok(poolStart(u, 4).threat === 8, 'dune: starting threat = 2 x players');
     ok(u.rules.initiative?.mode === 'nominate', 'dune: initiative nominate');
+    // Drives: the rulebook's fixed array 8/7/6/5/4, one value per drive (CharacterBuilder tap/drag-to-assign).
+    const arr = u.rules.creation.attrArray;
+    assert.deepEqual(arr, [8, 7, 6, 5, 4], 'dune: rules.creation.attrArray is 8/7/6/5/4'); checks++;
+    ok(arr.reduce((a, b) => a + b, 0) === u.rules.creation.attrPoints, 'dune: attrArray sums to attrPoints (30)');
+    const perm = (attrs) => u.rules.attributes.map((a) => Number(attrs?.[a.key]) || 0).sort((a, b) => b - a).join(',') === [...arr].sort((a, b) => b - a).join(',');
+    const offenders = chars.filter((c) => !perm(c.attributes));
+    ok(chars.length > 0, 'dune: bundled characters to check against the drive array');
+    // Bundled packs are NOT edited here: offenders are reported (non-fatal) for the content owner.
+    for (const c of offenders) {
+      const pack = packs.find((p) => (p.characters || []).includes(c));
+      warnings.push(`dune: ${pack?.id || '?'} / ${c.id} drives ${u.rules.attributes.map((a) => `${a.key} ${c.attributes[a.key]}`).join(', ')} are not a permutation of ${arr.join('/')}`);
+    }
+    console.log(`  dune drive array: ${chars.length - offenders.length}/${chars.length} bundled characters conform${offenders.length ? ` — ${offenders.length} offender(s) listed below` : ''}`);
+    // Determination (0–3, starts 1) is assigned with the character.
+    const det = determinationDef(u);
+    ok(det && det.max === 3 && det.initial === 1, 'dune: rules.determination max 3, starts 1');
+    eq(initialCharacterState(u, chars[0]).determination, { value: 1, max: 3 }, 'dune: initialCharacterState carries determination 1/3');
+  }
+  if (id === 'alien') {
+    ok(!u.rules.creation.attrArray, 'alien: keeps point-buy (no attrArray)');
+    ok(determinationDef(u) === null && initialCharacterState(u, chars[0]).determination === undefined, 'alien: no determination');
   }
   console.log(`✓ ${id}: interface OK, ${packs.length} bundled packs, ${chars.length} characters`);
 }
@@ -135,9 +160,36 @@ for (const id of ids) {
 }
 
 ok(inRange('15+', 22) && inRange('1-6', 6) && !inRange('7', 8), 'mechanicsUtils.inRange');
+// 24-hour times everywhere (rulesUtils.fmtTime)
+const t1 = new Date(2026, 9, 30, 21, 5, 9);
+ok(fmtTime(t1) === '21:05' && fmtTime(t1.getTime(), { seconds: true }) === '21:05:09' && fmtTime(new Date(2026, 0, 1, 0, 7)) === '00:07', 'rulesUtils.fmtTime is 24-hour');
+// Panic supersedes botch (feed / TV / phone)
+eq(displayFlags(['panic', 'botch', 'push']), ['panic', 'push'], 'displayFlags: panic drops botch');
+eq(displayFlags(['botch']), ['botch'], 'displayFlags: botch alone stays');
+// GM secret attack: full pool + damage
+const atk = resolveSignatureAttack({ text: 'Inner jaws, 9 Base Dice, Damage 2.' }, (n) => ({ dice: Array(n).fill(6).map((d, i) => (i < 3 ? 6 : 2)), successes: 3 }));
+ok(atk.dice === 9 && atk.pool.dice.length === 9 && atk.hit && atk.damage === 4, 'resolveSignatureAttack: 9 dice, 3 successes → damage 2 + 2');
+ok(resolveSignatureAttack({ text: 'Hisses: Panic Roll.' }, () => null).pool === null, 'resolveSignatureAttack: no pool = automatic effect');
+eq(attackDamage('5 Stress to one target'), { stress: 5 }, 'attackDamage: 2d20 stress');
 ok(ambientPreset('ship-hum') === 'ship' && ambientPreset('wind') === 'wind' && ambientPreset('nope') === null, 'mechanicsUtils.ambientPreset');
+
+// ASCII map parser (board vector maps + fog geometry; full table: scripts/test-ascii-maps.mjs)
+{
+  const art = ['┌──────┐   ┌──────┐', '│ LAB  ├───┤ MESS │', '│[CAGE]│   │      │', '└──┬───┘   └──────┘', '   │', '┌──┴────────────┐', '│  HANGAR [ZERO]│', '└───────────────┘'].join(String.fromCharCode(10));
+  const p = parseAsciiMap(art, [{ name: 'Lab' }, { name: 'Mess Hall' }, { name: 'Hangar' }]);
+  eq(p.unmatched, [], 'asciiMap: every hinted room matched');
+  eq(p.rooms.map((r) => r.id).sort(), ['hangar', 'lab', 'mess-hall'], 'asciiMap: kebab ids from hints');
+  ok(p.doors.some((d) => [d.from, d.to].sort().join() === 'lab,mess-hall') && p.doors.some((d) => [d.from, d.to].sort().join() === 'hangar,lab'), 'asciiMap: connectors become doors');
+  ok(p.rooms.every((r) => r.shape.w > 0 && r.shape.h > 0 && r.shape.x + r.shape.w <= 1 && r.shape.y + r.shape.h <= 1), 'asciiMap: normalized rects');
+  const def = buildAsciiMapDef({ id: 'smoke-map', title: 'SMOKE', kind: 'ascii', ascii: art, rooms: [{ name: 'Lab' }, { name: 'Mess Hall' }, { name: 'Hangar' }] });
+  ok(def.size[0] === p.cols * 12 && def.size[1] === p.rows * 24 && def.spawn.pc && def.rooms.length === 3, 'asciiMap: mapDef with 1×2 cell aspect, spawn, rooms');
+}
 
 const { total, failures } = validateAll({ quiet: true });
 ok(failures === 0, `${failures} invalid content pack(s) — run node scripts/validate-content.mjs`);
 console.log(`✓ content: ${total} packs valid`);
+if (warnings.length) {
+  console.log(`\n⚠ ${warnings.length} warning(s) (not failures):`);
+  for (const w of warnings) console.log(`  - ${w}`);
+}
 console.log(`\nSMOKE OK — ${checks} checks passed.`);

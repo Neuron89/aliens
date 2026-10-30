@@ -84,6 +84,28 @@ export function creatureStats(c) {
   return { hpMax, armor, armorVsFire: s.armorVsFire ?? null, speed: s.speed ?? null, skills: s.skills || null, threat: s.threat ?? null, test: s.test || null };
 }
 
+/** Damage named in a signature attack text: { damage } for "Damage 2" (YZE) or { stress } for "5 Stress"
+    (2d20); {} when the entry names neither. */
+export function attackDamage(text) {
+  const t = String(text || '');
+  const d = /Damage\s+(\d+)/i.exec(t);
+  if (d) return { damage: Number(d[1]) };
+  const s = /(\d+)\s+(?:extra\s+)?Stress\b/i.exec(t);
+  return s ? { stress: Number(s[1]) } : {};
+}
+
+/** Resolve a signature attack's pool roll. roll(n) → { dice[], successes }.
+    YZE: any success hits; base damage + 1 per extra success. Entries without a dice pool are automatic effects.
+    Returns { dice: n|null, pool: { dice[], successes }|null, hit: bool|null, damage: number|null, stress: number|null }. */
+export function resolveSignatureAttack(entry, roll) {
+  const nd = attackDice(entry?.text);
+  const { damage = null, stress = null } = attackDamage(entry?.text);
+  if (!nd) return { dice: null, pool: null, hit: null, damage, stress };
+  const pool = roll(nd);
+  const hit = pool.successes > 0;
+  return { dice: nd, pool, hit, damage: hit && damage != null ? damage + (pool.successes - 1) : null, stress };
+}
+
 /** Number of attack dice named in a signature attack text ("6 Base Dice"), or null. */
 export function attackDice(text) {
   const m = /(\d+)\s+Base Dice/i.exec(String(text || ''));

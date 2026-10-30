@@ -6,8 +6,11 @@
    because bundled packs only exist in the client bundle.
    ═══════════════════════════════════════════════════════════════ */
 import { resolveEngine } from '../MapRenderer';
+import { parseAsciiMapCached, kebab, mergeRooms, buildAsciiMapDef } from '../../maps/asciiMap';
 
-const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'room';
+export { mergeRooms };
+
+const slug = kebab;
 
 /**
  * Map picker options: active pack first, then universe maps, then other packs.
@@ -97,6 +100,11 @@ function measureImage(src) {
   });
 }
 
+/** ASCII map → parsed geometry (memoized by map id + ascii hash). */
+export function asciiGeometry(map) {
+  return parseAsciiMapCached(map.id, map.ascii || '', map.rooms || []);
+}
+
 function shapedRooms(rooms) {
   const seen = new Set();
   const out = [];
@@ -119,9 +127,11 @@ export async function resolveMapDef(universe, option) {
   const m = option.map;
   const base = engineBase(universe, m);
   if (base) {
+    // a pack map on top of a universe engine map may carry Room Editor corrections
+    const rooms = m !== base && option.packId ? mergeRooms(base.rooms, m.rooms) : base.rooms;
     return {
       id: base.id, title: m.title || base.title, ...(m.subtitle || base.subtitle ? { subtitle: m.subtitle || base.subtitle } : {}),
-      kind: 'engine', engine: base.id, ...pick(base, BOARD_KEYS), rooms: shapedRooms(base.rooms),
+      kind: 'engine', engine: base.id, ...pick(base, BOARD_KEYS), rooms: shapedRooms(rooms),
     };
   }
   const src = m.src || m.image;
@@ -132,8 +142,10 @@ export async function resolveMapDef(universe, option) {
       kind: 'image', src, ...pick(m, BOARD_KEYS), ...(size ? { size } : {}), rooms: shapedRooms(m.rooms),
     };
   }
-  return {
-    id: m.id, title: m.title || m.id, ...(m.subtitle ? { subtitle: m.subtitle } : {}),
-    kind: 'ascii', ascii: m.ascii || '', ...pick(m, BOARD_KEYS), rooms: shapedRooms(m.rooms),
-  };
+  return asciiMapDef(m);
+}
+
+/** Plain-data mapDef for an ASCII map (engine/maps/asciiMap.js buildAsciiMapDef; node-importable for tests). */
+export function asciiMapDef(m) {
+  return buildAsciiMapDef(m);
 }

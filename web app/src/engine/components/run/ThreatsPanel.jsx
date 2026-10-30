@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import { getCatalog } from '../../catalogUtils';
-import { creatureStats, attackDice, tableLookup, rollDie } from '../../mechanicsUtils';
+import { creatureStats, tableLookup, rollDie, resolveSignatureAttack } from '../../mechanicsUtils';
 import { STATUS_DEFS, tokenStatuses } from '../board/TokenChip';
 
 /* ═══════════════════════════════════════════════════════════════
@@ -11,7 +11,9 @@ import { STATUS_DEFS, tokenStatuses } from '../board/TokenChip';
    from universe.catalog.creatures by token.ref. Health lives on the token
    (token.hp / token.hpMax — GM-only, persisted, never sent to the TV).
    Status toggles write token.status (the TV ring). ROLL ATTACK is a secret
-   GM roll (gm-roll): signature attack die + its "N Base Dice" pool.
+   GM roll (gm-roll): the signature die lookup PLUS the full attack — the entry's "N Base Dice"
+   pool (dice, successes, HIT/MISS, damage = "Damage N" + 1 per extra success) or, for entries
+   without a pool, the automatic effect — in the roll feed (summary + entry text) and on the card.
    ═══════════════════════════════════════════════════════════════ */
 const STATUS_KEYS = ['wounded', 'broken', 'burning', 'stress'];
 const tokId = () => `cr-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`;
@@ -46,17 +48,23 @@ function ThreatCard({ t, creature, onUpsert, onRemove, onSecretRoll }) {
     if (!sigs.length) return;
     const n = rollDie(die);
     const entry = tableLookup(sigs, n);
-    const nd = attackDice(entry?.text);
-    const pool = secretAttack && nd ? rollPool(nd) : null;
-    setSig({ roll: n, entry, pool });
+    const atk = secretAttack ? resolveSignatureAttack(entry, rollPool) : { dice: null, pool: null, hit: null, damage: null, stress: null };
+    setSig({ roll: n, entry, ...atk, attack: secretAttack });
     if (secretAttack) {
+      const name = (entry?.name || 'ATTACK').toUpperCase();
+      const outcome = atk.pool
+        ? `${atk.dice} DICE → ${atk.pool.successes} SUCCESS${atk.pool.successes === 1 ? '' : 'ES'} · ${atk.hit ? `HIT${atk.damage != null ? `, DAMAGE ${atk.damage}` : ''}` : 'MISS'}`
+        : `NO ATTACK ROLL — AUTOMATIC EFFECT${atk.stress != null ? ` (${atk.stress} STRESS)` : ''}`;
       onSecretRoll({
-        kind: 'gm', label: `${(entry?.name || 'ATTACK').toUpperCase()}`,
-        summary: `${t.label}: d${die}=${n} ${entry?.name || '—'}${pool ? ` — ${pool.successes} success${pool.successes === 1 ? '' : 'es'} on ${nd} dice` : ''}`,
-        successes: pool ? pool.successes : undefined,
-        flags: pool && pool.successes >= 2 ? ['crit'] : [],
-        dice: pool ? { base: pool.dice } : {},
-        pool: pool ? { base: nd, stress: 0 } : undefined,
+        kind: 'gm', label: name,
+        summary: `D${die}=${n} ${name} · ${outcome}`,
+        detail: String(entry?.text || '').slice(0, 600),
+        signature: { die, roll: n, name: entry?.name || '' },
+        successes: atk.pool ? atk.pool.successes : undefined,
+        damage: atk.damage ?? undefined,
+        flags: atk.pool ? [atk.hit ? 'hit' : 'miss', ...(atk.pool.successes >= 2 ? ['crit'] : [])] : [],
+        dice: atk.pool ? { base: atk.pool.dice } : {},
+        pool: atk.pool ? { base: atk.dice, stress: 0 } : undefined,
       }, t.label);
     }
   };
@@ -120,8 +128,14 @@ function ThreatCard({ t, creature, onUpsert, onRemove, onSecretRoll }) {
           </div>
           {sig && (
             <div className="thr-sig-result" role="status">
-              <b>D{die} {sig.roll} → {sig.entry?.name || '—'}</b>
-              {sig.pool && <span className="thr-pool">[{sig.pool.dice.join(' ')}] {sig.pool.successes} SUCCESS{sig.pool.successes === 1 ? '' : 'ES'}</span>}
+              <b>{sig.attack ? 'SECRET · ' : ''}D{die} {sig.roll} → {sig.entry?.name || '—'}</b>
+              {sig.pool && (
+                <span className={`thr-pool${sig.hit ? ' hit' : ' miss'}`}>
+                  {sig.dice} DICE [{sig.pool.dice.join(' ')}] → {sig.pool.successes} SUCCESS{sig.pool.successes === 1 ? '' : 'ES'}
+                  {' · '}<b>{sig.hit ? `HIT${sig.damage != null ? ` — DAMAGE ${sig.damage}` : ''}` : 'MISS'}</b>
+                </span>
+              )}
+              {sig.attack && !sig.pool && <span className="thr-pool">NO ATTACK ROLL — AUTOMATIC EFFECT{sig.stress != null ? ` (${sig.stress} STRESS)` : ''}</span>}
               <p>{sig.entry?.text}</p>
             </div>
           )}

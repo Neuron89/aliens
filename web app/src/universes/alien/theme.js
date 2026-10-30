@@ -71,6 +71,16 @@ export const theme = {
     statusStyle: 'segments', // square-cut ring ticks
     chipFill: '#0a0c10',
     font: "'Share Tech Mono', ui-monospace, monospace",
+    hullStyle: 'hatched',    // engine deck plans on the TV: dim hatched hull, not a bright teal slab
+    hullAlpha: 0.3,
+    /* Vector deck plans drawn from ASCII schematics (board/AsciiLayer.jsx). */
+    deck: {
+      style: 'hatched',
+      hull: '#0b1f1b', hullEdge: '#2f8f78', hullHatch: '#163e35', zone: '#1f5a4c', zoneFill: 'rgba(40, 120, 100, 0.06)',
+      floor: '#0b221e', floorAlt: '#0e2a25', wall: '#4fc4a4', wallDim: '#2a7a68', corridor: '#081714', corridorEdge: '#2a6a5a',
+      door: '#9cf0d8', text: '#d4f4ea', textDim: '#6fae9a', accent: '#50c8a8',
+      organic: '#8a9a40', solid: '#b84a3a', water: '#2f8f9a', sand: '#9a8a5a', rock: '#6f8a86', fence: '#c8a040', dash: '#5f9a88', dots: '#5f9a88',
+    },
   },
   /* Terminal blips: square waves and short noise ticks. */
   sfx: {

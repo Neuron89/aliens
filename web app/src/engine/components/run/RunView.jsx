@@ -12,6 +12,7 @@ import InitiativePanel from './InitiativePanel';
 import ThreatsPanel from './ThreatsPanel';
 import PoolCounters from './PoolCounters';
 import { ambientPreset } from '../../mechanicsUtils';
+import Confirm from '../Confirm';
 
 /* ═══════════════════════════════════════════════════════════════
    GM RUN VIEW (DM tab "RUN") — the GM's main screen during play
@@ -80,14 +81,20 @@ export default function RunView({ tts, audio }) {
     if (table?.boardMode === 'theatre') setBoardMode('theatre', theatreFor(a, s));
   };
   const toggleDone = () => runSet({ completed: { ...completed, [key]: !completed[key] }, actIndex, sceneIndex, sceneTitle: scene?.name || '' });
+  const nextAct = acts[actIndex + 1];
+  const withAgenda = nextAct ? Object.values(players).filter((p) => p.character?.agendaByAct?.[String(actIndex + 2)]).length : 0;
   const doAdvance = () => {
     const next = actIndex + 1;
     if (!acts[next]) return;
-    const withAgenda = Object.values(players).filter((p) => p.character?.agendaByAct?.[String(next + 1)]).length;
-    if (!confirm(`Start ${actLabel(acts[next])}?${withAgenda ? `\n${withAgenda} player(s) receive NEW ORDERS on their phone.` : ''}`)) return;
     advanceAct(next, { actTitle: actLabel(acts[next]), sceneTitle: acts[next].scenes?.[0]?.name || '' });
     if (table?.boardMode === 'theatre') setBoardMode('theatre', theatreFor(next, 0));
   };
+  /* ADVANCE ACT: themed inline confirm (Confirm.jsx), never a native dialog. */
+  const advanceButton = (className, align = 'right') => (
+    <Confirm label="ADVANCE ACT ▸" className={className} align={align} title={`START ${String(actLabel(nextAct)).toUpperCase()}?`}
+      message={`The scene moves to ${nextAct?.scenes?.[0]?.name || 'the first scene'}.${withAgenda ? `\n${withAgenda} ${withAgenda === 1 ? 'player receives' : 'players receive'} NEW ORDERS on their phone.` : ''}`}
+      confirmLabel="ADVANCE" onConfirm={doAdvance} />
+  );
   const resendOrders = () => advanceAct(actIndex, { actTitle: actLabel(act), sceneTitle: scene?.name || '' });
   const sendNarration = (text, mode) => narrate(text, { title: scene?.name || act?.title || '', mode });
   const toggleTheatre = () => {
@@ -151,7 +158,7 @@ export default function RunView({ tts, audio }) {
                     </button>
                   );
                 })}
-                {acts[actIndex + 1] && <button type="button" className="run-btn primary run-advance" onClick={doAdvance}>ADVANCE ACT ▸</button>}
+                {nextAct && advanceButton('run-btn primary run-advance')}
               </nav>
 
               <section className="run-actinfo">
@@ -181,7 +188,7 @@ export default function RunView({ tts, audio }) {
                 {sceneIndex < scenes.length - 1
                   ? <button type="button" className="run-btn" onClick={() => goScene(actIndex, sceneIndex + 1)}>NEXT ▸</button>
                   : acts[actIndex + 1]
-                    ? <button type="button" className="run-btn primary" onClick={doAdvance}>ADVANCE ACT ▸</button>
+                    ? advanceButton('run-btn primary')
                     : <span className="run-dim">FINAL SCENE</span>}
               </div>
 

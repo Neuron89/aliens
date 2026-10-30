@@ -13,7 +13,9 @@ import PanicOverlay from './player/PanicOverlay';
 import SupplyPanel from './SupplyPanel';
 import { ItemArt } from './sheet/parts';
 import { getCatalog, itemById } from '../catalogUtils';
-import { plural } from '../rulesUtils';
+import { plural, fmtTime, determinationDef } from '../rulesUtils';
+import Confirm from './Confirm';
+import { FxToggles } from './Header';
 
 /* ═══════════════════════════════════════════════════════════════
    PlayerView — phone-first player terminal.
@@ -40,7 +42,7 @@ function IncomingAlert({ message, onDismiss, onReply, terminal, terms }) {
         <div className="pv-alert-head">
           {fromGm ? `▓▓ INCOMING ${terminal.name} ${terms.message.toUpperCase()} ▓▓` : `▓▓ ${terms.message.toUpperCase()} FROM ${String(message.from).toUpperCase()} ▓▓`}
           <br />
-          <span>PRIORITY: {message.priority} &nbsp;|&nbsp; {new Date(message.timestamp).toLocaleTimeString()}</span>
+          <span>PRIORITY: {message.priority} &nbsp;|&nbsp; {fmtTime(message.timestamp)}</span>
         </div>
         <div className="pv-alert-text">{message.text}</div>
         <div className="ph-alert-btns">
@@ -56,7 +58,7 @@ export default function PlayerView() {
   const {
     myPlayer, messages, sendPlayerMessage, sendPlayerToPlayer, leaveGame, unreadCount, clearUnread,
     gameCode, connectedPlayers, connected, dmOnline, table, outboxCount, sendRoll,
-    supplyRoll, initPass, on,
+    supplyRoll, initPass, on, determinationSpend,
   } = useGame();
   const { universe } = useUniverse();
   const { terms, terminal, rules } = universe;
@@ -109,9 +111,18 @@ export default function PlayerView() {
   const PLAYER = terms.player.toUpperCase();
   const GM = terms.gm.toUpperCase();
   /* Leaving drops this device's seat token: coming back to the same seat then needs the GM's approval. */
-  const confirmLeave = () => {
-    if (typeof window === 'undefined' || window.confirm(`Disconnect? Returning to this seat later needs the ${terms.gm}'s approval.`)) leaveGame();
-  };
+  const leaveButton = (label, className = 'pv-btn danger') => (
+    <Confirm block danger label={label} className={className} title="DISCONNECT?"
+      message={`Returning to this seat later needs the ${terms.gm}'s approval.`} confirmLabel="DISCONNECT" cancelLabel="STAY" onConfirm={leaveGame} />
+  );
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [detMsg, setDetMsg] = useState(null);
+  const detDef = determinationDef(universe);
+  const det = myPlayer?.determination || null;
+  const spendDetermination = () => determinationSpend('', (r) => {
+    setDetMsg(r?.success ? 'SPENT — THE GM SEES IT' : (r?.error || 'NOT SENT'));
+    setTimeout(() => setDetMsg(null), 3000);
+  });
   const myId = myPlayer?.id;
 
   const chat = messages
@@ -169,18 +180,29 @@ export default function PlayerView() {
     </div>
   );
 
+  const sub = table?.submission;
+  /* Player-built character: the first one, or a replacement at any time (after a death or by choice).
+     SUBMIT sends character-submit; the GM assigns it (DM editor / KIA flow: ASSIGN PLAYER-BUILT). */
+  if (building) {
+    return (
+      <div className="app pv-root ph-build-root">
+        {layer}
+        {lostBanner}
+        {c && myPlayer?.alive !== false && <div className="ph-build-note">NEW CHARACTER — {c.name} STAYS IN PLAY UNTIL THE {String(terms.gmShort || GM).toUpperCase()} ASSIGNS THIS ONE</div>}
+        <BuildCharacter onDone={() => setBuilding(false)} />
+      </div>
+    );
+  }
+  const subStatus = sub && (sub.status === 'pending' || sub.status === 'rejected') && (
+    <p className={`ph-sub-status${sub.status === 'rejected' ? ' rejected' : ''}`}>
+      {sub.status === 'pending'
+        ? `SUBMITTED: ${sub.name || 'your character'} — AWAITING ${terms.gmShort || GM} APPROVAL`
+        : `${terms.gmShort || GM} RETURNED YOUR CHARACTER${sub.reason ? `: “${sub.reason}”` : ''} — EDIT AND RESUBMIT`}
+    </p>
+  );
+
   /* Waiting screen — no character assigned yet (build one, or wait for the GM) */
   if (!c) {
-    const sub = table?.submission;
-    if (building) {
-      return (
-        <div className="app pv-root ph-build-root">
-          {layer}
-          {lostBanner}
-          <BuildCharacter onDone={() => setBuilding(false)} />
-        </div>
-      );
-    }
     return (
       <div className="app pv-screen">
         <div className="crt-overlay" />
@@ -193,15 +215,14 @@ export default function PlayerView() {
           <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem', marginBottom: '1rem' }}>
             Welcome, {myPlayer?.name}. Stand by for character assignment from {terms.gm}, or build your own.
           </p>
-          {sub?.status === 'pending' && <p className="ph-sub-status">SUBMITTED: {sub.name || 'your character'} — AWAITING {terms.gmShort || GM} APPROVAL</p>}
-          {sub?.status === 'rejected' && <p className="ph-sub-status rejected">{terms.gmShort || GM} RETURNED YOUR CHARACTER{sub.reason ? `: “${sub.reason}”` : ''} — EDIT AND RESUBMIT</p>}
+          {subStatus}
           <button type="button" className="pv-btn primary ph-wide" onClick={() => setBuilding(true)}>
             {sub?.status === 'pending' ? 'EDIT MY CHARACTER' : 'BUILD YOUR CHARACTER'}
           </button>
           <p style={{ color: 'var(--text-dim)', fontSize: '0.7rem', marginTop: '0.75rem' }}>AWAITING ASSIGNMENT...</p>
           {!connected && <p className="pv-offline">RECONNECTING…</p>}
         </div>
-        <button className="pv-btn" onClick={confirmLeave}>DISCONNECT</button>
+        <div className="ph-wait-leave">{leaveButton('DISCONNECT', 'pv-btn')}</div>
       </div>
     );
   }
@@ -218,7 +239,11 @@ export default function PlayerView() {
           {c.career && <div className="pv-dead-sub">{c.career}</div>}
           <div className="pv-dead-rule" />
           <div className="pv-dead-wait">AWAITING REASSIGNMENT</div>
-          <p className="pv-dead-note">Stand by for new character assignment from {terms.gm}.</p>
+          <p className="pv-dead-note">Stand by for new character assignment from {terms.gm} — or build your replacement now.</p>
+          {subStatus}
+          <button type="button" className="pv-btn primary ph-wide pv-dead-build" onClick={() => setBuilding(true)}>
+            {sub?.status === 'pending' ? 'EDIT MY NEW CHARACTER' : 'BUILD A NEW CHARACTER'}
+          </button>
           {(!connected || !dmOnline) && <p className="pv-offline">{!connected ? 'RECONNECTING…' : `${GM} OFFLINE`}</p>}
         </div>
       </div>
@@ -283,7 +308,7 @@ export default function PlayerView() {
             return <TrackBar key={t.key} label={t.short || t.label} value={value} max={max} color={t.color || 'var(--accent)'} danger={danger} />;
           })}
         </div>
-        {table?.pools?.length > 0 && (
+        {(table?.pools?.length > 0 || (detDef && det)) && (
           <div className="ph-pools" aria-label="Shared pools">
             {table.pools.map(p => (
               <span key={p.key} className={`ph-pool k-${p.key}`}>
@@ -294,6 +319,18 @@ export default function PlayerView() {
                 <b>{p.value}{p.max ? `/${p.max}` : ''}</b>
               </span>
             ))}
+            {detDef && det && (
+              <span className="ph-pool ph-det" aria-label={`${detDef.label} ${det.value} of ${det.max}`}>
+                <span className="ph-pool-label">{detDef.short || detDef.label}</span>
+                <span className="ph-pool-grains" aria-hidden="true">
+                  {Array.from({ length: det.max }, (_, i) => <i key={i} className={i < det.value ? 'on' : ''} />)}
+                </span>
+                <b>{det.value}/{det.max}</b>
+                <Confirm label="SPEND" className="ph-det-spend" disabled={det.value < 1 || !connected} title={`SPEND 1 ${detDef.label}?`}
+                  message={`You keep ${Math.max(0, det.value - 1)}. The ${terms.gm} sees it in the roll feed.`} confirmLabel="SPEND" onConfirm={spendDetermination} />
+              </span>
+            )}
+            {detMsg && <span className="ph-det-msg" role="status">{detMsg}</span>}
           </div>
         )}
         <ClocksRow clocks={table?.clocks || []} pulseId={pulseId} />
@@ -321,13 +358,29 @@ export default function PlayerView() {
       <main className={`pv-body${tab === 'messages' ? ' pv-body-chat' : ''}${tab === 'map' ? ' pv-body-map' : ''}`}>
         {tab === 'sheet' && (
           <div className="pv-pane ph-sheet-pane">
+            <div className={`ph-sheet-menu${menuOpen ? ' open' : ''}`}>
+              <button type="button" className="ph-menu-btn" aria-expanded={menuOpen} aria-controls="ph-sheet-menu" onClick={() => setMenuOpen((o) => !o)}>
+                <span aria-hidden="true">☰</span> MENU{sub?.status === 'pending' ? ' · NEW CHARACTER SUBMITTED' : ''}
+              </button>
+              {menuOpen && (
+                <div id="ph-sheet-menu" className="ph-menu-body">
+                  <button type="button" className="pv-btn primary ph-wide" onClick={() => { setMenuOpen(false); setBuilding(true); }}>
+                    {sub?.status === 'pending' ? 'EDIT MY NEW CHARACTER' : 'BUILD A NEW CHARACTER'}
+                  </button>
+                  <p className="ph-menu-hint">A replacement goes to the {terms.gm}, who swaps it in when the story allows.</p>
+                  {subStatus}
+                  <span className="ph-menu-label">THIS DEVICE</span>
+                  <FxToggles className="fx-toggles ph-fx" />
+                  {leaveButton(`DISCONNECT FROM ${terms.session.toUpperCase()}`)}
+                </div>
+              )}
+            </div>
             <CharacterSheet character={c} statusEffects={myPlayer.statusEffects || []} conditions={activeConditions}
               injuries={myPlayer.injuries || []} onRoll={onRoll} />
             {rules?.supplies?.length > 0 && myPlayer.supply && Object.keys(myPlayer.supply).length > 0 && (
               <SupplyPanel keys={rules.supplies} supply={myPlayer.supply} danger={rules.supplyDanger ?? 2}
                 onRoll={(k) => supplyRoll(k)} last={supplyLast} />
             )}
-            <button className="pv-btn danger" onClick={confirmLeave}>DISCONNECT FROM {terms.session.toUpperCase()}</button>
           </div>
         )}
 
@@ -370,7 +423,7 @@ export default function PlayerView() {
                         ? `TO ${m.type === 'p2p' ? String(m.to).toUpperCase() : GM}`
                         : m.type === 'gm' ? `${GM}${m.toId === 'broadcast' ? ` · ${terms.broadcast?.toUpperCase() || 'BROADCAST'}` : ''}` : `${String(m.from).toUpperCase()} · ${PLAYER}`}
                       {m.type === 'gm' && m.priority && m.priority !== 'STANDARD' && <b> · {m.priority}</b>}
-                      {' · '}{m.pending ? 'QUEUED' : new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {' · '}{m.pending ? 'QUEUED' : fmtTime(m.timestamp)}
                     </div>
                     <div className="pv-bubble-text">{m.text}</div>
                     {!mine && (

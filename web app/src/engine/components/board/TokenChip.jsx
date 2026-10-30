@@ -97,6 +97,31 @@ export const STATUS_DEFS = {
 /* Alias for the ALIEN panic status; non-enumerable so status pickers list PANICKING once. */
 Object.defineProperty(STATUS_DEFS, 'panicked', { value: STATUS_DEFS.panicking, enumerable: false });
 
+/* Colours for the other rules-level status effects (badge = first two letters). */
+const EXTRA_STATUS_COLORS = {
+  bleeding: '#d83a3a', unconscious: '#8a9bb0', critical: '#ff2d55', exhausted: '#c0a060', starving: '#b08850', dehydrated: '#4fb3c4',
+  freezing: '#7fd0ff', radiation: '#c6ff3a', infected: '#9acd32', poisoned: '#7ccf5a', 'spice-addicted': '#4f7cff', disgraced: '#a07060',
+  'marked-for-death': '#ff3d3d', indebted: '#d4b46a', suspected: '#e08a3a',
+};
+/* Rules wording → token status key (keeps the ALIEN stress counter and panic ring). */
+const STATUS_ALIAS = { stressed: 'stress', panicked: 'panicking', panic: 'panicking' };
+const UNIVERSAL_STATUSES = ['hidden', 'wounded'];
+
+/** Status keys for the token sheet: universe.rules.statusEffects (+ hidden / wounded), never a constant list. */
+export function statusOptions(universe) {
+  const keys = [];
+  for (const raw of universe?.rules?.statusEffects || []) {
+    let k = String(raw).toLowerCase().trim().replace(/[^a-z]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 16).replace(/-+$/, '');
+    k = STATUS_ALIAS[k] || k;
+    if (k && /^[a-z]/.test(k) && !keys.includes(k)) keys.push(k);
+  }
+  for (const u of UNIVERSAL_STATUSES) if (!keys.includes(u)) keys.push(u);
+  return keys.map((key) => ({ key, ...(STATUS_DEFS[key] || { label: key.toUpperCase().replace(/-/g, ' '), color: EXTRA_STATUS_COLORS[key] || '#cfd8dc' }) }));
+}
+for (const [k, color] of Object.entries(EXTRA_STATUS_COLORS)) {
+  if (!STATUS_DEFS[k]) Object.defineProperty(STATUS_DEFS, k, { value: { label: k.toUpperCase().replace(/-/g, ' '), color }, enumerable: false });
+}
+
 /** Normalize token.status to [{ key, count }]. */
 export function tokenStatuses(status) {
   const list = Array.isArray(status) ? status : typeof status === 'string' ? status.split(',') : [];
@@ -176,21 +201,33 @@ export function StatusRing({ statuses, r, ring, style = 'segments', chipFill = '
  * active: pulsing active-turn ring (initiative); showHp: GM-only health bar
  * from token.hp / token.hpMax (never passed on the TV).
  */
-export default function TokenChip({ token: t, x, y, unit, counter = '', uid, selected, mine, ghost, showLabel = true, dragging, palette, labelMin = 0, minR = 0, flash = null, active = false, showHp = false }) {
-  const r = Math.max(4, (t.size || 1) * unit * 0.46, minR * (t.size || 1));
+/**
+ * Chip geometry shared by TokenChip and the label collision pass in MapCanvas.
+ * One base for every kind: radius = size × unit × 0.46 (never below minR × size),
+ * so a creature and a PC of the same size are the same size on every screen.
+ */
+export function chipMetrics(t, unit, { labelMin = 0, minR = 0 } = {}) {
+  const size = Number(t.size) > 0 ? Number(t.size) : 1;
+  const r = Math.max(4, size * unit * 0.46, minR * size);
+  const ring = t.kind === 'pc' ? r * 0.2 : r * 0.14;
+  const label = t.label || '';
+  const fs = Math.max(unit * 0.32, Math.min(r, unit * 0.6) * 0.5, labelMin);
+  const shown = label.length > 18 ? label.slice(0, 17) + '…' : label;
+  const plateW = Math.min(shown.length * fs * 0.62 + fs, Math.max(unit * 6, fs * 12));
+  const statuses = tokenStatuses(t.status);
+  const ringOut = statuses.length ? ring * 1.9 + Math.max(ring * 1.25, r * 0.16) : 0;
+  const plateDy = r + ring + ringOut * 0.6 + fs * 0.9; // label plate centre below the chip centre
+  return { r, ring, fs, shown, plateW, plateH: fs * 1.25, plateDy, statuses, ringOut, label };
+}
+
+export default function TokenChip({ token: t, x, y, unit, counter = '', uid, selected, mine, ghost, showLabel = true, dragging, palette, labelMin = 0, minR = 0, flash = null, active = false, showHp = false, labelDy = null }) {
+  const { r, ring, fs, shown, plateW, plateDy, label, statuses, ringOut } = chipMetrics(t, unit, { labelMin, minR });
   const color = t.color || KIND_COLOR[t.kind] || '#b0bec5';
   const clipId = `${uid}-clip-${t.id}`;
   const isPc = t.kind === 'pc';
-  const ring = isPc ? r * 0.2 : r * 0.12;
-  const label = t.label || '';
-  const fs = Math.max(unit * 0.32, r * 0.5, labelMin);
-  const shown = label.length > 18 ? label.slice(0, 17) + '…' : label;
-  const plateW = Math.min(shown.length * fs * 0.62 + fs, Math.max(unit * 6, fs * 12));
   const facing = Number.isFinite(t.facing) ? t.facing : 0;
   const showFacing = isPc || t.kind === 'creature' || t.kind === 'npc' || facing !== 0;
-  const statuses = tokenStatuses(t.status);
   const chipFill = palette?.chipFill || '#0a0c10';
-  const ringOut = statuses.length ? ring * 1.9 + Math.max(ring * 1.25, r * 0.16) : 0;
   const cls = `tk tk-${t.kind}${selected ? ' tk-selected' : ''}${mine ? ' tk-mine' : ''}${ghost ? ' tk-ghost' : ''}${dragging ? ' tk-dragging' : ''}${statuses.length ? ' tk-has-status' : ''}${active ? ' tk-active' : ''}`;
   const hpMax = Number(t.hpMax) || 0;
   const hpPct = showHp && hpMax ? Math.max(0, Math.min(1, (Number(t.hp ?? hpMax) || 0) / hpMax)) : null;
@@ -232,7 +269,7 @@ export default function TokenChip({ token: t, x, y, unit, counter = '', uid, sel
           </g>
         )}
         {showLabel && label && (
-          <g transform={`translate(0,${r + ring + ringOut * 0.6 + fs * 0.9})`}>
+          <g transform={`translate(0,${labelDy ?? plateDy})`} className="tk-label">
             <rect x={-plateW / 2} y={-fs * 0.85} width={plateW} height={fs * 1.25} rx={fs * 0.35} fill="rgba(0,0,0,0.82)" stroke={color} strokeWidth={fs * 0.06} />
             <text y={fs * 0.12} textAnchor="middle" fontSize={fs} fill="#f2f4f8" letterSpacing="0.04em" fontFamily={palette?.font}>{shown}</text>
           </g>

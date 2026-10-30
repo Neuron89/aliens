@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
 import { useGame } from '../GameContext';
-import { downloadJson } from '../rulesUtils';
+import { downloadJson, fmtTime } from '../rulesUtils';
 import { poolDefs, poolStart } from '../mechanicsUtils';
 import ScenarioDetail from './ScenarioDetail';
 import { runGeneration, fetchGeneratorStatus } from './wizard/generateClient';
@@ -76,7 +76,7 @@ const hintList = (hints, ...keys) => {
 export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) {
   const { universe } = useUniverse();
   const { save } = useContent();
-  const { createGame, players: sessionPlayers } = useGame();
+  const { createGame, players: sessionPlayers, gameCode } = useGame();
   const { terms, terminal } = universe;
   const logStyle = universe.theme?.logStyle || 'terminal';
   const hints = universe.generator?.parameterHints || {};
@@ -85,7 +85,15 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
   const toneHints = hintList(hints, 'tones', 'tone');
 
   const [params, setParams] = useState(() => loadParams(universe));
-  const [step, setStep] = useState('crew');
+  const [step, setStepRaw] = useState('crew');
+  const [maxReached, setMaxReached] = useState(0); // highest step index visited (stepper "reached" state)
+  const setStep = useCallback((s) => {
+    setStepRaw(s);
+    setMaxReached((m) => Math.max(m, STEPS.indexOf(s)));
+  }, []);
+  const [confirmStart, setConfirmStart] = useState(false); // inline START SESSION warning
+  const [started, setStarted] = useState(null);            // { code, old } after START SESSION
+  const [copied, setCopied] = useState(null);
   const [genStatus, setGenStatus] = useState(undefined); // undefined = loading, null = unreachable
   const [notConfigured, setNotConfigured] = useState(null); // { hint } when server says so
   const [log, setLog] = useState([]);
@@ -185,7 +193,7 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
       setRunning(false);
       if (abortRef.current === controller) abortRef.current = null;
     }
-  }, [params, universe]);
+  }, [params, universe, setStep]);
 
   const cancel = () => abortRef.current?.abort();
 
@@ -203,18 +211,23 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
     }
   };
 
+  /* START SESSION replaces the running session (new access code; seated players must rejoin):
+     an inline warning names the current code and player count; afterwards COPY NEW CODE. */
+  const seated = Object.values(sessionPlayers || {});
+  const seatedOnline = seated.filter((p) => p.connected !== false).length;
   const startSession = () => {
     if (!pack || !saved) return;
-    const connected = Object.keys(sessionPlayers || {}).length;
-    const msg = connected
-      ? `Start a NEW ${terms.session.toLowerCase()} with "${pack.meta.title}"? You get a new access code and the ${connected} connected ${terms.players.toLowerCase()} must rejoin.`
-      : `Start a new ${terms.session.toLowerCase()} with "${pack.meta.title}"? A new access code will be issued.`;
-    if (!confirm(msg)) return;
+    setConfirmStart(false);
+    const old = gameCode;
     const pools = universe.rules?.pools?.length ? { defs: poolDefs(universe), values: poolStart(universe, playerCount) } : null;
     createGame({ universeId: universe.id, packId: pack.id, pools }, (response) => {
       if (response?.error) { setSaveErrors([response.error]); return; }
-      onClose?.();
+      setStarted({ code: response.code, old });
     });
+  };
+  const copyText = (text, what) => {
+    navigator.clipboard?.writeText(text).then(() => setCopied(what), () => setCopied('fail'));
+    setTimeout(() => setCopied(null), 2500);
   };
 
   const discard = () => {
@@ -238,11 +251,14 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
       <nav className="gnw-stepper" aria-label="Generator steps">
         {STEPS.map((s, i) => {
           const reachable = !running && (i < 2 || (s === 'generate' && (log.length || error)) || (s === 'preview' && pack));
-          const state = s === step ? 'current' : i < stepIdx ? 'done' : reachable ? '' : 'locked';
+          // Reached = visited and still available (PREVIEW counts once a pack exists). A saved preview is done.
+          const reached = i <= maxReached && (s !== 'preview' || !!pack);
+          const done = s !== step && (i < stepIdx || (reached && (s !== 'preview' || saved)));
+          const state = s === step ? `current${s === 'preview' && saved ? ' done' : ''}` : done ? 'done' : reached && reachable ? 'reached' : reachable ? '' : 'locked';
           return (
             <button key={s} type="button" className={`gnw-step ${state}`} disabled={!reachable || s === step}
               aria-current={s === step ? 'step' : undefined} onClick={() => setStep(s)}>
-              <span className="gnw-node">{i < stepIdx ? '✓' : i + 1}</span>
+              <span className="gnw-node">{done || (s === step && s === 'preview' && saved) ? '✓' : i + 1}</span>
               {STEP_LABEL[s]}
             </button>
           );
@@ -456,7 +472,7 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
           <div ref={logRef} className="gnw-log-body" aria-live="polite">
             {log.map((l, i) => {
               const err = l.message.startsWith('ERROR') || l.message.startsWith('  !');
-              const t = new Date(l.at).toLocaleTimeString([], { hour12: false });
+              const t = fmtTime(l.at, { seconds: true });
               return (
                 <div key={i} className={`gnw-log-line${err ? ' err' : i === log.length - 1 ? ' last' : ''}`}>
                   {logStyle === 'mentat'
@@ -510,7 +526,8 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
             <button onClick={doSave} disabled={saving} style={btnPrimary}>{saving ? 'SAVING…' : '⬇ SAVE TO LIBRARY'}</button>
           ) : (
             <>
-              <button onClick={startSession} style={{ ...btnPrimary, borderColor: 'var(--success)', color: 'var(--success)' }}>
+              <button onClick={() => setConfirmStart((v) => !v)} aria-expanded={confirmStart} disabled={!!started}
+                style={{ ...btnPrimary, borderColor: 'var(--success)', color: 'var(--success)' }}>
                 ▶ START {terms.session.toUpperCase()} WITH THIS SCENARIO
               </button>
               {onOpenPack && <button onClick={() => onOpenPack(pack.id)} style={btnGhost}>OPEN IN LIBRARY</button>}
@@ -520,6 +537,34 @@ export default function GameNightWizard({ tts, onClose, onImport, onOpenPack }) 
           <button onClick={() => downloadJson(pack, `${pack.id}.json`)} style={btnGhost}>DOWNLOAD JSON</button>
           {!saved && <button onClick={discard} style={{ ...btnGhost, borderColor: 'var(--danger)', color: 'var(--danger)' }}>DISCARD</button>}
         </div>
+        {confirmStart && !started && (
+          <div className="gnw-start-warn" role="alertdialog" aria-label={`Start a new ${terms.session.toLowerCase()}`}>
+            <b>THIS REPLACES {terms.session.toUpperCase()} {gameCode || ''}</b>
+            <span>
+              A new access code is issued and {gameCode || 'the current code'} stops working.
+              {seated.length
+                ? ` ${seated.length} ${seated.length === 1 ? terms.player.toUpperCase() : terms.players.toUpperCase()} (${seatedOnline} online) will be disconnected and must rejoin with the new code; their assigned characters, rolls and log stay with the old ${terms.session.toLowerCase()}.`
+                : ` No ${terms.players.toLowerCase()} are seated yet.`}
+            </span>
+            <span className="gnw-start-btns">
+              <button onClick={() => setConfirmStart(false)} style={btnGhost}>CANCEL</button>
+              <button onClick={startSession} style={{ ...btnPrimary, borderColor: 'var(--warn)', color: 'var(--warn)' }}>
+                START NEW {terms.session.toUpperCase()}{seated.length ? ` — DISCONNECT ${seated.length}` : ''}
+              </button>
+            </span>
+          </div>
+        )}
+        {started && (
+          <div className="gnw-started" role="status">
+            <b>{terms.session.toUpperCase()} {started.code} STARTED</b>
+            <span>{started.old ? `${started.old} is closed. ` : ''}Share the new code with every {terms.player.toLowerCase()}.</span>
+            <span className="gnw-start-btns">
+              <button onClick={() => copyText(started.code, 'code')} style={btnPrimary}>{copied === 'code' ? 'COPIED' : 'COPY NEW CODE'}</button>
+              <button onClick={() => copyText(`${window.location.origin}?join=${started.code}`, 'link')} style={btnGhost}>{copied === 'link' ? 'COPIED' : 'COPY JOIN LINK'}</button>
+              <button onClick={() => onClose?.()} style={btnGhost}>CLOSE</button>
+            </span>
+          </div>
+        )}
         {repaired && <div style={{ ...dim, fontSize: '0.65rem', marginTop: '0.4rem' }}>Note: the first draft failed validation and was corrected automatically.</div>}
         {saveErrors.length > 0 && (
           <div style={{ ...errorBox, marginTop: '0.5rem' }}>

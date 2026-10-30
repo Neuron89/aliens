@@ -4,7 +4,7 @@ import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
 import MapCanvas from './board/MapCanvas';
 import RoomEditor from './board/RoomEditor';
-import { Glyph, MARKERS, careerGlyph, initials, STATUS_DEFS, tokenStatuses } from './board/TokenChip';
+import { Glyph, MARKERS, careerGlyph, initials, statusOptions, tokenStatuses } from './board/TokenChip';
 import { boardMapOptions, findMapOption, resolveMapDef } from './board/mapDefs';
 import { qrPath } from './board/qr';
 
@@ -100,6 +100,8 @@ export default function MapController() {
   }, [status]);
 
   const options = useMemo(() => boardMapOptions(universe, packs, g.packId), [universe, packs, g.packId]);
+  /* Token statuses come from the universe rules (+ hidden / wounded), so Dune tokens never offer ALIEN panic. */
+  const statusList = useMemo(() => statusOptions(universe), [universe]);
   const currentOpt = findMapOption(options, board.mapId);
   const activePack = g.packId ? byId[g.packId] : null;
   const levels = mapDef?.levels || [];
@@ -309,7 +311,7 @@ export default function MapController() {
           </div>
         )}
         <button className={`mc-btn${board.fog ? ' on' : ''}`} onClick={() => g.boardSetFog(!board.fog)} disabled={!mapDef}>FOG {board.fog ? 'ON' : 'OFF'}</button>
-        <button className="mc-btn" onClick={rotate} disabled={!mapDef} title="Rotate the TV view">ROTATE {view.rotation || 0}°</button>
+        <button className="mc-btn" onClick={rotate} disabled={!mapDef} title="Rotate the TV view"><span className="mc-wide">ROTATE </span>{view.rotation || 0}°</button>
         <button className={`mc-btn${view.flipX ? ' on' : ''}`} onClick={flip} disabled={!mapDef}>FLIP</button>
         <button className="mc-btn" onClick={fit} disabled={!mapDef}>FIT</button>
         <span className="mc-seg">
@@ -319,8 +321,8 @@ export default function MapController() {
         <button className={`mc-btn${pingMode ? ' on warn' : ''}`} onClick={() => { setPingMode((v) => !v); setArmed(null); }} disabled={!mapDef}>PING</button>
         <button className={`mc-btn${snap ? ' on' : ''}`} onClick={() => setSnap((v) => !v)}>SNAP</button>
         <button className={`mc-btn${matchTv ? ' on' : ''}`} onClick={() => setMatchTv((v) => !v)} title="Show this map in the TV orientation">AS TV</button>
-        {mapDef?.kind === 'image' && currentOpt?.packId && (
-          <button className="mc-btn" onClick={() => setEditRooms(true)}>EDIT ROOMS</button>
+        {mapDef && currentOpt?.packId && (
+          <button className="mc-btn" onClick={() => setEditRooms(true)} title="Correct the room shapes used for fog of war">EDIT ROOMS</button>
         )}
         <button className="mc-btn danger" onClick={reset} disabled={!mapDef}>RESET</button>
         <span className="mc-spacer" />
@@ -336,7 +338,7 @@ export default function MapController() {
           {mapDef ? (
             <MapCanvas ref={canvasRef} className="mc-canvas" mapDef={mapDef} board={board} role="dm" universe={universe}
               view={canvasView} editable selectedTokenId={selTok} selectedRoomId={selRoom} pings={g.pings} snap={snap}
-              showRoomLabels={mapDef.kind !== 'engine'} onTap={onTap} onTokenTap={onTokenTap} onTokenMove={onTokenMove}
+              showRoomLabels={mapDef.kind === 'image'} onTap={onTap} onTokenTap={onTokenTap} onTokenMove={onTokenMove}
               showHp activeTokenId={g.table?.initiative?.active ? g.table.initiative.order?.[g.table.initiative.turn]?.tokenId : null} />
           ) : (
             <div className="mc-empty">
@@ -391,7 +393,7 @@ export default function MapController() {
               {tok.kind !== 'marker' && tok.kind !== 'hazard' && tok.kind !== 'item' && (
                 <div className="mc-sheet-row" role="group" aria-label="Token status">
                   <span className="mc-meta">STATUS</span>
-                  {Object.entries(STATUS_DEFS).map(([key, def]) => {
+                  {statusList.map(({ key, ...def }) => {
                     const cur = tokenStatuses(tok.status);
                     const on = cur.find((s) => s.key === key);
                     const write = (next) => g.boardUpsertToken({ id: tok.id, status: next.map((s) => (s.count ? `${s.key}:${s.count}` : s.key)) });
@@ -489,7 +491,7 @@ export default function MapController() {
               <div className="mc-pal-list">
                 {tab === 'rooms' ? (
                   <>
-                    {rooms.length === 0 && <p className="mc-hint">{mapDef ? 'This map has no room shapes yet.' : 'No map selected.'}{mapDef?.kind === 'image' && currentOpt?.packId ? ' Use EDIT ROOMS to draw them.' : ''}</p>}
+                    {rooms.length === 0 && <p className="mc-hint">{mapDef ? 'This map has no room shapes yet.' : 'No map selected.'}{mapDef && currentOpt?.packId ? ' Use EDIT ROOMS to draw them.' : ''}</p>}
                     {rooms.length > 0 && (
                       <div className="mc-row-btns">
                         <button className="mc-btn" onClick={() => rooms.forEach((r) => !board.rooms[r.id]?.revealed && g.boardSetRoom(r.id, { revealed: true }))}>REVEAL ALL</button>

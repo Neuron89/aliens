@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGame } from '../../GameContext';
+import { fmtTime, displayFlags } from '../../rulesUtils';
 
 /* ═══════════════════════════════════════════════════════════════
    Roll feed (backlog row 10) — RUN right rail + DM "ROLLS" tab.
@@ -10,7 +11,7 @@ import { useGame } from '../../GameContext';
    A roll is what the universe roller passes to onResult:
    { kind, label, summary, successes?, flags[], dice: { base[], stress[], d20[] }, pool? }.
    ═══════════════════════════════════════════════════════════════ */
-const FLAG_CLASS = { panic: 'danger', botch: 'danger', complication: 'danger', crit: 'good', push: 'warn' };
+const FLAG_CLASS = { panic: 'danger', botch: 'danger', complication: 'danger', crit: 'good', push: 'warn', determination: 'warn', hit: 'good', miss: '' };
 
 function Glyphs({ dice, kind }) {
   if (!dice) return null;
@@ -34,22 +35,23 @@ function poolText(r) {
 
 export function RollRow({ e }) {
   const r = e.roll || {};
-  const flags = Array.isArray(r.flags) ? r.flags : [];
+  const flags = displayFlags(r.flags);
   return (
     <li className={`rf-row${e.secret ? ' secret' : ''}${flags.includes('panic') || flags.includes('botch') ? ' bad' : flags.includes('crit') ? ' good' : ''}`}>
-      <time>{new Date(e.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</time>
+      <time>{fmtTime(e.at, { seconds: true })}</time>
       <span className="rf-who">{e.secret && <b className="rf-secret">SECRET </b>}{(e.characterName || e.playerName || '?').toUpperCase()}</span>
       <span className="rf-what">
         <b className="rf-label">{r.label || 'ROLL'}</b>
         {poolText(r) && <span className="rf-pool">{poolText(r)}</span>}
         <Glyphs dice={r.dice} kind={r.kind} />
         <span className="rf-result">
-          {r.successes != null ? `${r.successes} SUCCESS${r.successes === 1 ? '' : 'ES'}` : (r.summary || '')}
+          {r.successes != null && r.kind !== 'gm' ? `${r.successes} SUCCESS${r.successes === 1 ? '' : 'ES'}` : (r.summary || '')}
           {r.kind === '2d20' && r.passed != null ? (r.passed ? ' · PASS' : ' · FAIL') : ''}
           {r.momentum ? ` · +${r.momentum} MOM` : ''}
         </span>
         {flags.map((f) => <b key={f} className={`rf-flag ${FLAG_CLASS[f] || ''}`}>{String(f).toUpperCase()}</b>)}
         {e.panic && <b className="rf-flag danger">→ PANIC {e.panic.total}: {String(e.panic.name).toUpperCase()}</b>}
+        {r.detail && <span className="rf-detail">{r.detail}</span>}
       </span>
     </li>
   );

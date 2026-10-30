@@ -915,10 +915,10 @@
       "appearance": "Broad, grey at the temples, with a duellist’s scarred knuckles and a habit of standing between the heir and every door. He speaks little and bows precisely. DRIVE STATEMENTS — Duty: I swore to Lord Castor that his son would outlive him. · Faith: The blade is honest even when the hand is not. · Justice: The forms exist so that killing has a price. · Power: Power is a tool I hold for others and never for myself. · Truth: I taught my brother the slow blade, and I taught him wrong.",
       "attributes": {
         "duty": 8,
-        "faith": 6,
+        "faith": 7,
         "justice": 6,
-        "power": 4,
-        "truth": 6
+        "truth": 5,
+        "power": 4
       },
       "skills": {
         "battle": 8,

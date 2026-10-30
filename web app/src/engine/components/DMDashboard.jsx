@@ -2,8 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import { useContent } from '../ContentContext';
-import { characterGroups, initialCharacterState, withDerived, attributeLabel, trackMaxFor, plural } from '../rulesUtils';
+import { characterGroups, initialCharacterState, withDerived, attributeLabel, trackMaxFor, plural, fmtTime, determinationDef } from '../rulesUtils';
 import CharacterBuilder from './CharacterBuilder';
+import Confirm from './Confirm';
 import RollFeed from './run/RollFeed';
 import InitiativePanel from './run/InitiativePanel';
 import ThreatsPanel from './run/ThreatsPanel';
@@ -18,7 +19,7 @@ export default function DMDashboard() {
     broadcastMessage, killCharacter, unreadCount, clearUnread, lastSaved, boardLinked,
     table, unreadBy, clearUnreadFor, resolveSubmission,
     supplySet, supplyRoll, injuryAdd, injuryRemove, on,
-    gmPin, pinFresh, hidePin,
+    gmPin, pinFresh, hidePin, determinationGrant,
   } = useGame();
   const [showPin, setShowPin] = useState(false);
   const [supplyLast, setSupplyLast] = useState(null);
@@ -28,6 +29,7 @@ export default function DMDashboard() {
   const { terms, terminal, rules } = universe;
   const priorities = terms.priorities?.length ? terms.priorities : ['STANDARD'];
   const tracks = rules.tracks || [];
+  const detDef = determinationDef(universe);
   const statusEffects = rules.statusEffects || [];
 
   const [selectedPlayer, setSelectedPlayer] = useState(null);
@@ -212,7 +214,7 @@ export default function DMDashboard() {
             </span>
             {lastSaved && (
               <span className="session-saved">
-                {terms.session.toUpperCase()} SAVED {new Date(lastSaved).toLocaleTimeString([], { hour12: false })}
+                {terms.session.toUpperCase()} SAVED {fmtTime(lastSaved, { seconds: true })}
               </span>
             )}
             {gmPin && (pinFresh || showPin ? (
@@ -231,16 +233,11 @@ export default function DMDashboard() {
           )}
         </div>
         <PoolCounters />
-        <button onClick={() => {
-          // Ending deletes the saved session for everyone (phones and TV are sent away): never on a single tap.
-          if (confirm(`END THIS ${terms.session.toUpperCase()} FOR EVERYONE?
-
-Phones and the TV are disconnected and the saved session is deleted. Export the recap first (RUN → LOG → EXPORT RECAP) if you want it.
-
-To stop for tonight and continue later, just close this tab instead.`)) leaveGame();
-        }} style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }}>
-          END {terms.session.toUpperCase()}
-        </button>
+        {/* Ending deletes the saved session for everyone (phones and TV are sent away): never on a single tap. */}
+        <Confirm danger label={`END ${terms.session.toUpperCase()}`} title={`END THIS ${terms.session.toUpperCase()} FOR EVERYONE?`}
+          message={`Phones and the TV are disconnected and the saved ${terms.session.toLowerCase()} is deleted. Export the recap first (RUN → LOG → EXPORT RECAP) if you want it.\nTo stop for tonight and continue later, just close this tab instead.`}
+          confirmLabel={`END ${terms.session.toUpperCase()}`} cancelLabel="KEEP PLAYING" onConfirm={leaveGame}
+          style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }} />
       </div>
 
       {/* Panel tabs */}
@@ -353,6 +350,15 @@ To stop for tonight and continue later, just close this tab instead.`)) leaveGam
                 </div>
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  {/* A replacement the player built mid-session (by choice, or before a death) */}
+                  {selected.alive && subFor(selected.id) && (
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <p className="run-dim" style={{ fontSize: '0.7rem', marginBottom: '0.3rem' }}>
+                        {selected.name} SUBMITTED A REPLACEMENT — ASSIGN SWAPS IT IN FOR {String(selected.character.name).toUpperCase()}:
+                      </p>
+                      {subCard(subFor(selected.id))}
+                    </div>
+                  )}
                   {/* Track controls */}
                   <div>
                     {tracks.map((t, i) => {
@@ -371,6 +377,19 @@ To stop for tonight and continue later, just close this tab instead.`)) leaveGam
                         </div>
                       );
                     })}
+                    {detDef && (() => {
+                      const det = selected.determination || { value: 0, max: detDef.max };
+                      return (
+                        <div style={{ marginTop: '0.5rem' }} className="dm-det">
+                          <label style={labelStyle}>{detDef.label} ({det.value}/{det.max})</label>
+                          <div style={{ display: 'flex', gap: '0.25rem' }}>
+                            <button style={smallBtn} onClick={() => determinationGrant(selected.id, -1, detDef.max)} disabled={det.value <= 0}>-1</button>
+                            <button style={{ ...smallBtn, borderColor: 'var(--accent)', color: 'var(--accent)' }}
+                              onClick={() => determinationGrant(selected.id, 1, detDef.max)} disabled={det.value >= det.max}>GRANT +1</button>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
 
                   {/* Status effects */}
@@ -460,15 +479,29 @@ To stop for tonight and continue later, just close this tab instead.`)) leaveGam
                   <div style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--danger)', paddingTop: '0.75rem' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                       {selected.alive ? (
-                        <button style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }}
-                          onClick={() => { if (confirm('Kill this character?')) killCharacter(selected.id); }}>
-                          KILL CHARACTER
-                        </button>
+                        <Confirm danger align="left" label="KILL CHARACTER" title={`KILL ${String(selected.character.name).toUpperCase()}?`}
+                          message={`${selected.name}'s phone shows the obituary; you can then assign a replacement (or one they build).`}
+                          confirmLabel="KILL" onConfirm={() => killCharacter(selected.id)}
+                          style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }} />
                       ) : (
                         <div style={{ width: '100%' }}>
                           <p style={{ color: 'var(--danger)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>
                             CHARACTER DECEASED — Assign replacement:
                           </p>
+                          {subFor(selected.id) ? (
+                            <div className="dm-kia-pb">
+                              <button type="button" className="run-btn primary" onClick={() => assignSub(subFor(selected.id))}>
+                                ASSIGN PLAYER-BUILT: {(subFor(selected.id).character?.name || 'UNNAMED').toUpperCase()}
+                                {subFor(selected.id).character?.career ? ` (${subFor(selected.id).character.career})` : ''}
+                              </button>
+                              <button type="button" className="run-btn sm" onClick={() => setEditingSub(subFor(selected.id))}>EDIT FIRST</button>
+                              <button type="button" className="run-btn sm danger" onClick={() => rejectSub(subFor(selected.id))}>REJECT</button>
+                            </div>
+                          ) : (
+                            <p className="run-dim" style={{ fontSize: '0.7rem', marginBottom: '0.5rem' }}>
+                              {selected.name} can build a replacement on their phone (BUILD A NEW CHARACTER); it appears here when submitted.
+                            </p>
+                          )}
                           {characterPicker(selected.id, true)}
                         </div>
                       )}
@@ -545,7 +578,7 @@ To stop for tonight and continue later, just close this tab instead.`)) leaveGam
                     {from} → {to}
                   </span>
                   <span style={{ color: 'var(--text-dim)', fontSize: '0.65rem' }}>
-                    {new Date(m.timestamp).toLocaleTimeString()} — {m.priority === 'PLAYER' ? `${PLAYERS} ${MESSAGE}` : m.priority}
+                    {fmtTime(m.timestamp, { seconds: true })} —{m.priority === 'PLAYER' ? `${PLAYERS} ${MESSAGE}` : m.priority}
                   </span>
                 </div>
                 <div style={{ color: 'var(--text)', fontSize: '0.8rem', whiteSpace: 'pre-wrap' }}>{m.text}</div>
