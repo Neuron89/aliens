@@ -18,13 +18,14 @@ irm https://raw.githubusercontent.com/Neuron89/aliens/expandable-system/install.
 curl -fsSL https://raw.githubusercontent.com/Neuron89/aliens/expandable-system/install.sh | bash
 ```
 
-No admin rights needed. It takes a few minutes the first time.
+No admin rights needed, except a one-time permission prompt if Node.js has to be installed or upgraded. It takes a few minutes the first time.
 
 ## What it does
 
-1. Checks for **Node.js** 20 or newer. If it is missing it tries to install it (Windows: `winget`,
-   Mac: Homebrew, Linux: apt). If that is not possible it tells you to get the **LTS** version from
-   <https://nodejs.org/en/download>; install it, open a new window, and paste the command again.
+1. Checks for **Node.js** 20 or newer and installs or **upgrades** it if needed (Windows: `winget`,
+   then the official nodejs.org installer, which asks for permission once; Mac: Homebrew; Linux: apt
+   or dnf, otherwise a private copy in your home folder). Only if all of that fails does it ask you to
+   get the **LTS** version from <https://nodejs.org/en/download> and paste the command again.
 2. Downloads the game, installs its packages and builds it.
 3. Puts it in **`%LOCALAPPDATA%\MUTHUR`** (Windows) or **`~/muthur`** (Mac/Linux).
 4. Adds start/stop launchers (and a **MUTHUR** shortcut on the Windows Desktop).

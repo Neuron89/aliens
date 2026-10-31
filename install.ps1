@@ -8,7 +8,7 @@
 # writes "Start MUTHUR.cmd" / "Stop MUTHUR.cmd", adds a Desktop shortcut and starts the
 # server on port 3100 (override with $env:MUTHUR_PORT). Re-run it any time to update:
 # saved sessions, portraits and imported packs live in <install dir>\data and are kept.
-# No admin rights needed. Optional environment switches:
+# No admin rights needed (one UAC prompt only if Node.js must be installed or upgraded). Optional switches:
 #   MUTHUR_BRANCH=main      install another branch
 #   MUTHUR_FIREWALL=1       same as -Firewall: ask (UAC) to open the port for phones
 #   MUTHUR_NO_START=1       do not start the server at the end
@@ -63,28 +63,79 @@ function Install-Muthur {
     return 0
   }
 
+  # Install-or-upgrade Node.js. Order: winget upgrade (an old copy from winget or the nodejs.org
+  # MSI), winget install (nothing installed), then the official nodejs.org MSI (no winget, or
+  # winget could not find / replace the old copy). Every step is checked by re-reading `node -v`.
+  function Update-Node([int]$have) {
+    $ok = { (Get-NodeMajor (Find-Node)) -ge 20 }
+    $eap = $ErrorActionPreference
+    $refreshPath = {
+      $env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User') + ';' + (Join-Path $env:ProgramFiles 'nodejs')
+    }
+    $winget = Get-Command winget.exe -ErrorAction SilentlyContinue
+    if ($winget) {
+      $ErrorActionPreference = 'Continue'
+      if ($have -gt 0) {
+        Say "Upgrading Node.js $have -> LTS with winget (Windows may ask for permission)..."
+        foreach ($id in @('OpenJS.NodeJS.LTS', 'OpenJS.NodeJS')) {
+          & winget.exe upgrade --id $id -e --silent --accept-package-agreements --accept-source-agreements --include-unknown 2>$null | Out-Null
+          & $refreshPath
+          if (& $ok) { break }
+        }
+      }
+      if (-not (& $ok)) {
+        Say 'Installing Node.js LTS with winget (Windows may ask for permission)...'
+        & winget.exe install --id OpenJS.NodeJS.LTS -e --silent --force --accept-package-agreements --accept-source-agreements 2>$null | Out-Null
+        & $refreshPath
+      }
+      $ErrorActionPreference = $eap
+      if (& $ok) { return $true }
+      Warn 'winget could not install or upgrade Node.js; trying the official installer from nodejs.org.'
+    }
+    # Official MSI: look up the newest LTS release in nodejs.org's index, download it, run msiexec
+    # (Windows asks for permission once). /passive shows only a progress bar.
+    try {
+      $arch = 'x64'
+      if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64' -or $env:PROCESSOR_ARCHITEW6432 -eq 'ARM64') { $arch = 'arm64' }
+      Say 'Finding the newest Node.js LTS release...'
+      $index = Invoke-RestMethod -UseBasicParsing -Uri 'https://nodejs.org/dist/index.json'
+      $lts = $index | Where-Object { $_.lts -and $_.lts -ne $false } | Select-Object -First 1
+      if (-not $lts) { throw 'no LTS release listed' }
+      $ver = $lts.version   # e.g. v24.11.0
+      $msiUrl = "https://nodejs.org/dist/$ver/node-$ver-$arch.msi"
+      $msi = Join-Path ([IO.Path]::GetTempPath()) "node-$ver-$arch.msi"
+      Say "Downloading Node.js $ver ($arch) from nodejs.org..."
+      Invoke-WebRequest -UseBasicParsing -Uri $msiUrl -OutFile $msi
+      Say 'Running the Node.js installer (click Yes if Windows asks for permission)...'
+      $p = Start-Process -FilePath 'msiexec.exe' -ArgumentList @('/i', "`"$msi`"", '/passive', '/norestart') -Wait -PassThru
+      if ($p.ExitCode -ne 0 -and $p.ExitCode -ne 3010) { throw "msiexec exit code $($p.ExitCode)" }
+      Remove-Item $msi -Force -ErrorAction SilentlyContinue
+      & $refreshPath
+      if (& $ok) { return $true }
+      Warn 'Node.js was installed but this window still sees the old one.'
+    } catch {
+      Warn "Could not install Node.js automatically ($($_.Exception.Message))."
+    }
+    return $false
+  }
+
   Step 'Checking for Node.js 20 or newer'
   $node = Find-Node
   $major = 0
   if ($node) { $major = Get-NodeMajor $node }
   if ($major -lt 20) {
-    if ($node) { Warn "Found Node.js $major at $node; it is too old." } else { Warn 'Node.js is not installed.' }
-    $winget = Get-Command winget.exe -ErrorAction SilentlyContinue
-    if ($winget) {
-      Say 'Installing Node.js LTS with winget (Windows may ask for permission)...'
-      $ErrorActionPreference = 'Continue'
-      & winget.exe install --id OpenJS.NodeJS.LTS -e --silent --accept-package-agreements --accept-source-agreements
-      $ErrorActionPreference = 'Stop'
-      $env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')
-      $node = Find-Node
-      if ($node) { $major = Get-NodeMajor $node }
-    }
+    if ($node) { Warn "Found Node.js $major at $node; it is too old (20 or newer needed)." } else { Warn 'Node.js is not installed.' }
+    $null = Update-Node $major
+    $node = Find-Node
+    $major = 0
+    if ($node) { $major = Get-NodeMajor $node }
     if ($major -lt 20) {
       Write-Host ''
       Warn 'Please install Node.js (the "LTS" button) from https://nodejs.org/en/download'
       Warn 'then close this window, open a new PowerShell and run the install command again.'
       return $false
     }
+    Good "Node.js is now $(& $node -v)"
   }
   $nodeDir = Split-Path -Parent $node
   $npm = Join-Path $nodeDir 'npm.cmd'

@@ -42,25 +42,79 @@ main() {
 
   # ------------------------------------------------------------ Node.js
   node_major() { node -v 2>/dev/null | sed -E 's/^v([0-9]+).*/\1/' || true; }
-  step "Checking for Node.js 20 or newer"
-  local major
-  major="$(node_major)"; major="${major:-0}"
-  if [ "$major" -lt 20 ]; then
-    if [ "$major" -gt 0 ]; then warn "Found Node.js $major; it is too old."; else warn "Node.js is not installed."; fi
-    local SUDO=""
+  # Install-or-upgrade Node.js: Homebrew (install or upgrade), apt via NodeSource (which replaces an
+  # old distro Node), dnf/yum via NodeSource; else a user-local copy of the official LTS tarball in
+  # ~/.muthur-node (no sudo, no package manager needed), which the launcher puts on PATH.
+  update_node() {
+    local have="$1" SUDO=""
     if [ "$(id -u)" -ne 0 ] && command -v sudo >/dev/null 2>&1; then SUDO="sudo"; fi
     if command -v brew >/dev/null 2>&1; then
-      say "Installing Node.js with Homebrew..."
-      brew install node </dev/null || true
-    elif command -v apt-get >/dev/null 2>&1 && { [ -n "$SUDO" ] || [ "$(id -u)" -eq 0 ]; }; then
-      say "Installing Node.js LTS from NodeSource (asks for your password)..."
-      local ns="$(mktemp)"
+      if [ "$have" -gt 0 ] && brew list --versions node >/dev/null 2>&1; then
+        say "Upgrading Node.js $have -> current with Homebrew..."
+        brew upgrade node </dev/null || true
+      else
+        say "Installing Node.js with Homebrew..."
+        brew install node </dev/null || true
+      fi
+      brew link --overwrite node </dev/null >/dev/null 2>&1 || true
+      hash -r 2>/dev/null || true
+      [ "$(node_major)" -ge 20 ] 2>/dev/null && return 0
+    fi
+    if command -v apt-get >/dev/null 2>&1 && { [ -n "$SUDO" ] || [ "$(id -u)" -eq 0 ]; }; then
+      say "Installing / upgrading Node.js LTS from NodeSource (asks for your password)..."
+      local ns; ns="$(mktemp)"
       fetch "https://deb.nodesource.com/setup_lts.x" "$ns" \
         && $SUDO bash "$ns" </dev/null \
         && $SUDO apt-get install -y nodejs </dev/null || true
       rm -f "$ns"
+      hash -r 2>/dev/null || true
+      [ "$(node_major)" -ge 20 ] 2>/dev/null && return 0
+    elif { command -v dnf >/dev/null 2>&1 || command -v yum >/dev/null 2>&1; } && { [ -n "$SUDO" ] || [ "$(id -u)" -eq 0 ]; }; then
+      say "Installing / upgrading Node.js LTS from NodeSource (asks for your password)..."
+      local ns pm="yum"; ns="$(mktemp)"
+      command -v dnf >/dev/null 2>&1 && pm="dnf"
+      fetch "https://rpm.nodesource.com/setup_lts.x" "$ns" \
+        && $SUDO bash "$ns" </dev/null \
+        && $SUDO "$pm" install -y nodejs </dev/null || true
+      rm -f "$ns"
+      hash -r 2>/dev/null || true
+      [ "$(node_major)" -ge 20 ] 2>/dev/null && return 0
     fi
+    # Official tarball into the user's home: works everywhere with curl/tar and never touches the
+    # system Node; the launcher adds this folder to PATH.
+    local os arch ver tgz dest="$HOME/.muthur-node"
+    case "$(uname -s)" in Darwin) os="darwin" ;; Linux) os="linux" ;; *) warn "Unsupported OS for the automatic Node.js download."; return 1 ;; esac
+    case "$(uname -m)" in x86_64|amd64) arch="x64" ;; arm64|aarch64) arch="arm64" ;; *) warn "Unsupported CPU ($(uname -m)) for the automatic Node.js download."; return 1 ;; esac
+    say "Finding the newest Node.js LTS release..."
+    local idx; idx="$(mktemp)"
+    fetch "https://nodejs.org/dist/index.json" "$idx" || { rm -f "$idx"; return 1; }
+    # first entry whose "lts" is not false (index.json is newest-first); plain sed/grep, no jq needed
+    ver="$(tr -d '\n' <"$idx" | sed 's/},{/}\n{/g' | grep -v '"lts":false' | head -n1 | sed -n 's/.*"version":"\(v[0-9.]*\)".*/\1/p')"
+    rm -f "$idx"
+    [ -n "$ver" ] || { warn "Could not read the Node.js release list."; return 1; }
+    tgz="$(mktemp)"
+    say "Downloading Node.js $ver ($os-$arch) from nodejs.org..."
+    fetch "https://nodejs.org/dist/$ver/node-$ver-$os-$arch.tar.gz" "$tgz" || { rm -f "$tgz"; return 1; }
+    rm -rf "$dest"; mkdir -p "$dest"
+    tar -xzf "$tgz" -C "$dest" --strip-components=1 || { rm -f "$tgz"; return 1; }
+    rm -f "$tgz"
+    export PATH="$dest/bin:$PATH"
     hash -r 2>/dev/null || true
+    [ "$(node_major)" -ge 20 ] 2>/dev/null && { say "Node.js $ver installed in $dest (just for MU/TH/UR)."; return 0; }
+    return 1
+  }
+
+  step "Checking for Node.js 20 or newer"
+  local major
+  major="$(node_major)"; major="${major:-0}"
+  # A private copy from an earlier run wins over an old system Node.
+  if [ "$major" -lt 20 ] && [ -x "$HOME/.muthur-node/bin/node" ]; then
+    export PATH="$HOME/.muthur-node/bin:$PATH"; hash -r 2>/dev/null || true
+    major="$(node_major)"; major="${major:-0}"
+  fi
+  if [ "$major" -lt 20 ]; then
+    if [ "$major" -gt 0 ]; then warn "Found Node.js $major; it is too old (20 or newer needed)."; else warn "Node.js is not installed."; fi
+    update_node "$major" || true
     major="$(node_major)"; major="${major:-0}"
     if [ "$major" -lt 20 ]; then
       echo
@@ -68,6 +122,7 @@ main() {
       warn "then open a new terminal and run the install command again."
       exit 1
     fi
+    good "Node.js is now $(node -v)"
   fi
   local NODE NPM
   NODE="$(command -v node)"
