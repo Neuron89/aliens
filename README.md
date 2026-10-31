@@ -16,6 +16,8 @@ Wording in the docs is neutral ("GM"); each universe renames it in the UI (ALIEN
 
 It is an unofficial fan tool; see [Content and legal](#content-and-legal).
 
+**Friends play-testing:** see [PLAYTEST.md](PLAYTEST.md) to install with one command.
+
 ## Universes
 
 | Universe | Id | Rules | Bundled packs | What it ships |
