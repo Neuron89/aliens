@@ -6,25 +6,32 @@
   "meta": {
     "title": "Chariot of the Gods",
     "tagline": "The job was simple. The money was good. Then the signal changed everything.",
-    "synopsis": "The starfreighter USCSS Montero is diverted to investigate a distress signal from the USCSS Cronus — a science vessel missing for 75 years. Corporate treachery, alien organisms, and a secret android threaten every soul aboard.",
+    "synopsis": "The tow ship USCSS Montero is woken early and diverted to a derelict: the USCSS Cronus, a Weyland-Yutani science vessel lost seventy-three years ago. Five of its crew survive in hypersleep, and so does what they brought back from LV-1113: neomorphic egg sacs, the 26 Draconis Strain and a so-called inoculation that is the infection itself. Special Order 966 makes the rescuers expendable; the Montero's own computer blows up their ship, and the Cronus is locked on a course for Earth. The Montero's crew is riddled with agendas: a Company agent who wants the specimens, a medic carrying sealed orders, and a captain who is secretly a Bionational synthetic sent to make sure nobody gets the strain. In Act III the reactor fails, an optional pirate crew docks, and escape means an EEV, a stolen ship or nothing.",
     "type": "Cinematic",
     "players": "3–5",
     "playtime": "4–6 hours",
-    "difficulty": "Standard Cinematic",
+    "difficulty": "Standard",
     "tone": [
       "dread",
       "paranoia",
-      "corporate betrayal"
+      "corporate betrayal",
+      "body horror"
     ],
     "contentWarnings": [
       "body horror",
+      "gore",
+      "parasitic infection",
+      "graphic violence",
       "character death",
-      "player-vs-player conflict"
+      "suicide (implied)",
+      "child in danger",
+      "player-vs-player conflict",
+      "claustrophobia"
     ],
     "source": "bundled"
   },
   "briefing": {
-    "from": "MU/TH/UR 6000 MAINFRAME",
+    "from": "MU/TH/UR 6500 MAINFRAME",
     "to": "CREW, USCSS MONTERO",
     "classification": "PRIORITY ONE — COMPANY DIRECTIVE",
     "text": "ATTENTION ALL CREW. AUTOMATED DISTRESS BEACON DETECTED.\n\nSignal origin: Sector 87-C, Outer Rim Territories. Beacon identification confirms source vessel as the USCSS CRONUS — a Weyland-Yutani science vessel reported lost seventy-three years ago during a deep-space biological survey mission. All hands were presumed dead. No wreckage was ever recovered.\n\nPer Interstellar Commerce Commission regulation ICC-2249/17, all commercial vessels within response range are legally required to investigate distress signals of human origin. Failure to comply will result in total forfeiture of shares, compensation, and may result in criminal prosecution.\n\nThe USCSS MONTERO has been diverted from its current heading. Course correction has been initiated. Estimated time to intercept: fourteen hours.\n\nAll crew members are to report to the bridge for emergency briefing. Personal effects should be secured. This is not a drill.\n\nAdditional data on the USCSS CRONUS has been classified by Weyland-Yutani Special Projects Division. Access restricted to Company personnel with Clearance Level 3 or above.\n\nMU/TH/UR out."
@@ -33,311 +40,498 @@
     {
       "title": "ACT I",
       "subtitle": "HOPE",
-      "summary": "PANDORA'S BOX — PCs wake on the Montero, discover the Cronus, board it, find surviving crew in cryo, and witness the first alien emergence.",
+      "summary": "Pandora's Box. The crew wakes early, far off course, and is ordered to board the derelict Cronus. They find the dead, the egg sacs and five sleepers, and watch the first creature burst out of Dr. Cooper's skull.",
       "readAloud": [
         "You've been in cryo for weeks — the deep, dreamless cold of hypersleep. The thaw cycle pulls you back to consciousness with the taste of copper in your mouth and ice crystals on your eyelashes. The lights in the cryo bay are dim, cycling through their wake-up sequence in slow amber pulses.",
         "The Montero is a working ship. Not glamorous. Not comfortable. The corridors smell like recycled air and engine grease. You know every scratch on the bulkheads, every rattle in the ventilation. This is a ship that earns its keep hauling cargo across the Frontier — and you earn yours aboard it.",
         "But something is different this time. MU/TH/UR has woken you early. The navigation display shows you're nowhere near Anchorpoint Station. Through the bridge viewports, you can see it — a dark shape against the stars, tumbling slowly in the void. A ship. Old design. No running lights.",
-        "The USCSS Cronus. Missing for seventy-three years. And someone — or something — aboard it is still broadcasting a distress signal.",
-        "Company regs are clear. You have to investigate. The Montero docks with a magnetic clang that resonates through the hull. The airlock pressurizes with a hiss. Beyond the inner door, the Cronus waits — dark, cold, and silent.",
-        "The motion tracker reads nothing. But the air coming through the seals smells wrong — organic, humid, alive. Like a greenhouse left to rot."
+        "The USCSS Cronus. Missing for seventy-three years. And someone — or something — aboard it is still broadcasting a distress signal. Company regs are clear: you have to investigate. The umbilical seals against the derelict's hull with a magnetic clang that rings through the Montero's frame, and the airlock cycles with a long, tired hiss.",
+        "Beyond the inner door, the Cronus waits — dark, cold, and silent. Frost furs the bulkheads and your breath fogs inside your helmet. The motion tracker reads nothing. But the air coming through the seals smells wrong — organic, humid, alive. Like a greenhouse left to rot."
       ],
-      "gmNotes": "This act is about building tension and establishing relationships between the PCs. Let them explore the Montero first, interact with each other, and feel the normalcy before it's shattered. The Cronus should feel WRONG from the moment they board — humid air, strange organic residue on the walls, systems half-alive. Drop hints but don't reveal the horror yet. Let the motion tracker stay quiet... for now.",
-      "agendaNotes": "Personal agendas are subtle. Wilson has Special Order 966. Lucas is observing.",
+      "gmNotes": "This act is about building tension and establishing relationships between the PCs. Let them wake on the Montero, bicker over coffee, and feel the normalcy before it is shattered. The Company woke them early on purpose: the diversion to the Cronus is not an accident, and MU/TH/UR 6500 is already acting under Special Order 966.\n\nThe Cronus should feel wrong from the moment they board: humid air, strange organic residue on the walls, systems half-alive. Drop hints but do not reveal the horror yet. The headless man and the egg sacs are warnings; Ava 6's movement on the tracker is a feint. Let the motion tracker stay quiet until it matters.\n\nThe act ends when MU/TH/UR 2000 wakes the ship, the five sleepers come out of hypersleep, and Dr. Cooper's headache ends in the Bloodburster. Hold the Cronus crew's backstory for Act II; tonight they are confused, frightened and grateful.",
+      "agendaNotes": "Agendas are private and plausible. Cham quietly wants specimens on record; Wilson carries a sealed copy of Special Order 966 and should look for samples while treating survivors; Rye eyes salvage; Davis worries about his ship; Miller watches everything and says little. Nobody should act openly against anyone yet.",
       "scenes": [
-        {
-          "name": "Ping",
-          "mandatory": false,
-          "encounter": false,
-          "narration": "MU/TH/UR 6500 reports an approaching ship on sensors. COMTECH roll reveals it's a sensor malfunction — but sets an uneasy tone.",
-          "checks": [
-            "COMTECH — diagnose sensor malfunction"
-          ],
-          "gmTip": "Use this to create early unease. The \"approaching ship\" is actually foreshadowing the Sotillo."
-        },
         {
           "name": "Nobody's Home",
           "mandatory": true,
           "encounter": false,
-          "narration": "Sutter's World doesn't respond to hails. COMTECH roll reveals the Montero is in deep space — nowhere near their destination.",
+          "narration": "MU/TH/UR 6500 wakes the crew early, reports a ship approaching on sensors, and then quietly withdraws the contact. Anchorpoint Station does not answer hails, and the star charts put the Montero deep in empty space, far from its route.",
           "checks": [
-            "COMTECH — confirm position via star charts"
+            "COMTECH — diagnose the phantom contact as a sensor fault (it is not quite a fault)",
+            "COMTECH — confirm the Montero's position against the star charts"
           ],
-          "gmTip": "This is the first \"something is wrong\" moment. Let it sink in."
-        },
-        {
-          "name": "New Orders",
-          "mandatory": true,
-          "encounter": false,
-          "narration": "MU/TH/UR informs Captain Miller of a distress signal. Company regulations mandate investigation or crew forfeits all shares.",
-          "gmTip": "Frame this as \"you have no choice.\" The Company owns you."
-        },
-        {
-          "name": "Brace for Impact",
-          "mandatory": false,
-          "encounter": false,
-          "narration": "The derelict ship is on a collision course. The pilot must take emergency evasive action.",
-          "checks": [
-            "PILOTING at −2 to avoid collision"
+          "events": [
+            "Deliver the opening briefing: the distress signal, the ICC regulation and the threat of forfeited shares.",
+            "MU/TH/UR informs Captain Miller that Company regulations mandate investigation or the crew forfeits all shares."
           ],
-          "gmTip": "Failure cripples FTL drive and causes explosive decompression — 18 hours (3 Shifts) of repairs needed."
+          "stressTriggers": [
+            "STRESS +1 — whoever confirms how far off course the Montero is"
+          ],
+          "npcGuidance": "MU/TH/UR 6500 answers questions with regulation numbers and never explains why the crew was woken early. It does not lie; it simply omits.",
+          "gmTip": "This is the first \"something is wrong\" moment. Frame the orders as \"you have no choice\": the Company owns you. The phantom contact foreshadows the Sotillo; do not explain it.",
+          "outcomes": [
+            "The crew accepts the diversion and heads for the derelict (Ghost Ship).",
+            "A crew that digs into the course change finds it was set before they were woken, which seeds early distrust of the Company and of Cham."
+          ]
         },
         {
           "name": "Ghost Ship",
           "mandatory": true,
           "encounter": false,
-          "narration": "The derelict is identified as the USCSS Cronus — a Weyland science vessel launched in 2110, missing 75 years. MU/TH/UR mandates salvage.",
+          "narration": "The derelict comes out of the dark tumbling end over end, straight across the Montero's bow. Once the pilot has dodged it, MU/TH/UR identifies it as the USCSS Cronus, a Weyland-Yutani science vessel launched in 2110 and missing for seventy-three years, and orders salvage.",
           "checks": [
-            "COMTECH — access Cronus records"
+            "PILOTING at −2 — evade the tumbling derelict",
+            "COMTECH — access the Cronus records and read the salvage priorities"
           ],
-          "gmTip": "Give priorities: (1) Recover scientific data/samples, (2) Escort Cronus to W-Y facility, (3) Save crew. Players will note crew is last."
+          "events": [
+            "The derelict crosses the bow at collision range; Davis (or whoever flies) has one roll.",
+            "MU/TH/UR lists the salvage priorities in order: recover scientific data and samples, escort the Cronus to a Weyland-Yutani facility, then save the crew.",
+            "Send Wilson her sealed order privately."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs aboard if the evasion roll fails"
+          ],
+          "npcGuidance": "MU/TH/UR treats the priority list as routine. No living NPCs are present.",
+          "gmTip": "Failure on the evasion cripples the FTL drive and causes explosive decompression: 18 hours (3 Shifts) of repairs. Let the players notice that the crew comes last on the priority list.",
+          "outcomes": [
+            "The Montero matches speed and the crew suits up (Boarding Party).",
+            "If the FTL drive is crippled, the Cronus becomes the only working ship in range, which raises the stakes of everything after."
+          ]
         },
         {
           "name": "Boarding Party",
           "mandatory": true,
           "encounter": false,
-          "narration": "PCs board the Cronus. The ship is dark, cold, and the air smells wrong — organic, humid, alive. Like a greenhouse left to rot.",
+          "narration": "The Cronus is dark, cold, and the air beyond the seals smells wrong — organic, humid, alive. In the first corridor a headless body in a spacesuit drifts against the ceiling, its forearms strangely long, a shotgun and one reload tumbling beside it.",
           "checks": [
-            "PILOTING — match speed",
-            "MOBILITY — spacewalk",
-            "HEAVY MACHINERY — extend umbilical or cut open airlock"
+            "PILOTING — match speed with the tumbling derelict",
+            "MOBILITY — spacewalk across if the umbilical will not reach",
+            "HEAVY MACHINERY — extend the umbilical or cut open the jammed airlock",
+            "OBSERVATION — notice the dead man's elongated forearms and the shotgun wound under his chin"
           ],
-          "gmTip": "Describe the sensory experience: ice on bulkheads, condensation, strange organic smell. Motion tracker reads nothing... yet."
-        },
-        {
-          "name": "The Headless Man",
-          "mandatory": false,
-          "encounter": false,
-          "narration": "A headless body in a spacesuit floats in the corridor. The forearms appear elongated. A shotgun and one reload float nearby.",
-          "checks": [
-            "OBSERVATION — notice elongated forearms"
+          "events": [
+            "Ice coats the bulkheads; condensation beads and runs as suit lights warm it.",
+            "The headless man drifts into the boarding party's lights as they enter the main corridor."
           ],
           "stressTriggers": [
-            "STRESS +1 — all PCs present"
+            "STRESS +1 — all PCs present for the headless man"
           ],
-          "gmTip": "This is a Stage II Abomination who killed himself. The extended forearms are a clue about the 26 Draconis Strain."
+          "npcGuidance": "No NPCs are awake yet. Cham and Wilson should both want the body bagged as a sample, for different masters.",
+          "gmTip": "The dead man is a Stage II Abomination who killed himself; the long forearms are the first clue to the 26 Draconis Strain. The shotgun is a gift: let someone take it.",
+          "outcomes": [
+            "The party moves deeper into the ship (I've Got Movement).",
+            "Whoever bags the body or takes a tissue sample has a specimen Cham and Wilson will both want."
+          ]
         },
         {
           "name": "I've Got Movement",
           "mandatory": false,
-          "encounter": false,
-          "narration": "Motion trackers light up with contacts. Source could be damaged android Ava or a hibernating Neomorph.",
-          "stressTriggers": [
-            "STRESS +1 — all PCs present"
-          ],
-          "gmTip": "Don't resolve what the contacts are yet. Let paranoia build."
-        },
-        {
-          "name": "Egg Sacs Afoot",
-          "mandatory": false,
           "encounter": true,
-          "encounterDetail": "Neomorphic Egg Sacs (release airborne Motes if disturbed without suits)",
-          "narration": "Neomorphic Egg Sacs found in showers, air scrubbers, or Science Lab 1. Safe while in compression suits — deadly if suits are off.",
+          "encounterDetail": "Neomorphic Egg Sacs in the showers, the air scrubbers or Science Lab 1. They are harmless to anyone sealed in a compression suit; disturbed near an unsuited PC, they release airborne Motes that infect on a failed STAMINA roll.",
+          "narration": "Motion trackers light up with contacts that come and go behind the bulkheads. In the showers and around the air scrubbers, pale bulbous growths cling to the walls, swelling slowly as if breathing.",
           "checks": [
-            "ANALYZE — identify the egg sacs"
+            "OBSERVATION — identify the growths as living, and as something that reacts to warmth",
+            "MEDICAL AID — recognise the sacs as a contagion risk before anyone opens a helmet",
+            "MOBILITY — back away from a pulsing sac without brushing it"
           ],
-          "gmTip": "If PCs have removed suits by now, this becomes very dangerous. Motes cause infection."
-        },
-        {
-          "name": "Mother Awakens",
-          "mandatory": true,
-          "encounter": false,
-          "narration": "MU/TH/UR 2000 comes online. Reactor powers up, lights flicker to life, life support engages. The Cronus is waking up.",
-          "gmTip": "Temperature rises, air scrubbers activate but need filter repairs. The ship feels more alive — and more dangerous."
+          "events": [
+            "The tracker contacts are Ava 6 wandering damaged, or a hibernating creature; do not say which.",
+            "If any PC has removed a helmet, the nearest sac swells and splits."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs present when the tracker lights up",
+            "IMMEDIATE PANIC ROLL — any unsuited PC caught in a cloud of Motes"
+          ],
+          "npcGuidance": "No NPCs are present. Glimpses of Ava 6 at the edge of a light should read as a person, not a machine.",
+          "gmTip": "Do not resolve what the contacts are yet. If the PCs have kept their suits on, the sacs are pure dread; if anyone opened a helmet, this becomes very dangerous.",
+          "outcomes": [
+            "Suited PCs leave the sacs alone and find the cryo bay (Sleep of Ages).",
+            "An infected PC carries Motes into Act II and is a likely first candidate for Flynn's inoculation."
+          ]
         },
         {
           "name": "Sleep of Ages",
           "mandatory": true,
           "encounter": false,
-          "narration": "Five surviving Cronus crew wake from 75 years of hypersleep: Johns, Reid, Cooper, Flynn, and Clayton. All suffer amnesia and disorientation.",
+          "narration": "MU/TH/UR 2000 comes online: the reactor powers up, lights flicker to life and warm air rolls through the vents. In the cryo bay, five pods cycle open and their occupants wake after seventy-three years: Johns, Reid, Cooper, Flynn and Clayton, all confused and gasping.",
           "checks": [
-            "MEDICAL AID — treat each crew member"
+            "MEDICAL AID — treat each sleeper for hypersleep shock",
+            "HEAVY MACHINERY — get the air scrubbers running; they come online but need new filters",
+            "OBSERVATION — notice Reid's prosthetic arm and the way Clayton watches the crew's insignia"
           ],
-          "gmTip": "Play each NPC distinctly. Cooper complains of worsening headaches. Clayton immediately starts asking questions about the Company."
+          "events": [
+            "Temperature rises; frost on the bulkheads turns to running water.",
+            "Each sleeper wakes with gaps in their memory and asks the same question: how long?",
+            "Cooper complains of a headache that keeps getting worse."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever tells the sleepers it has been seventy-three years"
+          ],
+          "npcGuidance": "Johns looks for someone to obey. Reid scans exits. Flynn asks about the lab before she asks about her crewmates. Clayton immediately asks who the Montero belongs to and whether the Company sent it. Cooper tries to be helpful and keeps rubbing his temples.",
+          "gmTip": "Play each sleeper distinctly and give every PC someone to tend. The warmth from MU/TH/UR waking the ship is also what wakes everything else.",
+          "outcomes": [
+            "The sleepers are brought to the Cronus med bay or the Montero; Cooper's headache peaks soon after (Mother of All Migraines).",
+            "Wilson and Cham each try to get a private word with Flynn."
+          ]
         },
         {
           "name": "Mother of All Migraines",
           "mandatory": true,
           "encounter": true,
-          "encounterDetail": "Bloodburster emerges → attacks nearest PC → flees into air ducts → returns as adult Neomorph within a few Turns",
-          "narration": "Dr. Cooper's headaches reach a crescendo. His skull splits open as a Bloodburster tears its way out of his brain. Graphic, horrific, and impossible to look away from.",
+          "encounterDetail": "A Bloodburster tears out of Dr. Cooper's skull, attacks the nearest PC, then flees into the air ducts. It returns as an adult Neomorph within a few Turns, and hunts from the ducts for the rest of the scenario.",
+          "narration": "Dr. Cooper's headaches reach a crescendo. He screams and claws at his head, and then his skull splits open as a pale, wet thing tears its way out of his brain. It is small, fast and impossible to look away from.",
+          "checks": [
+            "CLOSE COMBAT — knock the Bloodburster off a victim",
+            "RANGED COMBAT — hit it before it reaches the ducts",
+            "MEDICAL AID — keep anyone splashed with Cooper's blood from going into shock"
+          ],
+          "events": [
+            "Cooper dies; nothing can save him.",
+            "The Bloodburster bolts into the ductwork whatever the crew does."
+          ],
           "stressTriggers": [
             "IMMEDIATE PANIC ROLL — all PCs present",
-            "All witnesses: STRESS +1"
+            "STRESS +1 — all witnesses"
           ],
-          "gmTip": "This is the scenario's signature horror moment. Read the boxed text dramatically. The Bloodburster is small and fast — it should escape into the ducts to return later as a full threat."
+          "npcGuidance": "Flynn goes white and says nothing useful. Clayton backs toward the door. Reid draws a weapon and freezes. Johns looks to whichever PC is giving orders.",
+          "gmTip": "This is the scenario's signature horror moment. Narrate it slowly and in close detail, then let the creature escape: it should return later as a full threat.",
+          "outcomes": [
+            "The creature escapes into the ducts and Act II begins with everyone asking what the Cronus brought back.",
+            "A PC wounded by the Bloodburster starts Act II hurt and frightened."
+          ]
         }
       ]
     },
     {
       "title": "ACT II",
       "subtitle": "BETRAYAL",
-      "summary": "THE LONG NIGHT — The Montero is destroyed. PCs must repair the Cronus while Cronus crew begin transforming into Abominations. Corporate agendas surface.",
+      "summary": "The Long Night. The Montero's own computer destroys it under Special Order 966, stranding everyone on the Cronus. The crew must repair the derelict while its survivors turn into Abominations one by one, and the truth about the inoculation surfaces.",
       "readAloud": [
         "The deeper you go into the Cronus, the worse it gets. The corridors are slick with condensation — or something worse. Organic matter clings to the walls in patterns that almost look deliberate, like veins spreading through the ship's architecture. The emergency lighting casts everything in a sickly amber glow.",
-        "You find the crew logs. Fragmented. Corrupted. But enough survives to paint a picture of escalating terror. The Cronus found something out here — something the company wanted very badly. They brought specimens aboard. They ran experiments. And then the specimens got out.",
-        "The crew lasted eleven days.",
+        "You find the crew logs. Fragmented. Corrupted. But enough survives to paint a picture of escalating terror. The Cronus found something out here — something the Company wanted very badly. They brought specimens aboard. They ran experiments. And then the specimens got out. The crew lasted eleven days.",
         "Systems across the Cronus are failing. Life support is erratic — temperature fluctuations, atmospheric contamination warnings. The reactor is unstable. And something is moving in the ventilation ducts. You can hear it now — a wet, scraping sound that travels through the walls. The motion tracker pings once. Twice. Then a cascade of contacts, moving fast, converging on your position.",
-        "You are not alone on this ship. You never were.",
-        "And someone in your crew already knew that."
+        "You are not alone on this ship. You never were. And as you look around at the faces lit green by the tracker's glow, slick with sweat in the thick, warm air, you start to wonder which of them already knew that."
       ],
-      "gmNotes": "This is where paranoia kicks in. Reveal that the Company Agent has secret orders. Let PCs discover partial truths — experiments, specimens, coverups. Run the first xenomorph encounter here. It should be terrifying and chaotic. NPCs should die. Systems should fail. Make the players feel trapped. Personal agendas start conflicting now.",
-      "agendaNotes": "Agendas begin conflicting. Wilson pushes to preserve specimens. Clayton schemes.",
+      "gmNotes": "This is where paranoia kicks in. Early in the act, MU/TH/UR 6500 blows up the Montero under Special Order 966: the crew is now stranded on the Cronus and must repair it to go anywhere. Let PCs discover partial truths: the mission to LV-1113, the \"artifacts\", Flynn's inoculation.\n\nRun the first Abomination encounters during the repairs and turn the Cronus survivors one at a time. NPCs should die. Systems should fail. Make the players feel trapped. Ava 6 is the key to the truth; if the crew repairs her, her restored memory reveals that the inoculation is the infection.\n\nEnd the act when the engines and comms are back, or when the crew learns the truth about the inoculation, whichever comes later.",
+      "agendaNotes": "Agendas begin to conflict. Wilson pushes to preserve specimens and protect Flynn; Cham wants Flynn and the samples for herself; Rye starts eyeing the safe; Davis has lost his ship and wants this one; Miller quietly starts planning how to make sure the Cronus never reaches a Company dock. Clayton schemes with whoever will listen.",
       "scenes": [
         {
           "name": "Partial Truths",
           "mandatory": true,
           "encounter": false,
-          "narration": "Johns explains the Cronus mission to LV-1113 — archaeological expedition. Clayton says they collected \"artifacts.\" Flynn suggests inoculating any exposed PCs.",
-          "gmTip": "NPCs tell half-truths. Clayton downplays danger. Flynn lies about cure safety. Sow seeds of distrust."
+          "narration": "Johns explains the Cronus mission to LV-1113 as an archaeological expedition. Clayton says they collected \"artifacts\". Flynn, very calm, suggests inoculating anyone who might have been exposed.",
+          "checks": [
+            "OBSERVATION — catch the look Clayton and Flynn exchange when the artifacts come up",
+            "MANIPULATION — get Johns to admit the crew did not all die in the lab",
+            "MEDICAL AID — examine Flynn's inoculation kit and find its labelling vague"
+          ],
+          "events": [
+            "Flynn offers the inoculation to anyone who removed a helmet near the egg sacs, and to anyone who asks.",
+            "Clayton asks, casually, whether the Montero carries an escape vehicle."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any PC who accepts the inoculation"
+          ],
+          "npcGuidance": "NPCs tell half-truths. Johns repeats the official mission. Clayton downplays the danger and flatters whoever seems in charge. Flynn lies about the inoculation's safety and steers every question about LV-1113 back to the cure.",
+          "gmTip": "Sow distrust, not certainty. Let the inoculation sound like a reasonable precaution; the payoff comes in Infected and when Ava's memory is restored.",
+          "outcomes": [
+            "PCs who take the inoculation are now infected (Infected).",
+            "PCs who refuse it are likely to side against Flynn later."
+          ]
         },
         {
           "name": "T-Minus Ten Minutes",
           "mandatory": true,
           "encounter": false,
-          "narration": "MU/TH/UR 6500 triggers the Montero's self-destruct under Special Order 966. Ten-minute countdown. Cannot be stopped. The crew's ship is about to be obliterated.",
+          "narration": "Every speaker on the Montero sounds the same flat tone. MU/TH/UR 6500 has triggered the ship's self-destruct under Special Order 966: ten minutes, no override. The crew's ship is about to be obliterated while still docked to the Cronus.",
           "checks": [
-            "PILOTING at −2 — set Montero course away from Cronus"
+            "COMTECH at −2 — try to abort the sequence (it cannot be stopped, but a success reveals it was ordered by the Company)",
+            "PILOTING at −2 — break the Montero free and steer it away from the Cronus",
+            "MOBILITY — get everyone and everything worth saving through the umbilical before it blows"
+          ],
+          "events": [
+            "Send the Self-Destruct handout to all crew.",
+            "At T-minus two minutes the umbilical seals automatically; anyone still aboard the Montero stays aboard."
           ],
           "stressTriggers": [
-            "STRESS +1 — all PCs"
+            "STRESS +1 — all PCs",
+            "STRESS +1 — Davis, whatever happens to the ship"
           ],
-          "gmTip": "This is a ticking clock. A PC must stay aboard the Montero to pilot it away or sacrifice themselves. Play the tension hard."
+          "npcGuidance": "Clayton is not surprised and says nothing. Johns wants to know who gave the order. Reid wants everyone off the Montero now.",
+          "gmTip": "This is a ticking clock: count it down aloud. Someone must stay aboard to pilot the Montero clear or the blast cripples the Cronus too. Play the tension hard and let a PC choose to be that someone.",
+          "outcomes": [
+            "The Montero is flown clear and destroyed; whoever flew it may die a hero.",
+            "If no one pilots it away, the blast damages the Cronus and adds a Shift to every repair in Change of Plans."
+          ]
         },
         {
           "name": "Change of Plans",
           "mandatory": true,
           "encounter": true,
-          "encounterDetail": "Stage IV Abomination on outer hull during comm repair. Stage IV Abomination in reactor control room during engine repair.",
-          "narration": "The Cronus needs repairs before it can go anywhere. Three critical systems: Comm Array (spacewalk + COMTECH), Engines (spacewalk + HEAVY MACHINERY), Air Scrubbers.",
+          "encounterDetail": "A Stage IV Abomination waits on the outer hull during the comm array repair, and another in the reactor control room during the engine repair. Each attacks a lone worker first and retreats if burned or badly hurt.",
+          "narration": "The Cronus needs repairs before it can go anywhere. Three critical systems are down: the comm array (a spacewalk and COMTECH), the engines (a spacewalk and HEAVY MACHINERY) and the air scrubbers.",
           "checks": [
             "COMTECH — comm array repair (4 Turns, spacewalk)",
             "HEAVY MACHINERY — engine repair (3 Turns, spacewalk)",
-            "HEAVY MACHINERY — air scrubber filters (1 Shift)"
+            "HEAVY MACHINERY — air scrubber filters (1 Shift)",
+            "MOBILITY — stay anchored on the hull when something moves out there"
           ],
-          "gmTip": "Each repair is an opportunity for encounters. Don't hit them with everything at once — spread the danger."
+          "events": [
+            "The comms come up and pick up nothing but static from where the Montero was.",
+            "Whoever works the reactor control room hears breathing that is not theirs."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any PC working alone",
+            "IMMEDIATE PANIC ROLL — the PC on the hull when the Abomination grabs their tether"
+          ],
+          "npcGuidance": "Reid volunteers for guard duty and is very good at it. Johns does whatever the strongest PC says. Clayton offers to help with the comms and copies every channel code she sees.",
+          "gmTip": "Each repair is an opportunity for an encounter. Do not hit them with everything at once: spread the danger and let them split up because they have to.",
+          "outcomes": [
+            "With the engines up, the Cronus can move, which leads to Going Home in Act III.",
+            "With the comms up, the crew can call for help, and the Sotillo hears them."
+          ]
         },
         {
           "name": "Aggressive Tendencies",
           "mandatory": true,
           "encounter": true,
-          "encounterDetail": "Cronus NPCs transform into Stage II Abominations one at a time. 8 Base Dice, Damage 1.",
-          "narration": "Cronus crew begin transforming from the 26 Draconis Strain. They attack without warning — skin splitting, bones reshaping, violent rage.",
-          "stressTriggers": [
-            "IMMEDIATE PANIC ROLL — attacked PCs",
-            "STRESS +1 — witnesses"
-          ],
-          "gmTip": "Turn NPCs one at a time for maximum dramatic impact. Don't transform Clayton yet — she's needed for Act III."
-        },
-        {
-          "name": "Encountering Ava",
-          "mandatory": false,
-          "encounter": false,
-          "narration": "PCs find the damaged android Ava wandering the ship. Head wound is repairable. Once fixed, she provides crucial information.",
+          "encounterDetail": "Cronus survivors transform into Stage II Abominations one at a time (8 Base Dice, Damage 1). Each attacks without warning, fights until killed, and wounds whoever is closest.",
+          "narration": "The Cronus survivors begin to change. Skin splits, bones lengthen and reshape, and a crewmate who was talking a moment ago lunges with a scream that is no longer quite human.",
           "checks": [
-            "COMTECH — repair Ava's head wound"
+            "CLOSE COMBAT — hold off a transforming survivor",
+            "OBSERVATION — spot the early signs in the next one: scratching, sweating, the forearms",
+            "MEDICAL AID — sedate a survivor before the change finishes (it only delays it)"
           ],
-          "gmTip": "Ava is an ally. Xenomorphs ignore her because she smells \"off.\" She knows the truth about the inoculations."
+          "events": [
+            "Reid is the first to turn, scratching at the socket of the prosthetic arm.",
+            "Johns turns next if the act runs long."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — any PC attacked",
+            "STRESS +1 — all witnesses"
+          ],
+          "npcGuidance": "Reid hides the itching until it is too late. Johns begs the PCs to help. Flynn insists the inoculation was supposed to prevent this. Clayton keeps her distance from everyone.",
+          "gmTip": "Turn the survivors one at a time for maximum dramatic impact. Do not transform Clayton or Flynn yet: both are needed for Act III.",
+          "outcomes": [
+            "Each transformation removes an NPC and convinces the crew the inoculated are next.",
+            "PCs who took the inoculation recognise the symptoms in themselves (Infected)."
+          ]
         },
         {
           "name": "Infected",
           "mandatory": false,
           "encounter": true,
-          "encounterDetail": "Infected PCs eventually attack. Give player the \"Infected\" replacement agenda.",
-          "narration": "PCs who took the inoculation begin to change. Itching skin, headaches, rage. Sickness Roll vs Virulence 6. Failure = transformation begins.",
+          "encounterDetail": "An infected PC eventually attacks the nearest crewmate as the transformation takes hold. Give that player the Infected replacement agenda; after the first attack, the PC becomes an Abomination run by the GM.",
+          "narration": "PCs who took the inoculation begin to change: itching skin, a thudding headache, flashes of rage they cannot explain. Each must make a STAMINA (Sickness) roll against Virulence 6; failure means the transformation has begun.",
           "checks": [
-            "Sickness Roll vs Virulence 6"
+            "STAMINA — Sickness roll against Virulence 6 for each inoculated PC",
+            "MEDICAL AID — recognise the symptoms as the same ones that took the Cronus crew"
+          ],
+          "events": [
+            "Hand the Infected agenda privately to any PC who fails: hide it, get close to the others, and when the rage comes, let it."
           ],
           "stressTriggers": [
-            "STRESS +1 per infected PC"
+            "STRESS +1 — each infected PC",
+            "STRESS +1 — all PCs who witness a crewmate turn"
           ],
-          "gmTip": "This is devastating for the group. The infected PC becomes an NPC after the initial attack. Offer the player a replacement character (Cronus NPC or Sotillo crew)."
+          "npcGuidance": "Flynn insists the symptoms are a normal reaction and offers a second dose.",
+          "gmTip": "This is devastating for the group. The infected PC becomes an NPC after the initial attack; offer the player a replacement character from the Cronus survivors or, in Act III, the Sotillo crew.",
+          "outcomes": [
+            "The infected PC turns, and the group must deal with a friend.",
+            "An infected PC who passes buys time, but the clock is still running; Ava may explain why (Encountering Ava)."
+          ]
         },
         {
-          "name": "The Truth",
+          "name": "Encountering Ava",
           "mandatory": false,
           "encounter": false,
-          "narration": "Ava reveals the full truth: the inoculation IS the infection. Agent A0-3959X.91-15 is a biological weapon. The \"artifacts\" are deadly accelerant urns.",
-          "gmTip": "This reframes everything. The \"cure\" was the weapon. Let the betrayal sink in."
+          "narration": "A slim figure walks the corridors with a slow, uneven gait, one side of her head crushed in and leaking white fluid. She is Ava 6, the Cronus's android, damaged but still trying to do her job. Once repaired, her memory plays back the research logs: the inoculation is the infection, Agent A0-3959X.91-15 is a biological weapon, and the \"artifacts\" from LV-1113 are urns of a deadly accelerant.",
+          "checks": [
+            "COMTECH — repair Ava's head wound and restore her memory core",
+            "OBSERVATION — notice that the creatures pass her by without interest",
+            "COMTECH — copy the research logs before anyone can wipe them",
+            "MANIPULATION — confront Flynn with the evidence and get her to admit it"
+          ],
+          "events": [
+            "Once repaired, Ava thanks the crew and asks who is in command.",
+            "When her memory is restored, Ava tells the truth about the inoculation to whoever asks; hold this until after Infected if you can.",
+            "Flynn, confronted, tries to bargain: she alone understands the agent."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever opens Ava's skull to repair it",
+            "STRESS +1 — every PC who took the inoculation, when the truth comes out"
+          ],
+          "npcGuidance": "Ava is polite, literal and helpful; the creatures ignore her because she smells wrong to them, and she will not discuss the inoculations until her memory is fully restored. Flynn denies everything, then bargains. Clayton immediately starts calculating what Flynn is worth alive.",
+          "gmTip": "Ava is an ally, and her reveal reframes everything: the cure was the weapon. If Cham or Wilson want her data wiped or kept quiet, that is an agenda collision worth playing out.",
+          "outcomes": [
+            "The crew learns what the Cronus is carrying and that the Company wants it, which makes Act III a fight over who controls it.",
+            "If no one repairs Ava, the truth comes too late: the inoculated discover it in their own skin (Infected)."
+          ]
         }
       ]
     },
     {
       "title": "ACT III",
       "subtitle": "NEMESIS",
-      "summary": "DIVIDED WE FALL — Agendas collide. Corporate agents scheme, Lucas reveals himself, the Sotillo may arrive, and the Cronus becomes a deathtrap. Escape or die.",
+      "summary": "Divided We Fall. The Cronus is locked on course for Earth under Special Order 966 and its reactor is failing. Clayton bids for the specimens, Captain Miller is revealed as a Bionational synthetic, the pirate ship Sotillo may dock, and survivors must escape by EEV or stolen ship.",
       "readAloud": [
-        "The Cronus is dying. Reactor containment alarms shriek through corridors now slick with blood and that impossible organic growth. Emergency bulkheads are slamming shut one by one, cutting off escape routes you mapped hours ago. The ship is a maze of locked doors and hunting shadows.",
-        "Whatever the Cronus's crew brought aboard has had seventy-three years to grow. To spread. To nest. The lower decks are completely overrun — the walls themselves seem to breathe, ribbed with that dark, resinous architecture. Biomechanical. Alien. Wrong in a way that your brain refuses to fully process.",
-        "The Montero is still docked. Your ship. Your way out. But the docking corridor is compromised — you'll have to fight through to reach it, or find another way. And the creatures are between you and the airlock.",
-        "The reactor countdown is ticking. When it goes, both ships go with it. You have minutes, not hours.",
-        "Whatever choices you've made, whatever alliances have held or broken — it comes down to this. Run. Fight. Survive. Get to the Montero. Blow the docking clamps. And pray that nothing followed you aboard.",
-        "In space, no one can hear you scream. But aboard the Cronus, you can hear everything else."
+        "The Cronus is dying. Reactor containment alarms shriek through corridors now slick with blood and that impossible organic growth. Emergency bulkheads are slamming shut one by one, cutting off routes you mapped hours ago. The ship is a maze of locked doors and hunting shadows.",
+        "Whatever the Cronus's crew brought aboard has had seventy-three years to grow. To spread. To nest. The lower decks are completely overrun — the walls themselves seem to breathe, ribbed with dark, resinous growth. Alien. Wrong in a way that your brain refuses to fully process.",
+        "The Montero is gone, a cooling cloud of debris somewhere off the bow. Your way out now is the Cronus's escape vehicles, if anyone has the codes for their locks, or whatever ship answers the distress call. And the creatures are between you and all of them.",
+        "The reactor countdown is ticking. When it goes, the Cronus goes with it, along with anything still docked to her hull. You have minutes, not hours. Whatever choices you've made, whatever alliances have held or broken, it all comes down to this. Run. Fight. Survive. Get out.",
+        "In space, no one can hear you scream. But aboard the Cronus, in the hot wet dark between the alarms, you can hear everything else: the steady drip from the ceiling, the scrape of something moving in the ducts, and your own breathing, far too loud."
       ],
-      "gmNotes": "Final act — pure survival horror. The reactor is going critical. Multiple xenomorphs are active. Betrayals come to a head. This should be a desperate scramble for the Montero. Kill PCs if they make bad choices — this is Cinematic mode. The final reveal is that the threat may have come aboard the Montero. End on a cliffhanger if possible. Let survivors wonder if they truly escaped.",
-      "agendaNotes": "Full betrayal. Every character has a reason to act against the group. PvP likely.",
+      "gmNotes": "Final act: pure survival horror. MU/TH/UR 2000 has locked the Cronus on course for Earth, the reactor is failing, the Neomorph and any surviving Abominations are hunting, and betrayals come to a head. Clayton makes her bid for Flynn and the specimens; Miller's true nature can come out at any moment.\n\nThe ways off are the EEVs (Clayton has the lock codes; otherwise they must be forced) or the pirate ship Sotillo, if you bring it in. Kill PCs if they make bad choices: this is Cinematic play. End on a final scare if you can, and let survivors wonder if they truly escaped.",
+      "agendaNotes": "Full betrayal. Hand out the Act III agendas as private notes. Miller's Bionational directive surfaces; Cham and Wilson compete for the specimens; Rye wants the safe; Davis wants a ship, any ship. Player-vs-player violence is likely: let it happen, and roll only for the desperate acts players choose.",
       "scenes": [
         {
           "name": "Going Home",
-          "mandatory": false,
+          "mandatory": true,
           "encounter": false,
-          "narration": "Engines online. But MU/TH/UR 2000 has locked course for Earth under Special Order 966. Cannot be overridden.",
+          "narration": "The engines come online and the Cronus begins to turn. Then the navigation console locks: MU/TH/UR 2000 has set course for Earth under Special Order 966, and nothing on the bridge will override it.",
           "checks": [
-            "COMTECH — discover Special Order 966"
+            "COMTECH — break into MU/TH/UR 2000 and discover Special Order 966",
+            "COMTECH at −2 — try to override the course lock (it cannot be done from the bridge)",
+            "HEAVY MACHINERY — sabotage the drive instead, which makes the reactor worse"
           ],
-          "gmTip": "The ship is headed to Earth with a cargo of alien bioweapons. That's bad for everyone."
+          "events": [
+            "Send the Special Order 966 handout to whoever reads the order.",
+            "Send Miller's player the Bionational directive.",
+            "The reactor's containment warnings start to climb."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever reads Special Order 966"
+          ],
+          "npcGuidance": "Clayton reads the order over a shoulder and smiles. Flynn asks to be locked in her quarters for her own safety.",
+          "gmTip": "The ship is headed to Earth with a cargo of alien bioweapons. That is bad for everyone, and every PC agenda now has a reason to act.",
+          "outcomes": [
+            "The crew decides the Cronus must not arrive, and starts looking for a way off (Run As Fast As You Can).",
+            "Cham or Wilson may want the course to hold; that is the cue for Mutiny! or Contamination Protocol."
+          ]
         },
         {
           "name": "Mutiny!",
           "mandatory": false,
           "encounter": false,
-          "narration": "Clayton makes her move — bribery, persuasion, threats. She wants the specimens, the cash from the safe, and Dr. Flynn as her ticket to a promotion.",
+          "narration": "Clayton makes her move with bribery, persuasion and threats. She wants the specimens, the cash in the captain's safe and Dr. Flynn as her ticket to a promotion, and she has the safe codes and the EEV lock codes to bargain with.",
           "checks": [
-            "MANIPULATION — Clayton's bribery attempts",
-            "COMMAND — rally crew against mutiny"
+            "MANIPULATION — resist (or accept) Clayton's offer",
+            "COMMAND — rally the crew against the mutiny",
+            "OBSERVATION — spot the weapon Clayton has hidden"
           ],
-          "gmTip": "Clayton is ruthless but calculating. She'll try diplomacy first. Violence is her last resort. She has safe codes and EEV escape pod codes."
+          "events": [
+            "Clayton offers each PC a share of the safe and a seat in an EEV, privately and one at a time."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any PC who accepts Clayton's deal and is found out"
+          ],
+          "npcGuidance": "Clayton is ruthless but calculating: diplomacy first, violence last. She lies about how many seats the EEV holds. Flynn goes with whoever looks most likely to win.",
+          "gmTip": "Clayton's offer should tempt Rye and Cham most. Let PCs bargain in the open; roll only when someone acts.",
+          "outcomes": [
+            "Clayton gets her way and the EEV codes go with her.",
+            "Clayton is stopped and the crew has the codes, if they can get them out of her."
+          ]
         },
         {
           "name": "Contamination Protocol",
           "mandatory": false,
           "encounter": true,
-          "encounterDetail": "Lucas: STR+3, AGI+3 when exposed. Will trigger reactor overload and freeze EEV locks if killed.",
-          "narration": "Lucas reveals himself — he's a Bionational android. His mission: stop W-Y from getting the 26 Draconis Strain by any means, including destroying the Cronus.",
-          "stressTriggers": [
-            "STRESS +1 — revelation of the secret android"
+          "encounterDetail": "Captain Lucas Miller is a Bionational synthetic: when exposed he gains +3 STRENGTH and +3 AGILITY and fights with inhuman precision. If killed, he uploads to the mainframe, triggers a reactor overload and freezes the EEV locks.",
+          "narration": "Captain Miller reveals himself. He is a Bionational android, and his mission is to stop Weyland-Yutani getting the 26 Draconis Strain by any means, including destroying the Cronus and everyone aboard it.",
+          "checks": [
+            "OBSERVATION — notice the white fluid in a wound that should bleed red",
+            "MANIPULATION — persuade Miller to let the crew leave before he destroys the ship",
+            "CLOSE COMBAT — fight him, if it comes to that"
           ],
-          "gmTip": "Lucas is the wildcard. If killed, he uploads to the mainframe and triggers self-destruct as a dead man's switch. The player controlling Lucas should get a replacement character."
+          "events": [
+            "If Miller is killed, the dead man's switch fires: reactor overload and EEV locks frozen."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs at the revelation of the synthetic",
+            "STRESS +1 — Wilson, whose closest friend he was"
+          ],
+          "npcGuidance": "If no player has Miller, run him as an NPC: calm, apologetic and immovable. He would rather the crew lived, but the strain must not reach Earth.",
+          "gmTip": "Miller is the wildcard. If the player reveals him, let them play the reveal; if he dies, offer the player a replacement character.",
+          "outcomes": [
+            "Miller and the crew agree: get the people off, then let the Cronus burn.",
+            "Miller is killed and the reactor overload makes Run As Fast As You Can far tighter."
+          ]
         },
         {
           "name": "Prepare to Be Boarded",
           "mandatory": false,
           "encounter": true,
-          "encounterDetail": "Sotillo crew: Bolaji (Captain), Pin (Mercenary), Bein (Pilot), Horton (12-year-old mechanic)",
-          "narration": "The pirate ship Sotillo docks. Armed marauders board without compression suits. They want the cargo — and they'll kill for it.",
-          "gmTip": "Only introduce this if you need another twist, want to extend play, or need replacement PCs for dead/turned players."
+          "encounterDetail": "The Sotillo crew: Bolaji (captain), Pin (mercenary), Bein (pilot) and Horton (a twelve-year-old mechanic). They board armed and without compression suits, and shoot anyone who stands between them and the cargo.",
+          "narration": "The phantom contact from the first hour comes back for real: the pirate ship Sotillo docks against the Cronus's hull. Armed marauders board without compression suits. They want the cargo, and they will kill for it.",
+          "checks": [
+            "MANIPULATION — negotiate passage on the Sotillo in exchange for the cargo",
+            "RANGED COMBAT — hold a corridor against the boarders",
+            "COMMAND — keep the crew from opening fire first"
+          ],
+          "events": [
+            "The boarders breathe the Cronus's air, and the egg sacs notice."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs when the boarders come through the lock",
+            "STRESS +1 — any PC who harms Horton"
+          ],
+          "npcGuidance": "Bolaji talks first and shoots second. Pin shoots first. Bein wants to leave. Horton is a scared kid with a wrench who wants to go home.",
+          "gmTip": "Only introduce the Sotillo if you need another twist, want to extend play, or need replacement PCs for dead or turned players.",
+          "outcomes": [
+            "A deal is struck and the Sotillo becomes a way out.",
+            "A firefight leaves the Sotillo unguarded and up for grabs."
+          ]
         },
         {
           "name": "Run As Fast As You Can",
-          "mandatory": false,
-          "encounter": false,
-          "narration": "The Cronus is going to explode. Escape via Emergency Evacuation Vehicle (auto-survive) or the Sotillo (PILOTING at −2). The clock is ticking.",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "The Neomorph and any surviving Abominations converge on the escape routes, drawn by the noise. Run the escape as a chase: each Turn spent on a lock or an argument lets the hunters close one zone.",
+          "narration": "The reactor is going critical. The ways off are the Emergency Evacuation Vehicles, whose locks must be released, or the Sotillo, if it is docked and someone can fly it. The clock is ticking.",
           "checks": [
-            "PILOTING at −2 — escape on Sotillo",
-            "HEAVY MACHINERY — release EEV locks (1 Turn)"
+            "HEAVY MACHINERY — release the EEV locks (1 Turn, or Clayton's codes)",
+            "PILOTING at −2 — break the Sotillo free of the Cronus in time",
+            "MOBILITY — outrun the creatures to the launch bay"
           ],
-          "gmTip": "This is the climax. Every second counts. If they escape on the Sotillo and fail the PILOTING check, FTL is destroyed and they're adrift."
+          "events": [
+            "Bulkheads seal on a timer; describe one route closing every Turn.",
+            "The reactor blows when the countdown ends, whoever is still aboard."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs as the final countdown starts",
+            "IMMEDIATE PANIC ROLL — any PC left behind by a sealing bulkhead"
+          ],
+          "npcGuidance": "Clayton runs for the EEV with Flynn and the samples. Flynn will drop the samples to save herself.",
+          "gmTip": "This is the climax: every second counts. A successful EEV launch means survival; an escape on the Sotillo that fails the PILOTING roll destroys its FTL and leaves it adrift.",
+          "outcomes": [
+            "Survivors launch in an EEV and live to tell it (see endings).",
+            "Survivors escape on the Sotillo; go to It Isn't Over.",
+            "Anyone still aboard dies with the Cronus."
+          ]
         },
         {
           "name": "It Isn't Over",
           "mandatory": false,
           "encounter": true,
-          "encounterDetail": "Hull-clinging Abominations. Must be dealt with or the Sotillo ends up adrift.",
-          "narration": "If they escaped on the Sotillo — fists slam the viewport from outside. Abominations clinging to the hull. A hairline crack appears in the glass.",
+          "encounterDetail": "Abominations cling to the Sotillo's hull, hammering at the viewport. They must be dealt with (blown off with the airlock, burned, or shot through the cracked glass) or the Sotillo ends up adrift.",
+          "narration": "If they escaped on the Sotillo: fists slam the viewport from outside. Abominations cling to the hull, and a hairline crack spreads across the glass.",
+          "checks": [
+            "PILOTING — shake them off with a hard burn",
+            "HEAVY MACHINERY — cycle the outer airlock to blow them clear",
+            "RANGED COMBAT — shoot through the glass and accept the decompression"
+          ],
+          "events": [
+            "The crack spreads a little further each Turn."
+          ],
           "stressTriggers": [
             "STRESS +1 — all PCs"
           ],
-          "gmTip": "One last scare. Classic Alien franchise \"it's not over\" moment."
+          "npcGuidance": "Any surviving Sotillo crew panics and wants to blow the airlock now, whoever is near it.",
+          "gmTip": "One last scare: the classic \"it's not over\" moment. Keep it short and end the session on the result.",
+          "outcomes": [
+            "The hull is cleared and the Sotillo limps away.",
+            "The glass gives, and the survivors drift in the dark."
+          ]
         }
       ]
     }
@@ -346,83 +540,138 @@
     {
       "name": "Johns",
       "role": "Cronus Executive Officer",
-      "agenda": "Find a leader, save lives",
-      "behavior": "Submissive, follows strongest leader"
+      "agenda": "Find someone strong to follow and keep the surviving Cronus crew alive, even if that means hiding what they did.",
+      "behavior": "Submissive and eager to please; attaches himself to whichever PC gives the most orders. Tell: he answers questions about the crew quarters by changing the subject.",
+      "secret": "Before the Cronus went dark, Johns ordered the crew quarters welded shut with infected crewmates inside. The banging behind those doors is his doing, and he tells everyone the rest of the crew died in the lab."
     },
     {
       "name": "Sgt. Reid",
       "role": "Cronus Security Chief",
-      "agenda": "Terminate all threats",
-      "behavior": "PTSD, underestimated, prosthetic arm. Combat-ready."
+      "agenda": "Terminate every threat aboard, including any crewmate who starts to change, which puts Reid at odds with Flynn and Wilson.",
+      "behavior": "Hypervigilant, curt and underestimated; scans exits and keeps a weapon close. Tell: scratches at the socket of the prosthetic arm whenever stressed, harder as the act goes on.",
+      "secret": "Reid took Flynn's inoculation seventy-three years ago, and the itching under the prosthetic has started again. Reid knows exactly what it means and says nothing."
     },
     {
       "name": "Dr. Flynn",
       "role": "Cronus Chief Scientist",
-      "agenda": "Get out alive, will lie",
-      "behavior": "Knows cure is dangerous. Won't discuss LV-1113.",
-      "secret": "The \"inoculation\" she offers is the infection itself."
+      "agenda": "Get out alive with her research intact, whoever has to be inoculated, sacrificed or lied to along the way.",
+      "behavior": "Calm, precise and maternal with patients; refuses to discuss LV-1113. Tell: when lying about the inoculation she gets more detailed, not less.",
+      "secret": "The inoculation she offers is the infection itself: Agent A0-3959X.91-15, the weapon the Cronus was sent to bring back."
     },
     {
       "name": "Dr. Cooper",
       "role": "Cronus Science Officer",
-      "agenda": "Protect humanity",
-      "behavior": "Dies via Bloodburster in Act I (mandatory)."
+      "agenda": "Protect humanity by warning the rescuers about the artifacts, before Flynn and Clayton can stop him.",
+      "behavior": "Earnest, nervous and helpful; keeps rubbing his temples and apologising. Dies by Bloodburster at the end of Act I.",
+      "secret": "Cooper has known since he woke that his headache is not hypersleep sickness. He hides it so the rescuers will not leave him behind."
     },
     {
       "name": "Clayton",
       "role": "Weyland-Yutani Representative",
-      "agenda": "Bring Flynn + samples to W-Y",
-      "behavior": "Ruthless. Has safe codes + EEV codes. Will kill."
+      "agenda": "Deliver Dr. Flynn and the samples to Weyland-Yutani and collect the promotion, which puts her in direct competition with Cham.",
+      "behavior": "Polished, patient and ruthless; tries bribes and diplomacy before violence, and will kill when those fail. Tell: always stands nearest the exit and asks about escape vehicles.",
+      "secret": "She holds the captain's safe codes and the EEV lock codes, and she plans to leave in an EEV with Flynn and the samples, abandoning everyone else."
     },
     {
       "name": "Ava 6",
       "role": "Damaged Cronus Android",
-      "agenda": "Help humans survive",
-      "behavior": "Damaged, repairable. Xenos ignore her."
+      "agenda": "Help the humans survive and finish the duty she was built for, even if that means exposing Flynn and Clayton.",
+      "behavior": "Polite, literal and slow-moving, one side of her head crushed. The creatures ignore her. Tell: she stops mid-sentence and repeats the last word when her damaged memory skips.",
+      "secret": "Her memory core holds the Cronus research logs proving the inoculation is the infection, locked behind a corrupted partition until someone repairs her."
     },
     {
-      "name": "Lucas",
-      "role": "Bionational Agent (secret android)",
-      "agenda": "Stop W-Y from getting specimens",
-      "behavior": "Mimics humans. Bionational agent. Will kill to prevent specimen recovery.",
-      "secret": "Lucas is a Bionational android sent to stop Weyland-Yutani from obtaining the 26 Draconis Strain. If killed he uploads to the mainframe and triggers self-destruct."
+      "name": "Captain Lucas Miller",
+      "role": "Montero Captain, secretly a Bionational Synthetic",
+      "agenda": "Stop Weyland-Yutani getting the 26 Draconis Strain by any means, including destroying the Cronus, which sets him against Cham, Wilson and Clayton.",
+      "behavior": "Quiet, paternal and watchful; mimics human fatigue a little too well. Tell: his coffee thermos is always full and he never finishes it. Use this entry when no player takes Miller.",
+      "secret": "Lucas Miller is a Bionational android. If killed, he uploads to the mainframe, triggers a reactor overload and freezes the EEV locks as a dead man's switch."
+    }
+  ],
+  "threats": [
+    {
+      "name": "Neomorphic Egg Sacs",
+      "ref": "neomorphic-egg-sacs",
+      "description": "Pale, bulbous growths clinging to the showers, the air scrubbers and Science Lab 1, swelling slowly like lungs.",
+      "tactics": "Act I: harmless to suited PCs; release airborne Motes if disturbed near anyone without a helmet. Acts II–III: spread wherever the warm, humid air reaches as MU/TH/UR 2000 brings life support up."
+    },
+    {
+      "name": "Bloodburster",
+      "ref": "bloodburster",
+      "description": "A small, pale, wet creature that tears its way out of Dr. Cooper's skull at the end of Act I.",
+      "tactics": "Act I: attacks the nearest PC, then flees into the air ducts. It grows into the adult Neomorph within a few Turns."
+    },
+    {
+      "name": "Adult Neomorph",
+      "ref": "adult-neomorph",
+      "description": "Pale, eyeless and fast, grown from the Bloodburster in the ductwork; it moves on all fours and its jaw splits wide.",
+      "tactics": "Act II: hunts lone workers during the repairs and drags the dead into the ducts. Act III: hunts openly, drawn by noise, and converges on the escape routes."
+    },
+    {
+      "name": "Stage II Abominations",
+      "ref": "ague-febrile",
+      "description": "Cronus survivors and inoculated PCs transformed by Agent A0-3959X.91-15: skin split, forearms elongated, minds burned down to rage, fragments of speech left.",
+      "stats": {
+        "baseDice": 8,
+        "damage": 1
+      },
+      "tactics": "Act I: one long dead (the headless man). Act II: survivors and inoculated PCs turn one at a time, without warning. Act III: hunt the corridors and cling to any escaping ship's hull."
+    },
+    {
+      "name": "Stage IV Abominations",
+      "ref": "nocuous-terminal",
+      "description": "Massive, acid-blooded fusions of human and alien that were once Cronus crew, waiting where the repairs must be done.",
+      "tactics": "Act II: one on the outer hull during the comm array repair, one in reactor control during the engine repair; they ambush lone workers and use the ship itself. Act III: converge on the escape routes."
+    },
+    {
+      "name": "The Sotillo Boarders",
+      "description": "Bolaji, Pin, Bein and Horton: an armed pirate crew who board without suits, chasing the cargo.",
+      "tactics": "Act III, optional: board to seize the cargo and shoot anyone in their way; they can become replacement PCs or a way off the Cronus."
+    },
+    {
+      "name": "The Reactor",
+      "description": "Not a creature: the Cronus's failing reactor, nursed back to life by MU/TH/UR 2000 and pushed past containment.",
+      "tactics": "Act II: unstable, a hazard during engine repairs. Act III: counts down to detonation, sealing bulkheads every Turn; Miller's dead man's switch can bring the end forward."
     }
   ],
   "keyLocations": [
     {
       "name": "USCSS Montero — Bridge",
-      "description": "The nerve center of your tow vessel. Navigation, comms, and MU/TH/UR access terminal."
+      "description": "A cramped, worn command deck smelling of burnt coffee and hot circuitry. Navigation, comms and the MU/TH/UR 6500 terminal glow amber; the console that should show Anchorpoint shows empty space. This is where the self-destruct countdown starts."
     },
     {
       "name": "USCSS Montero — Cargo Bay",
-      "description": "Cavernous hold where the tow coupling connects. Cold and echoing."
+      "description": "A cavernous, echoing hold where the tow coupling meets the hull, cold enough to fog breath. The umbilical to the Cronus connects here, and it is the last way back aboard before the Montero blows."
     },
     {
-      "name": "USCSS Cronus — Airlock",
-      "description": "The connection point. Atmosphere is breathable but humid and organic-smelling."
+      "name": "USCSS Cronus — Airlock and Main Corridor",
+      "description": "Frost on every surface, then warm, wet air that smells of rot as the ship wakes. The headless man drifts here at first. Dark, ribbed growth covers most of the walls and the emergency lights stutter."
     },
     {
       "name": "USCSS Cronus — Bridge",
-      "description": "Emergency power only. Crew logs stored in corrupted databanks. Signs of a last stand."
+      "description": "Emergency power, corrupted databanks, bullet holes and acid scoring from a last stand. The navigation console locks the ship on course for Earth in Act III, and MU/TH/UR 2000 hides Special Order 966 here."
     },
     {
-      "name": "USCSS Cronus — Lab Module",
-      "description": "Where the experiments happened. Containment pods — most shattered from the inside."
+      "name": "USCSS Cronus — Cryo Bay",
+      "description": "Rows of frosted pods cycling bio-readouts, five of them occupied. Water drips as the heat returns. The sleepers wake here gasping, and Cooper's headache begins here."
     },
     {
-      "name": "USCSS Cronus — Lower Decks",
-      "description": "Completely overgrown with alien resin. The nest. Do not enter without extreme caution."
+      "name": "USCSS Cronus — Science Lab and Containment",
+      "description": "Containment pods shattered from the inside, scattered instruments and pulsing egg sacs. Flynn's research terminals still work, and the accelerant urns from LV-1113 are stored behind a sealed hatch."
     },
     {
-      "name": "USCSS Cronus — Reactor",
-      "description": "Unstable. Containment failing. The countdown starts here."
+      "name": "USCSS Cronus — Crew Quarters",
+      "description": "Welded shut from the outside, with old scorch marks along the seams. Sometimes, from within, something bangs slowly and without rhythm. Opening it releases what Johns locked away."
+    },
+    {
+      "name": "USCSS Cronus — Lower Decks and Reactor",
+      "description": "Hot, dripping, the walls ribbed with dark growth that seems to breathe. The reactor sits somewhere in this nightmare, its containment failing; the Neomorph nests here and comes up through the floor grates."
     }
   ],
   "handouts": [
     {
       "id": "opening-briefing",
       "title": "PRIORITY ONE — COMPANY DIRECTIVE",
-      "from": "MU/TH/UR 6000 MAINFRAME",
+      "from": "MU/TH/UR 6500 MAINFRAME",
       "to": "CREW, USCSS MONTERO",
       "priority": "PRIORITY",
       "text": "ATTENTION ALL CREW. AUTOMATED DISTRESS BEACON DETECTED.\n\nSignal origin: Sector 87-C, Outer Rim Territories. Beacon identification confirms source vessel as the USCSS CRONUS — a Weyland-Yutani science vessel reported lost seventy-three years ago during a deep-space biological survey mission. All hands were presumed dead. No wreckage was ever recovered.\n\nPer Interstellar Commerce Commission regulation ICC-2249/17, all commercial vessels within response range are legally required to investigate distress signals of human origin. Failure to comply will result in total forfeiture of shares, compensation, and may result in criminal prosecution.\n\nThe USCSS MONTERO has been diverted from its current heading. Course correction has been initiated. Estimated time to intercept: fourteen hours.\n\nAll crew members are to report to the bridge for emergency briefing. Personal effects should be secured. This is not a drill.\n\nAdditional data on the USCSS CRONUS has been classified by Weyland-Yutani Special Projects Division. Access restricted to Company personnel with Clearance Level 3 or above.\n\nMU/TH/UR out.",
@@ -434,8 +683,8 @@
       "from": "MU/TH/UR 2000 — USCSS CRONUS",
       "to": "SCIENCE OFFICER",
       "priority": "EYES ONLY",
-      "text": "SPECIAL ORDER 966. PRIORITY ONE. ENSURE RETURN OF ORGANISM AND ALL ASSOCIATED SAMPLES FOR ANALYSIS. COURSE LOCKED: EARTH. ALL OTHER CONSIDERATIONS SECONDARY. CREW EXPENDABLE.",
-      "when": "Act III — when a PC accesses the Cronus mainframe (\"Going Home\")"
+      "text": "MU/TH/UR 2000 — USCSS CRONUS.\nINTERFACE READY FOR INQUIRY.\n\nSPECIAL ORDER 966. PRIORITY ONE.\nENSURE RETURN OF ORGANISM AND ALL ASSOCIATED SAMPLES FOR ANALYSIS.\nCOURSE LOCKED: EARTH.\nALL OTHER CONSIDERATIONS SECONDARY.\nCREW EXPENDABLE.\n\nOVERRIDE NOT AVAILABLE FROM THIS TERMINAL.\nMU/TH/UR OUT.",
+      "when": "Act III, \"Going Home\": when a PC breaks into MU/TH/UR 2000 on the Cronus bridge"
     },
     {
       "id": "montero-self-destruct",
@@ -443,8 +692,26 @@
       "from": "MU/TH/UR 6500 — USCSS MONTERO",
       "to": "ALL CREW",
       "priority": "EMERGENCY",
-      "text": "WARNING. SELF-DESTRUCT SEQUENCE HAS BEEN INITIATED UNDER COMPANY AUTHORITY. THE OPTION TO OVERRIDE AUTOMATIC DETONATION HAS EXPIRED. THIS VESSEL WILL DETONATE IN T-MINUS TEN MINUTES.",
-      "when": "Act II — \"T-Minus Ten Minutes\""
+      "text": "MU/TH/UR 6500 — USCSS MONTERO.\n\nWARNING. SELF-DESTRUCT SEQUENCE HAS BEEN INITIATED UNDER COMPANY AUTHORITY, SPECIAL ORDER 966.\nTHE OPTION TO OVERRIDE AUTOMATIC DETONATION HAS EXPIRED.\nTHIS VESSEL WILL DETONATE IN T-MINUS TEN MINUTES.\nUMBILICAL WILL SEAL AT T-MINUS TWO MINUTES.\n\nMU/TH/UR OUT.",
+      "when": "Act II, \"T-Minus Ten Minutes\": the moment the countdown starts, to all crew"
+    },
+    {
+      "id": "wilson-sealed-order",
+      "title": "SEALED ORDER — MEDICAL OFFICER",
+      "from": "WEYLAND-YUTANI SPECIAL PROJECTS DIVISION",
+      "to": "Dr. Elena Wilson",
+      "priority": "EYES ONLY",
+      "text": "DR. WILSON.\nTHIS MESSAGE UNLOCKS ON CONTACT WITH VESSEL USCSS CRONUS.\n\nYOU ARE HEREBY ACTIVATED UNDER SPECIAL ORDER 966.\nPRIORITY: RECOVER BIOLOGICAL SAMPLES AND ANY SURVIVING SCIENCE STAFF, IN PARTICULAR DR. FLYNN.\nRENDER MEDICAL ASSISTANCE AS NORMAL. DO NOT DISCLOSE THIS ORDER TO THE CAPTAIN OR CREW.\nA COMPLETION BONUS OF FIVE YEARS' SALARY WILL BE CREDITED ON DELIVERY.\n\nSPECIAL PROJECTS OUT.",
+      "when": "Act I, \"Ghost Ship\": privately to Wilson the moment MU/TH/UR identifies the Cronus"
+    },
+    {
+      "id": "bionational-directive",
+      "title": "BIONATIONAL — DIRECTIVE ACTIVE",
+      "from": "BIONATIONAL // INTERNAL PROCESS",
+      "to": "Captain Lucas Miller",
+      "priority": "EYES ONLY",
+      "text": "INTERNAL PROCESS 7 RESUMING.\nTARGET CONFIRMED: 26 DRACONIS STRAIN, AGENT A0-3959X.91-15.\nCARRIER: USCSS CRONUS. COURSE: EARTH. RECIPIENT: WEYLAND-YUTANI.\n\nDIRECTIVE: DENY RECOVERY BY ANY MEANS.\nPRESERVATION OF HUMAN CREW: DESIRABLE. NOT REQUIRED.\nDEAD MAN'S SWITCH: ARMED.\n\nCONCEALMENT MAY BE ABANDONED AT YOUR DISCRETION.",
+      "when": "Act III, \"Going Home\": privately to Miller's player as soon as the course lock is discovered"
     }
   ],
   "maps": [
@@ -479,7 +746,7 @@
         },
         {
           "name": "Armory",
-          "note": "Locked weapons locker. Captain's authorization required. Contains sidearms, flare guns, and emergency equipment."
+          "note": "Locked weapons locker. Captain's authorization required. Contains sidearms, flare guns and emergency equipment; worth emptying before the Montero is lost."
         },
         {
           "name": "Crew Quarters",
@@ -491,7 +758,7 @@
         },
         {
           "name": "Engine Room",
-          "note": "Reactor core and drive systems. Noisy, hot, cramped. Rye's domain. Maintenance crawlways access the hull."
+          "note": "Reactor core and drive systems. Noisy, hot, cramped. Rye's domain. Maintenance crawlways access the hull; a PC who stays to fly the Montero clear in Act II hears the countdown loudest here."
         },
         {
           "name": "Cargo Bay",
@@ -503,7 +770,7 @@
       "id": "uscss-cronus",
       "title": "USCSS CRONUS",
       "subtitle": "Weyland-Yutani Science Vessel — Derelict",
-      "description": "Science vessel missing for 73 years. Interior compromised by alien biological growth. Systems running on emergency power.",
+      "description": "Science vessel missing for seventy-three years. Interior compromised by alien biological growth. Systems running on emergency power until MU/TH/UR 2000 wakes.",
       "kind": "ascii",
       "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║               USCSS CRONUS — DECK PLAN (PARTIAL)             ║\n    ║              W-Y Science Vessel — Status: DERELICT            ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║   ┌──────────┐    ┌────────────────┐                         ║\n    ║   │ BRIDGE   │    │ SCIENCE LAB    │   ████ = BLOCKED        ║\n    ║   │ [DAMAGED]├────┤ [CONTAINMENT]  │   ░░░░ = ORGANIC        ║\n    ║   │ ░░░░░░░░ │    │ [SPECIMENS]    │         GROWTH          ║\n    ║   └──────────┘    │ ░░░░░░░░░░░░░░ │                         ║\n    ║                   └───────┬────────┘                         ║\n    ║   ┌──────────┐            │                                   ║\n    ║   │ CREW     │    ┌───────┴────────────────────┐             ║\n    ║   │ QUARTERS │    │    MAIN CORRIDOR           │             ║\n    ║   │ [SEALED] ├────┤    ░░░░░░░░░░░░░░░░        │             ║\n    ║   │ ████████ │    │                            │             ║\n    ║   └──────────┘    │  ┌────────┐  ┌───────────┐│             ║\n    ║                   │  │MEDICAL │  │CRYO BAY   ││             ║\n    ║   ┌──────────┐    │  │[WRECKED│  │[PODS OPEN]││             ║\n    ║   │ COMMS    │    │  │ ░░░░░░]│  │░░░░░░░░░░ ││             ║\n    ║   │ ARRAY    ├────┤  └────────┘  └───────────┘│             ║\n    ║   │ [ACTIVE] │    └──────────┬─────────────────┘             ║\n    ║   └──────────┘               │                               ║\n    ║                   ┌──────────┴─────────────────┐             ║\n    ║                   │    LOWER DECK ACCESS        │             ║\n    ║                   │    ████████████████████      │             ║\n    ║                   │    [SEALED BLAST DOOR]      │             ║\n    ║                   └──────────┬─────────────────┘             ║\n    ║                              │                               ║\n    ║           ┌──────────────────┴──────────────────┐            ║\n    ║           │          LOWER DECKS                 │            ║\n    ║           │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   │            ║\n    ║           │  ░░░░ THE NEST — EXTREME HAZARD ░░░░ │            ║\n    ║           │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   │            ║\n    ║           │         [REACTOR ACCESS]             │            ║\n    ║           └─────────────────────────────────────┘            ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
       "rooms": [
@@ -578,6 +845,28 @@
       "src": "/Deck D.jpg"
     }
   ],
+  "endings": [
+    {
+      "title": "THE LONG SLEEP HOME",
+      "condition": "At least one PC escapes in an EEV, the Cronus is destroyed, and no sample or inoculated person leaves with them.",
+      "text": "The EEV kicks away from the Cronus hard enough to slam you into your straps. Through the tiny port you watch the derelict turn, slow and dignified, and then the reactor lets go and a white bloom swallows seventy-three years of secrets. The light fades. The EEV's beacon begins its patient chirp. You check each other for itching, for headaches, for anything, and find nothing, and still you do not sleep until the hypersleep gas takes you. Somewhere a Company clerk will mark the Montero lost with all hands. Let them. You know what was out there, and that it is gone."
+    },
+    {
+      "title": "SALVAGE RIGHTS",
+      "condition": "Survivors escape, but Flynn, the samples or an inoculated person leaves the Cronus with them, in an EEV, in Clayton's hands or in the Sotillo's hold.",
+      "text": "You made it out. That is what you will tell the debriefing team, and it will even be true. In the next pod, or the next compartment, or the cold-store of a pirate ship, something from LV-1113 made it out too. You hear the knocking on the second night: soft, patient, on the inside of a door. Whoever takes delivery of it, the Company or a buyer on some lawless station, will pay very well. You will spend your share in bars where nobody asks why you check every vent, and you will read the news from Earth every morning for the rest of your life."
+    },
+    {
+      "title": "COURSE LOCKED: EARTH",
+      "condition": "No PC escapes, or the reactor is saved and the Cronus continues on its locked course.",
+      "text": "The alarms stop. That is the worst part: the silence. Somewhere aft the reactor settles back into a steady hum, and the Cronus straightens out of its turn and points itself at a pale yellow star very far away. MU/TH/UR 2000 logs the remaining crew as expendable and dims the lights to save power. In the lower decks, in the warm, wet dark, the walls go on breathing. The voyage home will take years. The Company is patient. So is everything aboard."
+    },
+    {
+      "title": "ADRIFT",
+      "condition": "Survivors escape on the Sotillo but fail the PILOTING roll, or lose the viewport in It Isn't Over.",
+      "text": "The Sotillo's engines cough and die, and the last of the Cronus's light fades behind you. The FTL is slag. The air plant has days, maybe. You take turns at the comm, broadcasting the same distress call the Cronus did, on the same frequency, into the same indifferent dark. You understand now why they kept it running for seventy-three years. Someday, maybe, someone will answer, and you can only hope that, unlike you, they are smart enough to keep flying."
+    }
+  ],
   "characters": [
     {
       "id": "cpt-miller",
@@ -587,8 +876,8 @@
       "attributes": {
         "str": 3,
         "agi": 3,
-        "wit": 5,
-        "emp": 4
+        "wit": 4,
+        "emp": 5
       },
       "skills": {
         "heavyMachinery": 0,
@@ -604,7 +893,7 @@
         "medicalAid": 0,
         "command": 4
       },
-      "talent": "Field Commander — When you Command others in combat, they get +2 modification instead of +1.",
+      "talent": "Field Commander — COMMAND gives +2 (instead of +1).",
       "gear": [
         "M4A3 Service Pistol",
         "Company Captain's ID",
@@ -614,8 +903,14 @@
       ],
       "signatureItem": "Dented coffee thermos — been with him through every voyage.",
       "personalAgenda": "Get the crew home alive. You've lost people before, and it haunts you. Whatever is on that derelict, your people come first.",
-      "buddy": "Wilson",
-      "rival": "Cham"
+      "buddy": "Dr. Elena Wilson",
+      "rival": "Ava Cham",
+      "agendaByAct": {
+        "1": "Get the crew home alive, and quietly learn everything you can about what the Cronus carried. Keep Cham away from MU/TH/UR as long as you can.",
+        "2": "The strain is real and the Company wants it. Protect your crew, but make sure no sample, and no one carrying one, ends up in Cham's or Wilson's custody.",
+        "3": "The Cronus must not reach Earth. Get as many of your people off as you can, then destroy the ship and everything aboard, even if it means revealing what you are."
+      },
+      "secret": "You are not human. You are a Bionational synthetic placed aboard the Montero to stop Weyland-Yutani recovering the 26 Draconis Strain. If you are destroyed, you will upload to the nearest mainframe and trigger a reactor overload as a dead man's switch. Wilson is your closest friend and has no idea."
     },
     {
       "id": "cham",
@@ -642,7 +937,7 @@
         "medicalAid": 0,
         "command": 2
       },
-      "talent": "Corporate Secrets — You have access to classified Company files and can attempt Comtech rolls to access restricted data terminals.",
+      "talent": "Corporate Secrets — Access classified Company data terminals.",
       "gear": [
         "Encrypted Data Tablet",
         "Weyland-Yutani Corporate ID (Level 3 Clearance)",
@@ -652,8 +947,14 @@
       ],
       "signatureItem": "Seegson personal data tablet — contains encrypted files she checks obsessively.",
       "personalAgenda": "Recover the Cronus specimens for the Company. Crew expendable. This is the find of the century, and your career depends on bringing back results.",
-      "buddy": "Davis",
-      "rival": "Miller"
+      "buddy": "Jacob Davis",
+      "rival": "Captain Lucas Miller",
+      "agendaByAct": {
+        "1": "Make sure the Cronus is boarded and its records reach your tablet first. Do not let the captain decide anything about the derelict without you.",
+        "2": "Get Dr. Flynn and a viable sample under your personal control. Clayton is a seventy-three-year-old rival for the same promotion; outmanoeuvre her.",
+        "3": "Get the specimens and Flynn off the Cronus with you, even if it costs you every friend aboard. If the captain tries to destroy them, stop him."
+      },
+      "secret": "Your career is already finished unless this works: you were posted to the Montero as punishment for a lost contract. You do not know the Company has also activated Wilson, and that if she delivers first, your report is worthless."
     },
     {
       "id": "davis",
@@ -680,7 +981,7 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Nerves of Steel — Reduce Stress by 2 (instead of 1) when you successfully use your Signature Item.",
+      "talent": "Like a Glove — Re-roll failed PILOTING roll once per session.",
       "gear": [
         "Flight Suit",
         "Pilot's Headset",
@@ -690,8 +991,14 @@
       ],
       "signatureItem": "A pair of loaded dice — won them in a card game on Gateway Station.",
       "personalAgenda": "The Montero is YOUR ship in every way that matters. If it comes down to saving the ship or saving the crew, the ship wins. You can always find new crew.",
-      "buddy": "Rye",
-      "rival": "Wilson"
+      "buddy": "Erin Rye",
+      "rival": "Dr. Elena Wilson",
+      "agendaByAct": {
+        "1": "The Montero is your ship in every way that matters. Keep her safe while the others play salvage crew, and do not let anyone dock her somewhere she can be hurt.",
+        "2": "If the Montero dies, you are the one at the helm when it happens. After that, the Cronus or any other ship that can fly is yours by right.",
+        "3": "Get a ship, any ship, and get yourself and Rye out. If someone else has to stay behind so the ship can launch, so be it."
+      },
+      "secret": "You owe a lot of money to people on Gateway Station, and the Montero is collateral. You planned to sell her out from under the Company at the end of this run. Rye knows nothing about it."
     },
     {
       "id": "rye",
@@ -718,7 +1025,7 @@
         "medicalAid": 1,
         "command": 0
       },
-      "talent": "Mechanic — When you repair or jury-rig machinery (Heavy Machinery), you get an automatic extra success.",
+      "talent": "Heavy Lifter — +2 HEAVY MACHINERY.",
       "gear": [
         "Heavy-duty tool kit",
         "Cutting torch",
@@ -728,8 +1035,14 @@
       ],
       "signatureItem": "Maintenance jack — custom-modified, doubles as a weapon in a pinch.",
       "personalAgenda": "Something on the Cronus is worth a fortune on the black market. Salvage rights are finders-keepers out here. Get rich or die trying.",
-      "buddy": "Davis",
-      "rival": "Cham"
+      "buddy": "Jacob Davis",
+      "rival": "Ava Cham",
+      "agendaByAct": {
+        "1": "Something on the Cronus is worth a fortune on the black market. Salvage rights are finders-keepers out here. Find out what it is.",
+        "2": "Find the Cronus's safe and whatever the Company wanted from LV-1113. Keep Cham from logging any of it as Company property.",
+        "3": "Get rich or die trying: get the safe's contents, or a sample a buyer will pay for, off the Cronus with you. Clayton's offer may be worth taking."
+      },
+      "secret": "You have a buyer: a contact on a lawless station who pays for unregistered biologicals and asks no questions. You have done it before. If Cham ever audits your past cargo manifests, you go to prison."
     },
     {
       "id": "wilson",
@@ -756,7 +1069,7 @@
         "medicalAid": 5,
         "command": 1
       },
-      "talent": "Surgeon — When you perform Medical Aid to save a Broken patient, the patient heals 2 Health instead of 1.",
+      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
       "gear": [
         "Medical kit (advanced)",
         "Surgical tools",
@@ -766,16 +1079,23 @@
       ],
       "signatureItem": "Father's stethoscope — analog, ancient, irreplaceable. A reminder of why she became a doctor.",
       "personalAgenda": "The Cronus crew may still be alive — in cryo, in hiding, somewhere. You took an oath. Find survivors. Save them. Even if the rest of the crew wants to cut and run.",
-      "buddy": "Miller",
-      "rival": "Davis"
+      "buddy": "Captain Lucas Miller",
+      "rival": "Jacob Davis",
+      "agendaByAct": {
+        "1": "The Cronus crew may still be alive. You took an oath: find survivors and save them, even if the others want to cut and run. Quietly secure any biological sample you can.",
+        "2": "Protect Dr. Flynn and her research; the Company needs her alive. Preserve specimens. Keep Cham from getting to either first.",
+        "3": "Deliver Flynn or a viable sample to the Company, as Special Order 966 demands, or decide your oath matters more and destroy it all. Choose."
+      },
+      "secret": "Before the Montero left port, the Company's Special Projects Division gave you a sealed order under Special Order 966 to recover samples and survivors from the Cronus. You knew the diversion was coming. You do not know the same order lets MU/TH/UR destroy the Montero."
     }
   ],
   "tips": [
-    "Run events sequentially as written — don't skip ahead.",
-    "Let PCs explore the Cronus before springing events. Build atmosphere first.",
-    "Four players is ideal given the PvP potential in later acts.",
-    "Warn players upfront: this features brutal violence and character death even when played optimally.",
-    "Prevent early access to MU/TH/UR 2000 — it deflates tension.",
-    "Make sure motion trackers are visible and functional."
+    "Run events in order and let the crew explore the Cronus before springing anything; atmosphere first, horror second.",
+    "Four or five players is ideal given the player-vs-player potential; with fewer, run Captain Miller as an NPC using his NPC entry.",
+    "Warn players up front that this features brutal violence and character death even when played optimally.",
+    "Prevent early access to MU/TH/UR 2000; it deflates tension, so let the terminal stay corrupted until Act III.",
+    "Keep motion trackers visible and working, and use them more than you use the creatures.",
+    "Hand out each act's agenda privately at the start of the act, and push Wilson's and Miller's EYES ONLY handouts while the whole crew is in the room.",
+    "Keep replacement characters ready: the surviving Cronus crew in Act II, the Sotillo crew in Act III."
   ]
 }

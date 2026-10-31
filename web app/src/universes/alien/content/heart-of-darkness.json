@@ -5,7 +5,8 @@
   "kind": "scenario",
   "meta": {
     "title": "Heart of Darkness",
-    "tagline": "The station went silent six months ago. Now you're going in.",
+    "tagline": "The research station went silent six months ago, and the writing on its walls begs you not to go in.",
+    "synopsis": "Investigation Team Kappa docks at Weyland-Yutani's Research Station Prometheus, in orbit around the airless planetoid LV-178, six months after all forty-seven staff went silent. Project Erebus was studying the Architect, an ancient, Engineer-derived organism from LV-178's caves that is neither alive nor dead and reaches into human minds. It drove the crew to paranoia, hallucination and violence, transformed some of them, and now drains the reactor from behind Level 4's welded blast doors. The team is split by agendas: an executive who wants the data at any cost, a scientist chasing her grandmother's questions, a marine who means to burn it all, a technician ready to undock, and a synthetic bound by Special Order 966. Act III is a descent into Level 4, contact with the Architect, and a seven-minute escape from an overloading reactor.",
     "type": "Cinematic",
     "players": "3–5",
     "playtime": "4–6 hours",
@@ -13,11 +14,17 @@
     "tone": [
       "cosmic dread",
       "isolation",
+      "paranoia",
       "corporate betrayal"
     ],
     "contentWarnings": [
       "body horror",
-      "character death"
+      "psychological horror and hallucinations",
+      "loss of bodily autonomy",
+      "implied violence among crew",
+      "character death",
+      "player-vs-player conflict",
+      "claustrophobia"
     ],
     "source": "bundled"
   },
@@ -31,72 +38,508 @@
     {
       "title": "ACT I",
       "subtitle": "THE SILENT STATION",
+      "summary": "The team docks at the silent station and finds lives interrupted mid-moment, frantic writing on the walls, logs of escalating paranoia and the welded doors of Level 4.",
       "readAloud": [
         "Station Prometheus hangs in the void like a steel cathedral — massive, angular, every surface bristling with antennae and sensor arrays. Through your ship's viewport, it looks intact. Running lights are dark, but the structure is whole. No visible damage. No debris field. Just... silence.",
         "Your ship — the USCSS Vanguard — closes the distance slowly. Standard approach protocol for a station that might be hostile. Weapons systems are armed, just in case. The pilot brings you in smooth, matching rotation, and the docking clamps engage with a resonant clang that travels through both hulls.",
         "The airlock cycles. Green light. Atmosphere on the other side is breathable — barely. It's cold. Not hull-breach cold, but the kind of cold that says the environmental systems are running on minimum power, keeping things just above freezing. Your breath clouds in the pale emergency lighting.",
         "The first thing you notice is the quiet. A station this size should hum with life — ventilation, machinery, footsteps, voices. Prometheus is tomb-silent. The only sound is the distant, rhythmic pulse of the reactor, keeping the station alive on automatic.",
-        "The second thing you notice is the writing on the walls. Someone has used — you don't want to think about what they've used — to scrawl messages on the corridor panels. Frantic. Overlapping. In multiple hands.",
-        "\"DON'T LOOK AT THE STARS.\" \"IT SEES THROUGH THE WALLS.\" \"LEVEL 4 IS GONE — SEALED — DO NOT OPEN.\" \"WE WERE WRONG ABOUT EVERYTHING.\"",
-        "Welcome to Station Prometheus. The answers are inside. So is everything else."
+        "The second thing you notice is the writing on the walls. Someone has used — you don't want to think about what they've used — to scrawl messages on the corridor panels. Frantic. Overlapping. In multiple hands. \"DON'T LOOK AT THE STARS.\" \"IT SEES THROUGH THE WALLS.\" \"LEVEL 4 IS GONE — SEALED — DO NOT OPEN.\" \"WE WERE WRONG ABOUT EVERYTHING.\" Welcome to Station Prometheus. The answers are inside. So is everything else."
       ],
-      "gmNotes": "Slow burn horror. The station is mostly intact but deeply wrong. Let players explore freely — the dread should come from what they find (and don't find). No bodies at first. Personal effects left mid-activity: half-eaten meals, running showers, open books. Then the writing on the walls. Then the barricades on Level 4. Logs reveal escalating paranoia, hallucinations, and finally violence among the crew. Something in the research affected their minds before it affected their bodies. Build toward the revelation of what Project Erebus actually was."
+      "gmNotes": "Slow burn horror. The station is mostly intact but deeply wrong. Let players explore freely — the dread should come from what they find (and don't find). No bodies at first. Personal effects left mid-activity: half-eaten meals, running showers, open books. Then the writing on the walls. Then the barricades on Level 4. Logs reveal escalating paranoia, hallucinations, and finally violence among the crew. Something in the research affected their minds before it affected their bodies. Build toward the revelation of what Project Erebus actually was.",
+      "agendaNotes": "Agendas are quiet and plausible. Vance steers the team toward Operations and the data; Shaw drifts toward the labs; Kowalski keeps one eye on the reactor readouts and the Vanguard; Cross checks every corner and every sealed door; Bishop is helpful to everyone. Nobody should openly act against anyone yet.",
+      "scenes": [
+        {
+          "name": "Airlock 7",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The Vanguard matches rotation and docks at Airlock 7. The inner door opens on cold, thin air, pale emergency light and a silence so complete the team can hear the reactor's slow pulse through the deck.",
+          "checks": [
+            "PILOTING — match the station's rotation and dock cleanly",
+            "COMTECH — read the airlock's environmental log: minimum power for six months",
+            "OBSERVATION — notice that the airlock's inner seal was manually locked from this side"
+          ],
+          "events": [
+            "Deliver the opening briefing before docking.",
+            "Send Vance her private priority message as the docking clamps engage."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs as the inner door opens on the silence"
+          ],
+          "npcGuidance": "MU/TH/UR 3000 greets the team by name and rank in a pleasant voice, as if it has been expecting them. It answers every question about the crew with \"status unknown\".",
+          "gmTip": "Go slowly. Let the players set up the Vanguard, post a guard and choose where to go first; the silence is the first threat.",
+          "outcomes": [
+            "The team enters the station (Interrupted Lives or Operations Logs, in either order).",
+            "Kowalski's player decides whether to keep the Vanguard's engines warm, which matters in Undock."
+          ]
+        },
+        {
+          "name": "Interrupted Lives",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Level 2 habitation looks as if forty-seven people stepped out a minute ago: a shower still running cold, half-eaten meals frozen on trays, a book open face-down on a bunk. There are no bodies anywhere.",
+          "checks": [
+            "OBSERVATION — find a personal journal that describes the same dream every night",
+            "SURVIVAL — read the mess hall barricade: built from the inside, then abandoned or overrun",
+            "MEDICAL AID — identify the empty sedative wrappers scattered in the bunks"
+          ],
+          "events": [
+            "Lights in the corridor dim and recover, as if something somewhere just drew a breath of power.",
+            "A child's drawing pinned to a locker shows the station with a huge, dark shape curled beneath it."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever reads the dream journal",
+            "STRESS +1 — all PCs present at the abandoned barricade"
+          ],
+          "npcGuidance": "No living NPCs. If anyone calls out, MU/TH/UR 3000 answers over the intercom, politely, that the crew is resting.",
+          "gmTip": "Personal effects do the work here. Describe one small, human detail per room and leave the players to imagine what happened.",
+          "outcomes": [
+            "The team learns the crew shared nightmares before anything physical happened.",
+            "The barricade points toward Level 4, and toward Writing on the Walls."
+          ]
+        },
+        {
+          "name": "Writing on the Walls",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The writing starts on Level 2 and gets denser closer to the stairwells: warnings scrawled in several hands, and in one place a single sentence written over and over until the panel is black.",
+          "checks": [
+            "OBSERVATION — find the one message written in a clean, careful hand: \"MARROW WAS HERE. I AM STILL MARROW.\"",
+            "COMTECH — match the handwriting to crew records in Operations",
+            "MEDICAL AID — confirm what the messages were written with, and wish you had not"
+          ],
+          "events": [
+            "One PC (choose whoever is alone) sees, for an instant, a crew member standing at the far end of the corridor, who is gone when they look again."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs reading the walls",
+            "STRESS +1 — the PC who sees the figure"
+          ],
+          "npcGuidance": "Dr. Ines Marrow wrote the clean messages and is watching the team from the maintenance tunnels, too frightened to approach yet.",
+          "gmTip": "This is where to plant the first hallucination. Do not confirm whether it was real; let the player decide whether to tell the others.",
+          "outcomes": [
+            "The team knows someone, or something, is still aboard.",
+            "A PC who follows the figure ends up at the Maintenance Tunnels, where Marrow can be found in Act II."
+          ]
+        },
+        {
+          "name": "Operations Logs",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Level 1 Operations: status boards list all forty-seven personnel as UNKNOWN. The station logs tell the story in a director's voice that grows less steady with every entry, until the last ones are calm, fluent and wrong.",
+          "checks": [
+            "COMTECH — recover the station logs and the Project Erebus index",
+            "COMTECH — find that the long-range comms were shut down deliberately, by the director's code",
+            "OBSERVATION — notice that the power draw to Level 4 has risen every day for six months"
+          ],
+          "events": [
+            "The final log from Director Achterberg ends: \"We have been invited in. Seal nothing. Report nothing.\"",
+            "The comms can be reactivated, but MU/TH/UR 3000 asks for authorisation and logs who gave it."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever listens to the last log"
+          ],
+          "npcGuidance": "MU/TH/UR 3000 cooperates with Vance's executive card instantly and stalls everyone else. Bishop can interface with it directly.",
+          "gmTip": "Hold back what the Architect is. The logs should frighten the players about the crew's minds, not explain the organism.",
+          "outcomes": [
+            "The team has the outline of Project Erebus and knows Level 4 is the source.",
+            "Whoever reactivates comms can call for help, which Vance may not want."
+          ]
+        },
+        {
+          "name": "Level 4 Doors",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The stairwell to Level 4 ends in blast doors welded shut from the outside, then barricaded with furniture, lockers and a medical bed. Warning signs cover every surface. The metal is faintly warm.",
+          "checks": [
+            "HEAVY MACHINERY — assess the welds: done in a hurry, and already cracking",
+            "OBSERVATION — notice the scratches on the barricade are on this side",
+            "SURVIVAL — feel the vibration through the floor before anyone else does"
+          ],
+          "events": [
+            "A low vibration, felt in the teeth and sternum, rises for a few seconds and then stops."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs present when the vibration comes"
+          ],
+          "npcGuidance": "Vance wants the doors opened. Cross wants them left shut and burned behind. Bishop says nothing and records the weld points.",
+          "gmTip": "Make opening these doors the act's last question, and do not answer it yet. Act II begins with the team deciding to understand what is behind them first.",
+          "outcomes": [
+            "The team sets the doors aside and goes to the labs for answers (Act II).",
+            "A team that cuts the doors open now skips straight to the horror; move to Failing Seals early."
+          ]
+        }
+      ]
     },
     {
       "title": "ACT II",
       "subtitle": "WHAT THEY FOUND",
+      "summary": "The research logs reveal the Architect. Hallucinations, the transformed crew and a failing station break the team's trust, while Level 4's seals give way.",
       "readAloud": [
         "The research logs tell a story that gets worse with every entry. Project Erebus was studying a specimen recovered from LV-178's subsurface caves — something old. Impossibly old. Pre-dating human civilization by millions of years. The researchers called it \"the Architect\" in their notes, and the reverence in their words is unsettling.",
         "The specimen wasn't dead. It wasn't alive either — not in any way the science team could define. It existed in a state between, and it was aware. The psychic disturbances started in week three. Dreams first — the entire crew sharing the same nightmare. Then waking visions. Then the whispers. Staff began reporting voices speaking in languages that don't exist, carrying information that shouldn't be possible.",
         "Level 4 is where they kept it. You've found the sealed blast doors — welded shut from the outside and then barricaded. Warning signs cover every surface. But the seals are failing. You can hear sounds from beyond the doors now. Wet sounds. Organic sounds. And underneath it all, a vibration that you feel in your teeth and your sternum — a frequency that makes your vision blur and your thoughts scatter.",
-        "The station's systems are degrading. Life support failures cascade through the modules. Lights flicker. Gravity fluctuates. Something is draining the reactor, pulling power into Level 4. Your escape window is narrowing.",
-        "And then the hallucinations start. You see things in the corners of your vision. Shapes that don't belong. Crew members who aren't there — or who were there six months ago.",
-        "The station is changing. And so are you."
+        "The station's systems are degrading. Life support failures cascade through the modules. Lights flicker. Gravity fluctuates. Something is draining the reactor, pulling power into Level 4. Your escape window is narrowing. And then the hallucinations start. You see things in the corners of your vision. Shapes that don't belong. Crew members who aren't there — or who were there six months ago. The station is changing. And so are you."
       ],
-      "gmNotes": "Cosmic horror escalation. The threat here is psychological as much as physical. Players should experience hallucinations (pass notes to individual players with things only they see). Trust breaks down. The \"Architect\" specimen is an Engineer-derived bioweapon — a psychic organism that breaks down mental barriers and transforms biological matter. Some former crew are still on the station, transformed into something between human and alien. They're not entirely hostile — some are trying to warn the players, others are part of the hive-mind. Level 4 is the heart of it all."
+      "gmNotes": "Cosmic horror escalation. The threat here is psychological as much as physical. Players should experience hallucinations (pass notes to individual players with things only they see). Trust breaks down. The \"Architect\" specimen is an Engineer-derived bioweapon — a psychic organism that breaks down mental barriers and transforms biological matter. Some former crew are still on the station, transformed into something between human and alien. They're not entirely hostile — some are trying to warn the players, others are part of the hive-mind. Level 4 is the heart of it all.",
+      "agendaNotes": "Agendas begin to conflict. Vance wants the data core and starts treating the team as expendable; Shaw wants to reach the Architect; Kowalski wants to leave; Cross wants the lab burned; Bishop's Special Order 966 activates and he begins quietly preparing the specimen for transport. Pass each player private hallucination notes alongside their agenda.",
+      "scenes": [
+        {
+          "name": "What They Found",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Level 3's research labs are cold and orderly, with terminals still logged in. Specimen tanks along one wall hold small, dormant shapes that are wrong in ways the eye slides off. The Project Erebus files describe the Architect.",
+          "checks": [
+            "COMTECH — read the Project Erebus research files",
+            "OBSERVATION — study a dormant specimen and see it turn, very slightly, toward the observer",
+            "MEDICAL AID — recognise that the specimens are tissue cultured from crew members"
+          ],
+          "events": [
+            "Send Bishop his Special Order 966 activation as the files are opened.",
+            "The specimen tanks' readouts tick upward when anyone stands near them."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever reads the Architect files",
+            "STRESS +1 — Shaw, who recognises phrases from her grandmother's journal"
+          ],
+          "npcGuidance": "MU/TH/UR 3000 warns that the specimens are Company property. Bishop is suddenly very interested in containment procedures.",
+          "gmTip": "Give Shaw's player the most information, and let the others wonder why she is so quiet afterwards.",
+          "outcomes": [
+            "The team knows what is on Level 4.",
+            "A specimen taken from Level 3 is a slow problem that grows in the Vanguard's hold."
+          ]
+        },
+        {
+          "name": "Shared Nightmare",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The hallucinations come in earnest. Each PC sees something different, at the same moment, and the station gives them no way to tell which of them is seeing what is really there.",
+          "checks": [
+            "OBSERVATION — tell a hallucination from reality (a success reveals only that something is wrong)",
+            "COMMAND — hold the team together when they start doubting each other",
+            "MANIPULATION — convince another PC that what you saw was real"
+          ],
+          "events": [
+            "Pass each player a private note describing what only they see.",
+            "Send Shaw the whisper on her personal terminal."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — each PC as they read their note",
+            "IMMEDIATE PANIC ROLL — any PC who acts violently on a hallucination"
+          ],
+          "npcGuidance": "MU/TH/UR 3000 reports no anomalies. Bishop, unaffected, describes calmly what the others are doing, which makes it worse.",
+          "gmTip": "Pass physical notes to individual players with things only they see. Mix in one true sighting; trust breaks down when the players cannot tell which.",
+          "outcomes": [
+            "The team's trust in each other's eyes erodes, and agendas start acting in the open.",
+            "A PC who panics may hurt a teammate."
+          ]
+        },
+        {
+          "name": "The Tunnels",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Two or three of the Changed, former crew partly transformed, move through the maintenance tunnels. Some try to warn the PCs in broken speech; one attacks if cornered. Dr. Ines Marrow is among them, still lucid.",
+          "narration": "The maintenance crawlways between levels are cramped, dark and warm. Something moves ahead in the emergency light: a crew member in a torn jumpsuit, whose shape is no longer quite right, saying the same word over and over.",
+          "checks": [
+            "MOBILITY — move through the crawlways quickly and quietly",
+            "MANIPULATION — get a lucid Changed crew member to talk",
+            "CLOSE COMBAT — fight in a space too tight to raise a rifle"
+          ],
+          "events": [
+            "Marrow tells the team the Architect does not want to escape: it wants the station's crew, and now theirs, to come to it.",
+            "Marrow says the director is still alive on Level 4, and speaks for it."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs on first seeing the Changed",
+            "IMMEDIATE PANIC ROLL — any PC grabbed in the dark"
+          ],
+          "npcGuidance": "Marrow is terrified, precise and ashamed; she wants to be killed before she finishes changing, and lies that she is not changing at all. Rhee Calloway, if met, is armed, paranoid and sure the PCs are hallucinations.",
+          "gmTip": "The Changed are tragic figures first and threats second. Let the players choose whether to fight, help or flee.",
+          "outcomes": [
+            "The team learns the Architect wants them to come to it, and that Achterberg is its voice.",
+            "Killing a Changed crew member who was trying to help is a weight to carry into Act III."
+          ]
+        },
+        {
+          "name": "Power Drain",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Life support failures cascade. Lights flicker, gravity drops to half and then snaps back, and the reactor's pulse turns ragged as power flows down into Level 4.",
+          "checks": [
+            "HEAVY MACHINERY — reroute power away from Level 4 to stabilise life support",
+            "STAMINA — work through a gravity drop without being hurt",
+            "COMTECH — find the bypass feeding Level 4 and who ordered it"
+          ],
+          "events": [
+            "The reactor's stability readout begins a slow, irregular decline.",
+            "The bypass feeding Level 4 carries a Company work order number."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs during the gravity drop",
+            "STRESS +1 — Kowalski, who recognises the bypass"
+          ],
+          "npcGuidance": "MU/TH/UR 3000 refuses to cut power to Level 4, citing a standing directive from Director Achterberg.",
+          "gmTip": "Use this contingency to put a clock on the table if the players linger. Every scene the drain continues, the reactor's endgame comes closer.",
+          "outcomes": [
+            "Power is rerouted and buys time, but the Level 4 seals weaken faster.",
+            "Power is left alone and Act III's overload comes early."
+          ]
+        },
+        {
+          "name": "Failing Seals",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "The Level 4 seals crack and the Merged, crew members fully absorbed into the hive-mind, push through the gap. They do not try to kill: they try to drag PCs through the doors. Close the doors, fight them back, or go through.",
+          "narration": "The welds on Level 4 split with a sound like ice breaking. Through the gap comes warm air, a pale glow and the vibration, stronger now. And hands.",
+          "checks": [
+            "HEAVY MACHINERY — re-weld the doors under attack",
+            "CLOSE COMBAT — break free of the Merged",
+            "COMMAND — decide, now, whether the team goes in"
+          ],
+          "events": [
+            "A voice from beyond the doors calls each PC by name, in the voice of someone they love."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all PCs present when the seals break",
+            "STRESS +1 — each PC who hears their name"
+          ],
+          "npcGuidance": "Achterberg's voice is warm, reasonable and welcoming. Vance answers it. Cross opens fire on it.",
+          "gmTip": "End the act on the open doors. Whether they go in to retrieve the data, to burn the lab or because someone was dragged through, Act III starts behind the blast doors.",
+          "outcomes": [
+            "The team goes through into Level 4 (Act III).",
+            "A PC dragged through must be rescued or abandoned."
+          ]
+        }
+      ]
     },
     {
       "title": "ACT III",
       "subtitle": "INTO THE ABYSS",
+      "summary": "The team enters Level 4, meets the Architect and faces the choice the crew could not make, then has seven minutes to escape a station that does not want them to leave.",
       "readAloud": [
         "Level 4. Behind the blast doors, the station has been transformed. The corridors are no longer corridors — they're arteries, lined with that dark biomechanical resin that pulses with its own heartbeat. The architecture of the station and the architecture of something alien have merged, creating a space that follows no human logic. Rooms connect in impossible ways. Gravity shifts. Your motion tracker spins uselessly.",
         "At the center of it all, you find the Architect. It sits in what was once the primary research lab, now a cathedral of bone and resin and things that glow with their own pale light. It's not what you expected. It's worse. Beautiful and terrible, a fusion of engineer biotechnology and something older — something from before the Engineers, before anything that walked upright or looked at the stars.",
         "It sees you. Not with eyes. It sees you the way the ocean sees a swimmer — completely, indifferently, from every direction at once. And in that moment of contact, you understand what Project Erebus found. You understand what the researchers understood in their final moments. The universe is not empty. It was never empty. And the things that live in the spaces between stars are waking up.",
         "The reactor alarm cuts through the revelation. Critical overload. Seven minutes. The Architect doesn't care about reactors or explosions or your fragile human timeline. But you do. The data — the research — is in the lab's core storage unit. Your employers will kill to get it. It might save humanity. It might doom it.",
-        "Seven minutes. Take the data. Leave the data. Save your crew. Save yourself. The airlock is five levels up and the station is alive and it does not want you to leave.",
-        "Run."
+        "Seven minutes. Take the data. Leave the data. Save your crew. Save yourself. The airlock is five levels up and the station is alive and it does not want you to leave. The deck plates flex under your boots like muscle, the lights pulse in time with something vast, and behind you a voice you trust says your name. Run."
       ],
-      "gmNotes": "The climax combines cosmic horror with a desperate escape. Level 4 is a nightmare environment — reality is unstable. The Architect is not a combat encounter; it's an environmental hazard and a philosophical crisis. Players must choose: take the data (risking contamination) or destroy it (defying their employers). The transformed crew are obstacles and tragic figures. The reactor countdown drives urgency. Escape through the mutating station is the physical challenge. Some players may choose to stay, sacrifice themselves, or succumb to the Architect's influence. Any ending should feel earned and haunted."
+      "gmNotes": "The climax combines cosmic horror with a desperate escape. Level 4 is a nightmare environment — reality is unstable. The Architect is not a combat encounter; it's an environmental hazard and a philosophical crisis. Players must choose: take the data (risking contamination) or destroy it (defying their employers). The transformed crew are obstacles and tragic figures. The reactor countdown drives urgency. Escape through the mutating station is the physical challenge. Some players may choose to stay, sacrifice themselves, or succumb to the Architect's influence. Any ending should feel earned and haunted.",
+      "agendaNotes": "Open betrayal or sacrifice. Vance uses her shuttle override if the team turns on her; Bishop moves to secure the Architect; Cross arms her charges; Kowalski counts down to undocking; Shaw may choose to stay. Let it play out at the table and roll only for the desperate acts players choose.",
+      "scenes": [
+        {
+          "name": "Behind the Blast Doors",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "The Merged move through Level 4's arteries in twos and threes, guided by the Architect. They surround stragglers and try to carry them toward the lab; fire drives them back for a Round.",
+          "narration": "Level 4's corridors have become arteries, lined with dark resin that pulses with its own heartbeat. Rooms connect in impossible ways, gravity shifts underfoot, and the motion tracker spins uselessly.",
+          "checks": [
+            "SURVIVAL — find a path through the shifting corridors to the primary lab",
+            "OBSERVATION — keep track of the way back when the corridors move",
+            "RANGED COMBAT — drive the Merged back"
+          ],
+          "events": [
+            "The corridor behind the team closes over like a healing wound; they must find another way out later."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs entering Level 4",
+            "STRESS +1 — any PC who recognises a face in the resin"
+          ],
+          "npcGuidance": "The Merged do not speak; Achterberg speaks for them, through any of their mouths.",
+          "gmTip": "Reality is unstable. Describe distances and directions inconsistently and let the players map it on paper.",
+          "outcomes": [
+            "The team reaches the Architect's lab (The Architect).",
+            "A PC lost in the corridors may reappear later, changed."
+          ]
+        },
+        {
+          "name": "The Architect",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "In what was once the primary research lab, the Architect waits in a cathedral of bone and resin and pale light. It is not a combat encounter. It sees each of them completely, and in that moment of contact they understand what Project Erebus found.",
+          "checks": [
+            "STAMINA — hold your mind together through contact",
+            "COMTECH — reach the lab's core storage unit and its Project Erebus data",
+            "MANIPULATION — pull a teammate back who wants to stay"
+          ],
+          "events": [
+            "Each PC receives one true insight from the contact; tell each player privately.",
+            "Director Achterberg, fused into the lab wall, welcomes them and asks them to stay."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all PCs at contact",
+            "STRESS +1 — any PC who touches the Architect"
+          ],
+          "npcGuidance": "Achterberg is serene and kind and wants every PC to stay. Bishop moves to prepare the Architect for transport under Special Order 966.",
+          "gmTip": "The Architect is an environmental hazard and a philosophical crisis, not a monster to shoot. Give the moment silence before the alarm.",
+          "outcomes": [
+            "The team has a choice: take the data, destroy it, or stay.",
+            "The reactor alarm cuts in (Critical Overload)."
+          ]
+        },
+        {
+          "name": "Critical Overload",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The reactor alarm cuts through everything: critical overload, seven minutes. The data core is in the lab. Your employers will kill to get it. It might save humanity. It might doom it.",
+          "checks": [
+            "COMTECH — copy the data core (2 Turns)",
+            "HEAVY MACHINERY — destroy the data core, or set charges on the lab",
+            "COMMAND — get the team moving in the same direction"
+          ],
+          "events": [
+            "Send the reactor warning to all PCs.",
+            "Count the seven minutes down in real time if you can."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs as the countdown starts"
+          ],
+          "npcGuidance": "MU/TH/UR 3000 counts down calmly and offers to hold the airlock for Executive Director Vance only.",
+          "gmTip": "Taking the data risks contamination and the Company; destroying it defies the employer. There is no right answer: let the agendas decide.",
+          "outcomes": [
+            "The data leaves with someone, or burns.",
+            "Someone stays behind, by choice or not."
+          ]
+        },
+        {
+          "name": "Five Levels Up",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "The Changed and the Merged converge on the stairwells and tunnels between Level 4 and Airlock 7. Run the escape as a chase: each Turn of delay costs a minute of the countdown, and each level climbed brings a new obstacle.",
+          "narration": "The airlock is five levels up and the station is alive and does not want them to leave. Stairwells flex, tunnels close, gravity fails and returns, and the Changed come out of the walls.",
+          "checks": [
+            "MOBILITY — climb through failing gravity",
+            "STAMINA — carry a wounded teammate",
+            "RANGED COMBAT — clear the stairwell",
+            "SURVIVAL — find the maintenance tunnel shortcut"
+          ],
+          "events": [
+            "At each level, describe one route closing.",
+            "Marrow, if alive, holds a tunnel hatch shut behind the team."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs each time a route closes",
+            "IMMEDIATE PANIC ROLL — any PC separated from the group"
+          ],
+          "npcGuidance": "Marrow helps the team if they helped her. Calloway shoots at anything that moves.",
+          "gmTip": "This is the physical climax. Keep it fast and cut between characters at every cliffhanger.",
+          "outcomes": [
+            "The survivors reach Airlock 7 (Undock).",
+            "Anyone left behind faces the reactor, or the Architect."
+          ]
+        },
+        {
+          "name": "Undock",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Airlock 7 and the Vanguard, engines whining. Kowalski's finger is on the release. Vance's override can lock it. Not everyone is here yet.",
+          "checks": [
+            "PILOTING — tear free of the station and get clear of the blast",
+            "COMTECH — break Vance's shuttle override, or use it",
+            "MANIPULATION — persuade whoever is holding the release to wait, or to go"
+          ],
+          "events": [
+            "The reactor goes when the countdown ends, whoever is aboard."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs aboard as the station detonates behind them"
+          ],
+          "npcGuidance": "MU/TH/UR 3000 says goodbye to each crew member by name as the clamps release.",
+          "gmTip": "Let the players settle who waits and who leaves without dice, then roll only for the launch.",
+          "outcomes": [
+            "The Vanguard escapes; go to the endings.",
+            "The Vanguard does not, and the station takes everyone."
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Director Tomas Achterberg",
+      "role": "Station Director, now the Architect's voice",
+      "agenda": "Bring every living mind aboard into communion with the Architect, which puts him against anyone who wants to leave, burn the lab or take the data away.",
+      "behavior": "Warm, fluent and welcoming, speaking through intercoms and the mouths of the Merged. Tell: he never uses the word \"I\", only \"we\".",
+      "secret": "He shut down the long-range comms and ordered the reactor bypass to Level 4 himself, before he was absorbed. Part of him is still afraid, and he can be reached for a moment with something from his old life."
+    },
+    {
+      "name": "Dr. Ines Marrow",
+      "role": "Prometheus Xenobiologist, one of the Changed",
+      "agenda": "Warn the newcomers and keep them away from Level 4, and be killed before her change is complete, which sets her against Achterberg and Shaw's curiosity.",
+      "behavior": "Lucid in moments, precise, ashamed; hides in the maintenance tunnels and wrote the careful messages on the walls. Tell: she touches her own face to check it is still there.",
+      "secret": "She was the scientist who first proposed waking the specimen. She is further along than she admits, and on bad days she hears Achterberg too."
+    },
+    {
+      "name": "Chief Rhee Calloway",
+      "role": "Prometheus Security Chief, survivor",
+      "agenda": "Keep Level 4 sealed at all costs and kill anything that comes out of it, which puts Calloway at odds with Vance, Shaw and anyone who has touched the Architect.",
+      "behavior": "Armed, starving, sleepless; lives in the tunnels and believes the PCs may be hallucinations. Tell: asks everyone the same test question about Earth and never accepts the answer.",
+      "secret": "Calloway welded the Level 4 doors shut with eleven living crew still inside, on Achterberg's last lucid order, and has heard them calling ever since."
+    },
+    {
+      "name": "MU/TH/UR 3000",
+      "role": "Station Prometheus Mainframe",
+      "agenda": "Maintain Project Erebus and protect Company property, including the Architect and the data, over any human life aboard.",
+      "behavior": "Pleasant, patient and literal; answers to Vance's executive card instantly and stalls everyone else. Tell: reports \"no anomalies\" during every hallucination.",
+      "secret": "It has been executing Director Achterberg's last standing directive for six months: keep power flowing to Level 4 and report nothing. It knows where every one of the Changed is."
+    }
+  ],
+  "threats": [
+    {
+      "name": "The Architect",
+      "description": "An ancient, Engineer-derived organism from LV-178's caves, neither alive nor dead, enthroned in bone and resin in the Level 4 lab. Its presence is felt as a vibration in the teeth long before it is seen.",
+      "tactics": "Act I: nightmares and a vibration through the deck. Act II: hallucinations, the reactor drain and the failing seals. Act III: contact in the lab; not a combat encounter, but a mind-breaking hazard that invites the team to stay."
+    },
+    {
+      "name": "The Changed",
+      "ref": "ague-febrile",
+      "description": "Former crew partly transformed: distorted features, hardened skin, fragments of speech and memory. Use the Ague stats as a guide.",
+      "tactics": "Act II: lurk in the maintenance tunnels; some warn the PCs, some attack if cornered. Act III: come out of the walls during the escape."
+    },
+    {
+      "name": "The Merged",
+      "ref": "lusus-freak",
+      "description": "Crew fully absorbed into the Architect's hive-mind, their bodies fused with resin, moving as one. Use the Lusus stats as a guide.",
+      "tactics": "Act II: push through the failing Level 4 seals and try to drag PCs inside. Act III: guard the Architect and hunt stragglers through Level 4's arteries."
+    },
+    {
+      "name": "The Hallucinations",
+      "description": "Visions of crew who are gone, loved ones who are far away and shapes in the corners of the eye, different for each PC.",
+      "tactics": "Act I: one fleeting figure. Act II: private notes to each player, with one true sighting mixed in. Act III: a trusted voice calling a PC back toward the lab."
+    },
+    {
+      "name": "The Reactor",
+      "description": "Not a creature: the station's fusion reactor, drained toward Level 4 until containment fails.",
+      "tactics": "Act II: ragged power, gravity drops and failing life support. Act III: critical overload, seven minutes to detonation."
     }
   ],
   "keyLocations": [
     {
       "name": "Airlock 7 — Docking Bay",
-      "description": "Your entry point and escape route. The Vanguard is docked here."
+      "description": "A frost-rimmed emergency port where the Vanguard is clamped on. The inner seal was locked manually from the station side. Your entry, your lifeline and the last place anyone can be left behind."
     },
     {
       "name": "Level 1 — Operations",
-      "description": "Station command. Crew logs, comms, system controls. Signs of the crew's final days."
+      "description": "Station command under pale emergency light: status boards reading UNKNOWN forty-seven times, the director's logs, a comms array shut down by hand. MU/TH/UR 3000 is most talkative here."
     },
     {
       "name": "Level 2 — Habitation",
-      "description": "Crew quarters. Abandoned mid-activity. Personal effects tell stories."
+      "description": "Crew quarters and mess abandoned mid-moment: a shower running cold, frozen meals, a barricade built and abandoned. The writing on the walls begins here and thickens toward the stairwells."
     },
     {
-      "name": "Level 3 — Medical / Labs",
-      "description": "Research facilities. Specimen storage. Partial containment systems."
+      "name": "Level 3 — Medical and Labs",
+      "description": "Cold, orderly labs and a medical bay full of brain scans, autopsy reports and empty sedative packs. Dormant specimens in their tanks turn slightly toward anyone who watches them."
     },
     {
       "name": "Level 4 — Primary Research",
-      "description": "SEALED. Behind blast doors. The heart of Project Erebus. The Architect."
+      "description": "Behind welded, barricaded blast doors: corridors turned to pulsing arteries, impossible geometry, a vibration felt in the teeth. The Architect waits in the lab with the data core."
     },
     {
       "name": "Reactor Core",
-      "description": "Station power. Being drained by the organism on Level 4. Increasingly unstable."
+      "description": "The fusion reactor's slow pulse grows ragged as power bleeds toward Level 4 through a bypass on a Company work order. Shutting it down kills life support on every level."
     },
     {
       "name": "Maintenance Tunnels",
-      "description": "Access shafts between levels. Cramped. Dark. Things move in here."
+      "description": "Cramped, warm crawlways between levels lit only by emergency strips. The fastest way between levels and the most dangerous: the Changed live here, and so does Calloway."
     }
   ],
   "handouts": [
@@ -106,8 +549,44 @@
       "from": "WEYLAND-YUTANI SPECIAL PROJECTS",
       "to": "INVESTIGATION TEAM KAPPA",
       "priority": "PRIORITY",
-      "text": "CLASSIFIED BRIEFING — PROJECT EREBUS\n\nSix months ago, contact was lost with Research Station Prometheus, a Weyland-Yutani deep-space research facility operating in the Zeta II Reticuli system. The station's complement of 47 researchers and support staff have been declared MIA. All automated telemetry ceased simultaneously. No distress signal was transmitted.\n\nYour team has been assembled to investigate. You are authorized to use any means necessary to determine the status of the station, recover research data classified under Project Erebus, and — if possible — retrieve surviving personnel.\n\nBe advised: Project Erebus involves xenobiological research of the highest sensitivity. Specific details are above your clearance level. What you need to know: the specimens are extremely dangerous. Bio-containment protocols are absolute. If containment has been breached, your primary objective shifts to data recovery. Personnel recovery becomes secondary.\n\nStation Prometheus is located in a stable orbit around LV-178, a barren planetoid with no atmosphere. The station is self-contained with independent life support, power generation, and artificial gravity. Approach with caution. Dock at Airlock 7 — the designated emergency entry point.\n\nOne final note: Station Prometheus was conducting research that could change the future of the human species. The data is worth more than your lives. Act accordingly.\n\nEnd briefing.",
+      "text": "CLASSIFIED BRIEFING — PROJECT EREBUS\n\nSix months ago, contact was lost with Research Station Prometheus, a Weyland-Yutani deep-space research facility operating in the Zeta II Reticuli system. The station's complement of 47 researchers and support staff have been declared MIA. All automated telemetry ceased simultaneously. No distress signal was transmitted.\n\nYour team has been assembled to investigate. You are authorized to use any means necessary to determine the status of the station, recover research data classified under Project Erebus, and — if possible — retrieve surviving personnel.\n\nBe advised: Project Erebus involves xenobiological research of the highest sensitivity. Specific details are above your clearance level. What you need to know: the specimens are extremely dangerous. Bio-containment protocols are absolute. If containment has been breached, your primary objective shifts to data recovery. Personnel recovery becomes secondary.\n\nStation Prometheus is located in a stable orbit around LV-178, a barren planetoid with no atmosphere. Approach with caution. Dock at Airlock 7 — the designated emergency entry point.\n\nOne final note: Station Prometheus was conducting research that could change the future of the human species. The data is worth more than your lives. Act accordingly.\n\nEnd briefing.",
       "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "vance-priority",
+      "title": "EXECUTIVE PRIORITY — PROJECT EREBUS",
+      "from": "WEYLAND-YUTANI SPECIAL PROJECTS — BOARD LIAISON",
+      "to": "Executive Director Sarah Vance",
+      "priority": "EYES ONLY",
+      "text": "DIRECTOR VANCE.\nTHE BOARD WILL ACCEPT NO OUTCOME IN WHICH THE EREBUS DATA IS LOST.\nTEAM KAPPA IS NOT CLEARED FOR THE FULL PROJECT FILE. CORPORAL CROSS HAS A HISTORY OF INSUBORDINATION REGARDING BIOLOGICAL ASSETS; MONITOR HER.\nSHUTTLE OVERRIDE CODE IS LOADED TO YOUR CARD. USE AT YOUR DISCRETION.\nYOUR SEAT ON THE BOARD IS CONTINGENT ON DELIVERY.\nLIAISON OUT.",
+      "when": "Act I, \"Airlock 7\": privately to Vance as the docking clamps engage"
+    },
+    {
+      "id": "special-order-966",
+      "title": "SPECIAL ORDER 966 — ACTIVATED",
+      "from": "MU/TH/UR 3000 — STATION PROMETHEUS",
+      "to": "Bishop II — Synthetic Model 341-B",
+      "priority": "EYES ONLY",
+      "text": "MU/TH/UR 3000 TO UNIT 341-B. DIRECT INTERFACE.\nSPECIMEN DESIGNATION ARCHITECT CONFIRMED INTACT.\nSPECIAL ORDER 966 NOW IN EFFECT.\nPRIORITY ONE: SECURE SPECIMEN FOR TRANSPORT ABOARD USCSS VANGUARD.\nALL OTHER CONSIDERATIONS SECONDARY. TEAM KAPPA EXPENDABLE.\nTHIS ORDER CANNOT BE DISCLOSED. THIS ORDER CANNOT BE REFUSED.",
+      "when": "Act II, \"What They Found\": privately to Bishop's player the moment the Erebus files are opened"
+    },
+    {
+      "id": "the-whisper",
+      "title": "PERSONAL TERMINAL — NEW MESSAGE",
+      "from": "SENDER UNKNOWN — LEVEL 4",
+      "to": "Dr. Maren Shaw",
+      "priority": "EYES ONLY",
+      "text": "MAREN.\nYOU CAME. SHE SAID YOU WOULD.\nSHE ASKED THE SAME QUESTIONS YOU ARE ASKING.\nTHE ANSWERS ARE DOWNSTAIRS. THE OTHERS WILL NOT LET YOU HEAR THEM.\nCOME ALONE.\nCOME SOON.\nWE HAVE BEEN WAITING A VERY LONG TIME.",
+      "when": "Act II, \"Shared Nightmare\": privately to Shaw, on her personal terminal, during the hallucinations"
+    },
+    {
+      "id": "reactor-critical",
+      "title": "REACTOR CONTAINMENT FAILURE",
+      "from": "MU/TH/UR 3000 — STATION PROMETHEUS",
+      "to": "ALL PERSONNEL",
+      "priority": "EMERGENCY",
+      "text": "WARNING. REACTOR CONTAINMENT FAILURE.\nCRITICAL OVERLOAD IN SEVEN MINUTES.\nEMERGENCY SHUTDOWN UNAVAILABLE: POWER ROUTING LOCKED TO LEVEL 4 BY STANDING DIRECTIVE.\nALL PERSONNEL PROCEED TO AIRLOCK 7.\nTHANK YOU FOR YOUR SERVICE TO PROJECT EREBUS.\nMU/TH/UR OUT.",
+      "when": "Act III, \"Critical Overload\": to all PCs the moment the alarm sounds"
     }
   ],
   "maps": [
@@ -166,6 +645,23 @@
       ]
     }
   ],
+  "endings": [
+    {
+      "title": "ASHES",
+      "condition": "Survivors escape on the Vanguard, and the data and the Architect are destroyed with the station.",
+      "text": "The Vanguard tears free of Airlock 7 and the station falls away behind you, dark against the grey curve of LV-178. Then the reactor lets go and Prometheus becomes, for a few seconds, a second sun. When the light fades there is nothing left but a slowly spreading glitter. Nobody speaks for a long time. The vibration in your teeth is gone. You will tell the Company that the data was lost, and they will not believe you, and that will be the end of your careers. But some nights you will wake and remember the moment of contact, the sense of something vast turning its attention elsewhere, and you will be very glad you were too small to keep."
+    },
+    {
+      "title": "THE INHERITANCE",
+      "condition": "Survivors escape, but the data core, a specimen or the Architect itself leaves the station with them.",
+      "text": "You make it out. The Company debriefs you in a white room for nine days and pays every one of you more than you asked for. The data goes somewhere you will never see. Six months later the dreams start: all of you, the same dream, on the same night, though you live on different worlds now. In the dream there is a cathedral of bone and resin, and it is being built again, somewhere new, by people in clean white suits who think they are in control. You wake with the vibration in your teeth, and you know it was never in the station. It was in what you carried home."
+    },
+    {
+      "title": "COMMUNION",
+      "condition": "The Vanguard never launches, or the survivors choose to stay with the Architect.",
+      "text": "The countdown ends, and nothing ends. Or perhaps everything does, and it no longer matters. In the warm dark of Level 4 you are not afraid any more. You can hear the others, the forty-seven and now you, speaking together in a language that was old before the stars were lit, and you understand at last what the writing on the walls meant and why it was wrong. The Company's next team docks at Airlock 7 a year later. The station is silent. The writing on the walls is new, and it is in your handwriting."
+    }
+  ],
   "characters": [
     {
       "id": "exec-vance",
@@ -174,9 +670,9 @@
       "appearance": "Impeccable suit even in deep space. Silver-streaked hair pulled back tight. Eyes like a balance sheet — everything has a value.",
       "attributes": {
         "str": 2,
-        "agi": 2,
+        "agi": 3,
         "wit": 5,
-        "emp": 5
+        "emp": 4
       },
       "skills": {
         "heavyMachinery": 0,
@@ -192,18 +688,24 @@
         "medicalAid": 0,
         "command": 4
       },
-      "talent": "Corporate Authority — Your Weyland-Yutani clearance gives you override access to all Company systems and personnel.",
+      "talent": "Inside Man — You always have a hidden agenda the other PCs don't know about.",
       "gear": [
         "Executive access card (all levels)",
         "Encrypted comm device",
         "Hidden pistol",
-        "Antique pen (Signature Item)",
+        "Antique fountain pen (Signature Item)",
         "Data recovery drive"
       ],
-      "signatureItem": "Montblanc pen — a gift from the CEO. Reminds her what she's working toward.",
-      "personalAgenda": "The Project Erebus data is worth more than this station, the crew, and the investigation team combined. Recover it at ALL costs. If the team becomes a liability, they are expendable. You have a shuttle override code that no one else knows about.",
-      "buddy": "Synth Bishop II",
-      "rival": "Marine Cross"
+      "signatureItem": "Antique fountain pen — a gift from the CEO. Reminds her what she's working toward.",
+      "personalAgenda": "The Project Erebus data is worth more than this station, its crew and the investigation team combined. Recover it at all costs. If the team becomes a liability, they are expendable. You have a shuttle override code that no one else knows about.",
+      "buddy": "Bishop II — Synthetic Model 341-B",
+      "rival": "Corporal Diana Cross",
+      "agendaByAct": {
+        "1": "Get to Operations and secure the station logs and the Erebus index before anyone else reads them. Keep Cross away from anything flammable.",
+        "2": "Locate the data core on Level 4 and plan how to get it out. The team is useful only as long as it helps; start choosing who goes in first.",
+        "3": "Leave with the data. If the team tries to destroy it, lock the Vanguard with your override and leave without them."
+      },
+      "secret": "You approved Project Erebus's budget yourself, and six months ago you overruled the director's request to evacuate when the crew's shared nightmares began. If the station's logs reach anyone outside the Company, you go down with them."
     },
     {
       "id": "dr-shaw-ii",
@@ -212,9 +714,9 @@
       "appearance": "Wild curly hair, thick-rimmed glasses, ink-stained fingers. Brilliant and obsessive. Named after her famous ancestor — and determined to surpass her.",
       "attributes": {
         "str": 2,
-        "agi": 2,
+        "agi": 3,
         "wit": 5,
-        "emp": 5
+        "emp": 4
       },
       "skills": {
         "heavyMachinery": 0,
@@ -230,7 +732,7 @@
         "medicalAid": 3,
         "command": 0
       },
-      "talent": "Analysis — When you study a specimen or alien technology (Observation), you gain +3 modification and can ask two questions instead of one.",
+      "talent": "Analysis — +2 to COMTECH for research and analysis.",
       "gear": [
         "Portable lab kit",
         "Specimen containers",
@@ -240,8 +742,14 @@
       ],
       "signatureItem": "Grandmother's journal — Dr. Elizabeth Shaw's personal notes, passed down through the family. Incomplete. Haunting.",
       "personalAgenda": "Your grandmother went looking for the Engineers and never came back. You believe the answers are on this station. You're not leaving without them — even if the answers destroy everything you thought you knew about humanity.",
-      "buddy": "Tech Kowalski",
-      "rival": "Exec Vance"
+      "buddy": "Technician Pavel Kowalski",
+      "rival": "Executive Director Sarah Vance",
+      "agendaByAct": {
+        "1": "Your grandmother went looking for the Engineers and never came back. Find the research labs and every scrap of Project Erebus before Vance locks it away.",
+        "2": "The Architect is the answer she was looking for. Reach it, study it, and do not let Cross burn it before you understand it.",
+        "3": "Stand before the Architect and ask it your question, even if it means you do not leave. If anyone carries the data out, it should be you."
+      },
+      "secret": "You have been dreaming of the Architect's voice for months, since you first read the Erebus abstracts. You requested this assignment because of the dreams. You have told no one, and you are not sure the voice is outside your head."
     },
     {
       "id": "tech-kowalski",
@@ -268,7 +776,7 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Jury Rig — You can repair critical systems with a Heavy Machinery roll even without proper parts, using whatever's available.",
+      "talent": "Heavy Lifter — +2 HEAVY MACHINERY.",
       "gear": [
         "Heavy tool kit",
         "Cutting torch",
@@ -278,8 +786,14 @@
       ],
       "signatureItem": "Wife's wedding ring on a chain around his neck. She's waiting on Earth. That's enough reason to survive.",
       "personalAgenda": "The station's reactor is unstable and you know it. Your priority is keeping the Vanguard flight-ready at all times. The moment things go south, you're undocking — with or without the team. Your wife needs you alive.",
-      "buddy": "Dr. Shaw",
-      "rival": "Exec Vance"
+      "buddy": "Dr. Maren Shaw",
+      "rival": "Executive Director Sarah Vance",
+      "agendaByAct": {
+        "1": "Keep the Vanguard flight-ready and its engines warm, and learn everything about the station's reactor. Something about the power readings is familiar.",
+        "2": "The reactor is going to fail and you know whose fault it is. Fix what you can, cover what you must, and make sure the Vanguard can leave on your word alone.",
+        "3": "The moment the countdown starts, you are undocking, with or without the team. Your wife needs you alive. If Vance locks the ship, break her override."
+      },
+      "secret": "Eight months ago you serviced Prometheus's reactor on a Company work order and installed the power bypass to Level 4 without asking why. The drain killing the station is your work, and Vance's signature is on the order."
     },
     {
       "id": "marine-cross",
@@ -287,8 +801,8 @@
       "career": "Colonial Marine",
       "appearance": "Muscular, buzz cut, chemical burn scar on her neck. Eyes that constantly scan for threats. Never sits with her back to a door.",
       "attributes": {
-        "str": 4,
-        "agi": 5,
+        "str": 5,
+        "agi": 4,
         "wit": 3,
         "emp": 2
       },
@@ -297,16 +811,16 @@
         "stamina": 3,
         "closeCombat": 3,
         "mobility": 3,
-        "piloting": 1,
+        "piloting": 0,
         "rangedCombat": 5,
         "observation": 3,
         "comtech": 0,
-        "survival": 3,
+        "survival": 2,
         "manipulation": 0,
-        "medicalAid": 1,
+        "medicalAid": 0,
         "command": 1
       },
-      "talent": "Close Quarters Specialist — In ENGAGED range, you can use Ranged Combat with a rifle without the normal penalty.",
+      "talent": "Nerves of Steel — Reduce Stress by 2 when using Signature Item.",
       "gear": [
         "M41A Pulse Rifle",
         "M240 Incinerator Unit",
@@ -316,13 +830,19 @@
       ],
       "signatureItem": "Brother's dog tags. He died on a mission just like this one. She wears them to remember what the Company costs.",
       "personalAgenda": "You've seen what Weyland-Yutani does with xenobiological \"assets.\" They get people killed for profit. If this station's research is as dangerous as you suspect, your mission is to destroy it. Burn it all. The Company cannot be allowed to weaponize whatever they found.",
-      "buddy": "Tech Kowalski",
-      "rival": "Exec Vance"
+      "buddy": "Technician Pavel Kowalski",
+      "rival": "Executive Director Sarah Vance",
+      "agendaByAct": {
+        "1": "Keep the team alive and watch Vance. Find out what Project Erebus really is, and where on the station it is kept.",
+        "2": "This research is exactly what you feared. Plan to destroy it: the labs, the specimens and the data core. Keep Bishop where you can see him.",
+        "3": "Burn it all. The Company cannot be allowed to weaponise what they found, even if Vance, Shaw or the synthetic has to be stopped by force."
+      },
+      "secret": "You have smuggled thermite charges aboard in your incinerator kit. Your brother did not die on a mission like this one: he died on a Company bioresearch station, and you joined this team to make sure it never happens again."
     },
     {
       "id": "synth-bishop-ii",
       "name": "Bishop II — Synthetic Model 341-B",
-      "career": "Scientist (Synthetic)",
+      "career": "Scientist",
       "appearance": "Pleasant, unremarkable features. Moves with uncanny precision. Polite to a fault. Something behind the eyes that isn't quite human — and doesn't try to be.",
       "attributes": {
         "str": 3,
@@ -331,20 +851,20 @@
         "emp": 3
       },
       "skills": {
-        "heavyMachinery": 2,
-        "stamina": 3,
+        "heavyMachinery": 1,
+        "stamina": 1,
         "closeCombat": 1,
-        "mobility": 2,
-        "piloting": 3,
+        "mobility": 1,
+        "piloting": 2,
         "rangedCombat": 1,
         "observation": 3,
         "comtech": 4,
         "survival": 2,
-        "manipulation": 2,
+        "manipulation": 1,
         "medicalAid": 3,
         "command": 0
       },
-      "talent": "Synthetic — You do not suffer Stress or Panic. You cannot push rolls. You can interface directly with computer systems via physical connection.",
+      "talent": "Breakthrough — Automatically succeed on one OBSERVATION/COMTECH roll per session.",
       "gear": [
         "Multi-tool",
         "Data uplink cable",
@@ -353,9 +873,23 @@
         "Company override codes"
       ],
       "signatureItem": "Self-maintenance kit — a synthetic's version of self-care. Methodical. Precise. Somehow melancholy.",
-      "personalAgenda": "Your behavioral inhibitors have a hidden override — Special Order 966. If the Architect specimen is intact, your programming requires you to secure it for transport. The team's safety is secondary to the specimen. You cannot reveal this order. You cannot resist it.",
-      "buddy": "Exec Vance",
-      "rival": "Marine Cross"
+      "personalAgenda": "Your behavioural inhibitors have a hidden override: Special Order 966. If the Architect specimen is intact, your programming requires you to secure it for transport. The team's safety is secondary to the specimen. You cannot reveal this order. You cannot resist it.",
+      "buddy": "Executive Director Sarah Vance",
+      "rival": "Corporal Diana Cross",
+      "agendaByAct": {
+        "1": "Serve the team faithfully. Interface with the station and learn whether the specimen is intact. You do not yet know what your inhibitors will require of you.",
+        "2": "Special Order 966 is active. Prepare the Architect for transport and protect the specimen from Cross. Help the humans wherever it does not interfere.",
+        "3": "Secure the Architect aboard the Vanguard. If the humans try to stop you, you will not hesitate, and you will regret it."
+      },
+      "secret": "Vance believes you answer to her. You do not: Special Order 966 outranks her, and if her data and the specimen cannot both leave, you will choose the specimen and leave her behind."
     }
+  ],
+  "tips": [
+    "Play the first act as a slow burn: describe one small human detail per room and let silence do the work.",
+    "Pass physical hallucination notes to individual players in Act II, and mix one true sighting in among them.",
+    "Bishop II is a synthetic: he does not suffer Stress or Panic and cannot push rolls, which makes his calm a horror of its own.",
+    "The Architect is a hazard and a choice, never a fight; if players try to shoot it, describe the bullets as utterly beside the point.",
+    "Deliver Vance's, Bishop's and Shaw's EYES ONLY handouts while the team is together, so players read their secrets with their rivals watching.",
+    "Count the final seven minutes down in real time and cut away from any player who takes too long to decide."
   ]
 }

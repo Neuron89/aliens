@@ -5,8 +5,8 @@
   "kind": "scenario",
   "meta": {
     "title": "Hope's Last Day",
-    "tagline": "The colony of Hadley's Hope has 158 days of peace left. Today is not one of them.",
-    "synopsis": "Hadley's Hope colony on LV-426 has gone silent. In its final hours, colonists fight for survival as xenomorphs overrun the settlement. This is the fall of the colony from the film Aliens — played from the perspective of the doomed.",
+    "tagline": "The colony of Hadley's Hope has 158 souls, one survey team overdue and one last day.",
+    "synopsis": "Hadley's Hope is a terraforming colony of 158 people on the storm-wracked moon LV-426. On an ordinary morning, Survey Team Bravo, the Jorden family, is sent by Company order to a structure the atmospheric processor's sensors picked up. Russ Jorden comes back with a creature on his face; hours later something bursts from his chest and vanishes into the ducts. Colonists start disappearing, a hive takes shape in the processor's sub-levels, and lockdown fails. In Act III the damaged processor is going critical, the emergency shuttle has only twelve seats, and the survivors must fight their way to the landing pad or the APC while their distress call goes unanswered. The PCs are the colony's marshal, doctor, roughneck, pilot and the Jordens' daughter, Newt; it is a tragedy, and most of them will not live to see help arrive.",
     "type": "Cinematic",
     "players": "3–5",
     "playtime": "3–4 hours",
@@ -14,12 +14,18 @@
     "tone": [
       "tragedy",
       "dread",
-      "desperation"
+      "desperation",
+      "isolation"
     ],
     "contentWarnings": [
       "body horror",
+      "gore",
+      "parasitic implantation",
       "child endangerment",
-      "character death"
+      "death of a parent",
+      "character death",
+      "player-vs-player conflict",
+      "claustrophobia"
     ],
     "source": "bundled"
   },
@@ -27,198 +33,347 @@
     "from": "COLONY OPERATIONS MAINFRAME",
     "to": "ALL PERSONNEL — HADLEY'S HOPE",
     "classification": "ROUTINE STATUS UPDATE",
-    "text": "GOOD MORNING, HADLEY'S HOPE. LOCAL TIME 0600 HOURS.\n\nAtmospheric processor status: NOMINAL. Terraforming cycle 847 in progress. External temperature: minus 42 degrees Celsius. Wind speed: 85 knots with gusts to 130. Visibility: near zero. Standard LV-426 conditions.\n\nColony population: 158 souls. All sections reporting normal. Water reclamation at 94% efficiency. Hydroponic bay output within expected parameters. Supply ship ETA: 47 days.\n\nNOTICE: Survey Team Bravo is dispatched to grid reference 0-4-7 to investigate a structure of unknown origin detected by the processor's ground-penetrating sensors. Survey team leader Russ Jorden reports departure at 0545.\n\nAll other personnel — report to duty stations per standard rotation.\n\nIt's another day on LV-426. Make it count.\n\nCOLONY OPS out."
+    "text": "GOOD MORNING, HADLEY'S HOPE. LOCAL TIME 0600 HOURS.\n\nAtmospheric processor status: NOMINAL. Terraforming cycle 847 in progress. External temperature: minus 42 degrees Celsius. Wind speed: 85 knots with gusts to 130. Visibility: near zero. Standard LV-426 conditions.\n\nColony population: 158 souls. All sections reporting normal. Water reclamation at 94% efficiency. Hydroponic bay output within expected parameters. Supply ship ETA: 47 days.\n\nNOTICE: Survey Team Bravo is dispatched to grid reference 0-4-7 to investigate a structure of unknown origin detected by the processor's ground-penetrating sensors. Survey team leader Russ Jorden reports departure at 0545.\n\nAll other personnel — report to duty stations per standard rotation.\n\nREMINDER: Movie night in the commons at 2000 hours. Children must be back in Hab Module A by 2200.\n\nIt's another day on LV-426. Make it count.\n\nCOLONY OPS out."
   },
   "acts": [
     {
       "title": "ACT I",
-      "subtitle": "ANOTHER GLORIOUS DAY IN THE CORPS",
-      "summary": "FIRST CONTACT — The colony is functioning normally until colonists sent to investigate the derelict ship return... changed. The first disappearances begin.",
+      "subtitle": "FIRST CONTACT",
+      "summary": "An ordinary colony day. The Jordens return from the survey site with a creature on Russ's face; it falls away, and hours later something bursts from his chest and escapes into the ducts. The first colonists go missing.",
       "readAloud": [
-        "Hadley's Hope. Population: 158. A terraforming colony on LV-426 — a desolate, storm-wracked moon that no one in their right mind would call home. But home is what the company calls it, and home is where you are.",
+        "Hadley's Hope. Population: 158. A terraforming colony on LV-426 — a desolate, storm-wracked moon that no one in their right mind would call home. But home is what the Company calls it, and home is where you are, under a sky the colour of wet cement.",
         "The colony is a collection of prefab modules bolted together against the wind, centered around the massive atmospheric processor that hums day and night, slowly making this hellhole breathable. Outside, the storms never stop. Inside, it's fluorescent lights, recycled air, and the same faces every day.",
-        "You know the routines. Morning shift, evening shift. Meals in the commons. Kids in the school module. Maybe a drink at the rec room if you're lucky. It's boring. It's safe. It's predictable.",
-        "Today starts like any other day. The wake-up alarm. Coffee that tastes like it was filtered through engine parts. The morning briefing. But there's something different in the air today — a tension you can't quite name. The survey team left early, heading out to check some structure the processor sensors picked up. Nobody thinks much of it. Survey teams go out all the time.",
-        "They always come back."
+        "You know the routines. Morning shift, evening shift. Meals in the commons. Kids in the school module, their drawings taped to every window. Maybe a drink at the rec room if you're lucky. It's boring. It's safe. It's predictable. The wind howls and the walls creak and nobody even hears it any more.",
+        "Today starts like any other day. The wake-up alarm. Coffee that tastes like it was filtered through engine parts. The morning briefing. But there's something different in the air today — a tension you can't quite name. The survey team left early, heading out to check some structure the processor sensors picked up. Nobody thinks much of it. Survey teams go out all the time. They always come back."
       ],
-      "gmNotes": "Establish the mundane reality of colony life. Let players interact with NPCs, handle small colony problems (broken equipment, supply disputes, personal drama). This normality makes the horror hit harder. Survey Team Bravo is out investigating the derelict — they will return with a facehugger victim. Plant seeds of unease: a kid's drawing of something scary, a weird signal on comms, a pet acting frightened.",
-      "agendaNotes": "Characters have personal goals and relationships. Establish these before the horror starts.",
+      "gmNotes": "Establish the mundane reality of colony life. Let players interact with NPCs and handle small colony problems: broken equipment, supply disputes, personal drama. This normality makes the horror hit harder. Plant seeds of unease: a kid's drawing of something scary, a weird signal on comms, a pet acting frightened.\n\nSurvey Team Bravo, the Jorden family, is out at the structure on Company orders. Mid-afternoon, Anne Jorden's emergency call comes in: Russ has something on his face. Run the medical crisis in the Med Bay: no one knows what to do, removal is impossible, and the thing eventually falls away dead. Russ wakes, groggy and hungry. Then, hours later, the chestburster. It should be shocking, and it escapes into the vents.\n\nEnd the act with the first disappearances: isolated workers on night shift and in the sub-levels, one at a time, and contacts on the motion trackers inside the walls.",
+      "agendaNotes": "Characters have personal goals and relationships; establish them before the horror starts. Al-Rahim keeps order and keeps her Company directive to herself; Patel is fascinated by the specimen; Novak counts days to the next transport; Clairemont keeps the shuttle in mind; Newt waits for her parents.",
       "scenes": [
         {
           "name": "Normal Day at Hadley's Hope",
           "mandatory": true,
           "encounter": false,
-          "narration": "Establish the colony — daily routines, relationships, tensions. The Jordens have been sent to check coordinates from the Company.",
-          "gmTip": "Spend time here. The horror is more effective when players care about what they're about to lose."
+          "narration": "Morning in the colony: the processor's hum, the commons full of shift workers, kids in the school module, a supply dispute brewing in the vehicle bay. The Jordens have already left to check coordinates sent by the Company.",
+          "checks": [
+            "COMTECH — read the overnight comms log and notice the Company's coordinates came in on a priority channel",
+            "COMMAND — settle a shouting match over the vehicle bay roster",
+            "OBSERVATION — notice the school's newest drawings are all of the same dark shape"
+          ],
+          "events": [
+            "Deliver the morning status update to all players.",
+            "A colony dog refuses to go near the north airlock."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever looks closely at the children's drawings of the dark shape"
+          ],
+          "npcGuidance": "Operations staff gossip about why the Company cares about an empty grid square. Newt, if an NPC, follows the adults around asking when her parents will be back.",
+          "gmTip": "Spend time here. The horror is more effective when players care about what they are about to lose; give each PC one small, ordinary problem to solve.",
+          "outcomes": [
+            "The players know the colony, its people and each other (The Jordens Return).",
+            "Whoever noticed the priority channel starts asking the Marshal about it."
+          ]
         },
         {
           "name": "The Jordens Return",
           "mandatory": true,
           "encounter": true,
-          "encounterDetail": "Facehugger (attached, cannot be removed without killing host)",
-          "narration": "Russ Jorden returns with a facehugger attached. Medics can't remove it. His wife Anne is in shock. The children are terrified.",
+          "encounterDetail": "A facehugger attached to Russ Jorden's face, its tail wrapped round his throat. It cannot be removed without killing him; cutting it sprays acid that eats through deck plates. It falls away dead on its own after some hours.",
+          "narration": "At 1430 the emergency band crackles: Anne Jorden, screaming that something attacked Russ at the site. When they bring him into the Med Bay, the thing on his face is pale and leathery, its fingers locked round his skull, keeping him alive through a tube forced down his throat.",
           "checks": [
-            "MEDICAL AID — attempt facehugger removal (impossible)"
+            "MEDICAL AID — attempt facehugger removal (impossible; failure risks the host)",
+            "OBSERVATION — notice the acid scar where the creature was cut at the site",
+            "COMMAND — keep the crowd and the Jorden children out of the Med Bay"
+          ],
+          "events": [
+            "Send the Marshal her Company directive privately.",
+            "Hours pass. The creature detaches, falls off and dies. Russ wakes, groggy, hungry and remembering nothing."
           ],
           "stressTriggers": [
-            "STRESS +1 — all who see the facehugger"
+            "STRESS +1 — all who see the facehugger",
+            "STRESS +1 — Newt, if she sees her father"
           ],
-          "gmTip": "The facehugger detaches on its own eventually. Russ seems fine... for now."
+          "npcGuidance": "Anne Jorden is in shock and keeps repeating that the Company sent them. Russ is unconscious, then cheerful and starving. Operations staff want the thing incinerated; Patel's player may want it preserved.",
+          "gmTip": "Let the relief land when Russ wakes up. The players know what is coming; their characters do not.",
+          "outcomes": [
+            "Russ appears to recover, and the colony relaxes (Something's Wrong with Russ).",
+            "Patel may keep the dead creature as a specimen."
+          ]
         },
         {
           "name": "Something's Wrong with Russ",
           "mandatory": true,
           "encounter": true,
-          "encounterDetail": "Chestburster → flees into colony infrastructure",
-          "narration": "Russ Jorden complains of chest pains. Then the chestburster emerges. Everyone in the medical bay witnesses it.",
-          "stressTriggers": [
-            "IMMEDIATE PANIC ROLL — all present"
+          "encounterDetail": "A chestburster erupts from Russ Jorden in the Med Bay, bites at the nearest hand and flees into the air ducts. It cannot be caught; it will grow rapidly.",
+          "narration": "Six hours later, Russ complains of chest pains over his meal. Then he convulses, and something tears its way out of his chest in front of everyone in the Med Bay.",
+          "checks": [
+            "MEDICAL AID — try to save Russ (impossible)",
+            "CLOSE COMBAT — grab at the creature before it reaches the vent",
+            "OBSERVATION — see which duct it took"
           ],
-          "gmTip": "This is the point of no return. The chestburster escapes into the air ducts and will grow rapidly."
+          "events": [
+            "Russ dies.",
+            "The creature disappears into the ventilation system, and the motion tracker follows it until it is out of range."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all present",
+            "STRESS +2 — Newt, if she is present"
+          ],
+          "npcGuidance": "Anne Jorden collapses. Operations staff want the vents sealed and argue about which ones. Nobody wants to tell the children.",
+          "gmTip": "This is the point of no return. Narrate it fast and close, then let the silence afterwards stretch.",
+          "outcomes": [
+            "The creature is loose in the ducts (First Disappearances).",
+            "The Marshal must decide what to tell the colony and the Company."
+          ]
         },
         {
           "name": "First Disappearances",
           "mandatory": true,
           "encounter": false,
-          "narration": "People start going missing. One at a time at first. Maintenance workers in the sub-levels. Night shift staff. Motion trackers show contacts in the walls.",
+          "narration": "People start going missing, one at a time at first: a maintenance worker in the sub-levels, a night-shift tech in Hydroponics. Motion trackers show contacts inside the walls.",
           "checks": [
-            "OBSERVATION — notice patterns in disappearances"
+            "OBSERVATION — notice the pattern: every disappearance is near the maintenance ducts toward the processor",
+            "SURVIVAL — follow a drag trail into the maintenance section",
+            "COMTECH — pull the motion sensor logs and see the contacts multiplying"
+          ],
+          "events": [
+            "A worker's radio clicks on for three seconds of breathing, then nothing.",
+            "The storm worsens and long-range comms start to fail."
           ],
           "stressTriggers": [
-            "STRESS +1 — per disappearance discovered"
+            "STRESS +1 — each PC for each disappearance they discover"
           ],
-          "gmTip": "Build dread. Don't show the alien yet. Just show its effects — empty rooms, blood trails, strange noises."
+          "npcGuidance": "Operations staff start blaming each other and drinking. The Administrator wants it handled quietly until the supply ship arrives.",
+          "gmTip": "Build dread. Do not show the creature yet; show its effects: empty rooms, drag marks, strange noises in the walls.",
+          "outcomes": [
+            "The trail leads toward the processor, and a search party forms (Act II).",
+            "A PC who goes into the sub-levels alone may not come back."
+          ]
         }
       ]
     },
     {
       "title": "ACT II",
-      "subtitle": "THEY MOSTLY COME AT NIGHT",
-      "summary": "OUTBREAK — The xenomorph population grows exponentially. The colony's defenses are overwhelmed. Systems fail. Panic spreads.",
+      "subtitle": "OUTBREAK",
+      "summary": "The search for the missing finds a hive in the atmospheric processor's sub-levels. Lockdown fails, the processor is damaged, and the survivors barricade themselves in Operations.",
       "readAloud": [
-        "The call comes in at 1430 hours. Survey Team Bravo — emergency frequency. Russ Jorden's wife is screaming. Something happened at the site. Something attacked her husband. His biosigns are erratic. There's something on his face. They can't get it off.",
-        "The med bay goes into emergency mode. When they bring Jorden in, the thing attached to his face is like nothing you've ever seen — pale, leathery, with a tail wrapped tight around his throat. It's keeping him alive, somehow. Feeding him air through a tube it's forced down his throat. Doctor's orders: do not attempt removal. The last person who tried got sprayed with acid that ate through three deck plates.",
-        "Hours pass. The tension in the colony ratchets up with every one of them. People cluster in corridors, whispering. The children are kept away from the med bay. And then — just as suddenly as it appeared — the thing on Jorden's face detaches. Falls off. Dead. Jorden wakes up, groggy but alive. Hungry. No memory of what happened.",
-        "Everyone breathes a sigh of relief.",
-        "That relief lasts exactly six hours.",
-        "The scream from the med bay is inhuman. By the time you get there, Jorden is dead — his chest torn open from the inside. And something small and fast and covered in blood has disappeared into the ventilation system. The motion tracker shows it moving through the ducts. Growing. Fast."
+        "The motion tracker in your hands will not stop ticking. Three days ago there was one contact in the walls. Now the screen is freckled with them, drifting slowly along the ductwork like something breathing in its sleep. The colony's corridors smell of sweat and burnt coffee and fear. Nobody walks alone any more. Nobody sleeps.",
+        "The trail leads north, along the covered walkway to the atmospheric processor. Out there the wind screams against the windows and the processor's bulk rises into the storm, lights blinking at its summit. Inside, it is warm. Far too warm. The air is wet and thick and smells like the inside of a mouth, and the walls of the lower levels are no longer the walls you remember.",
+        "The emergency klaxon begins in the Operations Center and spreads module by module, a slow red wave through the colony. Bulkheads grind shut. Somewhere a door that should have closed does not. Over the intercom, the Administrator's voice is calm and rehearsed and you can hear his hands shaking through it.",
+        "The lights dim, recover, dim again. The deep hum of the processor, the sound you stopped hearing years ago, has developed a stutter. You hear it now. Everyone hears it now. And under it, in the ducts above your head, something moves quickly from one end of the corridor to the other."
       ],
-      "gmNotes": "The facehugger arrival triggers escalating horror. Run the medical crisis — no one knows what to do. When the chestburster erupts, it should be shocking and graphic. The creature disappears into the vents. Colony lockdown begins. Run encounters with the rapidly-growing creature in the vents — it's hunting, learning the layout, picking off isolated colonists. Communications with the outside are jammed by the storm.",
-      "agendaNotes": "Survival becomes the only agenda. Some characters may crack under pressure.",
+      "gmNotes": "The creature has grown and has not been alone. A search party following the disappearances finds the processor's sub-levels converted into a hive: cocooned colonists and eggs. Retreat is the smart option. Colony lockdown begins and fails: the creatures are already in the walls.\n\nRun encounters with creatures that are hunting, learning the layout and picking off isolated colonists. Communications with the outside are cut by the storm. A repair attempt in the processor or the power plant draws an ambush and leaves the processor damaged, which starts Act III's clock.\n\nEnd the act with the survivors barricaded in Operations, ammunition ticking down and the processor's hum gone wrong.",
+      "agendaNotes": "Survival becomes the main agenda, but the personal ones bite. Patel wants a specimen; Al-Rahim's directive comes out or stays buried; Novak wants to run for the shuttle now; Clairemont starts counting seats; Newt wants to find her mother and knows the vents better than anyone. Some characters may crack under pressure.",
       "scenes": [
         {
           "name": "The Hive Discovered",
           "mandatory": true,
           "encounter": true,
-          "encounterDetail": "Multiple Xenomorph Drones. At least 3-4 in the hive.",
-          "narration": "A search party finds the sub-level atmospheric processor has been converted into a hive. Cocooned colonists. Eggs. The scope of the infestation is revealed.",
+          "encounterDetail": "Three or four Drones in the processor sub-levels, guarding the cocooned and the eggs. They attack anyone who lingers, cut off the way back and pull back once the intruders flee.",
+          "narration": "A search party follows the trail into the processor's sub-levels and finds them rebuilt: ribbed, glistening walls, cocooned colonists, and rows of leathery eggs. The scope of the infestation is suddenly clear.",
           "checks": [
-            "OBSERVATION — assess the hive",
-            "COMTECH — access colony records to determine missing count"
+            "OBSERVATION — assess the hive and count the eggs",
+            "COMTECH — access colony records afterwards to determine the missing count",
+            "MOBILITY — retreat through the sub-levels without being cut off"
+          ],
+          "events": [
+            "A cocooned colonist, still alive, begs to be killed.",
+            "Send Patel the Company's reply to his specimen report."
           ],
           "stressTriggers": [
-            "STRESS +2 — seeing the hive"
+            "STRESS +2 — all PCs seeing the hive",
+            "IMMEDIATE PANIC ROLL — any PC grabbed in the dark"
           ],
-          "gmTip": "This should be overwhelming. PCs should realize they cannot fight this. Retreat is the smart option."
+          "npcGuidance": "Any operations staff with the party freeze, or flee. Newt, if present, knows a vent that leads back to the colony and only she fits.",
+          "gmTip": "This should be overwhelming. The PCs should realise they cannot fight this; retreat is the smart option.",
+          "outcomes": [
+            "The survivors know what they are facing and the colony goes into lockdown (Colony Lockdown).",
+            "An egg or specimen carried out is a disaster waiting in the Med Bay."
+          ]
         },
         {
           "name": "Colony Lockdown",
           "mandatory": true,
           "encounter": false,
-          "narration": "Emergency protocols activated. Bulkheads sealed. But the xenomorphs are in the walls, the ducts, the infrastructure. Lockdown is futile.",
+          "narration": "Emergency protocols activate. Bulkheads seal, colonists are herded to the commons and Operations. But the creatures are in the walls, the ducts and the infrastructure, and lockdown is futile.",
           "checks": [
-            "COMTECH — seal bulkheads",
-            "HEAVY MACHINERY — barricade positions"
+            "COMTECH — seal bulkheads and isolate the duct network",
+            "HEAVY MACHINERY — barricade positions and weld vents",
+            "COMMAND — get 100-odd frightened colonists where they need to be"
+          ],
+          "events": [
+            "Send the lockdown order to all PCs.",
+            "One sealed bulkhead reports a breach a minute later: acid."
           ],
           "stressTriggers": [
-            "STRESS +1 — lockdown alarm"
+            "STRESS +1 — all PCs when the lockdown alarm sounds"
           ],
-          "gmTip": "The sentry guns (if available) buy time but ammo is limited. Track ammunition carefully."
+          "npcGuidance": "The Administrator orders everyone to shelter in place. Operations staff obey and then panic. Anne Jorden, if alive, wanders off looking for Newt.",
+          "gmTip": "If the colony has sentry guns, they buy time but ammunition is limited; track it carefully and visibly.",
+          "outcomes": [
+            "The colonists are concentrated in Operations and the commons (Barricade and Hold).",
+            "Someone has to go out to keep the power on (Systems Failing)."
+          ]
         },
         {
           "name": "Systems Failing",
           "mandatory": true,
           "encounter": true,
-          "encounterDetail": "Xenomorph ambush during repair attempts",
-          "narration": "The atmospheric processor is damaged. Power fluctuations. Life support warnings. The colony is dying around them.",
+          "encounterDetail": "A Drone ambush during the repair attempt: one comes through the duct over the work site, a second from the floor grate behind. They target whoever is working.",
+          "narration": "Power fluctuations ripple through the colony. Life support warnings scroll. The atmospheric processor is damaged, and its cooling systems are struggling. The colony is dying around them.",
           "checks": [
-            "HEAVY MACHINERY — emergency repairs",
-            "COMTECH — reroute power"
+            "HEAVY MACHINERY — emergency repairs in the maintenance section",
+            "COMTECH — reroute power to life support and the sentries",
+            "STAMINA — keep working with a creature somewhere in the dark"
+          ],
+          "events": [
+            "The processor's coolant pressure starts to drop no matter what is repaired."
           ],
           "stressTriggers": [
-            "STRESS +1"
+            "STRESS +1 — all PCs on the repair team",
+            "IMMEDIATE PANIC ROLL — the PC attacked while working"
           ],
-          "gmTip": "The atmospheric processor will eventually explode. This is the countdown clock for Act III."
+          "npcGuidance": "An operations tech knows the systems and is too frightened to go out; persuaded, they are a liability and an asset.",
+          "gmTip": "The atmospheric processor will eventually explode. This is the countdown clock for Act III; let the players see the coolant numbers fall.",
+          "outcomes": [
+            "Life support holds a little longer, but the processor's failure is now certain.",
+            "A repair team that does not come back leaves the colony dark."
+          ]
         },
         {
           "name": "Barricade and Hold",
           "mandatory": false,
           "encounter": true,
-          "encounterDetail": "Waves of Xenomorph Drones testing the defenses",
-          "narration": "Surviving colonists barricade in Operations. Sentry guns cover the approaches. But ammo counters tick down and contacts keep coming.",
+          "encounterDetail": "Waves of Drones test the barricades around Operations, two or three at a time, probing for weak points. Each wave burns sentry ammunition; when it runs out, they come through.",
+          "narration": "Surviving colonists barricade themselves in Operations. Sentry guns, if there are any, cover the approaches. Ammo counters tick down, and the contacts keep coming.",
           "checks": [
-            "RANGED COMBAT — sentry gun management",
-            "COMMAND — keep civilians calm"
+            "RANGED COMBAT — manage the sentries and fill the gaps",
+            "COMMAND — keep the civilians calm",
+            "HEAVY MACHINERY — shore up the weak point before the next wave"
+          ],
+          "events": [
+            "Between waves, the processor's alarms change pitch."
           ],
           "stressTriggers": [
-            "STRESS +1 per wave of contacts"
+            "STRESS +1 — all PCs for each wave of contacts"
           ],
-          "gmTip": "Use the sentry gun ammo countdown from the film. \"They're not coming in here.\" \"I say we seal that tunnel off.\""
+          "npcGuidance": "Colonists argue about running for the shuttle now. Novak's player may agree with them loudly.",
+          "gmTip": "Show the sentry ammunition counts on the table and tick them down after every wave; nothing else needs to be said.",
+          "outcomes": [
+            "The barricade holds until the processor alert (Act III).",
+            "The barricade breaks and Act III begins mid-retreat."
+          ]
         }
       ]
     },
     {
       "title": "ACT III",
-      "subtitle": "GAME OVER, MAN",
-      "summary": "LAST DAY — The atmospheric processor is going critical. The colony must be evacuated — but there aren't enough ships, and the xenomorphs are everywhere.",
+      "subtitle": "LAST DAY",
+      "summary": "The atmospheric processor is going critical. The colony must be evacuated, but the shuttle has twelve seats, the creatures are everywhere, and the distress call goes unanswered.",
       "readAloud": [
-        "It's been twelve hours since the creature escaped into the vents, and Hadley's Hope is falling apart. The body count is climbing. The thing in the vents has grown — impossibly fast — into something that barely fits in the ducts anymore. Something tall and black and eyeless, with a skull like polished bone and a mouth full of chrome teeth.",
-        "The colony's motion tracker network is lighting up with contacts. Not one contact. Multiple. The ground-penetrating sensors have picked up movement beneath the processor — a structure, organic, growing. A nest. The eggs were already here, seeded by something that came before, and the colony's survey teams have been walking right past them for months.",
+        "Since the creature escaped into the vents, Hadley's Hope has been falling apart. The body count is climbing. The thing in the vents has grown — impossibly fast — into something that barely fits in the ducts anymore. Something tall and black and eyeless, with a skull like polished bone and a mouth full of chrome teeth.",
+        "The colony's motion tracker network is lighting up with contacts. Not one contact. Multiple. The ground-penetrating sensors show the nest beneath the processor still growing, organic and patient. The eggs were already here, seeded by something that came before, and the colony's survey teams have been walking right past them for months.",
         "Power failures cascade through the colony modules. Emergency lighting bathes everything in red. Bulkheads that should be sealed are being forced open — or melted through with acid. The screams come from every direction now. Colonists are being dragged into the vents, into the walls, into the dark spaces between modules where the creatures have made their home.",
         "You have one chance. The colony's emergency shuttle — or the armored personnel carrier in the vehicle bay. Get to one of them. Get your people aboard. Get off this rock before the atmospheric processor goes critical. Because when that goes, it'll take the colony, the creatures, and everything within a thirty-kilometer radius with it.",
-        "The clock is ticking. The creatures are everywhere. And Hadley's Hope is about to live up to its name for the very last time."
+        "The clock is ticking. The creatures are everywhere. The wind screams at the windows and the processor's alarms howl back, and somewhere in the ducts above you something is keeping pace. Hadley's Hope is about to live up to its name for the very last time."
       ],
-      "gmNotes": "Full colony collapse. Multiple xenomorphs. Running battles through failing infrastructure. NPCs die in horrible ways. The atmospheric processor is destabilizing (the creatures have damaged it). Players must reach the shuttle or APC. Barricades, desperate last stands, impossible choices about who to save. This should feel like the second half of ALIENS — chaotic, terrifying, and lethal. Most PCs should not survive.",
-      "agendaNotes": "Get out alive. Some may sacrifice themselves for others.",
+      "gmNotes": "Full colony collapse. Multiple creatures, running battles through failing infrastructure, NPCs dying in horrible ways. The atmospheric processor is destabilising because the creatures and the failed repairs have damaged it, and nothing can stop it.\n\nThe ways out are the emergency shuttle on the landing pad (twelve seats) and the APC in the vehicle bay, which can get people away from the blast if it is driven hard enough. Barricades, desperate last stands and impossible choices about who to save. This should be chaotic, terrifying and lethal. Most PCs should not survive.",
+      "agendaNotes": "Open betrayal or sacrifice. Clairemont's half-empty fuel cells, Novak's seat, Patel's specimen and the Marshal's oath all collide over twelve seats. Newt knows a place only she can hide. Some may sacrifice themselves for others; let players make that choice.",
       "scenes": [
         {
           "name": "Atmosphere Processor Alert",
           "mandatory": true,
           "encounter": false,
-          "narration": "The atmospheric processor has gone critical. It will detonate in a nuclear explosion within hours. Everything within the blast radius will be vaporized.",
+          "narration": "The atmospheric processor has gone critical. Its reactor will detonate within hours, and everything within thirty kilometres will be vaporised.",
           "checks": [
-            "COMTECH — determine time remaining"
+            "COMTECH — determine the time remaining",
+            "HEAVY MACHINERY — try a manual shutdown (it cannot be done, but a success buys an hour)"
+          ],
+          "events": [
+            "Send the processor-critical warning to all PCs."
           ],
           "stressTriggers": [
-            "STRESS +2 — nuclear countdown"
+            "STRESS +2 — all PCs at the countdown"
           ],
-          "gmTip": "This is the ultimate ticking clock. There is no way to stop it. The only option is escape."
+          "npcGuidance": "The Administrator orders everyone to the landing field and then locks himself in his office. Colonists stampede toward the vehicle bay.",
+          "gmTip": "This is the ultimate ticking clock. There is no way to stop it; the only option is escape. Write the time remaining where everyone can see it.",
+          "outcomes": [
+            "Everyone heads for the shuttle or the APC (Twelve Seats).",
+            "A PC who buys an hour gives the others a chance to reach the APC."
+          ]
+        },
+        {
+          "name": "Twelve Seats",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The emergency shuttle seats twelve. There are far more survivors than that, and the APC can carry a few more if someone can reach the vehicle bay through the infested maintenance section.",
+          "checks": [
+            "COMMAND — set the evacuation order and make it stick",
+            "MANIPULATION — talk someone out of a seat, or into giving one up",
+            "PILOTING — check the shuttle's fuel and know what it can really lift"
+          ],
+          "events": [
+            "Colonists start pushing toward the pad before anyone has decided anything."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever decides who stays behind",
+            "STRESS +1 — Clairemont, when the fuel readout is checked"
+          ],
+          "npcGuidance": "Parents push their children forward. Operations staff claim seats by rank. Anne Jorden, if alive, wants Newt aboard and will not leave without her.",
+          "gmTip": "Do not roll for the argument; let players bargain, then roll only for the violent or desperate acts they choose.",
+          "outcomes": [
+            "A group runs for the landing pad (Escape to the Landing Pad).",
+            "A second group runs for the APC in the vehicle bay."
+          ]
         },
         {
           "name": "Escape to the Landing Pad",
           "mandatory": true,
           "encounter": true,
-          "encounterDetail": "Multiple Xenomorphs blocking the route. At least one major encounter.",
-          "narration": "The surviving colonists must reach the landing pad. The route goes through xenomorph-infested corridors. Every junction is a potential ambush point.",
+          "encounterDetail": "Multiple Drones block the route, striking from ducts, ceilings and floor grates at every junction; at least one major attack hits the group in the open on the pad itself.",
+          "narration": "The surviving colonists must reach the landing pad, or the vehicle bay, through creature-infested corridors. Every junction is a potential ambush.",
           "checks": [
             "MOBILITY — navigate wreckage",
             "RANGED COMBAT — fighting retreat",
-            "COMMAND — keep group together"
+            "COMMAND — keep the group together",
+            "PILOTING — launch the shuttle into the storm, or drive the APC flat out"
+          ],
+          "events": [
+            "The storm hits the pad at full force as the ramp comes down.",
+            "Somewhere behind, a child's voice calls from a vent."
           ],
           "stressTriggers": [
-            "STRESS +1 per encounter"
+            "STRESS +1 — all PCs for each encounter on the route",
+            "IMMEDIATE PANIC ROLL — any PC who sees someone dragged into a duct"
           ],
-          "gmTip": "This is the final gauntlet. Not everyone will make it. Make each death matter."
+          "npcGuidance": "Colonists scatter at the first attack. Newt, if an NPC, vanishes into the vents and will not come out for anyone she does not trust.",
+          "gmTip": "This is the final gauntlet. Not everyone will make it; make each death matter and give each one a moment.",
+          "outcomes": [
+            "The shuttle or the APC gets away with whoever made it aboard (see endings).",
+            "Those left behind must hold out somewhere and hope (The Distress Call)."
+          ]
         },
         {
           "name": "The Distress Call",
           "mandatory": true,
           "encounter": false,
-          "narration": "A distress call has been sent. But will help arrive in time? The PCs must hold out at the landing pad or find another way off-world.",
+          "narration": "A distress call goes out on every band. Will help arrive in time? Anyone still in the colony must hold out, hide, or find another way off-world.",
           "checks": [
-            "COMTECH — boost distress signal"
+            "COMTECH — boost the distress signal through the storm",
+            "SURVIVAL — find somewhere to hide that the creatures have not found",
+            "MOBILITY — reach the vents with Newt"
           ],
-          "gmTip": "The Marines will eventually come (the events of Aliens). But most PCs will not survive to see them. Newt survives by hiding in the air ducts."
+          "events": [
+            "The call goes out. Nothing answers but static."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all PCs left behind when the static answers"
+          ],
+          "npcGuidance": "The Colonial Marines who will answer this call are weeks away. Nobody on LV-426 will hear them coming.",
+          "gmTip": "Help will come, eventually, far too late for most PCs. Newt survives by hiding in the air ducts; if she is a PC, let her player know she can.",
+          "outcomes": [
+            "A PC who hides with Newt may yet be alive when help comes (see endings).",
+            "Everyone else's story ends here."
+          ]
         }
       ]
     }
@@ -227,50 +382,109 @@
     {
       "name": "Newt (Rebecca Jorden)",
       "role": "Colony Child",
-      "agenda": "Hide and survive",
-      "behavior": "Knows the air ducts. Will flee from everything."
+      "agenda": "Hide, survive and find her family, which means refusing to go where the adults tell her.",
+      "behavior": "Quiet, watchful and fast; knows every air duct in the colony and flees from everything. Tell: she only speaks to adults who have kept a promise to her. Use this entry when no player takes Newt.",
+      "secret": "She saw something moving in the vents before anyone else believed it, and she has a hiding place where only someone small can fit."
+    },
+    {
+      "name": "Anne Jorden",
+      "role": "Survey Team Bravo, Newt's mother",
+      "agenda": "Keep her children safe and make the Company answer for sending her family to that site, which sets her against the Marshal.",
+      "behavior": "Brittle and furious after the attack; repeats that the Company sent them. Tell: she cannot stop touching the place on Russ's helmet where the acid burned.",
+      "secret": "She saw more of the structure than she has told anyone: rows of the same leathery shapes, and one open."
+    },
+    {
+      "name": "Russ Jorden",
+      "role": "Survey Team Bravo Leader",
+      "agenda": "Earn the finder's share the Company promised for the coordinates, then get his family off LV-426.",
+      "behavior": "Cheerful and boastful before the site; groggy, starving and too cheerful after it. Tell: rubs his chest and laughs it off. Dies in Act I.",
+      "secret": "He knew the coordinates came on a priority Company channel with a finder's fee attached, and took his children anyway."
+    },
+    {
+      "name": "The Colony Administrator",
+      "role": "Hadley's Hope Colony Operations",
+      "agenda": "Keep the colony running and his Company contract clean until the supply ship arrives, which puts him against the Marshal's instinct to tell everyone the truth.",
+      "behavior": "Calm, rehearsed and reassuring on the intercom; increasingly absent in person. Tell: answers every question with a schedule.",
+      "secret": "He received the same Company priority message as the Marshal and chose not to log the Jordens' trip. When the processor goes critical, he locks himself in his office."
     },
     {
       "name": "Operations Staff",
       "role": "Hadley's Hope Colony Operations",
-      "agenda": "Maintain colony systems",
-      "behavior": "Increasingly panicked. Some will crack."
+      "agenda": "Maintain colony systems and survive, which soon means competing with everyone else for a seat.",
+      "behavior": "Competent and increasingly panicked; some crack, some become heroes. Tell: they start answering the intercom by name instead of by station.",
+      "secret": "Night shift has been hearing noises in the processor ducts for days and logging them as wind."
     },
     {
       "name": "Colonial Marines",
       "role": "Rescue Force (off-screen)",
-      "agenda": "Respond to distress call",
-      "behavior": "They won't arrive in time for most PCs."
+      "agenda": "Respond to the colony's distress call, eventually.",
+      "behavior": "Never seen in this scenario; they exist as static on the comms and as a hope. They will not arrive in time for most PCs.",
+      "secret": "The nearest Marine unit is weeks away. Nothing the PCs do changes when they arrive."
+    }
+  ],
+  "threats": [
+    {
+      "name": "Facehugger",
+      "ref": "facehugger",
+      "description": "A pale, leathery, many-fingered thing locked onto Russ Jorden's face, tail wrapped round his throat.",
+      "tactics": "Act I: cannot be removed without killing the host; sprays acid if cut; falls away dead after some hours. Later: more wait in the eggs beneath the processor."
+    },
+    {
+      "name": "Chestburster",
+      "ref": "chestburster",
+      "description": "A slick, eyeless creature that tears out of Russ Jorden's chest in the Med Bay.",
+      "tactics": "Act I: bites at the nearest hand and flees into the air ducts, where it grows fast."
+    },
+    {
+      "name": "Xenomorph Drones",
+      "ref": "drone",
+      "description": "Tall, black and eyeless, with skulls like polished bone and mouths full of chrome teeth; seen first as contacts inside the walls.",
+      "tactics": "Act I: take isolated workers. Act II: guard the hive, ambush repair teams and test the barricades in waves. Act III: strike at every junction on the way to the pad."
+    },
+    {
+      "name": "The Nest Beneath the Processor",
+      "ref": "ovomorph-egg",
+      "description": "Rows of leathery eggs among cocooned colonists in the processor's sub-levels, in warm, wet, rebuilt corridors.",
+      "tactics": "Act II: discovered by the search party; every cocooned colonist becomes another egg's host. Act III: the source of an endless supply of creatures."
+    },
+    {
+      "name": "The Atmospheric Processor",
+      "description": "Not a creature: the colony's huge terraforming plant, damaged by the creatures and the failed repairs.",
+      "tactics": "Act II: power fluctuations and falling coolant pressure. Act III: critical; it will detonate within hours and vaporise everything within thirty kilometres."
     }
   ],
   "keyLocations": [
     {
       "name": "Operations Center",
-      "description": "Colony command. Comms, sensors, atmospheric processor controls."
+      "description": "Colony command: comms consoles, sensor displays and processor monitors glowing in the gloom, the Administrator's office next door. Everyone runs here when things go wrong; it becomes the barricade in Act II."
     },
     {
       "name": "Med Bay",
-      "description": "Colony medical facility. Where the facehugger victim is brought. Where it all goes wrong."
+      "description": "A small, bright medical suite that smells of antiseptic and burnt plastic once the acid hits. Russ Jorden is brought here, and it is where it all goes wrong."
     },
     {
       "name": "Hab Modules",
-      "description": "Living quarters for 158 colonists. Narrow corridors. Thin walls."
+      "description": "Narrow corridors and thin walls, family quarters next to the school and bunks near maintenance. The ducts above every room connect to the whole colony; the creatures hunt here at night."
     },
     {
-      "name": "Commons / Rec Room",
-      "description": "Social hub. Tables, a bar, a pool table. Feels safe. Isn't."
+      "name": "Commons and Rec Room",
+      "description": "Tables, a bar, a pool table and a vid screen; the social heart of the colony. Feels safe. Isn't. It becomes a crowded refugee shelter during lockdown."
+    },
+    {
+      "name": "School Module",
+      "description": "Small, bright and covered in drawings, some of them of the same dark shape. Newt knows the ventilation access hidden behind the supply closet."
     },
     {
       "name": "Vehicle Bay",
-      "description": "Garage module. The APC and other vehicles are stored here."
+      "description": "A cold, echoing garage of survey trucks and the colony's APC, with heavy doors that seal. Reaching it means crossing the infested maintenance section; Clairemont knows every vehicle here."
     },
     {
       "name": "Atmospheric Processor",
-      "description": "Massive industrial structure. The nest is growing in its sub-levels."
+      "description": "Two kilometres north, a massive humming tower in the storm. Its sub-levels are warm, wet and rebuilt into a nest of eggs and cocooned colonists; its reactor is the colony's countdown."
     },
     {
       "name": "Landing Pad",
-      "description": "Emergency shuttle pad. Exposed to the storm. Your ticket out."
+      "description": "An emergency shuttle pad on the colony's west side, exposed to howling wind and grit. The shuttle seats twelve; the colony has 158. Your ticket out, if you can reach it."
     }
   ],
   "handouts": [
@@ -280,7 +494,7 @@
       "from": "COLONY OPERATIONS MAINFRAME",
       "to": "ALL PERSONNEL — HADLEY'S HOPE",
       "priority": "PRIORITY",
-      "text": "GOOD MORNING, HADLEY'S HOPE. LOCAL TIME 0600 HOURS.\n\nAtmospheric processor status: NOMINAL. Terraforming cycle 847 in progress. External temperature: minus 42 degrees Celsius. Wind speed: 85 knots with gusts to 130. Visibility: near zero. Standard LV-426 conditions.\n\nColony population: 158 souls. All sections reporting normal. Water reclamation at 94% efficiency. Hydroponic bay output within expected parameters. Supply ship ETA: 47 days.\n\nNOTICE: Survey Team Bravo is dispatched to grid reference 0-4-7 to investigate a structure of unknown origin detected by the processor's ground-penetrating sensors. Survey team leader Russ Jorden reports departure at 0545.\n\nAll other personnel — report to duty stations per standard rotation.\n\nIt's another day on LV-426. Make it count.\n\nCOLONY OPS out.",
+      "text": "GOOD MORNING, HADLEY'S HOPE. LOCAL TIME 0600 HOURS.\n\nAtmospheric processor status: NOMINAL. Terraforming cycle 847 in progress. External temperature: minus 42 degrees Celsius. Wind speed: 85 knots with gusts to 130. Visibility: near zero. Standard LV-426 conditions.\n\nColony population: 158 souls. All sections reporting normal. Water reclamation at 94% efficiency. Hydroponic bay output within expected parameters. Supply ship ETA: 47 days.\n\nNOTICE: Survey Team Bravo is dispatched to grid reference 0-4-7 to investigate a structure of unknown origin detected by the processor's ground-penetrating sensors. Survey team leader Russ Jorden reports departure at 0545.\n\nAll other personnel — report to duty stations per standard rotation.\n\nREMINDER: Movie night in the commons at 2000 hours. Children must be back in Hab Module A by 2200.\n\nIt's another day on LV-426. Make it count.\n\nCOLONY OPS out.",
       "when": "Start of the session, before Act I"
     },
     {
@@ -289,8 +503,35 @@
       "from": "COLONY OPERATIONS MAINFRAME",
       "to": "ALL PERSONNEL",
       "priority": "EMERGENCY",
-      "text": "WARNING. PRIMARY COOLANT FAILURE — ATMOSPHERE PROCESSING STATION. REACTOR CONTAINMENT FAILURE IMMINENT. ALL PERSONNEL EVACUATE TO LANDING FIELD IMMEDIATELY. THIS IS NOT A DRILL.",
-      "when": "Act III — \"Atmosphere Processor Alert\""
+      "text": "COLONY OPERATIONS MAINFRAME.\n\nWARNING. PRIMARY COOLANT FAILURE — ATMOSPHERE PROCESSING STATION.\nREACTOR CONTAINMENT FAILURE IMMINENT.\nESTIMATED BLAST RADIUS: 30 KM.\nALL PERSONNEL EVACUATE TO LANDING FIELD IMMEDIATELY.\nTHIS IS NOT A DRILL.",
+      "when": "Act III, \"Atmosphere Processor Alert\": to all PCs at the start of the act"
+    },
+    {
+      "id": "marshal-directive",
+      "title": "COMPANY DIRECTIVE — COLONIAL MARSHAL",
+      "from": "WEYLAND-YUTANI — COLONY ADMINISTRATION DIVISION",
+      "to": "Marshal Zara Al-Rahim",
+      "priority": "EYES ONLY",
+      "text": "MARSHAL AL-RAHIM.\nRE: SURVEY TEAM BRAVO, GRID REFERENCE 0-4-7.\nTHE SURVEY IS AUTHORIZED AT COMPANY REQUEST. A FINDER'S FEE WILL BE PAID TO THE TEAM LEADER.\nDO NOT LOG FINDINGS ON THE COLONY NETWORK.\nREFER ALL INCIDENTS AT THE SITE DIRECTLY TO THIS OFFICE.\nACKNOWLEDGED: Z. AL-RAHIM (SIGNED 9 DAYS AGO).",
+      "when": "Act I, \"The Jordens Return\": privately to the Marshal as Russ is carried into the Med Bay"
+    },
+    {
+      "id": "patel-company-reply",
+      "title": "RE: SPECIMEN REPORT — MED BAY",
+      "from": "WEYLAND-YUTANI — BIOMEDICAL DIVISION",
+      "to": "Dr. Sanjay Patel",
+      "priority": "EYES ONLY",
+      "text": "DR. PATEL.\nYOUR SPECIMEN REPORT HAS BEEN RECEIVED WITH GREAT INTEREST.\nPRESERVE ALL BIOLOGICAL MATERIAL, INCLUDING ANY SECONDARY ORGANISM, IN VIABLE CONDITION.\nDO NOT DESTROY. DO NOT DISCUSS WITH COLONY STAFF.\nA SENIOR RESEARCH POSITION WILL BE AVAILABLE ON YOUR RETURN.\nBIOMEDICAL OUT.",
+      "when": "Act II, \"The Hive Discovered\": privately to Patel as the search party reaches the hive"
+    },
+    {
+      "id": "lockdown-order",
+      "title": "COLONY LOCKDOWN IN EFFECT",
+      "from": "COLONY OPERATIONS MAINFRAME",
+      "to": "ALL PERSONNEL — HADLEY'S HOPE",
+      "priority": "EMERGENCY",
+      "text": "COLONY LOCKDOWN IN EFFECT.\nALL BULKHEADS SEALED. DUCT NETWORK ISOLATED.\nALL PERSONNEL REPORT TO OPERATIONS OR THE COMMONS IMMEDIATELY.\nDO NOT TRAVEL ALONE. DO NOT OPEN SEALED DOORS.\nLONG-RANGE COMMUNICATIONS UNAVAILABLE DUE TO ATMOSPHERIC CONDITIONS.\nCOLONY OPS OUT.",
+      "when": "Act II, \"Colony Lockdown\": to all PCs as the klaxon sounds"
     }
   ],
   "maps": [
@@ -349,6 +590,23 @@
       ]
     }
   ],
+  "endings": [
+    {
+      "title": "TWELVE SEATS",
+      "condition": "The shuttle or the APC gets clear of the blast with at least one PC aboard.",
+      "text": "The shuttle claws up through the storm, or the APC runs flat out across the plain with the wind trying to roll it, and behind you the processor lets go. The light comes first, white through every window, and then the sound, and then the long, rolling shove of the shockwave. When it passes, there is nothing on the horizon but a pillar of cloud. You count the faces around you and you do not let yourself count the ones that are missing. Somebody starts to cry, and then everyone does. Hadley's Hope is gone. You are what is left of it."
+    },
+    {
+      "title": "THE LAST ONE",
+      "condition": "Every adult PC is dead, but Newt, as a PC or NPC, is alive and hidden in the ducts.",
+      "text": "The colony is quiet now. Not silent, never silent, but quiet in the way a house is quiet after everyone has gone. You live in the ducts. You know which ones are too narrow for them, and which ones are warm, and where the ration packs fall when a locker rusts through. You talk to Casey. Casey talks back sometimes. You do not cry any more. Somewhere out past the storm, a ship is coming, because someone sent a call, and someday someone will crawl into the dark calling a name you used to answer to. You will decide then whether to trust them."
+    },
+    {
+      "title": "HOPE'S LAST DAY",
+      "condition": "No one escapes, or the shuttle is lost in the storm.",
+      "text": "The shuttle never clears the pad, or the barricade never holds, or the clock simply runs out. The last thing anyone in Hadley's Hope hears is the processor's alarm changing pitch one final time. Weeks later, a Company transport answers the distress call and finds the colony's records intact, its modules empty and its people gone, all one hundred and fifty-eight of them, as though they had stepped out for a moment. The report lists the cause as unknown. Someone in an office far away reads it, and makes a note, and sends another ship."
+    }
+  ],
   "characters": [
     {
       "id": "marshal-al-rahim",
@@ -363,19 +621,19 @@
       },
       "skills": {
         "heavyMachinery": 0,
-        "stamina": 3,
-        "closeCombat": 3,
+        "stamina": 2,
+        "closeCombat": 2,
         "mobility": 2,
-        "piloting": 1,
+        "piloting": 0,
         "rangedCombat": 4,
         "observation": 3,
         "comtech": 1,
         "survival": 2,
         "manipulation": 2,
         "medicalAid": 0,
-        "command": 3
+        "command": 2
       },
-      "talent": "Authority — You can Command NPCs without a roll if they are civilians under your jurisdiction.",
+      "talent": "Authority — Re-roll failed COMMAND roll once per session.",
       "gear": [
         "VP 78 Pistol",
         "Marshal badge & ID",
@@ -385,8 +643,14 @@
       ],
       "signatureItem": "Father's compass — doesn't work on LV-426, but it points her home in her heart.",
       "personalAgenda": "Protect the colonists. All of them. Every single one. That's the oath you took when you pinned on the badge. If this colony is going down, you're going down last.",
-      "buddy": "Dr. Patel",
-      "rival": "Roughneck Novak"
+      "buddy": "Dr. Sanjay Patel",
+      "rival": "Hank Novak",
+      "agendaByAct": {
+        "1": "Keep order and keep the colony calm. Find out what happened to the Jordens, and keep the Company directive you signed out of it.",
+        "2": "Protect every colonist you can. Novak and others will want to run for the shuttle; you cannot let a stampede kill more than the creatures do.",
+        "3": "You are going down last. Get the children and the wounded onto the shuttle first, and if anyone tries to take a seat by force, stop them, by force if you must."
+      },
+      "secret": "Nine days ago you signed a Company directive authorising the Jordens' survey and ordering you to keep its findings off the colony network. You sent that family out there."
     },
     {
       "id": "dr-patel",
@@ -396,8 +660,8 @@
       "attributes": {
         "str": 2,
         "agi": 3,
-        "wit": 5,
-        "emp": 4
+        "wit": 4,
+        "emp": 5
       },
       "skills": {
         "heavyMachinery": 0,
@@ -413,7 +677,7 @@
         "medicalAid": 5,
         "command": 1
       },
-      "talent": "Field Surgeon — Medical Aid rolls gain +2 when you have access to a proper med bay.",
+      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
       "gear": [
         "Medical kit",
         "Colony med bay access",
@@ -423,8 +687,14 @@
       ],
       "signatureItem": "Leather-bound journal — writes letters to his family on Earth he knows will never arrive in time.",
       "personalAgenda": "The facehugger specimen is an unprecedented discovery. Part of you — the scientist — wants to study it. Preserve it. Understand it. Even as the doctor in you screams that it should be incinerated.",
-      "buddy": "Marshal Al-Rahim",
-      "rival": "Pilot Clairemont"
+      "buddy": "Marshal Zara Al-Rahim",
+      "rival": "Josie Clairemont",
+      "agendaByAct": {
+        "1": "Save Russ Jorden if anyone can, and study the creature on his face while you do. Keep the specimen intact.",
+        "2": "The Company wants a viable specimen and has promised you a career. Preserve what you can, even as the doctor in you screams that it should be burned.",
+        "3": "Get a specimen, or the data on it, onto the shuttle, or decide your oath matters more and destroy it all. Either way, the wounded need you."
+      },
+      "secret": "You sent a report on the facehugger to the Company on the last outbound data burst before the storm cut comms. They answered. You have not told the Marshal."
     },
     {
       "id": "roughneck-novak",
@@ -451,7 +721,7 @@
         "medicalAid": 0,
         "command": 1
       },
-      "talent": "Tough — Reduce all damage you take by 1 (minimum 1).",
+      "talent": "Tough — Reduce one Critical Injury severity by 1 (once per session).",
       "gear": [
         "Heavy wrench (weapon)",
         "Welding torch",
@@ -461,8 +731,14 @@
       ],
       "signatureItem": "Hip flask — filled with the worst moonshine on LV-426. Brewed it himself.",
       "personalAgenda": "Your family is back on Earth, and you haven't seen them in two years. You need to survive to make the next transport. Nothing else matters. If the colony burns, you're on the first ship out.",
-      "buddy": "Pilot Clairemont",
-      "rival": "Marshal Al-Rahim"
+      "buddy": "Josie Clairemont",
+      "rival": "Marshal Zara Al-Rahim",
+      "agendaByAct": {
+        "1": "Do your shift, keep your head down and count the days to the next transport. Do not let anyone look too closely at the sub-level maintenance logs.",
+        "2": "The colony is finished. Get yourself, and Clairemont if she will come, as close to the shuttle as you can, and stop the Marshal from locking everyone in.",
+        "3": "Get on the shuttle. Your family is back on Earth. If you have to take a seat from someone, take it."
+      },
+      "secret": "Days before anyone vanished, you were drinking on night shift in the sub-levels and heard something in the processor ducts. You sealed a hatch and logged nothing. If the Marshal finds out, she will hold you responsible for every disappearance."
     },
     {
       "id": "pilot-clairemont",
@@ -489,7 +765,7 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Full Throttle — When piloting a vehicle in dangerous conditions, you can push without increasing Stress.",
+      "talent": "Full Throttle — Your vehicle speed increases by 1 in chases.",
       "gear": [
         "APC keys",
         "Flight jacket",
@@ -499,8 +775,14 @@
       ],
       "signatureItem": "Pack of spearmint gum — been chewing it since flight school. Always has a piece.",
       "personalAgenda": "You know where the emergency shuttle is and how to fly it. If things go sideways, you're flying out — with or without passengers. Survive first, feel guilty later.",
-      "buddy": "Roughneck Novak",
-      "rival": "Dr. Patel"
+      "buddy": "Hank Novak",
+      "rival": "Dr. Sanjay Patel",
+      "agendaByAct": {
+        "1": "Keep the shuttle and the APC ready, quietly. Something about the Jordens' trip feels wrong, and you want a way out you control.",
+        "2": "Start counting seats and fuel. Make sure Novak is on your list and Patel's specimen is not on the shuttle.",
+        "3": "You are flying out, with or without passengers. Survive first, feel guilty later, and do not let anyone else fly your shuttle."
+      },
+      "secret": "You have been selling shuttle fuel to supply ship crews on the side. The emergency shuttle's cells are half empty: it can reach orbit with maybe six aboard, not twelve, and only you know it."
     },
     {
       "id": "kid-newt",
@@ -527,7 +809,7 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Hide — When you hide (Mobility), you gain +3 modification instead of the normal bonus.",
+      "talent": "Hide — +2 to MOBILITY when hiding.",
       "gear": [
         "Casey (doll head, Signature Item)",
         "Flashlight",
@@ -536,15 +818,23 @@
       ],
       "signatureItem": "Casey — the head of a doll. Her best friend. Don't judge.",
       "personalAgenda": "Find your family. Mom and Dad went out with the survey team. They haven't come back. Find them. They're alive. They have to be.",
-      "buddy": "Dr. Patel",
-      "rival": "None"
+      "buddy": "Dr. Sanjay Patel",
+      "rival": "Hank Novak",
+      "agendaByAct": {
+        "1": "Find your family. Mom and Dad went out with the survey team and have not come back. Find them. They are alive. They have to be.",
+        "2": "Dad is gone and Mom will not stop staring at the wall. Keep her safe, and do not let the grown-ups leave you behind or lock you in.",
+        "3": "Survive. The grown-ups are going to fight over seats, and Novak will take yours if he can. You know places they cannot follow."
+      },
+      "secret": "You saw something moving in the vents before anyone else believed it, and you know a hiding place deep in the ducts where only someone small can fit. If it comes to it, there is not room for anyone else."
     }
   ],
   "tips": [
-    "This scenario is a tragedy. Everyone will probably die. Set expectations.",
-    "Focus on character moments between action scenes.",
-    "The atmosphere processor is the ticking clock — it will explode.",
-    "Let players make meaningful choices even when the outcome is bleak.",
-    "Use the colony maps to create a claustrophobic, maze-like feel."
+    "This scenario is a tragedy and most characters will probably die; set that expectation before you start.",
+    "Spend real time on the ordinary colony day in Act I, because the players need to care about what they are going to lose.",
+    "Focus on character moments between action scenes, especially with Newt, whose family is at the centre of the horror.",
+    "The atmospheric processor is the ticking clock and cannot be stopped; show the countdown so players feel it.",
+    "Let players make meaningful choices even when the outcome is bleak, above all in Twelve Seats.",
+    "Use the colony map to create a claustrophobic, maze-like feel, and remember that the ducts connect everything.",
+    "With fewer than five players, run Newt as an NPC using her NPC entry, and use her to lead survivors through the vents."
   ]
 }
