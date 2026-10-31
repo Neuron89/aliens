@@ -11,8 +11,13 @@
     "players": "2–3",
     "playtime": "1–2 hours",
     "difficulty": "Introductory",
-    "tone": ["dread", "claustrophobia"],
-    "contentWarnings": ["body horror"],
+    "tone": [
+      "dread",
+      "claustrophobia"
+    ],
+    "contentWarnings": [
+      "body horror"
+    ],
     "source": "custom"
   },
   "briefing": {
@@ -37,8 +42,12 @@
           "mandatory": true,
           "encounter": false,
           "narration": "Hold A's freezer doors stand open. Rotting carcasses hang from hooks in the humid dark.",
-          "checks": ["COMTECH — pull the barge's power log (reefer units shut down from the bridge 30 hours ago)"],
-          "stressTriggers": ["STRESS +1 — the smell and the dark"],
+          "checks": [
+            "COMTECH — pull the barge's power log (reefer units shut down from the bridge 30 hours ago)"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — the smell and the dark"
+          ],
           "gmTip": "Someone switched the freezers off on purpose. That is the first clue that the cargo was never the point."
         },
         {
@@ -46,9 +55,15 @@
           "mandatory": true,
           "encounter": false,
           "narration": "In Hold D a stencilled Weyland-Yutani container has been cut open from the inside. Something leathery and opened like a flower sits in packing foam.",
-          "checks": ["OBSERVATION — notice the second empty cradle in the foam"],
-          "stressTriggers": ["STRESS +1 — all present"],
-          "outcomes": ["If the players report it, MU/TH/UR orders them to secure the crate for Company pickup."]
+          "checks": [
+            "OBSERVATION — notice the second empty cradle in the foam"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all present"
+          ],
+          "outcomes": [
+            "If the players report it, MU/TH/UR orders them to secure the crate for Company pickup."
+          ]
         },
         {
           "name": "Okafor",
@@ -56,8 +71,12 @@
           "encounter": true,
           "encounterDetail": "Okafor is lucid for one Round, then the chestburster emerges (Panic Roll for witnesses) and flees into the ducts. The loose facehugger attacks the first PC to search the ducts.",
           "narration": "A man in a stained barge jumpsuit sits against the wall of Hold C, clutching his chest, smiling at you with relief.",
-          "checks": ["MEDICAL AID — find the scar on his face (too late to help)"],
-          "stressTriggers": ["IMMEDIATE PANIC ROLL — all witnesses"],
+          "checks": [
+            "MEDICAL AID — find the scar on his face (too late to help)"
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all witnesses"
+          ],
           "npcGuidance": "Okafor begs them to take him off the barge. He hides the fact that something was on his face yesterday."
         }
       ]
@@ -87,8 +106,14 @@
     }
   ],
   "keyLocations": [
-    { "name": "Kestrel Nine — Holds A–D", "description": "Four warm, dripping meat lockers off a single spine corridor. Hooks, carcasses, and a lot of places to hide." },
-    { "name": "Kestrel Nine — Bridge", "description": "Cramped two-seat bridge. The reefer controls were switched off by hand; the log shows Okafor's code." }
+    {
+      "name": "Kestrel Nine — Holds A–D",
+      "description": "Four warm, dripping meat lockers off a single spine corridor. Hooks, carcasses, and a lot of places to hide."
+    },
+    {
+      "name": "Kestrel Nine — Bridge",
+      "description": "Cramped two-seat bridge. The reefer controls were switched off by hand; the log shows Okafor's code."
+    }
   ],
   "handouts": [
     {
@@ -110,8 +135,14 @@
       "kind": "ascii",
       "ascii": "╔══════════════════════════════════════╗\n║        KESTREL NINE — DECK PLAN       ║\n╠══════════════════════════════════════╣\n║ [BRIDGE]──┬──[HOLD A]   [HOLD B]       ║\n║           │      │          │          ║\n║           └──────┴── SPINE ─┴──┐       ║\n║                  │          │  │       ║\n║              [HOLD C]   [HOLD D]       ║\n║                  ░░ ducts ░░           ║\n║ [AIRLOCK]──── umbilical to HALBERD     ║\n╚══════════════════════════════════════╝",
       "rooms": [
-        { "name": "Hold C", "note": "Okafor is here. Duct access above." },
-        { "name": "Hold D", "note": "The opened Company crate." }
+        {
+          "name": "Hold C",
+          "note": "Okafor is here. Duct access above."
+        },
+        {
+          "name": "Hold D",
+          "note": "The opened Company crate."
+        }
       ]
     }
   ],
@@ -133,10 +164,33 @@
       "name": "Inspector Lena Varga",
       "career": "Colonial Marshal",
       "appearance": "Compact, grey-eyed, uniform pressed even after a month in transit. Talks slowly so people have to listen.",
-      "attributes": { "str": 3, "agi": 3, "wit": 5, "emp": 3 },
-      "skills": { "heavyMachinery": 0, "stamina": 1, "closeCombat": 1, "mobility": 1, "piloting": 0, "rangedCombat": 2, "observation": 3, "comtech": 1, "survival": 0, "manipulation": 1, "medicalAid": 0, "command": 0 },
-      "talent": "Investigator — +2 to OBSERVATION when looking for clues.",
-      "gear": ["M4A3 Service Pistol", "ICC inspection tablet", "Flashlight", "Brass inspector's seal (Signature Item)"],
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 5,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 1,
+        "closeCombat": 1,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 2,
+        "observation": 3,
+        "comtech": 1,
+        "survival": 0,
+        "manipulation": 1,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "Investigator — After spending a Turn in a room or similar spot, roll OBSERVATION (one attempt). Each success lets you ask the GM one of: what happened here; is anything hidden here and where; is anything here out of place or unusual. Answers must be true but may be vague.",
+      "gear": [
+        "M4A3 Service Pistol",
+        "ICC inspection tablet",
+        "Flashlight",
+        "Brass inspector's seal (Signature Item)"
+      ],
       "signatureItem": "Brass inspector's seal — her mother's, from the old Earth customs service.",
       "personalAgenda": "Someone at Thedus is taking Company money to wave cargo through. Bring back proof — the crate is proof.",
       "buddy": "Teo Salas",
@@ -147,10 +201,33 @@
       "name": "Teo Salas",
       "career": "Roughneck",
       "appearance": "Big, tired, grease under every fingernail. Hums when he works and when he is scared.",
-      "attributes": { "str": 5, "agi": 3, "wit": 3, "emp": 3 },
-      "skills": { "heavyMachinery": 3, "stamina": 2, "closeCombat": 1, "mobility": 0, "piloting": 1, "rangedCombat": 0, "observation": 1, "comtech": 2, "survival": 0, "manipulation": 0, "medicalAid": 0, "command": 0 },
-      "talent": "Heavy Lifter — +2 HEAVY MACHINERY.",
-      "gear": ["Cutting Torch", "Tool Kit", "Comm Unit", "Daughter's drawing (Signature Item)"],
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 3,
+        "stamina": 2,
+        "closeCombat": 1,
+        "mobility": 0,
+        "piloting": 1,
+        "rangedCombat": 0,
+        "observation": 1,
+        "comtech": 2,
+        "survival": 0,
+        "manipulation": 0,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "True Grit — You may push any STRENGTH-based skill roll a second time. Each push raises your Stress Level by one.",
+      "gear": [
+        "Cutting Torch",
+        "Electronic Tools",
+        "Hand Radio",
+        "Daughter's drawing (Signature Item)"
+      ],
       "signatureItem": "A crayon drawing of a spaceship, folded into his breast pocket.",
       "personalAgenda": "The Company's cooperation bonus would clear your debts. Make sure that crate reaches them intact.",
       "buddy": "Inspector Lena Varga",

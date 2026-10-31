@@ -56,6 +56,8 @@ export const theme = {
   /* Generator wizard log style. */
   logStyle: 'terminal',
   favicon: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='#050709'/><rect x='3.5' y='3.5' width='25' height='25' rx='3' fill='none' stroke='#00d4aa' stroke-width='1.5'/><path d='M8 22V10l8 7 8-7v12' fill='none' stroke='#00d4aa' stroke-width='2.4' stroke-linejoin='round'/><path d='M6 26h20' stroke='#e0aa2a' stroke-width='1.4'/></svg>",
+  /* Ambient presets offered in the GM rail AUDIO popover (keys of hooks/useAmbientAudio PRESETS): ship hum, tension, red alert, deep space, cosmic dread. */
+  ambient: ['ship', 'tension', 'alert', 'space', 'dread'],
   /* Table-board palette (board/*). Maps may override any key via map.palette. */
   board: {
     levelNoun: 'DECK',
@@ -96,6 +98,13 @@ export const theme = {
     'boot.line': [
       { wave: 'square', freq: 1180, dur: 0.05, gain: 0.04, filter: { type: 'lowpass', freq: 2800 } },
       { wave: 'square', freq: 1760, at: 0.06, dur: 0.08, gain: 0.04, filter: { type: 'lowpass', freq: 2800 } },
+    ],
+    /* Faint mains hum under the boot typing: re-struck every 0.9 s by fx/BootSequence, so the 1.25 s
+       swells overlap into a low, slightly breathing drone that stops when the boot does. */
+    'boot.hum': [
+      { wave: 'sine', freq: 120, dur: 1.25, gain: 0.03, attack: 0.4 },
+      { wave: 'sine', freq: 180, dur: 1.25, gain: 0.012, attack: 0.4 },
+      { wave: 'sawtooth', freq: 60, dur: 1.25, gain: 0.008, attack: 0.4, filter: { type: 'lowpass', freq: 400 } },
     ],
     'boot.ready': [
       { wave: 'square', freq: 880, dur: 0.09, gain: 0.045, filter: { type: 'lowpass', freq: 2600 } },

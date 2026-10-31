@@ -1,0 +1,182 @@
+/* ═══════════════════════════════════════════════════════════════
+   F7 — TV dice stage (board/DiceStage.jsx) + the GM DICE tab's
+   TV / SECRET / LOCAL route control (DiceRoller.jsx).
+   Theme vars only (--accent, --warn, --danger, --blue, --text-bright,
+   --bg-dark, --font-display, --font-mono …) so both universes skin it.
+   TV text: vh with px minimums (index.css .ov-* convention).
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── GM route control (DiceRoller.jsx) ─── */
+.dr-route { display: inline-flex; border: 1px solid var(--border-bright); }
+.dr-route-btn { min-height: 44px; min-width: 44px; padding: 0 0.9rem; display: inline-flex; align-items: center; gap: 0.45rem; background: transparent; border: 0; border-left: 1px solid var(--border-bright); color: var(--text-dim); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; cursor: pointer; }
+.dr-route-btn:first-child { border-left: 0; }
+.dr-route-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.dr-route-btn.on { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.dr-route-btn.k-secret.on { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.dr-route-btn.k-local.on { color: var(--text-bright); background: color-mix(in srgb, var(--text-bright) 8%, transparent); }
+
+/* ─── Stage ─── */
+.ds-root { position: absolute; inset: 0; pointer-events: none; }
+.ds-stage {
+  --ds-base-body: color-mix(in srgb, var(--text-bright) 90%, var(--accent) 10%);
+  --ds-base-pip: var(--bg-dark);
+  --ds-stress-body: var(--warn);
+  --ds-stress-pip: #000;
+  --ds-d20-body: var(--accent);
+  --ds-glow: var(--accent-bright, var(--accent));
+  --ds-half: calc(var(--ds-size) / 2);
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.ds-band {
+  position: absolute; left: 0; right: 0; top: 50%; height: max(380px, 66vh); transform: translateY(-50%);
+  background:
+    linear-gradient(to bottom, transparent 0%, color-mix(in srgb, var(--bg-dark) 84%, transparent) 18%, color-mix(in srgb, var(--bg-dark) 93%, transparent) 50%, color-mix(in srgb, var(--bg-dark) 84%, transparent) 82%, transparent 100%);
+  animation: ds-band-in 0.45s ease-out both;
+}
+.ds-band::before, .ds-band::after {
+  content: ''; position: absolute; left: 6vw; right: 6vw; height: 1px;
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--accent) 55%, transparent), transparent);
+}
+.ds-band::before { top: 17%; }
+.ds-band::after { bottom: 17%; }
+.ds-stage.p-out .ds-band, .ds-stage.p-out .ds-table { animation: ds-fade-out 0.5s ease-in both; }
+.ds-stage.ds-cont .ds-band { animation: none; }
+
+.ds-table { position: relative; display: flex; flex-direction: column; align-items: center; gap: max(18px, 3.4vh); max-width: 94vw; }
+.ds-row { display: flex; align-items: flex-end; justify-content: center; gap: calc(var(--ds-size) * 0.7); }
+.ds-group { display: flex; align-items: flex-end; gap: calc(var(--ds-size) * 0.42); }
+
+/* ─── One die: fly (translate) › hop (bounce) › tilt (camera angle) › cube/d20 (spin) ─── */
+.ds-die { position: relative; width: var(--ds-size); height: var(--ds-size); animation: ds-fly var(--fly) cubic-bezier(0.16, 0.72, 0.28, 1) var(--delay) both; }
+.ds-hop { position: absolute; inset: 0; perspective: calc(var(--ds-size) * 7); animation: ds-hop var(--fly) linear var(--delay) both; }
+.ds-tilt { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(-17deg) rotateY(19deg); }
+.ds-die.t-d20 .ds-tilt { transform: none; }
+.ds-shadow {
+  position: absolute; left: 6%; right: 6%; bottom: -14%; height: 22%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.75), transparent);
+  animation: ds-shadow var(--fly) linear var(--delay) both;
+}
+.ds-halo {
+  position: absolute; inset: -55%; border-radius: 50%; opacity: 0;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--ds-glow) 55%, transparent), transparent 75%);
+}
+.ds-die.still, .ds-die.still .ds-hop, .ds-die.still .ds-shadow, .ds-die.still .ds-cube, .ds-die.still .ds-d20 { animation: none; }
+
+/* d6 cube */
+.ds-cube { position: absolute; inset: 0; transform-style: preserve-3d; transform: var(--r1); animation: ds-spin var(--fly) cubic-bezier(0.12, 0.62, 0.22, 1) var(--delay) both; }
+.ds-face, .ds-core { position: absolute; inset: 0; border-radius: 17%; backface-visibility: hidden; }
+.ds-core { backface-visibility: visible; border-radius: 6%; background: var(--ds-body); }
+.ds-core-b { transform: rotateY(90deg); }
+.ds-core-c { transform: rotateX(90deg); }
+.ds-face {
+  box-sizing: border-box; padding: 13%; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+  background:
+    radial-gradient(circle at 28% 22%, color-mix(in srgb, var(--ds-body) 70%, #fff) 0%, var(--ds-body) 46%, color-mix(in srgb, var(--ds-body) 78%, #000) 100%);
+  box-shadow: inset 0 0 calc(var(--ds-size) * 0.08) color-mix(in srgb, var(--ds-body) 55%, #000);
+  transition: box-shadow 0.35s ease, filter 0.35s ease;
+}
+.ds-face.f1 { transform: translateZ(var(--ds-half)); }
+.ds-face.f6 { transform: rotateY(180deg) translateZ(var(--ds-half)); }
+.ds-face.f3 { transform: rotateY(90deg) translateZ(var(--ds-half)); }
+.ds-face.f4 { transform: rotateY(-90deg) translateZ(var(--ds-half)); }
+.ds-face.f2 { transform: rotateX(90deg) translateZ(var(--ds-half)); }
+.ds-face.f5 { transform: rotateX(-90deg) translateZ(var(--ds-half)); }
+.ds-pip {
+  width: 64%; height: 64%; place-self: center; border-radius: 50%; background: var(--ds-pip);
+  box-shadow: inset 0 calc(var(--ds-size) * 0.02) calc(var(--ds-size) * 0.025) rgba(0, 0, 0, 0.6), 0 1px 0 color-mix(in srgb, var(--ds-body) 60%, #fff);
+}
+.ds-face.f1 .ds-pip { width: 78%; height: 78%; }
+.ds-pip.red { background: var(--danger); }
+.ds-die.t-base { --ds-body: var(--ds-base-body); --ds-pip: var(--ds-base-pip); }
+.ds-die.t-stress { --ds-body: var(--ds-stress-body); --ds-pip: var(--ds-stress-pip); }
+
+/* d20 (front view of an icosahedron: up face + nine facets) */
+.ds-d20 { position: absolute; inset: -12%; transform: var(--r1); animation: ds-spin var(--fly) cubic-bezier(0.12, 0.62, 0.22, 1) var(--delay) both; filter: drop-shadow(0 calc(var(--ds-size) * 0.05) calc(var(--ds-size) * 0.06) rgba(0, 0, 0, 0.7)); }
+.ds-d20 svg { width: 100%; height: 100%; overflow: visible; }
+.ds-facet { stroke: color-mix(in srgb, var(--ds-d20-body) 45%, #000); stroke-width: 1.1; stroke-linejoin: round; }
+.ds-facet-up { fill: color-mix(in srgb, var(--ds-d20-body) 82%, #fff); }
+.ds-d20-num { font-family: var(--font-display); font-weight: 700; font-size: 25px; fill: var(--bg-dark); }
+.ds-d20-bar { stroke: var(--bg-dark); stroke-width: 2; }
+.ds-group.g-d20.gm .ds-die { --ds-d20-body: var(--blue); --ds-glow: var(--blue); }
+
+/* ─── Lit results ─── */
+.ds-die.dim { filter: brightness(0.62) saturate(0.7); transition: filter 0.5s ease; }
+.ds-die.hit .ds-halo { animation: ds-halo 1.6s ease-in-out infinite; }
+.ds-die.hit .ds-face.up { box-shadow: inset 0 0 0 calc(var(--ds-size) * 0.045) var(--ds-glow), 0 0 calc(var(--ds-size) * 0.45) var(--ds-glow); }
+.ds-die.t-base.hit .ds-face.up .ds-pip { background: color-mix(in srgb, var(--accent) 70%, var(--bg-dark)); }
+.ds-die.t-d20.hit .ds-facet-up { fill: color-mix(in srgb, var(--ds-d20-body) 55%, #fff); }
+.ds-die.t-d20.hit .ds-d20 { filter: drop-shadow(0 0 calc(var(--ds-size) * 0.18) var(--ds-glow)); }
+.ds-die.crit { --ds-glow: var(--blue); }
+.ds-die.crit .ds-d20 { filter: drop-shadow(0 0 calc(var(--ds-size) * 0.3) var(--blue)) drop-shadow(0 0 calc(var(--ds-size) * 0.1) var(--blue)); }
+.ds-die.bad { --ds-glow: var(--danger); }
+.ds-die.bad .ds-halo { animation: ds-halo-bad 0.9s ease-in-out infinite; }
+.ds-die.bad .ds-face.up { box-shadow: inset 0 0 0 calc(var(--ds-size) * 0.05) var(--danger), 0 0 calc(var(--ds-size) * 0.5) var(--danger); }
+.ds-die.t-d20.bad .ds-d20 { filter: drop-shadow(0 0 calc(var(--ds-size) * 0.25) var(--danger)); animation: ds-bad-throb 0.9s ease-in-out infinite; }
+.ds-die.t-d20.bad .ds-facet-up { fill: color-mix(in srgb, var(--danger) 70%, #fff); }
+
+/* ─── Result card ─── */
+.ds-card { min-height: max(120px, 17vh); display: flex; flex-direction: column; align-items: center; gap: max(6px, 0.9vh); text-align: center; opacity: 0; }
+.ds-card.in { opacity: 1; animation: ds-card-in 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+.ds-card-kicker { display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap; gap: 0.4vh 1.2vw; }
+.ds-card-gm { padding: 0.1em 0.5em; border: 1px solid var(--blue); color: var(--blue); font-family: var(--font-mono); font-size: max(18px, 2vh); letter-spacing: 0.24em; }
+.ds-card-name { max-width: 60vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-bright); font-family: var(--font-display); font-size: max(26px, 3.2vh); letter-spacing: 0.16em; }
+.ds-card-label { color: var(--accent); font-family: var(--font-mono); font-size: max(22px, 2.6vh); letter-spacing: 0.18em; }
+.ds-card-name + .ds-card-label::before { content: '·'; margin-right: 1.2vw; color: var(--text-dim); }
+.ds-card-big {
+  max-width: 92vw; color: var(--accent); font-family: var(--font-display); font-weight: 700;
+  font-size: max(44px, 8vh); line-height: 1.05; letter-spacing: 0.08em;
+  text-shadow: 0 0 calc(0.4vh + 12px) color-mix(in srgb, currentColor 55%, transparent), 0 2px 0 #000;
+}
+.ds-stage.tone-crit .ds-card-big { color: var(--accent-bright, var(--accent)); }
+.ds-stage.tone-fail .ds-card-big { color: var(--text-dim); text-shadow: 0 2px 0 #000; }
+.ds-stage.tone-panic .ds-card-big { color: var(--danger); animation: ds-panic-throb 1.1s ease-in-out infinite; }
+.ds-card-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8vh 1vw; }
+.ds-chip { padding: 0.15em 0.65em; border: 1px solid currentColor; font-family: var(--font-mono); font-size: max(18px, 2.1vh); letter-spacing: 0.18em; color: var(--text); background: color-mix(in srgb, var(--bg-dark) 70%, transparent); }
+.ds-chip.k-good { color: var(--accent); }
+.ds-chip.k-warn { color: var(--warn); }
+.ds-chip.k-bad { color: var(--danger); animation: ds-bad-throb 0.9s ease-in-out infinite; }
+.ds-chip.k-dim { color: var(--text-dim); }
+html[data-universe="dune"] .ds-card-name { letter-spacing: 0.26em; }
+html[data-universe="dune"] .ds-card-big { letter-spacing: 0.12em; font-weight: 600; }
+
+/* ─── Keyframes ─── */
+@keyframes ds-band-in { from { opacity: 0; transform: translateY(-50%) scaleY(0.6); } to { opacity: 1; transform: translateY(-50%) scaleY(1); } }
+@keyframes ds-fade-out { to { opacity: 0; } }
+@keyframes ds-fly {
+  0% { transform: translate3d(var(--sx), var(--sy), 0) scale(0.75); opacity: 0; }
+  6% { opacity: 1; }
+  100% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+}
+/* Arc + bounces; the last two keyframes squash on landing. */
+@keyframes ds-hop {
+  0% { transform: translateY(0); animation-timing-function: cubic-bezier(0.3, 0.6, 0.6, 1); }
+  26% { transform: translateY(calc(var(--ds-size) * -1.5 * var(--hop))); animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.5); }
+  52% { transform: translateY(0) scale(1.06, 0.9); animation-timing-function: cubic-bezier(0.3, 0.6, 0.6, 1); }
+  66% { transform: translateY(calc(var(--ds-size) * -0.48 * var(--hop))); animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.5); }
+  80% { transform: translateY(0) scale(1.04, 0.94); animation-timing-function: cubic-bezier(0.3, 0.6, 0.6, 1); }
+  88% { transform: translateY(calc(var(--ds-size) * -0.12)); animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.5); }
+  95% { transform: translateY(0) scale(1.02, 0.97); }
+  100% { transform: translateY(0) scale(1); }
+}
+@keyframes ds-shadow {
+  0% { transform: scale(0.4); opacity: 0.2; }
+  26% { transform: scale(0.55); opacity: 0.35; }
+  52% { transform: scale(1.05); opacity: 1; }
+  66% { transform: scale(0.8); opacity: 0.6; }
+  80%, 100% { transform: scale(1); opacity: 1; }
+}
+@keyframes ds-spin { from { transform: var(--r0); } to { transform: var(--r1); } }
+@keyframes ds-halo { 0%, 100% { opacity: 0.55; transform: scale(0.9); } 50% { opacity: 0.95; transform: scale(1.06); } }
+@keyframes ds-halo-bad { 0%, 100% { opacity: 0.35; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
+@keyframes ds-bad-throb { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@keyframes ds-panic-throb { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.025); } }
+@keyframes ds-card-in { from { opacity: 0; transform: translateY(-3vh) scale(0.92); } to { opacity: 1; transform: none; } }
+
+/* ─── Reduced FX: no tumble, no bounce, no pulse; final faces + card ─── */
+.ds-stage.ds-reduced *, .ds-stage.ds-reduced *::before, .ds-stage.ds-reduced *::after { animation: none !important; transition: none !important; }
+.ds-stage.ds-reduced .ds-die.hit .ds-halo { opacity: 0.7; }
+.ds-stage.ds-reduced .ds-die.bad .ds-halo { opacity: 0.9; }
+.ds-stage.ds-reduced .ds-card.in { opacity: 1; }
+.ds-stage.ds-reduced .ds-band { transform: translateY(-50%); }
+html.fx-reduced .ds-stage * { animation: none !important; }

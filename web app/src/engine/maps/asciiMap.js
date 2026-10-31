@@ -1001,11 +1001,12 @@ export function buildAsciiMapDef(m) {
   const ids = new Set(rooms.map((r) => r.id));
   const doors = [...(Array.isArray(m.doors) ? m.doors : []), ...g.doors.map(({ from, to }) => ({ from, to }))]
     .filter((d, i, a) => ids.has(d.from) && ids.has(d.to) && a.findIndex((e) => (e.from === d.from && e.to === d.to) || (e.from === d.to && e.to === d.from)) === i);
-  // spawn: centre of the first hinted room (where it is now, after GM corrections), else the hull entrance
+  // spawn: the first hinted room (where it is now, after GM corrections), centred low so the PC token does not
+  // sit on the room's label; else the hull entrance
   const h0 = (m.rooms || [])[0];
   const fr = h0 ? rooms.find((r) => r.id === (h0.id || kebab(h0.name))) : null;
   const spawnPt = m.spawn?.pc || (fr?.shape?.type === 'rect'
-    ? [r4(fr.shape.x + fr.shape.w / 2), r4(fr.shape.y + fr.shape.h / 2)] : g.spawn);
+    ? [r4(fr.shape.x + fr.shape.w / 2), r4(fr.shape.y + fr.shape.h * 0.74)] : g.spawn);
   return {
     id: m.id, title: m.title || m.id, ...(m.subtitle ? { subtitle: m.subtitle } : {}),
     kind: 'ascii', ascii: m.ascii || '',

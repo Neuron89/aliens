@@ -8,16 +8,19 @@ import PackImportExport, { ExportPackButton } from './PackImportExport';
 import GameNightWizard from './GameNightWizard';
 import { onNavReselect } from './Nav';
 import Motif from './fx/Motifs';
+import PlanThumb, { hasPlan } from './fx/PlanThumb';
 import { play } from '../sfx';
 
 const TYPE_ORDER = ['Cinematic', 'One-Shot', 'Campaign'];
 
-/** Art for the card strip: an act's sceneArt, else the first image map; null → generated motif. */
-function cardArt(p) {
+/** Art for the card strip: an act's sceneArt, else (when the pack has no engine plan,
+    which PlanThumb draws) the first image map; null → plan thumbnail or generated motif. */
+function cardArt(p, planned = false) {
   for (const a of p.acts || []) {
     if (typeof a.sceneArt === 'string' && a.sceneArt) return a.sceneArt;
     for (const sc of a.scenes || []) if (typeof sc.sceneArt === 'string' && sc.sceneArt) return sc.sceneArt;
   }
+  if (planned) return null;
   const m = (p.maps || []).find((x) => typeof (x.src || x.image) === 'string');
   return m ? (m.src || m.image) : null;
 }
@@ -94,7 +97,7 @@ export default function ScenarioLibrary({ tts }) {
   const renderCard = (p) => {
     const hasRunner = (p.acts || []).some(a => a.scenes?.length);
     const isActive = sessionPackId === p.id;
-    const art = cardArt(p);
+    const art = cardArt(p, hasPlan(universe, p));
     const lethal = lethalityOf(p);
     const source = p.meta.source || 'custom';
     const isNew = source === 'generated' || source === 'custom';
@@ -104,7 +107,8 @@ export default function ScenarioLibrary({ tts }) {
         onClick={() => open(p)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(p); } }}
         style={isActive ? { borderColor: 'var(--success)' } : undefined}>
         <div className="card-art" aria-hidden="true">
-          {art ? <img src={art} alt="" loading="lazy" /> : <Motif motif={universe.theme?.motif} seed={p.id} opacity={0.55} width={400} height={110} />}
+          {art ? <img src={art} alt="" loading="lazy" />
+            : <PlanThumb universe={universe} pack={p} fallback={<Motif motif={universe.theme?.motif} seed={p.id} opacity={0.55} width={400} height={110} />} />}
           <span className="card-badges">
             {isNew && <span className="card-new">{source === 'generated' ? 'NEW · GENERATED' : 'NEW'}</span>}
           </span>
@@ -159,18 +163,18 @@ export default function ScenarioLibrary({ tts }) {
       {showImport && <PackImportExport onDone={(id) => { setShowImport(false); if (id) setSelected(id); }} />}
 
       <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-        <button className={typeFilter === 'all' ? 'active' : ''} onClick={() => setTypeFilter('all')}>ALL TYPES ({packs.length})</button>
+        <button className={typeFilter === 'all' ? 'active' : ''} aria-pressed={typeFilter === 'all'} onClick={() => setTypeFilter('all')}>ALL TYPES ({packs.length})</button>
         {types.map(t => (
-          <button key={t} className={typeFilter === t ? 'active' : ''} onClick={() => setTypeFilter(t)}>
+          <button key={t} className={typeFilter === t ? 'active' : ''} aria-pressed={typeFilter === t} onClick={() => setTypeFilter(t)}>
             {t.toUpperCase()} ({sorted.filter(p => typeOf(p) === t).length})
           </button>
         ))}
       </div>
       {sources.length > 1 && (
         <div className="filter-bar" style={{ marginBottom: '1rem' }}>
-          <button className={sourceFilter === 'all' ? 'active' : ''} onClick={() => setSourceFilter('all')}>ALL SOURCES</button>
+          <button className={sourceFilter === 'all' ? 'active' : ''} aria-pressed={sourceFilter === 'all'} onClick={() => setSourceFilter('all')}>ALL SOURCES</button>
           {sources.map(s => (
-            <button key={s} className={sourceFilter === s ? 'active' : ''} onClick={() => setSourceFilter(s)}>
+            <button key={s} className={sourceFilter === s ? 'active' : ''} aria-pressed={sourceFilter === s} onClick={() => setSourceFilter(s)}>
               {s.toUpperCase()} ({sorted.filter(p => (p.meta.source || 'custom') === s).length})
             </button>
           ))}

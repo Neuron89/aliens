@@ -808,11 +808,11 @@
         "medicalAid": 0,
         "command": 2
       },
-      "talent": "Investigator — +2 to OBSERVATION when looking for clues.",
+      "talent": "Investigator — After spending a Turn in a room or similar spot, roll OBSERVATION (one attempt). Each success lets you ask the GM one of: what happened here; is anything hidden here and where; is anything here out of place or unusual. Answers must be true but may be vague.",
       "gear": [
         ".357 Magnum Revolver",
         "Flashlight",
-        "Comm Unit",
+        "Hand Radio",
         "Binoculars",
         "Pocket notebook of every arrest she has made"
       ],
@@ -852,11 +852,11 @@
         "medicalAid": 5,
         "command": 1
       },
-      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
+      "talent": "Field Surgeon — You get +2 to MEDICAL AID when treating someone who is about to die from a critical injury.",
       "gear": [
-        "Medkit",
-        "First Aid Kit",
-        "Personal Terminal",
+        "Personal Medkit",
+        "Personal Medkit",
+        "Seegson P-DAT",
         "Respirator Mask",
         "Wing C key on a bootlace"
       ],
@@ -896,12 +896,12 @@
         "medicalAid": 0,
         "command": 2
       },
-      "talent": "Heavy Lifter — +2 HEAVY MACHINERY.",
+      "talent": "True Grit — You may push any STRENGTH-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "Cutting Torch",
-        "Tool Kit",
+        "Electronic Tools",
         "Respirator Mask",
-        "Emergency Flares",
+        "Signal Flare ×3",
         "Local 31 strike-fund ledger"
       ],
       "signatureItem": "Local 31 strike-fund ledger — every credit the union ever raised, in your handwriting, including one entry you would burn the book to hide.",
@@ -940,12 +940,12 @@
         "medicalAid": 1,
         "command": 2
       },
-      "talent": "Cunning — +2 to MANIPULATION for deception.",
+      "talent": "Cunning — You may push any WITS-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "M4A3 Service Pistol",
-        "Personal Terminal",
+        "Seegson P-DAT",
         "Samani E-Series Watch",
-        "Comm Unit",
+        "Hand Radio",
         "Sealed specimen case"
       ],
       "signatureItem": "Sealed specimen case — Company issue, thermally lined, delivered to you with the Clement Hale; you were told never to ask what it was for.",
@@ -984,11 +984,11 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Reckless — +2 PILOTING in dangerous maneuvers.",
+      "talent": "Reckless — You may push any AGILITY-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "Rexim RXF-M5 EVA Pistol",
-        "Comm Unit",
-        "Emergency Flares",
+        "Hand Radio",
+        "Signal Flare ×3",
         "Flashlight",
         "Wren's Due ignition fob"
       ],

@@ -185,6 +185,22 @@ export function semanticErrors(pack, { universe, params, acts }) {
     }
     for (const k of Object.keys(ch.skills || {})) if (skillKeys.length && !skillKeys.includes(k)) errs.push(`${at}/skills has unknown key "${k}"`);
     if (careers.size && !careers.has(ch.career)) errs.push(`${at}/career "${ch.career}" is not one of: ${[...careers].join(', ')}`);
+    if (Array.isArray(c.attrArray) && attrKeys.length) {
+      const got = attrKeys.map((k) => Number(ch.attributes?.[k])).sort((a, b) => b - a).join('/');
+      const want = [...c.attrArray].map(Number).sort((a, b) => b - a).join('/');
+      if (got !== want) errs.push(`${at}/attributes must be the values ${want} once each (got ${got})`);
+    }
+    if (c.skillMin) for (const k of skillKeys) if (Number.isInteger(ch.skills?.[k]) && ch.skills[k] < c.skillMin) errs.push(`${at}/skills/${k}=${ch.skills[k]} below the minimum ${c.skillMin}`);
+    const career = (universe.careers || []).find((x) => x.name === ch.career);
+    if (career?.talents?.length) {
+      const names = career.talents.map((t) => String(t).split(/s+[—–-]{1,2}s+/)[0].trim().toLowerCase());
+      if (c.allowGeneralTalents) for (const t of universe.catalog?.talents || []) if (t.career === 'general') names.push(String(t.name).toLowerCase());
+      const talentName = String(ch.talent || '').split(/s+[—–-]{1,2}s+/)[0].trim().toLowerCase();
+      if (!names.includes(talentName)) errs.push(`${at}/talent "${talentName}" is not one of the ${ch.career} talents`);
+    }
+    for (const a of (rules.attributes || []).filter((x) => x.prompt)) {
+      if (!String(ch.driveStatements?.[a.key] || '').trim()) errs.push(`${at}/driveStatements/${a.key} missing`);
+    }
   });
   if (params.playerNames?.length) {
     const assigned = Object.values(pack.meta?.generated?.params?.assignments || {});

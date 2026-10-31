@@ -15,6 +15,7 @@ import { Router } from 'express';
 import { promises as fs } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { randomBytes } from 'crypto';
 import { validatePack } from './schema/validate.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -111,9 +112,15 @@ export function createContentRouter() {
       const dir = join(CONTENT_DIR, universe);
       await fs.mkdir(dir, { recursive: true });
       const file = join(dir, `${id}.json`);
-      const tmp = `${file}.${process.pid}.tmp`;
+      // Unique tmp name: two saves of the same pack at once never share (and corrupt) one tmp file.
+      const tmp = `${file}.${process.pid}-${randomBytes(4).toString('hex')}.tmp`;
       await fs.writeFile(tmp, JSON.stringify(pack, null, 2) + '\n', 'utf8');
-      await fs.rename(tmp, file);
+      try {
+        await fs.rename(tmp, file);
+      } catch {
+        // Windows can refuse rename-over while a reader holds the file: retry once via unlink.
+        try { await fs.unlink(file); await fs.rename(tmp, file); } catch (e2) { await fs.unlink(tmp).catch(() => {}); throw e2; }
+      }
       res.json({ ok: true, pack });
     } catch (e) {
       res.status(500).json({ error: e.message });

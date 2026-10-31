@@ -65,12 +65,13 @@ export const careers = [
     ] },
 ];
 
+/* Common carried items, spelled exactly as catalog item names so they resolve on the sheet. */
 export const gear = [
-  'Crysknife', 'Kindjal', 'Rapier', 'Slip-tip', 'Maula pistol', 'Lasgun', 'Stunner',
-  'Shield belt', 'Stillsuit', 'Fremkit', 'Paracompass', 'Thumper', 'Maker hooks',
-  'Distrans', 'Literjon of water', 'Water rings', 'Spice samples', 'Spice coffee service',
-  'Poison snooper', 'Hunter-seeker (concealed)', 'Chaumurky antidote kit', 'Sapho juice',
-  'Suk medical kit', 'Filmbook reader', 'Ornithopter access codes', 'Glowglobes',
-  'House signet ring', 'Forged travel papers', 'Solari purse', 'Krimskell fiber rope',
-  'Oil-lens binoculars', 'Desert cloak', 'Stilltent',
+  'Crysknife', 'Kindjal', 'Dueling Rapier', 'Slip-Tip', 'Maula Pistol', 'Lasgun Pistol', 'Stunner',
+  'Personal Shield Belt', 'Stillsuit', 'Fremkit', 'Paracompass', 'Thumper', 'Maker Hooks',
+  'Distrans', 'Literjon', 'Water Rings', 'Spice Melange', 'Spice Coffee Service',
+  'Poison Snooper', 'Hunter-Seeker', 'Antidote Kit', 'Sapho Juice',
+  'Suk Medical Kit', 'Filmbook', 'Ornithopter Access', 'Glowglobe',
+  'House Signet Ring', 'Forged Travel Papers', 'Solari Purse', 'Krimskell Fiber Rope',
+  'Oil-Lens Binoculars', 'Desert Cloak', 'Stilltent',
 ];

@@ -213,7 +213,8 @@ function StackElevation({ C }) {
   );
 }
 
-function exteriorDetails(C) {
+/* opts.board (EngineLayer on the table board): the stack elevation is Maps-tab furniture outside the board crop. */
+function exteriorDetails(C, opts) {
   return (
     <g>
       <Vanguard C={C} />
@@ -252,7 +253,7 @@ function exteriorDetails(C) {
       <path d="M 330 892 Q 550 856 870 892" fill="none" stroke={C.equipLine} strokeWidth="0.8" opacity="0.45" />
       <path d="M 300 902 Q 550 862 900 902" fill="none" stroke={C.equipLine} strokeWidth="0.4" opacity="0.25" strokeDasharray="3 4" />
       <text x={550} y={888} fill={C.textDim} fontSize="5.2" textAnchor="middle" letterSpacing="0.22em">▼ LV-178 · ZETA II RETICULI</text>
-      <StackElevation C={C} />
+      {!opts?.board && <StackElevation C={C} />}
     </g>
   );
 }

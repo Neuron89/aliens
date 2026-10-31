@@ -1,6 +1,6 @@
 /* CharacterBuilder state helpers: caps from rules.creation, blank state,
    per-step validation, cart → character conversion, localStorage drafts. */
-import { careerById, itemById, parseGearEntry, slug, splitTalent, talentForCharacter } from '../../catalogUtils';
+import { careerById, itemById, parseGearEntry, slug, splitTalent, talentForCharacter } from '../../catalogUtils.js';
 
 export const STEPS = [
   { id: 'career', label: (T) => T.career },

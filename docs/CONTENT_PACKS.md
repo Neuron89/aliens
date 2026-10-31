@@ -63,7 +63,7 @@ Only `title` is required. Typical act:
 - `readAloud`: 2-6 paragraphs per the schema (house standard 3-6). The Scenarios tab can read these via text-to-speech, so keep them pure narration.
 - `scenes[]` feed the **scene runner** (`ScenarioPlayer`) and the GM **RUN** view: `name` (required), `mandatory`, `encounter`, `encounterDetail`, `narration`, `checks[]`, `events[]`, `stressTriggers[]`, `npcGuidance`, `gmTip`, `outcomes[]`, plus:
   - `clueRefs[]`: ids of entries in the pack's `clues[]` that can be found here; the RUN scene card lists them with a one-tap reveal.
-  - `ambient`: a universe audio preset id (ALIEN: `ship-hum`, `tension`, `alert`, `dread`, `space`; DUNE: `wind`, `bazaar`, `sietch`, `court`) or a site path to an audio file. Moving to the scene switches the GM's AudioPanel (and the TV when opened with `&audio=1`).
+  - `ambient`: a universe audio preset id (ALIEN: `ship-hum`, `tension`, `alert`, `dread`, `space`; DUNE: `wind`, `bazaar`, `sietch`, `court`) or a site path to an audio file. Moving to the scene switches the GM's ambient audio (rail AUDIO; and the TV when opened with `&audio=1`).
 - Check strings: `"OBSERVATION — notice the elongated forearms"` or `"PILOTING at −2 — avoid collision"`; use the universe's skill names in upper case.
 - Stress strings: `"STRESS +1 — all PCs present"`, `"IMMEDIATE PANIC ROLL — witnesses"`.
 
@@ -145,11 +145,12 @@ A pack map whose `engine` names a universe engine map uses that map's rooms, lev
 Required: `id`, `name`, `career`, `appearance`, `attributes`, `skills`, `talent`, `gear[]`, `signatureItem`, `personalAgenda`, `buddy`, `rival`.
 Optional: `agendaByAct` (keys `"1"`..`"99"`), `secret`, `health`, `driveStatements`.
 
-- `attributes` and `skills` are keyed by the universe's keys (`web app/src/universes/<id>/rules.js`). The schema does not check the keys; `scripts/smoke.mjs` does, for bundled packs only.
+- `attributes` and `skills` are keyed by the universe's keys (`web app/src/universes/<id>/rules.js`). The schema does not check the keys; `scripts/validate-content.mjs` does (see Validator below).
+- `career` should be a catalog career (`catalog/careers.json`) and `talent` one of that career's talents written `"Name — text"` with the catalog text, so the sheet can resolve its buff. `gear[]` entries that match a catalog item name (a trailing `×N` quantity or `(note)` is allowed) show stats and art; anything else shows as CUSTOM.
 - `skills` should list every skill (0 for untrained).
 - `health` is informational: the engine recomputes it with `universe.rules.derived.health(char)` when a character is assigned. Omit it.
 - `agendaByAct` is listed on the character sheet (CharacterSheet.jsx) and **pushed to each assigned player as a private NEW ORDERS card when the GM presses ADVANCE ACT** in the RUN view (moving to act N reads key `"N"`, counting from 1; SEND AGENDA CARDS re-sends the current act's). Escalate toward betrayal.
-- `driveStatements` (optional): `{ "<attributeKey>": "one sentence in the character's voice" }`, keyed by the universe's attribute keys (DUNE drives: `duty`, `faith`, `justice`, `power`, `truth`). Players write them in the character builder; the sheet shows them. Pre-gens may include a few.
+- `driveStatements`: `{ "<attributeKey>": "one sentence in the character's voice" }`, keyed by the universe's attribute keys, for universes whose `rules.attributes[]` carry a `prompt` (DUNE drives: `duty`, `faith`, `justice`, `power`, `truth`). The sheet shows each under its drive (Characters tab, scenario pre-gens, builder review, phone). Every DUNE pre-gen carries all five (the validator checks it and the generator requires them); never paste them into `appearance`. Players can rewrite them in the character builder.
 - Characters made in the in-app creator are saved to a runtime pack with id `custom-characters`, `kind: "characters"`.
 
 ## Bundled vs runtime vs generated
@@ -197,4 +198,5 @@ node scripts/validate-content.mjs      # or: npm run validate
 ```
 It checks every `src/universes/<u>/content/*.json` (bundled), `content/<u>/*.json` (runtime) and `content/examples/*.json`. Beyond the schema it checks:
 universe equals the folder (not for examples), file name equals `<id>.json`, bundled packs carry `meta.source: "bundled"`, and no duplicate ids per origin and universe.
+Every character is also checked against its universe's rules and catalog: a known career; a talent of that career (or a general talent where `creation.allowGeneralTalents`) carrying the catalog text; attribute/skill keys and hard ranges; a fixed attribute array (DUNE 8/7/6/5/4) used once each, otherwise an attribute total of `attrPoints` ±1 with only the key attribute above `otherAttrMax`; a skill total of at most `skillPoints + 10` (pre-gens are seasoned); all `driveStatements` where the attributes carry a prompt; `buddy`/`rival` naming another PC of the pack (or "None"); no duplicate names. `--warnings` also lists gear that is not a catalog item and skills above the builder's per-career caps.
 It exits 1 on any failure. `node scripts/smoke.mjs` (`npm run smoke`) runs it as part of a wider check.

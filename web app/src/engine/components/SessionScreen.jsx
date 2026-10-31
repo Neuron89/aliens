@@ -37,9 +37,11 @@ export default function SessionScreen() {
 
   if (role) return null;
 
+  // Same order as the STORIES library: cinematic scenarios, one-shots, then campaign operations.
+  const typeRank = (p) => { const i = ['Cinematic', 'One-Shot', 'Campaign'].indexOf(p.meta.type); return i < 0 ? 3 : i; };
   const scenarioPacks = packs
     .filter(p => p.kind === 'scenario' || p.kind === 'campaign')
-    .sort((a, b) => (a.meta.type || '').localeCompare(b.meta.type || '') || a.meta.title.localeCompare(b.meta.title));
+    .sort((a, b) => typeRank(a) - typeRank(b) || a.meta.title.localeCompare(b.meta.title));
 
   const handleCreate = () => {
     setLoading(true);
@@ -164,7 +166,7 @@ export default function SessionScreen() {
           <div className="panel">
             <h3 style={stepTitle}>SELECT SCENARIO — {universe.name}</h3>
             <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem', marginBottom: '0.75rem' }}>
-              You will assume the role of {terms.gm}. The {terms.players.toLowerCase()} connect with the access code
+              You will assume the role of the {terms.gm}. The {terms.players.toLowerCase()} connect with the access code
               provided after initialization. Characters from the selected scenario are offered first when assigning.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', maxHeight: '45vh', overflowY: 'auto', marginBottom: '1rem' }}>
@@ -274,7 +276,7 @@ export default function SessionScreen() {
 
 function PackOption({ active, onClick, title, subtitle, badges = [] }) {
   return (
-    <button onClick={onClick} style={{
+    <button type="button" onClick={onClick} aria-pressed={active} style={{
       ...cardBtn, padding: '0.5rem 0.75rem',
       borderColor: active ? 'var(--accent)' : 'var(--border)',
       background: active ? 'var(--accent-glow)' : 'transparent',

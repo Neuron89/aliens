@@ -30,6 +30,7 @@ Extends ARCHITECTURE.md. Same conventions (universe-agnostic engine, data not co
       "x": 0.42, "y": 0.61,                // normalized 0..1 in map space
       "roomId": "medbay" | null,           // computed server-side from room shapes on every move
       "hidden": false,                     // GM-only even if the room is revealed
+      "locked"?: true,                     // item tokens: players see it, token-take is refused (ask the GM)
       "ownerPlayerId": "p_<hex>" | null,   // stable player id (pc tokens; colour assigned per player)
       "level": "deck-a" | null,            // level the token is on (defaults to board.level)
       "facing": 0, "note": "..."           // note is GM-only (stripped for board/players)
@@ -70,6 +71,37 @@ above, token `note`/`hidden` and room notes stripped; `mapDef` only on join/resu
 `game-ended` (also sent to board clients). Board clients never receive sheets or messages.
 Players get `board-state` right after `join-game` / `rejoin-game`; the DM after `resume-game`.
 
+### Table actions: item pickup and roll requests (`server/sessions.js`, test: `scripts/test-table-actions.mjs`)
+- `token-take {tokenId}` (player) → `{ success, item, takeId }` | `{ error }`. Allowed only for a token
+  the player can see (visibility rule above) with `kind:'item'`, not `locked`, whose `roomId` (and level)
+  equals that of the player's own `pc` token. Errors: `NOTHING TO TAKE.` (unknown / not an item / not
+  visible), `ASK THE GM.` (locked), `YOU ARE NOT ON THE MAP.`, `NOT IN YOUR ROOM.`, `NO CHARACTER.`,
+  `GEAR FULL.` (200). Effect: the token leaves the board (`board-state` to everyone, so the TV shows it
+  vanish), its `label` (or `sub`, or "Item") is appended to the seat's gear (`player.inventory`; the phone
+  gets `item-received {item, at, taken:true}` + `status-updated`, the DM `players-updated`), the PC token
+  flashes (`board-flash`), and a `loot` log entry `{ playerId, takeId, tokenId }` is written. The full token
+  is kept in `table.takes` (DM-only, last 50: `{ id, playerId, item, token, at, undone }`).
+- `token-take-undo {takeId}` (DM) → `{ success, tokenId }`. Puts the token back exactly as it was (a fresh
+  id if the GM reused the old one meanwhile), removes one copy of the item from the gear, logs a `loot`
+  entry with `undo:true`. A take can be undone once. The GM's feed offers UNDO on any `loot` entry with a
+  `takeId` whose take is not `undone`.
+- `roll-request {skill, label?, difficulty?, note?, to}` (DM) → `{ success, id, sent: [playerIds] }`.
+  `skill` = a `universe.rules.skills[].key` (validated as `^[A-Za-z][A-Za-z0-9_-]{0,39}$`, the server does
+  not read rules); `label` ≤ 60 (default: the key); `difficulty` optional integer −10..10 (ALIEN: dice
+  modifier; DUNE: difficulty) else `null`; `note` ≤ 300; `to` = `'all'` | playerId | [playerIds].
+  Each recipient gets `roll-requested { request: { id, skill, label, difficulty, note, at } }`; open
+  requests addressed to a player (not answered by them, not cancelled) are also in their table view as
+  `table.rollRequests`, so a reconnecting phone still shows the ROLL NOW card. Stored in
+  `table.rollRequests` (DM view adds `recipients`, `answeredBy[]`, `cancelled`; last 30).
+- The phone answers with a normal `player-roll` carrying `requestId` (top level, or `roll.requestId`):
+  the DM's `roll { roll }` entry gets `requestId`, the ack echoes it, and the request closes for that
+  player. A requestId that is unknown, cancelled, already answered or not addressed to the player is
+  ignored (the roll still lands, untagged) — the outbox never drops a roll over it.
+- `roll-request-cancel {id}` (DM) → `{ success }`; phones drop the card via `table-state`.
+GameContext: `tokenTake(tokenId, cb)`, `sendRoll(roll, { requestId })` (player);
+`tokenTakeUndo(takeId, cb)`, `rollRequest({ skill, label, difficulty, note, to }, cb)`,
+`rollRequestCancel(id, cb)` (DM); `on('roll-requested', fn)`.
+
 ## 3. Map definitions become data
 
 Both universe maps and pack maps get the same shape (schema extension on `maps[]`):
@@ -109,7 +141,7 @@ frame = hull; ±2-column jitter tolerated), reads each box's label, fuzzy-matche
 box whose `[TAGS]` match other room names ("ADMIN BLOCK [OPS] [BRIG]"), turns labels outside boxes
 into free-text rooms grown over adjacent texture (≈ lava tube, ∴ dune field), and turns connectors
 (`├──┤`, `│` shafts, `═══` tubes, `┬/┴` stubs) into corridors and doors. `resolveMapDef` sends
-`buildAsciiMapDef(map)` (rooms, doors, size, outline, crop, spawn = centre of the first hinted room);
+`buildAsciiMapDef(map)` (rooms, doors, size, outline, crop, spawn = the first hinted room, centred low so the PC token clears its label);
 `board/AsciiLayer.jsx` draws the plan in the universe's `theme.board.deck` palette.
 
 The Map Controller's **Room Editor** works on image, ASCII and engine pack maps (draw a rectangle on
@@ -129,7 +161,9 @@ engine map) + a collapsible right/bottom palette.
   **NPCS** (from the active pack's `npcs[]`), **ITEMS** (from `universe.catalog` weapons/gear +
   "custom label"), **MARKERS** (hazard, objective, noise, blood, locked door, vent, fire).
 - Token actions (tap token): rename, hide/show, resize, facing, note, remove, "send to player"
-  (for items: adds to that player's inventory and removes the token).
+  (for items: adds to that player's inventory and removes the token). Items also toggle
+  FREE PICKUP / ASK FIRST (`locked`): a free item can be taken from the phone (`token-take`), a
+  locked one shows ASK there instead.
 - Room actions (tap room): reveal/conceal, rename, note, "all tokens here → hidden".
 - Top bar: map picker (universe maps + active pack maps + levels), FOG toggle, ROTATE 90°,
   FLIP, FIT, PING mode, RESET, "OPEN BOARD" (shows `/?board=CODE` + QR).
@@ -163,8 +197,23 @@ that token's `roomId` (room name from `board.rooms[id].name` or the mapDef); VIS
 `item` / `marker` / `hazard` tokens with the same `roomId` and level; WITH YOU = visible `pc` /
 `npc` / `creature` tokens there (a `panicking` status ring is shown). MapCanvas `role="player"`,
 `highlightPlayerId` = own id, `selectedRoomId` = own room; NEAR ME zooms (`view.zoom` 2.4, pan
-clamped) on the own token, WHOLE MAP fits the whole map. TAKE sends the GM a normal
-private `player-message` ("I take the …"); the GM hands the item over as usual.
+clamped) on the own token, WHOLE MAP fits the whole map. TAKE (unlocked items) sends `token-take`;
+the item lands in the gear and vanishes from the TV. A locked item, or a server answer of
+`ASK THE GM.`, shows ASK, which sends the GM a normal private `player-message` ("I take the …").
+
+**Roll requests in the UI.** GM: Run → CREW drawer → ASK FOR A ROLL picks a skill from
+`universe.rules.skills`, an optional modifier (ALIEN: ±1–3 dice) or Difficulty (DUNE: 0–5) and ALL or
+one seat, and sends `roll-request`. The drawer lists the last three ROLL REQUESTS (each answer with its
+roll summary, who is still WAITING, CANCEL = `roll-request-cancel` while open, DONE once everyone rolled) and PICKED UP (the last `table.takes`, UNDO =
+`token-take-undo`). Phone: `player/RollRequestCard.jsx` shows the newest open request
+(`table.rollRequests`) as a ROLL NOW card under the quick actions (orders cue on a fresh
+`roll-requested`); ROLL opens the roller with the sheet's pool for that skill plus the modifier
+(ALIEN adds/removes base dice) or the Difficulty (DUNE roller `preset.difficulty`). The preset carries
+`requestId`; both rollers copy it onto the result, so `sendRoll` answers the request and the card closes.
+
+**Engine-map room renames.** Engine plans draw room names into the plan, so `MapCanvas` draws a
+GM-renamed room's name (`board.rooms[id].name`) on a plate over it for every role (only for rooms the
+viewer may see; the server already withholds names of unrevealed rooms).
 
 ## 6. Character Builder
 

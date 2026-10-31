@@ -9,7 +9,7 @@
     "synopsis": "The relief crew of a Weyland-Yutani helium-3 refinery hanging in the clouds of the gas giant Dis arrives to find the outgoing crew dead, hiding or barricaded. The last ore shuttle from the Eresh moon survey carried three xenomorph eggs; one hatched in transit and its adult now hunts the rig. The efficiency auditor who arrived with the crew carries sealed orders to recover the last intact egg and hold every witness. As the crew finds survivors, a sister carrying an embryo and proof of an old cover-up, quarantine pits them against each other. In Act III the rig's synthetic begins a controlled descent to erase the platform, and there are not enough seats for everyone.",
     "type": "Cinematic",
     "players": "4 (optional 5th)",
-    "playtime": "3-5 hours",
+    "playtime": "3–5 hours",
     "difficulty": "Standard",
     "tone": [
       "dread",
@@ -752,8 +752,8 @@
     {
       "id": "tartarus-reach-section",
       "title": "TARTARUS REACH",
-      "subtitle": "Helium-3 refinery platform, vertical section",
-      "description": "Four levels joined by the central spine lift (landing deck to processing core) and a ladder down to the maintenance underdeck. Ducts connect every level; the creature uses them freely. The whole structure hangs from the lift cells on L4 over the open atmosphere of Dis.",
+      "subtitle": "Helium-3 refinery platform, vertical section — upper platform, process deck and keel",
+      "description": "Three bands on the board: the upper platform (landing deck and ops), the process deck and the keel, joined by the central spine lift and a ladder down to the maintenance underdeck. Ducts connect every level; the creature uses them freely. The whole structure hangs from its lift cells over the open atmosphere of Dis.",
       "kind": "ascii",
       "ascii": "   TARTARUS REACH :: VERTICAL SECTION :: NOT TO SCALE\n L1  LANDING DECK  (open to the wind, 210 m wide)\n ┌─────────────┬─────────────┬─────────────┬─────────────┐\n │ PAD A       │ COLD CARGO  │ DECON LOCK  │ PAD B       │\n │ LAMPLIGHTER │ HOLD        │ & CUSTOMS   │ RELIEF HOP  │\n └─────────────┴──────┬──────┴─────────────┴─────────────┘\n           SPINE LIFT │\n L2  HAB RING         │\n ┌─────────────┬──────┴──────┬─────────────┬─────────────┐\n │ OPS CENTER  │ MESS &      │ BUNK        │ INFIRMARY   │\n │ MU/TH/UR    │ REC LOUNGE  │ CORRIDOR    │ & MORGUE    │\n ├─────────────┼─────────────┼─────────────┴─────────────┤\n │ AUDIT SUITE │ QUIET ROOM  │ SURVEY LAB (SEALED)       │\n └─────────────┴──────┬──────┴───────────────────────────┘\n           SPINE LIFT │\n L3  PROCESSING CORE  │\n ┌─────────────┬──────┴──────┬─────────────┬─────────────┐\n │ SCOOP       │ FRACTION    │ CONTROL     │ HE-3 TANK   │\n │ INTAKE      │ COLUMN      │ GALLERY     │ FARM        │\n └─────────────┴──────┬──────┴─────────────┴─────────────┘\n          LADDER ONLY │ (LIFT ENDS AT L3)\n L4  MAINT UNDERDECK  │\n ┌─────────────┬──────┴──────┬─────────────┬─────────────┐\n │ LIFT-CELL   │ REACTOR     │ SUMP &      │ ESCAPE      │\n │ GALLERY     │ CRAWLWAY    │ BALLAST     │ GONDOLA     │\n └─────────────┴─────────────┴─────────────┴─────────────┘\n     ▼  ▼  ▼   DIS: 40,000 KM OF CLOUD BELOW   ▼  ▼  ▼",
       "rooms": [
@@ -879,11 +879,11 @@
         "medicalAid": 0,
         "command": 4
       },
-      "talent": "Pull Rank — Override one decision per session without a roll.",
+      "talent": "Pull Rank — You can order non-officer PCs and NPCs of your own organization to perform one specific action: roll COMMAND against the target's MANIPULATION. On a success they must obey, even into danger. Each use raises your Stress Level by one. Cannot stop actions forced by Panic Rolls.",
       "gear": [
         "M4A3 Service Pistol",
-        "Personal Terminal",
-        "Comm Unit",
+        "Seegson P-DAT",
+        "Hand Radio",
         "Brass rig whistle (Signature Item)"
       ],
       "signatureItem": "Brass rig whistle — given to her by the old superintendent of her first gas rig, it has called crews off a dozen collapsing catwalks.",
@@ -922,10 +922,10 @@
         "medicalAid": 1,
         "command": 0
       },
-      "talent": "True Grit — Reduce Stress by 1 after successfully using STAMINA.",
+      "talent": "True Grit — You may push any STRENGTH-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "Cutting Torch",
-        "Tool Kit",
+        "Electronic Tools",
         "IRC Mk.35 Pressure Suit",
         "Calum's rigging hook (Signature Item)"
       ],
@@ -965,10 +965,10 @@
         "medicalAid": 4,
         "command": 1
       },
-      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
+      "talent": "Field Surgeon — You get +2 to MEDICAL AID when treating someone who is about to die from a critical injury.",
       "gear": [
-        "Medkit",
-        "First Aid Kit",
+        "Personal Medkit",
+        "Personal Medkit",
         "Flashlight",
         "Paper crane (Signature Item)"
       ],
@@ -1008,10 +1008,10 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Reckless — +2 PILOTING in dangerous maneuvers.",
+      "talent": "Reckless — You may push any AGILITY-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "Rexim RXF-M5 EVA Pistol",
-        "Comm Unit",
+        "Hand Radio",
         "Samani E-Series Watch",
         "Patched flight jacket (Signature Item)"
       ],
@@ -1051,10 +1051,10 @@
         "medicalAid": 2,
         "command": 0
       },
-      "talent": "Inquisitive — Ask the GM one yes/no question per Act that must be answered truthfully.",
+      "talent": "Inquisitive — You may push any WITS-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
-        "Motion Tracker",
-        "Personal Terminal",
+        "M314 Motion Tracker",
+        "Seegson P-DAT",
         "Respirator Mask",
         "Silver cryo-flask (Signature Item)"
       ],

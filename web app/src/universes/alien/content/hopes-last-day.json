@@ -633,7 +633,7 @@
         "medicalAid": 0,
         "command": 2
       },
-      "talent": "Authority — Re-roll failed COMMAND roll once per session.",
+      "talent": "Authority — By invoking your marshal's authority you can roll COMMAND in place of MANIPULATION to make someone bend to your will.",
       "gear": [
         "VP 78 Pistol",
         "Marshal badge & ID",
@@ -677,9 +677,9 @@
         "medicalAid": 5,
         "command": 1
       },
-      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
+      "talent": "Field Surgeon — You get +2 to MEDICAL AID when treating someone who is about to die from a critical injury.",
       "gear": [
-        "Medical kit",
+        "Personal Medkit",
         "Colony med bay access",
         "Personal journal (Signature Item)",
         "Sedatives",
@@ -721,7 +721,7 @@
         "medicalAid": 0,
         "command": 1
       },
-      "talent": "Tough — Reduce one Critical Injury severity by 1 (once per session).",
+      "talent": "Resilient — Whenever you take damage, roll STRENGTH (attribute only; cannot be pushed; not an action). Each success removes one point of that damage, possibly all of it.",
       "gear": [
         "Heavy wrench (weapon)",
         "Welding torch",
@@ -765,13 +765,13 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Full Throttle — Your vehicle speed increases by 1 in chases.",
+      "talent": "Full Throttle — When piloting a spacecraft you get +2 to PILOTING rolls for Accelerate and Decelerate actions.",
       "gear": [
         "APC keys",
         "Flight jacket",
         "Gum (endless supply, Signature Item)",
-        "Emergency flares",
-        "Tool kit"
+        "Signal Flare ×3",
+        "Electronic Tools"
       ],
       "signatureItem": "Pack of spearmint gum — been chewing it since flight school. Always has a piece.",
       "personalAgenda": "You know where the emergency shuttle is and how to fly it. If things go sideways, you're flying out — with or without passengers. Survive first, feel guilty later.",
@@ -809,7 +809,7 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Hide — +2 to MOBILITY when hiding.",
+      "talent": "Nimble — You may push any AGILITY-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "Casey (doll head, Signature Item)",
         "Flashlight",

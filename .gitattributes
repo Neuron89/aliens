@@ -1,0 +1,19 @@
+# Line endings: every text file is LF in the repo and in the working tree (agents and editors on
+# Windows agree; no LF->CRLF warnings on commit). Binary types are listed so they are never touched.
+* text=auto eol=lf
+
+*.ps1 text eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.mp3 binary
+*.ogg binary
+*.wav binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.zip binary

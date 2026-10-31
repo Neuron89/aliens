@@ -593,7 +593,7 @@
     {
       "id": "station-prometheus",
       "title": "STATION PROMETHEUS",
-      "subtitle": "Weyland-Yutani Deep Space Research Station",
+      "subtitle": "Weyland-Yutani Deep Space Research Station — four levels and the reactor core",
       "description": "Orbital research station around LV-178. Crew complement: 47 (all MIA). Project Erebus facility.",
       "kind": "ascii",
       "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║            STATION PROMETHEUS — CROSS SECTION                ║\n    ║           Orbiting LV-178 — Zeta II Reticuli                 ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║                  [DOCKING ARM]                                ║\n    ║                       │                                       ║\n    ║              ┌────────┴────────┐                              ║\n    ║              │   AIRLOCK 7     │                              ║\n    ║              │ [DOCKING PORT]  │                              ║\n    ║              └────────┬────────┘                              ║\n    ║                       │                                       ║\n    ║    ╔══════════════════╧══════════════════╗                    ║\n    ║    ║          LEVEL 1 — OPS             ║                    ║\n    ║    ║  ┌──────┐  ┌────────┐  ┌────────┐ ║                    ║\n    ║    ║  │BRIDGE│  │ COMMS  │  │LIFE    │ ║                    ║\n    ║    ║  │      │  │        │  │SUPPORT │ ║                    ║\n    ║    ║  └──────┘  └────────┘  └────────┘ ║                    ║\n    ║    ╠════════════════╤══════════════════╣                    ║\n    ║    ║       LEVEL 2 — HABITATION        ║                    ║\n    ║    ║  ┌──────┐  ┌────────┐  ┌────────┐ ║                    ║\n    ║    ║  │CREW  │  │ MESS   │  │REC     │ ║                    ║\n    ║    ║  │QTRS  │  │ HALL   │  │AREA    │ ║                    ║\n    ║    ║  └──────┘  └────────┘  └────────┘ ║                    ║\n    ║    ╠════════════════╤══════════════════╣                    ║\n    ║    ║       LEVEL 3 — MEDICAL/LABS      ║                    ║\n    ║    ║  ┌──────┐  ┌────────┐  ┌────────┐ ║                    ║\n    ║    ║  │MED   │  │ LABS   │  │SPECIMN │ ║                    ║\n    ║    ║  │BAY   │  │ A & B  │  │STORAGE │ ║                    ║\n    ║    ║  └──────┘  └────────┘  └────────┘ ║                    ║\n    ║    ╠════════════════╤══════════════════╣                    ║\n    ║    ║   ████ LEVEL 4 — [SEALED] ████    ║                    ║\n    ║    ║   ████ PRIMARY RESEARCH    ████    ║                    ║\n    ║    ║   ████ PROJECT EREBUS      ████    ║                    ║\n    ║    ║   ████ ░░░░░░░░░░░░░░░░░░ ████    ║                    ║\n    ║    ║   ████ ░░ THE ARCHITECT ░░ ████    ║                    ║\n    ║    ║   ████ ░░░░░░░░░░░░░░░░░░ ████    ║                    ║\n    ║    ╠════════════════╤══════════════════╣                    ║\n    ║    ║       REACTOR CORE                ║                    ║\n    ║    ║  ┌──────────────────────────────┐ ║                    ║\n    ║    ║  │   [FUSION REACTOR]           │ ║                    ║\n    ║    ║  │   [POWER DISTRIBUTION]       │ ║                    ║\n    ║    ║  │   [EMERGENCY SHUTDOWN]       │ ║                    ║\n    ║    ║  └──────────────────────────────┘ ║                    ║\n    ║    ╚════════════════════════════════════╝                    ║\n    ║                                                               ║\n    ║    [MAINTENANCE TUNNELS run between all levels]              ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
@@ -686,9 +686,9 @@
         "survival": 0,
         "manipulation": 5,
         "medicalAid": 0,
-        "command": 4
+        "command": 3
       },
-      "talent": "Inside Man — You always have a hidden agenda the other PCs don't know about.",
+      "talent": "Personal Safety — When you are attacked or face lethal danger and another PC or friendly NPC is within SHORT range, you may make a straight MANIPULATION roll (not opposed, not an action). On a success that character suffers the attack or hazard instead of you. Each use raises your Stress Level by one.",
       "gear": [
         "Executive access card (all levels)",
         "Encrypted comm device",
@@ -732,7 +732,7 @@
         "medicalAid": 3,
         "command": 0
       },
-      "talent": "Analysis — +2 to COMTECH for research and analysis.",
+      "talent": "Analysis — After studying a strange or alien artifact or creature for at least a Turn, roll OBSERVATION. Each success lets you ask the GM one of: is it human or alien; dead or alive; how old is it; what is its purpose; how does it work; what problems could it cause. Answers are true but may be vague. A successful roll also lowers the Stress Level of all other PCs within SHORT range by one; a failed roll raises it by one.",
       "gear": [
         "Portable lab kit",
         "Specimen containers",
@@ -776,7 +776,7 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Heavy Lifter — +2 HEAVY MACHINERY.",
+      "talent": "True Grit — You may push any STRENGTH-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "Heavy tool kit",
         "Cutting torch",
@@ -820,7 +820,7 @@
         "medicalAid": 0,
         "command": 1
       },
-      "talent": "Nerves of Steel — Reduce Stress by 2 when using Signature Item.",
+      "talent": "Overkill — When a Panic Roll result is 11 or higher and enemies are in sight, you may replace it with the Overkill effect: you must attack the visible enemies and keep going until you or all of them are Broken. All other PCs within SHORT range must immediately make a Panic Roll.",
       "gear": [
         "M41A Pulse Rifle",
         "M240 Incinerator Unit",
@@ -864,7 +864,7 @@
         "medicalAid": 3,
         "command": 0
       },
-      "talent": "Breakthrough — Automatically succeed on one OBSERVATION/COMTECH roll per session.",
+      "talent": "Breakthrough — Once per game session you automatically pass an OBSERVATION roll of your choice without rolling. The GM may veto its use on a particular roll to avoid spoiling the scenario.",
       "gear": [
         "Multi-tool",
         "Data uplink cable",

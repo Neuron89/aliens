@@ -305,6 +305,13 @@ export default function MapController({ compact = false, onOpenFull }) {
         <button className={`mc-btn${tok.hidden ? ' on warn' : ''}`} onClick={() => g.boardUpsertToken({ id: tok.id, hidden: !tok.hidden })}>
           {tok.hidden ? 'HIDDEN — SHOW' : 'VISIBLE — HIDE'}
         </button>
+        {tok.kind === 'item' && (
+          <button className={`mc-btn${tok.locked ? ' on warn' : ''}`} aria-pressed={!!tok.locked}
+            title="Free pickup: a player in the same room can TAKE it from the phone. Ask first: the phone shows ASK and messages you."
+            onClick={() => g.boardUpsertToken({ id: tok.id, locked: !tok.locked })}>
+            {tok.locked ? 'ASK FIRST — ALLOW PICKUP' : 'FREE PICKUP — LOCK'}
+          </button>
+        )}
         <span className="mc-seg"><button onClick={() => g.boardUpsertToken({ id: tok.id, size: Math.max(0.5, (tok.size || 1) - 0.5) })} aria-label="Smaller">−</button>
           <span className="mc-seg-val">SIZE {tok.size || 1}</span>
           <button onClick={() => g.boardUpsertToken({ id: tok.id, size: Math.min(6, (tok.size || 1) + 0.5) })} aria-label="Bigger">+</button></span>
@@ -513,7 +520,7 @@ export default function MapController({ compact = false, onOpenFull }) {
     <div className="mc-seg" role="group" aria-label="Level">
       {levels.map((l) => (
         <button key={l.id} className={l.id === level ? 'on' : ''} aria-pressed={l.id === level} onClick={() => chooseLevel(l.id)} title={l.label}>
-          {l.label.split(/\s+[—-]\s+/)[0]}
+          {l.label.split(/\s+[—·-]\s+/)[0]}
         </button>
       ))}
     </div>

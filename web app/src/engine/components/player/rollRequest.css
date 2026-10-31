@@ -1,0 +1,24 @@
+/* ROLL NOW card (player/RollRequestCard.jsx) — sits under the phone's quick actions. */
+.rr-card {
+  margin: 0.5rem 0.75rem 0; padding: 0.6rem 0.75rem; border: 1px solid var(--accent);
+  border-radius: 6px; background: color-mix(in srgb, var(--accent) 10%, var(--bg-panel, #0b0f12));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent), 0 0 18px color-mix(in srgb, var(--accent) 18%, transparent);
+  animation: rr-in 0.35s ease-out;
+}
+.rr-head { display: flex; align-items: center; gap: 0.5rem; }
+.rr-k { font-size: 0.68rem; letter-spacing: 0.14em; color: var(--accent); font-weight: 700; }
+.rr-more { margin-left: auto; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--text-dim); }
+.rr-body { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.35rem; }
+.rr-text { flex: 1; min-width: 0; }
+.rr-skill { display: block; font-size: 1.15rem; letter-spacing: 0.08em; color: var(--text-bright, var(--text)); overflow-wrap: anywhere; }
+.rr-diff { display: inline-block; margin-top: 0.15rem; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--warn); }
+.rr-note { margin: 0.25rem 0 0; font-size: 0.8rem; color: var(--text-dim); overflow-wrap: anywhere; }
+.rr-btn {
+  min-width: 88px; min-height: 48px; padding: 0 1rem; border: 1px solid var(--accent); border-radius: 6px;
+  background: var(--accent); color: var(--bg-dark, #000); font: inherit; font-weight: 700; letter-spacing: 0.14em; cursor: pointer;
+}
+.rr-btn:active { transform: translateY(1px); }
+.rr-btn:focus-visible { outline: 2px solid var(--accent-bright, var(--accent)); outline-offset: 2px; }
+@keyframes rr-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .rr-card { animation: none; } }
+html.fx-reduced .rr-card { animation: none; }

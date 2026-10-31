@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useUniverse, bootDuration } from '../../UniverseContext';
 import { useGame } from '../../GameContext';
-import { play } from '../../sfx';
+import { play, reducedFx } from '../../sfx';
 
 /* ═══════════════════════════════════════════════════════════════
    BootSequence — shown while UniverseContext.booting is set.
@@ -14,6 +14,8 @@ import { play } from '../../sfx';
                  The pace comes from theme.bootMs (ALIEN sets ~10 s on
                  purpose; the default is 900 ms). Link/channel lines are
                  truthful: they read STANDBY unless the socket is up.
+                 The text glows and flickers like CRT phosphor (index.css
+                 .boot-crt) over a faint hum (cue 'boot.hum').
      'sandstorm' (DUNE) a slow sand-coloured wipe with the terminal name.
    Any click / key / tap skips it. Never shown with reduced motion/FX
    (UniverseContext does not set `booting` then).
@@ -87,6 +89,14 @@ function TerminalBoot({ u, connected, total }) {
     onKey: (ch) => play('boot.key', { volume: DOT_RE.test(ch) ? 0.55 : 0.9 }),
     onLine: (li) => play(li === lines.length - 1 ? 'boot.ready' : 'boot.line'),
   });
+  /* A faint mains hum under the typing: theme cue 'boot.hum' (ALIEN defines one; other themes don't, so
+     play() is a no-op), re-struck every 0.9 s so it stops the moment the boot ends or is skipped. */
+  useEffect(() => {
+    if (reducedFx()) return undefined;
+    play('boot.hum');
+    const id = setInterval(() => play('boot.hum'), 900);
+    return () => clearInterval(id);
+  }, []);
   const active = typed.findIndex((s, i) => s.length < lines[i].length);
   const cursorAt = active === -1 ? lines.length - 1 : active;
   return (

@@ -797,7 +797,7 @@
     {
       "id": "ridgeback-station",
       "title": "RIDGEBACK STATION",
-      "subtitle": "Seegson Deep Thermal Survey Outpost — LV-2213 \"Cinder\", section view",
+      "subtitle": "Seegson Deep Thermal Survey Outpost — LV-2213 \"Cinder\": surface, lift landing and deep level",
       "description": "Surface modules on the ridge connect to Deep Level only through the Throat (lift and maintenance ladder) or, once the lift is cut, the long way through Lava Tube Seven. The nest sits between the squad and the reactor.",
       "kind": "ascii",
       "ascii": "╔══════════════════════════════════════════════════════════╗\n║  RIDGEBACK STATION — SEEGSON DEEP THERMAL SURVEY OUTPOST ║\n║  LV-2213 \"CINDER\" — HARROW SYSTEM — SECTION VIEW         ║\n╠══════════════════════════════════════════════════════════╣\n║  SURFACE  ░░ ash plain ░░ vent field ░░ ridge ░░         ║\n║  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐   ║\n║  │ PAD ONE │═══│ OPS /   │═══│ HAB     │═══│ MOTOR   │   ║\n║  │ [LZ]    │   │ HEARTH  │   │ MODULE  │   │ POOL    │   ║\n║  └─────────┘   └────┬────┘   └────┬────┘   └─────────┘   ║\n║  ┌─────────┐   ┌────┴────┐   ┌────┴────┐                 ║\n║  │ COMMS   │═══│ LIFT    │═══│ MED /   │                 ║\n║  │ DISH    │   │ HOUSING │   │ CHARGE  │                 ║\n║  └─────────┘   └────┬────┘   └─────────┘                 ║\n║  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─│─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ║\n║     THE THROAT      │  lift shaft, 1,200 m               ║\n║     (lift cage +    │  maint. ladder, 4 rest decks       ║\n║      cable run)     │                                    ║\n║  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─│─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ║\n║  DEEP LEVEL    ┌────┴────┐   ┌─────────┐   ┌─────────┐   ║\n║  ┌─────────┐   │ LIFT    │═══│ CORE    │═══│ SPECIMEN│   ║\n║  │ COLD    │═══│ LANDING │   │ VAULT   │   │ LAB     │   ║\n║  │ ROOM    │   └────┬────┘   └─────────┘   └────┬────┘   ║\n║  └─────────┘        │                           │        ║\n║   ≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈┴≈≈ LAVA TUBE 7 ≈≈≈≈≈≈≈≈≈≈≈≈≈┘        ║\n║        │                                                 ║\n║  ┌─────┴─────────────────────┐   ┌─────────────────┐     ║\n║  │ HEAT EXCHANGER HALL       │═══│ REACTOR TAP     │     ║\n║  │ ▓▓▓▓▓▓▓ THE NEST ▓▓▓▓▓▓▓▓ │   │ \"THE HEART\"     │     ║\n║  └───────────────────────────┘   └─────────────────┘     ║\n╚══════════════════════════════════════════════════════════╝",
@@ -908,13 +908,13 @@
         "medicalAid": 1,
         "command": 4
       },
-      "talent": "Field Commander — COMMAND gives +2 (instead of +1).",
+      "talent": "Field Commander — Giving orders in combat with COMMAND is a fast action for you instead of a slow one, so you can give orders twice in one Round.",
       "gear": [
         "Armat M41A Pulse Rifle",
         "M4A3 Service Pistol",
         "M3 Personnel Armor",
-        "Personal Terminal",
-        "Comm Unit",
+        "Seegson P-DAT",
+        "Hand Radio",
         "Brass compass"
       ],
       "signatureItem": "Brass compass — her first squad leader's, handed to her as he bled out on a frontier world, and it still points the wrong way.",
@@ -953,7 +953,7 @@
         "medicalAid": 1,
         "command": 0
       },
-      "talent": "Overkill — Spend extra successes for +2 damage (instead of +1).",
+      "talent": "Overkill — When a Panic Roll result is 11 or higher and enemies are in sight, you may replace it with the Overkill effect: you must attack the visible enemies and keep going until you or all of them are Broken. All other PCs within SHORT range must immediately make a Panic Roll.",
       "gear": [
         "M56A2 Smart Gun",
         "M4A3 Service Pistol",
@@ -997,10 +997,10 @@
         "medicalAid": 4,
         "command": 0
       },
-      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
+      "talent": "Field Surgeon — You get +2 to MEDICAL AID when treating someone who is about to die from a critical injury.",
       "gear": [
-        "Medkit",
-        "Armat Model 37A2 Shotgun",
+        "Personal Medkit",
+        "Armat Model 37A2 12 Gauge Pump Action",
         "M3 Personnel Armor",
         "Respirator Mask",
         "Silver suture needle"
@@ -1019,7 +1019,7 @@
     {
       "id": "lcpl-tamsk",
       "name": "LCpl. Oren Tamsk",
-      "career": "Colonial Marine",
+      "career": "Comtech Marine",
       "appearance": "Wiry and restless, helmet bristling with antennas and taped-on cameras. Grins too much and jokes faster than he thinks. Always fiddling with a patch cable.",
       "attributes": {
         "str": 3,
@@ -1041,11 +1041,11 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Nerves of Steel — Reduce Stress by 2 when using Signature Item.",
+      "talent": "Bypass — +2 to COMTECH when trying to unlock a locked door or entryway.",
       "gear": [
         "Armat M41A Pulse Rifle",
-        "Motion Tracker",
-        "Tool Kit",
+        "M314 Motion Tracker",
+        "Electronic Tools",
         "M3 Personnel Armor",
         "Helmet-cam field recorder"
       ],
@@ -1072,9 +1072,9 @@
         "emp": 2
       },
       "skills": {
-        "heavyMachinery": 2,
+        "heavyMachinery": 1,
         "stamina": 1,
-        "closeCombat": 1,
+        "closeCombat": 0,
         "mobility": 3,
         "piloting": 5,
         "rangedCombat": 2,
@@ -1085,12 +1085,12 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Like a Glove — Re-roll failed PILOTING roll once per session.",
+      "talent": "Like the Back of Your Hand — Pick one specific vehicle or spacecraft (a single craft, not a model line). You get +2 to PILOTING with it. Can be taken several times, once per craft.",
       "gear": [
         "M4A3 Service Pistol",
-        "Comm Unit",
+        "Hand Radio",
         "Samani E-Series Watch",
-        "Tool Kit",
+        "Electronic Tools",
         "Hula-girl dash ornament"
       ],
       "signatureItem": "Hula-girl dash ornament — glued to every console the Tin Halo has had, given to him by a pilot who died on a hot extraction he flew out of alone.",

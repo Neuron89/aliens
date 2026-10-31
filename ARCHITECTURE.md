@@ -41,7 +41,7 @@ web app/
       content-pack.schema.json  # JSON Schema (draft 2020-12) for content packs
       validate.js               # ajv wrapper used by content.js, generate.js and the scripts
   scripts/                      # validate-content, smoke, check-art, generate-pack, test-sessions, test-session-features,
-                                #   test-mechanics, test-board, test-hardening (.mjs)
+                                #   test-mechanics, test-board, test-hardening, test-table-actions, test-ui-polish (.mjs)
   src/
     main.jsx  App.jsx  index.css
     engine/                     # shared, universe-agnostic
@@ -59,16 +59,17 @@ web app/
         UniverseSelect.jsx SessionScreen.jsx Header.jsx Nav.jsx DMDashboard.jsx PlayerView.jsx BoardView.jsx
         ScenarioLibrary.jsx ScenarioDetail.jsx ScenarioPlayer.jsx ScenarioPanels.jsx PackImportExport.jsx GameNightWizard.jsx
         Characters.jsx CharacterSheet.jsx CharacterCreator.jsx CharacterBuilder.jsx InjuryPicker.jsx SupplyPanel.jsx
-        AudioPanel.jsx DiceRoller.jsx (dispatches to universe.rules.dice.Roller)
+        DiceRoller.jsx (dispatches to universe.rules.dice.Roller)
         MapEngine.jsx MapRenderer.jsx Maps.jsx MapController.jsx
+        mapGroups.js legendLayout.js   # JSX-free helpers: Maps-tab grouping (images fold under their ship), card plan picker, legend wrap (scripts/test-ui-polish.mjs)
         run/       RunView RunScene ClocksPanel ClockRing CluesPanel HandoutsPanel InitiativePanel ThreatsPanel PoolCounters
                    RollFeed SessionLogPanel SessionZeroPanel TargetPicker recap.js          # GM RUN tab
         player/    PhoneLayer PauseButton PanicOverlay HandoutsPane HandoutViewer ClocksRow BuildCharacter fx.js   # phone extras
-        board/     MapCanvas RoomLayer EngineLayer AsciiLayer Overlays TokenChip RoomEditor PlayerMapPane mapDefs.js qr.js     # TV + controller
+        board/     MapCanvas RoomLayer EngineLayer AsciiLayer Overlays TokenChip RoomEditor mapDefs.js qr.js     # TV + controller
         builder/   steps.jsx GearStep.jsx builderState.js                                   # character builder steps
         sheet/     parts.jsx
         wizard/    generateClient.js
-        fx/        BootSequence.jsx Motifs.jsx
+        fx/        BootSequence.jsx Motifs.jsx PlanThumb.jsx (library card thumbnail: the pack's first engine plan, rendered once off-screen, cached per pack)
     universes/
       index.js                  # registry: { alien, dune }, getUniverse(id), DEFAULT_UNIVERSE
       alien/ and dune/          # same shape:
@@ -246,7 +247,8 @@ doc and the schema in sync. Validation runs on every save and on every generator
   - Every game is snapshotted to `<DATA_DIR>/sessions/<CODE>.json` (`DATA_DIR` env, default `web app/data`,
     git-ignored). Writes are debounced (<= 1 per 250 ms per game) and atomic (tmp + rename); Maps/Sets are
     stored as arrays. On start, snapshots newer than 24 h load as `status: 'dormant'` (no sockets); older
-    ones are deleted. Dormant games with no activity for 24 h are swept hourly.
+    ones are deleted. Dormant games with no activity for 24 h are swept (at start, every 10 min, and before
+    a create-game would hit `MAX_GAMES`); EMPTY dormant games (no seats, no messages, <= 1 log entry) go after 1 h.
   - Game record: `{ code, universeId, packId, status: 'live'|'dormant', createdAt, updatedAt, dmToken, gmPin,
     dmId (socket or null), players: Map<stableId, player>, messages }` (assigned character ids are recomputed from the
     seats; the snapshot keeps an informational `assignedCharacterIds` array). `gmPin` is a 6-digit PIN minted at
@@ -342,12 +344,14 @@ doc and the schema in sync. Validation runs on every save and on every generator
     URLs (`art`, `image`) must start with `/` or `http(s)://`.
   - Player events: `handout-seen { handoutId }`, `safety-confirm {}`, `pause-request {}` (anonymous; 3 s per-socket guard),
     `character-submit { character }` (one pending per seat; id becomes kebab `pb-…` if missing; ≤ 64 KB),
-    `player-roll { clientId, roll, at? }` (roll ≤ 4 KB; deduped by clientId), and `player-message` / `player-to-player` now take
+    `player-roll { clientId, roll, at?, requestId? }` (roll ≤ 4 KB; deduped by clientId; `requestId` answers a GM `roll-request`),
+    `token-take { tokenId }` (item pickup; see docs/BOARD_AND_BUILDER.md §2 "Table actions"), and `player-message` / `player-to-player` now take
     `clientId` + an ack callback (dedupe of offline-queue replays; the dedupe buffer persists, so replays after a server restart are safe).
   - Server → client one-shots: `handout-received { handout }`, `clue-revealed { clue }`, `clock-ticked { clock, delta }` (players + board, visible clocks only),
     `new-orders { actIndex, actTitle, text, at }`, `item-received { item, at }` (from `update-player` when inventory grows, multiset diff),
     `board-flash { tokenId }` (board + DM; the player's PC token), `pause-requested { at }` (DM; never contains who), `handout-seen { handoutId, playerId, seen, of }` (DM),
-    `character-submitted { submission }` (DM), `submission-updated { submission: { id, status, reason } }` (player), `roll { roll }` (DM), `log-entry { entry }` (DM).
+    `character-submitted { submission }` (DM), `submission-updated { submission: { id, status, reason } }` (player), `roll { roll }` (DM), `log-entry { entry }` (DM),
+    `roll-requested { request }` (player; from the DM's `roll-request`, cancel with `roll-request-cancel`; undo a pickup with `token-take-undo`).
   - Session log entries `{ id, at, type, text, act, scene, … }`, types `scene act narration handout clue clock track kill fog pause note loot character roll safety`
     (cap 2000). Auto-logged: scene/act changes, narration, handouts, clue reveals, clock start/ticks, track + status changes, kills, fog reveals,
     pauses (anonymous), loot, character assign/submit, rolls, session zero.
@@ -373,14 +377,14 @@ doc and the schema in sync. Validation runs on every save and on every generator
     successes, flags[] ('panic'|'push'|'crit'|'botch'|'complication'), dice: { base[], stress[], d20[] }, pool?: { base, stress }, pushed?, stressGain? (0–3 → tracks.stress),
     momentum? (→ pools.momentum when its def has playerAdd, capped at max), complications?, passed?, difficulty?, target? }`.
     Rollers accept `preset { attr, skill, bonus, label, attrKey?, skillKey?, stress?, kind?, total?, at? }` (phone re-mounts with `key=preset.at`) and `compact`.
-  - DM events (`{ gameCode?, … }`, ack `{ success, … } | { error }`): `gm-roll { roll, who }` (secret: GM feed + log only), `supply-set { playerId, supply }` (null removes a key),
+  - DM events (`{ gameCode?, … }`, ack `{ success, … } | { error }`): `gm-roll { roll, who, secret? }` (secret defaults to true: GM feed + log only; a boolean `false` also broadcasts `board-roll` to the TV with `who: 'gm'`), `supply-set { playerId, supply }` (null removes a key),
     `supply-roll { playerId, key }`, `pools-init { defs: rules.pools, values, reset }` (also sent by `createGame({ pools })`), `pool-set { key, value }`,
     `pool-delta { key, delta, reason? }` (floor 0, capped at max), `init-set { initiative }`, `init-step { dir: 1|-1 }` (next marks the actor done; past the end = new round),
     `init-goto { index }` (GM nominates), `init-round {}`, `init-end {}`, `injury-add { playerId, injury }`, `injury-remove { playerId, uid }`,
     `panic-result { playerId, … }` (GM rolling for a player). `update-player` removing every panic status clears `player.panic` + the token's `panicking` ring.
   - Player events: `panic-result { rollId (roll id or clientId), total, die, effect: { id, name, text, stressDelta, panicAction, status[] } }` (queued in the outbox;
     idempotent per roll; a new panic replaces the old named status), `supply-roll { key }` (own seat), `init-pass { toId }` (acting PC → an ally who has not acted).
-  - Server → client: `board-roll { roll: { id, name, label, summary, kind, dice, flags, at } }` (TV), `panic { playerId, name, total, effect, rollId, at }` (DM),
+  - Server → client: `board-roll { roll: { id, who, name, label, summary, kind, dice, flags, successes, stunts, pushed, panic, passed, momentum, complications, difficulty, target, at } }` (TV: `board/DiceStage.jsx` plays the roll as tumbling 3D dice + a result card), `panic { playerId, name, total, effect, rollId, at }` (DM),
     `board-panic { tokenId, name, effect, panicAction }` (TV; effect text stays private), `supply-rolled { playerId, name, key, dice, ones, before, after, at }` (DM + player),
     `pool-changed { key, value, delta, max }` (DM; board/players when visible), `your-turn { round, label, entryId }` (acting player), `turn-changed { round, label, tokenId }` (TV).
   - Log types added: `panic supply pool initiative injury`.
@@ -392,7 +396,7 @@ doc and the schema in sync. Validation runs on every save and on every generator
   - UI: RUN rail tabs INIT + THREATS, roll feed in the rail, pool counters in the RUN strip and the Session header; Session tab ROLLS / INITIATIVE / THREATS;
     player editor SUPPLY + CRITICAL INJURIES; phone PANIC ROLL overlay, complication red flash, MOMENTUM chip, YOUR TURN banner (+ PASS TO for Dune), SUPPLY on SHEET;
     TV roll/panic toasts, pool meters, supply strip, turn strip, TokenChip `flash` / `active` props (GM controller adds `showHp` bars).
-    Scene `ambient` (ship-hum, tension, alert, dread, space, wind, bazaar, sietch, court) switches the GM AudioPanel; `?board=CODE&audio=1` makes the TV follow it.
+    Scene `ambient` (ship-hum, tension, alert, dread, space, wind, bazaar, sietch, court) switches the GM ambient (rail AUDIO popover, Nav.jsx; it lists the universe's `theme.ambient` moods); `?board=CODE&audio=1` makes the TV follow it.
   - Regression test: `node scripts/test-mechanics.mjs`.
 
 ## Generator

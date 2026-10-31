@@ -2,18 +2,27 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import { trackMaxFor, fmtTime } from '../../rulesUtils';
+import './CrewDrawer.css';
 
 const initialsOf = (name = '') => name.replace(/^(capt|dr|sgt|lt|mr|ms|mrs)\.?\s+/i, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?';
 
 /* ═══════════════════════════════════════════════════════════════
    CREW drawer (Focus Stage dock): every seat with its tracks as bars,
    panic / offline / KIA state, unread messages, MSG per seat and
-   MSG ALL; quick actions +1 STRESS ALL, ASK FOR A ROLL (a priority
-   message to one or all), SEND HANDOUT, PRIVATE AGENDA.
+   MSG ALL; quick actions +1 STRESS ALL, ASK FOR A ROLL, SEND HANDOUT,
+   PRIVATE AGENDA.
+   ASK FOR A ROLL sends a real `roll-request` (skill from
+   universe.rules.skills, optional modifier (ALIEN, +/- dice) or difficulty
+   (DUNE), one seat or all): the phones show a ROLL NOW card that opens
+   the roller prefilled, and each answer comes back tagged with the
+   request. ROLL REQUESTS lists the last three (answers with their result,
+   who is still to roll, CANCEL while open); PICKED UP lists items players took off the board
+   (`token-take`) with UNDO (`token-take-undo`).
    ═══════════════════════════════════════════════════════════════ */
 export default function CrewDrawer({ onOpen, onNavigate }) {
   const {
     players, messages, unreadBy, clearUnreadFor, sendMessage, broadcastMessage, updatePlayer, table,
+    rollRequest, rollRequestCancel, tokenTakeUndo,
   } = useGame();
   const { universe } = useUniverse();
   const { terms, rules, terminal } = universe;
@@ -25,10 +34,17 @@ export default function CrewDrawer({ onOpen, onNavigate }) {
   const [to, setTo] = useState(null);       // composer target: playerId | 'broadcast' | null
   const [text, setText] = useState('');
   const [prio, setPrio] = useState(priorities[0]);
-  const [ask, setAsk] = useState(null);     // { skill, who: 'all'|playerId, note }
+  const [ask, setAsk] = useState(null);     // { skill (rules key), who: 'all'|playerId, note, diff: '' | '<int>' }
   const [status, setStatus] = useState(null);
   useEffect(() => { if (!status) return undefined; const t = setTimeout(() => setStatus(null), 4000); return () => clearTimeout(t); }, [status]);
-  const skills = useMemo(() => (rules.skills || []).map((s) => s.label), [rules]);
+  const skills = useMemo(() => (rules.skills || []).map((s) => ({ key: s.key, label: s.label || s.key })), [rules]);
+  const d20 = rules.dice?.kind === '2d20';
+  /* ALIEN: a modifier in dice (-3..+3); DUNE: the Difficulty (0..maxDifficulty). '' = none (roller default). */
+  const diffOptions = d20
+    ? Array.from({ length: (rules.dice?.maxDifficulty ?? 5) + 1 }, (_, i) => [String(i), `DIFFICULTY ${i}`])
+    : [3, 2, 1, -1, -2, -3].map((n) => [String(n), `${n > 0 ? '+' : '−'}${Math.abs(n)} ${Math.abs(n) === 1 ? 'DIE' : 'DICE'}`]);
+  const diffText = (d) => (d === null || d === undefined ? '' : d20 ? `D${d}` : d === 0 ? '' : `${d > 0 ? '+' : '−'}${Math.abs(d)}`);
+  const skillLabel = (key) => skills.find((s) => s.key === key)?.label || key;
   const PLAYERS = terms.players.toUpperCase();
   const MSG = terms.message.toUpperCase();
 
@@ -62,13 +78,25 @@ export default function CrewDrawer({ onOpen, onNavigate }) {
   const sendAsk = (e) => {
     e.preventDefault();
     if (!ask?.skill) return;
-    const line = `ROLL ${ask.skill.toUpperCase()}${ask.note.trim() ? ` — ${ask.note.trim()}` : ''}`;
-    const urgent = priorities[1] || priorities[0];
-    if (ask.who === 'all') broadcastMessage(line, urgent);
-    else sendMessage(ask.who, line, urgent);
-    setStatus(`ASKED ${ask.who === 'all' ? `ALL ${PLAYERS}` : (players[ask.who]?.character?.name || '').toUpperCase()}: ${ask.skill.toUpperCase()}`);
+    const label = skillLabel(ask.skill);
+    const who = ask.who === 'all' ? `ALL ${PLAYERS}` : (players[ask.who]?.character?.name || '').toUpperCase();
+    rollRequest({ skill: ask.skill, label, difficulty: ask.diff === '' ? null : Number(ask.diff), note: ask.note.trim(), to: ask.who }, (r) => {
+      if (r?.error) { setStatus(`NOT SENT: ${String(r.error).toUpperCase()}`); return; }
+      const n = r?.sent?.length ?? 0;
+      setStatus(`ROLL ${label.toUpperCase()} → ${who}${n ? '' : ' (OFFLINE — THEY SEE IT ON RECONNECT)'}`);
+    });
     setAsk(null);
   };
+  const nameOf = (pid) => players[pid]?.character?.name || players[pid]?.name || '?';
+  /* Roll requests (DM table view): the last three not withdrawn, newest first; `waiting` = addressed live seats
+     that have not answered yet (empty = done). */
+  const live = seated.filter((p) => p.alive !== false).map((p) => p.id);
+  const requests = (table?.rollRequests || []).filter((r) => !r.cancelled).slice(-3).reverse().map((r) => {
+    const to = r.recipients === 'all' ? live : (r.recipients || []).filter((id) => live.includes(id));
+    return { ...r, waiting: to.filter((id) => !(r.answeredBy || []).includes(id)) };
+  });
+  const answersFor = (rq) => (table?.rolls || []).filter((x) => x.requestId === rq.id);
+  const pickups = (table?.takes || []).filter((t) => !t.undone).slice(-3).reverse();
   const thread = (pid) => messages.filter((m) => m.toId === pid || m.fromId === pid).slice(-3);
 
   const composer = (
@@ -156,16 +184,22 @@ export default function CrewDrawer({ onOpen, onNavigate }) {
       <div className="cd-quick">
         {stressTrack && <button type="button" className="fs-btn" onClick={stressAll} disabled={!seated.length}>+1 STRESS ALL</button>}
         <button type="button" className={`fs-btn${ask ? ' on' : ''}`} aria-expanded={!!ask} disabled={!list.length}
-          onClick={() => setAsk((a) => (a ? null : { skill: skills[0] || '', who: 'all', note: '' }))}>ASK FOR A ROLL</button>
+          onClick={() => setAsk((a) => (a ? null : { skill: skills[0]?.key || '', who: 'all', note: '', diff: '' }))}>ASK FOR A ROLL</button>
         <button type="button" className="fs-btn" onClick={() => onOpen('handouts')}>SEND HANDOUT</button>
         <button type="button" className="fs-btn" onClick={() => onOpen('more', 'agendas')}>PRIVATE AGENDA</button>
       </div>
       {ask && (
         <form className="cd-ask" onSubmit={sendAsk}>
           <label className="fs-label" htmlFor="cd-ask-skill">ROLL</label>
-          <select id="cd-ask-skill" value={ask.skill} onChange={(e) => setAsk({ ...ask, skill: e.target.value })}>
-            {skills.map((s) => <option key={s} value={s}>{s.toUpperCase()}</option>)}
-          </select>
+          <div className="cd-ask-pair">
+            <select id="cd-ask-skill" value={ask.skill} onChange={(e) => setAsk({ ...ask, skill: e.target.value })}>
+              {skills.map((s) => <option key={s.key} value={s.key}>{s.label.toUpperCase()}</option>)}
+            </select>
+            <select value={ask.diff} onChange={(e) => setAsk({ ...ask, diff: e.target.value })} aria-label={d20 ? 'Difficulty' : 'Dice modifier'}>
+              <option value="">{d20 ? 'DIFFICULTY —' : 'NO MODIFIER'}</option>
+              {diffOptions.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+            </select>
+          </div>
           <div className="run-targets" role="group" aria-label="Who rolls">
             <button type="button" className={`run-chip${ask.who === 'all' ? ' on' : ''}`} aria-pressed={ask.who === 'all'} onClick={() => setAsk({ ...ask, who: 'all' })}>ALL</button>
             {seated.map((p) => (
@@ -178,6 +212,55 @@ export default function CrewDrawer({ onOpen, onNavigate }) {
             <button type="button" className="run-btn" onClick={() => setAsk(null)}>CANCEL</button>
           </div>
         </form>
+      )}
+      {requests.length > 0 && (
+        <div className="cd-reqs" aria-label="Roll requests">
+          <div className="cd-k">ROLL REQUESTS</div>
+          <ul className="cd-req-list">
+            {requests.map((rq) => {
+              const answers = answersFor(rq);
+              const to = rq.recipients === 'all' ? `ALL ${PLAYERS}` : (rq.recipients || []).map(nameOf).join(', ').toUpperCase();
+              return (
+                <li key={rq.id} className={`cd-req${rq.waiting.length ? '' : ' done'}`}>
+                  <div className="cd-req-line">
+                    <b>{String(rq.label || rq.skill).toUpperCase()}{diffText(rq.difficulty) ? ` · ${diffText(rq.difficulty)}` : ''}</b>
+                    <span className="cd-req-to">{'→'} {to}</span>
+                    {rq.waiting.length > 0
+                      ? (
+                        <button type="button" className="run-btn cd-req-x" aria-label={`Cancel the ${rq.label || rq.skill} request`}
+                          onClick={() => rollRequestCancel(rq.id, (r) => setStatus(r?.error ? `CANCEL FAILED: ${r.error}` : 'REQUEST WITHDRAWN'))}>CANCEL</button>
+                      )
+                      : <span className="cd-req-done">DONE</span>}
+                  </div>
+                  {answers.length > 0 && (
+                    <ul className="cd-req-answers">
+                      {answers.map((x) => <li key={x.id}><b>{x.characterName || x.playerName}</b> {x.roll?.summary || ''}</li>)}
+                    </ul>
+                  )}
+                  {rq.waiting.length > 0 && (
+                    <p className="cd-req-wait">WAITING: {rq.waiting.map(nameOf).join(', ').toUpperCase()}</p>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+      {pickups.length > 0 && (
+        <div className="cd-reqs" aria-label="Items picked up">
+          <div className="cd-k">PICKED UP</div>
+          <ul className="cd-req-list">
+            {pickups.map((t) => (
+              <li key={t.id} className="cd-req">
+                <div className="cd-req-line">
+                  <b>{nameOf(t.playerId)}</b><span className="cd-req-to">took {t.item}</span>
+                  <button type="button" className="run-btn cd-req-x" aria-label={`Undo: put ${t.item} back on the map`}
+                    onClick={() => tokenTakeUndo(t.id, (r) => setStatus(r?.error ? `UNDO FAILED: ${r.error}` : `${t.item.toUpperCase()} IS BACK ON THE MAP`))}>UNDO</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
       {status && <p className="cd-status" role="status">{status}</p>}
       {table?.pause && <p className="cd-status warn">PAUSE REQUESTED — see the banner above the stage.</p>}

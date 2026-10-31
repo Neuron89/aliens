@@ -9,7 +9,8 @@ import { DEFAULT_BOARD_PALETTE } from './mapDefs';
    readable; the board and phones get near-opaque fog.
 
    `palette` (board/mapDefs.mapVisuals) colours the fog, edges and labels
-   per universe/map; palette.reveal picks the dissolve: 'scan' (ALIEN,
+   per universe/map (the selected / "your room" outline uses
+   palette.selectedEdge, else the deck accent); palette.reveal picks the dissolve: 'scan' (ALIEN,
    stepped CRT dissolve), 'dust' (DUNE, slow fade with a grain veil that
    lingers), else a plain fade.
 
@@ -135,6 +136,8 @@ export default function RoomLayer({
   const stroke = Math.max(0.6, unit * 0.05);
   const reveal = palette.reveal || 'fade';
   const dust = reveal === 'dust';
+  // selected / "your room" outline: the universe's board accent, not a fixed white
+  const selEdge = palette.selectedEdge || palette.deck?.accent || palette.door || '#ffffff';
   // big rooms first so nested rooms sit on top (taps hit the smaller room, like the server's roomAt)
   const ordered = useMemo(() => [...rooms].sort((a, b) => area(b.shape) - area(a.shape)), [rooms]);
   const holes = useMemo(() => nestedShapes(rooms), [rooms]);
@@ -166,7 +169,7 @@ export default function RoomLayer({
             {dust && !dm && <Shape shape={r.shape} W={W} H={H} holes={hole} className="rm-fog-grain" fill={`url(#${uid}-fogdust)`} pointerEvents="none" style={{ opacity: revealed ? 0 : 1 }} />}
             {dm && !revealed && <Shape shape={r.shape} W={W} H={H} holes={hole} fill={`url(#${uid}-foghatch)`} pointerEvents="none" />}
             <Shape shape={r.shape} W={W} H={H} className="rm-hit" fill="transparent"
-              stroke={selected ? '#ffffff' : revealed ? (dm ? palette.revealedEdge : 'none') : palette.fogEdge}
+              stroke={selected ? selEdge : revealed ? (dm ? palette.revealedEdge : 'none') : palette.fogEdge}
               strokeWidth={selected ? 2.5 : 1} strokeDasharray={revealed ? undefined : '5 4'}
               vectorEffect="non-scaling-stroke" />
           </g>

@@ -109,6 +109,19 @@ export function buildOutputSchema(universe, params, acts) {
   if (attrKeys.length) C.attributes = intMap(attrKeys, `Attribute scores, each ${aMin}–${aMax}.`, aMin, aMax);
   if (skillKeys.length) C.skills = intMap(skillKeys, `Skill levels, every skill present, each 0–${sMax}.`, 0, sMax);
   delete C.health;
+  // Statements per attribute (DUNE drive statements): explicit keys when the universe prompts for them.
+  const promptedKeys = (rules.attributes || []).filter((a) => a.prompt).map((a) => a.key);
+  if (promptedKeys.length) {
+    C.driveStatements = {
+      description: C.driveStatements?.description || 'One belief statement per attribute.',
+      type: 'object',
+      additionalProperties: false,
+      required: promptedKeys,
+      properties: Object.fromEntries((rules.attributes || []).filter((a) => a.prompt).map((a) => [a.key, { type: 'string', description: `${a.label}: ${a.prompt} One first-person sentence.` }])),
+    };
+  } else {
+    delete C.driveStatements;
+  }
   const actKeys = Array.from({ length: acts.max }, (_, i) => String(i + 1));
   C.agendaByAct = {
     description: C.agendaByAct?.description || 'Agenda per act.',
@@ -118,7 +131,7 @@ export function buildOutputSchema(universe, params, acts) {
     properties: Object.fromEntries(actKeys.map((k) => [k, { type: 'string', description: `Agenda for act ${k}, 1–3 sentences in second person.` }])),
   };
   const required = ['id', 'name', 'career', 'appearance', 'attributes', 'skills', 'talent', 'gear', 'signatureItem',
-    'personalAgenda', 'agendaByAct', 'buddy', 'rival', 'secret'];
+    'personalAgenda', 'agendaByAct', 'buddy', 'rival', 'secret', ...(promptedKeys.length ? ['driveStatements'] : [])];
   if (params.playerNames?.length) {
     C.assignedTo = {
       description: 'Which real player this character is written for (each name used exactly once). Removed from the saved pack.',

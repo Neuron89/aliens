@@ -23,7 +23,7 @@ the rest are craft rules you must check by reading your own output.
 - [ ] One PC per player; each has `personalAgenda`, `agendaByAct` ("1","2","3"), `secret`, `buddy`, `rival`, `signatureItem`, `appearance`.
 - [ ] `agendaByAct` escalates: private and plausible, then conflict, then open betrayal.
 - [ ] Each PC secret collides with another PC's agenda or secret; no PC is without a conflict by the last act.
-- [ ] (V) Every PC has all required fields. NOT validated: attribute/skill keys are checked only by `smoke.mjs` for bundled packs, so verify them by hand against `rules.js`. `health` omitted.
+- [ ] (V) Every PC has all required fields, legal attribute/skill keys and ranges, a catalog career and a talent of that career with its catalog text, `buddy`/`rival` naming other PCs, and (DUNE) all five `driveStatements`. `health` omitted. Run the validator with `--warnings` to see gear that is not a catalog item and skills above the builder caps.
 - [ ] Attribute and skill totals computed against `rules.creation` (see SKILL.md step 4); no skill above the allowed max.
 - [ ] Career and talent come from `careers.js`.
 - [ ] No two PCs have the same id, name or signature item. `buddy`/`rival` refer to real PC names (or "None").

@@ -1,10 +1,13 @@
 # Build the app and run it as a local background server (default port 3100).
-# Usage:  powershell -File scripts\deploy-local.ps1 [-Port 3100] [-Stop]
+# Usage:  powershell -File scripts\deploy-local.ps1 [-Port 3100] [-MaxGames 200] [-Stop]
+# -MaxGames (or an existing MAX_GAMES env var) caps live + dormant games on the server
+# (server default 50). Empty dormant games expire after an hour on their own.
 # The deployed copy lives in ..\aliens-deploy so rebuilding or editing the repo
 # never breaks the running game. Runtime content packs and saved sessions created
 # through the deployed app stay in the deploy folder (content\ and data\).
 param(
   [int]$Port = 3100,
+  [int]$MaxGames = 0,
   [switch]$Stop
 )
 $ErrorActionPreference = "Stop"
@@ -55,6 +58,8 @@ Pop-Location
 Stop-Server
 Write-Host "== starting on port $Port =="
 $env:PORT = "$Port"
+if ($MaxGames -gt 0) { $env:MAX_GAMES = "$MaxGames" }
+if ($env:MAX_GAMES) { Write-Host "MAX_GAMES = $env:MAX_GAMES" } else { Write-Host "MAX_GAMES = 50 (server default)" }
 $p = Start-Process -FilePath "node" -ArgumentList "server/index.js" -WorkingDirectory $app -WindowStyle Hidden -PassThru
 $p.Id | Out-File $pidFile
 Start-Sleep -Seconds 2

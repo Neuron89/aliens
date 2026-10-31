@@ -22,7 +22,7 @@ import { randomBytes, randomInt } from 'crypto';
 import { loadSnapshots, scheduleSave, removeSnapshot, allowCode, MAX_AGE_MS } from './persistence.js';
 import {
   emptyBoard, normalizeBoard, sanitizeMapDef, publicMapDef, sanitizeToken, placeToken, relocateAll, viewFor,
-  sanitizeView, isMapId, isLevelId, isTokenId, spawnPoint, MAX_TOKENS, MAX_PINGS,
+  sanitizeView, isMapId, isLevelId, isTokenId, isTokenVisible, spawnPoint, MAX_TOKENS, MAX_PINGS,
 } from './board.js';
 import { safeOn, EVENT_NAMES, RESERVED_IDS, isSafeKey, isPlainObject, nullObj, safeEqual } from './guard.js';
 import { listUniverseIds, loadUniverseCore } from './generator/universes.js';
@@ -41,6 +41,12 @@ const PING_INTERVAL_MS = 1000;
 const MAX_TEXT = 4000;                 // GM / player message text cap (chars)
 export const MAX_GAMES = Math.max(1, Number(process.env.MAX_GAMES) || 50); // live + dormant games per server
 const MAX_PLAYERS = 40;
+/* Dormant games nobody ever played in (no seats, no messages, at most one log line) expire after
+   EMPTY_GAME_MS instead of MAX_AGE_MS, so test/sandbox sessions do not fill the MAX_GAMES cap. */
+const EMPTY_GAME_MS = Math.max(100, Number(process.env.EMPTY_GAME_MS) || 60 * 60 * 1000);
+const SWEEP_INTERVAL_MS = Math.max(100, Number(process.env.SWEEP_INTERVAL_MS) || 10 * 60 * 1000);
+/** A game with no seats, no messages and at most one log entry. */
+export const isEmptyGame = (g) => g.players.size === 0 && g.messages.length === 0 && (Array.isArray(g.log) ? g.log.length : 0) <= 1;
 const SEAT_CLAIM_MS = Math.max(500, Number(process.env.SEAT_CLAIM_MS) || 2 * 60 * 1000);
 const MAX_CLAIMS_PER_GAME = 10;
 const PIN_MAX_FAILS = 5;               // wrong PINs per game before a lockout
@@ -198,6 +204,10 @@ const MAX_CHARACTER_BYTES = 64 * 1024;
 const MAX_ROLL_BYTES = 4096;
 const PAUSE_INTERVAL_MS = 3000;
 const ITEM_RE = /^[A-Za-z0-9_-]{1,64}$/;
+const MAX_TAKES = 50;                  // token-take records kept for GM undo
+const MAX_ROLL_REQUESTS = 30;          // roll-request records (open + answered)
+const MAX_INVENTORY = 200;
+const SKILL_RE = /^[A-Za-z][A-Za-z0-9_-]{0,39}$/;
 const sstr = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
 const urlish = (v) => (typeof v === 'string' && v.length <= 500 && /^(\/|https?:\/\/)/.test(v) ? v : null);
 const shortId = (prefix) => `${prefix}-${Date.now().toString(36)}${randomBytes(2).toString('hex')}`;
@@ -221,6 +231,8 @@ export function emptyTable() {
     pools: {},              // { momentum: n, threat: n } (mechanics.js)
     poolDefs: {},           // { key: { label, max, visible, playerAdd } }
     initiative: emptyInitiative(), // { active, order[], turn, round }
+    takes: [],              // [{ id, playerId, item, token, at, undone }] (<= 50) - token-take, GM undo
+    rollRequests: [],       // [{ id, skill, label, difficulty, note, recipients:'all'|[ids], at, answeredBy[], cancelled }] (<= 30)
     clientIds: [],          // ids of replayed phone actions already applied (dedupe)
     seeded: false,          // pack clocks/clues seeded (session-seed) — never re-seeded after GM edits
   };
@@ -344,8 +356,14 @@ function tableView(game, role, player = null) {
     pools: publicPools(t),
     initiative: publicInitiative(t, pid),
     submission: sub ? { id: sub.id, status: sub.status, reason: sub.reason || '', at: sub.at, name: sub.character?.name || '' } : null,
+    rollRequests: t.rollRequests.filter((r) => isOpenRequestFor(r, pid)).map(publicRollRequest),
   };
 }
+
+/** Roll request as a phone sees it (no recipient list / receipts). */
+const publicRollRequest = (r) => ({ id: r.id, skill: r.skill, label: r.label, difficulty: r.difficulty, note: r.note, at: r.at });
+/** Open (not cancelled), addressed to this player and not yet answered by them. */
+const isOpenRequestFor = (r, pid) => !!pid && !r.cancelled && sentTo(r.recipients, pid) && !r.answeredBy.includes(pid);
 
 /** Multiset difference: entries of `next` that are not in `prev`. */
 function addedItems(prev, next) {
@@ -365,19 +383,24 @@ export function attachSessions(io) {
   for (const g of loadSnapshots()) games.set(g.code, g);
   if (games.size) console.log(`[SESSION] Loaded ${games.size} dormant game(s) from disk`);
 
-  /* Expire dormant games nobody came back for. */
-  const sweep = setInterval(() => {
+  /* Expire dormant games nobody came back for (MAX_AGE_MS), and empty dormant ones sooner (EMPTY_GAME_MS).
+     Runs at start (snapshots loaded from disk) and every SWEEP_INTERVAL_MS. */
+  function sweepOnce() {
     const now = Date.now();
     for (const [code, g] of games) {
-      if (g.status === 'dormant' && now - g.updatedAt > MAX_AGE_MS) {
+      if (g.status !== 'dormant' || g.dmId) continue;
+      const idle = now - g.updatedAt;
+      if (idle > MAX_AGE_MS || (idle > EMPTY_GAME_MS && isEmptyGame(g))) {
         games.delete(code);
         removeSnapshot(code);
         lastSavedEmit.delete(code);
         pinFails.delete(code);
         for (const c of [...claims.values()]) if (c.code === code) closeClaim(c, { approved: false, error: 'SESSION EXPIRED.' });
+        console.log(`[SESSION] Game ${code} expired (${idle > MAX_AGE_MS ? 'dormant too long' : 'empty'})`);
       }
     }
-  }, 60 * 60 * 1000);
+  }
+  const sweep = setInterval(sweepOnce, SWEEP_INTERVAL_MS);
   sweep.unref?.();
 
   const lastSavedEmit = new Map();
@@ -595,6 +618,8 @@ export function attachSessions(io) {
     detachSocket(socket);
   }
 
+  sweepOnce(); // snapshots loaded above (claims/pinFails exist by now)
+
   let eventsChecked = false;
   io.on('connection', (socket) => {
     console.log(`[SESSION] Connection: ${socket.id}`);
@@ -604,6 +629,7 @@ export function attachSessions(io) {
     /* ─── DM: Create Game { universeId, packId? } → { code, universeId, packId, dmToken, gmPin } ───
        gmPin (6 digits) is shown to the DM once; it authorizes a TAKE OVER from another terminal. */
     on('create-game', (options, callback) => {
+      if (games.size >= MAX_GAMES) sweepOnce(); // free expired/empty dormant slots first
       if (games.size >= MAX_GAMES) return callback?.({ error: `SERVER FULL — ${MAX_GAMES} GAMES ALREADY HOSTED. END AN OLD ONE FIRST.` });
       detachSocket(socket); // a socket holds one role in one game
       const game = createGame(socket.id, options);
@@ -1604,7 +1630,15 @@ export function attachSessions(io) {
       let roll = payload.roll;
       try { if (!roll || typeof roll !== 'object' || JSON.stringify(roll).length > MAX_ROLL_BYTES) return callback?.({ error: 'Invalid roll.' }); } catch { return callback?.({ error: 'Invalid roll.' }); }
       roll = JSON.parse(JSON.stringify(roll));
-      const entry = { id: shortId('r'), clientId, playerId: player.id, playerName: player.name, characterName: player.character?.name || '', roll, at: Number(payload.at) || Date.now() };
+      // `at` is when the phone rolled (an offline-queued roll arrives later); anything implausible → now.
+      const now = Date.now();
+      const rolledAt = Number(payload.at);
+      const at = Number.isFinite(rolledAt) && rolledAt > now - 7 * 24 * 3600 * 1000 && rolledAt <= now + 60 * 1000 ? rolledAt : now;
+      const entry = { id: shortId('r'), clientId, playerId: player.id, playerName: player.name, characterName: player.character?.name || '', roll, at };
+      // Answer to a GM roll-request ({ requestId } on the payload or the roll): tag the entry, close it for this player.
+      const reqId = typeof payload.requestId === 'string' ? payload.requestId : (typeof roll.requestId === 'string' ? roll.requestId : null);
+      const request = reqId ? t.rollRequests.find((r) => r.id === reqId && isOpenRequestFor(r, player.id)) : null;
+      if (request) { entry.requestId = request.id; request.answeredBy.push(player.id); }
       t.rolls.push(entry);
       if (t.rolls.length > MAX_ROLLS) t.rolls.splice(0, t.rolls.length - MAX_ROLLS);
       if (clientId) rememberClientId(t, clientId);
@@ -1612,9 +1646,115 @@ export function attachSessions(io) {
       logTo(game, 'roll', `${pcName(player)} rolled${summary ? `: ${summary}` : ''}`);
       toDM(game, 'roll', { roll: entry });
       afterPlayerRoll(mech, game, player, entry); // push stress, Momentum, TV toast (board-roll)
-      emitTable(game, entry.roll.momentum ? {} : { dmOnly: true });
+      if (entry.roll.momentum) emitTable(game);
+      else {
+        emitTable(game, { dmOnly: true });
+        if (request) emitTable(game, { only: player }); // the ROLL NOW card closes on the phone
+      }
       touch(game);
-      callback?.({ success: true, id: entry.id });
+      callback?.({ success: true, id: entry.id, ...(request ? { requestId: request.id } : {}) });
+    });
+
+    /* ─── Player: Pick up an item token { tokenId } → { success, item, takeId } ───
+       Valid only for a visible, unlocked 'item' token in the same room (and level) as the player's own
+       PC token. The token leaves the board, its label goes into the seat's gear (player.inventory),
+       and a 'loot' log entry carries { takeId } so the GM can token-take-undo it. */
+    on('token-take', (payload, callback) => {
+      const { game, player } = playerCtx();
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      if (!player.character || player.alive === false) return callback?.({ error: 'NO CHARACTER.' });
+      const b = boardOf(game);
+      const tok = isTokenId(payload.tokenId) ? b.tokens[payload.tokenId] : null;
+      if (!tok || tok.kind !== 'item' || !isTokenVisible(b, tok)) return callback?.({ error: 'NOTHING TO TAKE.' });
+      if (tok.locked) return callback?.({ error: 'ASK THE GM.' });
+      const pc = Object.values(b.tokens).find((x) => x.kind === 'pc' && x.ownerPlayerId === player.id);
+      if (!pc) return callback?.({ error: 'YOU ARE NOT ON THE MAP.' });
+      const lvl = (x) => x.level || b.level || null;
+      if (!pc.roomId || pc.roomId !== tok.roomId || lvl(pc) !== lvl(tok)) return callback?.({ error: 'NOT IN YOUR ROOM.' });
+      if (player.inventory.length >= MAX_INVENTORY) return callback?.({ error: 'GEAR FULL.' });
+      const item = (tok.label || tok.sub || 'Item').slice(0, 120);
+      const t = tableOf(game);
+      const take = { id: shortId('take'), playerId: player.id, item, token: { ...tok }, at: Date.now(), undone: false };
+      t.takes.push(take);
+      if (t.takes.length > MAX_TAKES) t.takes.splice(0, t.takes.length - MAX_TAKES);
+      delete b.tokens[tok.id];
+      player.inventory = [...player.inventory, item];
+      const roomName = b.rooms[tok.roomId]?.name || (game.mapDef?.rooms || []).find((r) => r.id === tok.roomId)?.name || tok.roomId;
+      logTo(game, 'loot', `${pcName(player)} took ${item} (${roomName})`, { playerId: player.id, takeId: take.id, tokenId: tok.id });
+      toPlayer(player, 'item-received', { item, at: take.at, taken: true });
+      toPlayer(player, 'status-updated', { player: getPlayerData(player) });
+      toDM(game, 'players-updated', { players: serializePlayers(game) });
+      io.to(boardRoom(game.code)).emit('board-flash', { tokenId: pc.id });
+      toDM(game, 'board-flash', { tokenId: pc.id });
+      emitBoard(game);
+      touch(game);
+      emitTable(game, { dmOnly: true });
+      callback?.({ success: true, item, takeId: take.id });
+    });
+
+    /* ─── DM: Undo a pickup { takeId } — the token goes back where it was, one copy of the item leaves the gear ─── */
+    on('token-take-undo', (payload, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = tableOf(game);
+      const take = t.takes.find((x) => x.id === payload.takeId);
+      if (!take || take.undone) return callback?.({ error: 'Unknown pickup.' });
+      const b = boardOf(game);
+      if (Object.keys(b.tokens).length >= MAX_TOKENS) return callback?.({ error: 'TOO MANY TOKENS.' });
+      take.undone = true;
+      // The GM may have reused the id meanwhile: restore under a fresh one then.
+      const id = b.tokens[take.token.id] ? `${take.token.id.slice(0, 32)}-${randomBytes(2).toString('hex')}` : take.token.id;
+      const restored = { ...take.token, id };
+      b.tokens[id] = restored;
+      placeToken(b, game.mapDef, restored);
+      const player = game.players.get(take.playerId);
+      if (player) {
+        const i = player.inventory.lastIndexOf(take.item);
+        if (i >= 0) player.inventory = [...player.inventory.slice(0, i), ...player.inventory.slice(i + 1)];
+        toPlayer(player, 'status-updated', { player: getPlayerData(player) });
+        toDM(game, 'players-updated', { players: serializePlayers(game) });
+      }
+      logTo(game, 'loot', `Undo: ${take.item} back on the map${player ? ` (from ${pcName(player)})` : ''}`, { takeId: take.id, tokenId: id, undo: true });
+      emitBoard(game);
+      done(game, callback, { tokenId: id });
+    });
+
+    /* ─── DM: Ask for a roll { skill, label?, difficulty?, note?, to:'all'|playerId|[playerIds] } → { success, id, sent } ───
+       Recipients get `roll-requested { request: { id, skill, label, difficulty, note, at } }`; open requests are
+       also in their table view (rollRequests), so a reconnecting phone still shows the card. The phone answers
+       with a normal player-roll carrying { requestId }; the DM's `roll` entry then has requestId. */
+    on('roll-request', (payload, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      if (typeof payload.skill !== 'string' || !SKILL_RE.test(payload.skill) || RESERVED_IDS.has(payload.skill)) return callback?.({ error: 'Invalid skill.' });
+      const recipients = recipientsOf(game, payload.to);
+      if (!recipients) return callback?.({ error: 'No recipients.' });
+      const d = payload.difficulty;
+      const difficulty = d === undefined || d === null || d === '' ? null : Number(d);
+      if (difficulty !== null && (!Number.isInteger(difficulty) || difficulty < -10 || difficulty > 10)) return callback?.({ error: 'Invalid difficulty.' });
+      const t = tableOf(game);
+      const request = {
+        id: shortId('rq'), skill: payload.skill, label: sstr(payload.label, 60).trim() || payload.skill,
+        difficulty, note: sstr(payload.note, 300).trim(), recipients, at: Date.now(), answeredBy: [], cancelled: false,
+      };
+      t.rollRequests.push(request);
+      if (t.rollRequests.length > MAX_ROLL_REQUESTS) t.rollRequests.splice(0, t.rollRequests.length - MAX_ROLL_REQUESTS);
+      const pub = publicRollRequest(request);
+      const sent = [];
+      for (const [, p] of game.players) if (sentTo(recipients, p.id)) { toPlayer(p, 'roll-requested', { request: pub }); sent.push(p.id); }
+      const nameOf = (id) => pcName(game.players.get(id));
+      logTo(game, 'roll', `GM asked ${recipients === 'all' ? 'everyone' : recipients.map(nameOf).join(', ')} for ${request.label}${difficulty !== null ? ` (difficulty ${difficulty})` : ''}`, { requestId: request.id });
+      done(game, callback, { id: request.id, sent });
+    });
+
+    /* ─── DM: Withdraw a roll request { id } (phones drop the card via table-state) ─── */
+    on('roll-request-cancel', (payload, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const request = tableOf(game).rollRequests.find((r) => r.id === payload.id);
+      if (!request) return callback?.({ error: 'Unknown request.' });
+      request.cancelled = true;
+      done(game, callback);
     });
 
     /* ═══ MECHANICS WAVE (server/mechanics.js): gm-roll, panic-result, supply-*, pool-*, init-*, injury-* ═══ */

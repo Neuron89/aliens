@@ -882,7 +882,7 @@
       "id": "ferrant-tally",
       "title": "Cipher Tally from the Boot Heel",
       "from": "Ferrant Osk (private hand)",
-      "to": "None",
+      "to": "No addressee",
       "priority": "SEALED",
       "text": "A strip of spice-paper rolled tight. Three marks, three figures. A closed hand in a circle: 300,000 solari, “the old woman pays in favors also.” A toothed wheel: 450,000, “wants the ladder, not the blood.” A griffin: 200,000 through the clerk, “the clerk asks too many questions.” Beneath, underlined twice: “Delivery by the Wren. The one in the glass must not know I sold it.”",
       "when": "Act I, when the boot heel is searched in The Body"
@@ -918,7 +918,7 @@
       "id": "auditor-last-notation",
       "title": "The Auditor’s Last Notation",
       "from": "AUDITOR OSRIC VAYLE (ledger margin, private hand)",
-      "to": "None",
+      "to": "No addressee",
       "priority": "URGENT",
       "text": "Day 5. Levy column reconciles at last; F.O. skimmed nine percent for three years. Note for my own peace: T. no longer consults the tables. T. quoted me the Kaitain warehouse figure this morning. I never gave her that figure. I never gave it to anyone. Have asked the Suk of the Wren to look at her tomorrow on some pretext. I am being foolish. I am being foolish.",
       "when": "Act II, The Second Death, when the ledger is read"
@@ -1092,7 +1092,7 @@
       "talent": "Projection Engine — Once per scene, state a conclusion about a person or plan. If the Narrator confirms it, gain 2 Momentum; if not, the Narrator gains 1 Threat.",
       "gear": [
         "Sapho juice",
-        "Filmbook reader",
+        "Filmbook",
         "Poison snooper",
         "Shield belt",
         "Ledger of the Carriage Charter"
@@ -1139,7 +1139,7 @@
         "Rapier",
         "Shield belt",
         "Stunner",
-        "Glowglobes",
+        "Glowglobe",
         "Empty wren sheath"
       ],
       "signatureItem": "Empty wren sheath — the off-hand scabbard that held the kindjal now buried in a dead man, carved by the Countess’s father with a glass wren on the locket.",
@@ -1229,7 +1229,7 @@
         "Suk medical kit",
         "Chaumurky antidote kit",
         "Poison snooper",
-        "Glowglobes",
+        "Glowglobe",
         "Silver bone-saw"
       ],
       "signatureItem": "Silver bone-saw — the instrument his Suk master gave him on graduation, engraved with the oath he has never broken.",

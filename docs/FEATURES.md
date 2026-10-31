@@ -16,9 +16,9 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 7 | Clocks attached to scenes, full clock prompts the GM | partial | Pack `clocks[]` are seeded into the session once (`session-seed`) and a full clock is tagged FULL in `ClocksPanel.jsx`; a scene cannot spawn a clock and nothing prompts "what happens" |
 | 8 | Year Zero roller (pool, push, stress, panic trigger) | done | `universes/alien/components/YzeDiceRoller.jsx`; roll payload `kind:'yze'` |
 | 9 | 2d20 roller (Focus, complications, Momentum, bought dice) | done | `universes/dune/components/D20DiceRoller.jsx`; roll payload `kind:'2d20'` |
-| 10 | Roll feed on GM and board | done | `run/RollFeed.jsx`, DMDashboard ROLLS; `player-roll`, `roll`, `board-roll`; TV toasts in `board/Overlays.jsx` |
+| 10 | Roll feed on GM and board | done | `run/RollFeed.jsx`, DMDashboard ROLLS; `player-roll`, `roll`, `board-roll`; the TV plays every public roll as an animated dice stage (`board/DiceStage.jsx`, mounted from `board/Overlays.jsx`: seeded tumble, lit hits, result card, pushed re-tumble, queue, reduced-FX fallback) |
 | 11 | Settle-then-celebrate feedback, crit/botch, reduce-motion and mute | done | `player/fx.js`, `sfx.js` (per-universe `theme.sfx`), `Header.jsx` `FxToggles` (REDUCE FX, MUTE, per device) |
-| 12 | GM secret roll | done | `gm-roll` (GM feed and log only, never the TV): threat cards' ROLL ATTACK (SECRET) in `run/ThreatsPanel.jsx` logs the signature lookup plus the full attack pool (dice, successes, HIT/MISS, damage; `mechanicsUtils.resolveSignatureAttack`), and the GM DICE ROLLER tab has a SECRET (GM ONLY) toggle (`DiceRoller.jsx`). No reveal-to-table option |
+| 12 | GM secret roll | done | `gm-roll` (GM feed and log only, never the TV): threat cards' ROLL ATTACK (SECRET) in `run/ThreatsPanel.jsx` logs the signature lookup plus the full attack pool (dice, successes, HIT/MISS, damage; `mechanicsUtils.resolveSignatureAttack`), and the GM DICE ROLLER tab has a TV / SECRET / LOCAL route control (`DiceRoller.jsx`): TV (default) sends `gm-roll { secret:false }` so the table screen plays the roll like a player's, SECRET keeps it to the feed and log, LOCAL keeps it on the GM screen |
 | 13 | Session zero screen (tone, warnings, lines and veils) | done | `run/SessionZeroPanel.jsx` (before INITIALIZE), `player/PhoneLayer.jsx` BEFORE WE BEGIN; `safety-set`, `safety-confirm` |
 | 14 | X-card / pause on every phone, anonymous | done | `player/PauseButton.jsx`; `pause-request`, `pause-requested`, `pause-clear`; TV PAUSE card. No rewind/fast-forward |
 | 15 | Pack content warnings in session zero | done | SessionZeroPanel pre-fills from `meta.contentWarnings` and `meta.tone` |
@@ -36,7 +36,7 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 27 | Active-turn highlight and YOUR TURN | done | `your-turn`, `turn-changed`; phone banner (+ PASS TO for DUNE, `init-pass`); TokenChip `active`; TV turn strip |
 | 28 | NPC/creature quick cards | done | `run/ThreatsPanel.jsx`; token `hp`, `hpMax`, `ref`; secret attack roll via `gm-roll` |
 | 29 | Conditions and critical injuries applicator | done | `InjuryPicker.jsx`, DMDashboard player editor; `injury-add`, `injury-remove`; conditions toggles; effects text on `CharacterSheet.jsx` |
-| 30 | Ping from phones, per-player colour | done | `board-ping` (1 per second per socket); `board/PlayerMapPane.jsx`, MapController PING |
+| 30 | Ping from phones, per-player colour | done | `board-ping` (1 per second per socket); `player/TablePane.jsx` PING, MapController PING |
 | 31 | Measurement tool | not yet | No code |
 | 32 | GM-only map layer with show-to-board toggle | partial | Hidden tokens, token and room notes and GM-only clocks never reach the TV (`board.js` `viewFor`); no separate layer to toggle |
 | 33 | Token palette from pack, drag to map, send item to player | done | `MapController.jsx` (CREW, THREATS, NPCS, ITEMS, MARKERS; tap-to-arm; send to player); `board-token-upsert` |
@@ -59,7 +59,7 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 50 | Act progress with mandatory checklist and pacing | partial | Act switcher with progress, MANDATORY tags and DONE ticks (`table.run.completed`); no playtime pacing |
 | 51 | Pacing nudges | not yet | No code |
 | 52 | Spotlight tracker | not yet | No code |
-| 53 | Ambient audio and stingers on the board speaker | partial | `AudioPanel.jsx`, `hooks/useAmbientAudio.js`, `scene.ambient` presets; TV follows with `?board=CODE&audio=1` (`table.ambient`); no stingers |
+| 53 | Ambient audio and stingers on the board speaker | partial | rail AUDIO popover (`Nav.jsx`, per-universe `theme.ambient`), `hooks/useAmbientAudio.js`, `scene.ambient` presets; TV follows with `?board=CODE&audio=1` (`table.ambient`); no stingers |
 | 54 | Alien motion tracker widget | not yet | No code |
 | 55 | Random/encounter tables in packs | not yet | Pack schema has no `tables[]` |
 | 56 | Name generators and loot tables | not yet | No code |

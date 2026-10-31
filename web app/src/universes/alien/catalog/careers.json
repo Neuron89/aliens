@@ -449,9 +449,9 @@
     "page": 50,
     "keyAttribute": "agi",
     "keySkills": [
-      "mobility",
-      "rangedCombat",
-      "comtech"
+      "piloting",
+      "comtech",
+      "rangedCombat"
     ],
     "talents": [
       "full-throttle",

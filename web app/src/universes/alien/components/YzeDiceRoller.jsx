@@ -8,11 +8,12 @@ import { play, reducedFx } from '../../../engine/sfx';
    PUSH: +1 Stress (one more Stress Die), re-roll every die not showing 6.
 
    Props:
-     preset { attr, skill, bonus, label, attrKey?, skillKey?, stress?, kind?, total?, at? }
+     preset { attr, skill, bonus, label, attrKey?, skillKey?, stress?, kind?, total?, at?, requestId? }
        pre-fills the pool (base = attr + skill + bonus, or `total` when the
        parts are missing; stress if given) and shows the label. The phone's
        sheet sends the full session shape; the simple shape still works.
-       Changing the preset re-applies it.
+       Changing the preset re-applies it. requestId (a GM roll request, player/RollRequestCard)
+       is copied onto the result so the phone's sendRoll answers that request.
      compact  (phones) tighter layout.
      onResult(roll)  called once per settled roll (and again after a push) with
        { kind:'yze', label, skillKey, attrKey, summary, successes, stunts, pushed,
@@ -55,6 +56,7 @@ function report(final, meta) {
     label: final.label || 'ROLL',
     skillKey: meta.skillKey || null,
     attrKey: meta.attrKey || null,
+    ...(meta.requestId ? { requestId: meta.requestId } : {}),
     summary: `${final.label || 'ROLL'} — ${o.text}${final.pushed ? ' (PUSHED)' : ''}`,
     successes: final.successes,
     stunts,
@@ -88,7 +90,7 @@ export default function DiceRoller({ preset, compact = false, onResult }) {
     const base = hasParts
       ? (Number(preset.attr) || 0) + (Number(preset.skill) || 0) + (Number(preset.bonus) || 0)
       : Number(preset.total) || 0;
-    metaRef.current = { skillKey: preset.skillKey, attrKey: preset.attrKey };
+    metaRef.current = { skillKey: preset.skillKey, attrKey: preset.attrKey, requestId: preset.requestId || null };
     setBaseDice(clamp(base, 0, 20));
     if (preset.stress != null) setStressDice(clamp(Number(preset.stress) || 0, 0, 10));
     setLabel(preset.label || null);

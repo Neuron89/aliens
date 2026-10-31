@@ -339,6 +339,8 @@ html[data-universe="dune"] .header .subtitle { font-family: var(--font-display);
 .card-art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .card-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, color-mix(in srgb, var(--bg-card) 92%, transparent) 100%); pointer-events: none; }
 html[data-universe="alien"] .card-art img { filter: grayscale(0.6) sepia(0.2) hue-rotate(110deg) saturate(1.2) contrast(1.1); }
+.card-art img.plan-thumb, html[data-universe="alien"] .card-art img.plan-thumb { opacity: 0.7; filter: none; }
+.scenario-card:hover .card-art img.plan-thumb { opacity: 0.9; }
 .card-badges { position: absolute; top: 0.5rem; right: 0.5rem; z-index: 1; display: flex; gap: 0.3rem; }
 .card-new { padding: 0.1rem 0.45rem; font-size: 0.62rem; letter-spacing: 0.14em; font-weight: bold; color: var(--bg-dark); background: var(--warn); }
 .card-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.15rem 0 0.6rem; }
@@ -545,72 +547,6 @@ html[data-universe="dune"] .narration-label { font-family: var(--font-display); 
   accent-color: var(--accent);
 }
 
-/* ── Audio Panel ──────────────────────────────────────── */
-.audio-panel {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  z-index: 1000;
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 0.75rem;
-  min-width: 200px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-}
-
-.audio-panel.collapsed { min-width: auto; padding: 0.5rem; }
-
-.audio-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--accent);
-  font-family: var(--font-display);
-  letter-spacing: 0.1em;
-  cursor: pointer;
-}
-
-.audio-panel.collapsed .audio-panel-body { display: none; }
-
-.audio-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-bottom: 0.5rem;
-}
-
-.audio-presets button {
-  font-family: var(--font-mono);
-  background: var(--bg-dark);
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
-  font-size: 0.7rem;
-  border-radius: 2px;
-  transition: all 0.2s;
-}
-
-.audio-presets button:hover { border-color: var(--accent-dim); color: var(--text); }
-.audio-presets button.active { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
-
-.volume-control {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.7rem;
-  color: var(--text-dim);
-}
-
-.volume-control input[type="range"] {
-  width: 100%;
-  accent-color: var(--accent);
-}
-
 /* ── Character Cards ──────────────────────────────────── */
 .character-grid {
   display: grid;
@@ -810,6 +746,20 @@ html[data-universe="dune"] .narration-label { font-family: var(--font-display); 
   line-height: 1.5;
   color: var(--text-dim);
 }
+.map-card .map-kind { font-size: 0.65rem; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 0.5rem; }
+.map-card .map-kind.live { color: var(--accent); }
+.map-slot { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
+.map-slot > .map-card { flex: 1 1 auto; }
+.map-kids-toggle {
+  align-self: stretch; min-height: 44px; padding: 0.4rem 0.75rem; text-align: left;
+  background: transparent; border: 1px dashed var(--border-bright, var(--border)); border-radius: 4px;
+  color: var(--text-dim); font: inherit; font-size: 0.68rem; letter-spacing: 0.1em; cursor: pointer;
+}
+.map-kids-toggle:hover, .map-kids-toggle[aria-expanded="true"] { color: var(--accent); border-color: var(--accent-dim); }
+.map-kids { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6rem; padding-left: 0.75rem; border-left: 2px solid var(--border); }
+.map-card-child { padding: 0.7rem 0.8rem; }
+.map-card-child .map-title { font-size: 0.8rem; }
+.map-card-child .map-desc { font-size: 0.8rem; }
 
 .map-viewer { animation: fadeIn 0.3s ease; }
 
@@ -1144,7 +1094,6 @@ ul.plain li {
   .scenario-grid,
   .character-grid,
   .map-grid { grid-template-columns: 1fr; }
-  .audio-panel { bottom: 0.5rem; right: 0.5rem; min-width: 180px; }
 }
 
 @media (max-width: 480px) {
@@ -1205,6 +1154,13 @@ ul.plain li {
 .boot-cursor { display: inline-block; width: 0.6em; height: 1.05em; vertical-align: text-bottom; background: var(--success); animation: bootCursor 0.5s steps(1) infinite; }
 .boot-skip { position: absolute; bottom: 1.5rem; color: var(--text-dim); font-size: 0.7rem; letter-spacing: 0.18em; }
 .boot.boot-crt::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%), repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.12) 0px, rgba(0, 0, 0, 0.12) 1px, transparent 1px, transparent 3px); }
+/* CRT phosphor: a soft glow on the typed text and an irregular low flicker (ALIEN boot only; the boot never
+   runs under REDUCE FX / reduced motion, and the rules below switch it off there too). */
+.boot-crt .boot-title, .boot-crt .boot-line { text-shadow: 0 0 6px color-mix(in srgb, currentColor 55%, transparent); animation: bootFlicker 3.7s steps(1) infinite; }
+.boot-crt .boot-line:nth-child(odd) { animation-duration: 4.3s; }
+@keyframes bootFlicker { 0%, 100% { opacity: 1; } 7% { opacity: 0.86; } 8% { opacity: 1; } 41% { opacity: 0.93; } 42% { opacity: 1; } 63% { opacity: 0.8; } 64% { opacity: 0.97; } 66% { opacity: 1; } }
+html.fx-reduced .boot-crt .boot-title, html.fx-reduced .boot-crt .boot-line { animation: none; text-shadow: none; }
+@media (prefers-reduced-motion: reduce) { .boot-crt .boot-title, .boot-crt .boot-line { animation: none; } }
 /* Dune: a slow sand-coloured wipe, no terminal text. */
 .boot.boot-sand { background: transparent; }
 .boot-sand-wipe { position: absolute; inset: -10%;
@@ -1643,13 +1599,6 @@ textarea.mc-input { resize: vertical; min-height: 44px; }
 .re-room.sel { border-color: #fff; }
 .re-room.unplaced { color: var(--warn); font-size: 0.75rem; padding: 0.3rem; cursor: pointer; }
 
-/* Player MAP tab */
-.pv-body-map { display: flex; flex-direction: column; overflow: hidden; }
-.pv-map { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
-.pv-map-head { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.35rem 0.75rem; font-size: 0.65rem; letter-spacing: 0.08em; color: var(--text-dim); border-bottom: 1px solid var(--border); }
-.pv-map-hint { color: var(--accent); }
-.pv-map-canvas { flex: 1 1 auto; }
-
 /* ── Character builder & sheet ── */
 .cs-term { color: var(--text-dim); font-size: 0.7rem; letter-spacing: 0.1em; }
 .cs-badge { display: inline-block; margin-top: 0.35rem; padding: 0.1rem 0.45rem; border: 1px solid var(--border-bright); border-radius: 2px; font-size: 0.65rem; letter-spacing: 0.08em; color: var(--text-dim); text-transform: uppercase; }
@@ -1872,7 +1821,6 @@ textarea.cb-input { resize: vertical; line-height: 1.45; }
   .cb-footer-btns .cb-btn { font-size: 0.72rem; padding: 0.4rem 0.5rem; }
 }
 /* While the builder is open, lift the floating audio panel above its fixed footer. */
-body:has(.cb-footer) .audio-panel { bottom: calc(4.5rem + env(safe-area-inset-bottom)); }
 
 /* ── Session features ─────────────────────────────────── */
 /* GM run view (run/*), DM alerts (Nav), session zero, TV overlays
@@ -2323,11 +2271,13 @@ html[data-universe="dune"] .ov-toast-name { letter-spacing: 0.24em; color: #f0e2
 .sup-pips { display: inline-flex; gap: 3px; flex: 1; }
 .sup-pips i { width: 10px; height: 10px; border: 1px solid var(--border); }
 .sup-pips i.on { background: var(--accent); border-color: var(--accent); }
+.sup-unset { font-style: normal; font-size: 0.68rem; letter-spacing: 0.12em; color: var(--text-dim); opacity: 0.75; }
+.sup-edit button:hover, .sup-roll:not(:disabled):hover { border-color: var(--accent-dim); color: var(--text); }
 .sup-row.low .sup-pips i.on { background: var(--warn); border-color: var(--warn); }
 .sup-row.out .sup-val { color: var(--danger); }
 .sup-val { min-width: 1.4rem; text-align: right; color: var(--text); }
 .sup-edit { display: inline-flex; gap: 0.2rem; }
-.sup-edit button, .sup-roll { min-height: 32px; min-width: 32px; padding: 0.2rem 0.5rem; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-mono); font-size: 0.72rem; cursor: pointer; }
+.sup-edit button, .sup-roll { min-height: 36px; min-width: 36px; padding: 0.2rem 0.5rem; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-mono); font-size: 0.72rem; cursor: pointer; }
 .sup-roll { border-color: var(--warn-dim); color: var(--warn); letter-spacing: 0.1em; }
 .sup-roll:disabled { opacity: 0.4; }
 .sup-last { margin-top: 0.5rem; font-size: 0.78rem; color: var(--text-dim); letter-spacing: 0.08em; }
@@ -2525,7 +2475,6 @@ html.fx-reduced .confirm-card { animation: none; }
 }
 @media (max-width: 900px) { .mc-top { flex-wrap: wrap; overflow-x: visible; } }
 /* the floating AUDIO button sits over the palette's bottom edge: keep the hint above it */
-body:has(.audio-panel) .mc-palette { padding-bottom: 3.4rem; }
 .mc-pal-foot { line-height: 1.35; }
 .re-sel { display: flex; flex-direction: column; gap: 0.3rem; padding: 0.4rem; border: 1px solid var(--accent-dim, var(--border)); background: var(--bg-card); }
 .re-sel .mc-input { width: 100%; }
@@ -3008,8 +2957,14 @@ html.fx-reduced .dr { animation: none; }
   .dr-left { left: 0; }
 }
 @media (max-width: 599px) {
-  .dock { overflow-x: auto; }
+  .dock { overflow-x: auto; scrollbar-width: none; }
+  .dock::-webkit-scrollbar { display: none; }
   .dock-btn, .dock > .confirm-wrap { flex: 0 0 76px; }
+  /* the dock scrolls sideways here, which would clip the ADVANCE ACT confirm floating above it */
+  .dock .confirm-card.float { position: fixed; left: 8px; right: 8px; width: auto; bottom: calc(var(--dock-h) + var(--bottom-bar) + 8px); top: auto; }
 }
 @media (max-width: 1279px) { .deck .mc-top { flex-wrap: wrap; overflow: visible; } }
 @media (max-width: 899px) { .strip .link-indicator.up, .strip .header-back span[aria-hidden] { display: none; } .strip-pin b { letter-spacing: 0.1em; } }
+
+/* MapEngine level selector (Maps tab): hover */
+.me-deck-btn:hover { color: var(--text) !important; }

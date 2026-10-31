@@ -100,6 +100,9 @@ function ArrayAttributesStep({ universe, T, career, caps, char, assignValue, app
   const [held, setHeld] = useState(null); // { value, from: key|null }
   const [over, setOver] = useState(null);
   const noun = T.attributes.toLowerCase().replace(/s$/, '');
+  // Statement rule (catalog/rules.json "drive-statements": value = lowest rating that needs a statement).
+  const stmtRule = attrs.some((a) => a.prompt) && Array.isArray(universe.catalog?.rules) ? universe.catalog.rules.find((r) => r.id === 'drive-statements') : null;
+  const stmtMin = Number.isFinite(Number(stmtRule?.value)) ? Number(stmtRule.value) : null;
   const suggestion = career ? suggestedArray(universe, career, caps.attrArray) : null;
   const sugText = suggestion ? attrs.slice().sort((a, b) => (suggestion[b.key] || 0) - (suggestion[a.key] || 0))
     .map((a) => `${a.short || a.label.toUpperCase()} ${suggestion[a.key]}`).join(' · ') : '';
@@ -135,6 +138,12 @@ function ArrayAttributesStep({ universe, T, career, caps, char, assignValue, app
         Assign {caps.attrArray.join(' / ')} — exactly one value per {noun}. Tap a value, then a {noun} (or drag it there).
         Tap a placed value to move it; the two {noun}s swap.
       </p>
+      {stmtMin !== null && (
+        <p className="cb-hint">
+          Under each {noun}, write one line in your own voice that answers its question. Every {noun} at {stmtMin} or more needs one;
+          a test may only use a {noun} whose statement fits the action.
+        </p>
+      )}
       <div className="cb-array-tray" role="group" aria-label="Values to assign">
         {left.length === 0 && <span className="cb-array-done">ALL VALUES PLACED</span>}
         {left.map((v, i) => {
@@ -171,7 +180,7 @@ function ArrayAttributesStep({ universe, T, career, caps, char, assignValue, app
               </div>
               {a.prompt && (
                 <input className="cb-input cb-statement" value={char.driveStatements?.[a.key] || ''} onChange={(e) => setStatement(a.key, e.target.value)}
-                  placeholder={a.prompt} aria-label={`${a.label} statement`} maxLength={160} />
+                  placeholder={stmtMin !== null && v >= stmtMin ? `${a.prompt} (needed at ${stmtMin}+)` : a.prompt} aria-label={`${a.label} statement`} maxLength={160} />
               )}
             </div>
           );

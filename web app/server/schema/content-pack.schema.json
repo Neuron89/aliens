@@ -406,7 +406,7 @@
         "rival": { "description": "Name of the character this PC distrusts most (another PC or 'None').", "type": "string" },
         "secret": { "description": "Optional hidden truth known only to this character's player (e.g. they are a synthetic).", "type": "string" },
         "driveStatements": {
-          "description": "Optional one-line belief statement per attribute, keyed by the universe's attribute keys (DUNE drives: duty, faith, justice, power, truth). Written by the player in the character builder.",
+          "description": "One-line belief statement per attribute, keyed by the universe's attribute keys, for universes whose attributes carry a prompt (DUNE drives: duty, faith, justice, power, truth). Shown under each attribute on the character sheet; players can rewrite them in the character builder. Keep them out of appearance. Bundled and generated DUNE characters carry all five.",
           "type": "object",
           "additionalProperties": { "type": "string", "description": "One sentence in the character's voice." }
         }

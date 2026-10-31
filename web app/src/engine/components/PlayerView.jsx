@@ -10,6 +10,7 @@ import PauseButton from './player/PauseButton';
 import BuildCharacter from './player/BuildCharacter';
 import PanicOverlay from './player/PanicOverlay';
 import TablePane from './player/TablePane';
+import RollRequestCard from './player/RollRequestCard';
 import PlayerMenu from './player/PlayerMenu';
 import ConfirmSheet from './player/ConfirmSheet';
 import Icon from './player/icons';
@@ -326,6 +327,9 @@ export default function PlayerView() {
   const stressDef = trackDefs.find((t) => t.key === 'stress');
   const stressNow = Number(myPlayer.tracks?.stress) || 0;
   const stressMax = Number(myPlayer.trackMax?.stress) || 0;
+  /* The free ROLL: no skill, but on a stress-dice roller (Year Zero) the stress dice still come from the
+     sheet, like the skill rolls (base stays at the roller's default 6). */
+  const freePreset = () => (stressDef && rules.dice?.kind === 'yze' ? { total: 6, stress: stressNow, at: Date.now() } : null);
   const vitals = [
     ...trackDefs.map((t) => {
       const value = myPlayer.tracks?.[t.key] ?? 0;
@@ -339,7 +343,7 @@ export default function PlayerView() {
 
   /* ─── Quick actions (what this universe's rules expose) ─── */
   const actions = [
-    { id: 'roll', label: 'ROLL', icon: 'dice', tone: 'primary', pressed: tab === 'dice', onClick: () => (tab === 'dice' ? setTab(lastTab.current) : (setRollPreset(null), go('dice'))) },
+    { id: 'roll', label: 'ROLL', icon: 'dice', tone: 'primary', pressed: tab === 'dice', onClick: () => (tab === 'dice' ? setTab(lastTab.current) : (setRollPreset(freePreset()), go('dice'))) },
     ...(detDef && det ? [{
       id: 'det', label: `${rules.determination?.short || detDef.label} ${det.value}`, icon: 'det', tone: 'warn',
       disabled: det.value < 1, aria: `Spend 1 ${detDef.label} (${det.value} of ${det.max} left)`, onClick: () => setConfirm('det'),
@@ -420,6 +424,9 @@ export default function PlayerView() {
           </button>
         ))}
       </div>
+
+      {/* ─── ROLL NOW: the GM's open roll request (player/RollRequestCard) ─── */}
+      <RollRequestCard hidden={tab === 'dice'} play={play} onRoll={(preset) => { setRollPreset(preset); go('dice'); }} />
 
       {/* ─── Status strip: clocks, turn, banners ─── */}
       {(flash || pools.length > 0 || (table?.clocks?.length > 0) || myTurn || table?.initiative?.active || !connected || table?.paused || (!dmOnline && connected)) && (

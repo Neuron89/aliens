@@ -38,7 +38,21 @@ const int = (v, lo, hi, d = lo) => {
   return Number.isFinite(n) ? Math.max(lo, Math.min(hi, n)) : d;
 };
 const uid = (p) => `${p}-${Date.now().toString(36)}${randomBytes(2).toString('hex')}`;
-const d6 = () => 1 + Math.floor(Math.random() * 6);
+/* Server-side dice (supply rolls). DICE_SEED (env, tests only) makes them a fixed mulberry32 sequence
+   so scripts/test-mechanics.mjs runs the same number of checks every time. */
+function seededRandom(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const diceSeed = Number(process.env.DICE_SEED);
+const rand = process.env.DICE_SEED && Number.isFinite(diceSeed) ? seededRandom(diceSeed) : Math.random;
+const d6 = () => 1 + Math.floor(rand() * 6);
 
 export const emptyInitiative = () => ({ active: false, order: [], turn: 0, round: 1 });
 
@@ -169,19 +183,31 @@ export function sanitizeDetermination(input) {
   return { value: int(input.value, 0, max, 0), max };
 }
 
-/** Board-safe roll for the TV toast. */
-export function boardRoll(entry, name) {
+/** Board-safe roll for the TV dice stage (F7, board/DiceStage.jsx): only what the table may see —
+    the faces, the outcome numbers and flags, the roller's name and who rolled ('player' | 'gm'). */
+export function boardRoll(entry, name, who = 'player') {
   const r = entry.roll || {};
   const dice = r.dice && typeof r.dice === 'object' ? r.dice : {};
   const nums = (a) => (Array.isArray(a) ? a.slice(0, 12).map((n) => int(n, 0, 99, 0)) : []);
+  const optInt = (v, lo, hi) => (v === undefined || v === null || v === '' || !Number.isFinite(Number(v)) ? null : int(v, lo, hi, lo));
   return {
     id: entry.id,
     name,
+    who: who === 'gm' ? 'gm' : 'player',
     label: sstr(r.label, 80),
     summary: sstr(r.summary, 160),
     kind: sstr(r.kind, 12),
     dice: { base: nums(dice.base), stress: nums(dice.stress), d20: nums(dice.d20) },
     flags: tableFlags(r.flags),
+    successes: optInt(r.successes, 0, 99),
+    stunts: optInt(r.stunts, 0, 99),
+    pushed: r.pushed === true,
+    panic: r.panic === true,
+    passed: typeof r.passed === 'boolean' ? r.passed : null,
+    momentum: optInt(r.momentum, 0, 99),
+    complications: optInt(r.complications, 0, 99),
+    difficulty: optInt(r.difficulty, 0, 20),
+    target: optInt(r.target, 0, 40),
     at: entry.at,
   };
 }
@@ -290,22 +316,29 @@ export function wireMechanics(socket, ctx) {
     cb?.({ success: true, initiative: tableOf(game).initiative });
   };
 
-  /* ─── DM: secret roll { roll } (creature attacks etc.; never sent to the board or players) ─── */
+  /* ─── DM: GM roll { roll, who?, secret? } (creature attacks, GM DICE tab…).
+     secret defaults to TRUE: GM roll feed + session log only, never the board or the players.
+     secret:false (F7, the GM DiceRoller "TV" route) → logged without the [SECRET] prefix and
+     sent to the board as the same `board-roll` players get (who:'gm', name = who || 'GM'). ─── */
   on('gm-roll', (payload, callback) => {
     const game = dmTableGame(socket, payload);
     if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
     let roll = payload.roll;
     try { if (!roll || typeof roll !== 'object' || JSON.stringify(roll).length > 4096) return callback?.({ error: 'Invalid roll.' }); } catch { return callback?.({ error: 'Invalid roll.' }); }
     roll = JSON.parse(JSON.stringify(roll));
+    const secret = payload.secret !== false;
     const t = tableOf(game);
-    const entry = { id: uid('r'), clientId: null, playerId: 'dm', playerName: 'GM', characterName: sstr(payload.who || roll.who, 60) || 'GM', roll, at: Date.now(), secret: true };
+    const entry = { id: uid('r'), clientId: null, playerId: 'dm', playerName: 'GM', characterName: sstr(payload.who || roll.who, 60) || 'GM', roll, at: Date.now(), secret };
     t.rolls.push(entry);
     if (t.rolls.length > MAX_ROLLS) t.rolls.splice(0, t.rolls.length - MAX_ROLLS);
-    logTo(game, 'roll', `[SECRET] ${entry.characterName}: ${sstr(roll.summary || roll.label || 'rolled', 200)}`, { secret: true });
+    const text = `${entry.characterName}: ${sstr(roll.summary || roll.label || 'rolled', 200)}`;
+    if (secret) logTo(game, 'roll', `[SECRET] ${text}`, { secret: true });
+    else logTo(game, 'roll', text);
     toDM(game, 'roll', { roll: entry });
+    if (!secret) io.to(boardRoom(game.code)).emit('board-roll', { roll: boardRoll(entry, entry.characterName, 'gm') });
     touch(game);
     emitTable(game, { dmOnly: true });
-    callback?.({ success: true, id: entry.id });
+    callback?.({ success: true, id: entry.id, secret });
   });
 
   /* ─── Player (own seat): spend 1 DETERMINATION { reason? } ───

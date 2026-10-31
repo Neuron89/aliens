@@ -24,9 +24,9 @@ export default function SupplyPanel({ keys = [], supply = {}, danger = 2, max = 
             <div key={k} className={`sup-row${low ? ' low' : ''}${set && v === 0 ? ' out' : ''}`}>
               <span className="sup-key">{k.toUpperCase()}</span>
               <span className="sup-pips" aria-label={`${k} ${set ? v : 'not set'}`}>
-                {set ? Array.from({ length: Math.max(v, 1) > 6 ? v : 6 }, (_, i) => <i key={i} className={i < v ? 'on' : ''} />) : <em>—</em>}
+                {set ? Array.from({ length: Math.max(v, 1) > 6 ? v : 6 }, (_, i) => <i key={i} className={i < v ? 'on' : ''} />) : <em className="sup-unset">NOT SET</em>}
               </span>
-              <b className="sup-val">{set ? v : '—'}</b>
+              {set && <b className="sup-val">{v}</b>}
               {onSet && (
                 <span className="sup-edit">
                   <button type="button" onClick={() => onSet(k, Math.max(0, (v || 0) - 1))} aria-label={`${k} minus one`}>−</button>

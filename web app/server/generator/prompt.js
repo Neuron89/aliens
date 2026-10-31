@@ -49,6 +49,10 @@ export function rulesText(universe) {
     const c = r.creation || {};
     const range = c.attrMin !== undefined && c.attrMax !== undefined ? ` (each ${c.attrMin}–${c.attrMax})` : '';
     lines.push(`Attributes${range}: ${r.attributes.map((a) => `${a.key} = ${a.label}`).join('; ')}.`);
+    const prompted = r.attributes.filter((a) => a.prompt);
+    if (prompted.length) {
+      lines.push(`Statements: every character carries driveStatements, one sentence per attribute in the character's own voice (first person, under 25 words), keyed ${prompted.map((a) => `${a.key} ("${a.prompt}")`).join('; ')}. Keep them out of appearance. Each statement should be playable at the table and at least one should strain against another character's statement or agenda.`);
+    }
   }
   if (r.skills?.length) {
     lines.push(`Skills (use every key; 0 = untrained): ${r.skills.map((s) => `${s.key} = ${s.label.toUpperCase()}${s.attr ? ` [${s.attr}]` : ''}`).join('; ')}.`);

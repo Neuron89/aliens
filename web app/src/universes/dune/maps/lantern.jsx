@@ -241,7 +241,7 @@ function BerthDecor({ r, outer }) {
       {cells > 0 && (
         <g>
           <rect x={ox} y={y + 6} width={34} height={h - 12} fill="none" stroke={C.divider} strokeWidth="0.9" />
-          {Array.from({ length: cells - 1 }, (_, i) => line(ox, y + 6 + ch * (i + 1), ox + 34, y + 6 + ch * (i + 1), 0.9, C.divider, 0.9))}
+          {Array.from({ length: cells - 1 }, (_, i) => <React.Fragment key={i}>{line(ox, y + 6 + ch * (i + 1), ox + 34, y + 6 + ch * (i + 1), 0.9, C.divider, 0.9)}</React.Fragment>)}
           {Array.from({ length: cells }, (_, i) => {
             const cy = y + 6 + ch * i + ch / 2;
             return (
@@ -274,7 +274,7 @@ function BerthDecor({ r, outer }) {
           {line(x + 44, y + h / 2 - 22, x + w - 4, y + h / 2 - 22, 0.9, C.divider, 0.9)}
           <text x={x + 95} y={y + 16} fill={C.textFaint} fontSize="3.8" textAnchor="middle" letterSpacing="0.1em">VANTROY</text>
           <rect x={x + 82} y={y + 22} width={24} height={10} fill="none" stroke={C.vent} strokeWidth="0.55" opacity="0.7" />
-          {[0, 1, 2, 3].map((i) => line(x + 86 + i * 5, y + 24, x + 86 + i * 5, y + 30, 0.5, C.vent, 0.4))}
+          {[0, 1, 2, 3].map((i) => <React.Fragment key={i}>{line(x + 86 + i * 5, y + 24, x + 86 + i * 5, y + 30, 0.5, C.vent, 0.4)}</React.Fragment>)}
           <text x={x + 95} y={y + h - 9} fill={C.textFaint} fontSize="3.8" textAnchor="middle" letterSpacing="0.1em">REVEREND MOTHER</text>
           {/* spliced seal-plate by Vantroy's door */}
           <rect x={x + w - 9} y={y + h / 2 - 34} width={5} height={7} fill={C.accent} opacity="0.55" />
@@ -284,7 +284,7 @@ function BerthDecor({ r, outer }) {
       {r.id === 'berth-c' && (
         <g>
           {/* weapon rack by the door, tea service, the factor's cargo niche */}
-          {[0, 1, 2, 3, 4].map((i) => line(ix - 6, y + h * 0.42 - 26 + i * 4, ix + 2, y + h * 0.42 - 26 + i * 4, 0.6, C.textBright, 0.5))}
+          {[0, 1, 2, 3, 4].map((i) => <React.Fragment key={i}>{line(ix - 6, y + h * 0.42 - 26 + i * 4, ix + 2, y + h * 0.42 - 26 + i * 4, 0.6, C.textBright, 0.5)}</React.Fragment>)}
           <circle cx={x + 96} cy={y + 26} r={8} fill="none" stroke={C.equipLine} strokeWidth="0.5" opacity="0.6" />
           {[0, 72, 144, 216, 288].map((a) => <circle key={a} cx={x + 96 + Math.cos((a * Math.PI) / 180) * 12} cy={y + 26 + Math.sin((a * Math.PI) / 180) * 12} r="1.4" fill="none" stroke={C.equipLine} strokeWidth="0.4" opacity="0.6" />)}
           <rect x={x + w - 46} y={y + h - 24} width={40} height={18} fill={purl('hatch')} stroke={C.equipLine} strokeWidth="0.5" opacity="0.9" />

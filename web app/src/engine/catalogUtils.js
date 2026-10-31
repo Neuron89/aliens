@@ -131,10 +131,25 @@ export function parseGearEntry(entry) {
   return m ? { name: m[1].trim(), qty: Number(m[2]) } : { name: s, qty: 1 };
 }
 
-/** Item by id, then by name slug, then by a loose name match ("Motion Tracker" → "M314 Motion Tracker"). */
+/** Split a trailing parenthetical note off a gear name ("Shotgun (in office)") → { base, note }. */
+export function splitGearNote(name) {
+  const s = String(name || '').trim();
+  const m = s.match(/^(.*\S)\s*\(([^()]+)\)$/);
+  return m ? { base: m[1].trim(), note: m[2].trim() } : { base: s, note: '' };
+}
+
+/** Item by id, then by name slug, then by a loose name match ("Motion Tracker" → "M314 Motion Tracker"),
+    then the same again without a trailing parenthetical note ("Maintenance Jack (Signature Item)"). */
 export function itemById(catalog, ref) {
   if (!catalog || !ref) return null;
   const { name } = parseGearEntry(ref);
+  const hit = itemByName(catalog, name);
+  if (hit) return hit;
+  const { base, note } = splitGearNote(name);
+  return note ? itemByName(catalog, base) : null;
+}
+
+function itemByName(catalog, name) {
   const idx = catalog._itemIndex;
   if (idx?.has(name)) return idx.get(name);
   const s = slug(name);
@@ -245,12 +260,26 @@ export function evalFormula(formula, character) {
   return total;
 }
 
+/** True when a gear entry is the character's signature item: tagged "(Signature Item)", or its name
+    matches the part of character.signatureItem before the " — story". */
+export function isSignatureEntry(label, signatureItem) {
+  const { base, note } = splitGearNote(label);
+  if (/signature/i.test(note)) return true;
+  const sig = slug(splitTalent(signatureItem).name);
+  return !!sig && (slug(label) === sig || slug(base) === sig);
+}
+
 /** Items a character carries (strings or {id|name, qty}), resolved against the catalog. */
 export function carriedItems(character, catalog) {
   return arr(character?.gear).map((g) => {
     const entry = typeof g === 'string' ? parseGearEntry(g) : { name: g?.name || g?.id || '', qty: g?.qty || 1 };
     const item = itemById(catalog, typeof g === 'object' && g?.id ? g.id : entry.name);
-    return { label: entry.name, qty: entry.qty, item, weight: typeof g === 'object' && g?.weight != null ? toNumber(g.weight) : item?.weight ?? null };
+    const { note } = splitGearNote(entry.name);
+    return {
+      label: entry.name, qty: entry.qty, item, note: item ? note : '',
+      signature: isSignatureEntry(entry.name, character?.signatureItem),
+      weight: typeof g === 'object' && g?.weight != null ? toNumber(g.weight) : item?.weight ?? null,
+    };
   });
 }
 
@@ -261,9 +290,8 @@ export function encumbrance(character, universe, catalog = getCatalog(universe))
   const max = enc ? evalFormula(enc.formula ?? enc.max ?? enc, character) : null;
   let used = 0;
   let unknown = 0;
-  const sig = slug(character?.signatureItem);
   for (const c of carriedItems(character, catalog)) {
-    if (sig && slug(c.label) === sig) continue;
+    if (c.signature) continue;
     if (c.weight === null) { if (!c.item) unknown++; continue; }
     used += c.weight * (c.qty || 1);
   }

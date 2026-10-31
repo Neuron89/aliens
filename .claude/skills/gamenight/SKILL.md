@@ -77,13 +77,14 @@ Read `rules.creation`, `rules.attributes`, `rules.skills` and **compute, do not 
 ALIEN today (verify in `rules.js`): `attrPoints 14`, attributes 2-5, `skillPoints 10`, `skillMax 3`. That is the
 in-app *creator* budget. The bundled Cinematic pre-gens are looser (attributes sum 14, each 2-5; skills total about 14-26
 with career key skills at 3-5). Use:
-- **Cinematic pre-gens:** attributes sum exactly `attrPoints`, each within `attrMin..attrMax`; skills total at most `skillPoints + 14` (ALIEN: 24); no skill above 5; the career's `keySkills` at >= 2.
+- **Cinematic pre-gens:** attributes sum `attrPoints` (±1), each within `attrMin..attrMax`, and only the career's key attribute above `otherAttrMax`; skills total at most `skillPoints + 10` (ALIEN: 20); no skill above `skillMax + 2` (ALIEN: 5); the career's `keySkills` at >= 2. DUNE drives are exactly 8/7/6/5/4, one each; DUNE skills 4-8.
+- **DUNE:** every PC carries `driveStatements` with one first-person sentence for each drive (`duty`, `faith`, `justice`, `power`, `truth`), answering that drive's `prompt` in `rules.js`. Never paste them into `appearance`.
 - **Creator-legal requested (or non-Cinematic):** skills total exactly `skillPoints`, none above `skillMax`.
 - Keep a scratch table `name | attr sum | skill sum | max skill` and fix any row that breaks the rule.
 - `attributes`/`skills` use only universe keys; `skills` lists **every** skill key (0 for untrained).
-- `career` is a name from `careers.js`; `talent` is `"Name — effect"` copied from that career.
+- `career` is a name from the catalog (`catalog/careers.json`; `careers.js` lists the same CRB careers); `talent` is `"Name — effect"` copied verbatim from that career's talents (the validator compares it with `catalog/talents.json`).
 - Derive nothing the engine recomputes: **omit `health`** (ALIEN health = STR; recomputed on assignment) and any track values.
-- Gear: names from the universe `gear` list plus invented keepsakes.
+- Gear: names from the universe `gear` list (they are catalog item names, so the sheet shows their stats and art) plus invented keepsakes.
 
 ## 5. Write the file
 

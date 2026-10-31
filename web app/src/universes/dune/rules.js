@@ -4,9 +4,11 @@
 
    Design notes (mechanics only; all wording is original):
    - Attributes are DRIVES — what a character believes in. Each drive carries a
-     one-line statement the player writes (stored on character.driveStatements
-     when the engine supports it; bundled packs put them in `appearance`
-     because the pack schema forbids extra character keys).
+     one-line statement in the character's voice, stored on
+     character.driveStatements { duty, faith, justice, power, truth }. The
+     attribute `prompt` below is the question the statement answers; it drives
+     the builder's statement inputs, the generator's driveStatements field and
+     the validator's "every DUNE pre-gen has all five" check.
    - Skills are not tied to a drive. A test pairs any drive with any skill:
      target number = drive + skill. `attr` is therefore null; `suggestedAttr`
      is the drive most often paired with the skill (shown as "suggested drive"

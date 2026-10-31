@@ -386,12 +386,12 @@
         "medicalAid": 0,
         "command": 4
       },
-      "talent": "Field Commander — COMMAND gives +2 (instead of +1).",
+      "talent": "Field Commander — Giving orders in combat with COMMAND is a fast action for you instead of a slow one, so you can give orders twice in one Round.",
       "gear": [
         "Armat M41A Pulse Rifle",
         "M3 Personnel Armor",
-        "Comm Unit",
-        "Personal Terminal",
+        "Hand Radio",
+        "Seegson P-DAT",
         "Spare dog tags (Signature Item)"
       ],
       "signatureItem": "A second set of dog tags on her chain — they belonged to the squad leader she replaced on Ariarcus, and she has never said what happened to him.",
@@ -428,7 +428,7 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Overkill — Spend extra successes for +2 damage (instead of +1).",
+      "talent": "Overkill — When a Panic Roll result is 11 or higher and enemies are in sight, you may replace it with the Overkill effect: you must attack the visible enemies and keep going until you or all of them are Broken. All other PCs within SHORT range must immediately make a Panic Roll.",
       "gear": [
         "M56A2 Smart Gun",
         "M3 Personnel Armor",
@@ -451,7 +451,7 @@
       "career": "Colonial Marine",
       "appearance": "Lean, pale and watchful, with ice-blonde hair shaved at the sides and a motion tracker she never puts down. Speaks rarely, in a flat northern accent, and always takes point.",
       "attributes": {
-        "str": 4,
+        "str": 5,
         "agi": 4,
         "wit": 3,
         "emp": 2
@@ -460,7 +460,7 @@
         "heavyMachinery": 0,
         "stamina": 2,
         "closeCombat": 3,
-        "mobility": 4,
+        "mobility": 3,
         "piloting": 0,
         "rangedCombat": 3,
         "observation": 3,
@@ -470,10 +470,10 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Nerves of Steel — Reduce Stress by 2 when using Signature Item.",
+      "talent": "Past the Limit — You may push any STRENGTH-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "Armat M41A Pulse Rifle",
-        "Motion Tracker",
+        "M314 Motion Tracker",
         "M3 Personnel Armor",
         "Knife",
         "Brother's harmonica (Signature Item)"
@@ -512,12 +512,12 @@
         "medicalAid": 4,
         "command": 0
       },
-      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
+      "talent": "Field Surgeon — You get +2 to MEDICAL AID when treating someone who is about to die from a critical injury.",
       "gear": [
         "M4A3 Service Pistol",
-        "Medkit",
+        "Personal Medkit",
         "M3 Personnel Armor",
-        "Personal Terminal",
+        "Seegson P-DAT",
         "Pocket recipe book (Signature Item)"
       ],
       "signatureItem": "A greasy pocket recipe book from his grandmother's kitchen — he promises every wounded marine a meal from it.",
@@ -554,11 +554,11 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Reckless — +2 PILOTING in dangerous maneuvers.",
+      "talent": "Reckless — You may push any AGILITY-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "Armat M41A Pulse Rifle",
-        "Tool Kit",
-        "Comm Unit",
+        "Electronic Tools",
+        "Hand Radio",
         "M3 Personnel Armor",
         "Grandfather's compass (Signature Item)"
       ],

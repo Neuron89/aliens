@@ -152,7 +152,11 @@ export default function CharacterSheet({
             <li key={i}>
               <ItemArt item={c.item} size={40} />
               <div className="cs-inv-body">
-                <div className="cs-inv-name">{c.item?.name || c.label}{c.qty > 1 && <span className="cs-qty"> ×{c.qty}</span>}</div>
+                <div className="cs-inv-name">
+                  {c.item?.name || c.label.replace(/\s*\(\s*signature item\s*\)$/i, '').replace(/,\s*signature item\s*\)$/i, ')')}{c.qty > 1 && <span className="cs-qty"> ×{c.qty}</span>}
+                  {c.note && !/^signature item$/i.test(c.note) && <span className="cs-qty"> ({c.note.replace(/,?\s*signature item$/i, '')})</span>}
+                  {c.signature && <span className="cs-key" title="Signature item">SIG</span>}
+                </div>
                 {c.item ? <StatsRow item={c.item} /> : <div className="cs-stats"><span><i>CUSTOM</i></span></div>}
               </div>
             </li>

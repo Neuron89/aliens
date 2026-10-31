@@ -218,6 +218,8 @@ export function sanitizeToken(input, prev, ctx = {}) {
   if (input.x !== undefined) t.x = isNum(input.x) ? clamp01(input.x) : 0.5;
   if (input.y !== undefined) t.y = isNum(input.y) ? clamp01(input.y) : 0.5;
   if (input.hidden !== undefined) t.hidden = !!input.hidden;
+  // Item tokens: locked = the GM decides (players see it but token-take is refused).
+  if (input.locked !== undefined) t.locked = !!input.locked;
   // Status rings (board/TokenChip): up to 6 short kebab names, optional ":n" count, e.g. ['stress:3', 'wounded'].
   if (input.status !== undefined) {
     const list = Array.isArray(input.status) ? input.status : [];

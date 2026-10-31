@@ -19,8 +19,13 @@
     ],
     "contentWarnings": [
       "murder",
+      "drowning",
       "poison",
-      "political violence"
+      "assassination attempts (hunter-seeker)",
+      "duels and blade violence",
+      "political violence",
+      "drug use (spice, sapho)",
+      "player-vs-player conflict"
     ],
     "source": "bundled"
   },
@@ -357,6 +362,7 @@
     },
     {
       "name": "Smuggler Crew",
+      "ref": "smuggler-crew",
       "description": "Kell’s six guns at the yard.",
       "stats": {
         "evade": 2,
@@ -401,7 +407,7 @@
       "id": "second-ledger",
       "title": "The Second Ledger (excerpt)",
       "from": "Steward Ilse Marrow (private hand)",
-      "to": "None",
+      "to": "No addressee",
       "priority": "SEALED",
       "text": "Quarter ending: 1,100 kg melange to K. — against 9,000 L delivered by H.W. via rock path. Running total owed to H.W.: 30,000 L, less 21,000 delivered. Promise stands: one voice at council when the Lady can be persuaded. God forgive me, the town would have died by summer.",
       "when": "Act I, if the loose panel is found; otherwise Act III in the Assessor’s hands"
@@ -409,8 +415,8 @@
     {
       "id": "kessa-cipher",
       "title": "Cipher Card in the Apron Hem",
-      "from": "Unknown",
-      "to": "Unknown",
+      "from": "Unknown sender",
+      "to": "Unknown recipient",
       "priority": "IMPERIAL",
       "text": "A strip of shigawire-bound film bearing a Harkonnen cipher block and a single cleartext line: \"Ledger secured. Druze to proceed. The Lady carries — confirm.\" DECODING ASSESSMENT: the sender knows of Lady Senna’s pregnancy. Someone in the keep is closer to her than any agent believed.",
       "when": "Act II, after tracing the hunter-seeker"
@@ -438,7 +444,7 @@
     {
       "id": "qarrat-keep",
       "title": "QARRAT KEEP",
-      "subtitle": "House Tessarin seat — ground floor",
+      "subtitle": "House Tessarin seat — ground floor, cistern vault and roof",
       "description": "A modest rock-and-plasteel keep on the Shield Wall edge. Its cistern vault holds the town’s water reserve and is the true heart of the House.",
       "kind": "ascii",
       "ascii": "\n  ╔══════════════════════════════════════════════════════════════╗\n  ║        QARRAT KEEP — GROUND FLOOR   (House Tessarin)         ║\n  ║        Shield Wall edge, Arrakis · north is up               ║\n  ╠══════════════════════════════════════════════════════════════╣\n  ║                                                              ║\n  ║   ┌──────────────┐   ┌──────────────────┐   ┌─────────────┐  ║\n  ║   │ THOPTER PAD  │   │  GREAT HALL      │   │  STEWARD'S  │  ║\n  ║   │ (roof ramp)  │   │  [dais] [hearth] │   │  COUNTING   │  ║\n  ║   │   ▲ ramp     │   │  audience floor  │   │  ROOM       │  ║\n  ║   └──────┬───────┘   └────────┬─────────┘   │  [ledgers]  │  ║\n  ║          │                    │             └──────┬──────┘  ║\n  ║   ┌──────┴────────────────────┴────────────────────┴──────┐  ║\n  ║   │            COLONNADE  (shield-door every 10 m)        │  ║\n  ║   └──┬─────────────┬───────────────┬──────────────────┬───┘  ║\n  ║      │             │               │                  │      ║\n  ║   ┌──┴────────┐ ┌──┴──────────┐ ┌──┴───────────┐  ┌───┴───┐  ║\n  ║   │ GUARD     │ │ CONSERVATORY│ │ KITCHENS &   │  │ GUEST │  ║\n  ║   │ ROOM      │ │ (date palms,│ │ SERVANTS'    │  │ WING  │  ║\n  ║   │ [armory]  │ │  dew traps) │ │ STAIR  ▼     │  │ (3 rm)│  ║\n  ║   └──┬────────┘ └─────────────┘ └──────┬───────┘  └───────┘  ║\n  ║      │                                 │                     ║\n  ║   ┌──┴──────────────┐          ┌───────┴───────────────┐     ║\n  ║   │ OUTER GATE      │          │ CISTERN VAULT (below) │     ║\n  ║   │ (sand-lock, two │          │ ~~~~~~~~~~~~~~~~~~~~~ │     ║\n  ║   │  doors, seal)   │          │ ~ town water: 41,000 L│     ║\n  ║   └──┬──────────────┘          │ ~~~~~~~~~~~~~~~~~~~~~ │     ║\n  ║      │                         └───────────────────────┘     ║\n  ║   ═══╧═══ to QARRAT TOWN and the spice-yard                  ║\n  ║                                                              ║\n  ╚══════════════════════════════════════════════════════════════╝",
@@ -503,7 +509,14 @@
       "id": "oren-haskell",
       "name": "Oren Haskell",
       "career": "Mentat",
-      "appearance": "Narrow, ink-stained, lips faintly red from sapho. Speaks in percentages when nervous. DRIVE STATEMENTS — Duty: I serve the House that bought my contract, not the one that might buy it next. · Faith: Faith is a variable I have not yet been able to solve. · Justice: Justice is a ledger that balances; I will balance it. · Power: Power is information arriving early. · Truth: Every lie leaves a residue in the numbers. I will find it.",
+      "appearance": "Narrow, ink-stained, lips faintly red from sapho. Keeps three styluses behind one ear and never loses track of any of them.",
+      "driveStatements": {
+        "duty": "I serve the House that bought my contract, not the one that might buy it next.",
+        "faith": "Faith is a variable I have not yet been able to solve.",
+        "justice": "Justice is a ledger that balances; I will balance it.",
+        "power": "Power is information arriving early.",
+        "truth": "Every lie leaves a residue in the numbers. I will find it."
+      },
       "attributes": {
         "duty": 7,
         "faith": 4,
@@ -521,7 +534,7 @@
       "talent": "Data Without Context — After an hour with records, ledgers or testimony, reduce the Difficulty of your next UNDERSTAND test about them by 1.",
       "gear": [
         "Sapho juice",
-        "Filmbook reader",
+        "Filmbook",
         "Poison snooper",
         "Stillsuit",
         "House signet ring (proxy)"
@@ -541,7 +554,14 @@
       "id": "ameline-vos",
       "name": "Sister Ameline Vos",
       "career": "Bene Gesserit",
-      "appearance": "Still as poured water, grey-eyed, dressed as a lady-in-waiting. Her smile arrives a moment after everyone else’s. DRIVE STATEMENTS — Duty: The Sisterhood placed me here; I will not leave its work half done. · Faith: The long plan is wiser than any single life, including mine. · Justice: Fairness is a luxury of those who will not live long. · Power: The hand that guides is stronger than the hand that strikes. · Truth: I hear every lie spoken in this keep. I choose which ones to answer.",
+      "appearance": "Still as poured water, grey-eyed, dressed as a lady-in-waiting. She answers questions nobody has asked yet.",
+      "driveStatements": {
+        "duty": "The Sisterhood placed me here; I will not leave its work half done.",
+        "faith": "The long plan is wiser than any single life, including mine.",
+        "justice": "Fairness is a luxury of those who will not live long.",
+        "power": "The hand that guides is stronger than the hand that strikes.",
+        "truth": "I hear every lie spoken in this keep. I choose which ones to answer."
+      },
       "attributes": {
         "faith": 8,
         "power": 7,
@@ -578,7 +598,14 @@
       "id": "teodor-brask",
       "name": "Teodor Brask",
       "career": "Swordmaster",
-      "appearance": "Grey-bearded, heavy-shouldered, moves like a much younger man. Three dueling scars, one he will not explain. DRIVE STATEMENTS — Duty: I swore to the old Lord on his deathbed. The oath outlives him. · Faith: I believe in the blade, the shield and the slow, sure stroke. · Justice: A murderer under this roof answers to me before any court. · Power: Power is for lords. I want only to be ready. · Truth: A man’s guard tells you more than his tongue.",
+      "appearance": "Lean, shaven-headed and weathered, with a stiff knee that vanishes the moment he draws. Three dueling scars, one he will not explain.",
+      "driveStatements": {
+        "duty": "I swore to the old Lord on his deathbed. The oath outlives him.",
+        "faith": "I believe in the blade, the shield and the slow, sure stroke.",
+        "justice": "A murderer under this roof answers to me before any court.",
+        "power": "Power is for lords. I want only to be ready.",
+        "truth": "A man’s guard tells you more than his tongue."
+      },
       "attributes": {
         "duty": 8,
         "justice": 7,
@@ -616,7 +643,14 @@
       "id": "farrah-hollow-wind",
       "name": "Farrah of Hollow Wind",
       "career": "Fremen Guide",
-      "appearance": "Small, sun-dark, eyes blue-within-blue. Wears her stillsuit even indoors and drinks only from her own catchpocket. DRIVE STATEMENTS — Duty: My sietch lent me to this House. I am its eyes here, and its debt-keeper. · Faith: The desert tests everyone. Only the worthy are returned. · Justice: Water taken must be water repaid. That is the oldest law. · Power: Outsiders want to own the desert. The desert owns them. · Truth: Watch the hands and the water. Words are wind.",
+      "appearance": "Small, sun-dark, eyes blue-within-blue. Wears her stillsuit even indoors and drinks only from her own catchpocket.",
+      "driveStatements": {
+        "duty": "My sietch lent me to this House. I am its eyes here, and its debt-keeper.",
+        "faith": "The desert tests everyone. Only the worthy are returned.",
+        "justice": "Water taken must be water repaid. That is the oldest law.",
+        "power": "Outsiders want to own the desert. The desert owns them.",
+        "truth": "Watch the hands and the water. Words are wind."
+      },
       "attributes": {
         "duty": 6,
         "faith": 8,
@@ -655,7 +689,14 @@
       "id": "cassius-tessarin",
       "name": "Cassius Tessarin",
       "career": "Noble Scion",
-      "appearance": "Lady Senna’s younger brother: handsome, restless, overdressed for the desert, sharper than he lets anyone see. DRIVE STATEMENTS — Duty: My sister rules. I was raised to be her shadow — I will not be her ghost. · Faith: I believe in luck, and in making it. · Justice: The Harkonnens have bled this town for a decade. Someone should make them pay. · Power: A minor House is only minor until it makes the right alliance. · Truth: Everyone at court is acting. The trick is knowing which play they are in.",
+      "appearance": "Lady Senna’s younger brother: handsome, restless, overdressed for the desert, sharper than he lets anyone see.",
+      "driveStatements": {
+        "duty": "My sister rules. I was raised to be her shadow — I will not be her ghost.",
+        "faith": "I believe in luck, and in making it.",
+        "justice": "The Harkonnens have bled this town for a decade. Someone should make them pay.",
+        "power": "A minor House is only minor until it makes the right alliance.",
+        "truth": "Everyone at court is acting. The trick is knowing which play they are in."
+      },
       "attributes": {
         "power": 8,
         "duty": 7,
@@ -676,7 +717,7 @@
         "Shield belt",
         "House signet ring",
         "Solari purse",
-        "Ornithopter access codes"
+        "Ornithopter Access"
       ],
       "signatureItem": "An unsent letter to the heir of House Vaszari proposing marriage — and an alliance against the Harkonnens.",
       "personalAgenda": "Turn the crisis into leverage. If the House must bend, make sure it bends toward a future you choose.",
@@ -692,7 +733,7 @@
   ],
   "tips": [
     "Let the Momentum pool rise early; the audience in Act III needs it.",
-    "Use Threat visibly: put a die on the table for each point. The players should watch it grow as the Assessor approaches.",
+    "Use Threat visibly. The engine keeps the pool off the players’ screens, so put a die on the table for each point when you want them to watch it grow as the Assessor approaches.",
     "Every NPC believes they serve a greater good. Play them sincerely.",
     "If players solve the murder fast, have Kessa flee into the desert, where the worm or the Fremen find her first.",
     "Drive statements are tools: when a player acts against one, offer them a choice — gain Threat for the Narrator, or challenge the statement and rewrite it."

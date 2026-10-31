@@ -43,6 +43,10 @@ function RulesSection() {
   const { Component } = current;
   return (
     <div className="rules">
+      <div className="page-head">
+        <h2>RULES — {universe.name}</h2>
+        <p>Reference and cheat sheets for the table.</p>
+      </div>
       <div className="subtabs" role="tablist" aria-label="Rules reference">
         {subs.map((s) => (
           <button key={`${universe.id}:${s.id}`} type="button" role="tab" aria-selected={s.id === current.id}
@@ -52,6 +56,20 @@ function RulesSection() {
       <div className="rules-body" role="tabpanel" aria-label={current.label}>
         <Component key={`${universe.id}:${current.id}`} />
       </div>
+    </div>
+  );
+}
+
+function DicePageHead() {
+  const { universe } = useUniverse();
+  const { gameCode } = useGame();
+  return (
+    <div className="page-head">
+      <h2>DICE — {universe.name}</h2>
+      <p>
+        Roll for NPCs, threats and anything off the sheet.
+        {gameCode ? ' Phone rolls land in the roll feed.' : ` Start ${universe.terms.sessionArticle || 'a'} ${universe.terms.session.toLowerCase()} to see phone rolls here.`}
+      </p>
     </div>
   );
 }
@@ -118,6 +136,7 @@ function AppContent() {
           <Section id="characters" active={activeSection}><Characters /></Section>
           <Section id="maps" active={activeSection}><Maps /></Section>
           <Section id="dice" active={activeSection}>
+            <DicePageHead />
             <div className="dice-page">
               <div className="dice-page-roller"><DiceRoller /></div>
               {gameCode && <RollFeed limit={20} title="ROLL FEED" className="dice-page-feed" />}

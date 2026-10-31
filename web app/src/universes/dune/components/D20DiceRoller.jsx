@@ -10,10 +10,11 @@ import { play, reducedFx } from '../../../engine/sfx';
    (20 by default, widening down to 16) is a complication. Successes beyond the
    Difficulty become Momentum. Difficulty 0 always succeeds.
 
-   Props: preset { attr, skill, bonus, label, attrKey?, skillKey?, kind?, total?, stress?, at? }
+   Props: preset { attr, skill, bonus, label, attrKey?, skillKey?, kind?, total?, stress?, at?, difficulty?, requestId? }
    pre-fills Drive (attr) + Skill and the bonus d20s, selects attrKey/skillKey,
    and shows the label (the phone sheet sends the full session shape; extra
-   keys are ignored). Settle-then-celebrate: dice tumble, settle, then a
+   keys are ignored; `difficulty` sets the Difficulty, `requestId` — a GM roll request — is copied
+   onto the result so the phone's sendRoll answers it). Settle-then-celebrate: dice tumble, settle, then a
    result overlay + sfx (dice.settle → dice.crit / dice.botch).
    onResult(roll) is called once per settled roll with
    { kind:'2d20', label, skillKey, attrKey, summary, successes, complications, passed,
@@ -110,6 +111,7 @@ function report(r, meta) {
     kind: '2d20',
     label,
     skillKey: meta.skillKey, attrKey: meta.driveKey,
+    ...(meta.requestId ? { requestId: meta.requestId } : {}),
     summary: `${label} — ${r.passed ? 'PASSED' : 'FAILED'} ${r.successes}/D${r.difficulty}${r.momentum ? ` +${r.momentum} MOMENTUM` : ''}${r.complications ? ` · ${r.complications} COMPLICATION${r.complications > 1 ? 'S' : ''}` : ''}`,
     successes: r.successes, complications: r.complications, passed: r.passed, momentum: r.momentum,
     difficulty: r.difficulty, target: r.target, flags, dice: { d20: r.rolls },
@@ -120,6 +122,7 @@ export default function D20DiceRoller({ preset, onResult, compact = false }) {
   const onResultRef = useRef(onResult);
   onResultRef.current = onResult;
   const metaRef = useRef({});
+  const requestRef = useRef(null); // preset.requestId: the GM roll request this roll answers
   const [driveKey, setDriveKey] = useState(attributes[0].key);
   const [skillKey, setSkillKey] = useState(skills[0].key);
   const [drive, setDrive] = useState(6);
@@ -144,6 +147,8 @@ export default function D20DiceRoller({ preset, onResult, compact = false }) {
     if (preset.attr != null) setDrive(clamp(Number(preset.attr) || 1, 1, 12));
     if (preset.skill != null) setSkill(clamp(Number(preset.skill) || 1, 1, 12));
     setBonus(clamp(Number(preset.bonus) || 0, 0, MAX_BONUS));
+    if (preset.difficulty != null) setDifficulty(clamp(Number(preset.difficulty) || 0, 0, MAX_DIFF));
+    requestRef.current = preset.requestId || null;
     setLabel(preset.label || null);
     setResult(null);
   }, [presetKey]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -166,7 +171,7 @@ export default function D20DiceRoller({ preset, onResult, compact = false }) {
     const passed = successes >= difficulty;
     const momentum = passed ? successes - difficulty : 0;
     const final = { rolls, dieKinds, successes, complications, passed, momentum, target, difficulty, bonus };
-    const meta = { ...metaRef.current };
+    const meta = { ...metaRef.current, requestId: requestRef.current };
     clearInterval(timer.current);
     setRollId((n) => n + 1);
     setResult(final);
@@ -200,7 +205,7 @@ export default function D20DiceRoller({ preset, onResult, compact = false }) {
         <div className="roll-preset">
           <b>{label}</b>
           <span>TARGET {target} · {BASE + bonus}D20</span>
-          <button type="button" onClick={() => setLabel(null)}>CLEAR</button>
+          <button type="button" onClick={() => { setLabel(null); requestRef.current = null; }}>CLEAR</button>
         </div>
       )}
       {!compact && (

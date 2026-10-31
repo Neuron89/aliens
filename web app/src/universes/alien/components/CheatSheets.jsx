@@ -10,7 +10,7 @@ export default function CheatSheets() {
             <tr><th>Pool</th><td>Base Dice = Attribute + Skill level. Add Stress Dice = current Stress Level.</td></tr>
             <tr><th>Success</th><td>At least one <strong>6</strong> on any die. Extra 6s = stunts (e.g. +1 damage, pin, disarm).</td></tr>
             <tr><th>Push</th><td>Re-roll all non-6s once. +1 Stress Level. If any Stress Die shows <strong>1</strong>, no push — make Panic Roll instead.</td></tr>
-            <tr><th>Stress Die 1</th><td>Panic Roll required; skill roll fails regardless of 6s. On weapon fire with limited ammo: magazine emptied.</td></tr>
+            <tr><th>Stress Die 1</th><td>Panic Roll required (D6 + Stress Level). Your 6s still count unless the result is 10+, which forces a panic action instead. Firing a weapon: magazine emptied.</td></tr>
           </tbody>
         </table>
       </div>
@@ -36,8 +36,8 @@ export default function CheatSheets() {
             <tr><th>8</th><td>Tremble. All AGILITY rolls −2 until panic stops.</td></tr>
             <tr><th>9</th><td>Drop item (weapon or important item). +1 Stress.</td></tr>
             <tr><th>10</th><td>Freeze. Lose next slow action. +1 Stress (you and friendlies SHORT).</td></tr>
-            <tr><th>11</th><td>Seek cover. Next action: move to safety. −1 Stress (you), +1 (friendlies SHORT).</td></tr>
-            <tr><th>12</th><td>Scream 1 Round. −1 Stress (you). Each friendly who hears: immediate Panic Roll.</td></tr>
+            <tr><th>11</th><td>Seek cover. Next action: move to safety (retreat roll if ENGAGED). −1 Stress (you), +1 (friendlies SHORT).</td></tr>
+            <tr><th>12</th><td>Scream 1 Round; lose next slow action. −1 Stress (you). Each friendly who hears: immediate Panic Roll.</td></tr>
             <tr><th>13</th><td className="effect-severe">Flee. Must flee to safe place; refuse to leave. −1 Stress. Friendlies who see you run: Panic Roll.</td></tr>
             <tr><th>14</th><td className="effect-critical">Berserk. Attack nearest person/creature until you or target Broken. Witnesses: Panic Roll.</td></tr>
             <tr><th>15+</th><td className="effect-critical">Catatonic. Collapse, can't talk or move.</td></tr>
@@ -76,7 +76,7 @@ export default function CheatSheets() {
       <div className="panel">
         <h2>STRESS RELIEF</h2>
         <ul className="plain">
-          <li>Rest in safe area: 1 Turn (5–10 min) = −1 Stress. No skill rolls during rest.</li>
+          <li>Rest in a secured safe area: each full Turn (5–10 min) = −1 Stress. No skill rolls during rest.</li>
           <li>Once per Act (Cinematic) or session (Campaign): interact with signature item = −1 Stress (slow action).</li>
           <li>Some Panic results reduce Stress. Certain drugs can reduce Stress.</li>
         </ul>

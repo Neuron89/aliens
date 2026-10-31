@@ -20,7 +20,7 @@ export const terminal = {
 
 export const terms = {
   gm: 'Game Mother',
-  gmShort: 'DM',
+  gmShort: 'GM',
   player: 'Crew Member',
   players: 'Crew',
   session: 'Session',

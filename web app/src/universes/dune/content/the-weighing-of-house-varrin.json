@@ -71,7 +71,7 @@
         "Down in the kitchens, past the water gate, a woman in a sand-colored cloak is waiting with her water-skins. She has sold water to this House for nine years and never once asked to come inside. Tonight she has asked to see the Lord. The servants say she spoke of the scale, and of dawn, and of something weighed that cannot be weighed back."
       ],
       "gmNotes": "Act I is a reception run as an intrigue conflict with every room treated as adjacent: let the agents split up, work the guests, and bring fragments back. Start Threat at 2 per player. The surface agendas are on display: Aster Quen wants the sealed offer opened before dawn; Ser Ulmar wants his gift accepted and served to the Lord tonight; Ilsabet Moreaux wants a buyer for what she knows; Ixa wants a private word with the Lord; Judge Strenn wants to be left alone. Underneath, Steward Oswin Pell is steering servants, seating and timing. The hunter-seeker during the toast is his: it is a feint to make Lord Castor retire early to his chambers, where the griffin decanter will follow him as a nightcap. Close the act when the Lord withdraws and the household goes to its rooms with the decanter carried upstairs.",
-      "agendaNotes": "Act I agendas are private and plausible. Teodor and Aurelian should both want to be the one who speaks for the House to the Judge; Severine should be quietly shaping how the Fremen prophecy is heard; Dr. Tervane should be testing every gift and watching Severine; Bastien should recognise a face in the Harkonnen retinue and say nothing. Send no agenda handouts yet: the first act lives on the character sheets.",
+      "agendaNotes": "Act I agendas are private and plausible. Idrin and Aurelian should both want to be the one who speaks for the House to the Judge; Severine should be quietly shaping how the Fremen prophecy is heard; Dr. Tervane should be testing every gift and watching Severine; Corvin should recognise a face in the Harkonnen retinue and say nothing. Send no agenda handouts yet: the first act lives on the character sheets.",
       "scenes": [
         {
           "name": "The Guests Arrive",
@@ -95,7 +95,7 @@
           "gmTip": "Do not run this as a series of rolls: give each agent one guest to handle and cut between them quickly, rolling only where something is at stake.",
           "outcomes": [
             "The agents learn which guests know of the Lord’s illness: the Guild envoy and the Harkonnen cousin",
-            "Kasimir Orlo is noticed in Ulmar’s retinue, which matters enormously to Bastien",
+            "Kasimir Orlo is noticed in Ulmar’s retinue, which matters enormously to Corvin",
             "A failed precedence leaves Ulmar holding a grievance he will spend later"
           ]
         },
@@ -232,7 +232,7 @@
         "Below everything, beneath the kitchens and the servant stair, the shield generator hums inside its vault, a deep, patient note you feel in your teeth more than you hear it. The vault has one door and two keys. Tonight, one of the keys is missing from its hook, and nobody remembers seeing who took it."
       ],
       "gmNotes": "Act II runs the middle hours of the night. Three threads must all be live: the Nightcap, where the second half of a two-part poison reaches a man already carrying the first (Pell has dosed Castor for months, and the griffin wine completes it); the Challenge and Duel, where Ulmar uses any slight to demand satisfaction under the forms and puts his blade Kasimir Orlo against the House; and the Shield Vault, where Pell has slaved a lasgun to fire into the generator's field at the first hour after dawn, while the Judge sits. Lasgun meets shield: the Residency, the Judge, the evidence and the Varrin name all go up together, and the deed closes on a dead grantor. The vault also holds the Black Tally and Lord Castor's private box with his copy of the deed of sale, sealed with a Bene Gesserit truth-witness mark. That is the discovery of the sale. Spend Threat freely in this act: the agents should never have enough people for all three threads.",
-      "agendaNotes": "Act II agendas set the agents against each other. Hand out the act 2 agendas by private dispatch as the act begins. The discovery of the sale is the hinge: Aurelian learns his father sold his birthright, Severine's witness mark is on the deed, Teodor's Black Tally is in the same box, and Bastien learns that the shield timings Pell used came from letters he wrote to his brother. Let accusations fly; do not let them resolve.",
+      "agendaNotes": "Act II agendas set the agents against each other. Hand out the act 2 agendas by private dispatch as the act begins. The discovery of the sale is the hinge: Aurelian learns his father sold his birthright, Severine's witness mark is on the deed, Idrin's Black Tally is in the same box, and Corvin learns that the shield timings Pell used came from letters he wrote to his brother. Let accusations fly; do not let them resolve.",
       "scenes": [
         {
           "name": "The Nightcap",
@@ -274,10 +274,10 @@
           ],
           "stressTriggers": [
             "THREAT +1 — refusing the challenge: the House is called coward before the Landsraad",
-            "STRESS +1 — Bastien, when Kasimir meets his eyes"
+            "STRESS +1 — Corvin, when Kasimir meets his eyes"
           ],
           "npcGuidance": "Ulmar insists the duel be to the death, then graciously accepts yielding if pushed, because either way the duel keeps the agents busy. Kasimir says nothing.",
-          "gmTip": "Deliver the Letter Folded into a Glove handout to Bastien privately here. Set the duel for the middle hour, which is exactly when Pell needs the vault quiet.",
+          "gmTip": "Deliver the Letter Folded into a Glove handout to Corvin privately here. Set the duel for the middle hour, which is exactly when Pell needs the vault quiet.",
           "outcomes": [
             "A duel under the forms is set in the conservatory, with terms the agents shaped",
             "An agent realises the duel is a distraction and splits the party"
@@ -287,7 +287,7 @@
           "name": "Duel in the Conservatory",
           "mandatory": true,
           "encounter": true,
-          "encounterDetail": "A duel under the forms: Kasimir Orlo, rapier and kindjal, personal shield, against the House champion. Kasimir is a superb slow-blade fighter (Battle 7, Move 6) who will not take a killing stroke against a yielding foe; if Bastien fights, Kasimir holds back until he learns why.",
+          "encounterDetail": "A duel under the forms: Kasimir Orlo, rapier and kindjal, personal shield, against the House champion. Kasimir is a superb slow-blade fighter (Battle 7, Move 6) who will not take a killing stroke against a yielding foe; if Corvin fights, Kasimir holds back until he learns why.",
           "narration": "Glowglobes hang low among the date palms. The fountain is shut off so that no water is wasted on blood. Two shields hum, two blades come up, and the court lines the dew-glass to watch.",
           "checks": [
             "BATTLE + DUTY, Difficulty 2 — the duel itself, fought as a duel conflict: blades must slow to pass the shield",
@@ -323,7 +323,7 @@
             "UNDERSTAND + POWER, Difficulty 2 — open the Lord’s private box in the archive niche and read what is inside"
           ],
           "events": [
-            "The box holds the Black Tally in Teodor’s cipher and the Lord’s copy of the deed of sale, sealed with a Bene Gesserit truth-witness mark.",
+            "The box holds the Black Tally in Idrin’s cipher and the Lord’s copy of the deed of sale, sealed with a Bene Gesserit truth-witness mark.",
             "If Pell is present, he fights only to reach the passage door and the roof."
           ],
           "stressTriggers": [
@@ -391,7 +391,7 @@
         "Your House has one hour to decide what it is. The scale does not care what you say about it, or what you swore last night, or whom you love. It measures only what you are willing to put in the pan, and it has never once been wrong about the weight."
       ],
       "gmNotes": "Act III is a single public intrigue conflict before the Judge, with private side-scenes as the agents scramble. Judge Strenn carries sealed instructions from Kaitain to confirm all concessions as they stand and ask no questions about weights; he is honest and hates them, and he will act only on proof laid before him publicly under the forms. The four roads: EXPOSE (lay the Black Tally, the deed and the lasgun before the Judge; the House loses the Weighing for fraud but breaks Ulmar and wins Atreides and Guild favor); COVER UP (Castor revokes the sale and the House sells to the Guild, which buries the past); KNEEL (accept the sale and become Ulmar's sworn weighers under the coming Atreides, a hidden Harkonnen knife); FLEE (take the Black Tally into the desert with Ixa and become outlaws holding a weapon). If the lasgun was not found, the timer runs during this act.",
-      "agendaNotes": "Act III agendas are open betrayal. Send each agent's act 3 agenda privately as the Judge sits. Teodor must decide what to certify; Aurelian decides whether to expose his father and his Mentat; Severine receives her Order's instruction and must choose it or the heir; Dr. Tervane decides whether to break a patient's confidence before the Judge; Bastien must decide whether his oath to Castor allows the heir to kneel. At least one agent should end the hearing having acted against another in front of witnesses.",
+      "agendaNotes": "Act III agendas are open betrayal. Send each agent's act 3 agenda privately as the Judge sits. Idrin must decide what to certify; Aurelian decides whether to expose his father and his Mentat; Severine receives her Order's instruction and must choose it or the heir; Dr. Tervane decides whether to break a patient's confidence before the Judge; Corvin must decide whether his oath to Castor allows the heir to kneel. At least one agent should end the hearing having acted against another in front of witnesses.",
       "scenes": [
         {
           "name": "The Kneeling Offer",
@@ -452,7 +452,7 @@
             "Whatever the Mentat answers, someone in the inner circle has the means to contradict it."
           ],
           "stressTriggers": [
-            "STRESS +2 — Teodor, whatever he says",
+            "STRESS +2 — Idrin, whatever he says",
             "STRESS +1 — any agent who contradicts another agent before the Judge"
           ],
           "npcGuidance": "Strenn wants a reason to strike the Harkonnens from his rolls and will seize it if handed proof; without proof, he confirms whatever the deed says.",
@@ -591,7 +591,7 @@
       "role": "Sworn blade of Ser Ulmar",
       "agenda": "Fight one last duel for Ulmar and so buy back his contract and his freedom.",
       "behavior": "Silent, courteous, precise. He bows to his opponents and to the dead.",
-      "secret": "He is Bastien Orlo’s younger brother, exiled for killing a man in practice. He knows nothing of the lasgun and would turn on Ulmar if he learned of it.",
+      "secret": "He is Corvin Orlo’s younger brother, exiled for killing a man in practice. He knows nothing of the lasgun and would turn on Ulmar if he learned of it.",
       "stats": {
         "battle": 7,
         "move": 6,
@@ -636,6 +636,7 @@
     },
     {
       "name": "Harkonnen House-Troopers",
+      "ref": "harkonnen-troopers",
       "description": "Four of Ulmar’s guards out of livery, carrying knives and stunners.",
       "stats": {
         "evade": 2,
@@ -728,10 +729,10 @@
       "id": "letter-from-kasimir",
       "title": "A LETTER FOLDED INTO A GLOVE",
       "from": "Kasimir Orlo",
-      "to": "Bastien Orlo",
+      "to": "Corvin Orlo",
       "priority": "SEALED",
       "text": "Brother. Your letters reached me, every one, and I kept them, as you kept mine. I did not know until tonight that my master kept them too. He knows when your shield is changed and how long the vault is unwatched. I fight you at the middle hour because my contract says I must, and it is the last fight it says I must. Do not hold back for my sake. I will not for yours. K.",
-      "when": "Act II, The Challenge, privately to Bastien"
+      "when": "Act II, The Challenge, privately to Corvin"
     },
     {
       "id": "deed-of-sale",
@@ -774,7 +775,7 @@
     {
       "id": "varrin-residency",
       "title": "THE VARRIN RESIDENCY",
-      "subtitle": "House Varrin seat above the Carthag spiceport — three levels",
+      "subtitle": "House Varrin seat above the Carthag spiceport — ground floor, upper floor and roof",
       "description": "A minor House residency built to impress Landsraad guests: cool halls, wasteful water, and a shield generator in the rock beneath. Servant passages run inside every wall.",
       "kind": "ascii",
       "ascii": "╔══════════════════════════════════════════════════════════════════╗\n║ THE VARRIN RESIDENCY — CARTHAG, ARRAKIS                          ║\n║ House Varrin · three levels · north is up · ┄ hidden door        ║\n╠══════════════════════════════════════════════════════════════════╣\n║  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐ ║\n║  │ ROOF 'THOPTER PAD│  │ GUEST WING       │  │ LORD'S CHAMBERS │ ║\n║  │ 2 craft · beacon │  │ Guild, Harkonnen │  │ upper floor     │ ║\n║  │ lift to the hall │  │ Judge, CHOAM     │  │ sickbed         │ ║\n║  └────────┬─────────┘  └───┬──────────────┘  └────┬────────────┘ ║\n║           │ lift           │ grand stair          │ stair        ║\n║           │                │                      │              ║\n║  ┌────────┴────────────────┴──┐  ┌────────────────┴────────────┐ ║\n║  │ GREAT HALL                 │  │ DINING COURT                │ ║\n║  │ dais · the Varrin Scale    │  │ long table · water service  │ ║\n║  │ reception floor            │══│ snooper posts at each seat  │ ║\n║  │ shield-doors at both ends  │  │ arch to the conservatory    │ ║\n║  └─────────────┬──────────────┘  └──────────────┬──────────────┘ ║\n║                │                                │                ║\n║  ┌─────────────┴──────────────┐  ┌──────────────┴──────────────┐ ║\n║  │ SERVANT PASSAGES           │  │ CONSERVATORY                │ ║\n║  │ kitchens · water gate      │┄┄│ date palms · dew-glass      │ ║\n║  │ hidden doors to every room │  │ fountain · duelling floor   │ ║\n║  └──────────────────┬─────────┘  └─────────────────────────────┘ ║\n║                     │                                            ║\n║             ┌───────┴──────────────────────────────┐             ║\n║             │ SHIELD-GENERATOR VAULT (below)       │             ║\n║             │ generator housing · field emitter    │             ║\n║             │ archive niche · two-key door         │             ║\n║             └──────────────────────────────────────┘             ║\n║                                                                  ║\n║  ═══ south: forecourt, shield-gate, spiceport road               ║\n╚══════════════════════════════════════════════════════════════════╝",
@@ -834,9 +835,16 @@
   "characters": [
     {
       "id": "teodor-quill",
-      "name": "Teodor Quill",
+      "name": "Idrin Quill",
       "career": "Mentat",
-      "appearance": "Tall, stooped and immaculate, with sapho-stained lips and ink in the creases of his knuckles. He counts under his breath when a room goes quiet. DRIVE STATEMENTS — Duty: The House bought my mind; I will not let it be sold cheaply. · Faith: I believe in nothing I cannot weigh, and I weigh everything. · Justice: A false figure is a debt that comes due with interest. · Power: Whoever holds the true numbers holds the room. · Truth: I have told one lie for eleven years, and I know its exact weight.",
+      "appearance": "Tall, stooped and immaculate, with sapho-stained lips and ink in the creases of his knuckles. He counts under his breath when a room goes quiet.",
+      "driveStatements": {
+        "duty": "The House bought my mind; I will not let it be sold cheaply.",
+        "faith": "I believe in nothing I cannot weigh, and I weigh everything.",
+        "justice": "A false figure is a debt that comes due with interest.",
+        "power": "Whoever holds the true numbers holds the room.",
+        "truth": "I have told one lie for eleven years, and I know its exact weight."
+      },
       "attributes": {
         "duty": 6,
         "faith": 4,
@@ -854,7 +862,7 @@
       "talent": "Projection Engine — Once per scene, state a conclusion about a person or plan. If the Narrator confirms it, gain 2 Momentum; if not, the Narrator gains 1 Threat.",
       "gear": [
         "Sapho juice",
-        "Filmbook reader",
+        "Filmbook",
         "Poison snooper",
         "House signet ring",
         "The first calibration weight"
@@ -874,7 +882,14 @@
       "id": "severine-ashka",
       "name": "Severine Ashka",
       "career": "Bene Gesserit",
-      "appearance": "Composed and unhurried, in grey-green silk, the Lord’s consort for six years. She never raises her voice and never needs to. DRIVE STATEMENTS — Duty: I owe the Sisterhood my training and this House my years; I have not decided which debt is larger. · Faith: Every legend is a tool someone forged; I know who forged this one. · Justice: Justice is a luxury of those who will not be here in a hundred years. · Power: The quietest voice in the room decides what the room remembers. · Truth: I can hear a lie in a breath; I have never been able to stop telling them.",
+      "appearance": "Composed and unhurried, in grey-green silk, the Lord’s consort for six years. She never raises her voice and never needs to.",
+      "driveStatements": {
+        "duty": "I owe the Sisterhood my training and this House my years; I have not decided which debt is larger.",
+        "faith": "Every legend is a tool someone forged; I know who forged this one.",
+        "justice": "Justice is a luxury of those who will not be here in a hundred years.",
+        "power": "The quietest voice in the room decides what the room remembers.",
+        "truth": "I can hear a lie in a breath; I have never been able to stop telling them."
+      },
       "attributes": {
         "duty": 5,
         "faith": 8,
@@ -904,15 +919,22 @@
         "2": "When the deed of sale is found, every eye will go to your truth-witness seal. Deny it, explain it, or turn Aurelian against his father so that the sale is voided by his own hand.",
         "3": "Your Order demands the scale pass to the Guild, even if the heir is ruined. Choose the Sisterhood or the young man you have watched grow up, and do it in front of the Judge."
       },
-      "buddy": "Teodor Quill",
+      "buddy": "Idrin Quill",
       "rival": "Dr. Maren Tervane",
       "secret": "Six days ago you witnessed Lord Castor sign away the Weighing and sealed the deed with your truth-witness mark, and he swore you to silence. Aurelian does not know his birthright is gone, and Dr. Tervane already suspects you of poisoning the Lord."
     },
     {
       "id": "bastien-orlo",
-      "name": "Bastien Orlo",
+      "name": "Corvin Orlo",
       "career": "Swordmaster",
-      "appearance": "Broad, grey at the temples, with a duellist’s scarred knuckles and a habit of standing between the heir and every door. He speaks little and bows precisely. DRIVE STATEMENTS — Duty: I swore to Lord Castor that his son would outlive him. · Faith: The blade is honest even when the hand is not. · Justice: The forms exist so that killing has a price. · Power: Power is a tool I hold for others and never for myself. · Truth: I taught my brother the slow blade, and I taught him wrong.",
+      "appearance": "Tall and rangy, with a duellist’s scarred knuckles and a habit of standing between the heir and every door. He speaks little and bows precisely.",
+      "driveStatements": {
+        "duty": "I swore to Lord Castor that his son would outlive him.",
+        "faith": "The blade is honest even when the hand is not.",
+        "justice": "The forms exist so that killing has a price.",
+        "power": "Power is a tool I hold for others and never for myself.",
+        "truth": "I taught my brother the slow blade, and I taught him wrong."
+      },
       "attributes": {
         "duty": 8,
         "faith": 7,
@@ -939,18 +961,25 @@
       "personalAgenda": "Keep Aurelian alive and the honor of House Varrin unbroken through the night, whatever the guests intend.",
       "agendaByAct": {
         "1": "Watch Ulmar’s retinue. Find out why your brother Kasimir wears Harkonnen blue, and keep Aurelian from accepting any challenge, however it is phrased.",
-        "2": "The challenge has come and you will answer it yourself. Decide whether to kill your brother, yield to him, or break the forms to save him, knowing Teodor will compute exactly how the vault was breached.",
+        "2": "The challenge has come and you will answer it yourself. Decide whether to kill your brother, yield to him, or break the forms to save him, knowing Idrin will compute exactly how the vault was breached.",
         "3": "If Aurelian kneels to a Harkonnen, your oath to his father requires you to stop him, before the Judge, by force if you must. Decide which you serve: the Varrin name, or the young man who bears it."
       },
       "buddy": "Aurelian Varrin",
-      "rival": "Teodor Quill",
-      "secret": "Kasimir Orlo is your younger brother. In your letters to him this year you mentioned the shield cycles and the vault watch as idle talk; those letters are how the Harkonnens breached the Residency, and Teodor’s security review will reveal it."
+      "rival": "Idrin Quill",
+      "secret": "Kasimir Orlo is your younger brother. In your letters to him this year you mentioned the shield cycles and the vault watch as idle talk; those letters are how the Harkonnens breached the Residency, and Idrin’s security review will reveal it."
     },
     {
       "id": "aurelian-varrin",
       "name": "Aurelian Varrin",
       "career": "Noble Scion",
-      "appearance": "Twenty-two, sharp-featured, dressed a little too well, with his father’s grey eyes and none of his patience. He touches his signet ring when he is lying. DRIVE STATEMENTS — Duty: I owe this House a better name than the one it has. · Faith: I believe the Atreides mean what they say, and I am betting everything on it. · Justice: Whatever my father’s generation did, mine will answer for it honestly. · Power: The Judge confirms an heir, not a ghost; I mean to be in that chair. · Truth: I do not yet know what the truth is, only that someone has been hiding it from me.",
+      "appearance": "Twenty-two, sharp-featured, dressed a little too well, with his father’s grey eyes and none of his patience. He touches his signet ring when he is lying.",
+      "driveStatements": {
+        "duty": "I owe this House a better name than the one it has.",
+        "faith": "I believe the Atreides mean what they say, and I am betting everything on it.",
+        "justice": "Whatever my father’s generation did, mine will answer for it honestly.",
+        "power": "The Judge confirms an heir, not a ghost; I mean to be in that chair.",
+        "truth": "I do not yet know what the truth is, only that someone has been hiding it from me."
+      },
       "attributes": {
         "duty": 6,
         "faith": 4,
@@ -976,19 +1005,26 @@
       "signatureItem": "Mother’s water ring — the last ring from his mother’s water, which he swore never to spend.",
       "personalAgenda": "Be confirmed by the Judge as heir and holder of the Weighing on your own terms, with House Varrin standing beside the Atreides rather than behind the Harkonnens.",
       "agendaByAct": {
-        "1": "Win the Judge’s ear and charm the Guild envoy. Find out what the Harkonnen cousin wants, and what Teodor keeps locked in the vault.",
+        "1": "Win the Judge’s ear and charm the Guild envoy. Find out what the Harkonnen cousin wants, and what Idrin keeps locked in the vault.",
         "2": "Your father has sold your birthright. Get the escrow copy of the deed from the CHOAM factor by any means, and find out who witnessed the sale.",
-        "3": "Stand before the Judge. Expose your father’s sale and Teodor’s false weights, losing the concession but winning the Atreides, or kneel and keep the name. Whatever you choose, the House chooses with you."
+        "3": "Stand before the Judge. Expose your father’s sale and Idrin’s false weights, losing the concession but winning the Atreides, or kneel and keep the name. Whatever you choose, the House chooses with you."
       },
-      "buddy": "Bastien Orlo",
+      "buddy": "Corvin Orlo",
       "rival": "Severine Ashka",
-      "secret": "You have written three times to the Atreides advance office, promising proof of the true weights of Carthag in exchange for their support at your confirmation. You do not know what the proof is, only that Teodor keeps something in the vault."
+      "secret": "You have written three times to the Atreides advance office, promising proof of the true weights of Carthag in exchange for their support at your confirmation. You do not know what the proof is, only that Idrin keeps something in the vault."
     },
     {
       "id": "maren-tervane",
       "name": "Dr. Maren Tervane",
       "career": "Suk Doctor",
-      "appearance": "Small, brisk and unadorned, with the Suk diamond tattooed on her brow and a medical case she never sets down. She examines everyone she speaks to, out of habit. DRIVE STATEMENTS — Duty: My patient is my House, and my patient is dying. · Faith: My conditioning holds; I have to believe that, or I have nothing. · Justice: Someone has been killing a man by the spoonful under my care. · Power: I hold the one fact that could end this night, and I am forbidden to say it. · Truth: A diagnosis does not care who it embarrasses.",
+      "appearance": "Small, brisk and unadorned, with the Suk diamond tattooed on her brow and a medical case she never sets down. She examines everyone she speaks to, out of habit.",
+      "driveStatements": {
+        "duty": "My patient is my House, and my patient is dying.",
+        "faith": "My conditioning holds; I have to believe that, or I have nothing.",
+        "justice": "Someone has been killing a man by the spoonful under my care.",
+        "power": "I hold the one fact that could end this night, and I am forbidden to say it.",
+        "truth": "A diagnosis does not care who it embarrasses."
+      },
       "attributes": {
         "duty": 8,
         "faith": 5,

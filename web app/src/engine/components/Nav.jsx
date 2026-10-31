@@ -170,6 +170,7 @@ export function railSections(universe) {
 
 function AudioPop({ audio, onClose, anchor }) {
   const ref = useRef(null);
+  const { universe } = useUniverse();
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     const onDown = (e) => { if (ref.current && !ref.current.contains(e.target) && !anchor.current?.contains(e.target)) onClose(); };
@@ -180,11 +181,14 @@ function AudioPop({ audio, onClose, anchor }) {
   }, [onClose, anchor]);
   if (!audio) return null;
   const { preset, volume, presets, applyPreset, updateVolume } = audio;
+  // Only this universe's moods (theme.ambient); OFF and whatever is playing now are always listed.
+  const own = universe?.theme?.ambient;
+  const shown = Object.entries(presets).filter(([key]) => !Array.isArray(own) || key === 'off' || key === preset || own.includes(key));
   return (
     <div ref={ref} className="rail-audio" role="dialog" aria-label="Ambient audio">
       <div className="rail-audio-head">AMBIENT AUDIO <span>{presets[preset]?.label || 'OFF'}</span></div>
       <div className="rail-audio-presets">
-        {Object.entries(presets).map(([key, val]) => (
+        {shown.map(([key, val]) => (
           <button key={key} type="button" className={preset === key ? 'on' : ''} aria-pressed={preset === key} onClick={() => applyPreset(key)}>{val.label}</button>
         ))}
       </div>

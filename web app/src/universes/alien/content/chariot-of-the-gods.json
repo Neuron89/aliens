@@ -718,7 +718,7 @@
     {
       "id": "uscss-montero",
       "title": "USCSS MONTERO",
-      "subtitle": "Lockmart CM-88B Bison-class Tow Vehicle",
+      "subtitle": "Lockmart CM-88B Bison-class Tow Vehicle — Decks A, B and C",
       "description": "Commercial towing vessel. Crew complement: 5. Currently hauling refinery module to Anchorpoint Station.",
       "kind": "ascii",
       "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║                    USCSS MONTERO — DECK PLAN                 ║\n    ║                 Lockmart CM-88B Bison M-Class                ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║   ┌─────────┐                                                 ║\n    ║   │ BRIDGE  │    ┌──────────────────────────────┐             ║\n    ║   │ [NAV]   ├────┤     MAIN CORRIDOR            │             ║\n    ║   │ [COMM]  │    │                              │             ║\n    ║   │ [MU/TH] │    │  ┌──────┐  ┌──────┐  ┌────┐│             ║\n    ║   └─────────┘    │  │GALLEY│  │MED   │  │ARM ││             ║\n    ║                  │  │      │  │BAY   │  │ORY ││             ║\n    ║   ┌─────────┐    │  └──────┘  └──────┘  └────┘│             ║\n    ║   │ CRYO    │    │                              │             ║\n    ║   │ CHAMBER │    │  ┌──────┐  ┌──────┐  ┌────┐│             ║\n    ║   │ 5 PODS  ├────┤  │CREW  │  │CREW  │  │STO ││             ║\n    ║   └─────────┘    │  │QTR 1 │  │QTR 2 │  │RGE ││             ║\n    ║                  │  └──────┘  └──────┘  └────┘│             ║\n    ║                  └──────────┬───────────────────┘             ║\n    ║                             │                                 ║\n    ║                  ┌──────────┴───────────────────┐             ║\n    ║                  │       ENGINE ROOM             │             ║\n    ║                  │    [REACTOR] [DRIVES]         │             ║\n    ║                  │    [MAINTENANCE ACCESS]       │             ║\n    ║                  └──────────┬───────────────────┘             ║\n    ║                             │                                 ║\n    ║                  ┌──────────┴───────────────────┐             ║\n    ║                  │       CARGO BAY              │             ║\n    ║                  │  [TOW COUPLING — EXTERNAL]   │             ║\n    ║                  │  [AIRLOCK — DOCKING PORT]    │             ║\n    ║                  └─────────────────────────────┘             ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
@@ -769,7 +769,7 @@
     {
       "id": "uscss-cronus",
       "title": "USCSS CRONUS",
-      "subtitle": "Weyland-Yutani Science Vessel — Derelict",
+      "subtitle": "Weyland-Yutani Science Vessel, derelict — main deck and lower decks",
       "description": "Science vessel missing for seventy-three years. Interior compromised by alien biological growth. Systems running on emergency power until MU/TH/UR 2000 wakes.",
       "kind": "ascii",
       "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║               USCSS CRONUS — DECK PLAN (PARTIAL)             ║\n    ║              W-Y Science Vessel — Status: DERELICT            ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║   ┌──────────┐    ┌────────────────┐                         ║\n    ║   │ BRIDGE   │    │ SCIENCE LAB    │   ████ = BLOCKED        ║\n    ║   │ [DAMAGED]├────┤ [CONTAINMENT]  │   ░░░░ = ORGANIC        ║\n    ║   │ ░░░░░░░░ │    │ [SPECIMENS]    │         GROWTH          ║\n    ║   └──────────┘    │ ░░░░░░░░░░░░░░ │                         ║\n    ║                   └───────┬────────┘                         ║\n    ║   ┌──────────┐            │                                   ║\n    ║   │ CREW     │    ┌───────┴────────────────────┐             ║\n    ║   │ QUARTERS │    │    MAIN CORRIDOR           │             ║\n    ║   │ [SEALED] ├────┤    ░░░░░░░░░░░░░░░░        │             ║\n    ║   │ ████████ │    │                            │             ║\n    ║   └──────────┘    │  ┌────────┐  ┌───────────┐│             ║\n    ║                   │  │MEDICAL │  │CRYO BAY   ││             ║\n    ║   ┌──────────┐    │  │[WRECKED│  │[PODS OPEN]││             ║\n    ║   │ COMMS    │    │  │ ░░░░░░]│  │░░░░░░░░░░ ││             ║\n    ║   │ ARRAY    ├────┤  └────────┘  └───────────┘│             ║\n    ║   │ [ACTIVE] │    └──────────┬─────────────────┘             ║\n    ║   └──────────┘               │                               ║\n    ║                   ┌──────────┴─────────────────┐             ║\n    ║                   │    LOWER DECK ACCESS        │             ║\n    ║                   │    ████████████████████      │             ║\n    ║                   │    [SEALED BLAST DOOR]      │             ║\n    ║                   └──────────┬─────────────────┘             ║\n    ║                              │                               ║\n    ║           ┌──────────────────┴──────────────────┐            ║\n    ║           │          LOWER DECKS                 │            ║\n    ║           │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   │            ║\n    ║           │  ░░░░ THE NEST — EXTREME HAZARD ░░░░ │            ║\n    ║           │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   │            ║\n    ║           │         [REACTOR ACCESS]             │            ║\n    ║           └─────────────────────────────────────┘            ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
@@ -815,7 +815,7 @@
     {
       "id": "cronus-deck-a",
       "title": "USCSS CRONUS — DECK A",
-      "subtitle": "Deck plan image",
+      "subtitle": "USCSS Cronus — illustrated deck plan",
       "description": "Deck A of the derelict USCSS Cronus.",
       "kind": "image",
       "src": "/Deck A.jpg"
@@ -823,7 +823,7 @@
     {
       "id": "cronus-deck-b",
       "title": "USCSS CRONUS — DECK B",
-      "subtitle": "Deck plan image",
+      "subtitle": "USCSS Cronus — illustrated deck plan",
       "description": "Deck B of the derelict USCSS Cronus.",
       "kind": "image",
       "src": "/Deck B.jpg"
@@ -831,7 +831,7 @@
     {
       "id": "cronus-deck-c",
       "title": "USCSS CRONUS — DECK C",
-      "subtitle": "Deck plan image",
+      "subtitle": "USCSS Cronus — illustrated deck plan",
       "description": "Deck C of the derelict USCSS Cronus.",
       "kind": "image",
       "src": "/Deck C.jpg"
@@ -839,7 +839,7 @@
     {
       "id": "cronus-deck-d",
       "title": "USCSS CRONUS — DECK D",
-      "subtitle": "Deck plan image",
+      "subtitle": "USCSS Cronus — illustrated deck plan",
       "description": "Deck D of the derelict USCSS Cronus.",
       "kind": "image",
       "src": "/Deck D.jpg"
@@ -893,11 +893,11 @@
         "medicalAid": 0,
         "command": 4
       },
-      "talent": "Field Commander — COMMAND gives +2 (instead of +1).",
+      "talent": "Field Commander — Giving orders in combat with COMMAND is a fast action for you instead of a slow one, so you can give orders twice in one Round.",
       "gear": [
         "M4A3 Service Pistol",
         "Company Captain's ID",
-        "Personal Terminal",
+        "Seegson P-DAT",
         "Coffee thermos (Signature Item)",
         "Ship's master keys"
       ],
@@ -937,7 +937,7 @@
         "medicalAid": 0,
         "command": 2
       },
-      "talent": "Corporate Secrets — Access classified Company data terminals.",
+      "talent": "Take Control — You may roll MANIPULATION using WITS instead of EMPATHY.",
       "gear": [
         "Encrypted Data Tablet",
         "Weyland-Yutani Corporate ID (Level 3 Clearance)",
@@ -981,7 +981,7 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Like a Glove — Re-roll failed PILOTING roll once per session.",
+      "talent": "Like the Back of Your Hand — Pick one specific vehicle or spacecraft (a single craft, not a model line). You get +2 to PILOTING with it. Can be taken several times, once per craft.",
       "gear": [
         "Flight Suit",
         "Pilot's Headset",
@@ -1025,7 +1025,7 @@
         "medicalAid": 1,
         "command": 0
       },
-      "talent": "Heavy Lifter — +2 HEAVY MACHINERY.",
+      "talent": "True Grit — You may push any STRENGTH-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "Heavy-duty tool kit",
         "Cutting torch",
@@ -1069,10 +1069,10 @@
         "medicalAid": 5,
         "command": 1
       },
-      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
+      "talent": "Field Surgeon — You get +2 to MEDICAL AID when treating someone who is about to die from a critical injury.",
       "gear": [
         "Medical kit (advanced)",
-        "Surgical tools",
+        "Surgical Kit",
         "Pharmaceutical supply",
         "Father's stethoscope (Signature Item)",
         "Personal data pad with medical journals"

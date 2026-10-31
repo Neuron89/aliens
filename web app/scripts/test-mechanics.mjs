@@ -6,6 +6,7 @@
    advance + "your turn" targeting + pass, creature hp on tokens (GM-only, persisted across a
    restart), critical injury apply/remove, DUNE determination spend/grant (validation, GM feed, cap),
    and the KIA → player-built replacement path (dead seat submits, GM assigns, seat revives).
+   Server dice are seeded (DICE_SEED) so the check count is the same on every run.
    Usage: node scripts/test-mechanics.mjs */
 import { spawn } from 'child_process';
 import { mkdtempSync, rmSync } from 'fs';
@@ -26,7 +27,7 @@ const eq = (a, b, m) => { assert.deepEqual(a, b, m); checks++; };
 
 let server = null;
 async function startServer() {
-  server = spawn(process.execPath, ['server/index.js'], { cwd: ROOT, env: { ...process.env, PORT: String(PORT), DATA_DIR: DATA }, stdio: ['ignore', 'pipe', 'pipe'] });
+  server = spawn(process.execPath, ['server/index.js'], { cwd: ROOT, env: { ...process.env, PORT: String(PORT), DATA_DIR: DATA, DICE_SEED: '1979' }, stdio: ['ignore', 'pipe', 'pipe'] });
   await new Promise((res, rej) => {
     const t = setTimeout(() => rej(new Error('server start timeout')), 10000);
     server.stdout.on('data', (d) => { if (String(d).includes('ONLINE')) { clearTimeout(t); res(); } });

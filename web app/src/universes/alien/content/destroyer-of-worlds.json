@@ -473,6 +473,7 @@
     },
     {
       "name": "UPP Special Forces",
+      "ref": "npc-upp-sof-commandos",
       "description": "A disciplined detachment in winter camouflage with laser-sighted rifles, first met surrounding the crash site.",
       "stats": {
         "health": 3,
@@ -566,7 +567,7 @@
     {
       "id": "fort-nebraska",
       "title": "FORT NEBRASKA",
-      "subtitle": "UA Mining Colony & Forward Operating Base — Ariarcus",
+      "subtitle": "UA Mining Colony & Forward Operating Base — Ariarcus, surface and mine",
       "description": "Small mining colony repurposed as military FOB during UPP territorial dispute. Mine complex extends deep underground.",
       "kind": "ascii",
       "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║              FORT NEBRASKA — TACTICAL MAP                    ║\n    ║              Ariarcus — Kruger 60 System                     ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║                 N                                             ║\n    ║                 ↑                                             ║\n    ║                                                               ║\n    ║   .............[MINE ENTRANCE ALPHA]..............            ║\n    ║   .            (3km north)                      .            ║\n    ║   .    ┌──────────────────────────┐             .            ║\n    ║   .    │     MINE COMPLEX         │             .            ║\n    ║   .    │  ┌────┐  ┌──────────┐   │             .            ║\n    ║   .    │  │UPP │  │ DEEP     │   │             .            ║\n    ║   .    │  │LAB │  │ SHAFTS   │   │             .            ║\n    ║   .    │  │████│  │ ░░░░░░░░ │   │             .            ║\n    ║   .    │  └────┘  │ THE HIVE │   │             .            ║\n    ║   .    │          └──────────┘   │             .            ║\n    ║   .    └────────────┬────────────┘             .            ║\n    ║   .                 │ tunnel                    .            ║\n    ║   .                 │                           .            ║\n    ║   ..........━━━━━━━━━━━━━━━[PERIMETER]━━━━━━━..            ║\n    ║   .         ┌───────┴──────────────┐           .            ║\n    ║   .         │    LANDING PAD       │           .            ║\n    ║   . ┌────┐  │    [DROPSHIP]        │  ┌─────┐ .            ║\n    ║   . │BAR-│  └──────────────────────┘  │MINE │ .            ║\n    ║   . │RACK│                            │ADMIN│ .            ║\n    ║   . │[WPN│  ┌──────────────────────┐  └─────┘ .            ║\n    ║   . │LCKR│  │    OPS CENTER        │           .            ║\n    ║   . └────┘  │    [COMMAND]         │  ┌─────┐ .            ║\n    ║   .         │    [COMMS]           │  │POWER│ .            ║\n    ║   .         └──────────────────────┘  │PLANT│ .            ║\n    ║   . ┌────┐  ┌──────────────────────┐  └─────┘ .            ║\n    ║   . │MED │  │    COLONY HABITATS   │           .            ║\n    ║   . │BAY │  │    [CIVILIANS]       │           .            ║\n    ║   . └────┘  └──────────────────────┘           .            ║\n    ║   .                                             .            ║\n    ║   ..━━━━━━━━━━━━━━━[PERIMETER FENCE]━━━━━━━━━━..            ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
@@ -666,10 +667,10 @@
         "medicalAid": 0,
         "command": 4
       },
-      "talent": "Pull Rank — Override one decision per session without a roll.",
+      "talent": "Pull Rank — You can order non-officer PCs and NPCs of your own organization to perform one specific action: roll COMMAND against the target's MANIPULATION. On a success they must obey, even into danger. Each use raises your Stress Level by one. Cannot stop actions forced by Panic Rolls.",
       "gear": [
         "M41A Pulse Rifle",
-        "M4A3 Pistol (sidearm)",
+        "M4A3 Service Pistol",
         "TNR Shoulder Lamp",
         "Dog tags (Signature Item)",
         "Tactical data pad"
@@ -710,13 +711,13 @@
         "medicalAid": 0,
         "command": 1
       },
-      "talent": "Banter — After a successful COMMAND roll, reduce Stress by 1 for a nearby ally.",
+      "talent": "Banter — During downtime, each Turn spent resting in a safe place lowers your Stress Level, and that of everyone within SHORT range, by two instead of one. Several Marines with Banter do not stack.",
       "gear": [
-        "M56 Smartgun",
+        "M56A2 Smart Gun",
         "Combat knife",
         "M3 Personnel Armor",
         "Rosary (Signature Item)",
-        "Frag grenades x3"
+        "Armat M40 HEDP Grenade ×3"
       ],
       "signatureItem": "Rosary beads — his grandmother's. Prays before every drop.",
       "personalAgenda": "The Lieutenant is green and going to get people killed. If it comes to it, you'll take command. The squad trusts you more than her anyway. Keep your people alive — by any means necessary.",
@@ -754,7 +755,7 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Nerves of Steel — Reduce Stress by 2 when using Signature Item.",
+      "talent": "Past the Limit — You may push any STRENGTH-based skill roll a second time. Each push raises your Stress Level by one.",
       "gear": [
         "M41A Pulse Rifle",
         "M3 Personnel Armor",
@@ -798,10 +799,10 @@
         "medicalAid": 0,
         "command": 0
       },
-      "talent": "Overkill — Spend extra successes for +2 damage (instead of +1).",
+      "talent": "Overkill — When a Panic Roll result is 11 or higher and enemies are in sight, you may replace it with the Overkill effect: you must attack the visible enemies and keep going until you or all of them are Broken. All other PCs within SHORT range must immediately make a Panic Roll.",
       "gear": [
         "M42A Scope Rifle",
-        "M4A3 Pistol (sidearm)",
+        "M4A3 Service Pistol",
         "M3 Personnel Armor",
         "Family photo (Signature Item)",
         "Ghillie netting"
@@ -842,12 +843,12 @@
         "medicalAid": 5,
         "command": 1
       },
-      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
+      "talent": "Field Surgeon — You get +2 to MEDICAL AID when treating someone who is about to die from a critical injury.",
       "gear": [
         "M41A Pulse Rifle",
         "M3 Personnel Armor",
         "Advanced trauma kit",
-        "Surgical tools",
+        "Surgical Kit",
         "Bourbon flask (Signature Item)"
       ],
       "signatureItem": "Flask of Kentucky bourbon — \"for medicinal purposes.\" Actually for coping purposes.",

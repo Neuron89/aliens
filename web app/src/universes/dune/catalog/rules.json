@@ -20,35 +20,35 @@
   {
     "id": "attribute-points",
     "source": "custom",
-    "text": "Distribute 30 points among the five drives: DUTY, FAITH, JUSTICE, POWER, TRUTH.",
+    "text": "Assign the values 8, 7, 6, 5 and 4 to the five drives (DUTY, FAITH, JUSTICE, POWER, TRUTH), one value each: 30 points in all.",
     "value": 30,
     "notes": ""
   },
   {
     "id": "attribute-min",
     "source": "custom",
-    "text": "No drive may start below 4.",
+    "text": "The lowest drive is 4.",
     "value": 4,
     "notes": ""
   },
   {
     "id": "attribute-max",
     "source": "custom",
-    "text": "No drive may start above 8.",
+    "text": "The highest drive is 8.",
     "value": 8,
     "notes": ""
   },
   {
     "id": "key-attribute-max",
     "source": "custom",
-    "text": "Your archetype’s key drive is a suggestion; it follows the same cap of 8.",
+    "text": "Your archetype’s key drive is a suggestion for where the 8 goes; it follows the same cap.",
     "value": 8,
     "notes": ""
   },
   {
     "id": "drive-statements",
     "source": "custom",
-    "text": "Write a one-line statement for every drive rated 6 or more. A test may only use a drive whose statement fits the action.",
+    "text": "Write a one-line statement for every drive rated 6 or more (pre-generated agents carry one for all five). A test may only use a drive whose statement fits the action.",
     "value": 6,
     "notes": ""
   },

@@ -116,7 +116,8 @@ export default function BoardView() {
 
   const code = gameCode || boardCodeForTab();
   const terminalName = universe?.terminal?.name || 'GAME TERMINAL';
-  const title = mapDef ? `${mapDef.title}${board?.level && mapDef.levels ? ` · ${mapDef.levels.find((l) => l.id === board.level)?.label || board.level}` : ''}` : '';
+  // the level label only when there is more than one (a one-level map read "HUB · HUB", "WRECK SITE · WRECK SITE")
+  const title = mapDef ? `${mapDef.title}${board?.level && mapDef.levels?.length > 1 ? ` · ${mapDef.levels.find((l) => l.id === board.level)?.label || board.level}` : ''}` : '';
 
   /* No game: enter a code (only shown when the URL had none or the game is gone). */
   if (role !== 'board' && !reconnecting && (boardError || !code)) {

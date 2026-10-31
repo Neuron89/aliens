@@ -54,9 +54,14 @@ function legalCharacter(universe, i, params) {
     const k = attrs[(i + j) % attrs.length];
     if (attributes[k] < aMax) { attributes[k]++; pool--; }
   }
+  if (Array.isArray(c.attrArray) && c.attrArray.length === attrs.length) {
+    // Fixed array (DUNE drives): rotate the values so each character gets a different spread.
+    attrs.forEach((k, j) => { attributes[k] = c.attrArray[(i + j) % attrs.length]; });
+  }
   const skillMax = c.skillMax ?? 3;
-  const skillsObj = Object.fromEntries(skills.map((k) => [k, 0]));
-  let sp = c.skillPoints ?? 10;
+  const skillMin = c.skillMin ?? 0;
+  const skillsObj = Object.fromEntries(skills.map((k) => [k, skillMin]));
+  let sp = (c.skillPoints ?? 10) - skillMin * skills.length;
   for (let j = 0; sp > 0 && j < 200; j++) {
     const k = skills[(i * 3 + j) % skills.length];
     if (skillsObj[k] < skillMax) { skillsObj[k]++; sp--; }
@@ -80,6 +85,8 @@ function legalCharacter(universe, i, params) {
     rival: params.players > 2 ? others(2) : 'None',
     secret: 'You signed a side contract that pays out only if the rest of the crew does not return.',
   };
+  const prompted = (rules.attributes || []).filter((a) => a.prompt);
+  if (prompted.length) ch.driveStatements = Object.fromEntries(prompted.map((a) => [a.key, `Mock statement for ${a.label.toLowerCase()}: I know what I owe and to whom.`]));
   if (params.playerNames?.length) ch.assignedTo = params.playerNames[i];
   return ch;
 }

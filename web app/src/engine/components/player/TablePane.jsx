@@ -3,6 +3,7 @@ import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import MapCanvas from '../board/MapCanvas';
 import Icon from './icons';
+import { Glyph } from '../board/TokenChip';
 
 /* ═══════════════════════════════════════════════════════════════
    TABLE tab: the board from this player's point of view.
@@ -13,7 +14,10 @@ import Icon from './icons';
    token highlighted and your room outlined, what is visible in your
    room (item / marker / hazard tokens) and who is with you (other PCs,
    NPCs, creatures). Tap the map to ping (server rate-limits 1/s).
-   TAKE sends the GM a private message ("I take the …"); the GM decides.
+   TAKE picks an item up (`token-take`: the server checks same room,
+   kind 'item', not locked; the item goes into your gear and vanishes
+   from the TV; the GM can undo it). A locked item ("ask the GM")
+   shows ASK instead, which sends the GM a private message.
    ═══════════════════════════════════════════════════════════════ */
 const THINGS = new Set(['item', 'marker', 'hazard']);
 const BEINGS = new Set(['pc', 'npc', 'creature']);
@@ -31,23 +35,26 @@ function nearView(mapDef, tok) {
   };
 }
 
-function Thing({ t, onAsk, asked, gmShort }) {
-  const glyph = t.glyph || KIND_GLYPH[t.kind] || '◆';
+function Thing({ t, onTake, state, gmShort, offline }) {
+  // token.glyph is a TokenChip glyph name ('crate', 'claw', …): draw the same SVG glyph the map uses
+  // (it used to print the name, so a GM-placed item read "crate").
   const fallback = t.kind === 'hazard' ? 'Hazard' : t.kind === 'marker' ? 'Marker' : 'Item';
   const sub = t.sub || (t.kind === 'hazard' ? 'Danger in this room' : t.kind === 'marker' ? 'Point of interest' : 'Visible here');
   return (
     <li className={`pp-thing k-${t.kind}`}>
       <span className="pp-thing-ico" aria-hidden="true">
-        {t.icon ? <img src={t.icon} alt="" /> : <span>{glyph}</span>}
+        {t.icon ? <img src={t.icon} alt="" />
+          : t.glyph ? <svg viewBox="-12 -12 24 24" width="100%" height="100%"><Glyph name={t.glyph} r={9} color="currentColor" /></svg>
+            : <span>{KIND_GLYPH[t.kind] || '◆'}</span>}
       </span>
       <span className="pp-thing-body">
         <b>{t.label || fallback}</b>
         <small>{sub}</small>
       </span>
       {t.kind === 'item' && (
-        <button type="button" className="pp-btn pp-btn-sm" disabled={asked}
-          aria-label={`Ask the ${gmShort} to take ${t.label || 'this item'}`} onClick={() => onAsk(t)}>
-          {asked ? 'ASKED' : 'TAKE'}
+        <button type="button" className={`pp-btn pp-btn-sm${t.locked ? '' : ' primary'}`} disabled={!!state || offline}
+          aria-label={t.locked ? `Ask the ${gmShort} for ${t.label || 'this item'}` : `Take ${t.label || 'this item'}`} onClick={() => onTake(t)}>
+          {state === 'asked' ? 'ASKED' : state === 'taking' ? '…' : t.locked ? 'ASK' : 'TAKE'}
         </button>
       )}
     </li>
@@ -55,13 +62,13 @@ function Thing({ t, onAsk, asked, gmShort }) {
 }
 
 export default function TablePane() {
-  const { board, mapDef, pings, boardPing, myPlayer, sendPlayerMessage, connected } = useGame();
+  const { board, mapDef, pings, boardPing, myPlayer, sendPlayerMessage, tokenTake, connected } = useGame();
   const { universe } = useUniverse();
   const { terms } = universe;
   const gmShort = terms.gmShort || terms.gm;
   const [note, setNote] = useState(null);
   const [mode, setMode] = useState(() => { try { return localStorage.getItem('muthur.tableView') || 'near'; } catch { return 'near'; } });
-  const [asked, setAsked] = useState({});
+  const [taking, setTaking] = useState({}); // tokenId -> 'taking' | 'asked'
   useEffect(() => { try { localStorage.setItem('muthur.tableView', mode); } catch { /* ignore */ } }, [mode]);
   useEffect(() => {
     if (!note) return undefined;
@@ -100,10 +107,24 @@ export default function TablePane() {
   const view = near ? nearView(mapDef, me) : WHOLE;
 
   const ping = (pt) => boardPing(pt.x, pt.y, (r) => setNote(r?.error ? 'WAIT…' : 'PING SENT'));
-  const ask = (t) => {
+  const askGm = (t) => {
     sendPlayerMessage(`I take the ${t.label || 'item'}${roomName ? ` in ${roomName}` : ''}.`);
-    setAsked((a) => ({ ...a, [t.id]: true }));
+    setTaking((a) => ({ ...a, [t.id]: 'asked' }));
     setNote(`ASKED THE ${String(gmShort).toUpperCase()}`);
+  };
+  /* Pick up: token-take; a locked item (or a server that refuses with ASK THE GM) falls back to a message. */
+  const take = (t) => {
+    if (t.locked || !tokenTake) { askGm(t); return; }
+    setTaking((a) => ({ ...a, [t.id]: 'taking' }));
+    const clear = () => setTaking((a) => { if (a[t.id] !== 'taking') return a; const n = { ...a }; delete n[t.id]; return n; });
+    const stuck = setTimeout(clear, 6000); // no ack (link dropped mid-request): let them try again
+    tokenTake(t.id, (r) => {
+      clearTimeout(stuck);
+      if (r?.success) { setNote(`${String(r.item || t.label || 'ITEM').toUpperCase()} → YOUR GEAR`); return; }
+      setTaking((a) => { const n = { ...a }; delete n[t.id]; return n; });
+      if (r?.error === 'ASK THE GM.') { askGm(t); return; }
+      setNote(r?.error || 'NOT TAKEN');
+    });
   };
 
   return (
@@ -138,7 +159,7 @@ export default function TablePane() {
             <h3 id="pp-here-h" className="pp-k">VISIBLE HERE</h3>
             {things.length === 0
               ? <p className="pp-dim">Nothing marked in this room.</p>
-              : <ul className="pp-things">{things.map((t) => <Thing key={t.id} t={t} asked={!!asked[t.id]} onAsk={ask} gmShort={gmShort} />)}</ul>}
+              : <ul className="pp-things">{things.map((t) => <Thing key={t.id} t={t} state={taking[t.id] || null} onTake={take} gmShort={gmShort} offline={!connected} />)}</ul>}
           </section>
           <section className="pp-sec" aria-labelledby="pp-with-h">
             <h3 id="pp-with-h" className="pp-k">WITH YOU</h3>

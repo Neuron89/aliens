@@ -6,6 +6,9 @@
    Contract changes (hardening pass, docs/REVIEW_2026-10-30.md):
    list-resumable needs { tokens: { CODE: dmToken } } (else []), and a
    name-only rejoin is a pending seat claim, not an instant reattach.
+   Phase C/D: stale snapshots are pruned on start; EMPTY dormant games (no
+   seats, no messages, <= 1 log entry) expire after EMPTY_GAME_MS (1 h), on
+   start and in the periodic sweep, while games someone played in are kept.
    Usage: node scripts/test-sessions.mjs */
 import { spawn } from 'child_process';
 import { mkdtempSync, existsSync, rmSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
@@ -25,8 +28,8 @@ const ok = (c, m) => { assert.ok(c, m); checks++; };
 const eq = (a, b, m) => { assert.deepEqual(a, b, m); checks++; };
 
 let server = null;
-async function startServer() {
-  server = spawn(process.execPath, ['server/index.js'], { cwd: ROOT, env: { ...process.env, PORT: String(PORT), DATA_DIR: DATA }, stdio: ['ignore', 'pipe', 'pipe'] });
+async function startServer(extraEnv = {}) {
+  server = spawn(process.execPath, ['server/index.js'], { cwd: ROOT, env: { ...process.env, PORT: String(PORT), DATA_DIR: DATA, ...extraEnv }, stdio: ['ignore', 'pipe', 'pipe'] });
   await new Promise((res, rej) => {
     const t = setTimeout(() => rej(new Error('server start timeout')), 10000);
     server.stdout.on('data', (d) => { if (String(d).includes('ONLINE')) { clearTimeout(t); res(); } });
@@ -204,15 +207,38 @@ try {
   await killServer();
   const dir = join(DATA, 'sessions');
   mkdirSync(dir, { recursive: true });
-  const mk = (c, updatedAt) => writeFileSync(join(dir, `${c}.json`), JSON.stringify({ version: 1, code: c, universeId: 'alien', packId: null, createdAt: updatedAt, updatedAt, dmToken: 't', players: [], messages: [], assignedCharacterIds: [] }));
+  const seat = { id: 'p_1', name: 'Kane', playerToken: 'x', character: null, tracks: {}, trackMax: {}, statusEffects: [], inventory: [], alive: true, conditions: {} };
+  const mk = (c, updatedAt, players = []) => writeFileSync(join(dir, `${c}.json`), JSON.stringify({ version: 1, code: c, universeId: 'alien', packId: null, createdAt: updatedAt, updatedAt, dmToken: 't', players, messages: [], assignedCharacterIds: [] }));
   mk('OLDD', Date.now() - 25 * 3600 * 1000);
-  mk('NEWW', Date.now() - 3600 * 1000);
+  mk('NEWW', Date.now() - 30 * 60 * 1000);           // empty, 30 min idle → kept
+  mk('EMPT', Date.now() - 2 * 3600 * 1000);           // empty, 2 h idle → expired on start
+  mk('USED', Date.now() - 2 * 3600 * 1000, [seat]);   // a seat, 2 h idle → kept
   await startServer();
   ok(!existsSync(join(dir, 'OLDD.json')), 'snapshot older than 24h deleted on start');
   const dm4 = await connect();
-  const l4 = await call(dm4, 'list-resumable', { tokens: { NEWW: 't', OLDD: 't' } });
-  ok(l4.some((g) => g.code === 'NEWW') && !l4.some((g) => g.code === 'OLDD'), 'only fresh snapshot loaded');
+  const l4 = await call(dm4, 'list-resumable', { tokens: { NEWW: 't', OLDD: 't', EMPT: 't', USED: 't' } });
+  eq(l4.map((g) => g.code).sort(), ['NEWW', 'USED'], 'fresh + played-in snapshots loaded; old and empty-idle ones gone');
+  ok(!existsSync(join(dir, 'EMPT.json')), 'empty dormant snapshot deleted after 1 h');
   dm4.close();
+  await killServer();
+
+  /* ── Phase D: periodic sweep of empty dormant games (short EMPTY_GAME_MS) ── */
+  await startServer({ EMPTY_GAME_MS: '400', SWEEP_INTERVAL_MS: '150' });
+  const dmE = await connect();
+  const empty = await call(dmE, 'create-game', { universeId: 'alien' });
+  const dmU = await connect();
+  const used = await call(dmU, 'create-game', { universeId: 'alien' });
+  const pU = await connect();
+  ok((await call(pU, 'join-game', { code: used.code, playerName: 'Lambert' })).success, 'a player joins the used game');
+  await sleep(700);
+  ok((await call(dmE, 'list-resumable', { tokens: { [empty.code]: empty.dmToken } })).length === 1, 'live (DM attached) empty game is never swept');
+  dmE.close(); dmU.close(); pU.close();
+  await sleep(1000);
+  const dmX = await connect();
+  const lx = await call(dmX, 'list-resumable', { tokens: { [empty.code]: empty.dmToken, [used.code]: used.dmToken } });
+  eq(lx.map((g) => g.code), [used.code], 'empty dormant game swept; game with a seat kept');
+  ok((await call(dmX, 'resume-game', { code: empty.code, dmToken: empty.dmToken })).error === 'GAME NOT FOUND.', 'swept game cannot be resumed');
+  dmX.close();
   await killServer();
 
   console.log(`test-sessions: ${checks} checks passed`);

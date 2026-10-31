@@ -3,6 +3,7 @@ import { useGame } from '../../GameContext';
 import ClockRing from '../run/ClockRing';
 import { useTypewriter } from '../player/fx';
 import { useUniverse } from '../../UniverseContext';
+import DiceStage from './DiceStage';
 
 /* ═══════════════════════════════════════════════════════════════
    TV overlay layer (mounted by BoardView over the map).
@@ -15,8 +16,8 @@ import { useUniverse } from '../../UniverseContext';
    - board-flash / board-panic → token ring flash (BoardView → MapCanvas →
                 TokenChip `flash` prop)
    Mechanics wave:
-   - board-roll  transient roll toast (name, skill, result glyphs) for 4 s;
-                crit / botch / panic / complication styled per theme
+   - board-roll  F7: the full-stage dice animation (board/DiceStage.jsx — tumble,
+                settle, lit hits, result card; player and non-secret GM rolls)
    - board-panic "PANIC — <name>" toast (effect text stays private)
    - pools       visible pool meters (Momentum) in the corner stack
    - crew        air/power strip when any rating is <= rules.supplyDanger
@@ -57,33 +58,13 @@ function Card({ title, subtitle, text, art, id }) {
 
 const TOAST_MS = 4000;
 
-function RollToast({ t }) {
-  if (t.kind === 'panic') {
-    return (
-      <div className="ov-toast k-panic" role="status">
-        <span className="ov-toast-kicker">PANIC</span>
-        <b className="ov-toast-name">{t.name}</b>
-        {t.effect && <span className="ov-toast-label">{String(t.effect).toUpperCase()}</span>}
-      </div>
-    );
-  }
-  const r = t.roll;
-  const flags = r.flags || [];
-  const tone = flags.includes('panic') || flags.includes('botch') ? 'botch' : flags.includes('complication') ? 'botch' : flags.includes('crit') ? 'crit' : 'plain';
+/* Panic toast (the roll itself plays on the DiceStage). */
+function PanicToast({ t }) {
   return (
-    <div className={`ov-toast k-${tone}`} role="status">
-      <b className="ov-toast-name">{r.name}</b>
-      <span className="ov-toast-label">{r.label}</span>
-      <span className="ov-toast-dice" aria-hidden="true">
-        {(r.dice?.base || []).map((d, i) => <i key={`b${i}`} className={`b${d === 6 ? ' hit' : ''}`}>{d}</i>)}
-        {(r.dice?.stress || []).map((d, i) => <i key={`s${i}`} className={`s${d === 6 ? ' hit' : ''}${d === 1 ? ' bad' : ''}`}>{d}</i>)}
-        {(r.dice?.d20 || []).map((d, i) => <i key={`t${i}`} className={`t${d === 20 ? ' bad' : ''}${d === 1 ? ' hit' : ''}`}>{d}</i>)}
-      </span>
-      {(() => {
-        const sum = r.summary?.split(' — ').slice(1).join(' — ') || '';
-        return sum && !flags.includes(sum.toLowerCase()) ? <span className="ov-toast-sum">{sum}</span> : null;
-      })()}
-      {flags.filter((f) => f !== 'botch').map((f) => <span key={f} className={`ov-toast-flag f-${f}`}>{f.toUpperCase()}</span>)}
+    <div className="ov-toast k-panic" role="status">
+      <span className="ov-toast-kicker">PANIC</span>
+      <b className="ov-toast-name">{t.name}</b>
+      {t.effect && <span className="ov-toast-label">{String(t.effect).toUpperCase()}</span>}
     </div>
   );
 }
@@ -91,17 +72,16 @@ function RollToast({ t }) {
 export default function Overlays({ terminalName }) {
   const { table, on } = useGame();
   const { universe } = useUniverse();
-  const [toasts, setToasts] = useState([]); // { id, kind:'roll'|'panic', roll?, name?, effect? }
+  const [toasts, setToasts] = useState([]); // { id, name, effect? } — PANIC toasts
 
-  /* Roll + panic toasts (4 s, newest on top, max 3). */
+  /* Panic toasts (4 s, newest on top, max 3). Rolls: <DiceStage /> listens to board-roll itself. */
   useEffect(() => {
     const add = (t) => {
       setToasts((prev) => [...prev.filter((x) => x.id !== t.id), t].slice(-3));
       setTimeout(() => setToasts((prev) => prev.filter((x) => x.id !== t.id)), TOAST_MS);
     };
     const offs = [
-      on('board-roll', ({ roll } = {}) => { if (roll) add({ id: roll.id, kind: 'roll', roll }); }),
-      on('board-panic', (p) => { if (p) add({ id: `panic-${p.tokenId}-${Date.now()}`, kind: 'panic', name: p.name, effect: p.effect }); }),
+      on('board-panic', (p) => { if (p) add({ id: `panic-${p.tokenId}-${Date.now()}`, name: p.name, effect: p.effect }); }),
     ];
     return () => offs.forEach((f) => f());
   }, [on]);
@@ -148,9 +128,11 @@ export default function Overlays({ terminalName }) {
         </div>
       )}
 
+      <DiceStage />
+
       {toasts.length > 0 && (
         <div className="ov-toasts" aria-live="polite">
-          {toasts.map((t) => <RollToast key={t.id} t={t} />)}
+          {toasts.map((t) => <PanicToast key={t.id} t={t} />)}
         </div>
       )}
 

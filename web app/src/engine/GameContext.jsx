@@ -77,7 +77,7 @@ const tokenUid = (kind) => `${kind}-${Date.now().toString(36)}${Math.random().to
 /* ─── Session features (ARCHITECTURE.md "Sessions") ───────────────
    table      role-filtered game.table from `table-state` (run, narration, handouts, clues, clocks, safety, pause…)
    sessionLog DM only: append-only log (`log-entry`)
-   on(event, fn) subscribe to one-shot effects: handout-received, clue-revealed, clock-ticked, new-orders,
+   on(event, fn) subscribe to one-shot effects: handout-received, clue-revealed, clock-ticked, new-orders, roll-requested,
               item-received, board-flash, pause-requested, roll, character-submitted, submission-updated, handout-seen
    Outbox (players): rolls and messages are queued in localStorage (muthur.outbox) and re-sent on every
    (re)connect until the server acks them; the server dedupes by clientId, so a roll is never lost or doubled. */
@@ -88,7 +88,9 @@ const TABLE_EVENTS = ['handout-received', 'clue-revealed', 'clock-ticked', 'new-
   // mechanics wave
   'board-roll', 'panic', 'board-panic', 'supply-rolled', 'pool-changed', 'your-turn', 'turn-changed',
   // builder gaps
-  'determination-spent'];
+  'determination-spent',
+  // table actions: GM asks for a roll → { request: { id, skill, label, difficulty, note, at } }
+  'roll-requested'];
 const clientUid = () => `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 
 export function GameProvider({ children }) {
@@ -142,6 +144,11 @@ export function GameProvider({ children }) {
   /* Drop all in-memory session state (does not touch localStorage). */
   const resetState = useCallback(() => {
     seatLive.current = false;
+    // A throttled token drag must not fire into the next session (suspend → resume another game).
+    for (const th of Object.values(moveThrottle.current)) clearTimeout(th?.timer);
+    moveThrottle.current = {};
+    pendingMoves.current = {};
+    codeRef.current = null;
     setRole(null);
     setGameCode(null);
     setPlayers({});
@@ -630,11 +637,16 @@ export function GameProvider({ children }) {
     queueOwnMessage('player-to-player', { targetId, text }, { type: 'p2p', from: myPlayer?.name, fromId: myPlayer?.id, to: target?.name || '', toId: targetId, text, priority: 'ENCRYPTED' });
   }, [queueOwnMessage, myPlayer, connectedPlayers]);
 
-  /** Player: report a dice roll ({ summary, ...anything ≤ 4 KB }). Queued until acked — never lost. */
-  const sendRoll = useCallback((roll) => {
+  /** Player: report a dice roll ({ summary, ...anything ≤ 4 KB }). Queued until acked — never lost.
+      opts.requestId (or roll.requestId) answers a GM roll-request: the card closes and the GM's feed entry is tagged. */
+  const sendRoll = useCallback((roll, opts) => {
     if (roleRef.current !== 'player' || !roll) return null;
-    return enqueue('player-roll', { roll, at: Date.now() });
+    const requestId = opts?.requestId || roll.requestId || null;
+    if (requestId) setTable((t) => (t?.rollRequests ? { ...t, rollRequests: t.rollRequests.filter((r) => r.id !== requestId) } : t));
+    return enqueue('player-roll', { roll, at: Date.now(), ...(requestId ? { requestId } : {}) });
   }, [enqueue]);
+  /** Player: pick up an item token in your room (server checks room/kind/lock). ack { success, item, takeId } | { error } */
+  const tokenTake = useCallback((tokenId, cb) => socketRef.current?.emit('token-take', { tokenId }, cb), []);
 
   const clearUnread = useCallback(() => setUnreadCount(0), []);
   const clearUnreadFor = useCallback((playerId) => setUnreadBy(prev => (prev[playerId] ? { ...prev, [playerId]: 0 } : prev)), []);
@@ -681,6 +693,11 @@ export function GameProvider({ children }) {
   const safetySet = useCallback((zero, cb) => emitTable('safety-set', zero, cb), [emitTable]);
   const pauseClear = useCallback((cb) => emitTable('pause-clear', {}, cb), [emitTable]);
   const logNote = useCallback((text, cb) => emitTable('log-note', { text }, cb), [emitTable]);
+  /** DM: put a picked-up item back on the map (log entries of type 'loot' carry takeId; table.takes lists them). */
+  const tokenTakeUndo = useCallback((takeId, cb) => emitTable('token-take-undo', { takeId }, cb), [emitTable]);
+  /** DM: rollRequest({ skill, label?, difficulty?, note?, to: 'all'|playerId|[playerIds] }) → ack { success, id, sent[] } */
+  const rollRequest = useCallback((req, cb) => emitTable('roll-request', { ...req }, cb), [emitTable]);
+  const rollRequestCancel = useCallback((id, cb) => emitTable('roll-request-cancel', { id }, cb), [emitTable]);
   /** resolveSubmission(id, 'reject'|'assigned', reason?) */
   const resolveSubmission = useCallback((id, action, reason, cb) => emitTable('submission-resolve', { id, action, reason }, cb), [emitTable]);
 
@@ -703,7 +720,7 @@ export function GameProvider({ children }) {
      initSet(initiative) · initStep(dir) · initGoto(index) · initRound() · initEnd() ·
      injuryAdd(playerId, injury) · injuryRemove(playerId, uid)
      Player: panicResult({ rollId, total, die, effect }) (queued until acked) · supplyRoll(key) · initPass(toId) */
-  const gmRoll = useCallback((roll, who, cb) => emitTable('gm-roll', { roll, who }, cb), [emitTable]);
+  const gmRoll = useCallback((roll, who, cb, opts) => emitTable('gm-roll', { roll, who, secret: opts?.secret !== false }, cb), [emitTable]);
   const supplySet = useCallback((playerId, supply, cb) => emitTable('supply-set', { playerId, supply }, cb), [emitTable]);
   const supplyRoll = useCallback((key, playerId, cb) => {
     socketRef.current?.emit('supply-roll', { gameCode: codeRef.current, key, ...(playerId ? { playerId } : {}) }, cb);
@@ -948,6 +965,11 @@ export function GameProvider({ children }) {
     requestPause,
     submitCharacter,
     sendRoll,
+    // Table actions (token-take / roll-request)
+    tokenTake,
+    tokenTakeUndo,
+    rollRequest,
+    rollRequestCancel,
     // Mechanics wave
     gmRoll,
     supplySet,

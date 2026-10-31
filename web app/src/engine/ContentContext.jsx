@@ -29,6 +29,8 @@ async function readError(res) {
   }
 }
 
+const NO_PACKS = Object.freeze([]);
+
 export function ContentProvider({ children }) {
   const { universe } = useUniverse();
   const universeId = universe.id;
@@ -53,7 +55,7 @@ export function ContentProvider({ children }) {
 
   useEffect(() => { reload(universeId); }, [universeId, reload]);
 
-  const runtimePacks = runtime[universeId] || [];
+  const runtimePacks = runtime[universeId] || NO_PACKS; // stable: keeps the memos below from recomputing every render
 
   /* kind:"maps" overlay packs ("<packId>-maps", written by the board Room Editor for
      bundled packs) are not listed as packs: their maps[] merge into <packId> by map id. */

@@ -138,6 +138,9 @@ export function play(name, { volume = 1 } = {}) {
   if (muted) return;
   const notes = cues[name];
   if (!notes?.length) return;
+  // Before the first user gesture an AudioContext is suspended and its clock stands still: every
+  // cue scheduled then (the boot typing ticks) would fire at once on the first tap. Skip instead.
+  if (typeof navigator !== 'undefined' && navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
   const ac = audio();
   if (!ac) return;
   if (ac.state === 'suspended') ac.resume().catch(() => {});

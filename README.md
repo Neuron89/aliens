@@ -7,7 +7,7 @@ A multi-universe **game-master terminal** for in-person tabletop RPG sessions. O
 | Screen | Device | URL | What it is |
 |---|---|---|---|
 | **GM** | tablet or laptop | `/` | Scene runner, handouts, clues, clocks, rolls, initiative, token/fog map controller, session log |
-| **TV (board)** | flat-lying TV on the table | `/?board=CODE` | Full-screen map with fog, tokens and pings, narration captions, clocks, roll toasts, pause card. No chrome, no input |
+| **TV (board)** | flat-lying TV on the table | `/?board=CODE` | Full-screen map with fog, tokens and pings, narration captions, clocks, animated dice rolls (every phone roll and the GM's TV-routed rolls), pause card. No chrome, no input |
 | **Player** | each player's phone | `/?join=CODE` | Own sheet and dice, private comms, handouts, clues, orders, a pause (X-card) button |
 
 The engine is **universe-agnostic**: each game system is a module in `web app/src/universes/<id>/` (theme, wording, rules, careers, catalog, dice, maps,
@@ -119,7 +119,10 @@ Every variable the server reads (`grep process.env "web app/server"`). All are o
 | `PORT` | `3002` (the deploy script sets `3100`) | `server/index.js` | HTTP + Socket.io port |
 | `CONTENT_DIR` | `web app/content` | `server/content.js` | Runtime pack folder (`<CONTENT_DIR>/<universe>/<id>.json`) |
 | `DATA_DIR` | `web app/data` | `server/persistence.js` | Session snapshots go to `<DATA_DIR>/sessions/<CODE>.json` |
-| `MAX_GAMES` | `50` | `server/sessions.js` | Cap on live + dormant games per server |
+| `MAX_GAMES` | `50` | `server/sessions.js` | Cap on live + dormant games per server (`deploy-local.ps1 -MaxGames N` or an existing `MAX_GAMES` env var passes it through) |
+| `EMPTY_GAME_MS` | `3600000` | `server/sessions.js` | Dormant games with no seats, no messages and at most one log entry expire after this (others after 24 h) |
+| `SWEEP_INTERVAL_MS` | `600000` | `server/sessions.js` | How often dormant games are swept (also once at start and before refusing a new game at the cap) |
+| `DICE_SEED` | unset | `server/mechanics.js` | Tests only: seeds the server's supply-roll dice so `test-mechanics` is deterministic |
 | `SEAT_CLAIM_MS` | `120000` (min 500) | `server/sessions.js` | How long a seat claim waits for the GM |
 | `API_TOKEN` | unset (open LAN) | `server/index.js` | When set, `PUT`/`DELETE /api/content/...` and `POST /api/generate` need header `x-api-token` |
 | `ANTHROPIC_API_KEY` | unset | `server/generator/env.js` | Claude API key for the generator |
@@ -160,6 +163,8 @@ Root `scripts/`:
 | `scripts/test-mechanics.mjs` | Roll feed, panic, supplies, pools, initiative, creature health, injuries |
 | `scripts/test-board.mjs` | Fog filtering, auto-reveal, pings, board persistence across a restart |
 | `scripts/test-hardening.mjs` | Garbage payloads, PIN takeover, seat claims, role detach, prototype ids, caps, `API_TOKEN` |
+| `scripts/test-table-actions.mjs` | Item pickup (`token-take`, GM undo) and GM roll requests (`roll-request`, tagged answers, cancel, persistence) |
+| `scripts/test-ui-polish.mjs` | No server: Maps-tab grouping (deck images under their ship), library card plan thumbnails, MapEngine legend two-column wrap |
 
 The `test-*` scripts spawn the server on a random port with a temp `DATA_DIR`. `npm` scripts: `dev` (Vite + server), `dev:client` (Vite :3000), `dev:server` (server :3002), `build`, `start`, `preview`, `validate`, `smoke`.
 

@@ -40,7 +40,7 @@ export default function DuneCheatSheets() {
             <tr><th>Create trait</th><td>2: establish a useful fact ("the guard owes me a favor").</td></tr>
             <tr><th>Add Stress</th><td>1 per extra point of Stress inflicted in a conflict.</td></tr>
             <tr><th>Keep the initiative</th><td>2: another agent acts next instead of the opposition.</td></tr>
-            <tr><th>Saving</th><td>Unspent Momentum goes to the pool; the pool loses 1 at the end of each scene.</td></tr>
+            <tr><th>Saving</th><td>Unspent Momentum goes to the pool (max 6); the pool loses 1 at the end of each scene.</td></tr>
           </tbody>
         </table>
       </div>
@@ -49,9 +49,9 @@ export default function DuneCheatSheets() {
         <h2>THREAT (NARRATOR'S POOL)</h2>
         <table className="cheat">
           <tbody>
-            <tr><th>Gains</th><td>+1 per player-bought die paid in Threat; +2 per complication the Narrator converts; +1 when agents act ruthlessly or reveal weakness; start each Audience with 1 per player.</td></tr>
-            <tr><th>Spends</th><td>Buy dice for adversaries; seize the initiative (2); reinforcements (1–3); a complication on a whim (2); environmental hazard (from the threat's listing).</td></tr>
-            <tr><th>Rule of thumb</th><td>Spend Threat visibly. Players should feel the pool rise and know what it means.</td></tr>
+            <tr><th>Gains</th><td>Starts each session at 2 per player. Grows by the price of every bonus die players buy with Threat (1 / 2 / 3), +2 per complication the Narrator converts, and +1 when agents act openly against a powerful faction.</td></tr>
+            <tr><th>Spends</th><td>Bonus dice for adversaries (1 / 2 / 3); +1 Difficulty (2); a complication or environmental effect (2); change a trait (2); keep the initiative (2); reinforcements (each threat lists its cost); a rival House acts offscreen (1).</td></tr>
+            <tr><th>Rule of thumb</th><td>The pool stays off the players' screens unless you reveal it, so announce spends out loud: players should feel the pressure even when they cannot see the number.</td></tr>
           </tbody>
         </table>
       </div>
@@ -73,7 +73,7 @@ export default function DuneCheatSheets() {
         <ul className="plain">
           <li>Stress track 0–{rules.tracks[0].max}. At {rules.tracks[0].max} the character is defeated in that conflict: they choose to concede (on their terms) or are taken out (on the Narrator's).</li>
           <li>Conceding before the track fills lets the player name a lesser consequence — a status such as WOUNDED, DISGRACED or INDEBTED.</li>
-          <li>Recovery: a scene of rest clears 2 Stress; a Suk doctor or a sincere act matching a drive statement clears more.</li>
+          <li>Recovery: a scene of rest clears all Stress; a Suk doctor (or the Field Surgery talent) clears 2 at once, mid-scene.</li>
         </ul>
       </div>
 

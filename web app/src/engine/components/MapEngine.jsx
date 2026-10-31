@@ -1,5 +1,8 @@
 import React, { useMemo, useState, useContext, createContext } from 'react';
 import { useUniverse } from '../UniverseContext';
+import { legendLayout } from './legendLayout';
+
+export { LEGEND_MAX_ROWS } from './legendLayout';
 
 /* ═══════════════════════════════════════════════════════════════════════
    MAP ENGINE v1.0 — Reusable SVG deck-plan & blueprint generation toolkit
@@ -49,7 +52,8 @@ import { useUniverse } from '../UniverseContext';
      ],
      fixedOverlays: (C) => JSX,      // Elements on all decks (inside hull clip)
      specs: { title, items },        // Bottom-left tech specs
-     legend: 'default' | [...],      // Legend items (or 'default')
+     legend: 'default' | [...],      // Legend items (or 'default'); > 13 rows wrap into two columns
+     legendColumns: 'auto' | 1 | 2,   // force the legend layout
    }
    ═══════════════════════════════════════════════════════════════════════ */
 
@@ -295,8 +299,13 @@ export function Room({
         <text x={cx} y={cy + 8} fill={C.textDim}
           fontSize="5" textAnchor="middle" letterSpacing="0.04em">{sub}</text>
       )}
-      {/* Icons in top-right corner */}
-      {icons.map((icon, i) => renderIcon(icon, x + w - 9 - i * 12, y + 9, C, i))}
+      {/* Icons in the top-right corner — inside the chamfer / curve for octagon and circle rooms
+          (at x + w - 9 they sat on the hull, outside the room) */}
+      {icons.map((icon, i) => {
+        const ix = shape === 'octagon' ? x + w - chm - 3 : shape === 'circle' ? cx + (w / 2) * 0.62 : x + w - 9;
+        const iy = shape === 'circle' ? cy - (h / 2) * 0.62 + 6 : y + 9;
+        return renderIcon(icon, ix - i * 12, iy, C, i);
+      })}
     </g>
   );
 }
@@ -449,21 +458,36 @@ export function defaultLegendItems(C) {
 
 /* ─── MapLegend ───────────────────────────────────────────────────────── */
 
-export function MapLegend({ x = 0, y = 0, items }) {
+
+/* Items carry absolute y positions (18 px apart). Past LEGEND_MAX_ROWS rows the
+   legend wraps into two columns (config.legendColumns: 1 forces one column,
+   2 forces two). The two columns are sized to their longest label, the second
+   half is shifted right by one column and up to the first row, and the box
+   keeps the one-column box's right edge, so it grows leftwards only as far as
+   the labels need. In 'auto' the wrap only happens when the wider box stays
+   clear of the hull outline (`hullPath`); otherwise the legend stays one tall
+   column rather than cover the plan. */
+export function MapLegend({ x = 0, y = 0, items, columns = 'auto', hullPath = null }) {
   const C = useMapTheme();
   const resolved = items === 'default' ? defaultLegendItems(C) : (typeof items === 'function' ? items(C) : items);
   if (!resolved || resolved.length === 0) return null;
-  const h = resolved[resolved.length - 1].y + 30;
+  const { rows, colW, boxW, dx, dy } = legendLayout(resolved, { x, y, columns, hullPath });
+  const h = resolved[rows - 1].y + 30;
   return (
-    <g transform={`translate(${x},${y})`}>
-      <rect x="-10" y="-15" width="172" height={h} rx="3" fill="none" stroke={C.frame} strokeWidth="0.4" />
+    <g transform={`translate(${x - dx},${y})`}>
+      <rect x="-10" y="-15" width={boxW} height={h} rx="3" fill="none" stroke={C.frame} strokeWidth="0.4" />
       <text y="0" fill={C.text} fontSize="7.5" fontWeight="bold" letterSpacing="0.1em">MAP LEGEND</text>
-      {resolved.map((item, i) => (
-        <g key={i}>
-          {item.draw}
-          <text x="20" y={item.y + 2} fill={C.textDim} fontSize="6" letterSpacing="0.05em">{item.label}</text>
-        </g>
-      ))}
+      {resolved.map((item, i) => {
+        const body = (
+          <>
+            {item.draw}
+            <text x="20" y={item.y + 2} fill={C.textDim} fontSize="6" letterSpacing="0.05em">{item.label}</text>
+          </>
+        );
+        return i < rows
+          ? <g key={i}>{body}</g>
+          : <g key={i} transform={`translate(${colW},${-dy})`}>{body}</g>;
+      })}
     </g>
   );
 }
@@ -529,15 +553,15 @@ export default function MapEngine({ config }) {
       <div>
         {/* Deck selector (only when multiple decks) */}
         {decks.length > 1 && (
-          <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '0.75rem' }}>
+          <div role="group" aria-label={`${levelNoun} select`} style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '0.75rem' }}>
             {decks.map(d => (
-              <button key={d.id} style={{
+              <button key={d.id} type="button" aria-pressed={activeDeckId === d.id} className="me-deck-btn" style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.8rem',
                 background: activeDeckId === d.id ? 'var(--accent-glow)' : 'var(--bg-card)',
                 border: `1px solid ${activeDeckId === d.id ? 'var(--accent)' : 'var(--border)'}`,
                 color: activeDeckId === d.id ? 'var(--accent)' : 'var(--text-dim)',
-                padding: '0.4rem 0.8rem', cursor: 'pointer', borderRadius: '2px',
-                letterSpacing: '0.08em',
+                padding: '0.4rem 0.8rem', minHeight: '40px', cursor: 'pointer', borderRadius: '2px',
+                letterSpacing: '0.08em', textAlign: 'left',
               }} onClick={() => setActiveDeckId(d.id)}>
                 {levelNoun} {d.id} — {d.name}
               </button>
@@ -621,7 +645,7 @@ export default function MapEngine({ config }) {
           {fixedOverlays && <g clipPath={hullClip}>{fixedOverlays(C)}</g>}
 
           {/* Legend */}
-          {legend && <MapLegend x={W - 195} y={85} items={legend} />}
+          {legend && <MapLegend x={W - 195} y={85} items={legend} columns={config.legendColumns || 'auto'} hullPath={hull?.path} />}
 
           {/* Specs */}
           {specs && <MapSpecs x={specs.x || 60} y={specs.y || (H - 58)} title={specs.title} items={specs.items} />}

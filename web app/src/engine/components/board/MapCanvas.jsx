@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import TokenChip, { chipMetrics } from './TokenChip';
-import RoomLayer from './RoomLayer';
+import RoomLayer, { shapeCenter } from './RoomLayer';
 import EngineLayer from './EngineLayer';
 import AsciiLayer from './AsciiLayer';
 import { engineConfig, mapVisuals } from './mapDefs';
@@ -293,6 +293,12 @@ const MapCanvas = forwardRef(function MapCanvas({
     return out;
   }, [board]);
 
+  /* Engine plans bake the room names into the drawing, so a GM rename (board.rooms[id].name) never showed on the
+     TV or the phones: draw renamed rooms' names on a plate over the baked label (visible rooms only). */
+  const renamed = mapDef?.kind === 'engine' && !showRoomLabels
+    ? rooms.filter((r) => roomNames[r.id] && (role === 'dm' || !(board ? board.fog : true) || board?.rooms?.[r.id]?.revealed))
+    : [];
+
   const now = Date.now();
   const outlineOpacity = role === 'dm' ? 0.35 : 0.72;
 
@@ -324,6 +330,19 @@ const MapCanvas = forwardRef(function MapCanvas({
           <RoomLayer rooms={rooms} roomState={board?.rooms} fog={board ? board.fog : true} role={role} W={W} H={H} uid={uid}
             selectedRoomId={selectedRoomId} showLabels={showRoomLabels} counter={counter} unit={unit}
             palette={palette} doors={doors} labelMin={labelMin} />
+          {renamed.map((r) => {
+            const [cx, cy] = shapeCenter(r.shape);
+            const fs = Math.max(unit * 0.42, labelMin);
+            const text = roomNames[r.id];
+            const w = fs * 0.64 * text.length + fs;
+            return (
+              <g key={`rn-${r.id}`} className="mc-room-rename" transform={`translate(${cx * W},${cy * H}) ${counter}`} pointerEvents="none">
+                <rect x={-w / 2} y={-fs * 0.8} width={w} height={fs * 1.5} rx={fs * 0.2} fill={palette.chipFill || palette.bg} opacity="0.9"
+                  stroke={palette.revealedEdge} strokeWidth={Math.max(0.5, fs * 0.05)} />
+                <text textAnchor="middle" y={fs * 0.32} fontSize={fs} fill={palette.label} letterSpacing="0.05em" fontFamily={palette.font}>{text}</text>
+              </g>
+            );
+          })}
           {showTokens && tokenList.map((t) => {
             const dp = dragPos?.id === t.id ? dragPos : null;
             return (

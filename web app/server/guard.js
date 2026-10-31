@@ -32,7 +32,7 @@ export const EVENT_NAMES = Object.freeze([
   'table-sync', 'session-seed', 'run-set', 'advance-act', 'narrate', 'narrate-clear', 'board-mode', 'handout-send',
   'handout-seen', 'clue-upsert', 'clue-reveal', 'clue-hide', 'clock-upsert', 'clock-tick', 'clock-remove',
   'safety-set', 'safety-confirm', 'pause-request', 'pause-clear', 'log-note', 'character-submit', 'submission-resolve',
-  'player-roll',
+  'player-roll', 'token-take', 'token-take-undo', 'roll-request', 'roll-request-cancel',
   // mechanics wave
   'gm-roll', 'panic-result', 'supply-set', 'supply-roll', 'pools-init', 'pool-set', 'pool-delta',
   'init-set', 'init-step', 'init-goto', 'init-round', 'init-end', 'init-pass', 'injury-add', 'injury-remove',

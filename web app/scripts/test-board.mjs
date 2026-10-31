@@ -73,6 +73,53 @@ const center = (id) => {
   ok(res.ok, 'maps overlay pack with Montero rooms is schema-valid: ' + res.errors.join('; '));
 }
 
+/* ── Every bundled engine plan, both universes: board geometry sanity (R4 map audit 2026-10-31) ──
+   rooms inside 0..1 and inside the crop, unique ids, every level has rooms, every room's level exists,
+   the default spawn and each per-level spawn lie inside a room of that level, doors join two rooms of
+   their level and sit on the `from` room's wall, the outline stays inside the crop, and the mapDef
+   the GM client sends sanitizes with every room and door. */
+for (const uni of ['alien', 'dune']) {
+  const { maps: uMaps } = await import(pathToFileURL(join(ROOT, `src/universes/${uni}/maps/index.js`)).href);
+  for (const m of uMaps.filter((x) => x.kind === 'engine')) {
+    const tag = `${uni}/${m.id}`;
+    const lv = (m.levels || []).map((l) => l.id);
+    const ids = new Set(m.rooms.map((r) => r.id));
+    ok(ids.size === m.rooms.length, `${tag}: room ids unique`);
+    const c = m.crop || { x: 0, y: 0, w: 1, h: 1 };
+    const e = 1e-4;
+    const bad = m.rooms.filter(({ shape: s }) => s.x < -e || s.y < -e || s.x + s.w > 1 + e || s.y + s.h > 1 + e
+      || s.x < c.x - e || s.y < c.y - e || s.x + s.w > c.x + c.w + e || s.y + s.h > c.y + c.h + e);
+    ok(!bad.length, `${tag}: rooms inside 0..1 and the crop (${bad.map((r) => r.id).join(', ')})`);
+    ok(m.rooms.every((r) => lv.includes(r.level)), `${tag}: every room's level is listed`);
+    ok(lv.every((l) => m.rooms.some((r) => r.level === l)), `${tag}: every level has rooms`);
+    const def = { ...m, kind: 'engine', engine: m.id };
+    ok(m.spawn?.pc && roomAt(def, m.spawn.pc[0], m.spawn.pc[1], lv[0]), `${tag}: default spawn inside a room on ${lv[0]}`);
+    for (const [l, sp] of Object.entries(m.spawn?.levels || {})) {
+      ok(lv.includes(l) && roomAt(def, sp.pc[0], sp.pc[1], l), `${tag}: ${l} spawn inside a room on that level`);
+    }
+    if (lv.length > 1) ok(lv.every((l) => m.spawn?.levels?.[l]), `${tag}: a spawn point for every level`);
+    const [W, H] = m.size;
+    for (const d of m.doors || []) {
+      const f = m.rooms.find((r) => r.id === d.from);
+      const t = m.rooms.find((r) => r.id === d.to);
+      ok(f && t && f.level === d.level && t.level === d.level, `${tag}: door ${d.from}→${d.to} joins two rooms on ${d.level}`);
+      const s = f.shape; const X = d.at[0] * W; const Y = d.at[1] * H;
+      const L = s.x * W; const T = s.y * H; const R = (s.x + s.w) * W; const B = (s.y + s.h) * H;
+      const onWall = X >= L - 2 && X <= R + 2 && Y >= T - 2 && Y <= B + 2
+        && Math.min(Math.abs(X - L), Math.abs(X - R), Math.abs(Y - T), Math.abs(Y - B)) <= 2;
+      ok(onWall, `${tag}: door ${d.from}→${d.to} sits on the ${d.from} wall`);
+    }
+    if (m.outline) {
+      const n = m.outline.match(/-?[\d.]+/g).map(Number);
+      let inside = true;
+      for (let i = 0; i < n.length; i += 2) if (n[i] < c.x - 1e-3 || n[i] > c.x + c.w + 1e-3 || n[i + 1] < c.y - 1e-3 || n[i + 1] > c.y + c.h + 1e-3) inside = false;
+      ok(inside, `${tag}: outline inside the crop`);
+    }
+    const { mapDef: sd, error } = sanitizeMapDef({ id: m.id, title: m.title, kind: 'engine', engine: m.id, size: m.size, levels: m.levels, rooms: m.rooms, doors: m.doors, outline: m.outline, crop: m.crop, spawn: m.spawn, grid: m.grid });
+    ok(!error && sd.rooms.length === m.rooms.length && (sd.doors || []).length === (m.doors || []).length, `${tag}: GM mapDef sanitizes with every room and door`);
+  }
+}
+
 /* ── ASCII map → parsed mapDef (what resolveMapDef sends for kind:'ascii') ── */
 const tartarusPack = JSON.parse(readFileSync(join(ROOT, 'src/universes/alien/content/tartarus-reach.json'), 'utf8'));
 const tartarusMap = tartarusPack.maps.find((m) => m.kind === 'ascii');

@@ -875,7 +875,14 @@
       "id": "ilan-vesk",
       "name": "Ilan Vesk",
       "career": "Planetologist",
-      "appearance": "Lean and sun-cured, fifty, with the squint of a man who reads horizons and a habit of crumbling sand between his fingers while he thinks. Speaks softly and precisely, and lights up only when talking about water. DRIVE STATEMENTS — Duty: I serve the planet first and the patron who pays me second. · Faith: I do not believe in prophecy, but I believe in the Fremen. · Justice: A world that kills its people for want of water can be changed, and should be. · Power: Power is knowing what the land will do before anyone else. · Truth: I will see what lies under the sand, whatever it costs me.",
+      "appearance": "Lean and sun-cured, fifty, with the squint of a man who reads horizons and a habit of crumbling sand between his fingers while he thinks. Speaks softly and precisely, and lights up only when talking about water.",
+      "driveStatements": {
+        "duty": "I serve the planet first and the patron who pays me second.",
+        "faith": "I do not believe in prophecy, but I believe in the Fremen.",
+        "justice": "A world that kills its people for want of water can be changed, and should be.",
+        "power": "Power is knowing what the land will do before anyone else.",
+        "truth": "I will see what lies under the sand, whatever it costs me."
+      },
       "attributes": {
         "truth": 8,
         "justice": 7,
@@ -893,8 +900,8 @@
       "talent": "Reading the Land — Spend 1 Momentum to predict a sandstorm, spice blow or worm sign one scene before it happens.",
       "gear": [
         "Paracompass",
-        "Spice samples",
-        "Filmbook reader",
+        "Spice Melange",
+        "Filmbook",
         "Stillsuit",
         "Green-glass rain vial"
       ],
@@ -913,7 +920,14 @@
       "id": "tahra-umm-kareth",
       "name": "Tahra of Umm Kareth",
       "career": "Fremen Guide",
-      "appearance": "Small, still and sun-dark, her face hidden behind a stillsuit mask until she chooses to lower it. Moves without a sound and watches how every outsider handles water. DRIVE STATEMENTS — Duty: My sietch first, my word second, my employer a distant third. · Faith: The desert judges; I only carry its verdicts. · Justice: Water given in trust is a law older than any Emperor. · Power: Out here, power is knowing where to stand. · Truth: I tell no lies, and I volunteer nothing.",
+      "appearance": "Small, still and sun-dark, her face hidden behind a stillsuit mask until she chooses to lower it. Moves without a sound and watches how every outsider handles water.",
+      "driveStatements": {
+        "duty": "My sietch first, my word second, my employer a distant third.",
+        "faith": "The desert judges; I only carry its verdicts.",
+        "justice": "Water given in trust is a law older than any Emperor.",
+        "power": "Out here, power is knowing where to stand.",
+        "truth": "I tell no lies, and I volunteer nothing."
+      },
       "attributes": {
         "faith": 8,
         "duty": 7,
@@ -951,7 +965,14 @@
       "id": "bastien-rhol",
       "name": "Bastien Rhol",
       "career": "Swordmaster",
-      "appearance": "Broad, grey-cropped and scarred across both forearms, with a soldier’s economy of movement and a courtier’s good manners. Keeps one hand on his rapier hilt and the other open. DRIVE STATEMENTS — Duty: I have eaten House Oskaren’s bread for nineteen years and I will earn every crumb. · Faith: I believe in the drill, the blade and the man beside me. · Justice: There are orders I will not follow; I learned which ones on Salusa. · Power: A guard’s power is to decide who passes. · Truth: I prefer not to know what I am protecting.",
+      "appearance": "Broad, grey-cropped and scarred across both forearms, with a soldier’s economy of movement and a courtier’s good manners. Keeps one hand on his rapier hilt and the other open.",
+      "driveStatements": {
+        "duty": "I have eaten House Oskaren’s bread for nineteen years and I will earn every crumb.",
+        "faith": "I believe in the drill, the blade and the man beside me.",
+        "justice": "There are orders I will not follow; I learned which ones on Salusa.",
+        "power": "A guard’s power is to decide who passes.",
+        "truth": "I prefer not to know what I am protecting."
+      },
       "attributes": {
         "duty": 8,
         "justice": 7,
@@ -989,7 +1010,14 @@
       "id": "jessamy-kort",
       "name": "Jessamy Kort",
       "career": "Smuggler",
-      "appearance": "Wiry, quick-grinning, forty, with a flight jacket worn over her stillsuit against all good sense and a voice made for haggling. Talks to the Cinder Moth more kindly than to people. DRIVE STATEMENTS — Duty: I owe the ship, and the ship owes me. · Faith: I believe in fuel, water and a fast exit. · Justice: Everybody skims; I just get caught less. · Power: Debt is a leash, and I am chewing through mine. · Truth: The truth is whatever gets you home.",
+      "appearance": "Wiry, quick-grinning, forty, with a flight jacket worn over her stillsuit against all good sense and a voice made for haggling. Talks to the Cinder Moth more kindly than to people.",
+      "driveStatements": {
+        "duty": "I owe the ship, and the ship owes me.",
+        "faith": "I believe in fuel, water and a fast exit.",
+        "justice": "Everybody skims; I just get caught less.",
+        "power": "Debt is a leash, and I am chewing through mine.",
+        "truth": "The truth is whatever gets you home."
+      },
       "attributes": {
         "duty": 4,
         "faith": 5,
@@ -1007,7 +1035,7 @@
       "talent": "A Price for Everything — Reduce the Difficulty of bribes, haggling and favor-trading by 1.",
       "gear": [
         "Maula pistol",
-        "Ornithopter access codes",
+        "Ornithopter Access",
         "Solari purse",
         "Forged travel papers",
         "Cracked control yoke"
@@ -1027,7 +1055,14 @@
       "id": "hallam-oro",
       "name": "Hallam Oro",
       "career": "Suk Doctor",
-      "appearance": "Tall, stooped and silver-bearded, the Suk diamond on his brow and a stillsuit he refits obsessively. His hands are the steadiest thing in any room; his voice is the gentlest. DRIVE STATEMENTS — Duty: The patient in front of me is my whole duty. · Faith: My conditioning is the only faith I was allowed to keep. · Justice: No one dies on my table because of what they are worth. · Power: I have none, and I am grateful. · Truth: I lied once, to a child, and I have been paying for it ever since.",
+      "appearance": "Tall, stooped and silver-bearded, the Suk diamond on his brow and a stillsuit he refits obsessively. His hands are the steadiest thing in any room; his voice is the gentlest.",
+      "driveStatements": {
+        "duty": "The patient in front of me is my whole duty.",
+        "faith": "My conditioning is the only faith I was allowed to keep.",
+        "justice": "No one dies on my table because of what they are worth.",
+        "power": "I have none, and I am grateful.",
+        "truth": "I lied once, to a child, and I have been paying for it ever since."
+      },
       "attributes": {
         "duty": 8,
         "justice": 7,

@@ -98,13 +98,15 @@ export function useAmbientAudio() {
 
   const ensureContext = useCallback(() => {
     if (!ctxRef.current) {
-      ctxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      ctxRef.current = new AC();
       masterGainRef.current = ctxRef.current.createGain();
       masterGainRef.current.gain.value = volume;
       masterGainRef.current.connect(ctxRef.current.destination);
     }
     if (ctxRef.current.state === 'suspended') {
-      ctxRef.current.resume();
+      ctxRef.current.resume().catch(() => {});
     }
     return ctxRef.current;
   }, [volume]);
@@ -130,7 +132,7 @@ export function useAmbientAudio() {
 
     const ctx = ensureContext();
     const config = PRESETS[presetName];
-    if (!config) return;
+    if (!ctx || !config) { setIsActive(false); return; }
 
     const oscNodes = [];
     const filters = [];
@@ -198,6 +200,8 @@ export function useAmbientAudio() {
       stopAll();
       if (ctxRef.current) {
         ctxRef.current.close().catch(() => {});
+        ctxRef.current = null; // a remount (StrictMode) builds a fresh context
+        masterGainRef.current = null;
       }
     };
   }, [stopAll]);

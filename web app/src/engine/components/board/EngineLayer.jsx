@@ -57,7 +57,8 @@ export default function EngineLayer({ config, level, backdrop: backdropProp, hul
           </>
         )}
         {hull?.overlays && <g clipPath={hullClip}>{hull.overlays(C)}</g>}
-        {exteriorDetails?.(C)}
+        {/* { board: true }: a map may leave out Maps-tab-only furniture (Prometheus' stack elevation sits outside the crop) */}
+        {exteriorDetails?.(C, { board: true })}
         <g clipPath={hullClip}>{DeckComp && <DeckComp />}</g>
         {fixedOverlays && <g clipPath={hullClip}>{fixedOverlays(C)}</g>}
       </g>

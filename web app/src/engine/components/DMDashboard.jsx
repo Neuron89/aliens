@@ -314,7 +314,7 @@ To stop for tonight and continue later, just close this tab instead.`}
                   {characterPicker(selected.id, false)}
                 </div>
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '1rem' }}>
                   {/* A replacement the player built mid-session (by choice, or before a death) */}
                   {selected.alive && subFor(selected.id) && (
                     <div style={{ gridColumn: '1 / -1' }}>
@@ -422,16 +422,17 @@ To stop for tonight and continue later, just close this tab instead.`}
                   {/* Character sheet (read-only summary) */}
                   <div style={{ gridColumn: '1 / -1' }}>
                     <label style={labelStyle}>CHARACTER SHEET</label>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(84px, 1fr))', gap: '0.5rem', marginBottom: '0.5rem' }}>
                       {Object.entries(selected.character.attributes || {}).map(([attr, val]) => (
                         <div key={attr} style={{ textAlign: 'center', padding: '0.3rem', border: '1px solid var(--border)' }}>
-                          <div style={{ fontSize: '0.6rem', color: 'var(--text-dim)' }}>{attributeLabel(universe, attr, { short: true })}</div>
+                          <div style={{ fontSize: '0.6rem', color: 'var(--text-dim)', letterSpacing: '0.06em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                            title={attributeLabel(universe, attr)}>{attributeLabel(universe, attr).toUpperCase()}</div>
                           <div style={{ fontSize: '1rem', color: 'var(--accent)' }}>{val}</div>
                         </div>
                       ))}
                     </div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>
-                      <strong style={{ color: 'var(--text)' }}>TALENT:</strong> {selected.character.talent}
+                      <strong style={{ color: 'var(--text)' }}>{(terms.talent || 'Talent').toUpperCase()}:</strong> {selected.character.talent}
                     </div>
                     {selected.character.personalAgenda && (
                       <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginTop: '0.25rem' }}>

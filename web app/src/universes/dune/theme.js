@@ -69,6 +69,8 @@ export const theme = {
   motif: 'contours',
   logStyle: 'mentat',
   favicon: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='#0d0905'/><circle cx='20' cy='11' r='5' fill='#e2932e'/><path d='M2 24c6-6 11-6 16-2s9 3 12-1v11H2z' fill='#9a6a32'/><path d='M2 27c7-4 12-3 17 0s8 2 11-1' fill='none' stroke='#e2d2b0' stroke-width='1.2'/></svg>",
+  /* Ambient presets offered in the GM rail AUDIO popover (keys of hooks/useAmbientAudio PRESETS): desert wind, bazaar, sietch, imperial court. */
+  ambient: ['wind', 'bazaar', 'sietch', 'court'],
   board: {
     levelNoun: 'LEVEL',
     backdrop: 'sand',

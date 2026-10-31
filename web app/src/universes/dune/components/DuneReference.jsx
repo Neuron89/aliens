@@ -63,7 +63,8 @@ const CSS = `
 .dr-card:hover .dr-art img{opacity:1;transform:scale(1.04)}
 .dr-art::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(8,5,2,.85))}
 .dr-cat{position:absolute;left:.5rem;bottom:.45rem;z-index:1;font-size:.6rem;letter-spacing:.16em;color:var(--accent-bright)}
-.dr-body{padding:.55rem .65rem .7rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+/* card body: not .dr-body, which is the GM run drawer body (run/Drawer.jsx) and would leak into every Dune drawer */
+.dr-cardbody{padding:.55rem .65rem .7rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
 .dr-name{font-family:var(--font-display);font-size:.88rem;color:var(--text-bright);letter-spacing:.04em;line-height:1.25}
 .dr-pills{display:flex;flex-wrap:wrap;gap:.25rem}
 .dr-pill{font-size:.6rem;letter-spacing:.08em;padding:.12rem .4rem;border:1px solid var(--border-bright);color:var(--text-dim);border-radius:2px}
@@ -113,7 +114,7 @@ function Card({ tab, item, catLabel, onOpen }) {
         {item.art ? <img src={item.art} alt="" loading="lazy" /> : null}
         <span className="dr-cat">{nice(catLabel)}</span>
       </div>
-      <div className="dr-body">
+      <div className="dr-cardbody">
         <div className="dr-name">{item.name}</div>
         <div className="dr-pills">{pills(tab, item).map((p, i) => <span key={i} className="dr-pill">{p}</span>)}</div>
       </div>
