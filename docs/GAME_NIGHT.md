@@ -8,7 +8,7 @@ Each universe renames some words in the UI (session, transmission, crew...); thi
 | Screen | URL | Notes |
 |---|---|---|
 | GM | `http://localhost:3100` on the host (or the LAN URL on a tablet) | Everything |
-| TV | `http://<LAN IP>:3100/?board=CODE` | No chrome, no input; add `&audio=1` for scene audio |
+| TV | `http://<LAN IP>:3100/?board=CODE` (or `/tv/CODE`) | No chrome, no input; add `&audio=1` for scene audio. **✕ EXIT** on the bottom strip (or Esc) leaves it |
 | Phones | `http://<LAN IP>:3100/?join=CODE` | Or open the host URL, choose JOIN, type the code |
 
 ## 1. Before the night (setup)
@@ -187,6 +187,7 @@ Run › **MORE** › **RECAP** › **GENERATE** writes a short log of the sessio
 - A **player's phone** drops or sleeps: it shows **CONNECTION LOST** with the number of queued actions; messages and dice results are held on the phone and re-sent on reconnect (never lost, never doubled). Their character, tracks and message history stay on the seat; the player card shows offline.
 - A **new device** for a seat (dead battery, replaced phone): the player opens the link and types the same name; the app answers "name in use" and offers **ASK THE GM FOR THIS SEAT**. You get a banner with **APPROVE / REJECT** (approve only if it is really them: the character and private messages move to the new device and the old one is cut off). The request waits up to 2 minutes if you are offline.
 - The **TV** sleeps or reloads: it reconnects by itself and remembers the code; if not, reopen `/?board=CODE`.
+- A tablet or phone **shows the board instead of the app**: tap **✕ EXIT** on the board's bottom strip (press Esc twice on a keyboard: once to leave fullscreen, once to exit). The board only ever appears when the address carries `?board` or `/tv`, so plain `http://<LAN IP>:3100/` always opens the app.
 
 ## 5. Pausing and resuming the whole game
 
@@ -212,6 +213,7 @@ The server snapshots every game to `data/sessions/<CODE>.json` after each change
 | Phone loads but says join code rejected | Codes are 4 letters (no I or O), case-insensitive. The game may have ended, or been swept after 24 h dormant. Check the GM screen shows the same code. |
 | Phone joined but shows no character | Normal until you assign one (rail **Crew** / **Agents**, tap the player). They can also tap **BUILD YOUR CHARACTER**. |
 | Name already in use | Someone else (or their old phone) holds that seat. Pick another name, or use **ASK THE GM FOR THIS SEAT** and approve it. |
+| A tablet or phone is stuck on the board | Tap **✕ EXIT** on the board's bottom strip (or Esc twice). Open `http://<LAN IP>:3100/` without `?board` for the app. |
 | TV shows nothing or "waiting" | Does the status strip show **TV LINKED**? Pick a map (Board, or the Run view's MAP drawer). If NO TV: reopen `http://<LAN IP>:3100/?board=CODE` (the code must be the live one). Tap the TV once for fullscreen. |
 | TV went to sleep | Browsers drop the wake lock when the tab loses focus. Reload `?board=CODE` and tap once; disable the TV's own sleep timer. |
 | TV has no sound | Open it as `?board=CODE&audio=1` and tap the TV once; browsers block autoplay until a tap. Stingers sent with the **TV** route need that too. |

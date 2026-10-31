@@ -1468,6 +1468,10 @@ html[data-universe="dune"] .bv-strip-title { color: #f0e2c2; }
 html[data-universe="dune"] .bv-root, html[data-universe="dune"] .bv-canvas { background: #070503; }
 .bv-spacer { flex: 1; }
 .bv-hint { opacity: 0.7; }
+/* The way out of the board. Dim on the strip so the TV barely shows it; a clear button on the standby card. */
+.bv-exit { min-height: 28px; padding: 0 0.6rem; background: transparent; border: 1px solid #333; color: #8a9499; font: inherit; font-size: 13px; letter-spacing: 0.12em; cursor: pointer; opacity: 0.6; }
+.bv-exit:hover, .bv-exit:focus-visible { opacity: 1; border-color: var(--accent, #7fd4b8); color: var(--accent, #7fd4b8); }
+.bv-exit-standby { margin-top: 1.2rem; min-height: 40px; font-size: 0.8rem; opacity: 0.85; }
 .bv-link { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--warn, #c8a040); }
 .bv-link.up { color: #a3b0b6; }
 .bv-link:not(.up) .link-dot { background: var(--warn, #c8a040); box-shadow: 0 0 6px var(--warn, #c8a040); animation: linkBlink 1s ease infinite; }

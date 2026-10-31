@@ -15,7 +15,7 @@ import RollFeed from './engine/components/run/RollFeed';
 import UniverseSelect, { BootOverlay } from './engine/components/UniverseSelect';
 import { UniverseProvider, useUniverse } from './engine/UniverseContext';
 import { ContentProvider } from './engine/ContentContext';
-import { GameProvider, useGame, boardCodeForTab } from './engine/GameContext';
+import { GameProvider, useGame, isBoardTab } from './engine/GameContext';
 import { useAmbientAudio } from './engine/hooks/useAmbientAudio';
 import { useTTS } from './engine/hooks/useTTS';
 
@@ -80,14 +80,14 @@ function AppContent() {
   const tts = useTTS();
   const { role, gameCode, packId } = useGame();
   const { chosen } = useUniverse();
-  const [boardTab] = useState(() => !!boardCodeForTab());
+  const [boardTab] = useState(() => isBoardTab());
 
   // Session features: once a DM session is live, land on RUN (scenario) or the crew dashboard (sandbox).
   useEffect(() => {
     if (role === 'dm' && gameCode) setActiveSection(packId ? 'run' : 'session');
   }, [role, gameCode, packId]);
 
-  // Table board (TV): ?board=CODE — full screen map, no chrome
+  // Table board (TV): the URL carries ?board (code or not) — full screen map, no chrome, EXIT on the strip
   if (role === 'board' || boardTab) {
     return <BoardView />;
   }

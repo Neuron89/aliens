@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { useGame, boardCodeForTab } from '../GameContext';
+import { useGame, boardCodeForTab, leaveBoard } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import MapCanvas from './board/MapCanvas';
 import Overlays from './board/Overlays';
@@ -21,6 +21,9 @@ import './board/camera.css';
    board.view (rotation / flipX / zoom), status strip on the bottom
    edge, screen wake lock, any tap → fullscreen. Reconnects on its
    own (GameContext re-sends join-board on every socket connect).
+   Always has a way out: EXIT on the strip (or Esc when not fullscreen)
+   forgets the board and returns to the app — the board is only ever
+   shown while the URL carries ?board, so nothing else can get stuck here.
    ═══════════════════════════════════════════════════════════════ */
 
 /* Before a map is up, the table screen doubles as the join screen: players scan this
@@ -380,6 +383,13 @@ export default function BoardView() {
     return () => document.documentElement.classList.remove('board-mode');
   }, []);
 
+  /* Esc leaves the board (the browser itself uses the first Esc to drop fullscreen). */
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape' && !document.fullscreenElement) leaveBoard(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   const goFullscreen = () => {
     if (document.fullscreenElement) return;
     const el = document.documentElement;
@@ -409,6 +419,7 @@ export default function BoardView() {
               maxLength={4} placeholder="CODE" aria-label="Session code" autoFocus />
             <button className="bv-btn" type="submit">CONNECT</button>
           </form>
+          <button type="button" className="bv-exit bv-exit-standby" onClick={leaveBoard}>✕ EXIT TABLE BOARD</button>
         </div>
       </div>
     );
@@ -450,6 +461,8 @@ export default function BoardView() {
         <span className={`bv-link${connected && role === 'board' ? ' up' : ''}`}>
           <span className="link-dot" />{connected ? (role === 'board' ? 'LINK' : 'JOINING…') : 'RECONNECTING…'}
         </span>
+        <button type="button" className="bv-exit" title="Leave the table board and return to the app (Esc)"
+          onPointerDown={(e) => e.stopPropagation()} onClick={leaveBoard}>✕ EXIT</button>
       </div>
     </div>
   );

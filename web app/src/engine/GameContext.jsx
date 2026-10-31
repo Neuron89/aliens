@@ -48,8 +48,11 @@ const joinParam = () => {
 
 /* ─── Table board role (TV): ?board=CODE; muthur.board = { code, role: 'board' } ───
    Kept apart from muthur.session so opening the board in a GM tab never
-   steals the GM seat. A saved board re-attaches on load only when this
-   browser has no other saved session and no ?join= link. */
+   steals the GM seat. The board is URL-only: a tab is the board ONLY while
+   its address carries `?board` (the server's /tv and /tv/CODE redirect to
+   it). The saved code is used just to fill in `?board` with no code (the TV
+   reloading on /tv), never to turn a plain visit to / into the board — that
+   used to trap the GM tablet or a phone on the map with no way out. */
 const BOARD_KEY = 'muthur.board';
 export const boardParam = () => {
   try { return (new URLSearchParams(window.location.search).get('board') || '').toUpperCase(); } catch { return ''; }
@@ -62,12 +65,22 @@ const loadBoard = () => {
   return b && b.code && b.role === 'board' ? b : null;
 };
 const clearBoard = () => { try { localStorage.removeItem(BOARD_KEY); } catch { /* ignore */ } };
-/** Code this tab should attach to as the table board ('' = not a board tab). */
+/** True while this tab's address carries `?board` (with or without a code): the tab IS the table
+    board — App mounts BoardView and GameContext never resumes a GM/player seat in it. */
+export const isBoardTab = () => hasBoardParam();
+/** Code this tab should attach to as the table board ('' = none yet: BoardView shows its code entry). */
 export const boardCodeForTab = () => {
   const p = boardParam();
   if (p) return p;
-  if ((hasBoardParam() || (!loadSession() && !joinParam())) && loadBoard()) return loadBoard().code;
+  if (hasBoardParam() && loadBoard()) return loadBoard().code;
   return '';
+};
+/** Leave the table board in this tab: forget the saved board, drop fullscreen and go back to the app
+    (the GM/player session saved in this browser is untouched). The board's EXIT control and Esc. */
+export const leaveBoard = () => {
+  clearBoard();
+  try { if (document.fullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen)?.call(document)?.catch?.(() => {}); } catch { /* ignore */ }
+  window.location.assign('/');
 };
 const MOVE_INTERVAL_MS = 33;   // 30 Hz token-move throttle
 const PENDING_MOVE_MS = 600;   // keep the local drag position over stale server echoes
@@ -288,9 +301,12 @@ export function GameProvider({ children }) {
 
   /* Try to restore the saved session on this socket. */
   const autoResume = useCallback((socket) => {
-    // A board tab (?board=CODE, or a saved TV board) never touches the GM/player seat.
-    const boardCode = boardCodeForTab();
-    if (boardCode) { joinBoardOn(socket, boardCode); return; }
+    // A board tab (?board, ?board=CODE, /tv) never touches the GM/player seat, even with no code yet.
+    if (isBoardTab()) {
+      const boardCode = boardCodeForTab();
+      if (boardCode) joinBoardOn(socket, boardCode);
+      return;
+    }
     let saved = loadSession();
     if (!saved) return;
     // A ?join= link for a different game wins over an old saved player seat.

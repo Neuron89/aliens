@@ -8,7 +8,7 @@ Extends ARCHITECTURE.md. Same conventions (universe-agnostic engine, data not co
 |---|---|---|---|
 | `dm` | GM tablet / laptop | `/` → create session | everything + Map Controller |
 | `player` | phone | `/?join=CODE` | own sheet, comms, dice, TABLE tab (map of revealed rooms, own room, what is in it, who is with you) |
-| `board` | TV lying flat | `/?board=CODE` | full-screen map, tokens in revealed rooms, PC tokens, pings. No chrome, no input except a hidden tap-to-fullscreen. |
+| `board` | TV lying flat | `/?board=CODE` or `/tv/CODE` | full-screen map, tokens in revealed rooms, PC tokens, pings. No chrome, no input except tap-to-fullscreen and a dim **✕ EXIT** on the strip (Esc) that returns to the app. A tab is the board only while its URL carries `?board`. |
 
 `join-board { code }` needs no token (the TV is in the room). The board receives `board-state` only; it never receives character sheets or messages.
 
@@ -194,8 +194,10 @@ Implemented in `BoardView.jsx` + the shared `board/MapCanvas.jsx` (also used by 
 the player TABLE tab and the Room Editor). Token chips and room labels are counter-rotated so they
 stay upright on the TV. Any tap requests fullscreen. The board remembers `muthur.board =
 { code, role:'board' }` (separate from `muthur.session` so a board tab never steals a GM/player
-seat) and re-sends `join-board` on every socket reconnect; a saved board re-attaches on load only
-when the browser has no other saved session and no `?join=` link.
+seat) and re-sends `join-board` on every socket reconnect. A tab is the board only while its URL
+carries `?board` (`/tv` and `/tv/CODE` redirect there); the saved code only fills in a bare `?board`
+(the TV reloading on `/tv`), so a plain visit to `/` is always the app. **✕ EXIT** on the strip
+(or Esc outside fullscreen) forgets the saved board and returns to `/`.
 
 **Director camera** (`board/Camera.js`, pure and node-testable; `scripts/test-camera.mjs`). The TV
 applies `view.camera` as one CSS transform on the canvas wrapper:
