@@ -344,7 +344,9 @@ function DirectorStage({ board, mapDef, universe, pings, flash, activeTokenId })
   );
 }
 
-const wantsAudio = () => { try { return new URLSearchParams(window.location.search).get('audio') === '1'; } catch { return false; } };
+/* TV sound is ON by default (narrator voice, ambience, stingers; the browser still needs one tap — TAP FOR SOUND).
+   `&audio=0` keeps the TV silent (e.g. when the GM tablet's speaker is enough). `&audio=1` is still accepted. */
+const wantsAudio = () => { try { return new URLSearchParams(window.location.search).get('audio') !== '0'; } catch { return true; } };
 
 export default function BoardView() {
   const { board, mapDef, gameCode, connected, reconnecting, pings, boardError, joinBoard, role, on, table } = useGame();

@@ -175,7 +175,7 @@ export function railSections(universe) {
    (table-sfx), to the TV and phones, or HERE (preview on this screen).
    AMBIENCE: the universe's beds (theme.ambient); a pick plays here and, in
    a live session, becomes table.ambient so the TV follows (run-set).
-   The TV only plays sound when opened as /?board=CODE&audio=1. */
+   The TV plays sound by default (silence it with /?board=CODE&audio=0). */
 const SFX_ROUTE_KEY = 'engine.sfx.route';
 const readRoute = () => { try { return localStorage.getItem(SFX_ROUTE_KEY) || 'tv'; } catch { return 'tv'; } };
 
@@ -280,7 +280,7 @@ function AudioPop({ audio, onClose, anchor }) {
       </div>
 
       <div className="sb-tv">
-        <p>TV SOUND: open the board with <b>&amp;audio=1</b> and tap the TV once. Scenes switch the ambience; everything ducks while narration is read aloud. VOL sets this screen only.</p>
+        <p>TV SOUND: tap the TV once (TAP FOR SOUND); add <b>&amp;audio=0</b> to the board link to keep it silent. Scenes switch the ambience; everything ducks while narration is read aloud. VOL sets this screen only.</p>
         {tvLink && <button type="button" className="sb-copy" onClick={copyLink}>{copied ? 'COPIED' : 'COPY TV AUDIO LINK'}</button>}
       </div>
     </div>

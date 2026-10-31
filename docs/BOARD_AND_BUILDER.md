@@ -235,7 +235,7 @@ from MORE › RECAP. Other card narrations keep the plain full-bleed card.
 **TV overlays added by the feature wave** (all in `board/Overlays.jsx` or mounted by `BoardView.jsx`):
 the vision overlay (`board/VisionOverlay.jsx`, `vision` event: DUNE spice-blue shimmer, ALIEN terminal
 "special order" override), token chips with character portraits (`board/TokenChip.jsx` via
-`usePortraitUrl`), and TV audio (`board/BoardAudio.jsx`, only with `?board=CODE&audio=1`: scene
+`usePortraitUrl`), and TV audio (`board/BoardAudio.jsx`, on by default, off with `?board=CODE&audio=0`: scene
 ambience from `table.ambient` and soundboard stingers from `table-sfx`).
 
 **Player TABLE tab** (`player/TablePane.jsx`): no new role or payload. The phone uses the same

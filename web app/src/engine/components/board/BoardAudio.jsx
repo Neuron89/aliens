@@ -7,7 +7,7 @@ import { playStinger, audioCtx, unlockAudio, onAudioState } from '../../soundboa
 import '../soundboard.css';
 
 /* ═══════════════════════════════════════════════════════════════
-   TV audio — mounted by BoardView only with ?board=CODE&audio=1
+   TV audio — mounted by BoardView unless the URL says ?board=CODE&audio=0 (sound is on by default)
    (contract: <BoardAudio ambient={table?.ambient} />).
    - ambience follows table.ambient: a preset id set by the GM's AUDIO
      popover (run-set { ambient }) or a scene mood alias (mechanicsUtils)

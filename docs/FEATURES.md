@@ -59,7 +59,7 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 50 | Act progress with mandatory checklist and pacing | partial | Act switcher with progress, MANDATORY tags and DONE ticks (`table.run.completed`); no playtime pacing |
 | 51 | Pacing nudges | not yet | No code |
 | 52 | Spotlight tracker | not yet | No code for "who has not acted lately" (the TV combat SPOTLIGHT, F2 below, is a different thing) |
-| 53 | Ambient audio and stingers on the board speaker | done | rail AUDIO popover (`Nav.jsx`: STINGERS routed TV / TV + PHONES / HERE, AMBIENCE from `theme.ambient`), `soundboard.js`, `hooks/useAmbientAudio.js`, `board/BoardAudio.jsx`; `table-sfx`; scene `ambient` presets; TV plays with `?board=CODE&audio=1` (F3) |
+| 53 | Ambient audio and stingers on the board speaker | done | rail AUDIO popover (`Nav.jsx`: STINGERS routed TV / TV + PHONES / HERE, AMBIENCE from `theme.ambient`), `soundboard.js`, `hooks/useAmbientAudio.js`, `board/BoardAudio.jsx`; `table-sfx`; scene `ambient` presets; TV sound on by default, off with `?board=CODE&audio=0` (F3) |
 | 54 | Alien motion tracker widget | done | On the phone rather than the board: `player/TrackerPane.jsx` (TRACKER tab), contacts from moving / signal-flagged tokens, GM grant in the CREW drawer; `tracker-set`, `tracker-signal` (F1) |
 | 55 | Random/encounter tables in packs | not yet | Pack schema has no `tables[]` |
 | 56 | Name generators and loot tables | not yet | No code |

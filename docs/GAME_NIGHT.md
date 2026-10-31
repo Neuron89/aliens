@@ -8,7 +8,7 @@ Each universe renames some words in the UI (session, transmission, crew...); thi
 | Screen | URL | Notes |
 |---|---|---|
 | GM | `http://localhost:3100` on the host (or the LAN URL on a tablet) | Everything |
-| TV | `http://<LAN IP>:3100/?board=CODE` (or `/tv/CODE`) | No chrome, no input; add `&audio=1` for scene audio. **✕ EXIT** on the bottom strip (or Esc) leaves it |
+| TV | `http://<LAN IP>:3100/?board=CODE` (or `/tv/CODE`) | No chrome, no input; sound on by default after one tap (`&audio=0` silences it). **✕ EXIT** on the bottom strip (or Esc) leaves it |
 | Phones | `http://<LAN IP>:3100/?join=CODE` | Or open the host URL, choose JOIN, type the code |
 
 ## 1. Before the night (setup)
@@ -52,7 +52,7 @@ Development mode (`cd "web app" && npm run dev`) serves the UI on :3000 and the 
 2. The TV shows "waiting" until the GM picks a map. The **TV** dot in the GM status strip (top bar) turns green and reads **TV LINKED** once the TV is attached.
 3. **Orientation** (players sit around all four sides): in **Board** (left rail) use **ROTATE** (90 degrees per tap), **FLIP** and **ZOOM −/+** until the map reads right from the GM seat; labels and tokens stay upright whichever way you turn it. **AS TV** makes the tablet canvas mirror the TV's rotation/flip so you move tokens in the orientation players see. Toggle it off to work upright on the tablet.
 4. No TV? Skip it: everything works from phones and the GM screen; the map shows on the phone **TABLE** tab for revealed rooms.
-5. Optional: open the TV as `/?board=CODE&audio=1` (rail **Audio** shows this link, ready to copy) so the TV speaker plays the scene ambience and the soundboard stingers you fire; tap the TV once to allow sound. Without `&audio=1` the TV stays silent, which is fine if the GM tablet's speaker is enough.
+5. Sound: the TV speaker plays the narrator voice, the scene ambience and the stingers by default; tap the TV once (**TAP FOR SOUND**) because browsers block autoplay. Add `&audio=0` to the board link if the GM tablet's speaker is enough.
 6. Burn-in safety is automatic: the map drifts a pixel or two every minute and dims after 10 minutes of nothing happening.
 
 ## 2. Start the session
@@ -152,7 +152,7 @@ Rail **Audio** opens the audio popover:
 - **STINGERS**: one tap fires a short synthesized sound. ALIEN: klaxon, hull groan, airlock cycle, steam vent, tracker burst, distant screech, lights out. DUNE: worm rumble, wind, thumper, shield hum, ornithopter, crysknife, the Voice. Pick the route first: **TV**, **TV + PHONES** or **HERE** (a preview on your screen only). Every shot is generated fresh, so the same stinger never sounds exactly alike twice; the TV and the phones play the same variant.
 - **AMBIENCE**: the universe's beds (ALIEN: engine hum, derelict silence, hive drip, tension, red alert, deep space, cosmic dread; DUNE: sietch wind, keep interior, open erg, wind, bazaar, court). In a live session your pick also becomes the TV's ambience.
 - Scenes can name a mood (`ambient` in the pack, for example `ship`, `derelict`, `hive`, `erg`, `keep`; friendly aliases such as `engine`, `drip`, `open-erg` or `interior` work too). Moving to that scene switches the ambience for you and the TV.
-- Ambience and stingers dip while narration is read aloud. The TV only plays sound when opened with `&audio=1` (1.4). Players can mute and reduce effects on their own device (SOUND / REDUCE FX toggles).
+- Ambience and stingers dip while narration is read aloud. The TV plays sound by default after one tap (1.4); `&audio=0` silences it. Players can mute and reduce effects on their own device (SOUND / REDUCE FX toggles).
 
 **Narrator voice (server TTS).** NARRATE drawer → **VOICE**: **OFF | TV | HERE | BOTH** (remembered on this tablet), the voice (the universe's default is marked ★; ALIEN `bm_george`, DUNE `bf_emma`; grades from the voice server in brackets) and **SPEED** (80-120 %).
 - With VOICE on, **SEND CAPTION** / **SEND AS CARD** also speak the text (marked ◉); **SPEAK ONLY** speaks without a caption; **■ STOP VOICE** cuts it on the TV and here.
@@ -232,7 +232,7 @@ The server snapshots every game to `data/sessions/<CODE>.json` after each change
 | A tablet or phone is stuck on the board | Tap **✕ EXIT** on the board's bottom strip (or Esc twice). Open `http://<LAN IP>:3100/` without `?board` for the app. |
 | TV shows nothing or "waiting" | Does the status strip show **TV LINKED**? Pick a map (Board, or the Run view's MAP drawer). If NO TV: reopen `http://<LAN IP>:3100/?board=CODE` (the code must be the live one). Tap the TV once for fullscreen. |
 | TV went to sleep | Browsers drop the wake lock when the tab loses focus. Reload `?board=CODE` and tap once; disable the TV's own sleep timer. |
-| TV has no sound | Open it as `?board=CODE&audio=1` and tap the TV once; browsers block autoplay until a tap. Stingers sent with the **TV** route need that too. |
+| TV has no sound | Tap the TV once (**TAP FOR SOUND** on the strip); browsers block autoplay until a tap. Make sure the board link does not end in `&audio=0`. Stingers sent with the **TV** route need that too. |
 | GENERATE PORTRAIT says the image server is offline | The ComfyUI machine (`COMFY_URL`, default `http://192.168.1.37:8188`) is off or busy. Start it and press **RETRY**; nothing else depends on it. |
 | TRACKER tab (ALIEN) says there is no tracker, or shows no fix | The seat needs a motion tracker in its gear or a **GRANT TRACKER** from the CREW drawer, and a token on the map for a fix. |
 | Map is upside down for the players | Board: **ROTATE** / **FLIP** (turn **AS TV** off to keep the tablet upright). |
@@ -247,7 +247,7 @@ The server snapshots every game to `data/sessions/<CODE>.json` after each change
 | Stale UI after an update | Hard refresh (Ctrl+F5). The deployed app serves the last built `dist/`. |
 | Text-to-speech silent | Browser voices load lazily; pick a voice in the TTS panel. Works best in Chrome/Edge. |
 | NARRATE says NO VOICE SERVER | `TTS_URL` missing from the server's `.env` (the deployed copy: `..\aliens-deploy\web app\.env`) or the Kokoro container is down: `http://192.168.1.37:8880/v1/audio/voices` should answer. Tap **↻** in the VOICE panel after fixing; the browser voice is used meanwhile. |
-| Voice plays on the tablet but not on the TV | The TV must be open as `?board=CODE&audio=1` and tapped once (TAP FOR SOUND). Check VOICE is **TV** or **BOTH**, not HERE. |
+| Voice plays on the tablet but not on the TV | The TV must have been tapped once (TAP FOR SOUND) and not opened with `&audio=0`. Check VOICE is **TV** or **BOTH**, not HERE. |
 | AI GM says offline | `GM_URL` not set in the server's `.env`, or Ollama on the GPU box is down: `http://192.168.1.37:11434/v1/models` should answer. The pack's own text is used meanwhile. |
 | BUILD THIS MAP is greyed out | No map on the table: pick one in Board or the MAP drawer first. |
 | BUILD says "Not authorized" | This tablet has no GM token for the session; rejoin as GM (RESUME) on this device. |

@@ -444,7 +444,7 @@ lists `ambient`.
   - **Soundboard (F3).** DM: `table-sfx { cue, phones? }` → `{ success, seed, boards, phones }`; server → board room (and
     every seated phone when `phones === true`): `table-sfx { cue, seed, at, phones }`. The server picks the seed so every
     device plays the same procedural variant; per-socket rate limit 120 ms. Cues: `theme.sounds.stingers`. Ambience beds:
-    `theme.ambient` + `table.run.ambient` (unchanged `run-set { ambient }`); the TV plays both only with `&audio=1`
+    `theme.ambient` + `table.run.ambient` (unchanged `run-set { ambient }`); the TV plays both by default (off with `&audio=0`)
     (`board/BoardAudio.jsx`). GameContext: `sfxSend(cue, { phones }, cb)`, `onSfx(fn)`. Test: `test-sfx.mjs`.
   - **Portraits (F4).** REST `/api/portrait` (`server/portrait.js`): `POST /` `{ characterId, universeId, name?, career?,
     appearance?, details?, seed? }` → 202 `{ id, state }` (400 / 404 / 429 busy / 503 `comfy_offline`), `GET /job/:id`,
