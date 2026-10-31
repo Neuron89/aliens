@@ -46,6 +46,8 @@ export const EVENT_NAMES = Object.freeze([
   'vision-send',
   // voice (server TTS → TV / GM)
   'narrate-speak', 'narrate-speak-stop',
+  // AI GM wave 2: room-entry loop (players walk through doors; the AI GM reacts)
+  'player-enter-room', 'ai-gm-set',
 ]);
 
 export const RESERVED_IDS = Object.freeze(new Set(['__proto__', 'constructor', 'prototype']));

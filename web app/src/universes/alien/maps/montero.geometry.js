@@ -229,3 +229,78 @@ export const monteroSpawn = {
     'deck-c': { pc: [r4(CX / W), r4((deckCLayout().jctFwdY + SH / 2) / H)] },
   },
 };
+
+/* ─── Doors (board EXITS / player-enter-room) ─────────────────────────────
+   Per deck, between board room ids ("<deck>-<room>"), at the hatches and
+   corridor stubs drawn in montero.jsx; (x, y) in canvas px on the `from`
+   room's wall. The decks themselves join at the junction ladders, the cargo
+   elevator and the air-scrubber shaft (a level change, not a door).
+   MU/TH/UR is the one locked hatch ("Restricted access"). */
+function monteroDoorsPx() {
+  const a = deckALayout(), b = deckBLayout(), c = deckCLayout();
+  const ex = PL + PW / 2 + SH / 2;   // cargo elevator shaft, east wall
+  const wx = SL + SW / 2 - SH / 2;   // air scrubber shaft, west wall
+  const D = (level, from, to, x, y, locked = false) => ({ level, from, to, x, y, locked });
+  const A = 'deck-a', B = 'deck-b', C = 'deck-c';
+  return [
+    D(A, 'hyperdrive', 'bridge', CX, a.hyperY),
+    D(A, 'cryo', 'hyperdrive', CX, a.cryoY),
+    D(A, 'cryo', 'junction-fwd', CX, a.cryoY + a.RH),
+    D(A, 'junction-fwd', 'corridor', CX, a.jctFwdY + SH),
+    D(A, 'corridor', 'tankage-port', CL, a.tankY + a.RH / 2),
+    D(A, 'corridor', 'tankage-stbd', CR, a.tankY + a.RH / 2),
+    D(A, 'corridor', 'claw-port', CL, a.clawY + a.RH / 2),
+    D(A, 'corridor', 'claw-stbd', CR, a.clawY + a.RH / 2),
+    D(A, 'corridor', 'elevator', CL, a.elevY + SH / 2),
+    D(A, 'corridor', 'air-scrubber', CR, a.airY + SH / 2),
+    D(A, 'corridor', 'galley', CL, a.galleyY + a.RH / 2),
+    D(A, 'corridor', 'medlab', CR, a.medlabY + a.RH / 2),
+    D(A, 'corridor', 'hygiene', CL, a.hygieneY + a.RH / 2),
+    D(A, 'corridor', 'storage', CR, a.storageY + a.RH / 2),
+    D(A, 'corridor', 'muthur', CL, a.muthurY + a.RH / 2, true),
+    D(A, 'corridor', 'supplies', CR, a.muthurY + a.RH / 2),
+    D(A, 'corridor', 'junction-aft', CX, a.jctAftY),
+
+    D(B, 'life-support', 'navigation', CX, b.lifeSupY),
+    D(B, 'life-support', 'dock-corridor', CX, b.lifeSupY + 42),
+    D(B, 'dock-corridor', 'docking-umbilical', CL, b.dockY + b.RH / 2),
+    D(B, 'dock-corridor', 'main-airlock', CR, b.dockY + b.RH / 2),
+    D(B, 'dock-corridor', 'junction-fwd', CX, b.dockY + b.RH),
+    D(B, 'junction-fwd', 'corridor', CX, b.jctFwdY + SH),
+    D(B, 'corridor', 'water-reclamation', CL, b.waterY + b.RH / 2),
+    D(B, 'corridor', 'workshop', CR, b.waterY + b.RH / 2),
+    D(B, 'corridor', 'lower-claw', CL, b.clawY + b.RH / 2),
+    D(B, 'corridor', 'maintenance', CR, b.clawY + b.RH / 2),
+    D(B, 'corridor', 'cross-corridor', CL, b.elevY + SH / 2),
+    D(B, 'elevator', 'cross-corridor', ex, b.elevY + SH / 2),
+    D(B, 'air-scrubber', 'cross-corridor', wx, b.airY + SH / 2),
+    D(B, 'reactor', 'corridor', CX, b.reactorY),
+    D(B, 'corridor', 'coolant', CL, b.coolantY + b.RH / 2),
+    D(B, 'corridor', 'reactor-control', CR, b.coolantY + b.RH / 2),
+    D(B, 'corridor', 'junction-aft', CX, b.jctAftY),
+
+    D(C, 'shuttle-dock', 'junction-fwd', CX, c.shuttleY + 70),
+    D(C, 'junction-fwd', 'alcove-corridor', CX, c.jctFwdY + SH),
+    D(C, 'alcove-corridor', 'loader-bay', CL, c.alcoveY + 20),
+    D(C, 'alcove-corridor', 'cargo-office', CR, c.alcoveY + 20),
+    D(C, 'alcove-corridor', 'top-corridor', CX, c.alcoveY + 40),
+    D(C, 'top-corridor', 'side-corridor-port', c.sclX + c.sideCorW / 2, c.topCorY + 16),
+    D(C, 'top-corridor', 'side-corridor-stbd', c.scrX + c.sideCorW / 2, c.topCorY + 16),
+    D(C, 'cargo-bay', 'side-corridor-port', c.cbL, c.cargoY + 35),
+    D(C, 'cargo-bay', 'side-corridor-stbd', c.cbR, c.cargoY + 35),
+    D(C, 'cargo-bay', 'side-corridor-port', c.cbL, c.cargoY + 100),
+    D(C, 'cargo-bay', 'side-corridor-stbd', c.cbR, c.cargoY + 100),
+    D(C, 'side-corridor-port', 'bottom-corridor', c.sclX + c.sideCorW / 2, c.cargoY + 170),
+    D(C, 'side-corridor-stbd', 'bottom-corridor', c.scrX + c.sideCorW / 2, c.cargoY + 170),
+    D(C, 'bottom-corridor', 'aft-corridor', CX, c.botCorY + 16),
+    D(C, 'elevator', 'aft-corridor', ex, c.shaftY + SH / 2),
+    D(C, 'air-scrubber', 'aft-corridor', wx, c.shaftY + SH / 2),
+    D(C, 'ventral-access', 'aft-corridor', CX, c.ventralY),
+    D(C, 'ventral-access', 'junction-aft', CX, c.ventralY + 44),
+  ];
+}
+
+/** Board doors [{ from, to, level, locked, at }] between monteroRooms ids (`at` normalized). */
+export const monteroDoors = monteroDoorsPx().map(({ level, from, to, x, y, locked }) => ({
+  from: `${level}-${from}`, to: `${level}-${to}`, level, locked, at: [r4(x / W), r4(y / H)],
+}));

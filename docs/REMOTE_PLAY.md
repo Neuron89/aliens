@@ -1,6 +1,6 @@
-# Remote play (muthur.kys-media.com)
+# Remote play (tabletop.kys-media.com)
 
-Friends play from anywhere by opening **https://muthur.kys-media.com**. The game
+Friends play from anywhere by opening **https://tabletop.kys-media.com**. The game
 server runs on the home server; Cloudflare's tunnel carries the traffic in and
 Cloudflare Access decides who may open the page.
 
@@ -69,9 +69,9 @@ session keeps it signed in.
 
 Exactly what they do on the LAN, with the domain instead of the IP:
 
-- **GM**: open `https://muthur.kys-media.com/`, create the game, set the GM PIN, share the room code.
-- **Players**: open `https://muthur.kys-media.com/`, join with the room code.
-- **TV / table board**: `https://muthur.kys-media.com/tv` (or `/tv/CODE` to jump straight to a game).
+- **GM**: open `https://tabletop.kys-media.com/`, create the game, set the GM PIN, share the room code.
+- **Players**: open `https://tabletop.kys-media.com/`, join with the room code.
+- **TV / table board**: `https://tabletop.kys-media.com/tv` (or `/tv/CODE` to jump straight to a game).
 - Content/generate writes (pack editor, generator, recap, portraits, TTS, AI GM) need the
   `API_TOKEN`: enter it on the GM session screen under **ADVANCED**. Reading packs stays open.
 
@@ -84,7 +84,7 @@ Exactly what they do on the LAN, with the domain instead of the IP:
 - The GM seat is protected by the GM PIN (5 wrong tries → 60 s lockout per game).
 - LAN-only assumptions in the code worth reviewing now that it is internet-facing:
   - CORS is `origin: '*'` on both Express (`cors()`) and Socket.io. Access cookies
-    limit who can actually connect, but a tighter origin (`https://muthur.kys-media.com`) would be cleaner.
+    limit who can actually connect, but a tighter origin (`https://tabletop.kys-media.com`) would be cleaner.
   - No per-IP rate limiting on HTTP or socket events (behind Cloudflare every
     request also arrives from cloudflared's IP, so per-IP limits would need `CF-Connecting-IP`).
   - Room traffic is encrypted only between the browser and Cloudflare's edge;

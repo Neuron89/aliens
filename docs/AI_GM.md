@@ -89,6 +89,59 @@ POST /api/gm/narrate           body { code, dmToken, kind, prompt?, npcId?, maxW
 
 The router is mounted in `server/index.js` behind `requireApiToken`, like the other `/api` routers. If the client disconnects, the request to the model server is cancelled. Upstream, the server calls `POST ${GM_URL}/chat/completions` with `{ model, messages:[system, user], stream:true, temperature:0.8, max_tokens }`.
 
+## AI BUILD (dress the map)
+
+The drawer's **BUILD** tab (tabs across the top: **NARRATE | BUILD | ROOMS**) asks the model to dress the map that is on the table: items, creatures, NPCs, markers and hazards per room, a short read-aloud description and mood per room, and at most one check per room. Nothing reaches the board until the GM applies it.
+
+| Control | What it does |
+|---|---|
+| Status line | `AI BUILD: model <name>` or `template (no model)`, and the number of AI tokens on the board (tokens tagged `ai: true`). The map's title on a second line. |
+| DENSITY | SPARSE (about 1 token per 2 rooms), NORMAL (1–2 per room), DENSE (2–3 per room). Saved in `localStorage` `muthur.aigm.density`. |
+| BUILD THIS MAP | `POST /api/gm/build`. A spinner counts the seconds; the local model takes 10–30 s. You can close the drawer, and the dock badge shows **…** while it works. Disabled when no map is on the table. Once a plan exists, the button reads REBUILD. |
+| Plan list | One card per room: the room name, the mood, the first lines of the description, the token chips (glyph, kind, label, **HIDDEN** / **LOCKED** marks; the GM note is the chip's tooltip) and the check line `ROLL <skill> (difficulty n): <label>`, plus hazard and loot lines when the plan has them. Each card has an **APPLY ON/OFF** toggle (on by default); ALL / NONE flip every card. |
+| APPLY SELECTED | `POST /api/gm/build/apply` with the plan and the chosen room ids. The server places the tokens inside each room's shape, creatures and NPCs hidden, items visible unless the plan hides them, and stores the plan as `table.aiPlan` (GM only). |
+| REBUILD | Asks for a new plan with the current density. The tokens already applied stay until you apply again or clear. |
+| CLEAR AI BUILD | Tap twice. `POST /api/gm/build/clear` removes every `ai: true` token and the stored plan. Tokens you placed yourself are never touched. |
+
+The model receives the universe voice, the pack's synopsis and tone, the threats and NPCs (names, roles and behaviour, never secrets), the key locations, the act and scene titles, and the map's rooms (including GM room notes), doors and spawn. The server validates the plan: unknown rooms, kinds, glyphs and skills are dropped, at most 4 tokens per room and 60 in total, never a creature in the spawn room. Without a model the server stitches a plan from the pack (threats in far rooms, NPCs, key locations as markers, stock items), so the plan is never empty. When the drawer opens, a plan built earlier in the session (`GET /api/gm/build`, or `table.aiPlan`) is listed again.
+
+## Room entry (the AI GM reacts)
+
+Players can walk their own character through a door. On the phone's **TABLE** tab, under the map, **EXITS** lists the doors out of the room the character is in (`mapDef.doors`, both directions):
+
+* An unlocked door is a button **ENTER <ROOM>**. A locked door is a greyed **LOCKED <ROOM>**. Rooms the GM has flagged open (`board.rooms[id].open`) are enterable too.
+* A character on the map but outside every room gets one button, **ENTER** the room that holds the map's spawn point.
+* Tapping sends `player-enter-room { roomId }`. The buttons are disabled until the answer arrives (6 s at most). The server checks adjacency, locked doors and a rate limit of one move per 2 s, moves the token, reveals the room under fog, and answers `{ success, roomId, name }` or an error such as `DOOR LOCKED.` or `NOT ADJACENT.`, which the phone shows for a few seconds. On success the phone shows **YOU ENTER <ROOM>** and the YOU ARE IN line follows.
+* When the GM has the AI reaction on (REVIEW or LIVE), the phone adds "The GM's AI reacts when you enter." The narration itself reaches the phones and the TV through the normal caption path, not the EXITS block.
+
+The GM gets `room-entered` for every entry, also when the GM drags a PC token into another room (fired once the drag rests for 600 ms). The **ROOMS** tab of the AI GM drawer shows them:
+
+| Control | What it does |
+|---|---|
+| ENTRY OFF / REVIEW / LIVE | `ai-gm-set { entry }`, saved with the session (`table.aiGm`). OFF: no AI reaction (players can still use EXITS). REVIEW: the AI drafts, you send. LIVE: the server sends by itself. |
+| VOICE ON/OFF | `ai-gm-set { voice }`. In LIVE mode the server also speaks the narration on the TV. |
+| Feed | Newest first: who, which room, the time. While the AI writes: "THE AI IS WRITING…". Then the draft (`ai-gm-draft`) in an editable box and the room's check line. |
+| REVIEW buttons | **SEND CAPTION** (`narrate`, titled with the room), **SEND + SPEAK** (caption and `speak()` to the voice target), **ASK <NAME> TO ROLL <SKILL>** (`rollRequest` to that player only, with the plan's skill, difficulty and label), **DISMISS**. Each button shows ✓ once done. |
+| LIVE markers | **SENT · SPOKEN · ROLL ASKED**, lit from the draft and the session log once the server has done each one. The draft box is read-only. |
+
+The dock badge counts drafts you have not looked at; opening the ROOMS tab clears it. The feed lives with the Run view, so it fills while the drawer is closed; it is not saved with the session (the session log keeps what was sent).
+
+The `enter-room` context is the room name, the plan's room (description, visible tokens, check, hazard), who entered, who else is there, whether the room was visited before (`table.visitedRooms`), and the current scene. The check is offered on the first visit only.
+
+### Client helpers (GameContext)
+
+```
+playerEnterRoom(roomId, cb)            player → 'player-enter-room' { roomId }; ack { success, roomId, name } | { error }
+aiGmSet({ entry, voice }, cb)          DM → 'ai-gm-set' (optimistic table.aiGm)
+onRoomEntered(fn) / onAiGmDraft(fn)    DM one-shot events → unsubscribe
+aiBuild({ density, mapId? })           POST /api/gm/build        → { plan, provider }
+aiBuildApply(plan, rooms?)             POST /api/gm/build/apply  → { applied:{ rooms, tokens }, plan }
+aiBuildClear()                         POST /api/gm/build/clear  → { removed }
+aiBuildGet()                           GET  /api/gm/build?code&dmToken → { plan | null }
+```
+
+The HTTP helpers send `{ code, dmToken }` with `apiHeaders()` (the `x-api-token` when one is stored) and reject with the server's message; a 403 reads "Not authorized: this tablet has no GM token for the session (rejoin as GM)."
+
 ## Limits
 
 * The drafts are only as good as the local model. In particular, it can sometimes invent a detail that is not in the pack, which is one reason the GM reviews every draft.

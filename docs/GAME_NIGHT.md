@@ -144,6 +144,7 @@ In **Board** (left rail; most of this also works from the Run view's MAP drawer)
 - **Tokens**: tap for the sheet (rename, hide/show, resize, facing, level, status ring, note, send an item to a player, remove). Statuses show as rings on the TV.
 - **PING** mode drops a pulse on the TV (players can ping from their TABLE tab, one per second). **RESET** clears tokens, reveals and pings. **EDIT ROOMS** draws rooms on an image map that has none.
 - Rooms, doors, levels and spawn points come from the map definition (`docs/BOARD_AND_BUILDER.md`).
+- **Players walk through doors.** On the phone's TABLE tab, **EXITS** lists the doors out of the character's room: **ENTER <ROOM>** for an open door, a greyed **LOCKED** for a locked one (and, for a character outside every room, ENTER the room with the spawn point). The server moves the token, reveals the room and tells you (AI GM drawer → ROOMS). Dragging a PC token into another room counts as an entry too. To let players through a locked door, unlock it in the map definition or flag the room open; otherwise you move them.
 
 ### 3.7 Scene audio and the soundboard
 
@@ -161,6 +162,8 @@ Rail **Audio** opens the audio popover:
 - No voice server: the status line says **NO VOICE SERVER — using the browser voice**; SPEAK and READ ALOUD use the browser voice here, the TV stays silent. Tap **↻** after starting the server.
 
 **AI GM tab** (dock): **OPEN THIS SCENE**, **DESCRIBE WHERE THEY ARE**, **NPC SPEAKS** (pick the NPC), **IMPROVISE** ("they cut the power"), **RECAP SO FAR**; LENGTH short/normal/long. The draft streams into an editable box; then **SEND CAPTION**, **SEND AS CARD**, **SPEAK ON TV** or **SEND + SPEAK**. Turn **AUTO** on and every new scene's opening is drafted for you (never sent by itself; the dock badge says NEW). The first draft of the night can take 1–2 minutes while the model loads; later drafts start at once. The model never sees NPC secrets, GM notes, hidden clues or endings, but it does invent small details, so read before you send. Details: `docs/AI_GM.md`.
+
+**AI GM → BUILD and ROOMS.** With a map on the table, **BUILD** → pick SPARSE / NORMAL / DENSE → **BUILD THIS MAP** (10–30 s): every room gets a mood, a read-aloud description, tokens (creatures and NPCs go on hidden) and maybe a check. Untick the rooms you do not want, then **APPLY SELECTED**; **CLEAR AI BUILD** takes all AI tokens off again. **ROOMS** sets what happens when a player taps ENTER on their phone: **OFF** (nothing), **REVIEW** (the AI drafts what they find; you tap SEND CAPTION, SEND + SPEAK and ASK <NAME> TO ROLL <SKILL>) or **LIVE** (the server narrates, speaks it if **VOICE** is on, and asks the roll by itself; the feed marks SENT · SPOKEN · ROLL ASKED). Start the night on REVIEW until you trust the model. The dock badge counts drafts waiting for you.
 
 ### 3.8 Pause (X-card)
 
@@ -246,6 +249,12 @@ The server snapshots every game to `data/sessions/<CODE>.json` after each change
 | NARRATE says NO VOICE SERVER | `TTS_URL` missing from the server's `.env` (the deployed copy: `..\aliens-deploy\web app\.env`) or the Kokoro container is down: `http://192.168.1.37:8880/v1/audio/voices` should answer. Tap **↻** in the VOICE panel after fixing; the browser voice is used meanwhile. |
 | Voice plays on the tablet but not on the TV | The TV must be open as `?board=CODE&audio=1` and tapped once (TAP FOR SOUND). Check VOICE is **TV** or **BOTH**, not HERE. |
 | AI GM says offline | `GM_URL` not set in the server's `.env`, or Ollama on the GPU box is down: `http://192.168.1.37:11434/v1/models` should answer. The pack's own text is used meanwhile. |
+| BUILD THIS MAP is greyed out | No map on the table: pick one in Board or the MAP drawer first. |
+| BUILD says "Not authorized" | This tablet has no GM token for the session; rejoin as GM (RESUME) on this device. |
+| AI BUILD put a creature where you did not want it | Untick that room and APPLY SELECTED again, or tap the token and remove it; CLEAR AI BUILD removes only AI-placed tokens. |
+| Phone shows no EXITS | The character has no token on the map, the room has no doors in the map definition, or the token is outside every room and the map has no spawn room. Drag the token into a room. |
+| Phone says DOOR LOCKED / NOT ADJACENT | The door is locked in the map definition, or the room is not next door. Move the token yourself or flag the room open. |
+| ROOMS feed stays on "THE AI IS WRITING…" | ENTRY is REVIEW/LIVE but the model is loading or offline (the template text should still arrive). Check the NARRATE tab's status line. |
 | First AI GM draft is slow | The model is loading into VRAM (about 95 s cold, longer if ComfyUI must unload first). It stays loaded ~10 min after the last draft. |
 | Voice starts late or cuts off mid-scene | Long text is spoken sentence by sentence; the first clip takes about a second (CPU Kokoro). A red line in the NARRATE drawer ("Voice: VOICE FAILED…") means the speech server dropped a request; send again. STOP VOICE always clears the TV's queue. |
 | Phone screen sleeps | Ask players to keep the screen on; they re-attach to their seat when it wakes. |

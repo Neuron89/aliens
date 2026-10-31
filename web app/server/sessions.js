@@ -23,6 +23,7 @@ import { loadSnapshots, scheduleSave, removeSnapshot, allowCode, MAX_AGE_MS } fr
 import {
   emptyBoard, normalizeBoard, sanitizeMapDef, publicMapDef, sanitizeToken, placeToken, relocateAll, viewFor,
   sanitizeView, isMapId, isLevelId, isTokenId, isTokenVisible, spawnPoint, MAX_TOKENS, MAX_PINGS,
+  roomAt, doorsFrom, pointInRoom,
 } from './board.js';
 import { safeOn, EVENT_NAMES, RESERVED_IDS, isSafeKey, isPlainObject, nullObj, safeEqual } from './guard.js';
 import { listUniverseIds, loadUniverseCore } from './generator/universes.js';
@@ -67,6 +68,15 @@ const PC_COLORS = ['#4fc3f7', '#ffb74d', '#81c784', '#e57373', '#ba68c8', '#fff1
 
 export const games = new Map();
 export { EVENT_NAMES }; // every client → server event (guard.js)
+/** Server-side hooks for HTTP routers (aibuild.js, gm.js): filled by attachSessions —
+ *  { touch, emitBoard, emitTable, logTo, toDM, narrateFor, speakFor, rollRequestFor, roomEntered }. */
+export const sessionApi = {};
+
+/* AI GM room loop (wave 2) */
+export const AI_ENTRY_MODES = Object.freeze(['off', 'review', 'live']);
+const ENTER_ROOM_GAP_MS = 2000;      // player-enter-room: 1 accepted move per 2 s per player
+const ROOM_ENTER_DEBOUNCE_MS = Math.max(50, Number(process.env.ROOM_ENTER_DEBOUNCE_MS) || 600); // GM drag → room-entered
+const ENTRY_MAX_QUEUED = 4;          // AI reactions queued per game (the rest are dropped)
 
 const token = () => randomBytes(18).toString('base64url'); // 24 chars
 const newPin = () => String(randomInt(0, 1000000)).padStart(6, '0');
@@ -246,6 +256,9 @@ export function emptyTable() {
     rollRequests: [],       // [{ id, skill, label, difficulty, note, recipients:'all'|[ids], at, answeredBy[], cancelled }] (<= 30)
     clientIds: [],          // ids of replayed phone actions already applied (dedupe)
     seeded: false,          // pack clocks/clues seeded (session-seed) — never re-seeded after GM edits
+    aiPlan: null,           // AI BUILD plan (server/aibuild.js) — GM only
+    aiGm: { entry: 'off', voice: false }, // room-entry reaction (ai-gm-set); players see only aiGm.entry
+    visitedRooms: {},       // roomId -> PC entries counted (room loop) — GM only
   };
 }
 
@@ -264,6 +277,12 @@ function tableOf(game) {
   if (!t.orders || typeof t.orders !== 'object') t.orders = {};
   for (const k of ['pools', 'poolDefs']) if (!t[k] || typeof t[k] !== 'object' || Array.isArray(t[k])) t[k] = {};
   if (!t.initiative || typeof t.initiative !== 'object' || !Array.isArray(t.initiative.order)) t.initiative = emptyInitiative();
+  if (!t.aiGm || typeof t.aiGm !== 'object' || Array.isArray(t.aiGm)) t.aiGm = { entry: 'off', voice: false };
+  if (!AI_ENTRY_MODES.includes(t.aiGm.entry)) t.aiGm.entry = 'off';
+  t.aiGm.voice = t.aiGm.voice === true;
+  if (!t.visitedRooms || typeof t.visitedRooms !== 'object' || Array.isArray(t.visitedRooms)) t.visitedRooms = nullObj();
+  else if (Object.getPrototypeOf(t.visitedRooms) !== null) t.visitedRooms = nullObj(t.visitedRooms);
+  if (t.aiPlan !== null && (typeof t.aiPlan !== 'object' || Array.isArray(t.aiPlan) || !t.aiPlan.rooms)) t.aiPlan = null;
   game.table = t;
   return t;
 }
@@ -373,6 +392,7 @@ function tableView(game, role, player = null) {
     submission: sub ? { id: sub.id, status: sub.status, reason: sub.reason || '', at: sub.at, name: sub.character?.name || '' } : null,
     rollRequests: t.rollRequests.filter((r) => isOpenRequestFor(r, pid)).map(publicRollRequest),
     tracker: trackerView(game, player), // F1 motion tracker: bearing/distance/strength only
+    aiGm: { entry: t.aiGm.entry }, // the phone labels EXITS "the GM's AI reacts"; plan/visits/voice stay GM-only
   };
 }
 
@@ -610,6 +630,227 @@ export function attachSessions(io) {
     if (e) toDM(game, 'log-entry', { entry: e });
     return e;
   };
+
+  /* ═══ Server-side table actions (socket handlers AND the AI GM room loop call these) ═══ */
+
+  /** narrate { text, title?, mode:'caption'|'card', art?, speak?, voice?, speed?, target? } →
+   *  { success, id, speech? } | { error }. Sets table.narration, logs, pushes table-state;
+   *  speak:true also voices it (speakFor) after the caption is out. */
+  async function narrateFor(game, payload) {
+    const text = sstr(payload.text, 4000).trim();
+    const art = urlish(payload.art);
+    if (!text && !art) return { error: 'Nothing to narrate.' };
+    const t = tableOf(game);
+    t.narration = {
+      id: shortId('n'), text, title: sstr(payload.title, 160), at: Date.now(),
+      mode: NARRATE_MODES.includes(payload.mode) ? payload.mode : 'caption', art,
+    };
+    const speak = payload.speak === true && !!text;
+    const line = `${t.narration.title ? t.narration.title + ': ' : ''}${text || '[image]'}`;
+    logTo(game, 'narration', `${speak ? 'Voice: ' : ''}${line}`.slice(0, 400));
+    touch(game);
+    emitTable(game);
+    if (!speak) return { success: true, id: t.narration.id };
+    const speech = await speakFor(game, { ...payload, text, title: t.narration.title }, { log: false });
+    return { success: true, id: t.narration.id, speech };
+  }
+
+  /* ═══ VOICE — server TTS to the TV / GM (server/tts.js) ═══════════════════
+     narrate-speak { text, voice?, speed?, target:'tv'|'gm'|'both' (default tv), title? }   DM only
+       ack (right away, before any audio) { success, id, total, target, voice, boards } | { error, provider? }
+       then, progressively (sentence groups of ~12–25 words, synthesized one after another):
+         `table-speak      { id, text, title, voice, speed, target, total, at }`  first
+         `table-speak-part { id, index, url, ms }`                               as each group is ready
+         `table-speak-done { id, count, ms, error? }`                            after the last (count = parts sent)
+       The board room gets them when target is tv/both. The DM socket ALWAYS gets them (the tablet
+       tracks what is playing; it only plays them itself for gm/both). Logged as narration "Voice: …".
+     narrate-speak-stop {}  DM only → `table-speak-stop { at }` to the board room and the DM; the
+       synthesis loop stops before its next group, queued speeches are dropped. ack { success }
+     Phones never get voice (the TV is the table's speaker). */
+  async function speakFor(game, payload, { log = true } = {}) {
+    const code = game.code;
+    const text = typeof payload.text === 'string' ? payload.text.trim() : '';
+    if (!text) return { error: 'Nothing to say.' };
+    if (text.length > TTS_MAX_TEXT) return { error: `Too long (max ${TTS_MAX_TEXT} characters).` };
+    const voice = payload.voice === undefined || payload.voice === null || payload.voice === '' ? undefined : payload.voice;
+    if (voice !== undefined && !isVoiceId(voice)) return { error: 'Invalid voice.' };
+    const target = VOICE_TARGETS.includes(payload.target) ? payload.target : 'tv';
+    const title = sstr(payload.title, 160);
+    if ((VOICE_BUSY.get(code) || 0) >= VOICE_MAX_INFLIGHT) return { error: 'VOICE BUSY — try again in a moment.' };
+    const st = await ttsStatus();
+    if (!st.ok) return { error: 'NO VOICE SERVER.', provider: 'none' };
+    const total = sentenceParts(text).length;
+    if (!total) return { error: 'Nothing to say.' };
+    const gen = VOICE_GEN.get(code) || 0;
+    const id = shortId('v');
+    const toBoard = target !== 'gm';
+    const emit = (event, data) => {
+      if (toBoard) io.to(boardRoom(code)).emit(event, data);
+      toDM(game, event, data);
+    };
+    const stopped = () => (VOICE_GEN.get(code) || 0) !== gen;
+    emit('table-speak', { id, text, title, voice: voice || null, speed: payload.speed ?? null, target, total, at: Date.now() });
+    if (log) logTo(game, 'narration', `Voice: ${title ? title + ': ' : ''}${text}`.slice(0, 400));
+    touch(game);
+    VOICE_BUSY.set(code, (VOICE_BUSY.get(code) || 0) + 1);
+    let count = 0;
+    const run = async () => {
+      if (stopped()) return;
+      try {
+        const r = await speakStream(text, { voice, speed: payload.speed }, {
+          shouldStop: stopped,
+          onPart: (p) => { count++; emit('table-speak-part', { id, index: p.index, url: p.url, ms: p.ms }); },
+        });
+        if (!r.stopped) emit('table-speak-done', { id, count, ms: r.ms });
+      } catch (err) {
+        if (!stopped()) emit('table-speak-done', { id, count, error: err?.code === 'no_voice_server' ? 'NO VOICE SERVER.' : `VOICE FAILED: ${String(err?.message || err).slice(0, 160)}` });
+      }
+    };
+    const tail = (VOICE_CHAIN.get(code) || Promise.resolve()).then(run).finally(() => {
+      const n = (VOICE_BUSY.get(code) || 1) - 1;
+      if (n > 0) VOICE_BUSY.set(code, n); else VOICE_BUSY.delete(code);
+      if (VOICE_CHAIN.get(code) === tail) VOICE_CHAIN.delete(code);
+    });
+    VOICE_CHAIN.set(code, tail);
+    return { success: true, id, total, target, voice: voice || null, boards: boardCount(code) };
+  }
+
+  /** roll-request { skill, label?, difficulty?, note?, to } → { success, id, sent } | { error }. */
+  function rollRequestFor(game, payload) {
+    if (typeof payload.skill !== 'string' || !SKILL_RE.test(payload.skill) || RESERVED_IDS.has(payload.skill)) return { error: 'Invalid skill.' };
+    const recipients = recipientsOf(game, payload.to);
+    if (!recipients) return { error: 'No recipients.' };
+    const d = payload.difficulty;
+    const difficulty = d === undefined || d === null || d === '' ? null : Number(d);
+    if (difficulty !== null && (!Number.isInteger(difficulty) || difficulty < -10 || difficulty > 10)) return { error: 'Invalid difficulty.' };
+    const t = tableOf(game);
+    const request = {
+      id: shortId('rq'), skill: payload.skill, label: sstr(payload.label, 60).trim() || payload.skill,
+      difficulty, note: sstr(payload.note, 300).trim(), recipients, at: Date.now(), answeredBy: [], cancelled: false,
+    };
+    t.rollRequests.push(request);
+    if (t.rollRequests.length > MAX_ROLL_REQUESTS) t.rollRequests.splice(0, t.rollRequests.length - MAX_ROLL_REQUESTS);
+    const pub = publicRollRequest(request);
+    const sent = [];
+    for (const [, p] of game.players) if (sentTo(recipients, p.id)) { toPlayer(p, 'roll-requested', { request: pub }); sent.push(p.id); }
+    const nameOf = (id) => pcName(game.players.get(id));
+    logTo(game, 'roll', `GM asked ${recipients === 'all' ? 'everyone' : recipients.map(nameOf).join(', ')} for ${request.label}${difficulty !== null ? ` (difficulty ${difficulty})` : ''}`, { requestId: request.id });
+    touch(game);
+    emitTable(game);
+    return { success: true, id: request.id, sent };
+  }
+
+  /* ═══ AI GM ROOM LOOP (docs/AI_GM.md "Room entry") ═══════════════════════
+     A PC token arrives in a room (player-enter-room, or the GM's drag settling for
+     ROOM_ENTER_DEBOUNCE_MS) → roomEntered(): visitedRooms[roomId]++, first-entry un-hide of
+     the AI BUILD's planned-visible tokens there, a 'fog' log line, `room-entered` to the DM,
+     then (table.aiGm.entry ≠ off) the AI reaction, queued per game:
+       review → `ai-gm-draft { id, kind:'enter-room', mode:'review', roomId, roomName, playerId,
+                 tokenId, name, text, check, provider, model, visits, at }` to the DM only;
+       live   → narrateFor (caption, title = room name; + voice when aiGm.voice), and when the
+                 plan has a check for a first visit, rollRequestFor → that player; the DM still
+                 gets `ai-gm-draft` with mode:'live' and sent: { narrationId, speechId,
+                 speechError, rollRequestId }. */
+  const roomNameOf = (game, roomId) => {
+    const b = boardOf(game);
+    return b.rooms[roomId]?.name || (game.mapDef?.rooms || []).find((r) => r.id === roomId)?.name || roomId;
+  };
+  const ENTRY_CHAIN = new Map(); // code -> Promise
+  const ENTRY_QUEUED = new Map(); // code -> n
+  function roomEntered(game, { playerId = null, tokenId, roomId, fromRoomId = null, by = 'player' }) {
+    const t = tableOf(game);
+    const b = boardOf(game);
+    const visits = (Number(t.visitedRooms[roomId]) || 0) + 1;
+    t.visitedRooms[roomId] = visits;
+    let shown = 0;
+    if (visits === 1) {
+      for (const tok of Object.values(b.tokens)) {
+        if (tok.ai && tok.aiRoom === roomId && tok.aiShow && tok.hidden) { tok.hidden = false; shown++; }
+      }
+    }
+    const player = playerId ? game.players.get(playerId) : null;
+    const tok = b.tokens[tokenId];
+    const name = player ? pcName(player) : (tok?.label || 'Someone');
+    const roomName = roomNameOf(game, roomId);
+    logTo(game, 'fog', `${name} enters ${roomName}`, { roomId, ...(playerId ? { playerId } : {}) });
+    touch(game);
+    if (shown) emitBoard(game);
+    emitTable(game, { dmOnly: true });
+    const entry = { playerId, tokenId, roomId, fromRoomId, name, roomName, visits, by, at: Date.now() };
+    toDM(game, 'room-entered', entry);
+    if (t.aiGm.entry === 'off') return entry;
+    const code = game.code;
+    const queued = ENTRY_QUEUED.get(code) || 0;
+    if (queued >= ENTRY_MAX_QUEUED) { console.warn(`[AIGM] ${code}: room reaction dropped (queue full)`); return entry; }
+    ENTRY_QUEUED.set(code, queued + 1);
+    const tail = (ENTRY_CHAIN.get(code) || Promise.resolve()).then(() => reactToEntry(game, entry)).catch((err) => {
+      console.error(`[AIGM] ${code}: room reaction failed: ${err?.stack || err}`);
+    }).finally(() => {
+      const n = (ENTRY_QUEUED.get(code) || 1) - 1;
+      if (n > 0) ENTRY_QUEUED.set(code, n); else ENTRY_QUEUED.delete(code);
+      if (ENTRY_CHAIN.get(code) === tail) ENTRY_CHAIN.delete(code);
+    });
+    ENTRY_CHAIN.set(code, tail);
+    return entry;
+  }
+
+  async function reactToEntry(game, entry) {
+    if (games.get(game.code) !== game || tableOf(game).aiGm.entry === 'off') return;
+    const gm = await import('./gm.js');
+    const universe = (await loadUniverseCore(game.universeId)) || { id: game.universeId, name: '' };
+    const pack = gm.loadPackFor(game.universeId, game.packId);
+    const r = await gm.generateEnterRoom({ game, roomId: entry.roomId, playerId: entry.playerId, visits: entry.visits, pack, universe });
+    if (games.get(game.code) !== game) return;
+    const ai = tableOf(game).aiGm;
+    if (ai.entry === 'off') return; // switched off while the model was writing
+    const draft = {
+      id: shortId('d'), kind: 'enter-room', mode: ai.entry, roomId: entry.roomId, roomName: r.roomName || entry.roomName,
+      playerId: entry.playerId, tokenId: entry.tokenId, name: entry.name, text: r.text, check: r.check || null,
+      provider: r.provider, model: r.model, visits: entry.visits, at: Date.now(), ...(r.warning ? { warning: r.warning } : {}),
+    };
+    if (ai.entry === 'live') {
+      const v = universe?.theme?.voice || {};
+      const nar = await narrateFor(game, {
+        text: draft.text, title: draft.roomName, mode: 'caption',
+        ...(ai.voice ? { speak: true, target: 'tv', voice: v.narrator, speed: v.speed } : {}),
+      });
+      let rq = null;
+      if (draft.check && entry.playerId && game.players.has(entry.playerId)) {
+        rq = rollRequestFor(game, { skill: draft.check.skill, label: draft.check.label, difficulty: draft.check.difficulty, note: draft.check.note, to: entry.playerId });
+      }
+      draft.sent = {
+        narrationId: nar?.id || null, speechId: nar?.speech?.id || null,
+        ...(nar?.speech?.error ? { speechError: nar.speech.error } : {}), rollRequestId: rq?.id || null,
+      };
+    }
+    toDM(game, 'ai-gm-draft', draft);
+  }
+
+  /** GM drags: a PC token's room change fires room-entered once the token has been still for
+   *  ROOM_ENTER_DEBOUNCE_MS, for the final room only (a drag across three rooms → one event). */
+  const pendingEntries = new Map(); // `${code}:${tokenId}` -> { from, timer }
+  function notePcMove(game, tok, prevRoomId) {
+    if (tok.kind !== 'pc') return;
+    const key = `${game.code}:${tok.id}`;
+    let p = pendingEntries.get(key);
+    if (!p) {
+      if (tok.roomId === prevRoomId) return;
+      p = { from: prevRoomId || null, timer: null };
+      pendingEntries.set(key, p);
+    }
+    clearTimeout(p.timer);
+    p.timer = setTimeout(() => {
+      pendingEntries.delete(key);
+      if (games.get(game.code) !== game) return;
+      const cur = boardOf(game).tokens[tok.id];
+      if (!cur || cur.kind !== 'pc' || !cur.roomId || cur.roomId === p.from) return;
+      roomEntered(game, { playerId: cur.ownerPlayerId || null, tokenId: cur.id, roomId: cur.roomId, fromRoomId: p.from, by: 'gm' });
+    }, ROOM_ENTER_DEBOUNCE_MS);
+    p.timer.unref?.();
+  }
+  const lastEnter = new Map(); // playerId -> ms of the last accepted player-enter-room
+
+  Object.assign(sessionApi, { touch, emitBoard, emitTable, logTo, toDM, narrateFor, speakFor, rollRequestFor, roomEntered });
 
 
   /* ─── Seats: token rejoin + GM-approved claims ─────────── */
@@ -1175,6 +1416,7 @@ export function attachSessions(io) {
         b.tokens = nullObj();
         b.rooms = nullObj();
         b.pings = [];
+        tableOf(game).visitedRooms = nullObj(); // room loop: a new map starts unvisited
         const [sx, sy] = spawnPoint(mapDef, level);
         pcs.forEach((t, i) => {
           const off = (i - (pcs.length - 1) / 2) * 0.02;
@@ -1209,8 +1451,10 @@ export function attachSessions(io) {
         const st = Array.isArray(token.status) ? token.status.filter((s) => !String(s).startsWith('panicking')) : [];
         token.status = ['panicking', ...st].slice(0, 6);
       }
+      const prevRoom = prev ? prev.roomId : null;
       b.tokens[token.id] = token;
       placeToken(b, game.mapDef, token);
+      if (prev) notePcMove(game, token, prevRoom); // room loop (a new PC token is a placement, not an entry)
       touch(game);
       emitBoard(game);
       callback?.({ success: true, token });
@@ -1226,7 +1470,9 @@ export function attachSessions(io) {
       t.x = Math.min(1, Math.max(0, payload.x));
       t.y = Math.min(1, Math.max(0, payload.y));
       t.lastMovedAt = Date.now(); // F1 motion tracker: a moving npc/creature is a contact
+      const prevRoom = t.roomId;
       placeToken(b, game.mapDef, t);
+      notePcMove(game, t, prevRoom); // room loop: room-entered after the drag settles
       touch(game);
       emitBoard(game);
     });
@@ -1243,7 +1489,8 @@ export function attachSessions(io) {
       callback?.({ success: true });
     });
 
-    /* ─── DM: Room { roomId, revealed?, name?, note?, hideTokens? } ─── */
+    /* ─── DM: Room { roomId, revealed?, name?, note?, hideTokens?, open? } ───
+       open:true = players may player-enter-room it from anywhere on its level (locked doors too). */
     on('board-room-set', (payload, callback) => {
       const game = dmBoardGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
@@ -1257,6 +1504,7 @@ export function attachSessions(io) {
       }
       if (typeof payload.name === 'string') st.name = payload.name.slice(0, 80);
       if (typeof payload.note === 'string') st.note = payload.note.slice(0, 1000);
+      if (typeof payload.open === 'boolean') { if (payload.open) st.open = true; else delete st.open; }
       if (payload.hideTokens === true) {
         for (const t of Object.values(b.tokens)) if (t.roomId === room.id && t.kind !== 'pc') t.hidden = true;
       }
@@ -1316,8 +1564,12 @@ export function attachSessions(io) {
       b.rooms = nullObj();
       b.pings = [];
       b.fog = true;
+      const t = tableOf(game);
+      t.visitedRooms = nullObj();
+      if (t.aiPlan) t.aiPlan.applied = []; // its tokens are gone
       touch(game);
       emitBoard(game);
+      emitTable(game, { dmOnly: true });
       callback?.({ success: true });
     });
 
@@ -1434,22 +1686,7 @@ export function attachSessions(io) {
     on('narrate', async (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
-      const text = sstr(payload.text, 4000).trim();
-      const art = urlish(payload.art);
-      if (!text && !art) return callback?.({ error: 'Nothing to narrate.' });
-      const t = tableOf(game);
-      t.narration = {
-        id: shortId('n'), text, title: sstr(payload.title, 160), at: Date.now(),
-        mode: NARRATE_MODES.includes(payload.mode) ? payload.mode : 'caption', art,
-      };
-      const speak = payload.speak === true && !!text;
-      const line = `${t.narration.title ? t.narration.title + ': ' : ''}${text || '[image]'}`;
-      logTo(game, 'narration', `${speak ? 'Voice: ' : ''}${line}`.slice(0, 400));
-      if (!speak) return done(game, callback, { id: t.narration.id });
-      touch(game);
-      emitTable(game);
-      const speech = await voiceToTable(game, { ...payload, text, title: t.narration.title }, { log: false });
-      callback?.({ success: true, id: t.narration.id, speech });
+      callback?.(await narrateFor(game, payload));
     });
 
     /* ─── DM: Clear narration {} ─── */
@@ -1460,70 +1697,12 @@ export function attachSessions(io) {
       done(game, callback);
     });
 
-    /* ═══ VOICE — server TTS to the TV / GM (server/tts.js) ═══════════════════
-       narrate-speak { text, voice?, speed?, target:'tv'|'gm'|'both' (default tv), title? }   DM only
-         ack (right away, before any audio) { success, id, total, target, voice, boards } | { error, provider? }
-         then, progressively (sentence groups of ~12–25 words, synthesized one after another):
-           `table-speak      { id, text, title, voice, speed, target, total, at }`  first
-           `table-speak-part { id, index, url, ms }`                               as each group is ready
-           `table-speak-done { id, count, ms, error? }`                            after the last (count = parts sent)
-         The board room gets them when target is tv/both. The DM socket ALWAYS gets them (the tablet
-         tracks what is playing; it only plays them itself for gm/both). Logged as narration "Voice: …".
-       narrate-speak-stop {}  DM only → `table-speak-stop { at }` to the board room and the DM; the
-         synthesis loop stops before its next group, queued speeches are dropped. ack { success }
-       Phones never get voice (the TV is the table's speaker). */
-    async function voiceToTable(game, payload, { log = true } = {}) {
-      const code = game.code;
-      const text = typeof payload.text === 'string' ? payload.text.trim() : '';
-      if (!text) return { error: 'Nothing to say.' };
-      if (text.length > TTS_MAX_TEXT) return { error: `Too long (max ${TTS_MAX_TEXT} characters).` };
-      const voice = payload.voice === undefined || payload.voice === null || payload.voice === '' ? undefined : payload.voice;
-      if (voice !== undefined && !isVoiceId(voice)) return { error: 'Invalid voice.' };
-      const target = VOICE_TARGETS.includes(payload.target) ? payload.target : 'tv';
-      const title = sstr(payload.title, 160);
-      if ((VOICE_BUSY.get(code) || 0) >= VOICE_MAX_INFLIGHT) return { error: 'VOICE BUSY — try again in a moment.' };
-      const st = await ttsStatus();
-      if (!st.ok) return { error: 'NO VOICE SERVER.', provider: 'none' };
-      const total = sentenceParts(text).length;
-      if (!total) return { error: 'Nothing to say.' };
-      const gen = VOICE_GEN.get(code) || 0;
-      const id = shortId('v');
-      const toBoard = target !== 'gm';
-      const emit = (event, data) => {
-        if (toBoard) io.to(boardRoom(code)).emit(event, data);
-        toDM(game, event, data);
-      };
-      const stopped = () => (VOICE_GEN.get(code) || 0) !== gen;
-      emit('table-speak', { id, text, title, voice: voice || null, speed: payload.speed ?? null, target, total, at: Date.now() });
-      if (log) logTo(game, 'narration', `Voice: ${title ? title + ': ' : ''}${text}`.slice(0, 400));
-      touch(game);
-      VOICE_BUSY.set(code, (VOICE_BUSY.get(code) || 0) + 1);
-      let count = 0;
-      const run = async () => {
-        if (stopped()) return;
-        try {
-          const r = await speakStream(text, { voice, speed: payload.speed }, {
-            shouldStop: stopped,
-            onPart: (p) => { count++; emit('table-speak-part', { id, index: p.index, url: p.url, ms: p.ms }); },
-          });
-          if (!r.stopped) emit('table-speak-done', { id, count, ms: r.ms });
-        } catch (err) {
-          if (!stopped()) emit('table-speak-done', { id, count, error: err?.code === 'no_voice_server' ? 'NO VOICE SERVER.' : `VOICE FAILED: ${String(err?.message || err).slice(0, 160)}` });
-        }
-      };
-      const tail = (VOICE_CHAIN.get(code) || Promise.resolve()).then(run).finally(() => {
-        const n = (VOICE_BUSY.get(code) || 1) - 1;
-        if (n > 0) VOICE_BUSY.set(code, n); else VOICE_BUSY.delete(code);
-        if (VOICE_CHAIN.get(code) === tail) VOICE_CHAIN.delete(code);
-      });
-      VOICE_CHAIN.set(code, tail);
-      return { success: true, id, total, target, voice: voice || null, boards: boardCount(code) };
-    }
+    /* ═══ VOICE (speakFor above, at the attachSessions level) ═══════════════ */
     on('narrate-speak', async (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       if (typeof payload.text !== 'string' || !payload.text.trim()) return callback?.({ error: 'Nothing to say.' });
-      callback?.(await voiceToTable(game, payload));
+      callback?.(await speakFor(game, payload));
     });
     on('narrate-speak-stop', (payload, callback) => {
       const game = dmTableGame(socket, payload);
@@ -1902,25 +2081,77 @@ export function attachSessions(io) {
     on('roll-request', (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
-      if (typeof payload.skill !== 'string' || !SKILL_RE.test(payload.skill) || RESERVED_IDS.has(payload.skill)) return callback?.({ error: 'Invalid skill.' });
-      const recipients = recipientsOf(game, payload.to);
-      if (!recipients) return callback?.({ error: 'No recipients.' });
-      const d = payload.difficulty;
-      const difficulty = d === undefined || d === null || d === '' ? null : Number(d);
-      if (difficulty !== null && (!Number.isInteger(difficulty) || difficulty < -10 || difficulty > 10)) return callback?.({ error: 'Invalid difficulty.' });
+      callback?.(rollRequestFor(game, payload));
+    });
+
+    /* ═══ AI GM ROOM LOOP — socket events (roomEntered / reactToEntry above) ═══
+       player-enter-room { roomId } (player) → { success, roomId, name } | { error }
+         The player's own PC token walks into roomId: same level, and through a door from its
+         current room that is not locked (doors from mapDef.doors, either direction); from outside
+         every room only into the room holding the map's spawn point; a room the GM flagged
+         `open` (board-room-set { open:true }) is always reachable on its level. 1 accepted move
+         per 2 s per player. Errors: 'NOT AUTHORIZED.' 'NO MAP.' 'UNKNOWN ROOM.' 'YOU ARE NOT ON
+         THE MAP.' 'ALREADY HERE.' 'DOOR LOCKED.' 'NOT ADJACENT.' 'RATE LIMITED.'
+         The token moves to a free point inside the room (centroid, jittered away from other
+         tokens), lastMovedAt is set, placeToken reveals the room in fog, the board is pushed,
+         then roomEntered() (room-entered → DM, AI reaction).
+       ai-gm-set { entry?:'off'|'review'|'live', voice?:bool } (DM) → { success, aiGm } | { error }
+         Persisted in table.aiGm (snapshot); players' table view carries aiGm.entry only. */
+    on('player-enter-room', (payload, callback) => {
+      const { game, player } = playerCtx();
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const b = boardOf(game);
+      const md = game.mapDef;
+      if (!md) return callback?.({ error: 'NO MAP.' });
+      const room = typeof payload.roomId === 'string' ? (md.rooms || []).find((r) => r.id === payload.roomId) : null;
+      if (!room) return callback?.({ error: 'UNKNOWN ROOM.' });
+      const pc = Object.values(b.tokens).find((x) => x.kind === 'pc' && x.ownerPlayerId === player.id);
+      if (!pc) return callback?.({ error: 'YOU ARE NOT ON THE MAP.' });
+      if (pc.roomId === room.id) return callback?.({ error: 'ALREADY HERE.' });
+      const level = pc.level || b.level || null;
+      if (room.level && level && room.level !== level) return callback?.({ error: 'NOT ADJACENT.' });
+      const open = !!b.rooms[room.id]?.open;
+      if (!open) {
+        if (!pc.roomId) {
+          const [sx, sy] = spawnPoint(md, level);
+          if (roomAt(md, sx, sy, level) !== room.id) return callback?.({ error: 'NOT ADJACENT.' });
+        } else {
+          const door = doorsFrom(md, pc.roomId).find((d) => d.to === room.id);
+          if (!door) return callback?.({ error: 'NOT ADJACENT.' });
+          if (door.locked) return callback?.({ error: 'DOOR LOCKED.' });
+        }
+      }
+      const now = Date.now();
+      if (now - (lastEnter.get(player.id) || 0) < ENTER_ROOM_GAP_MS) return callback?.({ error: 'RATE LIMITED.' });
+      const avoid = Object.values(b.tokens).filter((x) => x.id !== pc.id && x.roomId === room.id).map((x) => [x.x, x.y]);
+      const pt = pointInRoom(md, room.id, { avoid, jitter: avoid.length ? 0.08 : 0.02 });
+      if (!pt) return callback?.({ error: 'UNKNOWN ROOM.' });
+      lastEnter.set(player.id, now);
+      const fromRoomId = pc.roomId || null;
+      pc.x = pt[0];
+      pc.y = pt[1];
+      if (room.level) pc.level = room.level;
+      pc.lastMovedAt = now;
+      placeToken(b, md, pc);
+      const pending = pendingEntries.get(`${game.code}:${pc.id}`); // a GM drag that had not settled yet
+      if (pending) { clearTimeout(pending.timer); pendingEntries.delete(`${game.code}:${pc.id}`); }
+      touch(game);
+      emitBoard(game);
+      roomEntered(game, { playerId: player.id, tokenId: pc.id, roomId: room.id, fromRoomId, by: 'player' });
+      callback?.({ success: true, roomId: room.id, name: roomNameOf(game, room.id) });
+    });
+
+    on('ai-gm-set', (payload, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      if (payload.entry !== undefined && !AI_ENTRY_MODES.includes(payload.entry)) return callback?.({ error: `entry must be one of ${AI_ENTRY_MODES.join(', ')}.` });
+      if (payload.voice !== undefined && typeof payload.voice !== 'boolean') return callback?.({ error: 'voice must be true or false.' });
       const t = tableOf(game);
-      const request = {
-        id: shortId('rq'), skill: payload.skill, label: sstr(payload.label, 60).trim() || payload.skill,
-        difficulty, note: sstr(payload.note, 300).trim(), recipients, at: Date.now(), answeredBy: [], cancelled: false,
-      };
-      t.rollRequests.push(request);
-      if (t.rollRequests.length > MAX_ROLL_REQUESTS) t.rollRequests.splice(0, t.rollRequests.length - MAX_ROLL_REQUESTS);
-      const pub = publicRollRequest(request);
-      const sent = [];
-      for (const [, p] of game.players) if (sentTo(recipients, p.id)) { toPlayer(p, 'roll-requested', { request: pub }); sent.push(p.id); }
-      const nameOf = (id) => pcName(game.players.get(id));
-      logTo(game, 'roll', `GM asked ${recipients === 'all' ? 'everyone' : recipients.map(nameOf).join(', ')} for ${request.label}${difficulty !== null ? ` (difficulty ${difficulty})` : ''}`, { requestId: request.id });
-      done(game, callback, { id: request.id, sent });
+      const before = t.aiGm.entry;
+      if (payload.entry !== undefined) t.aiGm.entry = payload.entry;
+      if (payload.voice !== undefined) t.aiGm.voice = payload.voice;
+      if (before !== t.aiGm.entry) logTo(game, 'note', `AI GM room entry: ${t.aiGm.entry.toUpperCase()}`);
+      done(game, callback, { aiGm: { ...t.aiGm } });
     });
 
     /* ─── DM: Withdraw a roll request { id } (phones drop the card via table-state) ─── */

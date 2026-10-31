@@ -29,7 +29,23 @@ export const imageMaps = [
       { id: 'dunes-east', name: 'Dunes (East)', note: 'Where the worm sign is coming from. The sand here trembles first.', shape: rect(0.82, 0.34, 0.18, 0.66) },
       { id: 'dunes-south', name: 'Dunes (South)', note: 'Low dunes and a rock outcrop half a kilometre off — the only safe ground.', shape: rect(0, 0.66, 0.45, 0.34) },
     ],
-    spawn: { pc: [0.33, 0.62] },
+    /* Doors: the crawler is boarded only by the side ladder (from the south sand);
+       inside, the open processing deck links the centrifuge house, hopper and cab.
+       The open sand around the hull joins dune to dune. */
+    doors: [
+      { from: 'dunes-south', to: 'boarding-ladder' },
+      { from: 'boarding-ladder', to: 'processing-deck' },
+      { from: 'processing-deck', to: 'processing-module' },
+      { from: 'processing-module', to: 'intake' },
+      { from: 'processing-deck', to: 'hopper' },
+      { from: 'processing-deck', to: 'cockpit' },
+      { from: 'hopper', to: 'cockpit' },
+      { from: 'dunes-south', to: 'dunes-west' },
+      { from: 'dunes-west', to: 'dunes-north' },
+      { from: 'dunes-north', to: 'dunes-east' },
+      { from: 'dunes-east', to: 'dunes-south' },
+    ],
+    spawn: { pc: [0.41, 0.56] },
   },
   {
     id: 'carthag-market',
@@ -52,6 +68,22 @@ export const imageMaps = [
       { id: 'west-houses', name: 'West Houses', note: 'Flat-roofed tenements; the roofs connect for anyone willing to jump.', shape: rect(0, 0.58, 0.4, 0.42) },
       { id: 'northwest-houses', name: 'Northwest Houses', note: 'A domed shrine and shuttered homes. Quiet — too quiet for a market day.', shape: rect(0, 0, 0.17, 0.58) },
       { id: 'east-rooftops', name: 'East Rooftops', note: 'Garrison quarter roofs with a rooftop cistern. Harkonnen spotters every half hour.', shape: rect(0.72, 0, 0.28, 0.42) },
+    ],
+    /* Doors: lanes between neighbouring stall rows and the plaza; the house blocks open
+       off the stalls. The garrison roofs are reached only past Harkonnen guards (locked). */
+    doors: [
+      { from: 'fountain-plaza', to: 'west-stalls' },
+      { from: 'fountain-plaza', to: 'north-stalls' },
+      { from: 'fountain-plaza', to: 'east-stalls' },
+      { from: 'fountain-plaza', to: 'south-stalls' },
+      { from: 'west-stalls', to: 'north-stalls' },
+      { from: 'west-stalls', to: 'northwest-houses' },
+      { from: 'west-stalls', to: 'west-houses' },
+      { from: 'northwest-houses', to: 'west-houses' },
+      { from: 'south-stalls', to: 'west-houses' },
+      { from: 'south-stalls', to: 'east-stalls' },
+      { from: 'east-stalls', to: 'east-rooftops', locked: true },
+      { from: 'north-stalls', to: 'east-rooftops', locked: true },
     ],
     spawn: { pc: [0.55, 0.9] },
   },

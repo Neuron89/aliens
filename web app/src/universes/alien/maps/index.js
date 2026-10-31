@@ -2,7 +2,7 @@
    Scenario-specific maps live in the content packs; entries here are
    always available in the Maps tab. 'engine' is filled in by ../index.js
    with an interactive MapEngine component. */
-import { W, H, MONTERO_LEVELS, monteroRooms, monteroOutline, monteroCrop, monteroSpawn } from './montero.geometry.js';
+import { W, H, MONTERO_LEVELS, monteroRooms, monteroDoors, monteroOutline, monteroCrop, monteroSpawn } from './montero.geometry.js';
 import * as CRONUS from './cronus.geometry.js';
 import * as NEBRASKA from './nebraska.geometry.js';
 import * as PROMETHEUS from './prometheus.geometry.js';
@@ -27,6 +27,7 @@ export const maps = [
     "size": [W, H],
     "levels": MONTERO_LEVELS.map(({ id, label }) => ({ id, label })),
     "rooms": monteroRooms,
+    "doors": monteroDoors,
     "outline": monteroOutline,
     "crop": monteroCrop,
     "spawn": monteroSpawn,

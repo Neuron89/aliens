@@ -24,3 +24,43 @@
 .ag-send .ag-discard { grid-column: 1 / -1; color: var(--text-dim); border-style: dashed; }
 .ag :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .ag-handoff { display: block; margin-top: 2px; font-size: 11px; color: var(--text-dim); letter-spacing: 0.06em; }
+
+/* wave 2: tabs NARRATE | BUILD | ROOMS */
+.ag-tabs { flex-wrap: nowrap; }
+.ag-spin { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -1px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: ag-spin 0.8s linear infinite; }
+@keyframes ag-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ag-spin { animation-duration: 2.4s; } }
+.ag-build-go { display: flex; flex-direction: column; gap: 6px; }
+.ag-build-go .fs-btn { min-height: 52px; font-size: 13px; }
+.ag-build-go .nd-hint { margin: 0; }
+.ag-mini { display: inline-flex; gap: 6px; }
+.ag-mini .run-chip { min-height: 36px; }
+.ag-plan, .ag-feed { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.ag-proom, .ag-entry { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border: 1px solid var(--border-bright, var(--border)); background: var(--bg-card); }
+.ag-proom.off { opacity: 0.55; border-style: dashed; }
+.ag-proom-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ag-proom-head b { font: 600 13px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text); }
+.ag-proom-head .run-chip { margin-left: auto; min-height: 36px; }
+.ag-mood { font: 11px var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+.ag-desc { margin: 0; font-size: 13px; line-height: 1.5; color: var(--text-dim); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ag-toks { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.ag-tok { display: inline-flex; align-items: center; gap: 5px; padding: 3px 7px; border: 1px solid var(--border); font: 12px var(--font-body, var(--font-mono)); color: var(--text); }
+.ag-tok small { font: 10px var(--font-mono); letter-spacing: 0.08em; color: var(--text-dim); }
+.ag-tok em { font: normal 10px var(--font-mono); letter-spacing: 0.08em; color: var(--warn); }
+.ag-tok.k-creature { border-color: var(--danger); }
+.ag-tok.k-creature svg { color: var(--danger); }
+.ag-tok.k-hazard { border-color: var(--warn); }
+.ag-tok.k-npc svg, .ag-tok.k-item svg, .ag-tok.k-marker svg { color: var(--accent); }
+.ag-check { margin: 0; font: 600 12px var(--font-mono); letter-spacing: 0.06em; color: var(--accent); }
+.ag-extra { margin: 0; font-size: 11px; }
+.ag-entry-head { font-size: 14px; color: var(--text); }
+.ag-entry-head b { color: var(--accent); }
+.ag-text.ag-text-sm { min-height: 96px; font-size: 14px; }
+.ag-send .ag-ask { grid-column: 1 / -1; }
+.ag-marks { margin: 0; display: flex; gap: 6px; flex-wrap: wrap; }
+.ag-marks span { padding: 3px 8px; border: 1px dashed var(--border); font: 11px var(--font-mono); letter-spacing: 0.1em; color: var(--text-dim); }
+.ag-marks span.on { border-style: solid; border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+.ag-discard.warn { color: var(--warn); border-color: var(--warn); border-style: solid; }
+.ag-clearfeed { align-self: flex-start; min-height: 36px; }
+.ag-onboard { font: 10px var(--font-mono); letter-spacing: 0.1em; padding: 2px 6px; border: 1px solid var(--accent); color: var(--accent); }
+.ag-marks span.err { border-style: solid; border-color: var(--warn); color: var(--warn); }

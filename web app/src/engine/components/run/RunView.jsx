@@ -200,7 +200,7 @@ export default function RunView({ tts, audio, active = true, onNavigate = () => 
   /* ─── Dock ─── */
   const dock = [
     ['narrate', 'NARRATE', 'narrate', narration ? '●' : null],
-    ['ai', 'AI GM', 'ai', ai.autoReady ? 'NEW' : ai.busy ? '…' : null],
+    ['ai', 'AI GM', 'ai', ai.autoReady ? 'NEW' : ai.rooms?.unseen ? String(ai.rooms.unseen) : ai.busy || ai.build?.busy ? '…' : null],
     ['map', 'MAP', 'board', null],
     ['crew', terms.players.toUpperCase(), 'crew', crewBadge || null],
     ['dice', 'DICE', 'dice', null],

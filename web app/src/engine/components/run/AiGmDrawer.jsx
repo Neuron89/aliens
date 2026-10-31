@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import { apiHeaders } from '../../apiToken';
+import { Glyph } from '../board/TokenChip';
 import './aigm.css';
 
 /* ═══════════════════════════════════════════════════════════════
@@ -16,6 +17,17 @@ import './aigm.css';
    GM moves to another scene — it never sends by itself.
    State lives in useAiGm(), called by RunView so AUTO works while the
    drawer is closed (the dock badge shows a ready draft).
+   Wave 2 adds two tabs (docs/AI_GM.md "AI BUILD" / "Room entry"):
+   BUILD  — POST /api/gm/build asks the model to dress the map on the table
+            (density SPARSE/NORMAL/DENSE); the plan is listed per room with
+            an APPLY toggle each; APPLY SELECTED places the tokens (ai:true),
+            CLEAR AI BUILD removes them. The build keeps running with the
+            drawer closed (state lives in useAiBuild, inside useAiGm).
+   ROOMS  — ENTRY OFF | REVIEW | LIVE + VOICE (`ai-gm-set`), the feed of
+            `room-entered` events with the `ai-gm-draft` for each: REVIEW =
+            the GM sends (caption / + voice / ask the roll), LIVE = the server
+            already did; the feed shows what it did. The dock badge counts
+            drafts the GM has not looked at yet (ai.rooms.unseen).
    ═══════════════════════════════════════════════════════════════ */
 
 export const LENGTHS = [['SHORT', 60], ['NORMAL', 110], ['LONG', 160]];
@@ -60,6 +72,136 @@ async function readSse(res, on) {
 
 /** Same key as server/gm.js npcKey(): the slug of the name (index as a last resort). */
 export const npcKey = (npc, i) => String(npc?.name || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || String(i);
+
+const TAB_KEY = 'muthur.aigm.tab';
+const DENSITY_KEY = 'muthur.aigm.density';
+export const DENSITIES = [['SPARSE', 'sparse'], ['NORMAL', 'normal'], ['DENSE', 'dense']];
+const FEED_CAP = 30;
+const roomsOf = (pl) => Object.keys(pl?.rooms || {});
+
+/**
+ * Room-entry feed (DM): room-entered events, each paired with its ai-gm-draft when it arrives.
+ * → { feed:[{ key, playerId, tokenId, roomId, fromRoomId, name, roomName, at, draft|null, mode, done:{} }],
+ *     unseen, markSeen(), mark(key, patch), editDraft(key, text), dismiss(key), clear() }
+ */
+export function useAiRooms() {
+  const { onRoomEntered, onAiGmDraft, table } = useGame();
+  const [feed, setFeed] = useState([]);
+  const [unseen, setUnseen] = useState(0);
+  const entryRef = useRef('off');
+  entryRef.current = table?.aiGm?.entry || 'off';
+
+  useEffect(() => {
+    if (!onRoomEntered || !onAiGmDraft) return undefined;
+    const offA = onRoomEntered((e) => {
+      if (!e?.roomId) return;
+      const key = `${e.playerId || e.tokenId || '?'}-${e.roomId}-${e.at || Date.now()}`;
+      setFeed((f) => [{ key, ...e, at: e.at || Date.now(), draft: null, mode: entryRef.current, done: {} }, ...f].slice(0, FEED_CAP));
+    });
+    const offB = onAiGmDraft((d) => {
+      if (!d?.text && !d?.check) return;
+      const draft = { id: d.id, text: String(d.text || ''), check: d.check || null, at: d.at || Date.now(), live: d.mode ? d.mode === 'live' : entryRef.current === 'live', flags: d };
+      setFeed((f) => {
+        // the newest entry of this player into this room still waiting for its draft
+        const i = f.findIndex((x) => !x.draft && x.roomId === d.roomId && (!d.playerId || !x.playerId || x.playerId === d.playerId));
+        if (i >= 0) { const n = [...f]; n[i] = { ...n[i], draft, mode: draft.live ? 'live' : n[i].mode }; return n; }
+        return [{ key: `d-${d.id || Date.now()}`, playerId: d.playerId, roomId: d.roomId, roomName: d.roomName, name: d.name, at: d.at || Date.now(), draft, mode: draft.live ? 'live' : 'review', done: {} }, ...f].slice(0, FEED_CAP);
+      });
+      setUnseen((n) => n + 1);
+    });
+    return () => { offA?.(); offB?.(); };
+  }, [onRoomEntered, onAiGmDraft]);
+
+  const mark = useCallback((key, patch) => setFeed((f) => f.map((x) => (x.key === key ? { ...x, done: { ...x.done, ...patch } } : x))), []);
+  const editDraft = useCallback((key, text) => setFeed((f) => f.map((x) => (x.key === key && x.draft ? { ...x, draft: { ...x.draft, text } } : x))), []);
+  const dismiss = useCallback((key) => setFeed((f) => f.filter((x) => x.key !== key)), []);
+  const clear = useCallback(() => setFeed([]), []);
+  const markSeen = useCallback(() => setUnseen(0), []);
+  return { feed, unseen, markSeen, mark, editDraft, dismiss, clear };
+}
+
+/**
+ * AI BUILD state (DM). The build request can take 10–30 s on the local model, so it lives with RunView.
+ * → { plan, provider, density, setDensity, busy, startedAt, error, msg, selected:{[roomId]:bool}, toggle(id),
+ *     setAll(bool), build(), apply(), clear(), applying }
+ */
+export function useAiBuild({ gameCode }) {
+  const { aiBuild, aiBuildApply, aiBuildClear, aiBuildGet, table, board } = useGame();
+  const [plan, setPlan] = useState(null);
+  const [provider, setProvider] = useState('');
+  const [density, setDensityState] = useState(() => { const d = readLs(DENSITY_KEY, 'normal'); return DENSITIES.some(([, v]) => v === d) ? d : 'normal'; });
+  const [busy, setBusy] = useState(false);
+  const [applying, setApplying] = useState(false);
+  const [startedAt, setStartedAt] = useState(0);
+  const [error, setError] = useState('');
+  const [msg, setMsg] = useState('');
+  const [selected, setSelected] = useState({});
+  const seq = useRef(0);
+  const setDensity = useCallback((d) => { setDensityState(d); writeLs(DENSITY_KEY, d); }, []);
+  const take = useCallback((pl) => {
+    setPlan(pl || null);
+    setSelected(Object.fromEntries(roomsOf(pl).map((id) => [id, true])));
+  }, []);
+
+  /* A plan already stored for this session (built earlier, or applied: table.aiPlan) — restore it once. */
+  useEffect(() => {
+    if (!gameCode || !aiBuildGet) return undefined;
+    let live = true;
+    aiBuildGet().then((r) => { if (live && r?.plan && !seq.current) take(r.plan); }).catch(() => { /* server without AI BUILD yet */ });
+    return () => { live = false; };
+  }, [gameCode, aiBuildGet, take]);
+  useEffect(() => { if (!plan && table?.aiPlan?.rooms && !busy) take(table.aiPlan); }, [plan, table?.aiPlan, busy, take]);
+
+  const build = useCallback(async () => {
+    if (!aiBuild || busy) return;
+    const my = ++seq.current;
+    setBusy(true); setError(''); setMsg(''); setStartedAt(Date.now());
+    try {
+      const r = await aiBuild({ density, mapId: board?.mapId || undefined });
+      if (seq.current !== my) return;
+      take(r?.plan || null);
+      setProvider(r?.provider || '');
+      const n = roomsOf(r?.plan).length;
+      setMsg(n ? `PLAN READY — ${n} ROOM${n === 1 ? '' : 'S'}. REVIEW, THEN APPLY SELECTED.` : 'THE PLAN CAME BACK EMPTY.');
+    } catch (e) {
+      if (seq.current === my) setError(e.message || 'Build failed.');
+    } finally {
+      if (seq.current === my) setBusy(false);
+    }
+  }, [aiBuild, busy, density, board?.mapId, take]);
+
+  const apply = useCallback(async () => {
+    if (!plan || !aiBuildApply) return;
+    const rooms = Object.keys(selected).filter((id) => selected[id]);
+    if (!rooms.length) { setMsg('NOTHING SELECTED.'); return; }
+    setApplying(true); setError(''); setMsg('');
+    try {
+      const r = await aiBuildApply(plan, rooms);
+      const a = r?.applied || {};
+      const nr = Array.isArray(a.rooms) ? a.rooms.length : Number(a.rooms) || rooms.length;
+      const nt = Array.isArray(a.tokens) ? a.tokens.length : Number(a.tokens) || 0;
+      setMsg(`APPLIED ${nr} ROOM${nr === 1 ? '' : 'S'} · ${nt} TOKEN${nt === 1 ? '' : 'S'} ON THE MAP.`);
+    } catch (e) { setError(e.message || 'Apply failed.'); }
+    finally { setApplying(false); }
+  }, [plan, selected, aiBuildApply]);
+
+  const clear = useCallback(async () => {
+    if (!aiBuildClear) return;
+    setApplying(true); setError(''); setMsg('');
+    try {
+      const r = await aiBuildClear();
+      const n = Array.isArray(r?.removed) ? r.removed.length : Number(r?.removed) || 0;
+      seq.current += 1; setBusy(false);
+      setPlan(null); setSelected({}); setProvider('');
+      setMsg(`AI BUILD CLEARED — ${n} TOKEN${n === 1 ? '' : 'S'} REMOVED.`);
+    } catch (e) { setError(e.message || 'Clear failed.'); }
+    finally { setApplying(false); }
+  }, [aiBuildClear]);
+
+  const toggle = useCallback((id) => setSelected((m) => ({ ...m, [id]: !m[id] })), []);
+  const setAll = useCallback((v) => setSelected((m) => Object.fromEntries(Object.keys(m).map((id) => [id, v]))), []);
+  return { plan, provider, density, setDensity, busy, applying, startedAt, error, msg, selected, toggle, setAll, build, apply, clear };
+}
 
 /**
  * AI GM state, owned by RunView (so AUTO keeps watching the scene while the drawer is closed).
@@ -132,15 +274,19 @@ export function useAiGm({ gameCode, actIndex, sceneIndex, hasScenes, sceneTitle 
     if (auto && hasScenes && gameCode) generate('scene-open', { title: sceneTitle, fromAuto: true });
   }, [sceneKey, auto, hasScenes, gameCode, generate, sceneTitle]);
 
+  const rooms = useAiRooms();
+  const build = useAiBuild({ gameCode });
+
   return {
     status, text, setText, busy, local, note, kind, title, auto, setAuto, length, setLength,
     autoReady, clearReady: () => setAutoReady(false), generate, discard,
+    rooms, build,
   };
 }
 
 const KIND_LABEL = { 'scene-open': 'SCENE OPENING', describe: 'WHERE THEY ARE', npc: 'NPC', improv: 'IMPROVISED', 'recap-so-far': 'PREVIOUSLY' };
 
-export default function AiGmDrawer({ ai, pack, act, scene }) {
+function NarrateTab({ ai, pack, act, scene }) {
   const { narrate, speak } = useGame();
   const { universe } = useUniverse();
   const npcs = pack?.npcs || [];
@@ -260,6 +406,297 @@ export default function AiGmDrawer({ ai, pack, act, scene }) {
           Pick what to narrate. The draft lands here for you to edit; nothing reaches the {universe?.terms?.players ? universe.terms.players.toLowerCase() : 'table'} until you send it.
         </p>
       )}
+    </div>
+  );
+}
+
+/* ─── BUILD tab ───────────────────────────────────────────────── */
+const KIND_MARK = { item: 'ITEM', creature: 'CREATURE', npc: 'NPC', marker: 'MARKER', hazard: 'HAZARD' };
+
+export function checkLine(check, skillLabel) {
+  if (!check?.skill) return '';
+  const d = check.difficulty;
+  const diff = d === null || d === undefined || d === '' ? '' : ` (difficulty ${d})`;
+  return `ROLL ${String(skillLabel(check.skill)).toUpperCase()}${diff}${check.label ? `: ${check.label}` : ''}`;
+}
+
+function useSkillLabel() {
+  const { universe } = useUniverse();
+  const skills = universe?.rules?.skills || [];
+  return useCallback((key) => skills.find((x) => x.key === key)?.label || key, [skills]);
+}
+
+function Elapsed({ since }) {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => { const t = setInterval(() => setNow(Date.now()), 500); return () => clearInterval(t); }, []);
+  return <>{Math.max(0, Math.round((now - since) / 1000))} s</>;
+}
+
+function BuildTab({ ai }) {
+  const { board, mapDef, table } = useGame();
+  const appliedIds = new Set(table?.aiPlan?.mapId === board?.mapId ? table?.aiPlan?.applied || [] : []);
+  const b = ai.build;
+  const skillLabel = useSkillLabel();
+  const st = ai.status;
+  const hasMap = !!board?.mapId && !!mapDef;
+  const roomName = (id) => board?.rooms?.[id]?.name || mapDef?.rooms?.find((r) => r.id === id)?.name || id;
+  const aiTokens = Object.values(board?.tokens || {}).filter((t) => t.ai).length;
+  const planRooms = Object.entries(b.plan?.rooms || {});
+  const nSel = planRooms.filter(([id]) => b.selected[id]).length;
+  const planOther = b.plan?.mapId && board?.mapId && b.plan.mapId !== board.mapId;
+  const source = b.provider ? (b.provider === 'local' ? `model ${st?.model || 'local'}` : 'template (pack text)')
+    : st ? (st.ok ? `model ${st.model}` : 'template (no model)') : '…';
+  const [confirmClear, setConfirmClear] = useState(false);
+  useEffect(() => { if (!confirmClear) return undefined; const t = setTimeout(() => setConfirmClear(false), 4000); return () => clearTimeout(t); }, [confirmClear]);
+
+  return (
+    <div className="ag">
+      <p className="ag-status" role="status">
+        AI BUILD: {source} · {aiTokens} AI TOKEN{aiTokens === 1 ? '' : 'S'} ON THE BOARD
+        {hasMap ? <small className="ag-handoff">MAP: {mapDef.title || board.mapId}</small> : null}
+      </p>
+      {!hasMap && <p className="run-warn" role="status">Put a map on the table first (MAP drawer) — the build dresses the map that is up.</p>}
+
+      <div className="ag-row">
+        <span className="fs-label">DENSITY</span>
+        <div className="run-seg ag-seg" role="group" aria-label="Density">
+          {DENSITIES.map(([label, v]) => (
+            <button key={v} type="button" className={b.density === v ? 'on' : ''} aria-pressed={b.density === v} onClick={() => b.setDensity(v)}
+              title={v === 'sparse' ? 'about 1 token per 2 rooms' : v === 'dense' ? '2–3 tokens per room' : '1–2 tokens per room'}>{label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="ag-build-go">
+        <button type="button" className="fs-btn primary" disabled={!hasMap || b.busy || b.applying} onClick={b.build}>
+          {b.busy ? <><span className="ag-spin" aria-hidden="true" /> BUILDING… <Elapsed since={b.startedAt} /></> : planRooms.length ? 'REBUILD' : 'BUILD THIS MAP'}
+        </button>
+        {b.busy && <span className="nd-hint">The local model takes 10–30 s. You can close the drawer; the plan waits here.</span>}
+      </div>
+
+      {b.error && <p className="run-warn" role="status">{b.error}</p>}
+      {b.msg && <p className="ag-ready" role="status">{b.msg}</p>}
+      {planOther && <p className="run-warn">This plan was built for another map ({b.plan.mapId}). REBUILD for the map on the table.</p>}
+
+      {planRooms.length > 0 && (
+        <>
+          <div className="ag-row">
+            <span className="fs-label">PLAN · {planRooms.length} ROOMS{b.plan?.density ? ` · ${String(b.plan.density).toUpperCase()}` : ''}</span>
+            <span className="ag-mini">
+              <button type="button" className="run-chip" onClick={() => b.setAll(true)}>ALL</button>
+              <button type="button" className="run-chip" onClick={() => b.setAll(false)}>NONE</button>
+            </span>
+          </div>
+          <ul className="ag-plan">
+            {planRooms.map(([id, r]) => {
+              const on = !!b.selected[id];
+              const line = checkLine(r.check, skillLabel);
+              return (
+                <li key={id} className={`ag-proom${on ? '' : ' off'}`}>
+                  <div className="ag-proom-head">
+                    <b>{roomName(id)}</b>
+                    {r.mood && <span className="ag-mood">{r.mood}</span>}
+                    {appliedIds.has(id) && <span className="ag-onboard">ON THE BOARD</span>}
+                    <button type="button" className={`run-chip${on ? ' on' : ''}`} aria-pressed={on} onClick={() => b.toggle(id)}
+                      aria-label={`Apply ${roomName(id)}`}>APPLY {on ? 'ON' : 'OFF'}</button>
+                  </div>
+                  {r.description && <p className="ag-desc">{r.description}</p>}
+                  {(r.tokens || []).length > 0 && (
+                    <ul className="ag-toks">
+                      {r.tokens.map((t, i) => (
+                        <li key={i} className={`ag-tok k-${t.kind}`} title={t.note || ''}>
+                          {t.glyph && <svg viewBox="-12 -12 24 24" width="14" height="14" aria-hidden="true"><Glyph name={t.glyph} r={9} color="currentColor" /></svg>}
+                          <small>{KIND_MARK[t.kind] || String(t.kind || '').toUpperCase()}</small>
+                          <span>{t.label}</span>
+                          {t.hidden && <em>HIDDEN</em>}
+                          {t.locked && <em>LOCKED</em>}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {line && <p className="ag-check">{line}</p>}
+                  {(r.hazard || r.loot) && <p className="run-dim ag-extra">{r.hazard ? `HAZARD: ${r.hazard}` : ''}{r.hazard && r.loot ? ' · ' : ''}{r.loot ? `LOOT: ${r.loot}` : ''}</p>}
+                </li>
+              );
+            })}
+          </ul>
+          <div className="ag-send">
+            <button type="button" className="fs-btn primary" disabled={!nSel || b.busy || b.applying || !hasMap} onClick={b.apply}>
+              {b.applying ? 'APPLYING…' : `APPLY SELECTED (${nSel})`}
+            </button>
+            <button type="button" className="fs-btn" disabled={!hasMap || b.busy || b.applying} onClick={b.build}>REBUILD</button>
+          </div>
+        </>
+      )}
+
+      {(aiTokens > 0 || planRooms.length > 0) && (
+        <button type="button" className={`fs-btn ag-discard${confirmClear ? ' warn' : ''}`} disabled={b.applying}
+          onClick={() => { if (!confirmClear) { setConfirmClear(true); return; } setConfirmClear(false); b.clear(); }}>
+          {confirmClear ? `TAP AGAIN: REMOVE ${aiTokens} AI TOKEN${aiTokens === 1 ? '' : 'S'} + THE PLAN` : 'CLEAR AI BUILD'}
+        </button>
+      )}
+      {!planRooms.length && !b.busy && (
+        <p className="run-empty">BUILD THIS MAP asks the AI to dress every room of the map on the table — items, creatures, NPCs, hazards and a check per room. Nothing reaches the board until you APPLY; creatures and NPCs go on hidden.</p>
+      )}
+    </div>
+  );
+}
+
+/* ─── ROOMS tab ───────────────────────────────────────────────── */
+const ENTRY_MODES = [['OFF', 'off'], ['REVIEW', 'review'], ['LIVE', 'live']];
+const clock = (at) => { try { return new Date(at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); } catch { return ''; } };
+
+/** Live mode: what the server did for this entry, read from the draft flags + the session log. */
+function liveMarks(x, log, aiGm) {
+  const d = x.draft?.flags || {};
+  const done = d.sent && typeof d.sent === 'object' ? d.sent : null; // server/sessions.js reactToEntry (live)
+  const room = String(x.roomName || '').toLowerCase();
+  const after = (e) => e.at >= (x.at || 0) - 1500 && e.at <= (x.at || 0) + 180000;
+  const near = (log || []).filter(after);
+  const has = (fn) => near.some(fn);
+  const txt = (e) => String(e.text || '').toLowerCase();
+  const sent = !!done?.narrationId || has((e) => e.type === 'narration' && !txt(e).startsWith('voice:') && (!room || txt(e).includes(room)));
+  const spoken = !!done?.speechId || has((e) => e.type === 'narration' && txt(e).startsWith('voice:') && (!room || txt(e).includes(room)));
+  const roll = !!done?.rollRequestId || (!!x.draft?.check && has((e) => e.type === 'roll' && txt(e).startsWith('gm asked') && (!x.name || txt(e).includes(String(x.name).toLowerCase()))));
+  return { sent, spoken, roll, speechError: done?.speechError || '', voiceAsked: !!aiGm?.voice || !!done?.speechId || !!done?.speechError };
+}
+
+function RoomsTab({ ai }) {
+  const { table, aiGmSet, narrate, speak, rollRequest, players, sessionLog } = useGame();
+  const skillLabel = useSkillLabel();
+  const r = ai.rooms;
+  const aiGm = table?.aiGm || { entry: 'off', voice: false };
+  const entry = aiGm.entry || 'off';
+  const [note, setNote] = useState('');
+  const canSpeak = typeof speak === 'function';
+  const target = (() => { const t = readLs('muthur.voiceTarget', 'tv'); return ['tv', 'gm', 'both'].includes(t) ? t : 'tv'; })();
+  const { markSeen } = r;
+  useEffect(() => { markSeen(); }, [markSeen, r.unseen]);
+  useEffect(() => { if (!note) return undefined; const t = setTimeout(() => setNote(''), 4000); return () => clearTimeout(t); }, [note]);
+  const set = (patch) => aiGmSet?.({ entry, voice: !!aiGm.voice, ...patch }, (res) => { if (res?.error) setNote(`NOT SET: ${res.error}`); });
+  const who = (x) => x.name || players?.[x.playerId]?.character?.name || players?.[x.playerId]?.name || 'SOMEONE';
+  const ack = (key, field, label) => (res) => {
+    if (res?.error) { setNote(`NOT SENT: ${res.error}`); return; }
+    r.mark(key, { [field]: true }); setNote(label);
+  };
+  const sendCaption = (x) => narrate(x.draft.text.trim(), { title: x.roomName || '', mode: 'caption' }, ack(x.key, 'sent', 'SENT AS A CAPTION.'));
+  const sendSpeak = (x) => {
+    narrate(x.draft.text.trim(), { title: x.roomName || '', mode: 'caption' }, ack(x.key, 'sent', 'SENT AS A CAPTION.'));
+    if (canSpeak) speak(x.draft.text.trim(), { target, title: x.roomName || '' }, ack(x.key, 'spoken', 'SENT AND SPEAKING.'));
+  };
+  const askRoll = (x) => {
+    const c = x.draft.check;
+    rollRequest({ skill: c.skill, label: c.label || skillLabel(c.skill), difficulty: c.difficulty ?? null, note: c.note || '', to: x.playerId }, ack(x.key, 'roll', `ROLL ASKED OF ${who(x).toUpperCase()}.`));
+  };
+
+  return (
+    <div className="ag">
+      <div className="ag-row">
+        <span className="fs-label">ENTRY</span>
+        <div className="run-seg ag-seg" role="group" aria-label="AI reaction when a player enters a room">
+          {ENTRY_MODES.map(([label, v]) => (
+            <button key={v} type="button" className={entry === v ? 'on' : ''} aria-pressed={entry === v} onClick={() => set({ entry: v })}>{label}</button>
+          ))}
+        </div>
+      </div>
+      <div className="ag-auto">
+        <button type="button" className={`run-chip${aiGm.voice ? ' on' : ''}`} aria-pressed={!!aiGm.voice} onClick={() => set({ voice: !aiGm.voice })}>VOICE {aiGm.voice ? 'ON' : 'OFF'}</button>
+        <span className="nd-hint">
+          {entry === 'off' ? 'Players can still walk through doors (EXITS on their phone); the AI stays quiet.'
+            : entry === 'review' ? 'The AI drafts what they find; you send it (and ask the roll).'
+              : `The AI narrates to the table by itself${aiGm.voice ? ', speaks it' : ''} and asks the room's roll.`}
+        </span>
+      </div>
+      {note && <p className="run-dim" role="status">{note}</p>}
+
+      {r.feed.length === 0 ? (
+        <p className="run-empty">Room entries show up here — when a player taps ENTER on their phone, or you drag a player's token into another room.</p>
+      ) : (
+        <ul className="ag-feed">
+          {r.feed.map((x) => {
+            const d = x.draft;
+            const live = x.mode === 'live' || d?.live;
+            const m = live ? liveMarks(x, sessionLog, aiGm) : null;
+            const ready = !!d?.text?.trim();
+            return (
+              <li key={x.key} className="ag-entry">
+                <div className="ag-row">
+                  <span className="ag-entry-head"><b>{who(x)}</b> → {x.roomName || x.roomId}{x.visits > 1 ? <small> · visit {x.visits}</small> : null}{x.by === 'gm' ? <small> · your drag</small> : null}</span>
+                  <span className="run-dim">{clock(x.at)}{d?.flags?.provider ? ` · ${d.flags.provider === 'local' ? 'local AI' : 'pack text'}` : ''}</span>
+                </div>
+                {!d && (x.mode === 'off'
+                  ? <p className="run-dim">ENTRY is OFF — no AI reaction.</p>
+                  : <p className="run-dim"><span className="ag-spin" aria-hidden="true" /> THE AI IS WRITING…</p>)}
+                {d && (
+                  <>
+                    <textarea className="ag-text ag-text-sm" value={d.text} rows={4} readOnly={live}
+                      onChange={(e) => r.editDraft(x.key, e.target.value)} aria-label={`What ${who(x)} finds in ${x.roomName || 'the room'}`} />
+                    {d.check && <p className="ag-check">{checkLine(d.check, skillLabel)}</p>}
+                    {d.flags?.warning && <p className="run-warn">{d.flags.warning}</p>}
+                    {live ? (
+                      <p className="ag-marks">
+                        <span className={m.sent ? 'on' : ''}>SENT</span>
+                        {m.voiceAsked ? <span className={m.speechError ? 'err' : m.spoken ? 'on' : ''} title={m.speechError || undefined}>{m.speechError ? 'VOICE FAILED' : 'SPOKEN'}</span> : null}
+                        {d.check ? <span className={m.roll ? 'on' : ''}>ROLL ASKED</span> : null}
+                      </p>
+                    ) : (
+                      <div className="ag-send">
+                        <button type="button" className="fs-btn primary" disabled={!ready} onClick={() => sendCaption(x)}>{x.done.sent ? 'SENT ✓' : 'SEND CAPTION'}</button>
+                        <button type="button" className="fs-btn" disabled={!ready || !canSpeak} onClick={() => sendSpeak(x)}>{x.done.spoken ? 'SPOKEN ✓' : 'SEND + SPEAK'}</button>
+                        {d.check && x.playerId && (
+                          <button type="button" className="fs-btn ag-ask" onClick={() => askRoll(x)}>
+                            {x.done.roll ? 'ROLL ASKED ✓' : `ASK ${who(x).toUpperCase()} TO ROLL ${String(skillLabel(d.check.skill)).toUpperCase()}`}
+                          </button>
+                        )}
+                        <button type="button" className="fs-btn ag-discard" onClick={() => r.dismiss(x.key)}>DISMISS</button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      {r.feed.length > 0 && <button type="button" className="run-chip ag-clearfeed" onClick={r.clear}>CLEAR FEED</button>}
+    </div>
+  );
+}
+
+/* ─── Drawer: NARRATE | BUILD | ROOMS ─────────────────────────── */
+const TABS = [['narrate', 'NARRATE'], ['build', 'BUILD'], ['rooms', 'ROOMS']];
+
+export default function AiGmDrawer({ ai, pack, act, scene }) {
+  const [tab, setTabState] = useState(() => { const t = readLs(TAB_KEY, 'narrate'); return TABS.some(([id]) => id === t) ? t : 'narrate'; });
+  const setTab = (t) => { setTabState(t); writeLs(TAB_KEY, t); };
+  const unseen = ai.rooms?.unseen || 0;
+  const label = useMemo(() => ({
+    narrate: 'NARRATE',
+    build: ai.build?.busy ? 'BUILD …' : 'BUILD',
+    rooms: unseen && tab !== 'rooms' ? `ROOMS ● ${unseen}` : 'ROOMS',
+  }), [ai.build?.busy, unseen, tab]);
+  const onKey = (e) => {
+    const i = TABS.findIndex(([id]) => id === tab);
+    const n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: TABS.length - 1 }[e.key];
+    if (n === undefined) return;
+    e.preventDefault();
+    const next = TABS[(n + TABS.length) % TABS.length][0];
+    setTab(next);
+    requestAnimationFrame(() => e.currentTarget?.querySelector?.(`[data-tab="${next}"]`)?.focus());
+  };
+  return (
+    <div className="ag-wrap">
+      <div className="md-tabs ag-tabs" role="tablist" aria-label="AI GM" onKeyDown={onKey}>
+        {TABS.map(([id]) => (
+          <button key={id} type="button" role="tab" data-tab={id} aria-selected={tab === id} tabIndex={tab === id ? 0 : -1}
+            className={tab === id ? 'on' : ''} onClick={() => setTab(id)}>{label[id]}</button>
+        ))}
+      </div>
+      <div role="tabpanel" aria-label={label[tab]}>
+        {tab === 'narrate' && <NarrateTab ai={ai} pack={pack} act={act} scene={scene} />}
+        {tab === 'build' && ai.build && <BuildTab ai={ai} />}
+        {tab === 'rooms' && ai.rooms && <RoomsTab ai={ai} />}
+      </div>
     </div>
   );
 }

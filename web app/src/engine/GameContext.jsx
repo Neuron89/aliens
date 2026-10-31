@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useUniverse } from './UniverseContext';
+import { apiHeaders } from './apiToken';
 
 const GameContext = createContext(null);
 export const useGame = () => useContext(GameContext);
@@ -103,7 +104,10 @@ const TABLE_EVENTS = ['handout-received', 'clue-revealed', 'clock-ticked', 'new-
   // builder gaps
   'determination-spent',
   // table actions: GM asks for a roll → { request: { id, skill, label, difficulty, note, at } }
-  'roll-requested'];
+  'roll-requested',
+  // AI GM wave 2 (DM only): a pc entered a room → { playerId, tokenId, roomId, fromRoomId, name, roomName, at };
+  // the AI's reaction → { id, kind:'enter-room', roomId, roomName, playerId, text, check|null, at }
+  'room-entered', 'ai-gm-draft'];
 const clientUid = () => `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 
 export function GameProvider({ children }) {
@@ -782,6 +786,38 @@ export function GameProvider({ children }) {
   /** DM: rollRequest({ skill, label?, difficulty?, note?, to: 'all'|playerId|[playerIds] }) → ack { success, id, sent[] } */
   const rollRequest = useCallback((req, cb) => emitTable('roll-request', { ...req }, cb), [emitTable]);
   const rollRequestCancel = useCallback((id, cb) => emitTable('roll-request-cancel', { id }, cb), [emitTable]);
+  /* ─── AI GM wave 2 (docs/AI_GM.md "AI BUILD" / "Room entry") ───
+     aiGmSet({ entry:'off'|'review'|'live', voice:bool }, cb) → `ai-gm-set` (DM) — table.aiGm follows by table-state.
+     onRoomEntered(fn) / onAiGmDraft(fn) → unsubscribe (one-shot DM events, see TABLE_EVENTS).
+     aiBuild({ density, mapId? }) → Promise<{ plan, provider }> · aiBuildApply(plan, rooms?) → { applied, plan }
+     aiBuildClear() → { removed } · aiBuildGet() → { plan|null }. Rejects with Error(message) on HTTP errors. */
+  const aiGmSet = useCallback((opts, cb) => {
+    const o = opts || {};
+    setTable((t) => (t ? { ...t, aiGm: { ...(t.aiGm || {}), ...o } } : t));
+    emitTable('ai-gm-set', o, cb);
+  }, [emitTable]);
+  const onRoomEntered = useCallback((fn) => on('room-entered', fn), [on]);
+  const onAiGmDraft = useCallback((fn) => on('ai-gm-draft', fn), [on]);
+  const gmHttp = useCallback(async (method, path, body) => {
+    const code = codeRef.current || '';
+    const saved = readJSON(SESSION_KEY, {}) || {};
+    const dmToken = dmTokenFor(code) || (saved.code === code ? saved.dmToken : '') || '';
+    const get = method === 'GET';
+    const url = get ? `${path}?code=${encodeURIComponent(code)}&dmToken=${encodeURIComponent(dmToken)}` : path;
+    const res = await fetch(url, {
+      method,
+      headers: apiHeaders(get ? { Accept: 'application/json' } : { 'Content-Type': 'application/json', Accept: 'application/json' }),
+      body: get ? undefined : JSON.stringify({ code, dmToken, ...body }),
+    });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(res.status === 403 ? 'Not authorized: this tablet has no GM token for the session (rejoin as GM).' : (j.message || j.error || `HTTP ${res.status}`));
+    return j;
+  }, []);
+  const aiBuild = useCallback((opts) => gmHttp('POST', '/api/gm/build', { density: opts?.density || 'normal', ...(opts?.mapId ? { mapId: opts.mapId } : {}) }), [gmHttp]);
+  const aiBuildApply = useCallback((plan, rooms) => gmHttp('POST', '/api/gm/build/apply', { ...(plan ? { plan } : {}), ...(rooms ? { rooms } : {}) }), [gmHttp]);
+  const aiBuildClear = useCallback(() => gmHttp('POST', '/api/gm/build/clear', {}), [gmHttp]);
+  const aiBuildGet = useCallback(() => gmHttp('GET', '/api/gm/build'), [gmHttp]);
+
   /** resolveSubmission(id, 'reject'|'assigned', reason?) */
   const resolveSubmission = useCallback((id, action, reason, cb) => emitTable('submission-resolve', { id, action, reason }, cb), [emitTable]);
 
@@ -797,6 +833,8 @@ export function GameProvider({ children }) {
   /** Anonymous X-card / pause. */
   const requestPause = useCallback((cb) => socketRef.current?.emit('pause-request', {}, cb), []);
   const submitCharacter = useCallback((character, cb) => socketRef.current?.emit('character-submit', { character }, cb), []);
+  /** Player: walk your token through an unlocked door → ack { success, roomId, name } | { error } */
+  const playerEnterRoom = useCallback((roomId, cb) => socketRef.current?.emit('player-enter-room', { roomId }, cb), []);
 
   /* ─── Mechanics wave (server/mechanics.js) ───
      DM: gmRoll(roll, who) secret roll · supplySet(playerId, supply) · supplyRoll(key, playerId?) ·
@@ -1079,6 +1117,15 @@ export function GameProvider({ children }) {
     tokenTakeUndo,
     rollRequest,
     rollRequestCancel,
+    // AI GM wave 2: AI BUILD + room-entry loop
+    playerEnterRoom,
+    aiGmSet,
+    onRoomEntered,
+    onAiGmDraft,
+    aiBuild,
+    aiBuildApply,
+    aiBuildClear,
+    aiBuildGet,
     // Mechanics wave
     gmRoll,
     supplySet,

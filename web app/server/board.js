@@ -318,7 +318,7 @@ export function viewFor(board, role) {
   const tokens = nullObj();
   for (const [id, t] of Object.entries(board.tokens)) {
     if (!isTokenVisible(board, t)) continue;
-    const { note, hidden, hp, hpMax, ref, ...pub } = t; // eslint-disable-line no-unused-vars
+    const { note, hidden, hp, hpMax, ref, ai, aiRoom, aiShow, ...pub } = t; // eslint-disable-line no-unused-vars
     tokens[id] = pub;
   }
   const rooms = nullObj();
@@ -350,4 +350,102 @@ export const isTokenId = (id) => isSafeKey(id) && TOKEN_ID_RE.test(id);
 /** Spawn point for a PC on a level (falls back to the map's default, then centre). */
 export function spawnPoint(mapDef, level) {
   return mapDef?.spawn?.levels?.[level]?.pc || mapDef?.spawn?.pc || [0.5, 0.5];
+}
+
+/* ─── Room geometry + doors (AI BUILD placement, player-enter-room) ─── */
+
+/** Bounding box { x0, y0, x1, y1 } of a shape. */
+export function shapeBounds(s) {
+  if (s.type === 'rect') return { x0: s.x, y0: s.y, x1: s.x + s.w, y1: s.y + s.h };
+  let x0 = 1; let y0 = 1; let x1 = 0; let y1 = 0;
+  for (const [x, y] of s.points) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+  return { x0, y0, x1, y1 };
+}
+
+/** Centroid [x, y] of a room's shape (area-weighted for polygons), or null for an unknown room. */
+export function roomCentroid(mapDef, roomId) {
+  const room = (mapDef?.rooms || []).find((r) => r.id === roomId);
+  if (!room?.shape) return null;
+  const s = room.shape;
+  if (s.type === 'rect') return [s.x + s.w / 2, s.y + s.h / 2];
+  const p = s.points;
+  let a = 0; let cx = 0; let cy = 0;
+  for (let i = 0, j = p.length - 1; i < p.length; j = i++) {
+    const f = p[j][0] * p[i][1] - p[i][0] * p[j][1];
+    a += f; cx += (p[j][0] + p[i][0]) * f; cy += (p[j][1] + p[i][1]) * f;
+  }
+  if (Math.abs(a) < 1e-12) return [p.reduce((n, q) => n + q[0], 0) / p.length, p.reduce((n, q) => n + q[1], 0) / p.length];
+  return [cx / (3 * a), cy / (3 * a)];
+}
+
+/** Doors leaving a room (either direction): [{ to, locked }] — one entry per neighbour,
+ *  unlocked when ANY door between the two rooms is unlocked. */
+export function doorsFrom(mapDef, roomId) {
+  const out = new Map();
+  for (const d of mapDef?.doors || []) {
+    const to = d.from === roomId ? d.to : d.to === roomId ? d.from : null;
+    if (!to || to === roomId) continue;
+    const prev = out.get(to);
+    out.set(to, { to, locked: prev ? prev.locked && !!d.locked : !!d.locked });
+  }
+  return [...out.values()];
+}
+
+/** True when a door joins rooms a and b (opts.unlocked: only through an unlocked door). */
+export function isAdjacent(mapDef, a, b, { unlocked = false } = {}) {
+  const d = doorsFrom(mapDef, a).find((x) => x.to === b);
+  return !!d && (!unlocked || !d.locked);
+}
+
+/** Small deterministic PRNG (mulberry32) for placement jitter / template plans. */
+export function seededRandom(seed = 1) {
+  let s = (Number(seed) >>> 0) || 1;
+  return () => {
+    s = (s + 0x6d2b79f5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * A point [x, y] inside `roomId` that hit-tests back to that room (roomAt on its level — a
+ * smaller room nested inside never steals it), as far as possible from `avoid` points.
+ * The centroid is preferred when nothing is in the way; `jitter` (fraction of the room's
+ * size, default 0.08) nudges the result with `rand` (Math.random by default).
+ * Returns null for an unknown room (or one with no hittable point).
+ */
+export function pointInRoom(mapDef, roomId, { avoid = [], rand = Math.random, jitter = 0.08, minGap = 0.025 } = {}) {
+  const room = (mapDef?.rooms || []).find((r) => r.id === roomId);
+  if (!room?.shape) return null;
+  const level = room.level || null;
+  const hits = (x, y) => roomAt(mapDef, x, y, level) === roomId;
+  const { x0, y0, x1, y1 } = shapeBounds(room.shape);
+  const w = x1 - x0; const h = y1 - y0;
+  const c = roomCentroid(mapDef, roomId);
+  const cands = [];
+  if (c && hits(c[0], c[1])) cands.push(c);
+  const N = 6;
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+    const x = x0 + w * ((i + 0.5) / N); const y = y0 + h * ((j + 0.5) / N);
+    if (hits(x, y)) cands.push([x, y]);
+  }
+  if (!cands.length) return null;
+  const gap = (p) => (avoid.length ? Math.min(...avoid.map((q) => Math.hypot(p[0] - q[0], p[1] - q[1]))) : Infinity);
+  let best = cands[0];
+  if (gap(best) < Math.max(minGap, Math.min(w, h) * 0.3)) {
+    let bestGap = -1;
+    for (const p of cands) {
+      // prefer far from the others, then close to the centre (so tokens do not hug the walls)
+      const score = Math.min(gap(p), Math.max(w, h)) - (c ? Math.hypot(p[0] - c[0], p[1] - c[1]) * 0.25 : 0);
+      if (score > bestGap) { bestGap = score; best = p; }
+    }
+  }
+  for (let k = 0; k < 6; k++) {
+    const x = best[0] + (rand() - 0.5) * 2 * jitter * w;
+    const y = best[1] + (rand() - 0.5) * 2 * jitter * h;
+    if (hits(x, y) && gap([x, y]) >= Math.min(gap(best), minGap)) return [Math.round(x * 1e5) / 1e5, Math.round(y * 1e5) / 1e5];
+  }
+  return [Math.round(best[0] * 1e5) / 1e5, Math.round(best[1] * 1e5) / 1e5];
 }

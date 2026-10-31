@@ -38,7 +38,8 @@ web app/
     generate.js                 # POST /api/generate (SSE), GET /api/generate/status
     portrait.js                 # /api/portrait: character portraits via the LAN ComfyUI (jobs, status, list, images)
     recap.js                    # /api/recap: the "ship's log" (public log only; Claude when ANTHROPIC_API_KEY is set, else a template)
-    gm.js                       # /api/gm: AI GM narration drafts (local OpenAI-compatible model via GM_URL, else the pack text); gmContext() is pure
+    gm.js                       # /api/gm: AI GM narration drafts (local OpenAI-compatible model via GM_URL, else the pack text); gmContext() is pure; + /api/gm/build* routes
+    aibuild.js                  # AI BUILD: dressing plan for the board map (model JSON → strict validation, template fallback), apply / clear AI tokens
     vram.js                     # GPU hand-off: ComfyUI /free before a narration, Ollama unload before a portrait
     generator/                  # core.js prompt.js params.js params.schema.json outputSchema.js universes.js env.js __mock__.js
     schema/
@@ -489,6 +490,45 @@ lists `ambient`.
     `refreshTts()`, `speak(text, opts, cb)`, `speakStop(cb)`, `onSpeak` / `onSpeakPart` / `onSpeakDone` /
     `onSpeakStop`, `voiceLive`. Voice prefs: localStorage `muthur.voiceTarget` ('off'|'tv'|'gm'|'both'),
     `muthur.voice` (`{ [universe]: { voice, speed } }`, default `theme.voice`). Test: `test-tts.mjs` (mock server).
+  - **AI BUILD (wave 2).** REST under `/api/gm` (`server/gm.js` routes, `server/aibuild.js` work), all with
+    `{ code, dmToken }` (403 otherwise): `POST /build { mapId?, density:'sparse'|'normal'|'dense' }` → JSON
+    `{ plan, provider:'local'|'template'|'mixed', model, warning? }`, or with `Accept: text/event-stream` SSE
+    `status { provider, model, batches, rooms }` · `progress { batch, of, rooms, stage:'asking'|'done', fallback? }` ·
+    `done { plan, provider, model, warning? }` · `error { message }` (400 bad_density / no_map, 429 busy). The model is
+    asked per batch of ≤ 10 rooms with `response_format: json_object`; fenced / prose-wrapped JSON is extracted, an
+    invalid answer retried once, then that batch comes from the template (threats → hidden creatures in far rooms,
+    npcs → hidden npc tokens, keyLocations → markers, universe items). Plan
+    `{ mapId, mapTitle, density, at, provider, model, applied:[roomId], rooms: { [roomId]: { name, level?, mood,
+    description, tokens:[{ kind:'item'|'creature'|'npc'|'marker'|'hazard', label, sub, glyph, hidden, locked, note }],
+    check:{ skill, difficulty, label, success, failure }|null, hazard, loot } } }` — validated strictly (known rooms,
+    kinds, TokenChip glyphs (unknown → kind default), the universe's skill keys, ALIEN difficulty −3..+3 / DUNE 1..5,
+    ≤ 4 tokens per room, ≤ 60 total, ≤ 1 creature per 3 rooms, none in a spawn room) and stored as `table.aiPlan`
+    (GM-only). `POST /build/apply { plan?, rooms?:[roomId], keep? }` (plan omitted = the stored one; a sent plan is
+    re-validated; 409 map_mismatch) → `{ applied: { rooms, tokens, roomIds, skipped }, plan }`: tokens placed at
+    spread points inside each room (`board.pointInRoom`), tagged `ai:true`, `aiRoom`, `aiShow` (planned visible);
+    re-applying a room replaces its AI tokens unless `keep`. `POST /build/clear` → `{ removed }` (AI tokens + plan).
+    `GET /build?code=&dmToken=` → `{ plan | null }`. `viewFor` strips `note`, `hidden`, `ai`, `aiRoom`, `aiShow` from
+    board/player tokens. Test: `test-aibuild.mjs`.
+  - **Room entry loop (wave 2).** Player: `player-enter-room { roomId }` → `{ success, roomId, name }` | `{ error }`
+    ('YOU ARE NOT ON THE MAP.', 'UNKNOWN ROOM.', 'ALREADY HERE.', 'NOT ADJACENT.', 'DOOR LOCKED.', 'RATE LIMITED.',
+    'NO MAP.'): the player's own PC token walks through a door (mapDef.doors, either direction, same level) that is not
+    locked; from outside every room only into the spawn room; any room the GM flagged `board-room-set { open:true }`
+    (visible to players as `board.rooms[id].open`) is reachable on its level. 1 accepted move per 2 s per player. The
+    token lands on a free point inside the room, the room is revealed (fog), the board is pushed. A GM drag of a PC
+    token (`board-token-move` / `board-token-upsert`) that settles in another room for 600 ms (`ROOM_ENTER_DEBOUNCE_MS`)
+    counts too (one event for the final room). Each entry: `table.visitedRooms[roomId]++` (GM-only), the AI BUILD's
+    planned-visible tokens there are un-hidden on the first visit, a `fog` log line "<name> enters <room>", and to the
+    DM `room-entered { playerId, tokenId, roomId, fromRoomId, name, roomName, visits, by:'player'|'gm', at }`.
+    DM: `ai-gm-set { entry?:'off'|'review'|'live', voice?:bool }` → `{ success, aiGm }` (persisted `table.aiGm`;
+    players' table view carries `aiGm: { entry }` only). With entry ≠ off the server writes an `enter-room` narration
+    (gm.js `generateEnterRoom`: room, applied plan description / visible tokens / hazard / check, who entered, who is
+    there, visit count, scene) and emits to the DM `ai-gm-draft { id, kind:'enter-room', mode, roomId, roomName,
+    playerId, tokenId, name, text, check:{ skill, difficulty, label, note, success?, failure? }|null, provider, model,
+    visits, at, sent? }` (check = the applied plan's check, first visit only). Review: draft only. Live: the server
+    itself sends the caption (`narrate`, title = room name; + voice with the universe narrator when `aiGm.voice`) and,
+    with a check, a `roll-request` to the entering player; the draft carries `sent: { narrationId, speechId,
+    speechError?, rollRequestId }`. `narrate`, `narrate-speak` and `roll-request` share `narrateFor` / `speakFor` /
+    `rollRequestFor` (also on `sessions.sessionApi` for HTTP routers). Test: `test-roomloop.mjs`.
   - Polish wave B: `test-polish-b.mjs` (the CREW drawer's `tracker-set` path, `burnSec` sanitising, ambience aliases,
     recap template non-repetition, content fixes).
 

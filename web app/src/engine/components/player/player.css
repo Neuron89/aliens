@@ -287,3 +287,14 @@ html.fx-reduced .pp-sheet, html.fx-reduced .pp-drawer { animation: none; }
   .pp-act .pp-icon { display: none; }
   .pp-link { font-size: 0; gap: 0; }
 }
+
+/* EXITS (TablePane — room entry, docs/AI_GM.md "Room entry") */
+.pp-exit-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.pp-exit { width: 100%; min-height: 48px; display: flex; align-items: center; gap: 0.7rem; justify-content: flex-start; text-align: left; padding: 0 0.9rem; }
+.pp-exit-verb { flex: 0 0 auto; min-width: 5.2em; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; }
+.pp-exit-room { min-width: 0; flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.06em; }
+.pp-exit.locked { border-style: dashed; color: var(--text-dim); }
+.pp-exit.locked .pp-exit-verb { color: var(--warn); }
+.pp-entered { margin: 0; padding: 0.45rem 0.6rem; border: 1px solid var(--accent); background: var(--accent-glow); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; }
+.pp-entered.err { border-color: var(--warn); background: transparent; color: var(--warn); }
+.pp-exit-ai { font-size: 0.8rem; }

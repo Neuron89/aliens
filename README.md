@@ -18,7 +18,7 @@ It is an unofficial fan tool; see [Content and legal](#content-and-legal).
 
 **Friends play-testing:** see [PLAYTEST.md](PLAYTEST.md) to install with one command.
 
-**Remote play:** friends can play from anywhere at https://muthur.kys-media.com (server on CT 107 behind the Cloudflare tunnel, gated by Cloudflare Access) — see [docs/REMOTE_PLAY.md](docs/REMOTE_PLAY.md) for setup, updating (`/opt/muthur/update.sh`) and security notes.
+**Remote play:** friends can play from anywhere at https://tabletop.kys-media.com (server on CT 107 behind the Cloudflare tunnel, gated by Cloudflare Access) — see [docs/REMOTE_PLAY.md](docs/REMOTE_PLAY.md) for setup, updating (`/opt/muthur/update.sh`) and security notes.
 
 ## Universes
 

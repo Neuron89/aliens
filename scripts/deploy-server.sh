@@ -25,7 +25,7 @@ if [ ! -d "$REPO_DIR/.git" ]; then
 else
   git -C "$REPO_DIR" fetch --depth 1 origin "$BRANCH"
   git -C "$REPO_DIR" checkout -q "$BRANCH"
-  git -C "$REPO_DIR" merge --ff-only FETCH_HEAD
+  git -C "$REPO_DIR" reset -q --hard FETCH_HEAD   # shallow clone: a plain ff-merge sees "unrelated histories"
 fi
 
 echo "== npm ci =="

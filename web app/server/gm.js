@@ -27,6 +27,25 @@
      With `Accept: application/json`: 200 { text, provider, model, kind, words, warning? }.
      A client disconnect aborts the upstream request.
 
+   Wave 2 (docs/AI_GM.md "AI BUILD" / "Room entry"):
+   - kind 'enter-room' (ENTER_ROOM; not in KINDS — the /narrate route accepts it with a roomId):
+     a player character steps into a room. Context = the room, the applied AI BUILD plan for it
+     (description, visible tokens, hazard, the check), who entered, who else is there, how often
+     the room was visited, the current scene. generateEnterRoom() → { text, check|null, … }:
+     check = the plan's check for that room on the FIRST visit only. Used by sessions.js
+     (room-entered → review draft / live narration).
+   - AI BUILD routes (server/aibuild.js does the work):
+     POST /api/gm/build { code, dmToken, mapId?, density:'sparse'|'normal'|'dense' }
+          → JSON { plan, provider, model, warning? } (default), or with Accept: text/event-stream
+            event: status { provider, model, batches, rooms } · event: progress { batch, of, rooms }
+            event: done { plan, provider, model, warning? } · event: error { message }
+          The plan is stored as table.aiPlan (applied: []) — GM-only.
+     POST /api/gm/build/apply { code, dmToken, plan?, rooms?:[roomId], keep? }
+          → { applied: { rooms, tokens, roomIds, skipped }, plan }   (plan omitted = the stored one)
+     POST /api/gm/build/clear { code, dmToken } → { removed }
+     GET  /api/gm/build?code=&dmToken= → { plan | null }
+     Errors: 403 not_authorized · 400 bad_density / no_map / bad_plan / no_plan · 409 map_mismatch · 429 busy.
+
    The GM always reviews the draft before anything reaches the TV or phones:
    this module never emits to sockets. The context (gmContext) is built on the
    server from the session itself: the pack (runtime override or bundled),
@@ -46,10 +65,15 @@ import { loadUniverseCore, bundledPackFiles } from './generator/universes.js';
 import { CONTENT_DIR } from './content.js';
 import { publicLog, publicFacts } from './recap.js';
 import { releaseForLlm, vramReach, comfyBase, ollamaRoot } from './vram.js';
+import * as aibuild from './aibuild.js';
 
 loadEnv();
 
 export const KINDS = Object.freeze(['scene-open', 'describe', 'npc', 'improv', 'recap-so-far']);
+export const ENTER_ROOM = 'enter-room';
+/** Every kind gmContext understands (KINDS = the drawer's five buttons; enter-room comes from the room loop). */
+export const ALL_KINDS = Object.freeze([...KINDS, ENTER_ROOM]);
+export const ENTER_ROOM_WORDS = 80;
 export const DEFAULT_WORDS = 110;
 export const MIN_MAX_WORDS = 40;
 export const MAX_MAX_WORDS = 200;
@@ -148,7 +172,37 @@ const TASKS = {
   npc: 'Write what the named NPC says aloud to the characters right now, in character, as first-person speech. Words only: no narration around it, no quotation marks, no name tag.',
   improv: 'The game master needs narration for something that just happened at the table (described below). Narrate it in the moment, grounded in the current scene.',
   'recap-so-far': 'Tell what has happened so far tonight, for a player who has just joined: a short spoken "previously" that orients them and ends in the present moment. Use only the public record.',
+  'enter-room': 'A player character has just stepped into a room. Narrate what they perceive in the first moments: the space, the light and sound, what stands out, and the people or things the context marks as visible. On a return visit keep it brief and note only what has changed. If the context says something unseen is here, let the narration unsettle without naming or confirming it. If a test is coming, build toward the danger or difficulty it covers, but never mention dice, skills or tests. End on a moment that invites the player to act.',
 };
+
+/** Room-entry facts for the enter-room kind (GM-only plan material is flagged in the prompt). */
+export function enterRoomFacts(game, { roomId, playerId, visits } = {}) {
+  const b = game?.board || {};
+  const md = game?.mapDef;
+  const room = arr(md?.rooms).find((r) => r.id === roomId) || null;
+  if (!room) return null;
+  const st = b.rooms?.[roomId] || {};
+  const name = clip(st.name || room.name || roomId, 80);
+  const players = playersOf(game);
+  const tokens = Object.values(b.tokens || {}).filter((t) => t && typeof t === 'object');
+  const owner = playerId ? players.find((p) => p.id === playerId) : null;
+  const pcTok = tokens.find((t) => t.kind === 'pc' && playerId && t.ownerPlayerId === playerId);
+  const who = clip(owner?.character?.name || pcTok?.label || owner?.name || 'Someone', 60);
+  const here = tokens.filter((t) => t.roomId === roomId);
+  const others = here.filter((t) => t.kind === 'pc' && !t.hidden && t !== pcTok).map((t) => {
+    const o = t.ownerPlayerId ? players.find((p) => p.id === t.ownerPlayerId) : null;
+    return clip(o?.character?.name || t.label || o?.name || 'Unknown', 60);
+  });
+  const visible = here.filter((t) => t.kind !== 'pc' && !t.hidden && (t.label || '').trim()).map((t) => ({ label: clip(t.label, 60), kind: t.kind })).slice(0, 10);
+  const unseen = here.filter((t) => t.kind !== 'pc' && t.hidden && (t.label || '').trim()).map((t) => ({ label: clip(t.label, 60), kind: t.kind })).slice(0, 6);
+  const plan = game?.table?.aiPlan;
+  const pr = plan && plan.mapId === b.mapId && arr(plan.applied).includes(roomId) ? plan.rooms?.[roomId] || null : null;
+  const v = Number.isInteger(visits) && visits > 0 ? visits : 1;
+  return {
+    roomId, name, who, others, visible, unseen, visits: v, plan: pr,
+    check: pr?.check && v === 1 ? pr.check : null,
+  };
+}
 
 /* ── Context ───────────────────────────────────────────────────── */
 
@@ -193,14 +247,15 @@ export function currentScene(game, pack) {
  * The prompt carries the pack's PUBLIC-facing and stage-direction text only; see the header for what is excluded.
  */
 export function gmContext(game, kind, opts = {}) {
-  const k = KINDS.includes(kind) ? kind : 'scene-open';
-  const maxWords = clampWords(opts.maxWords);
+  const k = ALL_KINDS.includes(kind) ? kind : 'scene-open';
+  const maxWords = clampWords(opts.maxWords ?? (k === ENTER_ROOM ? ENTER_ROOM_WORDS : undefined));
   const minWords = Math.max(20, Math.round(maxWords * 0.6));
   const pack = opts.pack || null;
   const universe = opts.universe || { id: game?.universeId };
   const persona = personaFor(universe?.id || game?.universeId);
   const { act, scene } = currentScene(game, pack);
   const npc = k === 'npc' ? findNpc(pack, opts.npcId) : null;
+  const room = k === ENTER_ROOM ? enterRoomFacts(game, opts) : null;
   const prompt = clip(opts.prompt, PROMPT_MAX);
   const facts = publicFacts(game);
   const bf = boardFacts(game);
@@ -265,6 +320,18 @@ export function gmContext(game, kind, opts = {}) {
     if (npc.behavior) L.push(`Manner: ${clip(npc.behavior, 500)}`);
     if (npc.agenda) L.push(`What they want (GM only, do not state it outright): ${clip(npc.agenda, 400)}`);
   }
+  if (room) {
+    L.push('');
+    L.push(`Who enters: ${room.who}`);
+    L.push(`The room: ${room.name}${room.visits > 1 ? ` (they have been here before: visit ${room.visits})` : ' (first time anyone enters)'}`);
+    if (room.plan?.description) L.push(`Room description to build on: ${clip(room.plan.description, 600)}`);
+    if (room.plan?.mood) L.push(`Mood: ${clip(room.plan.mood, 80)}`);
+    L.push(`Already in the room: ${room.others.length ? room.others.join(', ') : 'nobody else'}`);
+    if (room.visible.length) L.push(`Visible in the room: ${room.visible.map((v) => `${v.label} (${v.kind})`).join('; ')}`);
+    if (room.unseen.length) L.push(`Unseen here (GM only — you may unsettle with a sound, a smell or a sign, but never name, describe or confirm it): ${room.unseen.map((v) => `${v.label} (${v.kind})`).join('; ')}`);
+    if (room.plan?.hazard) L.push(`Hazard (GM only — hint at it through the senses, never explain it): ${clip(room.plan.hazard, 300)}`);
+    if (room.check) L.push(`A test follows this narration (GM only — never mention it): ${clip(room.check.label || room.check.skill, 60)}. Set up what makes it hard.`);
+  }
   L.push('');
   L.push(`Recent public record (oldest first):${log.length ? '' : ' nothing yet.'}`);
   for (const e of log) L.push(`- ${e.type}: ${e.text}`);
@@ -285,6 +352,7 @@ const STOCK = {
     recapOpen: 'Here is where things stand.',
     recapNone: 'Nothing has been logged yet. The shift has only just begun.',
     describeNone: 'Your position is not on the plan yet. The corridor lights run ahead of you and stop where the plan ends.',
+    enter: 'The lights take a moment to decide you are there. The air is colder than it should be.',
   },
   dune: {
     generic: 'The heat presses at the walls like a patient creditor. Glowglobes drift in their slow orbits. Every courtesy in this place has a price, and the price is not yet named.',
@@ -292,6 +360,7 @@ const STOCK = {
     recapOpen: 'Let the record be read for those who arrive late.',
     recapNone: 'The record of this audience is still empty; the first page waits.',
     describeNone: 'The agents\' places in the keep are not yet set down in the record.',
+    enter: 'The room receives you without comment, which is its own kind of comment. Somewhere a door closes softly.',
   },
 };
 const stockFor = (id) => STOCK[id] || STOCK.alien;
@@ -343,6 +412,17 @@ export function templateNarration(game, kind, opts = {}) {
       lines.push(pick.length ? `${pick.join('. ')}.` : s.recapNone);
       if (facts.clues.length) lines.push(`Known so far: ${facts.clues.slice(-3).join(' ')}`);
       if (ctx.scene?.name) lines.push(`Now: ${ctx.scene.name}.`);
+      text = lines.join(' ');
+      break;
+    }
+    case ENTER_ROOM: {
+      const f = enterRoomFacts(game, opts);
+      if (!f) { text = s.generic; break; }
+      const lines = [`${f.who} ${f.visits > 1 ? 'is back in' : 'steps into'} ${theRoom(f.name)}.`];
+      if (f.plan?.description && f.visits === 1) lines.push(f.plan.description);
+      if (f.visible.length) lines.push(`You can see ${listAnd(f.visible.map((v) => v.label).slice(0, 5))}.`);
+      if (f.others.length) lines.push(`${listAnd(f.others)} ${f.others.length === 1 ? 'is' : 'are'} already here.`);
+      if (f.visits === 1 && !f.plan?.description) lines.push(s.enter);
       text = lines.join(' ');
       break;
     }
@@ -429,7 +509,7 @@ export async function gmStatus(cfg = gmConfig(), { fresh = false } = {}) {
 const markDown = (cfg) => { probeCache = { key: `${cfg.url}|${cfg.model}`, at: Date.now(), value: { ok: false, provider: 'none', model: 'template', url: cfg.url } }; };
 
 /** Stream one chat completion; yields content chunks. Throws on HTTP / network errors. */
-export async function* streamChat(cfg, { system, user, maxTokens, signal }) {
+export async function* streamChat(cfg, { system, user, maxTokens, signal, body: extra = null, temperature = 0.8 }) {
   const ctrl = new AbortController();
   const onAbort = () => ctrl.abort();
   signal?.addEventListener('abort', onAbort);
@@ -439,8 +519,9 @@ export async function* streamChat(cfg, { system, user, maxTokens, signal }) {
       method: 'POST', signal: ctrl.signal,
       headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream', ...authHeaders(cfg) },
       body: JSON.stringify({
-        model: cfg.model, stream: true, temperature: 0.8, max_tokens: maxTokens,
+        model: cfg.model, stream: true, temperature, max_tokens: maxTokens,
         messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
+        ...(extra || {}),
       }),
     });
     if (!res.ok || !res.body) throw new Error(`GM model HTTP ${res.status}`);
@@ -482,8 +563,8 @@ const stripThink = (s) => String(s || '').replace(/<think>[\s\S]*?(<\/think>|$)/
  * GM_URL answers (`cfg` overrides env, as the tests do with a mock server), else the template.
  * onDelta(textSoFar, chunk) streams.
  */
-export async function generateNarration({ game, kind, pack, universe, npcId, prompt, maxWords, onDelta = () => {}, onStatus = () => {}, signal, cfg: cfgIn } = {}) {
-  const opts = { pack, universe, npcId, prompt, maxWords };
+export async function generateNarration({ game, kind, pack, universe, npcId, prompt, maxWords, roomId, playerId, visits, onDelta = () => {}, onStatus = () => {}, signal, cfg: cfgIn } = {}) {
+  const opts = { pack, universe, npcId, prompt, maxWords, roomId, playerId, visits };
   const ctx = gmContext(game, kind, opts);
   const cfg = cfgIn || gmConfig();
   const template = () => templateNarration(game, ctx.kind, opts);
@@ -515,6 +596,23 @@ export async function generateNarration({ game, kind, pack, universe, npcId, pro
     if (!/HTTP 4\d\d/.test(String(e?.message))) markDown(cfg);
     return result(template(), false, { warning: 'The local AI GM failed; this is the pack\'s own text.' });
   }
+}
+
+/**
+ * Room entry (sessions.js room-entered → review draft / live narration).
+ * → { text, check: { skill, difficulty, label, note, success?, failure? } | null, provider, model,
+ *     kind:'enter-room', words, roomId, roomName, visits, warning? }
+ */
+export async function generateEnterRoom({ game, roomId, playerId, visits, pack, universe, cfg, signal, maxWords } = {}) {
+  const f = enterRoomFacts(game, { roomId, playerId, visits });
+  const r = await generateNarration({ game, kind: ENTER_ROOM, pack, universe, roomId, playerId, visits, maxWords, cfg, signal });
+  const c = f?.check || null;
+  const check = c ? {
+    skill: c.skill, difficulty: Number.isInteger(c.difficulty) ? c.difficulty : null,
+    label: clip(c.label || c.skill, 60), note: clip(`Entering ${f.name}`, 300),
+    ...(c.success ? { success: c.success } : {}), ...(c.failure ? { failure: c.failure } : {}),
+  } : null;
+  return { ...r, check, roomId, roomName: f?.name || roomId, visits: f?.visits || 1 };
 }
 
 /* ── Router ────────────────────────────────────────────────────── */
@@ -551,7 +649,8 @@ export function createGmRouter({ config } = {}) {
       return res.status(403).json({ error: 'not_authorized', message: 'Only the GM of this session can ask the AI GM.' });
     }
     const kind = String(b.kind || '');
-    if (!KINDS.includes(kind)) return res.status(400).json({ error: 'bad_kind', message: `kind must be one of ${KINDS.join(', ')}.` });
+    if (!ALL_KINDS.includes(kind)) return res.status(400).json({ error: 'bad_kind', message: `kind must be one of ${ALL_KINDS.join(', ')}.` });
+    if (kind === ENTER_ROOM && !(game.mapDef?.rooms || []).some((r) => r.id === b.roomId)) return res.status(400).json({ error: 'unknown_room', message: 'Pick a room on the current map.' });
     const prompt = typeof b.prompt === 'string' ? b.prompt.trim() : '';
     if (prompt.length > PROMPT_MAX) return res.status(400).json({ error: 'prompt_too_long', message: `Keep the prompt under ${PROMPT_MAX} characters.` });
     if (kind === 'improv' && !prompt) return res.status(400).json({ error: 'prompt_required', message: 'Say what happened (e.g. "they cut the power").' });
@@ -560,6 +659,7 @@ export function createGmRouter({ config } = {}) {
     if (inflight.has(code)) return res.status(429).json({ error: 'busy', message: 'The AI GM is already writing.' });
     const universe = (await loadUniverseCore(game.universeId)) || { id: game.universeId, name: '' };
     const args = { game, kind, pack, universe, npcId: b.npcId, prompt, maxWords: b.maxWords, cfg: cfgOf() };
+    if (kind === ENTER_ROOM) Object.assign(args, { roomId: b.roomId, playerId: typeof b.playerId === 'string' ? b.playerId : null, visits: Number(game.table?.visitedRooms?.[b.roomId]) || 1 });
 
     const accept = String(req.headers.accept || '');
     const sse = accept.includes('text/event-stream') || !accept.includes('application/json');
@@ -604,6 +704,106 @@ export function createGmRouter({ config } = {}) {
   });
 
   router.all('/narrate', (req, res) => res.status(405).json({ error: 'Use POST /api/gm/narrate.' }));
+
+  /* ── AI BUILD (server/aibuild.js) ── */
+  const buildInflight = new Set();
+  const gmGame = (src) => {
+    const code = String(src?.code || '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
+    const game = code ? games.get(code) : null;
+    return game && safeEqual(String(src?.dmToken || ''), String(game.dmToken || '')) ? game : null;
+  };
+  const deny = (res) => res.status(403).json({ error: 'not_authorized', message: 'Only the GM of this session can use AI BUILD.' });
+  const tableOfGame = (game) => (game.table && typeof game.table === 'object' ? game.table : (game.table = {}));
+
+  router.get('/build', (req, res) => {
+    const game = gmGame(req.query);
+    if (!game) return deny(res);
+    res.json({ plan: tableOfGame(game).aiPlan || null });
+  });
+
+  router.post('/build', async (req, res) => {
+    const b = req.body || {};
+    const game = gmGame(b);
+    if (!game) return deny(res);
+    const density = b.density === undefined ? 'normal' : String(b.density);
+    if (!aibuild.DENSITIES.includes(density)) return res.status(400).json({ error: 'bad_density', message: `density must be one of ${aibuild.DENSITIES.join(', ')}.` });
+    const pack = loadPackFor(game.universeId, game.packId);
+    const universe = (await loadUniverseCore(game.universeId)) || { id: game.universeId, name: '' };
+    const mapDef = aibuild.resolveMap(game, typeof b.mapId === 'string' ? b.mapId : null, { universe, pack });
+    if (!mapDef?.rooms?.length) return res.status(400).json({ error: 'no_map', message: 'Put a map with rooms on the board first.' });
+    if (buildInflight.has(game.code)) return res.status(429).json({ error: 'busy', message: 'AI BUILD is already working on this map.' });
+    buildInflight.add(game.code);
+    const accept = String(req.headers.accept || '');
+    const sse = accept.includes('text/event-stream');
+    const controller = new AbortController();
+    let finished = false;
+    res.on('close', () => { if (!finished) controller.abort(); });
+    let send = () => {};
+    let keepalive = null;
+    if (sse) {
+      res.status(200);
+      res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-cache, no-transform');
+      res.setHeader('Connection', 'keep-alive');
+      res.setHeader('X-Accel-Buffering', 'no');
+      res.flushHeaders?.();
+      send = (event, data) => { if (!res.writableEnded) res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`); };
+      res.write(': connected\n\n');
+      keepalive = setInterval(() => { if (!res.writableEnded) res.write(': keepalive\n\n'); }, 15000);
+    }
+    try {
+      const r = await aibuild.generatePlan({
+        game, pack, universe, mapDef, density, cfg: cfgOf(), signal: controller.signal,
+        onStatus: (s) => send('status', s), onProgress: (p) => send('progress', p),
+      });
+      if (!games.has(game.code)) throw new Error('The session ended.');
+      tableOfGame(game).aiPlan = r.plan;
+      aibuild.publish(game, `AI BUILD: plan for ${r.plan.mapTitle} (${Object.keys(r.plan.rooms).length} rooms, ${r.provider})`);
+      if (sse) send('done', r); else res.json(r);
+    } catch (e) {
+      if (!controller.signal.aborted) {
+        if (sse) send('error', { message: e?.message || 'AI BUILD failed.' });
+        else if (!res.headersSent) res.status(500).json({ error: 'internal', message: e?.message || 'AI BUILD failed.' });
+      }
+    } finally {
+      finished = true;
+      buildInflight.delete(game.code);
+      if (keepalive) clearInterval(keepalive);
+      if (sse && !res.writableEnded) res.end();
+    }
+  });
+
+  router.post('/build/apply', async (req, res) => {
+    const b = req.body || {};
+    const game = gmGame(b);
+    if (!game) return deny(res);
+    if (!game.mapDef || !game.board) return res.status(400).json({ error: 'no_map', message: 'Put a map with rooms on the board first.' });
+    const t = tableOfGame(game);
+    let plan = t.aiPlan || null;
+    if (b.plan !== undefined && b.plan !== null) {
+      const universe = (await loadUniverseCore(game.universeId)) || { id: game.universeId };
+      if (b.plan?.mapId && b.plan.mapId !== game.board.mapId) return res.status(409).json({ error: 'map_mismatch', message: 'That plan is for another map.' });
+      plan = aibuild.sanitizePlan(b.plan, { mapDef: game.mapDef, universe });
+      if (!plan) return res.status(400).json({ error: 'bad_plan', message: 'The plan has no valid room.' });
+      if (t.aiPlan?.mapId === plan.mapId) plan.applied = [...(t.aiPlan.applied || [])];
+    }
+    if (!plan) return res.status(400).json({ error: 'no_plan', message: 'Build a plan first.' });
+    const rooms = Array.isArray(b.rooms) ? b.rooms.filter((r) => typeof r === 'string').slice(0, 500) : undefined;
+    const r = aibuild.applyPlan(game, plan, { rooms, keep: b.keep === true });
+    if (r.error) return res.status(r.status || 400).json({ error: r.error, message: r.error === 'map_mismatch' ? 'The board shows another map now; rebuild for this one.' : 'Put a map with rooms on the board first.' });
+    t.aiPlan = r.plan;
+    aibuild.publish(game, `AI BUILD applied: ${r.applied.tokens} token(s) in ${r.applied.rooms} room(s)`);
+    res.json(r);
+  });
+
+  router.post('/build/clear', (req, res) => {
+    const game = gmGame(req.body || {});
+    if (!game) return deny(res);
+    const removed = aibuild.clearAiTokens(game);
+    tableOfGame(game).aiPlan = null;
+    aibuild.publish(game, `AI BUILD cleared (${removed} token(s) removed)`);
+    res.json({ removed });
+  });
   return router;
 }
 

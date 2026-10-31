@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import MapCanvas from '../board/MapCanvas';
@@ -18,12 +18,80 @@ import { Glyph } from '../board/TokenChip';
    kind 'item', not locked; the item goes into your gear and vanishes
    from the TV; the GM can undo it). A locked item ("ask the GM")
    shows ASK instead, which sends the GM a private message.
+   EXITS (AI GM wave 2, docs/AI_GM.md "Room entry"): the doors from your
+   room (mapDef.doors, both directions) — unlocked → ENTER <ROOM>
+   (`player-enter-room`; the server re-checks adjacency, locks and a 1 per
+   2 s rate limit), locked → greyed LOCKED; rooms the GM flagged open
+   (board.rooms[id].open) are enterable too. Off every room: ENTER the room
+   that holds the map spawn. The GM's narration of what you find arrives
+   through the normal caption path, not here.
    ═══════════════════════════════════════════════════════════════ */
 const THINGS = new Set(['item', 'marker', 'hazard']);
 const BEINGS = new Set(['pc', 'npc', 'creature']);
 const KIND_GLYPH = { item: '◆', marker: '◎', hazard: '⚠', npc: '●', creature: '✖', pc: '●' };
 const NEAR_ZOOM = 2.4;
 const WHOLE = { rotation: 0, flipX: false, zoom: 1, pan: [0, 0] };
+const ENTER_STUCK_MS = 6000;
+
+/* Same hit-test as server/board.js pointInShape / roomAt (smallest containing room on the level). */
+function inShape(s, x, y) {
+  if (!s) return false;
+  if (s.type === 'rect') return x >= s.x && x <= s.x + s.w && y >= s.y && y <= s.y + s.h;
+  let inside = false;
+  const pts = s.points || [];
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i];
+    const [xj, yj] = pts[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+function area(s) {
+  if (s?.type === 'rect') return s.w * s.h;
+  let a = 0;
+  const pts = s?.points || [];
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) a += (pts[j][0] + pts[i][0]) * (pts[j][1] - pts[i][1]);
+  return Math.abs(a / 2);
+}
+function roomAtPoint(mapDef, x, y, level) {
+  let best = null;
+  let bestArea = Infinity;
+  for (const r of mapDef?.rooms || []) {
+    if (level && r.level && r.level !== level) continue;
+    if (!inShape(r.shape, x, y)) continue;
+    const a = area(r.shape);
+    if (a < bestArea) { best = r; bestArea = a; }
+  }
+  return best;
+}
+
+/** [{ id, name, locked }] the player could walk into from `me` (server: player-enter-room). */
+function exitsFor(mapDef, board, me) {
+  if (!me || !mapDef) return [];
+  const level = me.level || mapDef.levels?.[0]?.id || null;
+  const rooms = new Map((mapDef.rooms || []).filter((r) => !level || !r.level || r.level === level).map((r) => [r.id, r]));
+  const nameOf = (r) => board?.rooms?.[r.id]?.name || r.name || r.id;
+  const out = new Map();
+  const add = (id, locked) => {
+    const r = rooms.get(id);
+    if (!r || id === me.roomId) return;
+    const prev = out.get(id);
+    // one unlocked door is enough to get in
+    out.set(id, { id, name: nameOf(r), locked: prev ? prev.locked && locked : locked });
+  };
+  if (me.roomId) {
+    for (const d of mapDef.doors || []) {
+      if (d.from === me.roomId) add(d.to, !!d.locked);
+      else if (d.to === me.roomId) add(d.from, !!d.locked);
+    }
+  } else {
+    const sp = mapDef.spawn?.levels?.[level]?.pc || mapDef.spawn?.pc || [0.5, 0.5];
+    const r = roomAtPoint(mapDef, sp[0], sp[1], level);
+    if (r) add(r.id, false);
+  }
+  for (const [id, r] of Object.entries(board?.rooms || {})) if (r?.open && rooms.has(id)) add(id, false);
+  return [...out.values()].sort((a, b) => Number(a.locked) - Number(b.locked));
+}
 
 function nearView(mapDef, tok) {
   const crop = mapDef?.crop || { x: 0, y: 0, w: 1, h: 1 };
@@ -62,13 +130,22 @@ function Thing({ t, onTake, state, gmShort, offline }) {
 }
 
 export default function TablePane() {
-  const { board, mapDef, pings, boardPing, myPlayer, sendPlayerMessage, tokenTake, connected } = useGame();
+  const { board, mapDef, pings, boardPing, myPlayer, sendPlayerMessage, tokenTake, connected, playerEnterRoom, table } = useGame();
   const { universe } = useUniverse();
   const { terms } = universe;
   const gmShort = terms.gmShort || terms.gm;
   const [note, setNote] = useState(null);
   const [mode, setMode] = useState(() => { try { return localStorage.getItem('muthur.tableView') || 'near'; } catch { return 'near'; } });
   const [taking, setTaking] = useState({}); // tokenId -> 'taking' | 'asked'
+  const [entering, setEntering] = useState(null); // roomId while player-enter-room is in flight
+  const [entered, setEntered] = useState(null);   // { text, error? } — YOU ENTER <ROOM> / refusal, a few seconds
+  const enterTimer = useRef(null);
+  useEffect(() => () => clearTimeout(enterTimer.current), []);
+  useEffect(() => {
+    if (!entered) return undefined;
+    const t = setTimeout(() => setEntered(null), 4000);
+    return () => clearTimeout(t);
+  }, [entered]);
   useEffect(() => { try { localStorage.setItem('muthur.tableView', mode); } catch { /* ignore */ } }, [mode]);
   useEffect(() => {
     if (!note) return undefined;
@@ -127,6 +204,21 @@ export default function TablePane() {
     });
   };
 
+  const exits = exitsFor(mapDef, board, me);
+  const aiEntry = table?.aiGm?.entry;
+  const enter = (x) => {
+    if (!playerEnterRoom || entering || x.locked) return;
+    setEntering(x.id); setEntered(null);
+    clearTimeout(enterTimer.current);
+    enterTimer.current = setTimeout(() => { setEntering(null); setEntered({ text: 'NO ANSWER — TRY AGAIN', error: true }); }, ENTER_STUCK_MS);
+    playerEnterRoom(x.id, (r) => {
+      clearTimeout(enterTimer.current);
+      setEntering(null);
+      if (r?.success) setEntered({ text: `YOU ENTER ${String(r.name || x.name).toUpperCase()}` });
+      else setEntered({ text: r?.error === 'RATE LIMITED.' ? 'WAIT A MOMENT…' : String(r?.error || 'YOU CANNOT GO THAT WAY.').toUpperCase(), error: true });
+    });
+  };
+
   return (
     <div className="pp-pane pp-table">
       <div className="pp-where">
@@ -152,6 +244,29 @@ export default function TablePane() {
           onTap={(pt) => ping(pt)} onTokenTap={(_id, pt) => ping(pt)} idleDrift={false} />
         <div className="pp-mapfoot" aria-live="polite">{note || 'TAP THE MAP TO PING THE TABLE'}{!connected ? ' · OFFLINE' : ''}</div>
       </div>
+
+      {me && (exits.length > 0 || entered) && (
+        <section className="pp-sec pp-exits" aria-labelledby="pp-exits-h">
+          <h3 id="pp-exits-h" className="pp-k">EXITS</h3>
+          {entered && <p className={`pp-entered${entered.error ? ' err' : ''}`} role="status">{entered.text}</p>}
+          {exits.length > 0 && (
+            <ul className="pp-exit-list">
+              {exits.map((x) => (
+                <li key={x.id}>
+                  <button type="button" className={`pp-btn pp-exit${x.locked ? ' locked' : ' primary'}`}
+                    disabled={x.locked || !!entering || !connected || !playerEnterRoom}
+                    aria-label={x.locked ? `${x.name}: the door is locked` : `Enter ${x.name}`}
+                    onClick={() => enter(x)}>
+                    <span className="pp-exit-verb">{x.locked ? 'LOCKED' : entering === x.id ? 'ENTERING…' : 'ENTER'}</span>
+                    <span className="pp-exit-room">{x.name}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          {(aiEntry === 'review' || aiEntry === 'live') && <p className="pp-dim pp-exit-ai">The {gmShort}&apos;s AI reacts when you enter.</p>}
+        </section>
+      )}
 
       {me && (
         <>
