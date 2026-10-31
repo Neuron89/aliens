@@ -1,40 +1,69 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import { useContent } from '../../ContentContext';
 import RunScene from './RunScene';
+import SceneList from './SceneList';
+import Drawer from './Drawer';
+import Icon from './icons';
 import ClocksPanel from './ClocksPanel';
 import HandoutsPanel from './HandoutsPanel';
-import CluesPanel from './CluesPanel';
-import SessionLogPanel from './SessionLogPanel';
 import RollFeed from './RollFeed';
 import InitiativePanel from './InitiativePanel';
 import ThreatsPanel from './ThreatsPanel';
 import PoolCounters from './PoolCounters';
+import CrewDrawer from './CrewDrawer';
+import NarrateDrawer from './NarrateDrawer';
+import MoreDrawer from './MoreDrawer';
+import MapController from '../MapController';
+import DiceRoller from '../DiceRoller';
 import { ambientPreset } from '../../mechanicsUtils';
 import Confirm from '../Confirm';
 
 /* ═══════════════════════════════════════════════════════════════
-   GM RUN VIEW (DM tab "RUN") — the GM's main screen during play
-   (docs/RESEARCH_GM_PLAYER_EXPERIENCE.md rows 1, 48, 49).
-   Left: act switcher + current scene card (read-aloud → table, checks,
-   events, NPC guidance, outcomes, clues here), prev/next.
-   Right rail: clocks, AGENDAS (NPC cards + each PC's agenda for this act,
-   SEND AGENDA CARDS) · HANDOUTS (receipts) · CLUES · INITIATIVE · THREATS
-   (creature cards) · LOG, roll feed. Pools (Momentum/Threat) in the top strip.
-   Scene change → scene.ambient switches the GM's ambient preset (audio prop).
+   GM RUN VIEW — "Focus Stage" (docs/GAME_NIGHT.md, UI_BRIEF hybrid).
+   ┌ progress strip: act · scene segments · SCENE n / N (→ scene list)
+   │                 · ADVANCE ACT (when the act's scenes are done) · pools
+   ├ stage: the current scene in large type (RunScene)
+   └ dock (72px): NEXT SCENE · NARRATE · MAP · CREW · DICE · CLOCKS ·
+                  HANDOUTS · THREATS · MORE — each opens one slide-over
+                  drawer on the right (400px, no dimming; ✕ / Escape /
+                  the same dock button closes it; the open drawer is
+                  remembered per session in localStorage).
+   Scene list: left drawer (tablet) or a pinned 280px column (≥1400px).
+   Keys (never while typing): [ / ] previous / next scene, n narrate.
+   Scene change → scene.ambient switches the GM's ambient preset.
    Scene progress lives in table.run on the server (survives resume).
    ═══════════════════════════════════════════════════════════════ */
 const clampI = (n, lo, hi) => Math.max(lo, Math.min(hi, Number.isInteger(n) ? n : lo));
+const DRAWERS = ['narrate', 'map', 'crew', 'dice', 'clocks', 'handouts', 'threats', 'more'];
+const storeKey = (code) => `gm.run.drawer.${code || 'none'}`;
+const readStore = (code) => {
+  try { const v = JSON.parse(localStorage.getItem(storeKey(code)) || 'null'); return v && typeof v === 'object' ? v : {}; } catch { return {}; }
+};
+const writeStore = (code, v) => { try { localStorage.setItem(storeKey(code), JSON.stringify(v)); } catch { /* storage unavailable */ } };
 
-export default function RunView({ tts, audio }) {
+function useMedia(query) {
+  const get = () => (typeof window !== 'undefined' && window.matchMedia ? window.matchMedia(query).matches : false);
+  const [m, setM] = useState(get);
+  useEffect(() => {
+    if (!window.matchMedia) return undefined;
+    const mq = window.matchMedia(query);
+    const h = () => setM(mq.matches);
+    h();
+    mq.addEventListener?.('change', h);
+    return () => mq.removeEventListener?.('change', h);
+  }, [query]);
+  return m;
+}
+
+const typingTarget = (t) => t && t.closest && t.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"]');
+
+export default function RunView({ tts, audio, active = true, onNavigate = () => {} }) {
   const {
     table, packId, players, runSet, advanceAct, narrate, narrateClear, setBoardMode, sessionSeed, clueReveal,
-    boardLinked, gameCode, gmPin, pinFresh, hidePin,
+    gameCode, unreadBy, seatClaims = [],
   } = useGame();
-  const [copied, setCopied] = useState(false);
-  const joinUrl = typeof window !== 'undefined' ? `${window.location.origin}/?join=${gameCode}` : '';
-  const copyJoin = () => { navigator.clipboard?.writeText(joinUrl).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); }, () => {}); };
   const { universe } = useUniverse();
   const { byId } = useContent();
   const { terms } = universe;
@@ -48,13 +77,28 @@ export default function RunView({ tts, audio }) {
   const scene = scenes[sceneIndex];
   const completed = run.completed || {};
   const key = `${actIndex}-${sceneIndex}`;
-  const [railTab, setRailTab] = useState('agendas');
-  const [freeText, setFreeText] = useState('');
-  const [showSecrets, setShowSecrets] = useState(false);
-  const [actInfo, setActInfo] = useState(false);
   const seeding = useRef(false);
+  const wide = useMedia('(min-width: 1400px)');
 
-  /* Scene ambient → the GM's AudioPanel preset (only when the scene names a known preset). */
+  /* ─── Drawer state (one at a time, remembered per session) ─── */
+  const [ui, setUi] = useState(() => readStore(gameCode));
+  useEffect(() => { setUi(readStore(gameCode)); }, [gameCode]);
+  const drawer = DRAWERS.includes(ui.drawer) ? ui.drawer : null;
+  const moreTab = ui.moreTab || 'agendas';
+  const [threatTab, setThreatTab] = useState('threats');
+  const [listOpen, setListOpen] = useState(false);
+  const save = useCallback((patch) => setUi((cur) => { const next = { ...cur, ...patch }; writeStore(gameCode, next); return next; }), [gameCode]);
+  const openDrawer = useCallback((id, sub) => {
+    save({ drawer: id, ...(sub && id === 'more' ? { moreTab: sub } : {}) });
+    if (id === 'threats' && sub) setThreatTab(sub);
+  }, [save]);
+  const toggleDrawer = useCallback((id) => save({ drawer: drawer === id ? null : id }), [save, drawer]);
+  const closeDrawer = useCallback(() => save({ drawer: null }), [save]);
+  const dockRefs = useRef({});
+  const listBtn = useRef(null);
+  const returnRef = useMemo(() => ({ get current() { return drawer ? dockRefs.current[drawer] : null; } }), [drawer]);
+
+  /* Scene ambient → the GM's ambient preset (only when the scene names a known preset). */
   const lastAmbient = useRef(null);
   const sceneAmbient = scene?.ambient || null;
   useEffect(() => {
@@ -80,19 +124,32 @@ export default function RunView({ tts, audio }) {
     runSet({ actIndex: a, sceneIndex: s, actTitle: actLabel(acts[a]), sceneTitle: sc?.name || '', ambient: amb || null });
     if (table?.boardMode === 'theatre') setBoardMode('theatre', theatreFor(a, s));
   };
-  const toggleDone = () => runSet({ completed: { ...completed, [key]: !completed[key] }, actIndex, sceneIndex, sceneTitle: scene?.name || '' });
+  const toggleDoneAt = (a, s) => {
+    const k = `${a}-${s}`;
+    runSet({ completed: { ...completed, [k]: !completed[k] }, actIndex, sceneIndex, sceneTitle: scene?.name || '' });
+  };
+  const toggleDone = () => toggleDoneAt(actIndex, sceneIndex);
+  const hasNextScene = sceneIndex < scenes.length - 1;
+  /* NEXT SCENE ticks the current scene done, then moves on. */
+  const nextScene = () => {
+    if (!hasNextScene) return;
+    if (!completed[key]) runSet({ completed: { ...completed, [key]: true }, actIndex, sceneIndex, sceneTitle: scene?.name || '' });
+    goScene(actIndex, sceneIndex + 1);
+  };
+  const prevScene = () => { if (sceneIndex > 0) goScene(actIndex, sceneIndex - 1); };
   const nextAct = acts[actIndex + 1];
   const withAgenda = nextAct ? Object.values(players).filter((p) => p.character?.agendaByAct?.[String(actIndex + 2)]).length : 0;
   const doAdvance = () => {
     const next = actIndex + 1;
     if (!acts[next]) return;
+    if (scene && !completed[key]) runSet({ completed: { ...completed, [key]: true }, actIndex, sceneIndex, sceneTitle: scene?.name || '' });
     advanceAct(next, { actTitle: actLabel(acts[next]), sceneTitle: acts[next].scenes?.[0]?.name || '' });
     if (table?.boardMode === 'theatre') setBoardMode('theatre', theatreFor(next, 0));
   };
   /* ADVANCE ACT: themed inline confirm (Confirm.jsx), never a native dialog. */
-  const advanceButton = (className, align = 'right') => (
-    <Confirm label="ADVANCE ACT ▸" className={className} align={align} title={`START ${String(actLabel(nextAct)).toUpperCase()}?`}
-      message={`The scene moves to ${nextAct?.scenes?.[0]?.name || 'the first scene'}.${withAgenda ? `\n${withAgenda} ${withAgenda === 1 ? 'player receives' : 'players receive'} NEW ORDERS on their phone.` : ''}`}
+  const advanceButton = (className, align = 'right', label = <>ADVANCE ACT<span aria-hidden="true"> ▸</span></>) => (
+    <Confirm label={label} className={className} align={align} title={`START ${String(actLabel(nextAct)).toUpperCase()}?`}
+      message={`The scene moves to ${nextAct?.scenes?.[0]?.name || 'the first scene'}.${withAgenda ? `\n${withAgenda} ${withAgenda === 1 ? terms.player.toLowerCase() + ' receives' : terms.players.toLowerCase() + ' receive'} NEW ORDERS on their phone.` : ''}`}
       confirmLabel="ADVANCE" onConfirm={doAdvance} />
   );
   const resendOrders = () => advanceAct(actIndex, { actTitle: actLabel(act), sceneTitle: scene?.name || '' });
@@ -101,189 +158,189 @@ export default function RunView({ tts, audio }) {
     if (table?.boardMode === 'theatre') setBoardMode('map');
     else setBoardMode('theatre', theatreFor(actIndex, sceneIndex));
   };
+  const actOpening = () => act?.readAloud?.length && narrate(act.readAloud.join('\n\n'), { title: actLabel(act), mode: 'card', art: act.sceneArt });
 
   const sceneClues = (table?.clues || []).filter((c) => (scene?.clueRefs || []).includes(c.id) || (c.scene && scene && c.scene === scene.name));
   const actDone = scenes.filter((_, i) => completed[`${actIndex}-${i}`]).length;
-  const assigned = Object.values(players).filter((p) => p.character);
-  const sentOrders = (pid) => (table?.orders?.[pid] || []).some((o) => o.actIndex === actIndex);
+  const allDone = scenes.length > 0 && actDone === scenes.length;
   const narration = table?.narration;
-  const unseen = (table?.handouts || []).reduce((n, h) => n + ((h.recipients === 'all' ? Object.keys(players).length : (h.recipients || []).length) - h.seenBy.length), 0);
+  const unseen = (table?.handouts || []).reduce((n, h) => n + Math.max(0, (h.recipients === 'all' ? Object.keys(players).length : (h.recipients || []).length) - h.seenBy.length), 0);
+  const unreadTotal = Object.values(unreadBy || {}).reduce((a, b) => a + (b || 0), 0);
+  const crewBadge = unreadTotal + seatClaims.length;
+  const ini = table?.initiative;
+
+  /* ─── Keyboard: [ / ] scenes, n narrate (GM terminal, Run section, never while typing) ─── */
+  const keyRef = useRef({});
+  const [narrateByKey, setNarrateByKey] = useState(false); // opened with `n` → focus the text box (a tap does not pop the tablet keyboard)
+  keyRef.current = { prevScene, nextScene, toggleDrawer, setNarrateByKey };
+  useEffect(() => {
+    if (!active) return undefined;
+    const onKey = (e) => {
+      if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || typingTarget(e.target)) return;
+      if (document.querySelector('.confirm-card')) return;
+      const k = keyRef.current;
+      if (e.key === '[') { e.preventDefault(); k.prevScene(); }
+      else if (e.key === ']') { e.preventDefault(); k.nextScene(); }
+      else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); k.setNarrateByKey(true); k.toggleDrawer('narrate'); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [active]);
+
+  const nextLabel = hasNextScene ? 'NEXT SCENE' : nextAct ? 'ADVANCE ACT' : 'FINAL SCENE';
+  const sceneListEl = acts.length > 0 && (
+    <SceneList acts={acts} actIndex={actIndex} sceneIndex={sceneIndex} completed={completed} tts={tts}
+      onGo={(a, s) => { goScene(a, s); if (!wide) setListOpen(false); }} onToggle={toggleDoneAt}
+      onPrev={sceneIndex > 0 ? prevScene : null} onNext={nextScene} nextLabel={hasNextScene ? 'NEXT' : 'FINAL SCENE'} nextDisabled={!hasNextScene}
+      advance={!hasNextScene && nextAct ? advanceButton('fs-btn primary', 'right') : null} onActOpening={actOpening} />
+  );
+
+  /* ─── Dock ─── */
+  const dock = [
+    ['narrate', 'NARRATE', 'narrate', narration ? '●' : null],
+    ['map', 'MAP', 'board', null],
+    ['crew', terms.players.toUpperCase(), 'crew', crewBadge || null],
+    ['dice', 'DICE', 'dice', null],
+    ['clocks', 'CLOCKS', 'clock', (table?.clocks || []).some((c) => c.filled === c.segments) ? '!' : null],
+    ['handouts', 'HANDOUTS', 'handout', unseen || null],
+    ['threats', 'THREATS', 'threat', ini?.active ? `R${ini.round}` : null],
+    ['more', 'MORE', 'more', table?.pause ? '❚❚' : null],
+  ];
+  const drawerTitle = { narrate: 'NARRATE', map: 'MAP', crew: terms.players.toUpperCase(), dice: 'DICE', clocks: 'CLOCKS', handouts: 'HANDOUTS', threats: 'THREATS', more: 'MORE' };
+
+  const drawerBody = () => {
+    switch (drawer) {
+      case 'narrate': return <NarrateDrawer onToggleTheatre={toggleTheatre} focusInput={narrateByKey} />;
+      case 'map': return <MapController compact onOpenFull={() => { closeDrawer(); onNavigate('board'); }} />;
+      case 'crew': return <CrewDrawer onOpen={openDrawer} onNavigate={onNavigate} />;
+      case 'dice': return (
+        <div className="dd">
+          <DiceRoller compact />
+          <RollFeed limit={10} title="ROLL FEED" />
+        </div>
+      );
+      case 'clocks': return <ClocksPanel />;
+      case 'handouts': return <HandoutsPanel handouts={pack?.handouts || []} terms={terms} />;
+      case 'threats': return (
+        <div className="td">
+          <div className="md-tabs" role="tablist" aria-label="Threats">
+            <button type="button" role="tab" aria-selected={threatTab === 'threats'} className={threatTab === 'threats' ? 'on' : ''} onClick={() => setThreatTab('threats')}>CREATURES</button>
+            <button type="button" role="tab" aria-selected={threatTab === 'init'} className={threatTab === 'init' ? 'on' : ''} onClick={() => setThreatTab('init')}>
+              INITIATIVE{ini?.active ? ` · R${ini.round}` : ''}
+            </button>
+          </div>
+          <div role="tabpanel">{threatTab === 'init' ? <InitiativePanel /> : <ThreatsPanel />}</div>
+        </div>
+      );
+      case 'more': return (
+        <MoreDrawer pack={pack} act={act} actIndex={actIndex} sceneClueIds={sceneClues.map((c) => c.id)}
+          onResendOrders={resendOrders} tab={moreTab} onTab={(t) => save({ moreTab: t })} />
+      );
+      default: return null;
+    }
+  };
 
   return (
-    <div className="run">
-      {/* ─── Table strip ─── */}
-      <div className="run-top">
-        <div className="run-top-title">
-          <span className="run-kicker">RUN</span>
-          <span className="run-pack">{pack ? pack.meta.title : 'SANDBOX'}</span>
+    <div className={`fs${drawer ? ' has-drawer' : ''}${wide && acts.length > 0 ? ' pinned-list' : ''}${drawer === 'map' ? ' wide-drawer' : ''}`}>
+      {/* ─── Progress strip ─── */}
+      {acts.length > 0 && (
+        <div className="fs-progress">
+          <button type="button" ref={listBtn} className="fs-act" onClick={() => !wide && setListOpen((v) => !v)} aria-expanded={wide ? undefined : listOpen}
+            aria-controls="fs-scenes" title="Acts and scenes">
+            <Icon name="list" size={18} />
+            <span>{act?.title}{act?.subtitle ? <small> · {act.subtitle}</small> : null}</span>
+          </button>
+          <ol className="fs-segs" aria-label={`Scenes in ${act?.title || 'this act'}`}>
+            {scenes.map((s, i) => {
+              const d = !!completed[`${actIndex}-${i}`];
+              const on = i === sceneIndex;
+              return (
+                <li key={i}>
+                  <button type="button" className={`fs-seg${d ? ' done' : ''}${on ? ' on' : ''}`} onClick={() => goScene(actIndex, i)}
+                    aria-current={on ? 'step' : undefined} aria-label={`Scene ${i + 1}: ${s.name}${d ? ', done' : ''}`} title={`${i + 1}. ${s.name}`} />
+                </li>
+              );
+            })}
+          </ol>
+          <button type="button" className="fs-count" onClick={() => !wide && setListOpen((v) => !v)} aria-expanded={wide ? undefined : listOpen} aria-controls="fs-scenes">
+            SCENE {Math.min(sceneIndex + 1, scenes.length)} / {scenes.length}
+          </button>
+          {allDone && nextAct && advanceButton('fs-btn primary fs-advance', 'right')}
+          <PoolCounters className="fs-pools" />
         </div>
-        {/* The GM lands here right after INITIALIZE: the join code (what players type) and, once,
-            the GM PIN must be visible without visiting the Session tab. */}
-        <div className="run-code">
-          <b className="run-code-val" title={joinUrl}>{gameCode}</b>
-          <button type="button" className="run-btn sm" onClick={copyJoin}>{copied ? 'COPIED' : 'COPY JOIN LINK'}</button>
-          {pinFresh && gmPin && (
-            <span className="dm-pin" title="Lets another terminal take over as GM. Never share it with players.">
-              GM PIN <b>{gmPin}</b>
-              <button type="button" className="run-btn sm" onClick={hidePin}>NOTED</button>
-            </span>
-          )}
-        </div>
-        <div className="run-row">
-          <PoolCounters />
-          <span className={`mc-tv${boardLinked ? ' up' : ''}`}><span className="link-dot" />{boardLinked ? 'TV' : 'NO TV'}</span>
-          <div className="run-seg" role="group" aria-label="Board mode">
-            <button type="button" className={table?.boardMode !== 'theatre' ? 'on' : ''} onClick={() => table?.boardMode === 'theatre' && toggleTheatre()}>MAP</button>
-            <button type="button" className={table?.boardMode === 'theatre' ? 'on' : ''} onClick={() => table?.boardMode !== 'theatre' && toggleTheatre()}>THEATRE</button>
-          </div>
-          {narration && (
-            <button type="button" className="run-btn warn" onClick={() => narrateClear()} title={narration.text}>CLEAR TABLE TEXT</button>
-          )}
-        </div>
-      </div>
+      )}
 
-      <div className="run-grid">
-        {/* ─── Main: acts + scene ─── */}
-        <main className="run-main">
-          {acts.length > 0 ? (
-            <>
-              <nav className="run-acts" aria-label="Acts">
-                {acts.map((a, i) => {
-                  const n = (a.scenes || []).length;
-                  const d = (a.scenes || []).filter((_, j) => completed[`${i}-${j}`]).length;
-                  return (
-                    <button key={i} type="button" className={`run-act${i === actIndex ? ' on' : ''}`} onClick={() => i !== actIndex && goScene(i, 0)}>
-                      <span>{a.title}</span>{a.subtitle && <small>{a.subtitle}</small>}
-                      {n > 0 && <i className="run-act-bar"><b style={{ width: `${(d / n) * 100}%` }} /></i>}
-                    </button>
-                  );
-                })}
-                {nextAct && advanceButton('run-btn primary run-advance')}
-              </nav>
+      {/* ─── Scene list: pinned column (wide) or left drawer ─── */}
+      {acts.length > 0 && wide && <aside className="fs-scenes-col" id="fs-scenes" aria-label="Acts and scenes">{sceneListEl}</aside>}
+      {acts.length > 0 && !wide && listOpen && (
+        <Drawer id="fs-scenes" side="left" title="ACTS & SCENES" onClose={() => setListOpen(false)} returnFocus={listBtn}>
+          {sceneListEl}
+        </Drawer>
+      )}
 
-              <section className="run-actinfo">
-                <button type="button" className="run-actinfo-head" onClick={() => setActInfo((v) => !v)} aria-expanded={actInfo}>
-                  <span>{actLabel(act)} · {actDone}/{scenes.length} SCENES</span><span>{actInfo ? '▲' : '▼'}</span>
-                </button>
-                {act?.summary && <p className="run-actinfo-sum">{act.summary}</p>}
-                {actInfo && (
-                  <div className="run-actinfo-body">
-                    {act.agendaNotes && <p><b className="run-accent">AGENDAS: </b>{act.agendaNotes}</p>}
-                    {act.gmNotes && <p className="run-dim-p">{act.gmNotes}</p>}
-                    {act.readAloud?.length > 0 && (
-                      <div className="run-row">
-                        <button type="button" className="run-btn sm" onClick={() => narrate(act.readAloud.join('\n\n'), { title: actLabel(act), mode: 'card', art: act.sceneArt })}>ACT OPENING → TV CARD</button>
-                        {tts && <button type="button" className="run-btn sm" onClick={() => tts.speak(act.readAloud)}>▶ TTS</button>}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </section>
-
-              <div className="run-scenenav">
-                <button type="button" className="run-btn" disabled={sceneIndex === 0} onClick={() => goScene(actIndex, sceneIndex - 1)}>◂ PREV</button>
-                <select value={sceneIndex} onChange={(e) => goScene(actIndex, Number(e.target.value))} aria-label="Scene">
-                  {scenes.map((s, i) => <option key={i} value={i}>{completed[`${actIndex}-${i}`] ? '✓ ' : ''}{i + 1}. {s.name}</option>)}
-                </select>
-                {sceneIndex < scenes.length - 1
-                  ? <button type="button" className="run-btn" onClick={() => goScene(actIndex, sceneIndex + 1)}>NEXT ▸</button>
-                  : acts[actIndex + 1]
-                    ? advanceButton('run-btn primary')
-                    : <span className="run-dim">FINAL SCENE</span>}
-              </div>
-
-              {scene ? (
-                <RunScene scene={scene} act={act} done={!!completed[key]} onToggleDone={toggleDone} tts={tts}
-                  onNarrate={sendNarration} narrationLive={!!narration && narration.text === scene.narration}
-                  clues={sceneClues} onRevealClue={(id) => clueReveal(id, 'all')} />
-              ) : (
-                <div className="run-box"><p className="run-empty">This act has no scene runner. Use the act text above.</p></div>
-              )}
-            </>
+      {/* ─── Stage ─── */}
+      <div className="fs-main">
+        {acts.length > 0 ? (
+          scene ? (
+            <RunScene scene={scene} act={act} actIndex={actIndex} sceneIndex={sceneIndex} sceneCount={scenes.length}
+              done={!!completed[key]} onToggleDone={toggleDone} tts={tts}
+              onNarrate={sendNarration} narrationLive={!!narration && narration.text === scene.narration} onClearNarration={() => narrateClear()}
+              clues={sceneClues} onRevealClue={(id) => clueReveal(id, 'all')} />
           ) : (
-            <div className="run-box">
-              <h3 className="run-h">{pack ? 'NO ACTS IN THIS PACK' : 'SANDBOX'}</h3>
-              <p className="run-empty">No scene runner — narrate freely, run clocks, clues and handouts from the rail.</p>
+            <div className="fs-empty">
+              <div className="fs-kicker">{actLabel(act)}</div>
+              <h1 className="fs-title">{act?.title}</h1>
+              {act?.summary && <p className="fs-sum">{act.summary}</p>}
+              <p className="run-empty">This act has no scene runner. Use the act brief in the scene list, and narrate freely (NARRATE or key n).</p>
+              {act?.readAloud?.length > 0 && <button type="button" className="fs-btn" onClick={actOpening}>ACT OPENING → TV CARD</button>}
             </div>
-          )}
-
-          <form className="run-box run-free" onSubmit={(e) => { e.preventDefault(); if (freeText.trim()) { narrate(freeText.trim(), { mode: 'caption' }); setFreeText(''); } }}>
-            <label className="rs-label" htmlFor="run-free">NARRATE TO TABLE</label>
-            <textarea id="run-free" rows={2} value={freeText} onChange={(e) => setFreeText(e.target.value)} placeholder="Type a line for the TV and phones…" />
-            <div className="run-row">
-              <button type="submit" className="run-btn primary sm" disabled={!freeText.trim()}>SEND CAPTION</button>
-              <button type="button" className="run-btn sm" disabled={!freeText.trim()} onClick={() => { narrate(freeText.trim(), { mode: 'card' }); setFreeText(''); }}>SEND AS CARD</button>
+          )
+        ) : (
+          <div className="fs-empty">
+            <div className="fs-kicker">{pack ? pack.meta.title : terms.session.toUpperCase()}</div>
+            <h1 className="fs-title">{pack ? 'No acts in this pack' : 'Sandbox'}</h1>
+            <p className="fs-sum">No scene runner: narrate freely, and run the map, {terms.players.toLowerCase()}, clocks, clues and handouts from the dock below.</p>
+            <div className="fs-actions">
+              <button type="button" className="fs-btn primary" onClick={() => openDrawer('narrate')}>NARRATE</button>
+              <button type="button" className="fs-btn" onClick={() => openDrawer('map')}>MAP</button>
+              <button type="button" className="fs-btn" onClick={() => openDrawer('crew')}>{terms.players.toUpperCase()}</button>
             </div>
-          </form>
-        </main>
-
-        {/* ─── Rail ─── */}
-        <aside className="run-rail">
-          <ClocksPanel compact />
-          <section className="run-box">
-            <div className="run-tabs" role="tablist">
-              {[
-                ['agendas', 'AGENDAS'],
-                ['handouts', `HANDOUTS${unseen > 0 ? ` · ${unseen}` : ''}`],
-                ['clues', 'CLUES'],
-                ['init', table?.initiative?.active ? `INIT · R${table.initiative.round}` : 'INIT'],
-                ['threats', 'THREATS'],
-                ['log', 'LOG'],
-              ].map(([id, label]) => (
-                <button key={id} type="button" role="tab" aria-selected={railTab === id} className={railTab === id ? 'on' : ''} onClick={() => setRailTab(id)}>{label}</button>
-              ))}
-            </div>
-
-            {railTab === 'agendas' && (
-              <div className="run-agendas">
-                {assigned.length > 0 && (
-                  <>
-                    <div className="run-row run-agenda-actions">
-                      <span className="rs-label">{terms.players?.toUpperCase() || 'PLAYERS'} — {act?.title || 'THIS ACT'}</span>
-                      <button type="button" className="run-btn sm primary" onClick={resendOrders}>SEND AGENDA CARDS</button>
-                    </div>
-                    {assigned.map((p) => {
-                      const text = p.character.agendaByAct?.[String(actIndex + 1)];
-                      return (
-                        <div key={p.id} className="run-card pc">
-                          <div className="run-card-head">
-                            <b>{p.character.name}</b><span className="run-dim">{p.name}</span>
-                            {sentOrders(p.id) && <span className="run-receipt all">SENT</span>}
-                          </div>
-                          <p>{text || p.character.personalAgenda || <i className="run-dim">No agenda for this act.</i>}</p>
-                        </div>
-                      );
-                    })}
-                  </>
-                )}
-                {pack?.npcs?.length > 0 && (
-                  <>
-                    <div className="run-row run-agenda-actions">
-                      <span className="rs-label">NPCS — IF IGNORED</span>
-                      <button type="button" className="run-btn sm" onClick={() => setShowSecrets((v) => !v)}>{showSecrets ? 'HIDE SECRETS' : 'SHOW SECRETS'}</button>
-                    </div>
-                    {pack.npcs.map((n) => (
-                      <div key={n.name} className="run-card npc">
-                        <div className="run-card-head"><b>{n.name}</b>{n.role && <span className="run-dim">{n.role}</span>}</div>
-                        <p><span className="run-accent">WANTS: </span>{n.agenda}</p>
-                        {n.behavior && <p><span className="run-warn">IF IGNORED: </span>{n.behavior}</p>}
-                        {showSecrets && n.secret && <p className="run-secret">SECRET: {n.secret}</p>}
-                      </div>
-                    ))}
-                  </>
-                )}
-                {!assigned.length && !pack?.npcs?.length && <p className="run-empty">Assign characters to see their agendas here.</p>}
-              </div>
-            )}
-            {railTab === 'handouts' && <HandoutsPanel handouts={pack?.handouts || []} terms={terms} />}
-            {railTab === 'clues' && <CluesPanel highlight={sceneClues.map((c) => c.id)} />}
-            {railTab === 'init' && <InitiativePanel />}
-            {railTab === 'threats' && <ThreatsPanel />}
-            {railTab === 'log' && <SessionLogPanel pack={pack} />}
-          </section>
-          <RollFeed />
-        </aside>
+            <PoolCounters className="fs-pools" />
+          </div>
+        )}
       </div>
+
+      {/* ─── Right drawer ─── */}
+      {drawer && (
+        <Drawer key={drawer} id={`fs-drawer-${drawer}`} title={drawerTitle[drawer]} onClose={closeDrawer} returnFocus={returnRef}
+          className={`dr-${drawer}`} label={drawer === 'crew' ? terms.players : drawerTitle[drawer].toLowerCase()}>
+          {drawerBody()}
+        </Drawer>
+      )}
+
+      {/* ─── Dock ─── */}
+      <nav className="dock" aria-label="Run controls">
+        {acts.length > 0 && (
+          hasNextScene || !nextAct ? (
+            <button type="button" className="dock-btn next" onClick={nextScene} disabled={!hasNextScene} aria-keyshortcuts="]">
+              <Icon name="next" /><span>{nextLabel}</span>
+            </button>
+          ) : (
+            advanceButton('dock-btn next', 'left', <><Icon name="next" /><span>ADVANCE ACT</span></>)
+          )
+        )}
+        {dock.map(([id, label, icon, badge]) => (
+          <button key={id} type="button" ref={(el) => { dockRefs.current[id] = el; }} className={`dock-btn${drawer === id ? ' on' : ''}`}
+            aria-expanded={drawer === id} aria-controls={drawer === id ? `fs-drawer-${id}` : undefined}
+            aria-keyshortcuts={id === 'narrate' ? 'n' : undefined}
+            aria-label={`${label}${badge ? ` (${badge === '●' ? 'text on the table' : badge === '!' ? 'a clock is full' : badge === '❚❚' ? 'pause requested' : badge})` : ''}`}
+            onClick={() => { setNarrateByKey(false); toggleDrawer(id); }}>
+            <Icon name={icon} />
+            <span>{label}</span>
+            {badge && <b className={`dock-badge${badge === '❚❚' || badge === '!' ? ' warn' : ''}`} aria-hidden="true">{badge}</b>}
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }

@@ -11,7 +11,7 @@ import { play as sfx, reducedFx } from '../../sfx';
    effect text is shown privately and `panic-result` goes to the server
    (status effect + stress + TV ring, see server/mechanics.js).
    Never auto-resolves: the player rolls, the GM narrates.
-   Props: pending { rollId, stress }, onClose(), fx (player/fx useFx)
+   Props: pending { rollId, stress, manual? } (manual: the phone's PANIC quick action, can be cancelled before rolling), onClose(), fx (player/fx useFx)
    ═══════════════════════════════════════════════════════════════ */
 export default function PanicOverlay({ pending, onClose, fx }) {
   const { panicResult } = useGame();
@@ -52,7 +52,7 @@ export default function PanicOverlay({ pending, onClose, fx }) {
   return (
     <div className={`ph-panic${severe ? ' severe' : ''}${result ? ' done' : ''}`} role="alertdialog" aria-label="Panic roll">
       <div className="ph-panic-card">
-        <div className="ph-panic-kicker">STRESS DIE — 1</div>
+        <div className="ph-panic-kicker">{pending.manual ? `ON THE ${String(universe.terms?.gmShort || 'GM').toUpperCase()}'S CALL` : 'STRESS DIE — 1'}</div>
         <h1 className="ph-panic-title">PANIC ROLL</h1>
         {!result ? (
           <>
@@ -64,6 +64,9 @@ export default function PanicOverlay({ pending, onClose, fx }) {
             <button type="button" className="pv-btn primary ph-wide ph-panic-roll" onClick={roll} disabled={!!tumble}>
               {tumble ? 'ROLLING…' : `ROLL D${cfg.die || 6}`}
             </button>
+            {pending.manual && !tumble && (
+              <button type="button" className="pv-btn ph-wide ph-panic-cancel" onClick={onClose}>NOT NOW</button>
+            )}
           </>
         ) : (
           <>

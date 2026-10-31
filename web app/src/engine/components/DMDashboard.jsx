@@ -16,12 +16,11 @@ export default function DMDashboard() {
   const {
     gameCode, players, messages, leaveGame, packId,
     assignCharacter, updatePlayer, sendMessage,
-    broadcastMessage, killCharacter, unreadCount, clearUnread, lastSaved, boardLinked,
+    broadcastMessage, killCharacter, unreadCount, clearUnread, lastSaved,
     table, unreadBy, clearUnreadFor, resolveSubmission,
     supplySet, supplyRoll, injuryAdd, injuryRemove, on,
-    gmPin, pinFresh, hidePin, determinationGrant,
+    determinationGrant,
   } = useGame();
-  const [showPin, setShowPin] = useState(false);
   const [supplyLast, setSupplyLast] = useState(null);
   React.useEffect(() => on('supply-rolled', (e) => e && setSupplyLast(e)), [on]);
   const { universe } = useUniverse();
@@ -191,57 +190,27 @@ export default function DMDashboard() {
 
   return (
     <div>
-      {/* Session header */}
-      <div className="panel" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-        <div>
-          <h2 style={{ fontSize: '1rem', letterSpacing: '0.15em', marginBottom: '0.25rem' }}>
-            {terms.session.toUpperCase()} ACTIVE — {universe.name}
-          </h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <span style={{ color: 'var(--accent)', fontSize: '1.5rem', letterSpacing: '0.3em', fontWeight: 'bold' }}>
-              {gameCode}
-            </span>
-            <button onClick={() => navigator.clipboard?.writeText(shareUrl)} style={smallBtn}>
-              COPY LINK
-            </button>
-            <a href={`/?board=${gameCode}`} target="_blank" rel="noreferrer" style={{ ...smallBtn, textDecoration: 'none' }}>OPEN BOARD</a>
-            <span className={`mc-tv${boardLinked ? ' up' : ''}`} title="Table board screen"><span className="link-dot" />{boardLinked ? 'TV LINKED' : 'NO TV'}</span>
-            <span style={{ color: 'var(--text-dim)', fontSize: '0.7rem' }}>
-              {playerList.filter(p => p.connected !== false).length}/{playerList.length} {PLAYERS} ONLINE
-            </span>
-            <span style={{ color: 'var(--text-dim)', fontSize: '0.7rem' }}>
-              SCENARIO: <span style={{ color: 'var(--accent)' }}>{activePack ? activePack.meta.title.toUpperCase() : 'SANDBOX'}</span>
-            </span>
-            {lastSaved && (
-              <span className="session-saved">
-                {terms.session.toUpperCase()} SAVED {fmtTime(lastSaved, { seconds: true })}
-              </span>
-            )}
-            {gmPin && (pinFresh || showPin ? (
-              <span className="dm-pin" title={`Lets another terminal take over this ${terms.session.toLowerCase()}`}>
-                GM PIN <b>{gmPin}</b>
-                <button type="button" style={smallBtn} onClick={() => { setShowPin(false); hidePin(); }}>HIDE</button>
-              </span>
-            ) : (
-              <button type="button" style={smallBtn} onClick={() => setShowPin(true)}>SHOW PIN</button>
-            ))}
-          </div>
-          {pinFresh && gmPin && (
-            <p className="dm-pin-hint">
-              NOTE THIS PIN: IT LETS ANOTHER TERMINAL TAKE OVER AS {terms.gm.toUpperCase()} IF THIS ONE DIES. NEVER SHARE IT WITH {terms.players.toUpperCase()}.
-            </p>
-          )}
+      {/* Session head (the code, PIN, TV and LINK live in the status strip above) */}
+      <div className="page-head">
+        <h2>{PLAYERS} — {playerList.filter(p => p.connected !== false).length}/{playerList.length} ONLINE</h2>
+        <div className="page-actions">
+          <span className="page-note">
+            {activePack ? activePack.meta.title.toUpperCase() : 'SANDBOX'}
+            {lastSaved ? ` · ${terms.session.toUpperCase()} SAVED ${fmtTime(lastSaved, { seconds: true })}` : ''}
+          </span>
+          <PoolCounters />
+          <button type="button" className="page-btn" onClick={() => navigator.clipboard?.writeText(shareUrl)}>COPY JOIN LINK</button>
+          <a className="page-btn" href={`/?board=${gameCode}`} target="_blank" rel="noreferrer">OPEN BOARD (TV)</a>
+          {/* Ending deletes the saved session for everyone (phones and TV are sent away): never on a single tap. */}
+          <Confirm danger label={`END ${terms.session.toUpperCase()}`} title={`END THIS ${terms.session.toUpperCase()} FOR EVERYONE?`}
+            message={`Phones and the TV are disconnected and the saved ${terms.session.toLowerCase()} is deleted. Export the recap first (RUN → MORE → LOG → EXPORT RECAP) if you want it.
+To stop for tonight and continue later, just close this tab instead.`}
+            confirmLabel={`END ${terms.session.toUpperCase()}`} cancelLabel="KEEP PLAYING" onConfirm={leaveGame} className="page-btn danger" />
         </div>
-        <PoolCounters />
-        {/* Ending deletes the saved session for everyone (phones and TV are sent away): never on a single tap. */}
-        <Confirm danger label={`END ${terms.session.toUpperCase()}`} title={`END THIS ${terms.session.toUpperCase()} FOR EVERYONE?`}
-          message={`Phones and the TV are disconnected and the saved ${terms.session.toLowerCase()} is deleted. Export the recap first (RUN → LOG → EXPORT RECAP) if you want it.\nTo stop for tonight and continue later, just close this tab instead.`}
-          confirmLabel={`END ${terms.session.toUpperCase()}`} cancelLabel="KEEP PLAYING" onConfirm={leaveGame}
-          style={{ ...smallBtn, borderColor: 'var(--danger)', color: 'var(--danger)' }} />
       </div>
 
       {/* Panel tabs */}
-      <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+      <div className="dm-tabs" role="tablist" aria-label={`${PLAYERS} dashboard`}>
         {[
           ['players', `${PLAYERS} STATUS (${playerList.length})`],
           ['message', plural(MESSAGE)],
@@ -251,12 +220,8 @@ export default function DMDashboard() {
           ['threats', 'THREATS'],
           ...(pendingSubs.length ? [['players', `PLAYER-BUILT (${pendingSubs.length})`]] : []),
         ].map(([id, label], i) => (
-          <button key={`${id}-${i}`} style={{
-            ...smallBtn,
-            background: panel === id ? 'var(--accent-glow)' : 'transparent',
-            borderColor: panel === id ? 'var(--accent)' : 'var(--border)',
-            color: panel === id ? 'var(--accent)' : 'var(--text-dim)',
-          }} onClick={() => { setPanel(id); if (id === 'log') { clearUnread(); playerList.forEach(p => clearUnreadFor(p.id)); } }}>
+          <button key={`${id}-${i}`} type="button" role="tab" aria-selected={panel === id} className={panel === id ? 'on' : ''}
+            onClick={() => { setPanel(id); if (id === 'log') { clearUnread(); playerList.forEach(p => clearUnreadFor(p.id)); } }}>
             {label}
           </button>
         ))}
@@ -405,7 +370,7 @@ export default function DMDashboard() {
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.2rem' }}>
                       {statusEffects.filter(e => !selected.statusEffects.includes(e)).map(e => (
-                        <button key={e} style={{ ...smallBtn, fontSize: '0.6rem', padding: '0.2rem 0.4rem' }}
+                        <button key={e} style={{ ...smallBtn, fontSize: '0.62rem', padding: '0.2rem 0.5rem', minHeight: '36px' }}
                           onClick={() => handleAddStatus(selected.id, e)}>+{e}</button>
                       ))}
                     </div>
@@ -609,7 +574,7 @@ function StatBar({ label, value, max, color }) {
 }
 
 const smallBtn = {
-  padding: '0.4rem 0.7rem', background: 'transparent',
+  padding: '0.4rem 0.8rem', minHeight: '44px', background: 'transparent',
   border: '1px solid var(--border)', color: 'var(--text-dim)',
   fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
   letterSpacing: '0.06em', cursor: 'pointer',

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import { useFx } from './player/fx';
+import Icon from './run/icons';
 
 /* Core sections every universe gets; universe.navSections are appended. */
 export const CORE_SECTIONS = [
@@ -142,57 +143,124 @@ function DmAlerts({ onChange }) {
   );
 }
 
-export default function Nav({ active, onChange, isDM }) {
-  const { unreadCount, players, table } = useGame();
+/* ═══════════════════════════════════════════════════════════════
+   LEFT RAIL (72px; a bottom bar below 900px, scrolling below 600px).
+   PLAY: Run · Board · Crew (terms.players)   LIBRARY: Stories · Characters
+   · Maps · Rules (universe.navSections as sub-tabs)   bottom: Dice · Audio.
+   Badges: Run (pause requested), Crew (seat claims + player-built
+   characters waiting + unread messages).
+   ═══════════════════════════════════════════════════════════════ */
+export function railSections(universe) {
+  const terms = universe.terms;
+  return {
+    play: [
+      { id: 'run', label: 'Run', icon: 'run' },
+      { id: 'board', label: 'Board', icon: 'board' },
+      { id: 'session', label: terms.players, icon: 'crew', short: terms.players.length > 8 ? terms.players.split(/\s+/).pop() : undefined },
+    ],
+    library: [
+      { id: 'scenarios', label: 'Stories', icon: 'stories' },
+      { id: 'characters', label: 'Characters', icon: 'characters', short: 'Chars' },
+      { id: 'maps', label: 'Maps', icon: 'maps' },
+      ...((universe.navSections || []).length ? [{ id: 'rules', label: 'Rules', icon: 'rules' }] : []),
+    ],
+    tools: [{ id: 'dice', label: 'Dice', icon: 'dice' }],
+  };
+}
+
+function AudioPop({ audio, onClose, anchor }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    const onDown = (e) => { if (ref.current && !ref.current.contains(e.target) && !anchor.current?.contains(e.target)) onClose(); };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onDown);
+    requestAnimationFrame(() => ref.current?.querySelector('button')?.focus({ preventScroll: true }));
+    return () => { document.removeEventListener('keydown', onKey); document.removeEventListener('pointerdown', onDown); };
+  }, [onClose, anchor]);
+  if (!audio) return null;
+  const { preset, volume, presets, applyPreset, updateVolume } = audio;
+  return (
+    <div ref={ref} className="rail-audio" role="dialog" aria-label="Ambient audio">
+      <div className="rail-audio-head">AMBIENT AUDIO <span>{presets[preset]?.label || 'OFF'}</span></div>
+      <div className="rail-audio-presets">
+        {Object.entries(presets).map(([key, val]) => (
+          <button key={key} type="button" className={preset === key ? 'on' : ''} aria-pressed={preset === key} onClick={() => applyPreset(key)}>{val.label}</button>
+        ))}
+      </div>
+      <label className="rail-audio-vol">
+        <span>VOL</span>
+        <input type="range" min="0" max="1" step="0.05" value={volume} onChange={(e) => updateVolume(parseFloat(e.target.value))} aria-label="Ambient volume" />
+        <span>{Math.round(volume * 100)}%</span>
+      </label>
+    </div>
+  );
+}
+
+export default function Nav({ active, onChange, audio }) {
+  const { unreadCount, table, seatClaims = [] } = useGame();
   const { universe } = useUniverse();
-  const playerCount = Object.keys(players).length;
-  const sections = [...(isDM ? [{ id: 'board', label: 'Board' }] : []), ...CORE_SECTIONS, ...(universe.navSections || []).map(({ id, label }) => ({ id, label }))];
+  const [audioOpen, setAudioOpen] = useState(false);
+  const audioBtn = useRef(null);
+  const groups = railSections(universe);
+  const pending = (table?.submissions || []).filter((s) => s.status === 'pending').length;
+  const crewBadge = seatClaims.length + pending + (unreadCount || 0);
+
+  const go = (id) => {
+    // Re-selecting the active entry resets that section to its root (e.g. STORIES → library).
+    if (active === id) window.dispatchEvent(new CustomEvent(NAV_RESELECT, { detail: id }));
+    onChange(id);
+  };
+  const btn = (s) => {
+    const on = active === s.id;
+    const badge = s.id === 'session' && crewBadge > 0 ? crewBadge : null;
+    const dot = s.id === 'run' && table?.pause;
+    const extra = badge ? `, ${badge} waiting` : dot ? ', pause requested' : '';
+    return (
+      <button key={s.id} type="button" className={`rail-btn${on ? ' on' : ''}`} aria-current={on ? 'page' : undefined}
+        aria-label={`${s.label}${extra}`} onClick={() => go(s.id)}>
+        <Icon name={s.icon} />
+        <span className="rail-l">{s.short || s.label}</span>
+        {badge && <span className="rail-badge" aria-hidden="true">{badge > 9 ? '9+' : badge}</span>}
+        {dot && <span className="rail-dot" aria-hidden="true" />}
+      </button>
+    );
+  };
 
   return (
+    <nav className="rail" aria-label="Sections">
+      <div className="rail-group" role="group" aria-label="Play">
+        <span className="rail-k" aria-hidden="true">PLAY</span>
+        {groups.play.map(btn)}
+      </div>
+      <div className="rail-group" role="group" aria-label="Library">
+        <span className="rail-k" aria-hidden="true">LIBRARY</span>
+        {groups.library.map(btn)}
+      </div>
+      <span className="rail-fill" />
+      <div className="rail-group rail-tools" role="group" aria-label="Tools">
+        {groups.tools.map(btn)}
+        {audio && (
+          <button ref={audioBtn} type="button" className={`rail-btn${audioOpen ? ' on' : ''}${audio.isActive ? ' live' : ''}`}
+            aria-expanded={audioOpen} aria-haspopup="dialog" aria-label={`Audio${audio.isActive ? `: ${audio.presets[audio.preset]?.label || ''}` : ''}`}
+            onClick={() => setAudioOpen((o) => !o)}>
+            <Icon name="audio" />
+            <span className="rail-l">Audio</span>
+            {audio.isActive && <span className="rail-dot live" aria-hidden="true" />}
+          </button>
+        )}
+      </div>
+      {audioOpen && <AudioPop audio={audio} anchor={audioBtn} onClose={() => setAudioOpen(false)} />}
+    </nav>
+  );
+}
+
+/** Banners shown above every GM section (new access code, seat claims, pause, prompts, player-built characters). */
+export function DmBanners({ onChange }) {
+  return (
     <>
-      <nav className="nav">
-        {isDM && (
-          <button className={active === 'run' ? 'active' : ''} onClick={() => onChange('run')}
-            style={{ position: 'relative', borderColor: active === 'run' ? 'var(--accent)' : undefined }}>
-            Run
-            {table?.pause && <span className="nav-dot warn" aria-label="Pause requested" />}
-          </button>
-        )}
-        {isDM && (
-          <button
-            className={active === 'session' ? 'active' : ''}
-            onClick={() => onChange('session')}
-            style={{
-              position: 'relative',
-              borderColor: active === 'session' ? 'var(--accent)' : undefined,
-            }}
-          >
-            {universe.terms.session} ({playerCount})
-            {unreadCount > 0 && (
-              <span style={{
-                position: 'absolute', top: '-4px', right: '-4px',
-                width: '8px', height: '8px', borderRadius: '50%',
-                background: 'var(--danger)', boxShadow: '0 0 6px var(--danger)',
-              }} />
-            )}
-          </button>
-        )}
-        {sections.map(s => (
-          <button
-            key={s.id}
-            className={active === s.id ? 'active' : ''}
-            onClick={() => {
-              // Re-clicking the active tab resets that section to its root (e.g. SCENARIOS → library).
-              if (active === s.id) window.dispatchEvent(new CustomEvent(NAV_RESELECT, { detail: s.id }));
-              onChange(s.id);
-            }}
-          >
-            {s.label}
-          </button>
-        ))}
-      </nav>
-      {isDM && <NewCodeBanner />}
-      {isDM && <DmAlerts onChange={onChange} />}
+      <NewCodeBanner />
+      <DmAlerts onChange={onChange} />
     </>
   );
 }

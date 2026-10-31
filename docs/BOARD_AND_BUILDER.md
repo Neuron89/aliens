@@ -7,7 +7,7 @@ Extends ARCHITECTURE.md. Same conventions (universe-agnostic engine, data not co
 | Role | Device | URL | Sees |
 |---|---|---|---|
 | `dm` | GM tablet / laptop | `/` → create session | everything + Map Controller |
-| `player` | phone | `/?join=CODE` | own sheet, comms, dice, mini-map of revealed rooms |
+| `player` | phone | `/?join=CODE` | own sheet, comms, dice, TABLE tab (map of revealed rooms, own room, what is in it, who is with you) |
 | `board` | TV lying flat | `/?board=CODE` | full-screen map, tokens in revealed rooms, PC tokens, pings. No chrome, no input except a hidden tap-to-fullscreen. |
 
 `join-board { code }` needs no token (the TV is in the room). The board receives `board-state` only; it never receives character sheets or messages.
@@ -149,11 +149,22 @@ faint outline when `fog` is on, reveal transition (fog dissolves ~500 ms), PC to
 colored ring per player, pings as expanding rings, a thin status strip at one edge with
 `terminal.name` + session code + map title. Wake-lock (`navigator.wakeLock`) when available.
 Implemented in `BoardView.jsx` + the shared `board/MapCanvas.jsx` (also used by the controller,
-the player MAP tab and the Room Editor). Token chips and room labels are counter-rotated so they
+the player TABLE tab and the Room Editor). Token chips and room labels are counter-rotated so they
 stay upright on the TV. Any tap requests fullscreen. The board remembers `muthur.board =
 { code, role:'board' }` (separate from `muthur.session` so a board tab never steals a GM/player
 seat) and re-sends `join-board` on every socket reconnect; a saved board re-attaches on load only
 when the browser has no other saved session and no `?join=` link.
+
+**Player TABLE tab** (`player/TablePane.jsx`): no new role or payload. The phone uses the same
+filtered `board-state {board, mapDef}` the server already pushes to every player (viewFor
+'player' = the board's rule above; public mapDef without GM room notes) and derives the rest on
+the client: its own token = the `pc` token whose `ownerPlayerId` is the player's id; YOU ARE IN =
+that token's `roomId` (room name from `board.rooms[id].name` or the mapDef); VISIBLE HERE = visible
+`item` / `marker` / `hazard` tokens with the same `roomId` and level; WITH YOU = visible `pc` /
+`npc` / `creature` tokens there (a `panicking` status ring is shown). MapCanvas `role="player"`,
+`highlightPlayerId` = own id, `selectedRoomId` = own room; NEAR ME zooms (`view.zoom` 2.4, pan
+clamped) on the own token, WHOLE MAP fits the whole map. TAKE sends the GM a normal
+private `player-message` ("I take the …"); the GM hands the item over as usual.
 
 ## 6. Character Builder
 

@@ -96,7 +96,8 @@ export function MapViewer({ map, onBack, backLabel = '← BACK TO MAPS' }) {
 
 function MapCard({ m, onClick }) {
   return (
-    <div className="map-card" onClick={onClick}>
+    <div className="map-card" onClick={onClick} role="button" tabIndex={0} aria-label={m.title}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}>
       <div className="map-subtitle">{m.group}</div>
       <div className="map-title">{m.title}</div>
       <div className="map-desc">{m.description}</div>
@@ -126,11 +127,11 @@ export default function Maps() {
 
   return (
     <div>
-      <div className="panel">
-        <h2>TACTICAL MAPS</h2>
-        <p style={{ color: 'var(--text-dim)', marginBottom: '1rem', fontSize: '0.85rem' }}>
+      <div className="page-head">
+        <h2>MAPS</h2>
+        <p>
           Select a location to view schematics, deck plans, and room descriptions.
-          Maps come from every scenario pack for this universe, plus general-purpose layouts.
+          Maps come from every scenario pack for this universe, plus general-purpose layouts. To put one on the table TV, use BOARD.
         </p>
       </div>
 
@@ -147,8 +148,8 @@ export default function Maps() {
 
       {groups.map(g => (
         <React.Fragment key={g.name}>
-          <div className="panel" style={{ padding: '0.5rem 0.75rem', marginBottom: '0.5rem', marginTop: '1rem' }}>
-            <h3 style={{ fontSize: '0.8rem', color: 'var(--accent)', letterSpacing: '0.1em' }}>{g.name.toUpperCase()}</h3>
+          <div className="sec-head">
+            <h3>{g.name.toUpperCase()}</h3><span>{g.maps.length}</span>
           </div>
           <div className="map-grid">
             {g.maps.map(m => <MapCard key={m.id} m={m} onClick={() => setSelected(m.id)} />)}

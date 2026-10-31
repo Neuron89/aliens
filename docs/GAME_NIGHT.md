@@ -37,17 +37,17 @@ Development mode (`cd "web app" && npm run dev`) serves the UI on :3000 and the 
 ### 1.3 Have a scenario ready
 
 - Bundled packs are already in the library (ALIEN 15, DUNE 4).
-- **Generate** one in the app: Scenarios tab, **GAME NIGHT — GENERATE SCENARIO** (needs `ANTHROPIC_API_KEY` in `..\aliens-deploy\web app\.env`; see README, mock mode exists for testing).
+- **Generate** one in the app: **Stories** (left rail), **GAME NIGHT — GENERATE SCENARIO** (needs `ANTHROPIC_API_KEY` in `..\aliens-deploy\web app\.env`; see README, mock mode exists for testing).
 - **Write** one with Claude Code and the `gamenight` skill (no API key): say "set up a game night" in this repo. The pack lands in `web app/content/<universe>/`; run `deploy-local.ps1` again (or copy the file into `..\aliens-deploy\web app\content\<universe>\`) and reload the page.
-- **Import** one: Scenarios tab, **IMPORT PACK** (paste or upload JSON); see `docs/CONTENT_PACKS.md`.
+- **Import** one: **Stories**, **IMPORT PACK** (paste or upload JSON); see `docs/CONTENT_PACKS.md`.
 - Read the pack's content warnings in the library card before you pick it.
 
 ### 1.4 Set the TV up on the table
 
 1. Put the TV flat in the middle of the table (or mount it so players can lean in), open its browser to `http://<LAN IP>:3100/?board=CODE` once you have the code (section 2), and tap the screen once: it goes fullscreen, hides the cursor and keeps the screen awake (wake lock). A tiny "TAP FOR FULLSCREEN" hint shows until then.
-2. The TV shows "waiting" until the GM picks a map. In the GM **Board** tab the **TV LINKED** dot should be on (the Session header also shows TV LINKED / NO TV).
-3. **Orientation** (players sit around all four sides): in the **Board** tab use **ROTATE** (90 degrees per tap), **FLIP** and **ZOOM −/+** until the map reads right from the GM seat; labels and tokens stay upright whichever way you turn it. **AS TV** makes the tablet canvas mirror the TV's rotation/flip so you move tokens in the orientation players see. Toggle it off to work upright on the tablet.
-4. No TV? Skip it: everything works from phones and the GM screen; the map shows on the phone **MAP** tab for revealed rooms.
+2. The TV shows "waiting" until the GM picks a map. The **TV** dot in the GM status strip (top bar) turns green and reads **TV LINKED** once the TV is attached.
+3. **Orientation** (players sit around all four sides): in **Board** (left rail) use **ROTATE** (90 degrees per tap), **FLIP** and **ZOOM −/+** until the map reads right from the GM seat; labels and tokens stay upright whichever way you turn it. **AS TV** makes the tablet canvas mirror the TV's rotation/flip so you move tokens in the orientation players see. Toggle it off to work upright on the tablet.
+4. No TV? Skip it: everything works from phones and the GM screen; the map shows on the phone **TABLE** tab for revealed rooms.
 5. Optional: add `&audio=1` to the TV URL so the TV speaker plays the ambient track that follows the GM's scene presets; tap the TV once to allow sound.
 6. Burn-in safety is automatic: the map drifts a pixel or two every minute and dims after 10 minutes of nothing happening.
 
@@ -57,82 +57,93 @@ Development mode (`cd "web app" && npm run dev`) serves the UI on :3000 and the 
 2. On the session screen choose **INITIATE SESSION**. A list of scenarios for the active universe appears (bundled and runtime packs, with type and source badges), plus **NO SCENARIO — SANDBOX** for free play (all characters available, no run view).
 3. **Session zero (do this before INITIALIZE, with the players at the table).** Tick **SESSION ZERO** under the scenario list: the pack's tone and content warnings pre-fill a checklist (untick what does not apply, add your own) and you write **lines and veils**. Every phone then shows a one-time **BEFORE WE BEGIN** card with these and an **I'M READY** button; the GM sees who has confirmed. Changing the settings later re-arms the card. Talk it through out loud as well; the card is a prompt, not a substitute.
 4. **DUNE only**: set **EXPECTED** players (the starting pools scale with it: Threat starts at 2 per player; you can override the starting values).
-5. Pick the scenario and press **INITIALIZE**. You receive a **4-letter access code** and a **6-digit GM PIN**. **Write the PIN down now**: it is shown once (the header's **SHOW PIN** reveals it again) and it is how another terminal takes over if this one dies (section 5). Do not tell players.
-6. Share the join link `http://<host>:<port>/?join=CODE` (the Session tab has **COPY LINK**) or just the code. The app draws no QR for phones: paste the link into any QR generator if you want players to scan it. The Board tab's **OPEN BOARD** does show a QR, but for the TV link.
-7. Link the TV (section 1.4). Once the session is live you land on the **RUN** tab (scenario sessions) or the Session tab (sandbox).
+5. Pick the scenario and press **INITIALIZE**. You receive a **4-letter access code** and a **6-digit GM PIN**, both in the status strip at the top of the screen. **Write the PIN down now**: it shows in amber until you tap **NOTED**; afterwards tap **PIN ••••••** in the strip to see it again. It is how another terminal takes over if this one dies (section 5). Do not tell players.
+6. Share the join link: tap the big **CODE** in the status strip for the link, a **QR code** players can scan, **COPY JOIN LINK** / **COPY CODE**, and the TV link (**OPEN BOARD HERE**, **COPY TV LINK**). The crew dashboard (rail **Crew**; DUNE **Agents**) also has **COPY JOIN LINK**.
+7. Link the TV (section 1.4). Once the session is live you land on **Run** (scenario sessions) or the crew dashboard (sandbox).
 
 ### What players do (phones)
 
 1. Open the link (or host URL, **JOIN**, type the code). The phone themes itself to the GM's universe once connected.
 2. Enter a name and press **AUTHENTICATE** (the button label follows the universe's join prompt). The name must be unique at the table.
 3. Wait for the GM to assign a character, or tap **BUILD YOUR CHARACTER**, build one on the phone and submit it (the GM sees a **PLAYER-BUILT** badge and can ASSIGN, EDIT or REJECT).
-4. Assigned: the phone shows a top bar (tracks, visible clocks, **PAUSE**, sound toggle) and tabs **SHEET** (**ROLL** next to a skill opens DICE pre-filled), **GEAR**, **COMMS** (messages, unread badge, **REPLY PRIVATELY**), **FILES** (orders per act, handouts, clues found and who found them), **MAP**, **DICE**.
+4. Assigned: the phone pins a vitals header (name, career and session code, LINK dot, **PAUSE**, **≡** menu; the universe's track bars with numbers, ALIEN HEALTH + STRESS, DUNE STRESS + DETERMINATION) and a quick-action row: **ROLL** (opens the dice roller; **DONE** goes back), **+STRESS** (marks +1 stress after a confirm; it shows in your roll feed as "+1 STRESS"), **PANIC** (ALIEN: a panic roll when you call for one, cancellable before rolling) and **DET n** (DUNE: spend 1 Determination after a confirm). Below that a strip with shared pools (DUNE Momentum), visible clocks and the YOUR TURN / paused / offline banners. Bottom tabs: **SHEET** (**ROLL** next to a skill opens the roller pre-filled), **GEAR**, **COMMS** (two views: messages with **REPLY PRIVATELY**, and **FILES & CLUES**: orders per act, handouts, clues found; one badge counts unread messages plus unopened handouts) and **TABLE** (the board from the player's side: **YOU ARE IN** room, the map with fog as the TV shows it, **NEAR ME** / **WHOLE MAP**, their own token highlighted and their room outlined, **VISIBLE HERE** items, markers and hazards in that room with **TAKE**, which messages you "I take the …", and **WITH YOU** for the other PCs, NPCs and threats in the room). The **≡** menu holds BUILD A NEW CHARACTER, alert sound, interface sound, REDUCE FX and DISCONNECT.
 5. Players never see GM tools, scenarios, hidden tokens or each other's secrets.
 
-Assign characters (Session tab, expand a player card): pack characters are offered first, then custom ones from the Characters tab. Stats come from the universe rules; health-type tracks are computed by the engine.
+Assign characters (rail **Crew** / DUNE **Agents**, tap a player card): pack characters are offered first, then custom ones from the Characters tab. Stats come from the universe rules; health-type tracks are computed by the engine.
 
 ## 3. During play
 
+### 3.0 The GM screen
+
+- **Status strip** (top, always visible): terminal name, scenario and act, the session **CODE** (tap: join link, QR, copy, TV link), **PIN** (tap to reveal), players online (tap: crew dashboard), **TV** linked dot, **LINK** (amber RECONNECTING when the socket drops), **◂ UNIVERSES** (asks first, then suspends the session; nothing is ended), **REDUCE FX** and **SOUND**. The session screen before INITIALIZE shows the same strip.
+- **Left rail**: PLAY → **Run**, **Board**, **Crew** (DUNE **Agents**; the old Session / Audience tab); LIBRARY → **Stories** (the scenario library), **Characters**, **Maps**, **Rules** (one entry; the universe's reference pages are tabs inside it: ALIEN Weapons / Vehicles / Xenomorphs / Cheat Sheets, DUNE Imperium / Cheat Sheets); at the bottom **Dice** (GM roller with SECRET, plus the roll feed) and **Audio** (ambient presets and volume; replaces the old floating AUDIO panel). Badges: Run shows a dot when a pause is requested; Crew counts seat claims, player-built characters waiting and unread messages. Tapping the active entry returns that section to its start (e.g. Stories → library). Below 900 px wide the rail becomes a bottom bar.
+- Alerts (pause requested, seat claims, panic and complication prompts, player-built characters, a new access code) appear as banners above whichever section is open.
+
 ### 3.1 The RUN view (your main screen)
 
-Left column: **act switcher** with progress, act summary and agenda notes, ◂ PREV / scene picker / NEXT ▸, and the **scene card**: read-aloud, events, checks, stress triggers, encounter detail, NPC guidance, outcomes, GM tip and the clues findable in this scene. Tick **DONE** per scene (mandatory scenes are tagged). Progress is saved on the server and survives a resume.
+The current scene fills the screen in large type: title, **MANDATORY** / **ENCOUNTER** tags, **MARK DONE**, the read-aloud, events, then three cards **CHECKS · STRESS TRIGGERS · OUTCOMES**, encounter detail, NPC guidance, the clues findable here (**REVEAL TO ALL**) and the GM tip. Progress is saved on the server and survives a resume.
+
+**Progress strip** (top): the act name, one segment per scene of the act (done ones lit, the current one glowing; tap a segment to jump), **SCENE n / N** (tap: the scene list), **ADVANCE ACT ▸** once every scene of the act is done, and the DUNE Momentum / Threat counters. The **scene list** shows every act with its scenes, done ticks (tap to toggle), MANDATORY / ENCOUNTER chips, the current act's brief (summary, agenda notes, GM notes, **ACT OPENING → TV CARD**, **▶ TTS**) and **PREV / NEXT**. On screens 1400 px and wider it stays open as a column on the left.
+
+**Dock** (bottom bar): **NEXT SCENE** (ticks the current scene done and moves on; on the act's last scene it becomes **ADVANCE ACT**, with a confirm), then **NARRATE · MAP · CREW · DICE · CLOCKS · HANDOUTS · THREATS · MORE**. Each opens one drawer on the right; tap the same button again, **✕** or Escape to close it. The open drawer is remembered for the session.
+
+**Keys** (never while typing in a field): **[** previous scene, **]** next scene, **n** the narrate drawer (with the cursor in the text box).
 
 **Narration**
-- **SEND TO TABLE** puts the read-aloud on the TV as a lower-third caption (typewriter reveal) and on every phone as a dismissible sheet. **AS CARD** shows it full-screen on the TV. **▶ TTS** reads it aloud on the GM device.
-- **NARRATE TO TABLE** (below the scene) sends free text. **CLEAR TABLE TEXT** removes it.
-- **MAP / THEATRE** (top strip) switches the TV between the map and a theatre-of-mind card (act and scene title, plus the act's `sceneArt` if the pack has one). The choice persists.
+- **SEND TO TABLE** puts the read-aloud on the TV as a lower-third caption (typewriter reveal) and on every phone as a dismissible sheet. **AS CARD** shows it full-screen on the TV. **▶ READ ALOUD** reads it on the GM device (TTS). While it is on the table the stage shows **● ON TABLE** and **CLEAR**.
+- **NARRATE** drawer: free text for the table (**SEND CAPTION**, **SEND AS CARD**, Ctrl+Enter), what is on the table now with **CLEAR TABLE TEXT**, **TV SHOWS MAP / THEATRE** (a theatre-of-mind card with the act and scene title, plus the act's `sceneArt` if the pack has one; the choice persists) and the recent narration (**USE** puts a line back in the box).
 
 **Acts and agendas**
-- **ADVANCE ACT ▸** moves to the next act and pushes each player's `agendaByAct` entry for it as a private **NEW ORDERS** card (vibration and sound). **SEND AGENDA CARDS** (AGENDAS tab) re-sends the current act's. Players can re-open orders under FILES.
+- **ADVANCE ACT ▸** moves to the next act and pushes each player's `agendaByAct` entry for it as a private **NEW ORDERS** card (vibration and sound). **SEND AGENDA CARDS** (MORE › AGENDAS) re-sends the current act's. Players can re-open orders under COMMS › FILES & CLUES.
 
-**Rail (right side)**
-- **CLOCKS** (always visible): **+ CLOCK** with 4 / 6 / 8 / custom segments, kind *danger* (strikes when full), *racing* (the players' progress) or *tug* (moves both ways), shown to the table or GM-only. Tap + / − to tick; phones chime and the TV clock stack updates. A full clock is tagged FULL: decide what happens.
-- **AGENDAS**: each PC's agenda this act; NPC cards with "if ignored" behaviour and optional secrets (hidden until you press **SHOW SECRETS**).
-- **HANDOUTS**: **PUSH TO PHONES** to everyone or chosen players, **SEEN 2/4** receipts, **SHOW ON TV** for handouts with an image, **+ CUSTOM HANDOUT**. Players get a sealed card ("TAP TO OPEN"); opening it counts as seen and they can re-open it under FILES. The same push exists in the Scenarios tab.
-- **CLUES**: pack clues plus ad-hoc ones; **REVEAL** to all or chosen players (they are credited as finders); status FOUND / HIDDEN and who found it. Give every important conclusion at least three clues.
-- **INIT / THREATS**: see 3.4 and 3.5.
-- **LOG**: filterable session log, **ADD NOTE**, mark the ending reached (feeds the recap), **EXPORT RECAP**.
-- **ROLL FEED**: every roll phones report (also the Session tab's **ROLLS** panel).
+**Drawers**
+- **MAP**: the board canvas in compact form: map and level, **FOG**, **REVEAL** (room list with SEEN / FOG toggles, REVEAL ALL / CONCEAL ALL), **PING**, **+ TOKEN** (the palette), tap a token or room for its sheet, and **OPEN FULL BOARD ▸** (the Board section, for rotate / flip / zoom / snap / edit rooms / reset).
+- **CREW** (DUNE **HOUSE AGENTS**): every seat with its track bars, panic / offline / KIA state, unread messages (the last one quoted), **MSG** per seat (with the last few messages) and **MSG ALL**; quick actions **+1 STRESS ALL**, **ASK FOR A ROLL** (pick a skill and who; sent as a priority message to the phone), **SEND HANDOUT** (opens HANDOUTS) and **PRIVATE AGENDA** (opens MORE › AGENDAS); **FULL CREW DASHBOARD ▸** for the editor (tracks, status, supplies, injuries, inventory, kill / replace).
+- **DICE**: the GM roller (SECRET logs privately) and the roll feed: every roll phones report (also the crew dashboard's **ROLLS** panel).
+- **CLOCKS**: **+ CLOCK** with 4 / 6 / 8 / custom segments, kind *danger* (strikes when full), *racing* (the players' progress) or *tug* (moves both ways), shown to the table or GM-only. Tap + / − to tick; phones chime and the TV clock stack updates. A full clock is tagged FULL (and the dock button shows **!**): decide what happens.
+- **HANDOUTS**: **PUSH TO PHONES** to everyone or chosen players, **SEEN 2/4** receipts (unseen count on the dock button), **SHOW ON TV** for handouts with an image, **+ CUSTOM HANDOUT**. Players get a sealed card ("TAP TO OPEN"); opening it counts as seen and they can re-open it under COMMS › FILES & CLUES. The same push exists in Stories.
+- **THREATS**: **CREATURES** (3.5) and **INITIATIVE** (3.4); the dock button shows the round while initiative runs.
+- **MORE**: **AGENDAS** (each PC's agenda this act, **SEND AGENDA CARDS**), **NPCS** ("if ignored" behaviour, secrets hidden until **SHOW SECRETS**), **CLUES** (pack clues plus ad-hoc ones; **REVEAL** to all or chosen players, who are credited as finders; FOUND / HIDDEN and who found it; give every important conclusion at least three clues), **LOG** (filterable session log, **ADD NOTE**, mark the ending reached, **EXPORT RECAP**), **SAFETY** (pause state with **RESUME PLAY**, the session-zero answers and who confirmed) and **END** (end the session for everyone, with a confirm).
 
 ### 3.2 Rolls and pressure mechanics
 
 - **Rolls.** Players roll on their phones. Each settled roll lands in the roll feed (who, skill, pool, dice, flags PANIC / PUSH / CRIT / COMPLICATION) and pops a 4-second toast on the TV. **Secret rolls** (a threat card's ROLL ATTACK (SECRET)) show only to you and the log, never the TV.
 - **ALIEN, push and Panic.** Pushing a roll adds the Stress automatically. When a Stress Die shows 1 the phone shows **PANIC ROLL**: the player taps it (D6 + Stress), sees the effect privately, and the server applies it: PANICKED (plus the action's name for 10+, e.g. FREEZE), stress per the table, a panic ring on their TV token, a "PANIC — name" toast on the TV and the full text in a GM prompt and in the player editor. Remove the status in the player editor to clear the ring.
 - **ALIEN, supplies.** In the player editor set AIR / POWER / FOOD / WATER with −/+. **SUPPLY ROLL** (yours, or the player's on SHEET) rolls Stress Dice equal to the rating (max 6); each 1 drops the rating one step. The TV shows a SUPPLY strip when anyone's air or power is 2 or lower.
-- **DUNE, Momentum and Threat.** Counters with −/+ sit in the RUN strip and the Session header. Momentum is capped at 6, generated by player rolls, and shown on every phone and the TV. Threat is GM-only. **RESET** starts both again.
+- **DUNE, Momentum and Threat.** Counters with −/+ sit in the Run progress strip and the crew dashboard header. Momentum is capped at 6, generated by player rolls, and shown on every phone and the TV. Threat is GM-only. **RESET** starts both again.
 - **DUNE, complications.** A complication flashes the phone red and prompts you with **+1 THREAT / +2 (CONVERT)**; nothing is applied automatically.
 - **Critical injuries.** In the player editor choose **ROLL D66** (DUNE: its consequence die) or pick from the list, then **APPLY CRITICAL INJURY**. It shows on the phone sheet as a debuff; **HEAL** removes it.
 - **Tracks and status.** Per player: +1 / −1 / MAX / CLEAR on each track, status-effect toggles, inventory. Values clamp to the track maximum and sync instantly. **Kill** a character, then assign a new one to the same player.
 
 ### 3.3 Messages and loot
 
-- The messages panel (**Transmissions** in ALIEN, **Dispatches** in DUNE; the tab label follows `terms.message`) sends a private message to one player or a broadcast, with a priority (ALIEN: STANDARD, PRIORITY, EYES ONLY, EMERGENCY; DUNE: ROUTINE, URGENT, SEALED, IMPERIAL). Phones vibrate and show an incoming alert. Players can reply to you and message each other; everything is in the Message Log, and player cards show **N NEW**.
+- The messages panel (**Transmissions** in ALIEN, **Dispatches** in DUNE; the tab label follows `terms.message`) sends a private message to one player or a broadcast, with a priority (ALIEN: STANDARD, PRIORITY, EYES ONLY, EMERGENCY; DUNE: ROUTINE, URGENT, SEALED, IMPERIAL). Phones vibrate and show an incoming alert. Players can reply to you and message each other; everything is in the Message Log, and player cards show **N NEW**. From the Run view use the CREW drawer's **MSG** / **MSG ALL**.
 - **Loot.** Adding an inventory item to a player pops an "ITEM RECEIVED" toast with the item art on their phone and flashes their token on the TV.
 
 ### 3.4 Initiative
 
-RUN rail **INIT** (or the Session tab **INITIATIVE**): **+ PCS**, **+ BOARD THREATS** or type a name.
+Run › **THREATS** › **INITIATIVE** (or the crew dashboard's **INITIATIVE**): **+ PCS**, **+ BOARD THREATS** or type a name.
 ALIEN: **DRAW CARDS** deals cards 1-10 (lowest acts first); tap FAST / SLOW to spend each combatant's actions.
 DUNE: **START**, then tap a name to nominate who acts next; **KEEP INITIATIVE** spends 2 Momentum and **GM TAKES IT** spends 2 Threat.
 **NEXT / PREV / END ROUND / END** step through the order. The acting phone shows **YOUR TURN** (vibration and sound; DUNE players can **PASS TO** an ally). The TV pulses the acting token and shows the name on its bottom edge.
 
 ### 3.5 Threat cards
 
-RUN rail **THREATS**: one card per creature or NPC on the board. **ADD FROM CATALOG** places a hidden token with the creature's health. Each card has −1 / −2 / +1 health, status toggles (they show as the TV ring), **ROLL ATTACK (SECRET)** (the signature die plus its base dice; only you see it) and **SIGNATURE D6** (lookup only). Health is stored on the token, survives a restart and shows as a small bar on your Board tab only.
+Run › **THREATS** › **CREATURES**: one card per creature or NPC on the board. **ADD FROM CATALOG** places a hidden token with the creature's health. Each card has −1 / −2 / +1 health, status toggles (they show as the TV ring), **ROLL ATTACK (SECRET)** (the signature die plus its base dice; only you see it) and **SIGNATURE D6** (lookup only). Health is stored on the token, survives a restart and shows as a small bar on your Board only.
 
 ### 3.6 The board: tokens, fog and pings
 
-In the **Board** tab:
+In **Board** (left rail; most of this also works from the Run view's MAP drawer):
 - Pick the **map** (universe maps and the pack's maps) and **level** (deck/floor). Changing map keeps PC tokens (moved to the spawn point) and clears the rest; changing level keeps everything.
 - **Palette**: **CREW** (one token per connected player), **THREATS**, **NPCS**, **ITEMS**, **MARKERS** (hazard, objective, noise, blood, locked door, vent, fire). Drag onto the map, or tap to arm and then tap the map. **SNAP** snaps to the grid.
 - **Fog**: rooms start hidden. Tap a room and reveal it (the fog dissolves on the TV); a PC token moving into a room reveals it automatically. **FOG** off reveals everything. Hidden tokens stay GM-only even in revealed rooms. Room notes and GM renames of unrevealed rooms never reach the table.
 - **Tokens**: tap for the sheet (rename, hide/show, resize, facing, level, status ring, note, send an item to a player, remove). Statuses show as rings on the TV.
-- **PING** mode drops a pulse on the TV (players can ping from their MAP tab, one per second). **RESET** clears tokens, reveals and pings. **EDIT ROOMS** draws rooms on an image map that has none.
+- **PING** mode drops a pulse on the TV (players can ping from their TABLE tab, one per second). **RESET** clears tokens, reveals and pings. **EDIT ROOMS** draws rooms on an image map that has none.
 - Rooms, doors, levels and spawn points come from the map definition (`docs/BOARD_AND_BUILDER.md`).
 
 ### 3.7 Scene audio
 
-If a scene names an `ambient` mood (ALIEN: ship-hum, tension, alert, dread, space; DUNE: wind, bazaar, sietch, court), moving to that scene switches your AudioPanel. With the TV opened as `/?board=CODE&audio=1` the TV follows it. Players can mute and reduce effects on their own device (SOUND / REDUCE FX toggles).
+If a scene names an `ambient` mood (ALIEN: ship-hum, tension, alert, dread, space; DUNE: wind, bazaar, sietch, court), moving to that scene switches your ambient preset (rail **Audio**). With the TV opened as `/?board=CODE&audio=1` the TV follows it. Players can mute and reduce effects on their own device (SOUND / REDUCE FX toggles).
 
 ### 3.8 Pause (X-card)
 
@@ -156,9 +167,9 @@ The server snapshots every game to `data/sessions/<CODE>.json` after each change
 
 ## 6. Ending the night
 
-1. In the RUN **LOG**, pick the **ending reached** and add any final notes (`ENDING:` notes feed the recap).
+1. In Run › **MORE** › **LOG**, pick the **ending reached** and add any final notes (`ENDING:` notes feed the recap).
 2. Press **EXPORT RECAP** to download a Markdown recap (title, universe, the cast and who played whom, a scene-by-scene timeline, clocks, clues found, notes, the ending reached). Keep it for the next session or for the "previously on..." speech.
-3. Press **END SESSION** (red button in the Session header; the wording follows the universe) only when you are finished. It tells every phone and the TV the game ended, sends everyone to the exit screen and **deletes the snapshot**. Export the recap first.
+3. Press **END SESSION** (Run › **MORE** › **END**, or the red button in the crew dashboard header; the wording follows the universe) only when you are finished. It tells every phone and the TV the game ended, sends everyone to the exit screen and **deletes the snapshot**. Export the recap first.
 4. Optional: save custom characters (Characters tab) or export the pack (library **EXPORT**), then `deploy-local.ps1 -Stop` if you want the server off.
 
 ## 7. Troubleshooting
@@ -167,13 +178,13 @@ The server snapshots every game to `data/sessions/<CODE>.json` after each change
 |---|---|
 | Phone cannot open the link | Same Wi-Fi? Not a guest/isolated network? Use the LAN URL printed by the deploy script, not `localhost`. Allow `node.exe` / the port in Windows Firewall (Private). Try `http://<LAN IP>:3100/` in the phone browser first. |
 | Phone loads but says join code rejected | Codes are 4 letters (no I or O), case-insensitive. The game may have ended, or been swept after 24 h dormant. Check the GM screen shows the same code. |
-| Phone joined but shows no character | Normal until you assign one (Session tab, expand the player). They can also tap **BUILD YOUR CHARACTER**. |
+| Phone joined but shows no character | Normal until you assign one (rail **Crew** / **Agents**, tap the player). They can also tap **BUILD YOUR CHARACTER**. |
 | Name already in use | Someone else (or their old phone) holds that seat. Pick another name, or use **ASK THE GM FOR THIS SEAT** and approve it. |
-| TV shows nothing or "waiting" | Is the Board tab showing **TV LINKED**? Pick a map in the Board tab. If NO TV: reopen `http://<LAN IP>:3100/?board=CODE` (the code must be the live one). Tap the TV once for fullscreen. |
+| TV shows nothing or "waiting" | Does the status strip show **TV LINKED**? Pick a map (Board, or the Run view's MAP drawer). If NO TV: reopen `http://<LAN IP>:3100/?board=CODE` (the code must be the live one). Tap the TV once for fullscreen. |
 | TV went to sleep | Browsers drop the wake lock when the tab loses focus. Reload `?board=CODE` and tap once; disable the TV's own sleep timer. |
 | TV has no sound | Open it as `?board=CODE&audio=1` and tap the TV once; browsers block autoplay until a tap. |
-| Map is upside down for the players | Board tab: **ROTATE** / **FLIP** (turn **AS TV** off to keep the tablet upright). |
-| GM tablet died or its browser was wiped | Another device: session screen, **TAKE OVER** with the code and the GM PIN (section 5). Forgot the PIN: the old GM browser still holds it (SHOW PIN in its header); there is no other recovery, so write it down at creation. |
+| Map is upside down for the players | Board: **ROTATE** / **FLIP** (turn **AS TV** off to keep the tablet upright). |
+| GM tablet died or its browser was wiped | Another device: session screen, **TAKE OVER** with the code and the GM PIN (section 5). Forgot the PIN: the old GM browser still holds it (tap **PIN** in its status strip); there is no other recovery, so write it down at creation. |
 | Server restarted mid-game | Reload the GM page (auto-resume) or use **RESUME** on the session screen; phones and the TV re-attach by themselves within a few seconds. |
 | `deploy-local.ps1` says "server did not answer" | Port in use (pick `-Port`), or start it by hand: `cd ..\aliens-deploy\web app; node server/index.js` and read the error. Node must be at `C:\Program Files\nodejs`. |
 | Port already used | `deploy-local.ps1 -Stop`, or pass another `-Port`. |

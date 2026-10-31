@@ -53,7 +53,7 @@ function QrBox({ text }) {
   );
 }
 
-export default function MapController() {
+export default function MapController({ compact = false, onOpenFull }) {
   const g = useGame();
   const { universe } = useUniverse();
   const { packs, byId } = useContent();
@@ -76,9 +76,11 @@ export default function MapController() {
   const rootRef = useRef(null);
   const [matchTv, setMatchTv] = useState(true);
   const [rootH, setRootH] = useState(null);
+  const [cPanel, setCPanel] = useState(null); // compact (Run → MAP drawer): null | 'rooms' | 'token'
 
   /* Fill the viewport below the header/nav (the DM chrome height varies by universe). */
   useLayoutEffect(() => {
+    if (compact) return undefined;
     const fitHeight = () => {
       const el = rootRef.current;
       if (!el || !el.offsetParent) return;
@@ -90,7 +92,7 @@ export default function MapController() {
     window.addEventListener('resize', fitHeight);
     const t = setInterval(fitHeight, 1000); // section switches change the layout without a resize
     return () => { window.removeEventListener('resize', fitHeight); clearInterval(t); };
-  }, []);
+  }, [compact]);
 
   useEffect(() => { if (g.role === 'dm' && !g.board) g.boardSync(); }, [g.role, g.board, g.boardSync]);
   useEffect(() => {
@@ -289,38 +291,281 @@ export default function MapController() {
 
   if (g.role !== 'dm') return null;
 
+  /* ─── Token sheet ─── */
+  const tokenSheet = tok && (
+    <div className="mc-sheet" role="dialog" aria-label="Token">
+      <div className="mc-sheet-head">
+        <span className={`mc-kind k-${tok.kind}`}>{tok.kind.toUpperCase()}</span>
+        <input className="mc-input mc-grow" key={`l-${tok.id}`} defaultValue={tok.label} aria-label="Token name"
+          onBlur={(e) => e.target.value !== tok.label && g.boardUpsertToken({ id: tok.id, label: e.target.value })}
+          onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }} />
+        <button className="mc-btn" onClick={() => setSelTok(null)}>CLOSE</button>
+      </div>
+      <div className="mc-sheet-row">
+        <button className={`mc-btn${tok.hidden ? ' on warn' : ''}`} onClick={() => g.boardUpsertToken({ id: tok.id, hidden: !tok.hidden })}>
+          {tok.hidden ? 'HIDDEN — SHOW' : 'VISIBLE — HIDE'}
+        </button>
+        <span className="mc-seg"><button onClick={() => g.boardUpsertToken({ id: tok.id, size: Math.max(0.5, (tok.size || 1) - 0.5) })} aria-label="Smaller">−</button>
+          <span className="mc-seg-val">SIZE {tok.size || 1}</span>
+          <button onClick={() => g.boardUpsertToken({ id: tok.id, size: Math.min(6, (tok.size || 1) + 0.5) })} aria-label="Bigger">+</button></span>
+        <span className="mc-seg"><button onClick={() => g.boardUpsertToken({ id: tok.id, facing: (tok.facing || 0) - 45 })} aria-label="Turn left">⟲</button>
+          <span className="mc-seg-val">FACING {tok.facing || 0}°</span>
+          <button onClick={() => g.boardUpsertToken({ id: tok.id, facing: (tok.facing || 0) + 45 })} aria-label="Turn right">⟳</button></span>
+        {levels.length > 1 && (
+          <select className="mc-select" value={tok.level || level || ''} onChange={(e) => g.boardUpsertToken({ id: tok.id, level: e.target.value })} aria-label="Token level">
+            {levels.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
+          </select>
+        )}
+        <span className="mc-meta">{tok.roomId ? (mapDef?.rooms.find((r) => r.id === tok.roomId)?.name || tok.roomId) : 'NO ROOM'}</span>
+        {!tok.hidden && tok.kind !== 'pc' && board.fog && tok.roomId && !board.rooms?.[tok.roomId]?.revealed && (
+          <span className="mc-meta mc-fogged" title="The table sees it once the room is revealed">IN FOG — NOT ON TV YET</span>
+        )}
+      </div>
+      {tok.kind !== 'marker' && tok.kind !== 'hazard' && tok.kind !== 'item' && (
+        <div className="mc-sheet-row" role="group" aria-label="Token status">
+          <span className="mc-meta">STATUS</span>
+          {statusList.map(({ key, ...def }) => {
+            const cur = tokenStatuses(tok.status);
+            const on = cur.find((s) => s.key === key);
+            const write = (next) => g.boardUpsertToken({ id: tok.id, status: next.map((s) => (s.count ? `${s.key}:${s.count}` : s.key)) });
+            const toggle = () => write(on ? cur.filter((s) => s.key !== key) : [...cur, { key, count: null }]);
+            if (key === 'stress' && on) {
+              const set = (n) => write(n <= 0 ? cur.filter((s) => s.key !== key) : cur.map((s) => (s.key === key ? { ...s, count: Math.min(10, n) } : s)));
+              return (
+                <span key={key} className="mc-seg">
+                  <button onClick={() => set((on.count || 1) - 1)} aria-label="Less stress">−</button>
+                  <span className="mc-seg-val" style={{ color: def.color }}>STRESS {on.count || 1}</span>
+                  <button onClick={() => set((on.count || 1) + 1)} aria-label="More stress">+</button>
+                </span>
+              );
+            }
+            return (
+              <button key={key} className={`mc-btn mc-status${on ? ' on' : ''}`} aria-pressed={!!on} onClick={toggle}
+                style={on ? { borderColor: def.color, color: def.color, background: `color-mix(in srgb, ${def.color} 12%, transparent)` } : undefined}>
+                {def.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+      <div className="mc-sheet-row">
+        <textarea className="mc-input mc-grow" key={`n-${tok.id}`} rows={2} defaultValue={tok.note || ''} placeholder="GM note (never shown on the board)"
+          onBlur={(e) => e.target.value !== (tok.note || '') && g.boardUpsertToken({ id: tok.id, note: e.target.value })} />
+      </div>
+      <div className="mc-sheet-row">
+        {tok.kind === 'item' && crewPlayers.length > 0 && (
+          <select className="mc-select" value="" onChange={(e) => e.target.value && sendToPlayer(e.target.value)} aria-label="Send to player">
+            <option value="">SEND TO {universe.terms.player.toUpperCase()}…</option>
+            {crewPlayers.map((p) => <option key={p.id} value={p.id}>{p.character.name} ({p.name})</option>)}
+          </select>
+        )}
+        <span className="mc-spacer" />
+        <button className="mc-btn danger" onClick={() => { g.boardRemoveToken(tok.id); setSelTok(null); }}>REMOVE</button>
+      </div>
+    </div>
+  );
+
+  /* ─── Room sheet ─── */
+  const roomSheet = !tok && roomDef && (
+    <div className="mc-sheet" role="dialog" aria-label="Room">
+      <div className="mc-sheet-head">
+        <span className="mc-kind">ROOM</span>
+        <input className="mc-input mc-grow" key={`rn-${roomDef.id}`} defaultValue={roomSt.name || roomDef.name} aria-label="Room name"
+          onBlur={(e) => e.target.value !== (roomSt.name || roomDef.name) && g.boardSetRoom(roomDef.id, { name: e.target.value })}
+          onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }} />
+        <button className="mc-btn" onClick={() => setSelRoom(null)}>CLOSE</button>
+      </div>
+      <div className="mc-sheet-row">
+        <button className={`mc-btn${roomSt.revealed ? ' on' : ''}`} onClick={() => g.boardSetRoom(roomDef.id, { revealed: !roomSt.revealed })}>
+          {roomSt.revealed ? 'REVEALED — CONCEAL' : 'FOGGED — REVEAL'}
+        </button>
+        <button className="mc-btn" onClick={() => g.boardSetRoom(roomDef.id, { hideTokens: true })}>ALL TOKENS HERE → HIDDEN</button>
+        {roomSt.entered && <span className="mc-meta">ENTERED BY CREW</span>}
+      </div>
+      {roomDef.note && <p className="mc-note">{roomDef.note}</p>}
+      <div className="mc-sheet-row">
+        <textarea className="mc-input mc-grow" key={`rnote-${roomDef.id}`} rows={2} defaultValue={roomSt.note || ''} placeholder="Session note for this room"
+          onBlur={(e) => e.target.value !== (roomSt.note || '') && g.boardSetRoom(roomDef.id, { note: e.target.value })} />
+      </div>
+    </div>
+  );
+
+  /* ─── Room list (palette ROOMS tab; compact REVEAL panel) ─── */
+  const roomList = (
+    <>
+      {rooms.length === 0 && <p className="mc-hint">{mapDef ? 'This map has no room shapes yet.' : 'No map selected.'}{mapDef && currentOpt?.packId ? ' Use EDIT ROOMS (Board) to draw them.' : ''}</p>}
+      {rooms.length > 0 && (
+        <div className="mc-row-btns">
+          <button className="mc-btn" onClick={() => rooms.forEach((r) => !board.rooms[r.id]?.revealed && g.boardSetRoom(r.id, { revealed: true }))}>REVEAL ALL</button>
+          <button className="mc-btn" onClick={() => rooms.forEach((r) => board.rooms[r.id]?.revealed && g.boardSetRoom(r.id, { revealed: false }))}>CONCEAL ALL</button>
+        </div>
+      )}
+      {rooms.map((r) => {
+        const st = board.rooms[r.id] || {};
+        const count = Object.values(board.tokens).filter((t) => t.roomId === r.id).length;
+        return (
+          <div key={r.id} className={`mc-room${st.revealed ? ' on' : ''}${selRoom === r.id ? ' sel' : ''}`}>
+            <button className="mc-room-name" onClick={() => { setSelRoom(r.id); setSelTok(null); }}>
+              {st.name || r.name}{count ? <small> · {count} TOKEN{count > 1 ? 'S' : ''}</small> : null}
+            </button>
+            <button className={`mc-toggle${st.revealed ? ' on' : ''}`} onClick={() => g.boardSetRoom(r.id, { revealed: !st.revealed })} aria-pressed={!!st.revealed}
+              aria-label={`${st.name || r.name}: ${st.revealed ? 'revealed — tap to fog' : 'fogged — tap to reveal'}`}>
+              {st.revealed ? 'SEEN' : 'FOG'}
+            </button>
+          </div>
+        );
+      })}
+    </>
+  );
+
+  /* ─── Palette body (tabs, filter, items) ─── */
+  const paletteTabs = compact ? [['crew', universe.terms.players.toUpperCase()], ['threats', 'THREATS'], ['npcs', 'NPCS'], ['items', 'ITEMS'], ['markers', 'MARKERS']]
+    : [['crew', 'CREW'], ['threats', 'THREATS'], ['npcs', 'NPCS'], ['items', 'ITEMS'], ['markers', 'MARKERS'], ['rooms', 'ROOMS']];
+  const paletteBody = (
+    <>
+      <div className="mc-tabs" role="tablist">
+        {paletteTabs.map(([id, label]) => (
+          <button key={id} role="tab" aria-selected={tab === id} className={tab === id ? 'on' : ''} onClick={() => { setTab(id); setQuery(''); }}>
+            {label}
+          </button>
+        ))}
+      </div>
+      {tab !== 'rooms' && tab !== 'markers' && tab !== 'crew' && (
+        <input className="mc-input mc-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Filter…" aria-label="Filter palette" />
+      )}
+      {tab === 'items' && (
+        <form className="mc-custom" onSubmit={(e) => {
+          e.preventDefault();
+          if (!custom.trim()) return;
+          setArmed({ key: `custom-${custom}`, label: custom.trim(), sub: 'ITEM', token: { kind: 'item', label: custom.trim(), glyph: 'crate', color: '#9ccc65' } });
+          setCustom('');
+        }}>
+          <input className="mc-input mc-grow" value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="Custom item label" aria-label="Custom item label" />
+          <button className="mc-btn" type="submit">ARM</button>
+        </form>
+      )}
+      <div className="mc-pal-list">
+        {tab === 'rooms' ? roomList : (
+          <>
+            {list.length === 0 && (
+              <p className="mc-hint">
+                {tab === 'crew' ? `No ${universe.terms.players.toLowerCase()} with characters yet.` : tab === 'npcs' ? 'The active scenario has no NPCs.' : 'Nothing here.'}
+              </p>
+            )}
+            {list.map((it) => (
+              <div key={it.key} className={`mc-pal-item${armed?.key === it.key ? ' armed' : ''}${it.onMap ? ' placed' : ''}`}
+                onPointerDown={(e) => onItemPointerDown(e, it)} role="button" tabIndex={0} aria-pressed={armed?.key === it.key}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setArmed(it); } }}>
+                <PaletteIcon item={it} />
+                <span className="mc-pal-text"><b>{it.label}</b><small>{it.sub}</small></span>
+                {it.onMap && <span className="mc-pal-badge">ON MAP</span>}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+      <p className="mc-hint mc-pal-foot">Drag onto the map, or tap to arm and tap the map.</p>
+    </>
+  );
+
+  const canvas = (
+    <div className={`mc-canvas-wrap${pingMode ? ' mode-ping' : armed ? ' mode-place' : ''}`}>
+      {mapDef ? (
+        <MapCanvas ref={canvasRef} className="mc-canvas" mapDef={mapDef} board={board} role="dm" universe={universe}
+          view={canvasView} editable selectedTokenId={selTok} selectedRoomId={selRoom} pings={g.pings} snap={snap}
+          showRoomLabels={mapDef.kind === 'image'} onTap={onTap} onTokenTap={onTokenTap} onTokenMove={onTokenMove}
+          showHp activeTokenId={g.table?.initiative?.active ? g.table.initiative.order?.[g.table.initiative.turn]?.tokenId : null} />
+      ) : (
+        <div className="mc-empty">
+          <h3>NO MAP ON THE BOARD</h3>
+          <p>Pick a map for the table screen.</p>
+          <div className="mc-empty-list">
+            {options.slice(0, compact ? 6 : 8).map((o) => (
+              <button key={o.mapId} className="mc-btn" onClick={() => chooseMap(o.mapId)}>{o.title}</button>
+            ))}
+          </div>
+        </div>
+      )}
+      <div className="mc-hud">
+        {mapDef && !compact && <span>{(mapDef.title || '').toUpperCase()}{level ? ` · ${(levels.find((l) => l.id === level)?.label || level).toUpperCase()}` : ''}</span>}
+        {mapDef && rooms.length > 0 && <span>{revealedCount}/{rooms.length} {compact ? 'REVEALED' : 'ROOMS REVEALED'}</span>}
+        {!compact && (view.rotation || view.flipX || (view.zoom && view.zoom !== 1)) ? <span>TV: {view.rotation || 0}°{view.flipX ? ' FLIP' : ''}{view.zoom && view.zoom !== 1 ? ` ×${view.zoom}` : ''}</span> : null}
+        {armed && <span className="mc-hud-mode">TAP MAP TO PLACE: {armed.label.toUpperCase()} <button onClick={() => setArmed(null)}>CANCEL</button></span>}
+        {pingMode && <span className="mc-hud-mode warn">PING MODE — TAP THE MAP</span>}
+        {status && <span className="mc-hud-status">{status}</span>}
+      </div>
+      {!compact && tokenSheet}
+      {!compact && roomSheet}
+    </div>
+  );
+
+  const mapSelect = (
+    <select className="mc-select" value={board.mapId || ''} onChange={(e) => chooseMap(e.target.value)} aria-label="Map">
+      <option value="" disabled>SELECT MAP…</option>
+      {groups.map((grp) => (
+        <optgroup key={grp.name} label={grp.name.toUpperCase()}>
+          {grp.items.map((o) => <option key={o.mapId} value={o.mapId}>{o.title}</option>)}
+        </optgroup>
+      ))}
+    </select>
+  );
+  const levelSeg = levels.length > 1 && (
+    <div className="mc-seg" role="group" aria-label="Level">
+      {levels.map((l) => (
+        <button key={l.id} className={l.id === level ? 'on' : ''} aria-pressed={l.id === level} onClick={() => chooseLevel(l.id)} title={l.label}>
+          {l.label.split(/\s+[—-]\s+/)[0]}
+        </button>
+      ))}
+    </div>
+  );
+  const ghostEl = ghost && (
+    <div className="mc-ghost" style={{ left: ghost.x, top: ghost.y }}>
+      <PaletteIcon item={ghost.item} /><span>{ghost.item.label}</span>
+    </div>
+  );
+
+  /* ═══ Compact (Run → MAP drawer): canvas + FOG / REVEAL / PING / + TOKEN / OPEN FULL BOARD ═══ */
+  if (compact) {
+    return (
+      <div className="mc-root mc-compact" ref={rootRef}>
+        <div className="mc-ctop">
+          {mapSelect}
+          {levelSeg}
+        </div>
+        <div className="mc-cbtns">
+          <button className={`mc-btn${board.fog ? ' on' : ''}`} aria-pressed={!!board.fog} onClick={() => g.boardSetFog(!board.fog)} disabled={!mapDef}>FOG {board.fog ? 'ON' : 'OFF'}</button>
+          <button className={`mc-btn${cPanel === 'rooms' ? ' on' : ''}`} aria-expanded={cPanel === 'rooms'} onClick={() => setCPanel((p) => (p === 'rooms' ? null : 'rooms'))} disabled={!mapDef}>REVEAL</button>
+          <button className={`mc-btn${pingMode ? ' on warn' : ''}`} aria-pressed={pingMode} onClick={() => { setPingMode((v) => !v); setArmed(null); }} disabled={!mapDef}>PING</button>
+          <button className={`mc-btn${cPanel === 'token' ? ' on' : ''}`} aria-expanded={cPanel === 'token'} onClick={() => setCPanel((p) => (p === 'token' ? null : 'token'))} disabled={!mapDef}>+ TOKEN</button>
+        </div>
+        {canvas}
+        {tokenSheet}
+        {roomSheet}
+        {cPanel === 'rooms' && <div className="mc-cpanel" aria-label="Rooms">{roomList}</div>}
+        {cPanel === 'token' && <div className="mc-cpanel mc-palette" aria-label="Tokens">{paletteBody}</div>}
+        <button type="button" className="fs-btn primary mc-openfull" onClick={onOpenFull}>OPEN FULL BOARD ▸</button>
+        {ghostEl}
+      </div>
+    );
+  }
+
   return (
     <div className="mc-root" ref={rootRef} style={rootH ? { height: rootH } : undefined}>
       {/* ─── Top bar ─── */}
       <div className="mc-top">
-        <select className="mc-select" value={board.mapId || ''} onChange={(e) => chooseMap(e.target.value)} aria-label="Map">
-          <option value="" disabled>SELECT MAP…</option>
-          {groups.map((grp) => (
-            <optgroup key={grp.name} label={grp.name.toUpperCase()}>
-              {grp.items.map((o) => <option key={o.mapId} value={o.mapId}>{o.title}</option>)}
-            </optgroup>
-          ))}
-        </select>
-        {levels.length > 1 && (
-          <div className="mc-seg" role="group" aria-label="Level">
-            {levels.map((l) => (
-              <button key={l.id} className={l.id === level ? 'on' : ''} onClick={() => chooseLevel(l.id)} title={l.label}>
-                {l.label.split(/\s+[—-]\s+/)[0]}
-              </button>
-            ))}
-          </div>
-        )}
-        <button className={`mc-btn${board.fog ? ' on' : ''}`} onClick={() => g.boardSetFog(!board.fog)} disabled={!mapDef}>FOG {board.fog ? 'ON' : 'OFF'}</button>
+        {mapSelect}
+        {levelSeg}
+        <button className={`mc-btn${board.fog ? ' on' : ''}`} aria-pressed={!!board.fog} onClick={() => g.boardSetFog(!board.fog)} disabled={!mapDef}>FOG {board.fog ? 'ON' : 'OFF'}</button>
         <button className="mc-btn" onClick={rotate} disabled={!mapDef} title="Rotate the TV view"><span className="mc-wide">ROTATE </span>{view.rotation || 0}°</button>
-        <button className={`mc-btn${view.flipX ? ' on' : ''}`} onClick={flip} disabled={!mapDef}>FLIP</button>
+        <button className={`mc-btn${view.flipX ? ' on' : ''}`} aria-pressed={!!view.flipX} onClick={flip} disabled={!mapDef}>FLIP</button>
         <button className="mc-btn" onClick={fit} disabled={!mapDef}>FIT</button>
         <span className="mc-seg">
           <button onClick={() => zoomBy(1 / 1.25)} disabled={!mapDef} aria-label="Zoom out">−</button>
           <button onClick={() => zoomBy(1.25)} disabled={!mapDef} aria-label="Zoom in">+</button>
         </span>
-        <button className={`mc-btn${pingMode ? ' on warn' : ''}`} onClick={() => { setPingMode((v) => !v); setArmed(null); }} disabled={!mapDef}>PING</button>
-        <button className={`mc-btn${snap ? ' on' : ''}`} onClick={() => setSnap((v) => !v)}>SNAP</button>
-        <button className={`mc-btn${matchTv ? ' on' : ''}`} onClick={() => setMatchTv((v) => !v)} title="Show this map in the TV orientation">AS TV</button>
+        <button className={`mc-btn${pingMode ? ' on warn' : ''}`} aria-pressed={pingMode} onClick={() => { setPingMode((v) => !v); setArmed(null); }} disabled={!mapDef}>PING</button>
+        <button className={`mc-btn${snap ? ' on' : ''}`} aria-pressed={snap} onClick={() => setSnap((v) => !v)}>SNAP</button>
+        <button className={`mc-btn${matchTv ? ' on' : ''}`} aria-pressed={matchTv} onClick={() => setMatchTv((v) => !v)} title="Show this map in the TV orientation">AS TV</button>
         {mapDef && currentOpt?.packId && (
           <button className="mc-btn" onClick={() => setEditRooms(true)} title="Correct the room shapes used for fog of war">EDIT ROOMS</button>
         )}
@@ -333,221 +578,23 @@ export default function MapController() {
       </div>
 
       <div className={`mc-main${paletteOpen ? '' : ' mc-collapsed'}`}>
-        {/* ─── Canvas ─── */}
-        <div className={`mc-canvas-wrap${pingMode ? ' mode-ping' : armed ? ' mode-place' : ''}`}>
-          {mapDef ? (
-            <MapCanvas ref={canvasRef} className="mc-canvas" mapDef={mapDef} board={board} role="dm" universe={universe}
-              view={canvasView} editable selectedTokenId={selTok} selectedRoomId={selRoom} pings={g.pings} snap={snap}
-              showRoomLabels={mapDef.kind === 'image'} onTap={onTap} onTokenTap={onTokenTap} onTokenMove={onTokenMove}
-              showHp activeTokenId={g.table?.initiative?.active ? g.table.initiative.order?.[g.table.initiative.turn]?.tokenId : null} />
-          ) : (
-            <div className="mc-empty">
-              <h3>NO MAP ON THE BOARD</h3>
-              <p>Pick a map for the table screen.</p>
-              <div className="mc-empty-list">
-                {options.slice(0, 8).map((o) => (
-                  <button key={o.mapId} className="mc-btn" onClick={() => chooseMap(o.mapId)}>{o.title}</button>
-                ))}
-              </div>
-            </div>
-          )}
-          <div className="mc-hud">
-            {mapDef && <span>{(mapDef.title || '').toUpperCase()}{level ? ` · ${(levels.find((l) => l.id === level)?.label || level).toUpperCase()}` : ''}</span>}
-            {mapDef && rooms.length > 0 && <span>{revealedCount}/{rooms.length} ROOMS REVEALED</span>}
-            {(view.rotation || view.flipX || (view.zoom && view.zoom !== 1)) ? <span>TV: {view.rotation || 0}°{view.flipX ? ' FLIP' : ''}{view.zoom && view.zoom !== 1 ? ` ×${view.zoom}` : ''}</span> : null}
-            {armed && <span className="mc-hud-mode">TAP MAP TO PLACE: {armed.label.toUpperCase()} <button onClick={() => setArmed(null)}>CANCEL</button></span>}
-            {pingMode && <span className="mc-hud-mode warn">PING MODE — TAP THE MAP</span>}
-            {status && <span className="mc-hud-status">{status}</span>}
-          </div>
-
-          {/* ─── Token sheet ─── */}
-          {tok && (
-            <div className="mc-sheet" role="dialog" aria-label="Token">
-              <div className="mc-sheet-head">
-                <span className={`mc-kind k-${tok.kind}`}>{tok.kind.toUpperCase()}</span>
-                <input className="mc-input mc-grow" key={`l-${tok.id}`} defaultValue={tok.label} aria-label="Token name"
-                  onBlur={(e) => e.target.value !== tok.label && g.boardUpsertToken({ id: tok.id, label: e.target.value })}
-                  onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }} />
-                <button className="mc-btn" onClick={() => setSelTok(null)}>CLOSE</button>
-              </div>
-              <div className="mc-sheet-row">
-                <button className={`mc-btn${tok.hidden ? ' on warn' : ''}`} onClick={() => g.boardUpsertToken({ id: tok.id, hidden: !tok.hidden })}>
-                  {tok.hidden ? 'HIDDEN — SHOW' : 'VISIBLE — HIDE'}
-                </button>
-                <span className="mc-seg"><button onClick={() => g.boardUpsertToken({ id: tok.id, size: Math.max(0.5, (tok.size || 1) - 0.5) })}>−</button>
-                  <span className="mc-seg-val">SIZE {tok.size || 1}</span>
-                  <button onClick={() => g.boardUpsertToken({ id: tok.id, size: Math.min(6, (tok.size || 1) + 0.5) })}>+</button></span>
-                <span className="mc-seg"><button onClick={() => g.boardUpsertToken({ id: tok.id, facing: (tok.facing || 0) - 45 })} aria-label="Turn left">⟲</button>
-                  <span className="mc-seg-val">FACING {tok.facing || 0}°</span>
-                  <button onClick={() => g.boardUpsertToken({ id: tok.id, facing: (tok.facing || 0) + 45 })} aria-label="Turn right">⟳</button></span>
-                {levels.length > 1 && (
-                  <select className="mc-select" value={tok.level || level || ''} onChange={(e) => g.boardUpsertToken({ id: tok.id, level: e.target.value })} aria-label="Token level">
-                    {levels.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
-                  </select>
-                )}
-                <span className="mc-meta">{tok.roomId ? (mapDef?.rooms.find((r) => r.id === tok.roomId)?.name || tok.roomId) : 'NO ROOM'}</span>
-                {!tok.hidden && tok.kind !== 'pc' && board.fog && tok.roomId && !board.rooms?.[tok.roomId]?.revealed && (
-                  <span className="mc-meta mc-fogged" title="The table sees it once the room is revealed">IN FOG — NOT ON TV YET</span>
-                )}
-              </div>
-              {tok.kind !== 'marker' && tok.kind !== 'hazard' && tok.kind !== 'item' && (
-                <div className="mc-sheet-row" role="group" aria-label="Token status">
-                  <span className="mc-meta">STATUS</span>
-                  {statusList.map(({ key, ...def }) => {
-                    const cur = tokenStatuses(tok.status);
-                    const on = cur.find((s) => s.key === key);
-                    const write = (next) => g.boardUpsertToken({ id: tok.id, status: next.map((s) => (s.count ? `${s.key}:${s.count}` : s.key)) });
-                    const toggle = () => write(on ? cur.filter((s) => s.key !== key) : [...cur, { key, count: null }]);
-                    if (key === 'stress' && on) {
-                      const set = (n) => write(n <= 0 ? cur.filter((s) => s.key !== key) : cur.map((s) => (s.key === key ? { ...s, count: Math.min(10, n) } : s)));
-                      return (
-                        <span key={key} className="mc-seg">
-                          <button onClick={() => set((on.count || 1) - 1)} aria-label="Less stress">−</button>
-                          <span className="mc-seg-val" style={{ color: def.color }}>STRESS {on.count || 1}</span>
-                          <button onClick={() => set((on.count || 1) + 1)} aria-label="More stress">+</button>
-                        </span>
-                      );
-                    }
-                    return (
-                      <button key={key} className={`mc-btn mc-status${on ? ' on' : ''}`} aria-pressed={!!on} onClick={toggle}
-                        style={on ? { borderColor: def.color, color: def.color, background: `color-mix(in srgb, ${def.color} 12%, transparent)` } : undefined}>
-                        {def.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-              <div className="mc-sheet-row">
-                <textarea className="mc-input mc-grow" key={`n-${tok.id}`} rows={2} defaultValue={tok.note || ''} placeholder="GM note (never shown on the board)"
-                  onBlur={(e) => e.target.value !== (tok.note || '') && g.boardUpsertToken({ id: tok.id, note: e.target.value })} />
-              </div>
-              <div className="mc-sheet-row">
-                {tok.kind === 'item' && crewPlayers.length > 0 && (
-                  <select className="mc-select" value="" onChange={(e) => e.target.value && sendToPlayer(e.target.value)} aria-label="Send to player">
-                    <option value="">SEND TO {universe.terms.player.toUpperCase()}…</option>
-                    {crewPlayers.map((p) => <option key={p.id} value={p.id}>{p.character.name} ({p.name})</option>)}
-                  </select>
-                )}
-                <span className="mc-spacer" />
-                <button className="mc-btn danger" onClick={() => { g.boardRemoveToken(tok.id); setSelTok(null); }}>REMOVE</button>
-              </div>
-            </div>
-          )}
-
-          {/* ─── Room sheet ─── */}
-          {!tok && roomDef && (
-            <div className="mc-sheet" role="dialog" aria-label="Room">
-              <div className="mc-sheet-head">
-                <span className="mc-kind">ROOM</span>
-                <input className="mc-input mc-grow" key={`rn-${roomDef.id}`} defaultValue={roomSt.name || roomDef.name} aria-label="Room name"
-                  onBlur={(e) => e.target.value !== (roomSt.name || roomDef.name) && g.boardSetRoom(roomDef.id, { name: e.target.value })}
-                  onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }} />
-                <button className="mc-btn" onClick={() => setSelRoom(null)}>CLOSE</button>
-              </div>
-              <div className="mc-sheet-row">
-                <button className={`mc-btn${roomSt.revealed ? ' on' : ''}`} onClick={() => g.boardSetRoom(roomDef.id, { revealed: !roomSt.revealed })}>
-                  {roomSt.revealed ? 'REVEALED — CONCEAL' : 'FOGGED — REVEAL'}
-                </button>
-                <button className="mc-btn" onClick={() => g.boardSetRoom(roomDef.id, { hideTokens: true })}>ALL TOKENS HERE → HIDDEN</button>
-                {roomSt.entered && <span className="mc-meta">ENTERED BY CREW</span>}
-              </div>
-              {roomDef.note && <p className="mc-note">{roomDef.note}</p>}
-              <div className="mc-sheet-row">
-                <textarea className="mc-input mc-grow" key={`rnote-${roomDef.id}`} rows={2} defaultValue={roomSt.note || ''} placeholder="Session note for this room"
-                  onBlur={(e) => e.target.value !== (roomSt.note || '') && g.boardSetRoom(roomDef.id, { note: e.target.value })} />
-              </div>
-            </div>
-          )}
-        </div>
+        {canvas}
 
         {/* ─── Palette ─── */}
         <aside className="mc-palette">
           <button className="mc-pal-toggle" onClick={() => setPaletteOpen((v) => !v)} aria-expanded={paletteOpen}>
             {paletteOpen ? 'HIDE PALETTE' : 'PALETTE'}
           </button>
-          {paletteOpen && (
-            <>
-              <div className="mc-tabs" role="tablist">
-                {[['crew', 'CREW'], ['threats', 'THREATS'], ['npcs', 'NPCS'], ['items', 'ITEMS'], ['markers', 'MARKERS'], ['rooms', 'ROOMS']].map(([id, label]) => (
-                  <button key={id} role="tab" aria-selected={tab === id} className={tab === id ? 'on' : ''} onClick={() => { setTab(id); setQuery(''); }}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-              {tab !== 'rooms' && tab !== 'markers' && tab !== 'crew' && (
-                <input className="mc-input mc-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Filter…" aria-label="Filter palette" />
-              )}
-              {tab === 'items' && (
-                <form className="mc-custom" onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!custom.trim()) return;
-                  setArmed({ key: `custom-${custom}`, label: custom.trim(), sub: 'ITEM', token: { kind: 'item', label: custom.trim(), glyph: 'crate', color: '#9ccc65' } });
-                  setCustom('');
-                }}>
-                  <input className="mc-input mc-grow" value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="Custom item label" />
-                  <button className="mc-btn" type="submit">ARM</button>
-                </form>
-              )}
-              <div className="mc-pal-list">
-                {tab === 'rooms' ? (
-                  <>
-                    {rooms.length === 0 && <p className="mc-hint">{mapDef ? 'This map has no room shapes yet.' : 'No map selected.'}{mapDef && currentOpt?.packId ? ' Use EDIT ROOMS to draw them.' : ''}</p>}
-                    {rooms.length > 0 && (
-                      <div className="mc-row-btns">
-                        <button className="mc-btn" onClick={() => rooms.forEach((r) => !board.rooms[r.id]?.revealed && g.boardSetRoom(r.id, { revealed: true }))}>REVEAL ALL</button>
-                        <button className="mc-btn" onClick={() => rooms.forEach((r) => board.rooms[r.id]?.revealed && g.boardSetRoom(r.id, { revealed: false }))}>CONCEAL ALL</button>
-                      </div>
-                    )}
-                    {rooms.map((r) => {
-                      const st = board.rooms[r.id] || {};
-                      const count = Object.values(board.tokens).filter((t) => t.roomId === r.id).length;
-                      return (
-                        <div key={r.id} className={`mc-room${st.revealed ? ' on' : ''}${selRoom === r.id ? ' sel' : ''}`}>
-                          <button className="mc-room-name" onClick={() => { setSelRoom(r.id); setSelTok(null); }}>
-                            {st.name || r.name}{count ? <small> · {count} TOKEN{count > 1 ? 'S' : ''}</small> : null}
-                          </button>
-                          <button className={`mc-toggle${st.revealed ? ' on' : ''}`} onClick={() => g.boardSetRoom(r.id, { revealed: !st.revealed })} aria-pressed={!!st.revealed}>
-                            {st.revealed ? 'SEEN' : 'FOG'}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </>
-                ) : (
-                  <>
-                    {list.length === 0 && (
-                      <p className="mc-hint">
-                        {tab === 'crew' ? `No ${universe.terms.players.toLowerCase()} with characters yet.` : tab === 'npcs' ? 'The active scenario has no NPCs.' : 'Nothing here.'}
-                      </p>
-                    )}
-                    {list.map((it) => (
-                      <div key={it.key} className={`mc-pal-item${armed?.key === it.key ? ' armed' : ''}${it.onMap ? ' placed' : ''}`}
-                        onPointerDown={(e) => onItemPointerDown(e, it)} role="button" tabIndex={0}
-                        onKeyDown={(e) => { if (e.key === 'Enter') setArmed(it); }}>
-                        <PaletteIcon item={it} />
-                        <span className="mc-pal-text"><b>{it.label}</b><small>{it.sub}</small></span>
-                        {it.onMap && <span className="mc-pal-badge">ON MAP</span>}
-                      </div>
-                    ))}
-                  </>
-                )}
-              </div>
-              <p className="mc-hint mc-pal-foot">Drag onto the map, or tap to arm and tap the map.</p>
-            </>
-          )}
+          {paletteOpen && paletteBody}
         </aside>
       </div>
 
-      {ghost && (
-        <div className="mc-ghost" style={{ left: ghost.x, top: ghost.y }}>
-          <PaletteIcon item={ghost.item} /><span>{ghost.item.label}</span>
-        </div>
-      )}
+      {ghostEl}
 
       {/* ─── OPEN BOARD ─── */}
       {showLink && (
         <div className="mc-modal" onClick={() => setShowLink(false)}>
-          <div className="mc-modal-box" onClick={(e) => e.stopPropagation()}>
+          <div className="mc-modal-box" role="dialog" aria-label="Table board link" onClick={(e) => e.stopPropagation()}>
             <h3>TABLE BOARD</h3>
             <p className="mc-hint">Open this on the TV browser (or scan the code with it):</p>
             <div className="mc-url">{boardUrl}</div>

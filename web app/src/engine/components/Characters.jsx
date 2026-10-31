@@ -167,12 +167,9 @@ export default function Characters() {
 
   return (
     <div>
-      <div className="panel">
+      <div className="page-head">
         <h2>CHARACTERS</h2>
-        <p style={{ color: 'var(--text-dim)', marginBottom: '0.75rem', fontSize: '0.85rem' }}>
-          Pre-generated characters from every pack, plus your own. Build a new character step by step, or duplicate a pre-gen to customise it.
-        </p>
-        <div className="cb-lib-actions">
+        <div className="page-actions cb-lib-actions">
           <button className="cb-btn primary" onClick={() => { setError(''); setEditing(null); setMode('build'); }}>+ NEW CHARACTER</button>
           <button className="cb-btn" onClick={() => fileRef.current?.click()}>IMPORT</button>
           {customPack?.characters?.length > 0 && (
@@ -183,6 +180,7 @@ export default function Characters() {
           )}
           <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) importFile(f); }} />
         </div>
+        <p>Pre-generated characters from every pack, plus your own. Build a new character step by step, or duplicate a pre-gen to customise it.</p>
         {error && <p className="cb-errors">{error}</p>}
         {notice && <p className="cb-ok">{notice}</p>}
       </div>
@@ -202,7 +200,7 @@ export default function Characters() {
         <div key={g.packId} className="cb-lib-group">
           <h3 className="cb-section-title">
             {g.title.toUpperCase()}
-            <span>{g.packId === CUSTOM_CHARACTERS_PACK_ID ? 'CUSTOM' : g.source === 'bundled' ? 'SCENARIO PRE-GENS' : (g.source || g.kind || '').toUpperCase()}</span>
+            <span>{g.characters.length} · {g.packId === CUSTOM_CHARACTERS_PACK_ID ? 'CUSTOM' : g.source === 'bundled' ? 'SCENARIO PRE-GENS' : (g.source || g.kind || '').toUpperCase()}</span>
           </h3>
           <div className="character-grid">
             {g.characters.map((c) => (

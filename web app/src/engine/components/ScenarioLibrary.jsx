@@ -135,36 +135,25 @@ export default function ScenarioLibrary({ tts }) {
 
   return (
     <div>
-      <div className="panel">
-        <h2>SCENARIO LIBRARY — {universe.name}</h2>
-        <p style={{ color: 'var(--text-dim)', marginBottom: '0.75rem', fontSize: '0.85rem' }}>
-          Select a scenario to view the briefing, act-by-act read-aloud text, GM notes and handouts.
-          Use Read Aloud to have {universe.terminal.name} narrate to your players, or PLAY SCENARIO for the scene-by-scene runner.
-        </p>
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <button onClick={() => setShowWizard(true)} style={{
-            padding: '0.4rem 0.8rem', background: 'var(--accent-glow)', border: '1px solid var(--accent)',
-            color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em', cursor: 'pointer',
-          }}>
-            ✦ GAME NIGHT — GENERATE SCENARIO
-          </button>
-          <button onClick={() => setShowImport(!showImport)} style={{
-            padding: '0.4rem 0.8rem', background: 'var(--accent-glow)', border: '1px solid var(--accent)',
-            color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em', cursor: 'pointer',
-          }}>
-            {showImport ? '× CLOSE IMPORT' : '+ IMPORT PACK'}
-          </button>
+      <div className="page-head">
+        <h2>STORIES — {universe.name}</h2>
+        <div className="page-actions">
           {sessionPackId && byId[sessionPackId] && (
-            <button onClick={() => { setSelected(sessionPackId); setPlaying(true); }} style={{
-              padding: '0.4rem 0.8rem', background: 'transparent', border: '1px solid var(--success)',
-              color: 'var(--success)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em', cursor: 'pointer',
-            }}>
-              ▶ RUN ACTIVE SCENARIO: {byId[sessionPackId].meta.title.toUpperCase()}
+            <button type="button" className="page-btn good" onClick={() => { setSelected(sessionPackId); setPlaying(true); }}>
+              ▶ OPEN ACTIVE: {byId[sessionPackId].meta.title.toUpperCase()}
             </button>
           )}
-          {loading && <span style={{ color: 'var(--text-dim)', fontSize: '0.7rem' }}>SYNCING RUNTIME PACKS…</span>}
-          {error && <span style={{ color: 'var(--warn)', fontSize: '0.7rem' }}>RUNTIME PACKS UNAVAILABLE ({error}) — SHOWING BUNDLED ONLY</span>}
+          <button type="button" className="page-btn primary" onClick={() => setShowWizard(true)}>✦ GAME NIGHT — GENERATE</button>
+          <button type="button" className="page-btn" onClick={() => setShowImport(!showImport)} aria-expanded={showImport}>
+            {showImport ? '× CLOSE IMPORT' : '+ IMPORT PACK'}
+          </button>
         </div>
+        <p>
+          Open a scenario for its briefing, act-by-act read-aloud text, GM notes and handouts.
+          During {universe.terms.sessionArticle || 'a'} {universe.terms.session.toLowerCase()} the scene-by-scene runner lives under RUN.
+        </p>
+        {loading && <span className="page-note">SYNCING RUNTIME PACKS…</span>}
+        {error && <span className="page-note warn">RUNTIME PACKS UNAVAILABLE ({error}) — SHOWING BUNDLED ONLY</span>}
       </div>
 
       {showImport && <PackImportExport onDone={(id) => { setShowImport(false); if (id) setSelected(id); }} />}
@@ -194,10 +183,10 @@ export default function ScenarioLibrary({ tts }) {
         </div>
       )}
 
-      {groups.map((g, i) => (
+      {groups.map((g) => (
         <React.Fragment key={g.type}>
-          <div className="panel" style={{ marginTop: i ? '2rem' : 0 }}>
-            <h2>{groupTitle(g.type)}</h2>
+          <div className="sec-head">
+            <h3>{groupTitle(g.type)}</h3><span>{g.packs.length}</span>
           </div>
           <div className="scenario-grid">
             {g.packs.map(renderCard)}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
-import PlayerMapPane from './board/PlayerMapPane';
 import CharacterSheet from './CharacterSheet';
 import { useFx } from './player/fx';
 import PhoneLayer from './player/PhoneLayer';
@@ -10,21 +9,30 @@ import ClocksRow from './player/ClocksRow';
 import PauseButton from './player/PauseButton';
 import BuildCharacter from './player/BuildCharacter';
 import PanicOverlay from './player/PanicOverlay';
+import TablePane from './player/TablePane';
+import PlayerMenu from './player/PlayerMenu';
+import ConfirmSheet from './player/ConfirmSheet';
+import Icon from './player/icons';
 import SupplyPanel from './SupplyPanel';
 import { ItemArt } from './sheet/parts';
 import { getCatalog, itemById } from '../catalogUtils';
 import { plural, fmtTime, determinationDef } from '../rulesUtils';
 import Confirm from './Confirm';
-import { FxToggles } from './Header';
+import './player/player.css';
 
 /* ═══════════════════════════════════════════════════════════════
-   PlayerView — phone-first player terminal.
-   Layout: sticky top bar (name, PAUSE, sound, compact tracks, clocks,
-   connection banners) / scrolling tab body / bottom tab bar
-   (SHEET · GEAR · COMMS · HANDOUTS · MAP · DICE). 100dvh, safe-area aware.
+   PlayerView: phone-first player terminal ("Command Deck" phone).
+   Layout (100dvh, safe-area aware, styling in player/player.css):
+     vitals header, pinned: name, career · session code, LINK, PAUSE, ≡ menu;
+       the universe's track bars with numbers (+ DETERMINATION grains);
+       shared pools; clocks; YOUR TURN / paused / offline banners
+     quick actions: ROLL (opens the roller) · +STRESS (when the universe
+       has a stress track) · PANIC (rules.panic) · DETERMINATION (spend)
+     tab body: SHEET · GEAR · COMMS (messages + files, one badge) · TABLE
+       (the board from this player's point of view, player/TablePane)
+     bottom tabs with icons, ≥ 56px targets.
    Session effects (handouts, orders, clues, loot, narration, session zero)
-   live in player/PhoneLayer. Styling: index.css "Player view (mobile)" and
-   "Session features".
+   live in player/PhoneLayer.
    ═══════════════════════════════════════════════════════════════ */
 
 function IncomingAlert({ message, onDismiss, onReply, terminal, terms }) {
@@ -38,7 +46,7 @@ function IncomingAlert({ message, onDismiss, onReply, terminal, terms }) {
 
   return (
     <div className="pv-alert" onClick={onDismiss}>
-      <div className="pv-alert-box" style={{ '--alert-color': color }} onClick={e => e.stopPropagation()}>
+      <div className="pv-alert-box" role="alertdialog" aria-label="Incoming message" style={{ '--alert-color': color }} onClick={e => e.stopPropagation()}>
         <div className="pv-alert-head">
           {fromGm ? `▓▓ INCOMING ${terminal.name} ${terms.message.toUpperCase()} ▓▓` : `▓▓ ${terms.message.toUpperCase()} FROM ${String(message.from).toUpperCase()} ▓▓`}
           <br />
@@ -54,6 +62,34 @@ function IncomingAlert({ message, onDismiss, onReply, terminal, terms }) {
   );
 }
 
+function TrackBar({ label, value, max, color, danger }) {
+  const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0;
+  const fill = danger ? 'var(--danger)' : color;
+  return (
+    <div className={`pp-track${danger ? ' danger' : ''}`} role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={value}>
+      <div className="pp-track-head">
+        <span className="pp-k">{label}</span>
+        <b style={{ color: fill }}>{value}/{max}</b>
+      </div>
+      <div className="pp-track-bar"><i style={{ width: `${pct}%`, background: fill }} /></div>
+    </div>
+  );
+}
+
+function GrainTrack({ label, value, max }) {
+  return (
+    <div className="pp-track pp-grains" role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={value}>
+      <div className="pp-track-head">
+        <span className="pp-k">{label}</span>
+        <b>{value}/{max}</b>
+      </div>
+      <div className="pp-grain-row" aria-hidden="true">
+        {Array.from({ length: max }, (_, i) => <i key={i} className={i < value ? 'on' : ''} />)}
+      </div>
+    </div>
+  );
+}
+
 export default function PlayerView() {
   const {
     myPlayer, messages, sendPlayerMessage, sendPlayerToPlayer, leaveGame, unreadCount, clearUnread,
@@ -64,6 +100,9 @@ export default function PlayerView() {
   const { terms, terminal, rules } = universe;
   const catalog = getCatalog(universe);
   const [tab, setTab] = useState('sheet');
+  const lastTab = useRef('sheet');
+  const menuBtn = useRef(null);
+  const [commsView, setCommsView] = useState('messages'); // COMMS: 'messages' | 'files'
   const [alertQueue, setAlertQueue] = useState([]);
   const seenIds = useRef(null);
   const [target, setTarget] = useState('dm');
@@ -77,11 +116,22 @@ export default function PlayerView() {
   const [pulseId, setPulseId] = useState(null);   // clock that just ticked
   const [building, setBuilding] = useState(false);
   const [rollPreset, setRollPreset] = useState(null);
-  const [panicPending, setPanicPending] = useState(null); // { rollId, stress } — PANIC ROLL overlay
+  const [panicPending, setPanicPending] = useState(null); // { rollId, stress, manual? }: PANIC ROLL overlay
   const [redFlash, setRedFlash] = useState(0);            // complication flash key
   const [supplyLast, setSupplyLast] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [confirm, setConfirm] = useState(null);           // 'stress' | 'det'
+  const [flash, setFlash] = useState(null);               // short status line under the quick actions
   const myTurn = !!table?.initiative?.mine;
   const wasMyTurn = useRef(false);
+
+  const go = useCallback((id) => {
+    setTab((cur) => { if (cur !== 'dice') lastTab.current = cur; return id; });
+  }, []);
+  const say = useCallback((msg) => {
+    setFlash(msg);
+    setTimeout(() => setFlash((v) => (v === msg ? null : v)), 3200);
+  }, []);
 
   /* YOUR TURN: banner + vibrate + sound when the turn lands on this phone. */
   useEffect(() => {
@@ -110,19 +160,15 @@ export default function PlayerView() {
   const c = myPlayer?.character;
   const PLAYER = terms.player.toUpperCase();
   const GM = terms.gm.toUpperCase();
+  const GMS = String(terms.gmShort || terms.gm).toUpperCase();
   /* Leaving drops this device's seat token: coming back to the same seat then needs the GM's approval. */
   const leaveButton = (label, className = 'pv-btn danger') => (
     <Confirm block danger label={label} className={className} title="DISCONNECT?"
       message={`Returning to this seat later needs the ${terms.gm}'s approval.`} confirmLabel="DISCONNECT" cancelLabel="STAY" onConfirm={leaveGame} />
   );
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [detMsg, setDetMsg] = useState(null);
   const detDef = determinationDef(universe);
   const det = myPlayer?.determination || null;
-  const spendDetermination = () => determinationSpend('', (r) => {
-    setDetMsg(r?.success ? 'SPENT — THE GM SEES IT' : (r?.error || 'NOT SENT'));
-    setTimeout(() => setDetMsg(null), 3000);
-  });
+  const spendDetermination = () => determinationSpend('', (r) => say(r?.success ? `${detDef.label} SPENT · THE ${GMS} SEES IT` : (r?.error || 'NOT SENT')));
   const myId = myPlayer?.id;
 
   const chat = messages
@@ -146,20 +192,22 @@ export default function PlayerView() {
   const dismissAlert = useCallback(() => setAlertQueue(prev => prev.slice(1)), []);
   const reply = useCallback((to = 'dm') => {
     setTarget(to || 'dm');
-    setTab('messages');
+    setCommsView('messages');
+    go('messages');
     setTimeout(() => inputRef.current?.focus(), 80);
-  }, []);
+  }, [go]);
   const onClockTick = useCallback((id) => {
     setPulseId(id);
     setTimeout(() => setPulseId(p => (p === id ? null : p)), 1600);
   }, []);
 
+  const chatOpen = tab === 'messages' && commsView === 'messages';
   useEffect(() => {
-    if (tab === 'messages') {
+    if (chatOpen) {
       if (unreadCount > 0) clearUnread();
       chatEnd.current?.scrollIntoView({ block: 'end' });
     }
-  }, [tab, chat.length, unreadCount, clearUnread]);
+  }, [chatOpen, chat.length, unreadCount, clearUnread]);
 
   const send = (e) => {
     e.preventDefault();
@@ -176,7 +224,7 @@ export default function PlayerView() {
   );
   const lostBanner = !connected && (
     <div className="ph-lost" role="status">
-      CONNECTION LOST — RECONNECTING…{outboxCount > 0 ? ` ${outboxCount} ACTION${outboxCount > 1 ? 'S' : ''} QUEUED` : ''}
+      CONNECTION LOST · RECONNECTING…{outboxCount > 0 ? ` ${outboxCount} ACTION${outboxCount > 1 ? 'S' : ''} QUEUED` : ''}
     </div>
   );
 
@@ -188,7 +236,7 @@ export default function PlayerView() {
       <div className="app pv-root ph-build-root">
         {layer}
         {lostBanner}
-        {c && myPlayer?.alive !== false && <div className="ph-build-note">NEW CHARACTER — {c.name} STAYS IN PLAY UNTIL THE {String(terms.gmShort || GM).toUpperCase()} ASSIGNS THIS ONE</div>}
+        {c && myPlayer?.alive !== false && <div className="ph-build-note">NEW CHARACTER · {c.name} STAYS IN PLAY UNTIL THE {GMS} ASSIGNS THIS ONE</div>}
         <BuildCharacter onDone={() => setBuilding(false)} />
       </div>
     );
@@ -196,30 +244,30 @@ export default function PlayerView() {
   const subStatus = sub && (sub.status === 'pending' || sub.status === 'rejected') && (
     <p className={`ph-sub-status${sub.status === 'rejected' ? ' rejected' : ''}`}>
       {sub.status === 'pending'
-        ? `SUBMITTED: ${sub.name || 'your character'} — AWAITING ${terms.gmShort || GM} APPROVAL`
-        : `${terms.gmShort || GM} RETURNED YOUR CHARACTER${sub.reason ? `: “${sub.reason}”` : ''} — EDIT AND RESUBMIT`}
+        ? `SUBMITTED: ${sub.name || 'your character'} · AWAITING ${GMS} APPROVAL`
+        : `${GMS} RETURNED YOUR CHARACTER${sub.reason ? `: “${sub.reason}”` : ''} · EDIT AND RESUBMIT`}
     </p>
   );
 
-  /* Waiting screen — no character assigned yet (build one, or wait for the GM) */
+  /* Waiting screen: no character assigned yet (build one, or wait for the GM) */
   if (!c) {
     return (
-      <div className="app pv-screen">
+      <div className="app pv-screen pp-wait">
         <div className="crt-overlay" />
         {layer}
         <div className="ph-wait-top"><PauseButton /></div>
         <h1 className="pv-title">{terminal.name}</h1>
         <div className="panel pv-center-card">
           <div className="pulse-line" style={{ height: '2px', background: 'var(--accent)', marginBottom: '1rem', animation: 'pulse 2s infinite' }} />
-          <h2 style={{ fontSize: '0.9rem', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>AUTHENTICATION CONFIRMED</h2>
-          <p style={{ color: 'var(--text-dim)', fontSize: '0.8rem', marginBottom: '1rem' }}>
+          <h2 className="pp-wait-h">AUTHENTICATION CONFIRMED</h2>
+          <p className="pp-wait-p">
             Welcome, {myPlayer?.name}. Stand by for character assignment from {terms.gm}, or build your own.
           </p>
           {subStatus}
           <button type="button" className="pv-btn primary ph-wide" onClick={() => setBuilding(true)}>
             {sub?.status === 'pending' ? 'EDIT MY CHARACTER' : 'BUILD YOUR CHARACTER'}
           </button>
-          <p style={{ color: 'var(--text-dim)', fontSize: '0.7rem', marginTop: '0.75rem' }}>AWAITING ASSIGNMENT...</p>
+          <p className="pp-wait-small">AWAITING ASSIGNMENT · {terms.session.toUpperCase()} {gameCode}</p>
           {!connected && <p className="pv-offline">RECONNECTING…</p>}
         </div>
         <div className="ph-wait-leave">{leaveButton('DISCONNECT', 'pv-btn')}</div>
@@ -227,19 +275,19 @@ export default function PlayerView() {
     );
   }
 
-  /* Death screen — full-screen obituary */
+  /* Death screen: full-screen obituary */
   if (!myPlayer.alive) {
     return (
       <div className="app pv-screen pv-dead">
         <div className="crt-overlay" />
         <div className="pv-dead-frame">
-          <div className="pv-dead-label">{terminal.name} — {PLAYER} STATUS</div>
+          <div className="pv-dead-label">{terminal.name} · {PLAYER} STATUS</div>
           <h1 className="pv-dead-title">{PLAYER} DECEASED</h1>
           <div className="pv-dead-name">{c.name}</div>
           {c.career && <div className="pv-dead-sub">{c.career}</div>}
           <div className="pv-dead-rule" />
           <div className="pv-dead-wait">AWAITING REASSIGNMENT</div>
-          <p className="pv-dead-note">Stand by for new character assignment from {terms.gm} — or build your replacement now.</p>
+          <p className="pv-dead-note">Stand by for new character assignment from {terms.gm}, or build your replacement now.</p>
           {subStatus}
           <button type="button" className="pv-btn primary ph-wide pv-dead-build" onClick={() => setBuilding(true)}>
             {sub?.status === 'pending' ? 'EDIT MY NEW CHARACTER' : 'BUILD A NEW CHARACTER'}
@@ -251,13 +299,12 @@ export default function PlayerView() {
   }
 
   const unseenHandouts = (table?.handouts || []).filter(h => !h.seen).length;
+  const commsBadge = (chatOpen ? 0 : unreadCount) + (tab === 'messages' && commsView === 'files' ? 0 : unseenHandouts);
   const tabs = [
-    ['sheet', 'SHEET'],
-    ['inventory', 'GEAR'],
-    ['messages', 'COMMS'],
-    ['handouts', 'FILES'],
-    ['map', 'MAP'],
-    ['dice', 'DICE'],
+    ['sheet', 'SHEET', 'sheet'],
+    ['inventory', 'GEAR', 'gear'],
+    ['messages', 'COMMS', 'comms'],
+    ['table', 'TABLE', 'table'],
   ];
   const Roller = rules?.dice?.Roller;
   const activeConditions = Object.entries(myPlayer.conditions || {}).filter(([, on]) => on).map(([k]) => k);
@@ -271,11 +318,53 @@ export default function PlayerView() {
       stress: Number(myPlayer.tracks?.stress) || 0,
       at: Date.now(),
     });
-    setTab('dice');
+    go('dice');
   };
 
+  /* ─── Vitals: the universe's tracks (+ DETERMINATION as grains) ─── */
+  const trackDefs = rules.tracks || [];
+  const stressDef = trackDefs.find((t) => t.key === 'stress');
+  const stressNow = Number(myPlayer.tracks?.stress) || 0;
+  const stressMax = Number(myPlayer.trackMax?.stress) || 0;
+  const vitals = [
+    ...trackDefs.map((t) => {
+      const value = myPlayer.tracks?.[t.key] ?? 0;
+      const max = myPlayer.trackMax?.[t.key] ?? 0;
+      const danger = typeof t.danger === 'function' ? t.danger(value, max) : false;
+      return <TrackBar key={t.key} label={t.label || t.short} value={value} max={max} color={t.color || 'var(--accent)'} danger={danger} />;
+    }),
+    ...(detDef && det ? [<GrainTrack key="det" label={detDef.label} value={det.value} max={det.max} />] : []),
+  ];
+  const pools = table?.pools || [];
+
+  /* ─── Quick actions (what this universe's rules expose) ─── */
+  const actions = [
+    { id: 'roll', label: 'ROLL', icon: 'dice', tone: 'primary', pressed: tab === 'dice', onClick: () => (tab === 'dice' ? setTab(lastTab.current) : (setRollPreset(null), go('dice'))) },
+    ...(detDef && det ? [{
+      id: 'det', label: `${rules.determination?.short || detDef.label} ${det.value}`, icon: 'det', tone: 'warn',
+      disabled: det.value < 1, aria: `Spend 1 ${detDef.label} (${det.value} of ${det.max} left)`, onClick: () => setConfirm('det'),
+    }] : []),
+    ...(stressDef ? [{
+      id: 'stress', label: `+${stressDef.short || 'STRESS'}`, icon: 'stress', tone: detDef ? '' : 'warn',
+      disabled: stressMax > 0 && stressNow >= stressMax, aria: `Mark plus one ${stressDef.label}`, onClick: () => setConfirm('stress'),
+    }] : []),
+    ...(rules?.panic ? [{
+      id: 'panic', label: 'PANIC', icon: 'panic', tone: '',
+      aria: 'Make a panic roll', onClick: () => setPanicPending({ rollId: null, stress: stressNow, manual: true }),
+    }] : []),
+  ];
+  const markStress = () => {
+    sendRoll({
+      kind: 'stress', label: `+1 ${stressDef?.label || 'STRESS'}`, summary: `+1 ${stressDef?.label || 'STRESS'} (marked on the phone)`,
+      stressGain: 1, flags: [], dice: {},
+    });
+    say(`+1 ${stressDef?.label || 'STRESS'} · THE ${GMS} SEES IT`);
+  };
+
+  const bodyClass = `pp-body${chatOpen ? ' pp-body-chat' : ''}${tab === 'table' ? ' pp-body-table' : ''}`;
+
   return (
-    <div className="app pv-root">
+    <div className={`app pv-root pp-root tab-${tab}`}>
       <div className="crt-overlay" />
       {layer}
 
@@ -285,96 +374,96 @@ export default function PlayerView() {
       {alertQueue.length > 0 && (
         <IncomingAlert message={alertQueue[0]} onDismiss={dismissAlert} onReply={reply} terminal={terminal} terms={terms} />
       )}
+      {menuOpen && (
+        <PlayerMenu onClose={() => { setMenuOpen(false); setTimeout(() => menuBtn.current?.focus(), 0); }} onBuild={() => setBuilding(true)}
+          buildLabel={sub?.status === 'pending' ? 'EDIT MY NEW CHARACTER' : 'BUILD A NEW CHARACTER'} subStatus={subStatus}
+          alertsMuted={muted} setAlertsMuted={setMuted} onLeave={leaveGame}
+          sessionLabel={terms.session.toUpperCase()} gameCode={gameCode} playerName={myPlayer.name} />
+      )}
+      {confirm === 'stress' && (
+        <ConfirmSheet title={`MARK +1 ${stressDef?.label || 'STRESS'}?`} confirmLabel={`+1 ${stressDef?.label || 'STRESS'}`} tone="warn"
+          onConfirm={markStress} onClose={() => setConfirm(null)}>
+          <p>{stressNow} → {Math.min(stressMax || stressNow + 1, stressNow + 1)}{stressMax ? ` of ${stressMax}` : ''}. Use it when the {terms.gm} tells you to take stress. It shows in the {terms.gm}&apos;s roll feed.</p>
+        </ConfirmSheet>
+      )}
+      {confirm === 'det' && detDef && det && (
+        <ConfirmSheet title={`SPEND 1 ${detDef.label}?`} confirmLabel="SPEND" tone="warn"
+          onConfirm={spendDetermination} onClose={() => setConfirm(null)}>
+          <p>You keep {Math.max(0, det.value - 1)} of {det.max}. The {terms.gm} sees it in the roll feed.</p>
+        </ConfirmSheet>
+      )}
 
-      {/* ─── Sticky top bar ─── */}
-      <header className="pv-top">
-        <div className="pv-top-row">
-          <div className="pv-who">
-            <span className="pv-name">{c.name}</span>
-            <span className="pv-sub">{c.career} · {terms.session.toUpperCase()} {gameCode}</span>
+      {/* ─── Vitals header (pinned) ─── */}
+      <header className="pp-vitals">
+        <div className="pp-idrow">
+          <div className="pp-who">
+            <span className="pp-name">{c.name}</span>
+            <span className="pp-sub" aria-label={`${c.career ? `${c.career}, ` : ''}${terms.session} code ${gameCode}`}>{c.career ? `${c.career} · ` : ''}<b className="pp-code">{gameCode}</b></span>
           </div>
-          <span className={`pv-link ${connected ? 'up' : 'down'}`}><span className="link-dot" />{connected ? 'LINK' : 'LOST'}</span>
+          <span className={`pp-link ${connected ? 'up' : 'down'}`} role="status" aria-label={connected ? 'Linked to the table' : 'Connection lost'}>
+            <span className="link-dot" aria-hidden="true" />{connected ? 'LINK' : 'LOST'}
+          </span>
           <PauseButton />
-          <button className="pv-icon-btn" aria-label={muted ? 'Unmute alerts' : 'Mute alerts'} aria-pressed={muted}
-            onClick={() => setMuted(m => !m)}>
-            {muted ? 'MUTED' : 'SOUND'}
+          <button ref={menuBtn} type="button" className="pp-iconbtn" aria-label="Menu" aria-haspopup="dialog" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
+            <Icon name="menu" />{sub?.status === 'pending' && <i className="pp-dot" aria-hidden="true" />}
           </button>
         </div>
-        <div className="pv-tracks">
-          {(rules.tracks || []).map(t => {
-            const value = myPlayer.tracks?.[t.key] ?? 0;
-            const max = myPlayer.trackMax?.[t.key] ?? 0;
-            const danger = typeof t.danger === 'function' ? t.danger(value, max) : false;
-            return <TrackBar key={t.key} label={t.short || t.label} value={value} max={max} color={t.color || 'var(--accent)'} danger={danger} />;
-          })}
-        </div>
-        {(table?.pools?.length > 0 || (detDef && det)) && (
-          <div className="ph-pools" aria-label="Shared pools">
-            {table.pools.map(p => (
-              <span key={p.key} className={`ph-pool k-${p.key}`}>
-                <span className="ph-pool-label">{p.label}</span>
-                <span className="ph-pool-grains" aria-hidden="true">
-                  {Array.from({ length: p.max || Math.max(p.value, 1) }, (_, i) => <i key={i} className={i < p.value ? 'on' : ''} />)}
-                </span>
-                <b>{p.value}{p.max ? `/${p.max}` : ''}</b>
-              </span>
-            ))}
-            {detDef && det && (
-              <span className="ph-pool ph-det" aria-label={`${detDef.label} ${det.value} of ${det.max}`}>
-                <span className="ph-pool-label">{detDef.short || detDef.label}</span>
-                <span className="ph-pool-grains" aria-hidden="true">
-                  {Array.from({ length: det.max }, (_, i) => <i key={i} className={i < det.value ? 'on' : ''} />)}
-                </span>
-                <b>{det.value}/{det.max}</b>
-                <Confirm label="SPEND" className="ph-det-spend" disabled={det.value < 1 || !connected} title={`SPEND 1 ${detDef.label}?`}
-                  message={`You keep ${Math.max(0, det.value - 1)}. The ${terms.gm} sees it in the roll feed.`} confirmLabel="SPEND" onConfirm={spendDetermination} />
-              </span>
-            )}
-            {detMsg && <span className="ph-det-msg" role="status">{detMsg}</span>}
-          </div>
-        )}
-        <ClocksRow clocks={table?.clocks || []} pulseId={pulseId} />
-        {myTurn && (
-          <div className="ph-yourturn" role="alert">
-            <span>YOUR TURN</span>
-            {table.initiative.round ? <small>ROUND {table.initiative.round}</small> : null}
-            {rules?.initiative?.mode === 'nominate' && table.initiative.allies?.length > 0 && (
-              <select aria-label="Pass the turn to" value="" onChange={(e) => e.target.value && initPass(e.target.value)}>
-                <option value="">PASS TO…</option>
-                {table.initiative.allies.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}
-              </select>
-            )}
-          </div>
-        )}
-        {!myTurn && table?.initiative?.active && table.initiative.current && (
-          <div className="ph-turnline">ROUND {table.initiative.round} · ACTING: {table.initiative.current.label}</div>
-        )}
-        {lostBanner}
-        {table?.paused && <div className="pv-banner ph-paused">TABLE PAUSED — TAKE A BREATH</div>}
-        {!dmOnline && connected && <div className="pv-banner">{GM} OFFLINE — YOUR STATE IS SAVED</div>}
+        {vitals.length > 0 && <div className={`pp-tracks n${Math.min(vitals.length, 3)}`}>{vitals}</div>}
       </header>
 
-      {/* ─── Tab body ─── */}
-      <main className={`pv-body${tab === 'messages' ? ' pv-body-chat' : ''}${tab === 'map' ? ' pv-body-map' : ''}`}>
-        {tab === 'sheet' && (
-          <div className="pv-pane ph-sheet-pane">
-            <div className={`ph-sheet-menu${menuOpen ? ' open' : ''}`}>
-              <button type="button" className="ph-menu-btn" aria-expanded={menuOpen} aria-controls="ph-sheet-menu" onClick={() => setMenuOpen((o) => !o)}>
-                <span aria-hidden="true">☰</span> MENU{sub?.status === 'pending' ? ' · NEW CHARACTER SUBMITTED' : ''}
-              </button>
-              {menuOpen && (
-                <div id="ph-sheet-menu" className="ph-menu-body">
-                  <button type="button" className="pv-btn primary ph-wide" onClick={() => { setMenuOpen(false); setBuilding(true); }}>
-                    {sub?.status === 'pending' ? 'EDIT MY NEW CHARACTER' : 'BUILD A NEW CHARACTER'}
-                  </button>
-                  <p className="ph-menu-hint">A replacement goes to the {terms.gm}, who swaps it in when the story allows.</p>
-                  {subStatus}
-                  <span className="ph-menu-label">THIS DEVICE</span>
-                  <FxToggles className="fx-toggles ph-fx" />
-                  {leaveButton(`DISCONNECT FROM ${terms.session.toUpperCase()}`)}
-                </div>
+      {/* ─── Quick actions ─── */}
+      <div className={`pp-actions n${actions.length}`} role="group" aria-label="Quick actions">
+        {actions.map((a) => (
+          <button key={a.id} type="button" className={`pp-act ${a.tone}`} disabled={a.disabled || (!connected && a.id !== 'roll')}
+            aria-pressed={a.pressed === undefined ? undefined : a.pressed} aria-label={a.aria} onClick={a.onClick}>
+            <Icon name={a.icon} size={20} />{a.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ─── Status strip: clocks, turn, banners ─── */}
+      {(flash || pools.length > 0 || (table?.clocks?.length > 0) || myTurn || table?.initiative?.active || !connected || table?.paused || (!dmOnline && connected)) && (
+        <div className="pp-status">
+          {flash && <div className="pp-flash" role="status">{flash}</div>}
+          {(pools.length > 0 || table?.clocks?.length > 0) && (
+            <div className="pp-chips-row">
+              {pools.map(p => (
+                <span key={p.key} className={`pp-pool k-${p.key}`} role="img" aria-label={`${p.label} ${p.value}${p.max ? ` of ${p.max}` : ''}`}>
+                  <span className="pp-k">{p.label}</span>
+                  <span className="pp-pool-grains" aria-hidden="true">
+                    {Array.from({ length: p.max || Math.max(p.value, 1) }, (_, i) => <i key={i} className={i < p.value ? 'on' : ''} />)}
+                  </span>
+                  <b>{p.value}{p.max ? `/${p.max}` : ''}</b>
+                </span>
+              ))}
+              <ClocksRow clocks={table?.clocks || []} pulseId={pulseId} />
+            </div>
+          )}
+          {myTurn && (
+            <div className="ph-yourturn" role="alert">
+              <span>YOUR TURN</span>
+              {table.initiative.round ? <small>ROUND {table.initiative.round}</small> : null}
+              {rules?.initiative?.mode === 'nominate' && table.initiative.allies?.length > 0 && (
+                <select aria-label="Pass the turn to" value="" onChange={(e) => e.target.value && initPass(e.target.value)}>
+                  <option value="">PASS TO…</option>
+                  {table.initiative.allies.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}
+                </select>
               )}
             </div>
+          )}
+          {!myTurn && table?.initiative?.active && table.initiative.current && (
+            <div className="ph-turnline">ROUND {table.initiative.round} · ACTING: {table.initiative.current.label}</div>
+          )}
+          {lostBanner}
+          {table?.paused && <div className="pv-banner ph-paused">TABLE PAUSED · TAKE A BREATH</div>}
+          {!dmOnline && connected && <div className="pv-banner">{GM} OFFLINE · YOUR STATE IS SAVED</div>}
+        </div>
+      )}
+
+      {/* ─── Tab body ─── */}
+      <main className={bodyClass} id="pp-body">
+        {tab === 'sheet' && (
+          <div className="pp-pane ph-sheet-pane">
             <CharacterSheet character={c} statusEffects={myPlayer.statusEffects || []} conditions={activeConditions}
               injuries={myPlayer.injuries || []} onRoll={onRoll} />
             {rules?.supplies?.length > 0 && myPlayer.supply && Object.keys(myPlayer.supply).length > 0 && (
@@ -385,111 +474,112 @@ export default function PlayerView() {
         )}
 
         {tab === 'inventory' && (
-          <div className="pv-pane">
-            <section className="panel">
-              <label className="pv-label">EQUIPMENT &amp; GEAR</label>
-              {myPlayer.inventory.length === 0 ? (
-                <p className="pv-text dim">No items.</p>
-              ) : (
-                <div className="pv-items">
-                  {myPlayer.inventory.map((item, i) => {
-                    const entry = itemById(catalog, item);
-                    const sig = item === c.signatureItem || /signature item/i.test(item);
-                    return (
-                      <div key={i} className="pv-item">
-                        <ItemArt item={entry} size={36} />
-                        <span className="pv-item-name">{item}{entry?.notes ? <em>{String(entry.notes)}</em> : null}</span>
-                        {sig && <small>SIGNATURE</small>}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </section>
+          <div className="pp-pane">
+            <h2 className="pp-k pp-h">EQUIPMENT &amp; GEAR <span>{myPlayer.inventory.length}</span></h2>
+            {myPlayer.inventory.length === 0 ? (
+              <p className="pp-dim">No items.</p>
+            ) : (
+              <ul className="pp-gear">
+                {myPlayer.inventory.map((item, i) => {
+                  const entry = itemById(catalog, item);
+                  const sig = item === c.signatureItem || /signature item/i.test(item);
+                  return (
+                    <li key={i} className={`pp-gear-row${sig ? ' sig' : ''}`}>
+                      <ItemArt item={entry} size={40} />
+                      <span className="pp-gear-name"><b>{item}</b>{entry?.notes ? <small>{String(entry.notes)}</small> : null}</span>
+                      {sig && <span className="pp-tag">SIGNATURE</span>}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
         )}
 
         {tab === 'messages' && (
           <>
-            <div className="pv-chat">
-              {chat.length === 0 && <p className="pv-text dim" style={{ textAlign: 'center' }}>No {plural(terms.message.toLowerCase())} received.</p>}
-              {chat.map(m => {
-                const mine = m.fromId === myId;
-                const kind = m.type === 'gm' ? 'gm' : m.type === 'p2p' ? 'p2p' : 'dm-bound';
-                return (
-                  <div key={m.id} className={`pv-bubble ${mine ? 'mine' : 'theirs'} ${kind}${m.pending ? ' pending' : ''}`}>
-                    <div className="pv-bubble-meta">
-                      {mine
-                        ? `TO ${m.type === 'p2p' ? String(m.to).toUpperCase() : GM}`
-                        : m.type === 'gm' ? `${GM}${m.toId === 'broadcast' ? ` · ${terms.broadcast?.toUpperCase() || 'BROADCAST'}` : ''}` : `${String(m.from).toUpperCase()} · ${PLAYER}`}
-                      {m.type === 'gm' && m.priority && m.priority !== 'STANDARD' && <b> · {m.priority}</b>}
-                      {' · '}{m.pending ? 'QUEUED' : fmtTime(m.timestamp)}
-                    </div>
-                    <div className="pv-bubble-text">{m.text}</div>
-                    {!mine && (
-                      <button type="button" className="ph-reply" onClick={() => reply(m.type === 'gm' ? 'dm' : m.fromId)}>REPLY PRIVATELY</button>
-                    )}
-                  </div>
-                );
-              })}
-              <div ref={chatEnd} />
+            <div className="pp-seg" role="tablist" aria-label={`${terms.message} and files`}>
+              <button type="button" role="tab" aria-selected={commsView === 'messages'} onClick={() => setCommsView('messages')}>
+                {plural(terms.message).toUpperCase()}{unreadCount > 0 && !chatOpen && <span className="pp-badge">{unreadCount}</span>}
+              </button>
+              <button type="button" role="tab" aria-selected={commsView === 'files'} onClick={() => setCommsView('files')}>
+                FILES &amp; CLUES{unseenHandouts > 0 && <span className="pp-badge">{unseenHandouts}</span>}
+              </button>
             </div>
-            <form className="pv-compose" onSubmit={send}>
-              <select value={target} onChange={e => setTarget(e.target.value)} aria-label="Recipient">
-                <option value="dm">{terms.gmShort} ({terms.gm})</option>
-                {otherPlayers.map(p => (
-                  <option key={p.id} value={p.id}>{p.name}{p.connected === false ? ' (offline)' : ''} (secret)</option>
-                ))}
-              </select>
-              <div className="pv-compose-row">
-                <input ref={inputRef} value={text} onChange={e => setText(e.target.value)} placeholder={`Type ${terms.message.toLowerCase()}...`}
-                  enterKeyHint="send" autoComplete="off" />
-                <button type="submit" className="pv-btn primary" disabled={!text.trim()}>SEND</button>
-              </div>
-            </form>
+            {commsView === 'messages' ? (
+              <>
+                <div className="pv-chat pp-chat">
+                  {chat.length === 0 && <p className="pp-dim pp-center">No {plural(terms.message.toLowerCase())} yet. Anything the {terms.gm} sends you lands here.</p>}
+                  {chat.map(m => {
+                    const mine = m.fromId === myId;
+                    const kind = m.type === 'gm' ? 'gm' : m.type === 'p2p' ? 'p2p' : 'dm-bound';
+                    return (
+                      <div key={m.id} className={`pv-bubble ${mine ? 'mine' : 'theirs'} ${kind}${m.pending ? ' pending' : ''}`}>
+                        <div className="pv-bubble-meta">
+                          {mine
+                            ? `TO ${m.type === 'p2p' ? String(m.to).toUpperCase() : GM}`
+                            : m.type === 'gm' ? `${GM}${m.toId === 'broadcast' ? ` · ${terms.broadcast?.toUpperCase() || 'BROADCAST'}` : ''}` : `${String(m.from).toUpperCase()} · ${PLAYER}`}
+                          {m.type === 'gm' && m.priority && m.priority !== 'STANDARD' && <b> · {m.priority}</b>}
+                          {' · '}{m.pending ? 'QUEUED' : fmtTime(m.timestamp)}
+                        </div>
+                        <div className="pv-bubble-text">{m.text}</div>
+                        {!mine && (
+                          <button type="button" className="ph-reply" onClick={() => reply(m.type === 'gm' ? 'dm' : m.fromId)}>REPLY PRIVATELY</button>
+                        )}
+                      </div>
+                    );
+                  })}
+                  <div ref={chatEnd} />
+                </div>
+                <form className="pv-compose pp-compose" onSubmit={send}>
+                  <select value={target} onChange={e => setTarget(e.target.value)} aria-label="Recipient">
+                    <option value="dm">{terms.gmShort} ({terms.gm})</option>
+                    {otherPlayers.map(p => (
+                      <option key={p.id} value={p.id}>{p.name}{p.connected === false ? ' (offline)' : ''} (secret)</option>
+                    ))}
+                  </select>
+                  <div className="pv-compose-row">
+                    <input ref={inputRef} value={text} onChange={e => setText(e.target.value)} placeholder={`Type ${terms.message.toLowerCase()}...`}
+                      aria-label={`${terms.message} text`} enterKeyHint="send" autoComplete="off" />
+                    <button type="submit" className="pv-btn primary" disabled={!text.trim()}>SEND</button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              <HandoutsPane table={table} onOpen={setViewer} onOpenOrder={(o) => setOrder({ ...o, fresh: false })} />
+            )}
           </>
         )}
 
-        {tab === 'handouts' && (
-          <HandoutsPane table={table} onOpen={setViewer} onOpenOrder={(o) => setOrder({ ...o, fresh: false })} />
-        )}
-
-        {tab === 'map' && <PlayerMapPane />}
+        {tab === 'table' && <TablePane />}
 
         {tab === 'dice' && (
-          <div className="pv-pane pv-dice">
+          <div className="pp-pane pv-dice pp-dice">
+            <div className="pp-dice-head">
+              <h2 className="pp-k pp-h">{rollPreset?.label ? `ROLL · ${rollPreset.label}` : 'ROLL'}</h2>
+              <button type="button" className="pp-btn pp-btn-sm" onClick={() => setTab(lastTab.current)}>DONE</button>
+            </div>
             {Roller
               ? <Roller key={rollPreset?.at || 'free'} preset={rollPreset} onResult={onRollResult} compact />
-              : <div className="panel"><p className="pv-text dim">No dice roller is registered for {universe.name}.</p></div>}
+              : <p className="pp-dim">No dice roller is registered for {universe.name}.</p>}
           </div>
         )}
       </main>
 
       {/* ─── Bottom tab bar ─── */}
-      <nav className="pv-tabs" aria-label="Terminal sections" style={{ gridTemplateColumns: `repeat(${tabs.length}, 1fr)` }}>
-        {tabs.map(([id, label]) => (
-          <button key={id} className={tab === id ? 'active' : ''} aria-current={tab === id ? 'page' : undefined}
-            onClick={() => setTab(id)}>
-            {label}
-            {id === 'messages' && unreadCount > 0 && tab !== 'messages' && <span className="pv-badge">{unreadCount}</span>}
-            {id === 'handouts' && unseenHandouts > 0 && tab !== 'handouts' && <span className="pv-badge">{unseenHandouts}</span>}
-          </button>
-        ))}
+      <nav className="pp-tabs" aria-label="Terminal sections">
+        {tabs.map(([id, label, icon]) => {
+          const badge = id === 'messages' ? commsBadge : 0;
+          return (
+            <button key={id} type="button" className={tab === id ? 'active' : ''} aria-current={tab === id ? 'page' : undefined}
+              aria-label={badge > 0 ? `${label}, ${badge} new` : undefined} onClick={() => go(id)}>
+              <Icon name={icon} />
+              <span>{label}</span>
+              {badge > 0 && <span className="pp-badge" aria-hidden="true">{badge}</span>}
+            </button>
+          );
+        })}
       </nav>
-    </div>
-  );
-}
-
-function TrackBar({ label, value, max, color, danger }) {
-  const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0;
-  const fill = danger ? 'var(--danger)' : color;
-  return (
-    <div className="pv-track">
-      <div className="pv-track-head">
-        <span>{label}</span>
-        <b style={{ color: fill }}>{value}/{max}</b>
-      </div>
-      <div className="pv-track-bar"><div style={{ width: `${pct}%`, background: fill }} /></div>
     </div>
   );
 }
