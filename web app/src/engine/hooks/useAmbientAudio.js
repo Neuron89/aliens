@@ -1,16 +1,31 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
+import { useGame } from '../GameContext';
+import { isMuted } from '../sfx';
+import { AMBIENCE, audioCtx, ambienceInput, startAmbience, playStinger } from '../soundboard';
+
+/* ═══════════════════════════════════════════════════════════════
+   Ambient beds for the GM terminal (App) and the TV (board/BoardAudio).
+   Two kinds of preset:
+     - procedural beds from soundboard.js AMBIENCE (seeded noise,
+       drones, LFOs and scheduled events: drips, creaks, gusts…)
+     - legacy oscillator stacks ({ nodes }) kept for packs that name them
+   Every bed plays into this hook's master gain → the shared duck bus,
+   so it drops under TTS narration (soundboard.js polls speechSynthesis).
+   Theme order/visibility: universe.theme.ambient (Nav AUDIO popover).
+
+   Phone stingers: App mounts this hook for every role, so a seated
+   phone listens for `table-sfx` here (only when the GM routed the cue to
+   phones and the phone's own sound is on — sfx.js mute).
+   ═══════════════════════════════════════════════════════════════ */
+
+const bed = (id) => ({ label: AMBIENCE[id].label, bed: id });
 
 const PRESETS = {
   off: { label: 'OFF', nodes: [] },
-  ship: {
-    label: 'SHIP AMBIENT',
-    nodes: [
-      { type: 'oscillator', wave: 'sawtooth', freq: 38, gain: 0.04, filterFreq: 80, filterQ: 2 },
-      { type: 'oscillator', wave: 'sine', freq: 55, gain: 0.03, filterFreq: 120, filterQ: 1 },
-      { type: 'oscillator', wave: 'triangle', freq: 22, gain: 0.02, filterFreq: 60, filterQ: 3 },
-      { type: 'lfo', target: 'gain', rate: 0.15, depth: 0.01 },
-    ],
-  },
+  /* ALIEN */
+  ship: bed('ship'),          // ENGINE HUM
+  derelict: bed('derelict'),  // DERELICT SILENCE
+  hive: bed('hive'),          // HIVE (WET DRIP)
   tension: {
     label: 'TENSION',
     nodes: [
@@ -49,7 +64,8 @@ const PRESETS = {
       { type: 'lfo', target: 'filter', rate: 0.03, depth: 30 },
     ],
   },
-  /* Dune scene moods (scene.ambient: wind · bazaar · sietch · court). */
+  /* DUNE (scene.ambient: wind · bazaar · sietch · court; erg · keep from the AUDIO popover) */
+  erg: bed('erg'),            // OPEN ERG
   wind: {
     label: 'DESERT WIND',
     nodes: [
@@ -59,6 +75,8 @@ const PRESETS = {
       { type: 'lfo', target: 'filter', rate: 0.07, depth: 90 },
     ],
   },
+  sietch: bed('sietch'),      // SIETCH WIND
+  keep: bed('keep'),          // KEEP INTERIOR
   bazaar: {
     label: 'BAZAAR',
     nodes: [
@@ -66,15 +84,6 @@ const PRESETS = {
       { type: 'oscillator', wave: 'triangle', freq: 165, gain: 0.018, filterFreq: 700, filterQ: 1 },
       { type: 'oscillator', wave: 'sawtooth', freq: 55, gain: 0.02, filterFreq: 200, filterQ: 2 },
       { type: 'lfo', target: 'gain', rate: 0.6, depth: 0.012 },
-    ],
-  },
-  sietch: {
-    label: 'SIETCH',
-    nodes: [
-      { type: 'oscillator', wave: 'sine', freq: 41, gain: 0.05, filterFreq: 90, filterQ: 3 },
-      { type: 'oscillator', wave: 'sine', freq: 82, gain: 0.02, filterFreq: 160, filterQ: 4 },
-      { type: 'oscillator', wave: 'triangle', freq: 123, gain: 0.008, filterFreq: 240, filterQ: 6 },
-      { type: 'lfo', target: 'gain', rate: 0.09, depth: 0.01 },
     ],
   },
   court: {
@@ -88,123 +97,106 @@ const PRESETS = {
   },
 };
 
+/** Build a legacy oscillator stack into `out`; returns { stop() }. */
+function startNodes(ctx, out, config) {
+  const nodes = [];
+  const oscNodes = [];
+  config.nodes.forEach((node) => {
+    if (node.type !== 'oscillator') return;
+    const osc = ctx.createOscillator();
+    osc.type = node.wave;
+    osc.frequency.value = node.freq;
+    const gain = ctx.createGain();
+    gain.gain.value = node.gain;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = node.filterFreq;
+    filter.Q.value = node.filterQ;
+    osc.connect(filter); filter.connect(gain); gain.connect(out);
+    osc.start();
+    nodes.push(osc, gain, filter);
+    oscNodes.push({ osc, gain, filter });
+  });
+  config.nodes.forEach((node) => {
+    if (node.type !== 'lfo' || !oscNodes.length) return;
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = node.rate;
+    const lfoGain = ctx.createGain();
+    lfoGain.gain.value = node.depth;
+    lfo.connect(lfoGain);
+    for (const n of oscNodes) {
+      if (node.target === 'gain') lfoGain.connect(n.gain.gain);
+      else if (node.target === 'filter') lfoGain.connect(n.filter.frequency);
+      else if (node.target === 'freq') lfoGain.connect(n.osc.frequency);
+    }
+    lfo.start();
+    nodes.push(lfo, lfoGain);
+  });
+  return {
+    stop() {
+      for (const n of nodes) { try { n.stop?.(); n.disconnect?.(); } catch { /* already stopped */ } }
+    },
+  };
+}
+
 export function useAmbientAudio() {
-  const ctxRef = useRef(null);
-  const nodesRef = useRef([]);
-  const masterGainRef = useRef(null);
+  const runningRef = useRef(null);  // { stop() } of the current bed
+  const masterRef = useRef(null);
   const [preset, setPreset] = useState('off');
   const [volume, setVolume] = useState(0.5);
+  const volumeRef = useRef(0.5);
   const [isActive, setIsActive] = useState(false);
+  const { role, connected, onSfx } = useGame();
 
-  const ensureContext = useCallback(() => {
-    if (!ctxRef.current) {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return null;
-      ctxRef.current = new AC();
-      masterGainRef.current = ctxRef.current.createGain();
-      masterGainRef.current.gain.value = volume;
-      masterGainRef.current.connect(ctxRef.current.destination);
+  const master = useCallback(() => {
+    const ctx = audioCtx();
+    if (!ctx) return null;
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    if (!masterRef.current || masterRef.current.context !== ctx) {
+      masterRef.current = ctx.createGain();
+      masterRef.current.gain.value = volumeRef.current;
+      masterRef.current.connect(ambienceInput());
     }
-    if (ctxRef.current.state === 'suspended') {
-      ctxRef.current.resume().catch(() => {});
-    }
-    return ctxRef.current;
-  }, [volume]);
+    return masterRef.current;
+  }, []);
 
   const stopAll = useCallback(() => {
-    nodesRef.current.forEach(n => {
-      try {
-        if (n.stop) n.stop();
-        if (n.disconnect) n.disconnect();
-      } catch (e) { /* already stopped */ }
-    });
-    nodesRef.current = [];
+    try { runningRef.current?.stop(); } catch { /* ignore */ }
+    runningRef.current = null;
   }, []);
 
   const applyPreset = useCallback((presetName) => {
     stopAll();
     setPreset(presetName);
-
-    if (presetName === 'off') {
-      setIsActive(false);
-      return;
-    }
-
-    const ctx = ensureContext();
     const config = PRESETS[presetName];
-    if (!ctx || !config) { setIsActive(false); return; }
-
-    const oscNodes = [];
-    const filters = [];
-
-    config.nodes.forEach(node => {
-      if (node.type === 'oscillator') {
-        const osc = ctx.createOscillator();
-        osc.type = node.wave;
-        osc.frequency.value = node.freq;
-
-        const gain = ctx.createGain();
-        gain.gain.value = node.gain;
-
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.value = node.filterFreq;
-        filter.Q.value = node.filterQ;
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(masterGainRef.current);
-        osc.start();
-
-        nodesRef.current.push(osc, gain, filter);
-        oscNodes.push({ osc, gain, filter });
-        filters.push(filter);
-      }
-    });
-
-    config.nodes.forEach(node => {
-      if (node.type === 'lfo' && oscNodes.length > 0) {
-        const lfo = ctx.createOscillator();
-        lfo.frequency.value = node.rate;
-
-        const lfoGain = ctx.createGain();
-        lfoGain.gain.value = node.depth;
-
-        lfo.connect(lfoGain);
-
-        if (node.target === 'gain') {
-          oscNodes.forEach(n => lfoGain.connect(n.gain.gain));
-        } else if (node.target === 'filter') {
-          filters.forEach(f => lfoGain.connect(f.frequency));
-        } else if (node.target === 'freq') {
-          oscNodes.forEach(n => lfoGain.connect(n.osc.frequency));
-        }
-
-        lfo.start();
-        nodesRef.current.push(lfo, lfoGain);
-      }
-    });
-
-    setIsActive(true);
-  }, [ensureContext, stopAll]);
+    if (presetName === 'off' || !config) { setIsActive(false); return; }
+    const out = master();
+    if (!out) { setIsActive(false); return; }
+    runningRef.current = config.bed ? startAmbience(config.bed, out) : startNodes(out.context, out, config);
+    setIsActive(!!runningRef.current);
+  }, [master, stopAll]);
 
   const updateVolume = useCallback((vol) => {
+    volumeRef.current = vol;
     setVolume(vol);
-    if (masterGainRef.current) {
-      masterGainRef.current.gain.value = vol;
-    }
+    const m = masterRef.current;
+    if (m) m.gain.setTargetAtTime(vol, m.context.currentTime, 0.05);
   }, []);
 
-  useEffect(() => {
-    return () => {
-      stopAll();
-      if (ctxRef.current) {
-        ctxRef.current.close().catch(() => {});
-        ctxRef.current = null; // a remount (StrictMode) builds a fresh context
-        masterGainRef.current = null;
-      }
-    };
+  useEffect(() => () => {
+    stopAll();
+    try { masterRef.current?.disconnect(); } catch { /* ignore */ }
+    masterRef.current = null; // the shared context stays open; a remount builds a fresh master
   }, [stopAll]);
+
+  /* Phone: GM stinger routed to phones (TV + PHONES). Respects this phone's sound toggle. */
+  useEffect(() => {
+    if (role !== 'player' || !connected || typeof onSfx !== 'function') return undefined;
+    return onSfx((e) => {
+      if (!e?.phones || isMuted()) return;
+      playStinger(e.cue, { seed: e.seed, volume: 0.7 });
+    });
+  }, [role, connected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     preset,

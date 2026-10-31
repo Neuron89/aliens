@@ -4,6 +4,8 @@ import ClockRing from '../run/ClockRing';
 import { useTypewriter } from '../player/fx';
 import { useUniverse } from '../../UniverseContext';
 import DiceStage from './DiceStage';
+import VisionOverlay from './VisionOverlay'; // F6: prescience / special-order vision line
+import HandoutCard, { isDocNarration } from './HandoutCard'; // F5: document narrations render as the universe's artefact
 
 /* ═══════════════════════════════════════════════════════════════
    TV overlay layer (mounted by BoardView over the map).
@@ -104,7 +106,7 @@ export default function Overlays({ terminalName }) {
           title={table.theatre?.subtitle || table.theatre?.title || terminalName}
           subtitle={table.theatre?.subtitle ? table.theatre?.title : ''} art={table.theatre?.art} text="" />
       )}
-      {n && n.mode === 'card' && <Card id={n.id} title={n.title || table.theatre?.title} subtitle={n.title ? table.theatre?.title : ''} text={n.text} art={n.art || (theatre ? table.theatre?.art : null)} />}
+      {n && n.mode === 'card' && (isDocNarration(n) ? <HandoutCard n={n} /> : <Card id={n.id} title={n.title || table.theatre?.title} subtitle={n.title ? table.theatre?.title : ''} text={n.text} art={n.art || (theatre ? table.theatre?.art : null)} />)}
       {n && n.mode !== 'card' && <Caption n={n} />}
 
       {(clocks.length > 0 || pools.length > 0) && (
@@ -156,6 +158,8 @@ export default function Overlays({ terminalName }) {
           <span className="ov-turn-name">{ini.current.label}</span>
         </div>
       )}
+
+      <VisionOverlay />{/* F6 */}
 
       {table.pause && (
         <div className="ov-pause" role="alert">

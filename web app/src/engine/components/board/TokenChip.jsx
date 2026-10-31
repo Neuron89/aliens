@@ -1,4 +1,5 @@
 import React from 'react';
+import { usePortraitUrl } from '../sheet/Portrait'; // F4: PC chips show the character portrait when one exists
 
 /* ═══════════════════════════════════════════════════════════════
    TokenChip — one board token drawn in SVG (map units).
@@ -225,6 +226,8 @@ export default function TokenChip({ token: t, x, y, unit, counter = '', uid, sel
   const color = t.color || KIND_COLOR[t.kind] || '#b0bec5';
   const clipId = `${uid}-clip-${t.id}`;
   const isPc = t.kind === 'pc';
+  const portrait = usePortraitUrl(isPc && !t.icon ? { name: t.label } : {});
+  const icon = t.icon || portrait;
   const facing = Number.isFinite(t.facing) ? t.facing : 0;
   const showFacing = isPc || t.kind === 'creature' || t.kind === 'npc' || facing !== 0;
   const chipFill = palette?.chipFill || '#0a0c10';
@@ -246,10 +249,10 @@ export default function TokenChip({ token: t, x, y, unit, counter = '', uid, sel
       <g transform={counter}>
         <StatusRing statuses={statuses} r={r} ring={ring} style={palette?.statusStyle} chipFill={chipFill} />
         <circle r={r} fill={chipFill} stroke={color} strokeWidth={ring} strokeDasharray={ghost ? `${r * 0.35} ${r * 0.25}` : undefined} />
-        {t.icon ? (
+        {icon ? (
           <>
             <clipPath id={clipId}><circle r={r - ring / 2} /></clipPath>
-            <image href={t.icon} x={-r} y={-r} width={r * 2} height={r * 2} clipPath={`url(#${clipId})`} preserveAspectRatio="xMidYMid slice" />
+            <image href={icon} x={-r} y={-r} width={r * 2} height={r * 2} clipPath={`url(#${clipId})`} preserveAspectRatio="xMidYMid slice" />
           </>
         ) : isPc ? (
           <text y={r * 0.34} textAnchor="middle" fontSize={r * 0.95} fontWeight="bold" fill="#ffffff" letterSpacing="0.02em" fontFamily={palette?.font}>{initials(label)}</text>

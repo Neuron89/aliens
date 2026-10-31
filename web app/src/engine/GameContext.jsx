@@ -988,6 +988,24 @@ export function GameProvider({ children }) {
     initPass,
     determinationSpend,
     determinationGrant,
+    /* ── F3 — Soundboard: DM fires a stinger to the TV (+ phones); any role listens on its live socket ── */
+    sfxSend: (cue, opts, cb) => emitTable('table-sfx', { cue, phones: !!opts?.phones }, cb),
+    onSfx: (fn) => {
+      const s = socketRef.current;
+      if (!s) return () => {};
+      s.on('table-sfx', fn);
+      return () => s.off('table-sfx', fn);
+    },
+    /* ── F6 — Intrigue web + prescience: DM sends a vision line (TV + phones); the TV and phones listen on the live socket ──
+       visionSend(text, { ms?, to?: 'all'|[playerIds]|'none', board?: bool }, cb) → ack { success, id, ms, phones, boards } | { error }
+       onVision(fn) → unsubscribe; fn({ vision: { id, text, ms, at, private } }). Re-subscribe when `connected` changes. */
+    visionSend: (text, opts, cb) => emitTable('vision-send', { text, ms: opts?.ms, to: opts?.to, board: opts?.board }, cb),
+    onVision: (fn) => {
+      const s = socketRef.current;
+      if (!s) return () => {};
+      s.on('vision', fn);
+      return () => s.off('vision', fn);
+    },
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

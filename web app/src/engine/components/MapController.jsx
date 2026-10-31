@@ -251,6 +251,30 @@ export default function MapController({ compact = false, onOpenFull }) {
   const flip = () => g.boardSetView({ flipX: !view.flipX });
   const fit = () => g.boardSetView({ zoom: 1, pan: [0, 0] });
   const zoomBy = (f) => g.boardSetView({ zoom: Math.min(6, Math.max(0.5, Math.round((view.zoom || 1) * f * 100) / 100)) });
+  /* F2 — TV director camera (board/Camera.js): mode FIXED / FOLLOW / CINEMATIC, combat SPOTLIGHT, optional pinned room. */
+  const cam = { mode: 'fixed', spotlight: false, target: null, ...(view.camera || {}) };
+  const setCam = (patch) => g.boardSetView({ camera: { ...cam, ...patch } });
+  const camTargetName = cam.target ? (board.rooms?.[cam.target]?.name || mapDef?.rooms?.find((r) => r.id === cam.target)?.name || cam.target) : null;
+  const cameraGroup = (
+    <>
+      <span className="mc-seg mc-camera" role="group" aria-label="TV camera">
+        {[['fixed', 'FIXED'], ['follow', null], ['cinematic', 'CINEMATIC']].map(([id, label]) => (
+          <button key={id} className={cam.mode === id ? 'on' : ''} aria-pressed={cam.mode === id} disabled={!mapDef}
+            onClick={() => setCam({ mode: id })}
+            title={id === 'fixed' ? 'TV shows the whole plan' : id === 'follow' ? 'TV frames the revealed rooms with player tokens' : 'Follow with a slow drift and a film frame'}>
+            {label || <><span className="mc-wide">{'FOLLOW '}</span>{String(universe?.terms?.players || 'party').toUpperCase()}</>}
+          </button>
+        ))}
+      </span>
+      <button className={`mc-btn${cam.spotlight ? ' on warn' : ''}`} aria-pressed={cam.spotlight} disabled={!mapDef}
+        onClick={() => setCam({ spotlight: !cam.spotlight })} title="In initiative: dim the TV except the active token's room and show the turn banner">SPOTLIGHT</button>
+      {cam.target ? (
+        <button className="mc-btn on" onClick={() => setCam({ target: null })} disabled={!mapDef} title="Back to automatic framing">UNPIN {String(camTargetName).toUpperCase().slice(0, 18)}</button>
+      ) : selRoom && cam.mode !== 'fixed' ? (
+        <button className="mc-btn" onClick={() => setCam({ target: selRoom })} title="Hold the TV camera on the selected room (once revealed)">FRAME ROOM</button>
+      ) : null}
+    </>
+  );
   const reset = () => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Reset the board? All tokens are removed and every room is fogged again.')) {
@@ -573,6 +597,7 @@ export default function MapController({ compact = false, onOpenFull }) {
         <button className={`mc-btn${pingMode ? ' on warn' : ''}`} aria-pressed={pingMode} onClick={() => { setPingMode((v) => !v); setArmed(null); }} disabled={!mapDef}>PING</button>
         <button className={`mc-btn${snap ? ' on' : ''}`} aria-pressed={snap} onClick={() => setSnap((v) => !v)}>SNAP</button>
         <button className={`mc-btn${matchTv ? ' on' : ''}`} aria-pressed={matchTv} onClick={() => setMatchTv((v) => !v)} title="Show this map in the TV orientation">AS TV</button>
+        {cameraGroup}
         {mapDef && currentOpt?.packId && (
           <button className="mc-btn" onClick={() => setEditRooms(true)} title="Correct the room shapes used for fog of war">EDIT ROOMS</button>
         )}

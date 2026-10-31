@@ -1,0 +1,104 @@
+/* ═══ F6 — Vision overlay (board/VisionOverlay.jsx): prescience + special-order skins ═══ */
+
+.vis { position: absolute; inset: 0; z-index: 9; display: flex; align-items: center; justify-content: center; pointer-events: none;
+  opacity: 0; transition: opacity var(--vis-fade, 1200ms) ease; overflow: hidden; }
+.vis.vis-in { opacity: 1; }
+.vis.vis-out { opacity: 0; }
+.vis-bg { position: absolute; inset: 0; }
+
+/* Phone host: a private flash above every phone overlay (handouts, orders, sheets). */
+.vis.vis-phone { position: fixed; z-index: 300; pointer-events: auto; flex-direction: column; gap: 1.2rem;
+  padding: max(1.2rem, env(safe-area-inset-top)) 1.1rem max(1.2rem, env(safe-area-inset-bottom)); cursor: pointer; }
+.vis-dismiss { position: relative; min-height: 44px; min-width: 160px; padding: 0 1.2rem; border: 1px solid currentColor; background: rgba(0, 0, 0, 0.35);
+  font: 600 0.8rem var(--font-mono); letter-spacing: 0.16em; cursor: pointer; }
+.vis-dismiss:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+/* ── PRESCIENCE (spice-blue shimmer) ───────────────────────────── */
+.vis-prescience { color: #dff4ff; }
+.vis-prescience .vis-bg {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(58, 166, 184, 0.34), transparent 70%),
+    radial-gradient(ellipse at 50% 50%, #0b2a3a 0%, #06121c 55%, #020509 100%);
+}
+.vis-prescience .vis-bg::before, .vis-prescience .vis-bg::after { content: ''; position: absolute; inset: -20%; }
+.vis-prescience .vis-bg::before {
+  background:
+    radial-gradient(circle at 30% 40%, rgba(90, 200, 230, 0.22), transparent 32%),
+    radial-gradient(circle at 70% 60%, rgba(40, 120, 220, 0.24), transparent 36%),
+    radial-gradient(circle at 55% 25%, rgba(150, 230, 255, 0.14), transparent 28%),
+    radial-gradient(circle at 40% 75%, rgba(58, 166, 184, 0.2), transparent 34%);
+  filter: blur(18px);
+  animation: visDrift 9s ease-in-out infinite alternate;
+}
+.vis-prescience .vis-bg::after {
+  background: repeating-linear-gradient(180deg, rgba(160, 230, 255, 0.05) 0 2px, transparent 2px 9px);
+  mix-blend-mode: screen;
+  animation: visShimmer 2.6s linear infinite;
+}
+@keyframes visDrift {
+  0% { transform: translate(-3%, -2%) scale(1) rotate(0deg); filter: blur(18px) hue-rotate(0deg); }
+  100% { transform: translate(3%, 2%) scale(1.12) rotate(8deg); filter: blur(22px) hue-rotate(-18deg); }
+}
+@keyframes visShimmer {
+  0% { transform: translateY(0) skewY(0deg); opacity: 0.6; }
+  50% { transform: translateY(-9px) skewY(0.6deg); opacity: 1; }
+  100% { transform: translateY(-18px) skewY(0deg); opacity: 0.6; }
+}
+.vis-pre-inner { position: relative; max-width: min(84vw, 1400px); text-align: center; }
+.vis-pre-eye { position: relative; width: 7.5vh; height: 7.5vh; margin: 0 auto 3vh; }
+.vis-pre-eye i { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(120, 210, 240, 0.55); }
+.vis-pre-eye i:nth-child(2) { inset: 22%; border-color: rgba(90, 180, 230, 0.75); background: radial-gradient(circle, rgba(58, 166, 184, 0.55), transparent 70%); }
+.vis-pre-eye i:nth-child(3) { inset: 42%; border: 0; background: #c8f2ff; box-shadow: 0 0 2.5vh 0.6vh rgba(120, 220, 255, 0.8); }
+.vis-pre-k { font: 600 1.6vh var(--font-mono); letter-spacing: 0.6em; color: rgba(150, 220, 245, 0.85); margin-bottom: 2.4vh; }
+.vis-pre-text {
+  font-family: var(--font-display); font-size: clamp(32px, 5.2vh, 72px); line-height: 1.3; letter-spacing: 0.04em; margin: 0;
+  color: #e8f8ff; text-shadow: 0 0 1.4vh rgba(90, 200, 240, 0.85), 0 0 4vh rgba(40, 140, 220, 0.6);
+  opacity: 0; filter: blur(6px); transform: scale(0.985);
+  transition: opacity var(--vis-fade, 1200ms) ease calc(var(--vis-fade, 1200ms) * 0.4), filter var(--vis-fade, 1200ms) ease calc(var(--vis-fade, 1200ms) * 0.4), transform var(--vis-ms, 9000ms) linear;
+}
+.vis-prescience.vis-in .vis-pre-text { opacity: 1; filter: blur(0); transform: scale(1.02); }
+.vis-prescience.vis-out .vis-pre-text { opacity: 0; filter: blur(8px); transition-delay: 0ms; }
+.vis-pre-foot { margin-top: 2.2rem; font: 600 0.72rem var(--font-mono); letter-spacing: 0.28em; color: rgba(150, 220, 245, 0.85); }
+.vis-prescience.vis-phone .vis-pre-text { font-size: clamp(22px, 6.4vw, 30px); }
+.vis-prescience.vis-phone .vis-pre-k { font-size: 0.72rem; margin-bottom: 1.2rem; }
+.vis-prescience.vis-phone .vis-pre-eye { width: 56px; height: 56px; margin-bottom: 1.4rem; }
+.vis-prescience .vis-dismiss { color: #bfeaff; }
+
+/* ── SPECIAL ORDER (terminal override) ─────────────────────────── */
+.vis-order { color: var(--accent, #00d4aa); font-family: var(--font-mono); }
+.vis-order .vis-bg { background: rgba(0, 0, 0, 0.94); }
+.vis-order .vis-bg::after { content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.35) 0 2px, transparent 2px 4px);
+  animation: visFlicker 3.2s steps(1) infinite; }
+@keyframes visFlicker { 0%, 100% { opacity: 1; } 47% { opacity: 0.82; } 48% { opacity: 1; } 91% { opacity: 0.9; } }
+.vis-order-panel { position: relative; width: min(78vw, 1300px); border: 2px solid var(--danger, #e5534b); background: rgba(10, 4, 4, 0.75);
+  box-shadow: 0 0 4vh rgba(229, 83, 75, 0.25), inset 0 0 6vh rgba(229, 83, 75, 0.08); }
+.vis-order-head { display: flex; justify-content: space-between; align-items: center; gap: 2vw; padding: 1.4vh 2vw; background: var(--danger, #e5534b); color: #120404; }
+.vis-order-k { font: 700 3.4vh var(--font-display); letter-spacing: 0.24em; }
+.vis-order-src { font-size: 1.8vh; letter-spacing: 0.2em; font-weight: 700; }
+.vis-order-meta { padding: 1.6vh 2vw 0; font-size: 1.8vh; letter-spacing: 0.22em; color: var(--warn, #e0aa2a); }
+.vis-order-text { margin: 0; padding: 2.4vh 2vw 3.4vh; min-height: 14vh; font-size: clamp(28px, 4.6vh, 60px); line-height: 1.35; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--accent-bright, #5effdc); text-shadow: 0 0 1.2vh rgba(0, 212, 170, 0.55); white-space: pre-wrap; }
+.vis-caret { display: inline-block; width: 0.6em; height: 1em; margin-left: 0.12em; vertical-align: -0.12em; background: currentColor; animation: visBlink 1s steps(1) infinite; }
+@keyframes visBlink { 50% { opacity: 0; } }
+.vis-bar { height: 0.8vh; background: rgba(229, 83, 75, 0.18); }
+.vis-bar i { display: block; height: 100%; width: 100%; background: var(--danger, #e5534b); transform-origin: left center; animation: visDrain var(--vis-ms, 9000ms) linear both; }
+@keyframes visDrain { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.vis-order.vis-phone .vis-order-panel { width: 100%; max-width: 440px; }
+.vis-order.vis-phone .vis-order-k { font-size: 1.05rem; }
+.vis-order.vis-phone .vis-order-src, .vis-order.vis-phone .vis-order-meta { font-size: 0.66rem; }
+.vis-order.vis-phone .vis-order-head { padding: 0.6rem 0.8rem; flex-wrap: wrap; gap: 0.3rem 0.8rem; }
+.vis-order.vis-phone .vis-order-meta { padding: 0.7rem 0.8rem 0; }
+.vis-order.vis-phone .vis-order-text { font-size: clamp(18px, 5.4vw, 24px); padding: 0.9rem 0.8rem 1.2rem; min-height: 0; }
+.vis-order.vis-phone .vis-bar { height: 5px; }
+.vis-order .vis-dismiss { color: var(--danger, #e5534b); }
+
+/* Reduced FX: no shimmer, flicker, drift or caret blink; the drain bar is hidden (its animation would jump to empty). */
+html.fx-reduced .vis-bg::before, html.fx-reduced .vis-bg::after, html.fx-reduced .vis-caret { animation: none !important; }
+html.fx-reduced .vis-bar { display: none; }
+html.fx-reduced .vis-pre-text { filter: none !important; transform: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .vis-bg::before, .vis-bg::after, .vis-caret { animation: none !important; }
+  .vis-bar { display: none; }
+  .vis-pre-text { filter: none !important; transform: none !important; }
+}

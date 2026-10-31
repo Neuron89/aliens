@@ -270,7 +270,8 @@
         "agenda": { "description": "What the NPC wants, in one sentence.", "type": "string" },
         "behavior": { "description": "How to play them: demeanor, tells, what they do under pressure. One or two sentences.", "type": "string" },
         "secret": { "description": "What the NPC hides from the players, if anything.", "type": "string" },
-        "stats": { "description": "Optional game statistics in the universe's own keys (e.g. {\"health\": 4, \"rangedCombat\": 3}). Open map.", "type": "object" }
+        "stats": { "description": "Optional game statistics in the universe's own keys (e.g. {\"health\": 4, \"rangedCombat\": 3}). Open map.", "type": "object" },
+        "relations": { "$ref": "#/$defs/relations" }
       }
     },
     "threat": {
@@ -409,7 +410,26 @@
           "description": "One-line belief statement per attribute, keyed by the universe's attribute keys, for universes whose attributes carry a prompt (DUNE drives: duty, faith, justice, power, truth). Shown under each attribute on the character sheet; players can rewrite them in the character builder. Keep them out of appearance. Bundled and generated DUNE characters carry all five.",
           "type": "object",
           "additionalProperties": { "type": "string", "description": "One sentence in the character's voice." }
-        }
+        },
+        "relations": { "$ref": "#/$defs/relations" }
+      }
+    },
+    "relations": {
+      "description": "Optional intrigue web (GM only): how this person stands toward other people in the same pack. The GM sees it as a relationship graph; a secret relation can be revealed to the players as a clue.",
+      "type": "array",
+      "maxItems": 12,
+      "items": { "$ref": "#/$defs/relation" }
+    },
+    "relation": {
+      "description": "One directed relation from the NPC or character that carries it to another person in the same pack.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["to", "kind"],
+      "properties": {
+        "to": { "description": "The other person: an NPC name, a character name or a character id from this pack.", "type": "string", "minLength": 1 },
+        "kind": { "description": "ally = works with; rival = works against; owes = is in debt to; fears = is afraid of; loves = loves, or is bound to by blood; serves = takes orders from; hides = keeps something from.", "type": "string", "enum": ["ally", "rival", "owes", "fears", "loves", "serves", "hides"] },
+        "note": { "description": "One short GM-facing sentence on what lies between them, written so it can be read to the players if revealed.", "type": "string", "maxLength": 300 },
+        "secret": { "description": "True when the players do not know this relation yet. The GM can reveal it to the players as a clue.", "type": "boolean" }
       }
     }
   }

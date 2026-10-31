@@ -6,16 +6,18 @@ import {
   carriedItems, termsFor,
 } from '../catalogUtils';
 import { ItemArt, WeightBar, EffectGroups, StatsRow } from './sheet/parts';
+import Portrait from './sheet/Portrait';
 
 /* Renders one character using the active universe's rules + catalog.
    Props:
      character, source (pack title badge), onBack, backLabel
      statusEffects, conditions, injuries — live session state (arrays of ids/names) shown as debuffs
      onRoll(skillKey, pool) — optional; when given, each skill row gets a ROLL button (part 2: roller)
-     actions — optional node rendered under the header (EDIT / DUPLICATE / EXPORT …) */
+     actions — optional node rendered under the header (EDIT / DUPLICATE / EXPORT …)
+     portrait — show the portrait + GENERATE PORTRAIT block (sheet/Portrait.jsx; default true) */
 export default function CharacterSheet({
   character, source, onBack, backLabel = '← BACK TO CHARACTERS',
-  statusEffects, conditions, injuries, onRoll, actions,
+  statusEffects, conditions, injuries, onRoll, actions, portrait = true,
 }) {
   const { universe } = useUniverse();
   const { rules } = universe;
@@ -50,6 +52,7 @@ export default function CharacterSheet({
 
       <div className="panel">
         <div className="char-header-section">
+          {portrait && character.id && <Portrait character={character} size={96} generate />}
           <div>
             <div className="char-name-display">{character.name || 'UNNAMED'}</div>
             <div className="char-career-display">

@@ -35,10 +35,31 @@ const str = (v, max) => (typeof v === 'string' ? v.slice(0, max) : undefined);
 
 export const DEFAULT_VIEW = Object.freeze({ rotation: 0, flipX: false, zoom: 1, pan: [0, 0] });
 
+/* ─── F2 director camera: board.view.camera { mode, spotlight, target } ───
+   mode 'fixed' (the plain fitted plan, the default) | 'follow' (TV frames the revealed rooms
+   holding PCs) | 'cinematic' (follow + drift/vignette/edge treatment); spotlight dims all but the
+   active initiative token's room; target = a room id the GM pinned (null = automatic framing).
+   The TV only ever frames rooms it may see, so a target in fog is ignored client-side. */
+export const CAMERA_MODES = Object.freeze(['fixed', 'follow', 'cinematic']);
+export const DEFAULT_CAMERA = Object.freeze({ mode: 'fixed', spotlight: false, target: null });
+export function sanitizeCamera(c, prev = DEFAULT_CAMERA) {
+  const base = prev && typeof prev === 'object' ? prev : DEFAULT_CAMERA;
+  const out = {
+    mode: CAMERA_MODES.includes(base.mode) ? base.mode : 'fixed',
+    spotlight: !!base.spotlight,
+    target: typeof base.target === 'string' && ID_RE.test(base.target) ? base.target : null,
+  };
+  if (!c || typeof c !== 'object' || Array.isArray(c)) return out;
+  if (c.mode !== undefined) out.mode = CAMERA_MODES.includes(c.mode) ? c.mode : 'fixed';
+  if (c.spotlight !== undefined) out.spotlight = c.spotlight === true;
+  if (c.target !== undefined) out.target = typeof c.target === 'string' && c.target.length <= 80 && ID_RE.test(c.target) ? c.target : null;
+  return out;
+}
+
 export function emptyBoard() {
   return {
     mapId: null, level: null, fog: true,
-    view: { ...DEFAULT_VIEW, pan: [0, 0] },
+    view: { ...DEFAULT_VIEW, pan: [0, 0], camera: { ...DEFAULT_CAMERA } },
     rooms: nullObj(), tokens: nullObj(), pings: [], mapRev: 0,
   };
 }
@@ -57,6 +78,7 @@ export function normalizeBoard(b) {
     b.rooms = rooms;
   }
   if (!Array.isArray(b.pings)) b.pings = [];
+  if (b.view && typeof b.view === 'object') b.view.camera = sanitizeCamera(null, b.view.camera); // F2: snapshots before the camera
   return b;
 }
 
@@ -310,12 +332,14 @@ export function viewFor(board, role) {
 }
 
 export function sanitizeView(v, prev = DEFAULT_VIEW) {
-  const out = { ...prev, pan: [...(prev.pan || [0, 0])] };
+  const out = { ...prev, pan: [...(prev.pan || [0, 0])], camera: sanitizeCamera(null, prev.camera) };
   if (!v || typeof v !== 'object') return out;
   if (v.rotation !== undefined) out.rotation = [0, 90, 180, 270].includes(v.rotation) ? v.rotation : 0;
   if (v.flipX !== undefined) out.flipX = !!v.flipX;
   if (v.zoom !== undefined) out.zoom = isNum(v.zoom) ? clamp(v.zoom, 0.5, 6) : 1;
   if (v.pan !== undefined) out.pan = Array.isArray(v.pan) && v.pan.length === 2 && v.pan.every(isNum) ? [clamp(v.pan[0], -1, 1), clamp(v.pan[1], -1, 1)] : [0, 0];
+  // F2: camera is always a fresh object (never shares DEFAULT_CAMERA / the previous one); partial updates merge.
+  out.camera = sanitizeCamera(v.camera, prev.camera);
   return out;
 }
 

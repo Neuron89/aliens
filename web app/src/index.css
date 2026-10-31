@@ -2578,7 +2578,8 @@ html[data-universe="dune"] .strip-mark { font-weight: 600; letter-spacing: 0.28e
 .rail-dot { position: absolute; top: 6px; right: 9px; width: 9px; height: 9px; border-radius: 50%; background: var(--warn); box-shadow: 0 0 6px var(--warn); }
 .rail-dot.live { background: var(--success); box-shadow: 0 0 6px var(--success); width: 7px; height: 7px; }
 .rail-audio {
-  position: fixed; left: calc(var(--rail-w) + 8px); bottom: 10px; z-index: 70; width: 290px; display: flex; flex-direction: column; gap: 10px;
+  position: fixed; left: calc(var(--rail-w) + 8px); bottom: 10px; z-index: 70; width: min(372px, calc(100vw - 16px)); display: flex; flex-direction: column; gap: 10px;
+  max-height: calc(100vh - 64px); max-height: calc(100dvh - 64px); overflow-y: auto; overscroll-behavior: contain; /* clears the status strip */
   padding: 14px; background: var(--bg-panel); border: 1px solid var(--accent); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
 }
 .rail-audio-head { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.16em; color: var(--text-dim); }
@@ -2599,7 +2600,7 @@ html[data-universe="dune"] .strip-mark { font-weight: 600; letter-spacing: 0.28e
   .rail-group { flex-direction: row; gap: 2px; }
   .rail-k, .rail-fill { display: none; }
   .rail-btn { width: 64px; min-height: 56px; flex: none; }
-  .rail-audio { left: auto; right: 8px; bottom: calc(var(--bottom-bar) + 8px); }
+  .rail-audio { left: auto; right: 8px; bottom: calc(var(--bottom-bar) + 8px); max-height: calc(100dvh - var(--bottom-bar) - 64px); }
   .deck-main { padding-bottom: calc(var(--bottom-bar) + 24px); }
 }
 @media (max-width: 599px) { .rail { justify-content: flex-start; } }

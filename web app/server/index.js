@@ -43,6 +43,8 @@ function requireApiToken(req, res, next) {
 
 app.use('/api/content', requireApiToken, createContentRouter());
 app.use('/api/generate', requireApiToken, createGenerateRouter());
+app.use('/api/recap', requireApiToken, (await import('./recap.js')).createRecapRouter()); // F5 ship's log recap (Claude or template)
+app.use('/api/portrait', requireApiToken, (await import('./portrait.js')).createPortraitRouter()); // F4 portraits (local ComfyUI)
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.' }));
 
 attachSessions(io);

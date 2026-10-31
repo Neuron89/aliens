@@ -40,6 +40,9 @@ const core = {
   maps,
   generator,
   catalog,
+  // Optional engine features (absent = off). tracker: phones get the TRACKER tab
+  // (player/TrackerPane.jsx) and the server a per-player motion-tracker summary.
+  features: { tracker: true },
 };
 
 export default core;

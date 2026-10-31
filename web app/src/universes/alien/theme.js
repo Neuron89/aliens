@@ -56,8 +56,13 @@ export const theme = {
   /* Generator wizard log style. */
   logStyle: 'terminal',
   favicon: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='#050709'/><rect x='3.5' y='3.5' width='25' height='25' rx='3' fill='none' stroke='#00d4aa' stroke-width='1.5'/><path d='M8 22V10l8 7 8-7v12' fill='none' stroke='#00d4aa' stroke-width='2.4' stroke-linejoin='round'/><path d='M6 26h20' stroke='#e0aa2a' stroke-width='1.4'/></svg>",
-  /* Ambient presets offered in the GM rail AUDIO popover (keys of hooks/useAmbientAudio PRESETS): ship hum, tension, red alert, deep space, cosmic dread. */
-  ambient: ['ship', 'tension', 'alert', 'space', 'dread'],
+  /* Ambient presets offered in the GM rail AUDIO popover (keys of hooks/useAmbientAudio PRESETS): engine hum,
+     derelict silence, hive (wet drip), tension, red alert, deep space, cosmic dread. */
+  ambient: ['ship', 'derelict', 'hive', 'tension', 'alert', 'space', 'dread'],
+  /* Soundboard (src/engine/soundboard.js): one-tap stingers the GM fires to the TV, in button order. */
+  sounds: {
+    stingers: ['klaxon', 'hull-groan', 'airlock', 'steam-vent', 'tracker-burst', 'screech', 'lights-out'],
+  },
   /* Table-board palette (board/*). Maps may override any key via map.palette. */
   board: {
     levelNoun: 'DECK',

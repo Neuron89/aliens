@@ -1,0 +1,84 @@
+/* ═══════════════════════════════════════════════════════════════
+   F2 — TV director camera + combat spotlight (BoardView DirectorStage,
+   board/Camera.js). The camera transform itself is written per frame
+   from JS on .bv-cam; everything here is the static frame, the drift,
+   the reveal wipes, the spotlight dim and the CINEMATIC edge looks.
+   Reduced FX: html.fx-reduced (index.css) already zeroes animation
+   durations; .cam-still also drops the looping ones outright.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* The map's clip box: the camera never spills over the status strip. */
+.bv-cam-clip { position: absolute; inset: 0; overflow: hidden; contain: paint; }
+.bv-cam { position: absolute; inset: 0; transform-origin: 0 0; }
+.bv-cam-drift { width: 100%; height: 100%; transform-origin: 50% 50%; }
+.bv-cam-drift.on { animation: bvCamDrift 46s ease-in-out infinite alternate; }
+@keyframes bvCamDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  35% { transform: translate(-0.45%, 0.3%) scale(1.012); }
+  70% { transform: translate(0.4%, -0.3%) scale(1.02); }
+  100% { transform: translate(-0.2%, -0.4%) scale(1.008); }
+}
+
+/* ─── Spotlight: dim everything but the actor's room ─── */
+.bv-spot { opacity: 0; transition: opacity 0.55s ease; }
+.bv-spot.on { opacity: 1; }
+.bv-spot-dim { opacity: 0.7; }
+.bv-spot-ring { stroke: var(--accent, #7fd4b8); opacity: 0.9; filter: drop-shadow(0 0 6px var(--accent, #7fd4b8)); }
+html[data-universe="dune"] .bv-spot-dim { opacity: 0.66; }
+
+/* ─── Reveal wipes (palette.reveal: 'scan' = phosphor line, 'dust' = sand sweep) ─── */
+.bvw-down { animation: bvwDown 1.15s cubic-bezier(0.45, 0, 0.6, 1) both; }
+@keyframes bvwDown { from { transform: translateY(0); } to { transform: translateY(var(--bvw-d)); } }
+.bvw-line { animation: bvwFlicker 0.12s steps(2, end) 9; }
+@keyframes bvwFlicker { from { opacity: 1; } to { opacity: 0.55; } }
+.bvw-sweep { animation: bvwSweep 1.45s cubic-bezier(0.4, 0, 0.2, 1) both; }
+@keyframes bvwSweep { from { transform: translateX(0); } to { transform: translateX(var(--bvw-d)); } }
+
+/* ─── CINEMATIC frame ─── */
+.bv-cine { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.bv-cine > i { position: absolute; inset: 0; display: block; }
+.bv-cine-vig { background: radial-gradient(ellipse 75% 70% at 50% 48%, transparent 55%, rgba(0, 0, 0, 0.5) 82%, rgba(0, 0, 0, 0.86) 100%); }
+
+/* ALIEN: a CRT bezel — rounded tube corners, scanlines toward the edges, a slow rolling bar, faint flicker */
+.bv-cine.k-crt .bv-cine-edge {
+  border-radius: 28px;
+  box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.9), inset 0 0 160px rgba(0, 212, 170, 0.24), inset 0 0 26px rgba(0, 0, 0, 0.92);
+  background: repeating-linear-gradient(to bottom, rgba(130, 255, 215, 0.1) 0 1px, transparent 1px 3px);
+  -webkit-mask: radial-gradient(ellipse 80% 78% at 50% 50%, transparent 52%, #000 100%);
+  mask: radial-gradient(ellipse 80% 78% at 50% 50%, transparent 52%, #000 100%);
+  animation: bvCrtFlicker 6.5s steps(1, end) infinite;
+}
+.bv-cine.k-crt .bv-cine-vig::after {
+  content: ''; position: absolute; left: 0; right: 0; top: -20%; height: 18%;
+  background: linear-gradient(to bottom, transparent, rgba(130, 255, 215, 0.05), transparent);
+  animation: bvCrtRoll 11s linear infinite;
+}
+@keyframes bvCrtFlicker { 0%, 100% { opacity: 1; } 47% { opacity: 0.86; } 48% { opacity: 1; } 81% { opacity: 0.92; } }
+@keyframes bvCrtRoll { from { transform: translateY(0); } to { transform: translateY(680%); } }
+
+/* DUNE: heat shimmer — the edges blur and wobble over a warm haze rising off the sand */
+.bv-cine.k-heat .bv-cine-edge {
+  -webkit-backdrop-filter: blur(2.6px) saturate(1.25);
+  backdrop-filter: blur(2.6px) saturate(1.25);
+  background:
+    radial-gradient(ellipse 90% 40% at 50% 112%, rgba(226, 147, 46, 0.34), transparent 70%),
+    linear-gradient(to bottom, rgba(255, 196, 120, 0.14), transparent 22%, transparent 76%, rgba(226, 147, 46, 0.22));
+  -webkit-mask: radial-gradient(ellipse 82% 78% at 50% 50%, transparent 56%, #000 96%);
+  mask: radial-gradient(ellipse 82% 78% at 50% 50%, transparent 56%, #000 96%);
+  animation: bvHeat 2.8s ease-in-out infinite alternate;
+}
+.bv-cine.k-heat .bv-cine-vig { background: radial-gradient(ellipse 75% 70% at 50% 46%, transparent 55%, rgba(20, 10, 2, 0.5) 82%, rgba(12, 6, 1, 0.86) 100%); }
+@keyframes bvHeat { from { transform: translateY(0) scale(1, 1); } to { transform: translateY(-4px) scale(1.004, 1.01); } }
+
+.bv-cine.k-plain .bv-cine-edge { display: none; }
+.cam-still .bv-cine-edge, .cam-still .bv-cine-vig::after, .cam-still .bvw-line { animation: none !important; }
+
+/* ─── Turn banner on the status strip (SPOTLIGHT) ─── */
+.bv-turn {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 0.5rem; height: 26px; padding: 0 0.85rem;
+  color: #000; background: var(--accent, #7fd4b8); letter-spacing: 0.16em;
+  animation: bvTurnIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.bv-turn b { font-weight: 700; }
+.bv-turn.k-creature, .bv-turn.k-npc { background: var(--danger, #d04030); color: #fff; }
+@keyframes bvTurnIn { from { transform: translateX(-28px); opacity: 0; } to { transform: none; opacity: 1; } }

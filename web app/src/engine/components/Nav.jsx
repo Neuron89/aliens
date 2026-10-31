@@ -3,6 +3,8 @@ import { useGame } from '../GameContext';
 import { useUniverse } from '../UniverseContext';
 import { useFx } from './player/fx';
 import Icon from './run/icons';
+import { STINGERS, stingersFor, playStinger, unlockAudio, isDucked, subscribeDuck } from '../soundboard';
+import './soundboard.css';
 
 /* Core sections every universe gets; universe.navSections are appended. */
 export const CORE_SECTIONS = [
@@ -168,35 +170,119 @@ export function railSections(universe) {
   };
 }
 
+/* ═══ AUDIO popover (F3 soundboard) ═══════════════════════════════
+   STINGERS: one tap fires a procedural stinger (soundboard.js) — to the TV
+   (table-sfx), to the TV and phones, or HERE (preview on this screen).
+   AMBIENCE: the universe's beds (theme.ambient); a pick plays here and, in
+   a live session, becomes table.ambient so the TV follows (run-set).
+   The TV only plays sound when opened as /?board=CODE&audio=1. */
+const SFX_ROUTE_KEY = 'engine.sfx.route';
+const readRoute = () => { try { return localStorage.getItem(SFX_ROUTE_KEY) || 'tv'; } catch { return 'tv'; } };
+
 function AudioPop({ audio, onClose, anchor }) {
   const ref = useRef(null);
   const { universe } = useUniverse();
+  const { gameCode, boardLinked = 0, table, runSet, sfxSend } = useGame();
+  const [route, setRouteState] = useState(readRoute);
+  const [status, setStatus] = useState(null); // { text, bad? }
+  const [fired, setFired] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [duck, setDuck] = useState(isDucked);
+  const live = !!gameCode && typeof sfxSend === 'function';
+  const where = live ? route : 'here';
+  useEffect(() => subscribeDuck(setDuck), []);
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    const close = () => { onClose(); anchor.current?.focus({ preventScroll: true }); };
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
     const onDown = (e) => { if (ref.current && !ref.current.contains(e.target) && !anchor.current?.contains(e.target)) onClose(); };
     document.addEventListener('keydown', onKey);
     document.addEventListener('pointerdown', onDown);
-    requestAnimationFrame(() => ref.current?.querySelector('button')?.focus({ preventScroll: true }));
+    requestAnimationFrame(() => ref.current?.querySelector('button:not([disabled])')?.focus({ preventScroll: true }));
     return () => { document.removeEventListener('keydown', onKey); document.removeEventListener('pointerdown', onDown); };
   }, [onClose, anchor]);
   if (!audio) return null;
   const { preset, volume, presets, applyPreset, updateVolume } = audio;
-  // Only this universe's moods (theme.ambient); OFF and whatever is playing now are always listed.
+  const setRoute = (r) => { setRouteState(r); try { localStorage.setItem(SFX_ROUTE_KEY, r); } catch { /* ignore */ } };
+  // Only this universe's moods (theme.ambient, in theme order); OFF and whatever is playing now are always listed.
   const own = universe?.theme?.ambient;
-  const shown = Object.entries(presets).filter(([key]) => !Array.isArray(own) || key === 'off' || key === preset || own.includes(key));
+  const ids = Array.isArray(own)
+    ? ['off', ...own.filter((k) => presets[k]), ...(preset !== 'off' && !own.includes(preset) ? [preset] : [])]
+    : Object.keys(presets);
+  const stingers = stingersFor(universe?.theme);
+  const tvAmb = table?.run?.ambient ?? table?.ambient ?? null; // GM table: run.ambient (the TV sees it as table.ambient)
+  const tvAmbient = tvAmb ? (presets[tvAmb]?.label || String(tvAmb).toUpperCase()) : 'OFF';
+  const tvLink = gameCode && typeof window !== 'undefined' ? `${window.location.origin}/?board=${gameCode}&audio=1` : '';
+  const sessionWord = (universe?.terms?.session || 'session').toUpperCase();
+
+  const fire = (id) => {
+    const label = STINGERS[id]?.label || id;
+    setFired(id);
+    setTimeout(() => setFired((f) => (f === id ? null : f)), 650);
+    if (where === 'here') {
+      unlockAudio();
+      playStinger(id);
+      setStatus({ text: `${label} — PLAYED HERE` });
+      return;
+    }
+    sfxSend(id, { phones: where === 'all' }, (r) => {
+      if (r?.error) { setStatus({ text: `${label} — ${r.error}`, bad: true }); return; }
+      const tv = r?.boards ? `TV${r.boards > 1 ? ` ×${r.boards}` : ''}` : 'NO TV LINKED';
+      const ph = where === 'all' ? ` + ${r?.phones || 0} PHONE${r?.phones === 1 ? '' : 'S'}` : '';
+      setStatus({ text: `${label} → ${tv}${ph}`, bad: !r?.boards && where !== 'all' });
+    });
+  };
+  const pickAmbient = (key) => {
+    applyPreset(key);
+    if (live && typeof runSet === 'function') runSet({ ambient: key === 'off' ? null : key });
+  };
+  const copyLink = () => {
+    navigator.clipboard?.writeText(tvLink).then(() => setCopied(true), () => setCopied(false));
+    setTimeout(() => setCopied(false), 2200);
+  };
+  const routes = [['tv', 'TV'], ['all', 'TV + PHONES'], ['here', 'HERE']];
+
   return (
-    <div ref={ref} className="rail-audio" role="dialog" aria-label="Ambient audio">
-      <div className="rail-audio-head">AMBIENT AUDIO <span>{presets[preset]?.label || 'OFF'}</span></div>
-      <div className="rail-audio-presets">
-        {shown.map(([key, val]) => (
-          <button key={key} type="button" className={preset === key ? 'on' : ''} aria-pressed={preset === key} onClick={() => applyPreset(key)}>{val.label}</button>
-        ))}
+    <div ref={ref} className="rail-audio sb-pop" role="dialog" aria-label="Audio: stingers and ambience">
+      <div className="rail-audio-head">AUDIO <span>{presets[preset]?.label || 'OFF'}{duck ? ' · DUCKED' : ''}</span></div>
+
+      <div className="sb-sec">
+        <div className="sb-k" id="sb-stingers">STINGERS</div>
+        <div className="sb-route" role="group" aria-label="Where stingers play">
+          {routes.map(([id, label]) => (
+            <button key={id} type="button" className={where === id ? 'on' : ''} aria-pressed={where === id}
+              disabled={!live && id !== 'here'} onClick={() => setRoute(id)}>{label}</button>
+          ))}
+        </div>
+        <div className="sb-grid" role="group" aria-labelledby="sb-stingers">
+          {stingers.map((id) => (
+            <button key={id} type="button" className={`sb-fire${fired === id ? ' fired' : ''}`} onClick={() => fire(id)}>
+              <span className="sb-glyph" aria-hidden="true" />{STINGERS[id].label}
+            </button>
+          ))}
+        </div>
+        <p className={`sb-status${status?.bad ? ' bad' : ''}`} role="status" aria-live="polite">
+          {status?.text || (live ? `TV ${boardLinked ? `LINKED ×${boardLinked}` : 'NOT LINKED'} · NO TWO SHOTS SOUND ALIKE` : `NO LIVE ${sessionWord} — PREVIEW HERE`)}
+        </p>
       </div>
-      <label className="rail-audio-vol">
-        <span>VOL</span>
-        <input type="range" min="0" max="1" step="0.05" value={volume} onChange={(e) => updateVolume(parseFloat(e.target.value))} aria-label="Ambient volume" />
-        <span>{Math.round(volume * 100)}%</span>
-      </label>
+
+      <div className="sb-sec">
+        <div className="sb-k" id="sb-ambience">AMBIENCE {live && <span>TV: {tvAmbient}</span>}</div>
+        <div className="rail-audio-presets" role="group" aria-labelledby="sb-ambience">
+          {ids.map((key) => (
+            <button key={key} type="button" className={preset === key ? 'on' : ''} aria-pressed={preset === key} onClick={() => pickAmbient(key)}>{presets[key]?.label || key}</button>
+          ))}
+        </div>
+        <label className="rail-audio-vol">
+          <span>VOL</span>
+          <input type="range" min="0" max="1" step="0.05" value={volume} onChange={(e) => updateVolume(parseFloat(e.target.value))} aria-label="Ambient volume on this screen" />
+          <span>{Math.round(volume * 100)}%</span>
+        </label>
+      </div>
+
+      <div className="sb-tv">
+        <p>TV SOUND: open the board with <b>&amp;audio=1</b> and tap the TV once. Scenes switch the ambience; everything ducks while narration is read aloud. VOL sets this screen only.</p>
+        {tvLink && <button type="button" className="sb-copy" onClick={copyLink}>{copied ? 'COPIED' : 'COPY TV AUDIO LINK'}</button>}
+      </div>
     </div>
   );
 }

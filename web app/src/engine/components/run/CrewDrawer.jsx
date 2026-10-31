@@ -3,8 +3,7 @@ import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import { trackMaxFor, fmtTime } from '../../rulesUtils';
 import './CrewDrawer.css';
-
-const initialsOf = (name = '') => name.replace(/^(capt|dr|sgt|lt|mr|ms|mrs)\.?\s+/i, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?';
+import Portrait from '../sheet/Portrait'; // F4 portraits
 
 /* ═══════════════════════════════════════════════════════════════
    CREW drawer (Focus Stage dock): every seat with its tracks as bars,
@@ -144,7 +143,7 @@ export default function CrewDrawer({ onOpen, onNavigate }) {
           return (
             <li key={p.id} className={`cd-row${offline ? ' off' : ''}${dead ? ' dead' : ''}${panic ? ' panic' : ''}`}>
               <div className="cd-main">
-                <span className="cd-av" aria-hidden="true">{initialsOf(c?.name || p.name)}</span>
+                <Portrait character={c} name={p.name} size={40} className="cd-av" decorative />
                 <div className="cd-body">
                   <div className="cd-line">
                     <b className="cd-name">{c?.name || p.name}</b>

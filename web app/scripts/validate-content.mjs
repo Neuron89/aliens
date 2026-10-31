@@ -10,7 +10,9 @@
                 attribute/skill keys, values outside the hard ranges, a fixed attribute array
                 (DUNE 8/7/6/5/4) not used exactly once, attribute statements missing for
                 universes whose attributes carry a prompt (or pasted into appearance),
-                buddy/rival that is not another PC of the pack (or "None"), duplicate names.
+                buddy/rival that is not another PC of the pack (or "None"), duplicate names,
+                relations[].to (NPCs and characters, intrigue web) that is not an NPC or character
+                name/id of the same pack, or that points at its owner.
      warnings — (listed with --warnings) gear that does not resolve to a catalog item, and
                 pre-gens beyond the builder's per-career caps (pre-gens are seasoned: skill
                 totals may exceed the budget by up to 10, as server/generator/prompt.js says). */
@@ -24,6 +26,7 @@ import { validateParams, actRange } from '../server/generator/params.js';
 import { mockOutput } from '../server/generator/__mock__.js';
 import { normalizePack, semanticErrors } from '../server/generator/core.js';
 import { buildOutputSchema } from '../server/generator/outputSchema.js';
+import { relationProblems } from '../src/engine/components/run/intrigueGraph.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -140,6 +143,7 @@ export function validateAll({ quiet = false, showWarnings = false } = {}) {
       seen.set(key, rel);
       const cp = characterProblems(pack);
       problems.push(...cp.errors);
+      problems.push(...relationProblems(pack)); // intrigue web: every relations[].to names a person of this pack
       warningCount += cp.warnings.length;
       if (showWarnings) for (const w of cp.warnings) console.log(`  ! ${rel} ${w}`);
     }
@@ -177,6 +181,16 @@ export function selfTest() {
   expect('alien non-key attr', mutate('alien', 'chariot-of-the-gods', (c, p) => { const k = Object.keys(c.attributes).find((a) => a !== 'emp'); c.attributes[k] = 5; c.career = 'Officer'; }), /above the cap 4/);
   expect('alien buddy', mutate('alien', 'chariot-of-the-gods', (c) => { c.buddy = 'Nobody Real'; }), /not the name of another PC/);
   expect('alien rival self', mutate('alien', 'chariot-of-the-gods', (c) => { c.rival = c.name; }), /themself/);
+  // Intrigue web (relations[]): every 'to' resolves to an NPC or character of the same pack.
+  {
+    const p = load('dune', 'the-water-debt');
+    if (relationProblems(p).length) failed.push(`dune/the-water-debt relations should be clean: ${relationProblems(p)[0]}`);
+    p.npcs[0].relations = [{ to: 'Nobody Of This Pack', kind: 'ally' }];
+    if (!relationProblems(p).some((e) => /is not an NPC or character/.test(e))) failed.push('relations: an unknown "to" must be flagged');
+    p.npcs[0].relations = [{ to: p.characters[0].id, kind: 'rival' }, { to: p.npcs[0].name, kind: 'ally' }];
+    const rp = relationProblems(p);
+    if (rp.length !== 1 || !/points at itself/.test(rp[0])) failed.push(`relations: a character id must resolve and a self-relation must be flagged (got ${rp.join(' | ') || 'none'})`);
+  }
   expect('alien skill total', mutate('alien', 'chariot-of-the-gods', (c) => { c.skills.comtech = 5; c.skills.survival = 5; c.skills.stamina = 5; }), /skill total \d+ exceeds/);
   // Generator contract: statements are a required, explicit-key field only where attributes carry a prompt,
   // the mock writes legal characters, and the engine checks catch a missing statement.

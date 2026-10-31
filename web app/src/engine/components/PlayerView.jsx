@@ -5,17 +5,20 @@ import CharacterSheet from './CharacterSheet';
 import { useFx } from './player/fx';
 import PhoneLayer from './player/PhoneLayer';
 import HandoutsPane from './player/HandoutsPane';
+import HandoutDoc from './player/HandoutDoc'; // F5
 import ClocksRow from './player/ClocksRow';
 import PauseButton from './player/PauseButton';
 import BuildCharacter from './player/BuildCharacter';
 import PanicOverlay from './player/PanicOverlay';
 import TablePane from './player/TablePane';
+import TrackerPane from './player/TrackerPane'; // F1 motion tracker (universe.features.tracker)
 import RollRequestCard from './player/RollRequestCard';
 import PlayerMenu from './player/PlayerMenu';
 import ConfirmSheet from './player/ConfirmSheet';
 import Icon from './player/icons';
 import SupplyPanel from './SupplyPanel';
 import { ItemArt } from './sheet/parts';
+import Portrait from './sheet/Portrait'; // F4 portraits
 import { getCatalog, itemById } from '../catalogUtils';
 import { plural, fmtTime, determinationDef } from '../rulesUtils';
 import Confirm from './Confirm';
@@ -220,8 +223,11 @@ export default function PlayerView() {
 
   const otherPlayers = (connectedPlayers || []).filter(p => p.id !== myId);
   const layer = (
-    <PhoneLayer fx={fx} viewer={viewer} setViewer={setViewer} order={order} setOrder={setOrder}
-      onClockTick={onClockTick} onReply={() => reply('dm')} />
+    <>
+      <PhoneLayer fx={fx} viewer={viewer} setViewer={setViewer} order={order} setOrder={setOrder}
+        onClockTick={onClockTick} onReply={() => reply('dm')} />
+      {viewer && <HandoutDoc handout={viewer} universe={universe} onClose={() => setViewer(null)} />}{/* F5: themed document reader over PhoneLayer's viewer */}
+    </>
   );
   const lostBanner = !connected && (
     <div className="ph-lost" role="status">
@@ -306,6 +312,7 @@ export default function PlayerView() {
     ['inventory', 'GEAR', 'gear'],
     ['messages', 'COMMS', 'comms'],
     ['table', 'TABLE', 'table'],
+    ...(universe.features?.tracker ? [['tracker', 'TRACKER', 'tracker']] : []), // F1 motion tracker
   ];
   const Roller = rules?.dice?.Roller;
   const activeConditions = Object.entries(myPlayer.conditions || {}).filter(([, on]) => on).map(([k]) => k);
@@ -400,6 +407,7 @@ export default function PlayerView() {
       {/* ─── Vitals header (pinned) ─── */}
       <header className="pp-vitals">
         <div className="pp-idrow">
+          <Portrait character={c} size={44} decorative />
           <div className="pp-who">
             <span className="pp-name">{c.name}</span>
             <span className="pp-sub" aria-label={`${c.career ? `${c.career}, ` : ''}${terms.session} code ${gameCode}`}>{c.career ? `${c.career} · ` : ''}<b className="pp-code">{gameCode}</b></span>
@@ -559,6 +567,7 @@ export default function PlayerView() {
         )}
 
         {tab === 'table' && <TablePane />}
+        {tab === 'tracker' && universe.features?.tracker && <TrackerPane />}
 
         {tab === 'dice' && (
           <div className="pp-pane pv-dice pp-dice">

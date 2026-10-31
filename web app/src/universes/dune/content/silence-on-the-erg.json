@@ -553,14 +553,42 @@
         "communicate": 7,
         "discipline": 6,
         "stress": 6
-      }
+      },
+      "relations": [
+        {
+          "to": "Ferrouk of Umm Kareth",
+          "kind": "owes",
+          "note": "She promised the sietch the harvester’s spice hold in return for six nights of water.",
+          "secret": true
+        },
+        {
+          "to": "Lord Steward Maddoc Oskaren",
+          "kind": "fears",
+          "note": "She ran the tithe skim on his word, and she knows the House now needs someone to carry the blame for it.",
+          "secret": true
+        },
+        {
+          "to": "Hallam Oro",
+          "kind": "rival",
+          "note": "She has always known the Suk doctor is her father, and she has never forgiven him.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Lord Steward Maddoc Oskaren",
       "role": "Steward and acting head of House Oskaren, on the House channel from Hadrath Station",
       "agenda": "Bury the evidence of the tithe skim and keep the House’s concession, at whatever cost to people he will never meet.",
       "behavior": "Courteous, clipped, distant over the comm. He asks about the register before he asks about the crew.",
-      "secret": "He ordered the skim, pressured the planetologist to clear the harvester in storm season, and gave Bastien Rhol a sealed order that Iselde must not return."
+      "secret": "He ordered the skim, pressured the planetologist to clear the harvester in storm season, and gave Bastien Rhol a sealed order that Iselde must not return.",
+      "relations": [
+        {
+          "to": "Crawler Boss Iselde Varn",
+          "kind": "rival",
+          "note": "He wants her silent before she can name him as the man who ordered the skim.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Lazlo Quint",
@@ -572,7 +600,20 @@
         "communicate": 7,
         "understand": 6,
         "battle": 4
-      }
+      },
+      "relations": [
+        {
+          "to": "Crawler Boss Iselde Varn",
+          "kind": "rival",
+          "note": "His salvage claim is cleanest with no survivors left to contest it, and she is the first of them.",
+          "secret": true
+        },
+        {
+          "to": "Lord Steward Maddoc Oskaren",
+          "kind": "rival",
+          "note": "He wants the register so his true masters can turn House Oskaren into a puppet."
+        }
+      ]
     },
     {
       "name": "Captain Rask Morrow",
@@ -584,35 +625,80 @@
         "battle": 7,
         "move": 5,
         "stress": 5
-      }
+      },
+      "relations": [
+        {
+          "to": "Lazlo Quint",
+          "kind": "serves",
+          "note": "He leads Quint’s hired guns, despises the man, and will change sides for a way off the sand.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Ferrouk of Umm Kareth",
       "role": "Watch-captain of Siq Abbar on Kareth’s Thumb",
       "agenda": "Collect the water and spice his sietch is owed, and see that the off-worlders leave the deep desert as debtors rather than masters.",
       "behavior": "Slow, courteous and immovable. Never lies; simply answers only what is asked.",
-      "secret": "He is Tahra’s brother. His people have kept the harvester crew alive for six nights, and he left Hesk’s body behind because a murdered man’s water is unclean until his killer answers."
+      "secret": "He is Tahra’s brother. His people have kept the harvester crew alive for six nights, and he left Hesk’s body behind because a murdered man’s water is unclean until his killer answers.",
+      "relations": [
+        {
+          "to": "Tahra of Umm Kareth",
+          "kind": "loves",
+          "note": "Brother and sister: he trusts her to tell the sietch how these off-worlders treat water.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Sayyadina Imra",
       "role": "Fremen holy woman of Sietch Umm Kareth",
       "agenda": "Read the will of the desert in what happens at the wreck, and bind the outsiders to the sietch by the judgment she pronounces.",
       "behavior": "Ancient, amused, unafraid. Speaks to off-worlders as if to clever children and to Tahra as if to a daughter.",
-      "secret": "She knows the Old Man of the basin rises whenever a great spice blow comes, and has timed the sietch’s bargain so that the worm, not the Fremen, will settle the dispute."
+      "secret": "She knows the Old Man of the basin rises whenever a great spice blow comes, and has timed the sietch’s bargain so that the worm, not the Fremen, will settle the dispute.",
+      "relations": [
+        {
+          "to": "Ferrouk of Umm Kareth",
+          "kind": "ally",
+          "note": "She speaks the sietch’s judgment; he carries it out at the wreck."
+        },
+        {
+          "to": "Crawler Boss Iselde Varn",
+          "kind": "hides",
+          "note": "She has let the crew’s bargain run toward the hour of the spice blow, when the great worm of the basin rises to settle it.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Pell Dorrin",
       "role": "Youngest harvester hand, survivor",
       "agenda": "Stay in the desert with the Fremen; he believes the spice has shown him where he belongs.",
       "behavior": "Gentle, frightened, spice-drunk. His eyes are nearly fully blue and he says unsettlingly accurate things about the next few minutes.",
-      "secret": "He heard the fight on the night of the storm and knows Iselde killed Hesk, but loves her too much to say it."
+      "secret": "He heard the fight on the night of the storm and knows Iselde killed Hesk, but loves her too much to say it.",
+      "relations": [
+        {
+          "to": "Crawler Boss Iselde Varn",
+          "kind": "loves",
+          "note": "He heard the fight on the storm night and knows what happened to Hesk, but he will not give her up.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Tobin Ashe",
       "role": "Co-pilot of the downed carryall Kestrel Vane",
       "agenda": "Get home alive and never fly past the Shield Wall again.",
       "behavior": "Feverish, jumpy, armed with a maula pistol he waves when frightened. Clings to whoever gave him water first.",
-      "secret": "Iselde called the Kestrel Vane out early and asked it to bring her alone, not the crew; Tobin heard the call and thinks it means she planned to desert them."
+      "secret": "Iselde called the Kestrel Vane out early and asked it to bring her alone, not the crew; Tobin heard the call and thinks it means she planned to desert them.",
+      "relations": [
+        {
+          "to": "Crawler Boss Iselde Varn",
+          "kind": "rival",
+          "note": "He heard her call the carryall early to fetch her alone, and believes she meant to leave her crew to the desert.",
+          "secret": true
+        }
+      ]
     }
   ],
   "threats": [
@@ -914,7 +1000,20 @@
       },
       "buddy": "Tahra of Umm Kareth",
       "rival": "Bastien Rhol",
-      "secret": "You hold an Imperial appointment, and your patron at court has asked you to bring back proof of any House defrauding the Emperor’s tithe. You also signed the storm-risk waiver that sent the Saltmother’s Due past the Shield Wall in storm season; the Lord Steward leaned on you, and eight of her crew died for it."
+      "secret": "You hold an Imperial appointment, and your patron at court has asked you to bring back proof of any House defrauding the Emperor’s tithe. You also signed the storm-risk waiver that sent the Saltmother’s Due past the Shield Wall in storm season; the Lord Steward leaned on you, and eight of her crew died for it.",
+      "relations": [
+        {
+          "to": "Tahra of Umm Kareth",
+          "kind": "ally",
+          "note": "Her most trusted companion on the expedition; both respect what the desert can teach."
+        },
+        {
+          "to": "Lord Steward Maddoc Oskaren",
+          "kind": "fears",
+          "note": "She signed the storm-season waiver under his pressure. If it surfaces, part of the crew’s deaths are hers.",
+          "secret": true
+        }
+      ]
     },
     {
       "id": "tahra-umm-kareth",
@@ -959,7 +1058,15 @@
       },
       "buddy": "Ilan Vesk",
       "rival": "Jessamy Kort",
-      "secret": "Your sietch has carried water to the harvester survivors every night for six days. Crawler Boss Iselde Varn swore the spice hold to the sietch in return, and the water of the dead is already in the sietch’s deathstill. Ferrouk of Siq Abbar is your brother. You knew all of this before you took the House’s money."
+      "secret": "Your sietch has carried water to the harvester survivors every night for six days. Crawler Boss Iselde Varn swore the spice hold to the sietch in return, and the water of the dead is already in the sietch’s deathstill. Ferrouk of Siq Abbar is your brother. You knew all of this before you took the House’s money.",
+      "relations": [
+        {
+          "to": "Crawler Boss Iselde Varn",
+          "kind": "ally",
+          "note": "Her sietch has carried water to the survivors every night, on the Crawler Boss’s sworn promise of spice.",
+          "secret": true
+        }
+      ]
     },
     {
       "id": "bastien-rhol",
@@ -1004,7 +1111,20 @@
       },
       "buddy": "Hallam Oro",
       "rival": "Ilan Vesk",
-      "secret": "Before lift-off the Lord Steward gave you a sealed order: the register is to be destroyed unread, and Iselde Varn, who ran the skim, must not return to testify. You trained beside Sardaukar on Salusa Secundus and were sent home for refusing to kill prisoners. This order sits badly."
+      "secret": "Before lift-off the Lord Steward gave you a sealed order: the register is to be destroyed unread, and Iselde Varn, who ran the skim, must not return to testify. You trained beside Sardaukar on Salusa Secundus and were sent home for refusing to kill prisoners. This order sits badly.",
+      "relations": [
+        {
+          "to": "Lord Steward Maddoc Oskaren",
+          "kind": "serves",
+          "note": "He carries the Steward’s sealed order: the register destroyed unread, and Iselde Varn never to testify.",
+          "secret": true
+        },
+        {
+          "to": "Ilan Vesk",
+          "kind": "rival",
+          "note": "He distrusts the planetologist’s questions and her patron at court."
+        }
+      ]
     },
     {
       "id": "jessamy-kort",
@@ -1049,7 +1169,21 @@
       },
       "buddy": "Bastien Rhol",
       "rival": "Tahra of Umm Kareth",
-      "secret": "You owe forty thousand solari to a Harkonnen credit-house, and before lift-off you sold the harvester’s last fix to a salvage factor named Lazlo Quint to cancel it. You have also flown House Oskaren’s skimmed spice to the Guild port for three years; the register names your ornithopter’s tail code."
+      "secret": "You owe forty thousand solari to a Harkonnen credit-house, and before lift-off you sold the harvester’s last fix to a salvage factor named Lazlo Quint to cancel it. You have also flown House Oskaren’s skimmed spice to the Guild port for three years; the register names your ornithopter’s tail code.",
+      "relations": [
+        {
+          "to": "Lazlo Quint",
+          "kind": "owes",
+          "note": "She sold him the harvester’s last position to wipe out a debt owed to a Harkonnen credit-house.",
+          "secret": true
+        },
+        {
+          "to": "Lord Steward Maddoc Oskaren",
+          "kind": "serves",
+          "note": "For three years she has flown the House’s skimmed spice to the Guild port; the register names her ornithopter.",
+          "secret": true
+        }
+      ]
     },
     {
       "id": "hallam-oro",
@@ -1094,7 +1228,15 @@
       },
       "buddy": "Bastien Rhol",
       "rival": "Jessamy Kort",
-      "secret": "Crawler Boss Iselde Varn is your daughter, born before your conditioning at the Suk School. She does not know you are on this flight. You asked for this assignment the hour you heard her harvester had gone silent."
+      "secret": "Crawler Boss Iselde Varn is your daughter, born before your conditioning at the Suk School. She does not know you are on this flight. You asked for this assignment the hour you heard her harvester had gone silent.",
+      "relations": [
+        {
+          "to": "Crawler Boss Iselde Varn",
+          "kind": "loves",
+          "note": "She is the daughter he had before the Suk School. He asked for this flight the hour her harvester went silent.",
+          "secret": true
+        }
+      ]
     }
   ],
   "tips": [

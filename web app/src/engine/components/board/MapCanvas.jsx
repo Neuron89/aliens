@@ -108,7 +108,7 @@ const MapCanvas = forwardRef(function MapCanvas({
   mapDef, board, role = 'board', universe, view, editable = false, selectedTokenId = null, selectedRoomId = null,
   highlightPlayerId = null, pings = [], onTokenTap, onTokenMove, onTap, onBackgroundDrag, snap = false,
   showRoomLabels = false, showTokens = true, overlay, className = '', cursor, idleDrift,
-  flashTokens = null, activeTokenId = null, showHp = false,
+  flashTokens = null, activeTokenId = null, showHp = false, onGeometry,
 }, ref) {
   const isBoard = role === 'board';
   const drift = idleDrift ?? isBoard;
@@ -145,6 +145,12 @@ const MapCanvas = forwardRef(function MapCanvas({
   const VH = rot % 180 ? Wc : Hc;
   const counter = `${flip ? 'scale(-1,1) ' : ''}rotate(${-rot})`;
 
+  /* F2 director camera (board/Camera.js): report the fitted view geometry so the TV camera can frame rooms
+     in screen px with the same crop/zoom/pan/rotation/flip math. */
+  useEffect(() => {
+    onGeometry?.({ W, H, X, Y, Wc, Hc, rot, flip, VW, VH });
+  }, [onGeometry, W, H, X, Y, Wc, Hc, rot, flip, VW, VH]);
+
   const engCfg = useMemo(() => (mapDef?.kind === 'engine' && universe ? engineConfig(universe, mapDef) : null), [mapDef, universe]);
   const visuals = useMemo(() => mapVisuals(universe, mapDef), [universe, mapDef]);
   const { palette } = visuals;
@@ -156,7 +162,11 @@ const MapCanvas = forwardRef(function MapCanvas({
   useEffect(() => {
     const el = svgRef.current;
     if (!el || typeof ResizeObserver === 'undefined') return undefined;
-    const measure = () => { const r = el.getBoundingClientRect(); if (r.width && VW && VH) setPxScale(Math.min(r.width / VW, r.height / VH)); };
+    // layout size (clientWidth), not getBoundingClientRect: the TV camera (F2) scales the canvas with a CSS transform
+    const measure = () => {
+      const r = el.clientWidth ? { width: el.clientWidth, height: el.clientHeight } : el.getBoundingClientRect();
+      if (r.width && VW && VH) setPxScale(Math.min(r.width / VW, r.height / VH));
+    };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);

@@ -4,6 +4,7 @@ import { useUniverse } from '../../UniverseContext';
 import { getCatalog, itemById } from '../../catalogUtils';
 import { ItemArt } from '../sheet/parts';
 import HandoutViewer from './HandoutViewer';
+import VisionOverlay from '../board/VisionOverlay'; // F6: private vision flash
 
 /* ═══════════════════════════════════════════════════════════════
    Phone overlay layer (PlayerView). One-shot session effects:
@@ -152,6 +153,8 @@ export default function PhoneLayer({ fx, viewer, setViewer, order, setOrder, onC
           ))}
         </div>
       )}
+
+      <VisionOverlay variant="phone" fx={fx} />{/* F6 */}
     </>
   );
 }

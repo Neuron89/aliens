@@ -516,7 +516,21 @@
       "stats": {
         "communicate": 6,
         "discipline": 5
-      }
+      },
+      "relations": [
+        {
+          "to": "Aurelian Varrin",
+          "kind": "loves",
+          "note": "He would trade the concession itself to keep his son clear of the reckoning for the false weights.",
+          "secret": true
+        },
+        {
+          "to": "Ser Ulmar Harkonnen",
+          "kind": "serves",
+          "note": "He set the weights light at Harkonnen demand for eleven years, and six days ago sold them the Weighing itself.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Ser Ulmar Harkonnen",
@@ -527,7 +541,15 @@
       "stats": {
         "communicate": 4,
         "battle": 3
-      }
+      },
+      "relations": [
+        {
+          "to": "Lord Castor Varrin",
+          "kind": "rival",
+          "note": "Once the sale is sealed, he wants the Lord dead.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Aster Quen",
@@ -539,7 +561,20 @@
         "communicate": 5,
         "understand": 6,
         "discipline": 3
-      }
+      },
+      "relations": [
+        {
+          "to": "Severine Ashka",
+          "kind": "ally",
+          "note": "The Guild and the Sisterhood have already agreed who holds the scale afterward.",
+          "secret": true
+        },
+        {
+          "to": "Ser Ulmar Harkonnen",
+          "kind": "rival",
+          "note": "Both want to buy the Weighing before dawn."
+        }
+      ]
     },
     {
       "name": "Ixa of Sietch Tamrak",
@@ -550,7 +585,14 @@
       "stats": {
         "move": 6,
         "battle": 5
-      }
+      },
+      "relations": [
+        {
+          "to": "Ser Ulmar Harkonnen",
+          "kind": "rival",
+          "note": "His line stored the skimmed spice in her people’s sacred cave and killed the Fremen who kept it."
+        }
+      ]
     },
     {
       "name": "Judge Ottavio Strenn",
@@ -561,7 +603,15 @@
       "stats": {
         "understand": 6,
         "discipline": 6
-      }
+      },
+      "relations": [
+        {
+          "to": "Aurelian Varrin",
+          "kind": "hides",
+          "note": "He carries sealed orders to confirm every concession as it stands and ask nothing about weights.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Ilsabet Moreaux",
@@ -572,7 +622,15 @@
       "stats": {
         "communicate": 5,
         "understand": 5
-      }
+      },
+      "relations": [
+        {
+          "to": "Aster Quen",
+          "kind": "ally",
+          "note": "She has already sold the Guild a copy of the deed, and will void the escrow for the best bid.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Steward Oswin Pell",
@@ -584,7 +642,20 @@
         "move": 6,
         "communicate": 4,
         "battle": 3
-      }
+      },
+      "relations": [
+        {
+          "to": "Ser Ulmar Harkonnen",
+          "kind": "serves",
+          "note": "Paid to dose the Lord by degrees and to open the house from within.",
+          "secret": true
+        },
+        {
+          "to": "Lord Castor Varrin",
+          "kind": "serves",
+          "note": "Twenty years of faithful service, on the surface."
+        }
+      ]
     },
     {
       "name": "Kasimir Orlo",
@@ -596,7 +667,20 @@
         "battle": 7,
         "move": 6,
         "discipline": 5
-      }
+      },
+      "relations": [
+        {
+          "to": "Ser Ulmar Harkonnen",
+          "kind": "serves",
+          "note": "Ulmar’s sworn blade, fighting one last duel to win back his contract."
+        },
+        {
+          "to": "Corvin Orlo",
+          "kind": "loves",
+          "note": "They are brothers; Kasimir was exiled after killing a man in practice.",
+          "secret": true
+        }
+      ]
     }
   ],
   "threats": [
@@ -876,7 +960,20 @@
       },
       "buddy": "Severine Ashka",
       "rival": "Aurelian Varrin",
-      "secret": "For eleven years you have calibrated the Varrin scales four parts in a hundred light on Lord Castor’s orders, and kept the true figures in the Black Tally in your own cipher. Aurelian has promised the Atreides exactly that proof without knowing it would destroy you."
+      "secret": "For eleven years you have calibrated the Varrin scales four parts in a hundred light on Lord Castor’s orders, and kept the true figures in the Black Tally in your own cipher. Aurelian has promised the Atreides exactly that proof without knowing it would destroy you.",
+      "relations": [
+        {
+          "to": "Lord Castor Varrin",
+          "kind": "serves",
+          "note": "He kept the scales light on the Lord’s orders and the true figures in his own cipher.",
+          "secret": true
+        },
+        {
+          "to": "Aurelian Varrin",
+          "kind": "rival",
+          "note": "The heir wants openness; the Mentat wants the vault kept shut."
+        }
+      ]
     },
     {
       "id": "severine-ashka",
@@ -921,7 +1018,15 @@
       },
       "buddy": "Idrin Quill",
       "rival": "Dr. Maren Tervane",
-      "secret": "Six days ago you witnessed Lord Castor sign away the Weighing and sealed the deed with your truth-witness mark, and he swore you to silence. Aurelian does not know his birthright is gone, and Dr. Tervane already suspects you of poisoning the Lord."
+      "secret": "Six days ago you witnessed Lord Castor sign away the Weighing and sealed the deed with your truth-witness mark, and he swore you to silence. Aurelian does not know his birthright is gone, and Dr. Tervane already suspects you of poisoning the Lord.",
+      "relations": [
+        {
+          "to": "Aurelian Varrin",
+          "kind": "hides",
+          "note": "She watched his father sign away his birthright and is sworn not to tell him.",
+          "secret": true
+        }
+      ]
     },
     {
       "id": "bastien-orlo",
@@ -966,7 +1071,20 @@
       },
       "buddy": "Aurelian Varrin",
       "rival": "Idrin Quill",
-      "secret": "Kasimir Orlo is your younger brother. In your letters to him this year you mentioned the shield cycles and the vault watch as idle talk; those letters are how the Harkonnens breached the Residency, and Idrin’s security review will reveal it."
+      "secret": "Kasimir Orlo is your younger brother. In your letters to him this year you mentioned the shield cycles and the vault watch as idle talk; those letters are how the Harkonnens breached the Residency, and Idrin’s security review will reveal it.",
+      "relations": [
+        {
+          "to": "Aurelian Varrin",
+          "kind": "ally",
+          "note": "Sworn to keep the heir alive through the night."
+        },
+        {
+          "to": "Kasimir Orlo",
+          "kind": "loves",
+          "note": "His letters to his brother let slip the shield cycles and the vault watch.",
+          "secret": true
+        }
+      ]
     },
     {
       "id": "aurelian-varrin",
@@ -1011,7 +1129,15 @@
       },
       "buddy": "Corvin Orlo",
       "rival": "Severine Ashka",
-      "secret": "You have written three times to the Atreides advance office, promising proof of the true weights of Carthag in exchange for their support at your confirmation. You do not know what the proof is, only that Idrin keeps something in the vault."
+      "secret": "You have written three times to the Atreides advance office, promising proof of the true weights of Carthag in exchange for their support at your confirmation. You do not know what the proof is, only that Idrin keeps something in the vault.",
+      "relations": [
+        {
+          "to": "Idrin Quill",
+          "kind": "hides",
+          "note": "He has promised the Atreides proof of the true weights, not knowing that proof would ruin Idrin.",
+          "secret": true
+        }
+      ]
     },
     {
       "id": "maren-tervane",
@@ -1056,7 +1182,21 @@
       },
       "buddy": "Aurelian Varrin",
       "rival": "Severine Ashka",
-      "secret": "Lord Castor has been poisoned slowly for four months and has days to live at most. He forbade you to tell anyone, even his son. You believe Severine, who serves his cup, is the poisoner; you are wrong, but you have written your suspicion in the case-book."
+      "secret": "Lord Castor has been poisoned slowly for four months and has days to live at most. He forbade you to tell anyone, even his son. You believe Severine, who serves his cup, is the poisoner; you are wrong, but you have written your suspicion in the case-book.",
+      "relations": [
+        {
+          "to": "Severine Ashka",
+          "kind": "rival",
+          "note": "She believes, wrongly, that Severine is the poisoner.",
+          "secret": true
+        },
+        {
+          "to": "Aurelian Varrin",
+          "kind": "hides",
+          "note": "His father is dying of slow poison and has forbidden her to tell him.",
+          "secret": true
+        }
+      ]
     }
   ],
   "tips": [

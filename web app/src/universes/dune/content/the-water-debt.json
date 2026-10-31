@@ -266,14 +266,35 @@
       "role": "Head of House Tessarin",
       "agenda": "Keep the House, the town and the concession alive, in that order — and hide her pregnancy until the House is safe.",
       "behavior": "Composed, dry-witted, exhausted. Asks the agents for the truth and means it, even when it hurts.",
-      "secret": "She suspected the Steward’s arrangement months ago and chose not to ask."
+      "secret": "She suspected the Steward’s arrangement months ago and chose not to ask.",
+      "relations": [
+        {
+          "to": "Steward Ilse Marrow",
+          "kind": "hides",
+          "note": "She guessed at the Steward’s arrangement with the sietch months ago and chose not to ask.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Steward Ilse Marrow",
       "role": "Steward of Qarrat Keep, Lady Senna’s cousin",
       "agenda": "Keep the water flowing to the town; protect the arrangement with the sietch; take the blame alone if it comes to that.",
       "behavior": "Calm, precise, unfailingly courteous. Lies only about the spice.",
-      "secret": "She promised the sietch a seat on the House council without authority to do so."
+      "secret": "She promised the sietch a seat on the House council without authority to do so.",
+      "relations": [
+        {
+          "to": "Lady Senna Tessarin",
+          "kind": "serves",
+          "note": "Cousin and steward, ready to take every blame on herself to keep the House standing."
+        },
+        {
+          "to": "Naib Haddar",
+          "kind": "owes",
+          "note": "She promised the sietch a seat on the House council that was never hers to offer.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Kessa Tine",
@@ -285,33 +306,81 @@
         "battle": 6,
         "move": 7,
         "threatToReveal": 2
-      }
+      },
+      "relations": [
+        {
+          "to": "Quota Assessor Vell Druze",
+          "kind": "serves",
+          "note": "Her report reached the Assessor before the spice shortfall was even logged.",
+          "secret": true
+        },
+        {
+          "to": "Chamberlain Rees Orlov",
+          "kind": "serves",
+          "note": "A quiet servant of the Chamberlain’s household."
+        }
+      ]
     },
     {
       "name": "Quota Assessor Vell Druze",
       "role": "Harkonnen Quota Office envoy",
       "agenda": "Bring Qarrat under a Harkonnen administrator without spending a single trooper.",
       "behavior": "Soft-spoken, smiling, endlessly reasonable. Every concession he offers is a trap with velvet edges.",
-      "secret": "He received Kessa’s report before the shortfall was even logged; the audit is pre-arranged."
+      "secret": "He received Kessa’s report before the shortfall was even logged; the audit is pre-arranged.",
+      "relations": [
+        {
+          "to": "Iver Ordrane",
+          "kind": "hides",
+          "note": "He had the duelist’s blade poisoned without telling him.",
+          "secret": true
+        },
+        {
+          "to": "Lady Senna Tessarin",
+          "kind": "rival",
+          "note": "He wants Qarrat under a Harkonnen administrator without spending a single trooper."
+        }
+      ]
     },
     {
       "name": "Rhiya of Hollow Wind",
       "role": "Fremen envoy",
       "agenda": "Recover Moussan’s water for the sietch and learn whether the House will honor its debt.",
-      "behavior": "Proud, patient, precise. Will not enter the keep until the debt is acknowledged."
+      "behavior": "Proud, patient, precise. Will not enter the keep until the debt is acknowledged.",
+      "relations": [
+        {
+          "to": "Naib Haddar",
+          "kind": "serves",
+          "note": "She speaks for the Naib at the keep and will carry back what she sees."
+        }
+      ]
     },
     {
       "name": "Naib Haddar",
       "role": "Leader of Sietch Hollow Wind",
       "agenda": "Collect the debt — in water, in a council seat, or in blood.",
-      "behavior": "Quiet and absolute. Judges people by how they treat water and promises."
+      "behavior": "Quiet and absolute. Judges people by how they treat water and promises.",
+      "relations": [
+        {
+          "to": "Lady Senna Tessarin",
+          "kind": "rival",
+          "note": "He will collect the debt in water, in a council seat, or in blood."
+        }
+      ]
     },
     {
       "name": "Dunmore Kell",
       "role": "Smuggler captain",
       "agenda": "Get paid, stay alive, and keep both the Harkonnens and the Tessarins thinking he works for them.",
       "behavior": "Charming, venal, quick to laugh and quicker to run.",
-      "secret": "He sold part of the diverted spice back to the Harkonnen Quota Office."
+      "secret": "He sold part of the diverted spice back to the Harkonnen Quota Office.",
+      "relations": [
+        {
+          "to": "Quota Assessor Vell Druze",
+          "kind": "ally",
+          "note": "He sold part of the missing spice back to the Assessor’s office while taking Tessarin coin.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Iver Ordrane",
@@ -322,7 +391,14 @@
       "stats": {
         "battle": 8,
         "move": 6
-      }
+      },
+      "relations": [
+        {
+          "to": "Quota Assessor Vell Druze",
+          "kind": "serves",
+          "note": "Fights under contract for the Assessor’s side, on his honour."
+        }
+      ]
     },
     {
       "name": "Chamberlain Rees Orlov",
@@ -548,7 +624,20 @@
         "1": "Find the gap in the spice ledger and compute who could have made it. Share only what you are certain of.",
         "2": "You have found the second ledger. Decide whether the Steward’s crime is treason or the best decision anyone in this House has made.",
         "3": "The Assessor will ask you, as a neutral Mentat, to certify the accounts. Whatever you certify becomes the truth. Choose."
-      }
+      },
+      "relations": [
+        {
+          "to": "Lady Senna Tessarin",
+          "kind": "hides",
+          "note": "He has not told her that a Harkonnen offer waits for him through the Assessor’s office.",
+          "secret": true
+        },
+        {
+          "to": "Cassius Tessarin",
+          "kind": "rival",
+          "note": "The Mentat and the scion want different futures for the House."
+        }
+      ]
     },
     {
       "id": "ameline-vos",
@@ -592,7 +681,15 @@
         "1": "Learn who in the keep is lying about the night of the murder. Tell no one of Lady Senna’s condition.",
         "2": "The Fremen sietch could shelter Lady Senna if the House falls. Win their envoy’s respect — or her fear.",
         "3": "If the audience turns against the House, use the Voice where it will matter most. The child must survive, whatever becomes of the title."
-      }
+      },
+      "relations": [
+        {
+          "to": "Lady Senna Tessarin",
+          "kind": "ally",
+          "note": "She guards Lady Senna and the child she secretly carries, at the Sisterhood’s wish.",
+          "secret": true
+        }
+      ]
     },
     {
       "id": "teodor-brask",
@@ -637,7 +734,20 @@
         "1": "Secure the keep. No one leaves or enters without your knowledge. Find who altered the guard roster.",
         "2": "Someone in the household is a traitor. You must consider that it is someone you love.",
         "3": "The Assessor’s champion will demand a duel under the forms. Win it, or yield it with honor — the House’s fate may depend on which."
-      }
+      },
+      "relations": [
+        {
+          "to": "Kessa Tine",
+          "kind": "loves",
+          "note": "He taught her the knife when she was a girl in the kitchens, and trusts her completely.",
+          "secret": true
+        },
+        {
+          "to": "Oren Haskell",
+          "kind": "rival",
+          "note": "The blade and the Mentat disagree on what justice requires."
+        }
+      ]
     },
     {
       "id": "farrah-hollow-wind",
@@ -683,7 +793,20 @@
         "1": "Someone wasted a man’s water in the cistern. That is a blasphemy that points at outsiders. Prove it was not your people.",
         "2": "Guide the agents to the smugglers’ yard and the sietch. Do not reveal your own part until you must.",
         "3": "If the House abandons the debt, your sietch will collect it in blood. Choose whether to warn the House or your people first."
-      }
+      },
+      "relations": [
+        {
+          "to": "Steward Ilse Marrow",
+          "kind": "serves",
+          "note": "She carried the spice out of the keep by the old rock path, on the Steward’s orders.",
+          "secret": true
+        },
+        {
+          "to": "Sister Ameline Vos",
+          "kind": "rival",
+          "note": "She does not trust the Sisterhood’s quiet hand in the keep."
+        }
+      ]
     },
     {
       "id": "cassius-tessarin",
@@ -728,7 +851,15 @@
         "1": "Keep your debt to Kell hidden. Learn what the Assessor wants before he arrives.",
         "2": "Kell offers to forgive your debt if you guarantee him the next spice shipment. Decide what your name is worth.",
         "3": "In the audience, someone must speak for the House. Make sure it is you — and that the Assessor leaves owing you something."
-      }
+      },
+      "relations": [
+        {
+          "to": "Dunmore Kell",
+          "kind": "owes",
+          "note": "Eleven thousand solaris in gambling debts, and the smuggler’s patience is running out.",
+          "secret": true
+        }
+      ]
     }
   ],
   "tips": [

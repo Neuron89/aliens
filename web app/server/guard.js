@@ -38,6 +38,12 @@ export const EVENT_NAMES = Object.freeze([
   'init-set', 'init-step', 'init-goto', 'init-round', 'init-end', 'init-pass', 'injury-add', 'injury-remove',
   // builder gaps (determination)
   'determination-spend', 'determination-grant',
+  // F3 soundboard
+  'table-sfx',
+  // F1 motion tracker
+  'tracker-set', 'tracker-signal',
+  // F6 intrigue web + prescience
+  'vision-send',
 ]);
 
 export const RESERVED_IDS = Object.freeze(new Set(['__proto__', 'constructor', 'prototype']));

@@ -617,14 +617,36 @@
         "communicate": 6,
         "discipline": 8,
         "understand": 7
-      }
+      },
+      "relations": [
+        {
+          "to": "The Navigator of the Long Vesper",
+          "kind": "serves",
+          "note": "She answers to the Guild the Navigator steers, and has no idea it arranged the theft it ordered her to solve.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "The Navigator of the Long Vesper",
       "role": "Guild Navigator, born Avel Teshrin",
       "agenda": "Have its pre-spice record carried home to House Teshrin and hear its human name spoken by its own blood before it forgets the name entirely.",
       "behavior": "Silent for two acts; a presence felt as lights that brighten when the crystal hums. In Act III it speaks through a grille in slow, wet sentences, often answering a question before it is asked.",
-      "secret": "It paid Ferrant in spice to smuggle its own record out of the Guild archive. It foresaw his death in most of the paths it could see, and let the voyage proceed anyway."
+      "secret": "It paid Ferrant in spice to smuggle its own record out of the Guild archive. It foresaw his death in most of the paths it could see, and let the voyage proceed anyway.",
+      "relations": [
+        {
+          "to": "Lady Sorrel Teshrin",
+          "kind": "loves",
+          "note": "It was born into House Teshrin and longs to hear its old name spoken by its own blood.",
+          "secret": true
+        },
+        {
+          "to": "Tobin Saar",
+          "kind": "hides",
+          "note": "The sealed case Tobin carries holds its own record, smuggled out of the archive at its request.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Attaché Corvane Ruul",
@@ -637,7 +659,26 @@
         "communicate": 7,
         "discipline": 5,
         "understand": 6
-      }
+      },
+      "relations": [
+        {
+          "to": "Tamsin Hask",
+          "kind": "fears",
+          "note": "He paid the clerk for a quiet search of the Teshrin luggage, and now fears what he actually hired.",
+          "secret": true
+        },
+        {
+          "to": "Auberon Kesh",
+          "kind": "rival",
+          "note": "He will use their meeting on the third night against the Mentat if he is pressed.",
+          "secret": true
+        },
+        {
+          "to": "Lady Sorrel Teshrin",
+          "kind": "rival",
+          "note": "He wants House Teshrin disgraced so the Carriage Charter passes to his client House."
+        }
+      ]
     },
     {
       "name": "Magister Isel Vantroy",
@@ -650,7 +691,15 @@
         "communicate": 5,
         "discipline": 5,
         "understand": 8
-      }
+      },
+      "relations": [
+        {
+          "to": "Proctor Meridel Sarn",
+          "kind": "hides",
+          "note": "Her instrument case holds a forbidden folding lattice that drew on the ring’s shields. The Guild must never open it.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Reverend Mother Thessaly Orn",
@@ -663,14 +712,30 @@
         "communicate": 8,
         "discipline": 8,
         "understand": 7
-      }
+      },
+      "relations": [
+        {
+          "to": "Tamsin Hask",
+          "kind": "hides",
+          "note": "She has sensed that the clerk is not what it seems and says nothing, because the confusion serves her.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Auditor Osric Vayle",
       "role": "CHOAM auditor of passenger levies (killed in Act II)",
       "agenda": "Finish his audit of the Guild’s passenger accounts and prove that Ferrant was skimming levies and trading in contraband.",
       "behavior": "Dry, precise, decent, faintly comic. Fond of his clerk. Begins to notice, too late, that she no longer needs to consult the tables.",
-      "secret": "He has written in his ledger that his clerk knew figures from Kaitain he never told anyone. He meant to ask the Suk Doctor to examine her on day five."
+      "secret": "He has written in his ledger that his clerk knew figures from Kaitain he never told anyone. He meant to ask the Suk Doctor to examine her on day five.",
+      "relations": [
+        {
+          "to": "Tamsin Hask",
+          "kind": "fears",
+          "note": "He noted that his clerk knew things he never told her, and meant to have her examined.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Tamsin Hask",
@@ -683,7 +748,20 @@
         "communicate": 6,
         "discipline": 7,
         "move": 8
-      }
+      },
+      "relations": [
+        {
+          "to": "Ser Dannic Orwe",
+          "kind": "rival",
+          "note": "The killer used the Swordmaster’s own kindjal so the death would look like the House’s work.",
+          "secret": true
+        },
+        {
+          "to": "Attaché Corvane Ruul",
+          "kind": "serves",
+          "note": "Works the passenger ring under Ruul’s commission, which makes good cover."
+        }
+      ]
     },
     {
       "name": "Ammar Sheth",
@@ -696,14 +774,30 @@
         "communicate": 4,
         "discipline": 7,
         "move": 7
-      }
+      },
+      "relations": [
+        {
+          "to": "Ser Dannic Orwe",
+          "kind": "hides",
+          "note": "He saw the Swordmaster away from his post on the third night, and will not say so before the Guild.",
+          "secret": true
+        }
+      ]
     },
     {
       "name": "Steward-of-Passage Ebbe Lunn",
       "role": "Human Guild steward of the passenger ring",
       "agenda": "Survive the voyage without anyone learning that he sells access to the service spine.",
       "behavior": "Round, sweating, eager to explain everything about seal logic. Brings meals, opens doors, and flinches whenever a proctor passes.",
-      "secret": "He sold Ferrant a service-spine key two days before the murder. In Act II the Face Dancer takes his face and leaves him bound in a reclamation alcove."
+      "secret": "He sold Ferrant a service-spine key two days before the murder. In Act II the Face Dancer takes his face and leaves him bound in a reclamation alcove.",
+      "relations": [
+        {
+          "to": "Proctor Meridel Sarn",
+          "kind": "fears",
+          "note": "He sold a service-spine key two days before the murder and dreads the proctors learning of it.",
+          "secret": true
+        }
+      ]
     }
   ],
   "threats": [
@@ -1106,7 +1200,20 @@
       },
       "buddy": "Doctor Ilyan Marsk",
       "rival": "Ser Dannic Orwe",
-      "secret": "At the second hour of night three you were in Berth A with Attaché Ruul, privately negotiating a fallback in which House Teshrin becomes a Harkonnen sub-carrier if the Charter fails. It is your alibi and it is treason in Ser Dannic’s eyes, and the seal-board that clears you also shows the Swordmaster’s door opening at the same hour."
+      "secret": "At the second hour of night three you were in Berth A with Attaché Ruul, privately negotiating a fallback in which House Teshrin becomes a Harkonnen sub-carrier if the Charter fails. It is your alibi and it is treason in Ser Dannic’s eyes, and the seal-board that clears you also shows the Swordmaster’s door opening at the same hour.",
+      "relations": [
+        {
+          "to": "Attaché Corvane Ruul",
+          "kind": "ally",
+          "note": "He spent the second hour of the third night with Ruul, quietly bargaining a fallback for the House.",
+          "secret": true
+        },
+        {
+          "to": "Ser Dannic Orwe",
+          "kind": "rival",
+          "note": "Logic against the blade: neither trusts the other’s account of the third night."
+        }
+      ]
     },
     {
       "id": "dannic-orwe",
@@ -1151,7 +1258,14 @@
       },
       "buddy": "Lady Sorrel Teshrin",
       "rival": "Auberon Kesh",
-      "secret": "At the second hour of night three you heard scraping behind Berth C, followed it into the south spine, and saw a man fold out of a duct like wet cloth and stand up. For the first time in your life you backed away. You have told everyone you never left your post, and the Fremen envoy saw you there."
+      "secret": "At the second hour of night three you heard scraping behind Berth C, followed it into the south spine, and saw a man fold out of a duct like wet cloth and stand up. For the first time in your life you backed away. You have told everyone you never left your post, and the Fremen envoy saw you there.",
+      "relations": [
+        {
+          "to": "Lady Sorrel Teshrin",
+          "kind": "ally",
+          "note": "Sworn to keep her safe for the whole voyage."
+        }
+      ]
     },
     {
       "id": "sorrel-teshrin",
@@ -1196,7 +1310,15 @@
       },
       "buddy": "Ser Dannic Orwe",
       "rival": "Tobin Saar",
-      "secret": "You spent six years at a Sisterhood school on Wallach and swore obedience to the Reverend Mothers; your mother believes you were at a Landsraad academy. Thessaly Orn knows it, and in Act II she uses it to command you to take the crystal that Tobin hides and that the Navigator wants home."
+      "secret": "You spent six years at a Sisterhood school on Wallach and swore obedience to the Reverend Mothers; your mother believes you were at a Landsraad academy. Thessaly Orn knows it, and in Act II she uses it to command you to take the crystal that Tobin hides and that the Navigator wants home.",
+      "relations": [
+        {
+          "to": "Reverend Mother Thessaly Orn",
+          "kind": "serves",
+          "note": "She swore obedience at a Sisterhood school her family believes was a Landsraad academy.",
+          "secret": true
+        }
+      ]
     },
     {
       "id": "ilyan-marsk",
@@ -1241,7 +1363,15 @@
       },
       "buddy": "Tobin Saar",
       "rival": "Lady Sorrel Teshrin",
-      "secret": "On night two Ferrant came to you for his spice-tremor and, half-drugged, told you: “If I die, the Wren’s factor carries my last delivery. It goes to the one in the glass.” You kept it as a patient’s confidence. It means your closest friend in the House has been carrying the reason for the murder all along."
+      "secret": "On night two Ferrant came to you for his spice-tremor and, half-drugged, told you: “If I die, the Wren’s factor carries my last delivery. It goes to the one in the glass.” You kept it as a patient’s confidence. It means your closest friend in the House has been carrying the reason for the murder all along.",
+      "relations": [
+        {
+          "to": "Tobin Saar",
+          "kind": "hides",
+          "note": "A dying patient’s words point straight at what Tobin carries; Ilyan has kept them as a confidence.",
+          "secret": true
+        }
+      ]
     },
     {
       "id": "tobin-saar",
@@ -1286,7 +1416,14 @@
       },
       "buddy": "Doctor Ilyan Marsk",
       "rival": "Auberon Kesh",
-      "secret": "For forty thousand solari, half paid, you agreed to carry Ferrant’s sealed case through Arrakeen customs under the House’s seal. He put it in the cargo niche himself, using a spine key. You are holding the thing the Guild will leave the House in foldspace to recover, and you have told no one."
+      "secret": "For forty thousand solari, half paid, you agreed to carry Ferrant’s sealed case through Arrakeen customs under the House’s seal. He put it in the cargo niche himself, using a spine key. You are holding the thing the Guild will leave the House in foldspace to recover, and you have told no one.",
+      "relations": [
+        {
+          "to": "Auberon Kesh",
+          "kind": "rival",
+          "note": "The Mentat asks too many questions about the cargo niche."
+        }
+      ]
     }
   ],
   "tips": [

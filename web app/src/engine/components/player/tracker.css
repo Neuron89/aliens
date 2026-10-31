@@ -1,0 +1,101 @@
+/* ═══════════════════════════════════════════════════════════════
+   TRACKER tab (player/TrackerPane.jsx, F1 motion tracker).
+   A phosphor-green handheld display; the green is the device's own
+   colour (not the theme accent), the chrome around it uses theme vars.
+   Owns the .trk-* classes. Also widens the phone tab bar to five
+   columns when a fifth tab is present.
+   ═══════════════════════════════════════════════════════════════ */
+
+.pp-tabs:has(> button:nth-child(5)) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.pp-tabs:has(> button:nth-child(5)) button { letter-spacing: 0.08em; font-size: 0.66rem; }
+/* Tab icon (icons.jsx has no 'tracker' path yet): a radar fan drawn as a mask on the empty icon svg. */
+.pp-tabs > button:nth-child(5) > .pp-icon {
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M12 21L4.5 7.5A14 14 0 0 1 19.5 7.5Z'/%3E%3Cpath d='M8 14.2a6 6 0 0 1 8 0'/%3E%3Ccircle cx='14' cy='10' r='1.3' fill='black'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M12 21L4.5 7.5A14 14 0 0 1 19.5 7.5Z'/%3E%3Cpath d='M8 14.2a6 6 0 0 1 8 0'/%3E%3Ccircle cx='14' cy='10' r='1.3' fill='black'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.trk-pane {
+  --trk: #7dffa2;
+  --trk-dim: rgba(125, 255, 162, 0.32);
+  --trk-faint: rgba(125, 255, 162, 0.12);
+  --trk-bg: #010904;
+  padding-top: 10px;
+}
+.trk-shell {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 12px 12px 14px; border: 1px solid var(--border-bright); border-radius: 14px;
+  background: linear-gradient(180deg, #121614, #0a0d0b);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.trk-head {
+  display: flex; justify-content: space-between; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.18em; color: var(--trk);
+  text-shadow: 0 0 6px var(--trk-dim);
+}
+.trk-screen {
+  position: relative; border-radius: 8px; overflow: hidden; background: var(--trk-bg);
+  border: 1px solid #1d2a21; box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.9);
+}
+.trk-screen::after { /* glass + vignette */
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 85%, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.05), transparent 40%);
+}
+.trk-svg { display: block; width: 100%; height: auto; max-height: 52dvh; margin: 0 auto; }
+.trk-fan { stroke: none; }
+.trk-edge { fill: none; stroke: var(--trk-dim); stroke-width: 1.2; }
+.trk-spoke { stroke: var(--trk-faint); stroke-width: 1; stroke-dasharray: 2 5; }
+.trk-spoke0 { stroke: var(--trk-dim); stroke-dasharray: 3 4; }
+.trk-scan { stroke: rgba(0, 0, 0, 0.35); stroke-width: 1; }
+.trk-ring { fill: none; stroke: var(--trk-dim); stroke-width: 1.2; }
+.trk-rim { stroke: var(--trk); stroke-width: 1.6; filter: drop-shadow(0 0 3px var(--trk-dim)); }
+.trk-ringlbl, .trk-bliplbl, .trk-out, .trk-nofix {
+  font-family: var(--font-mono); fill: var(--trk); paint-order: stroke; stroke: var(--trk-bg); stroke-width: 3px;
+}
+.trk-ringlbl { font-size: 11px; opacity: 0.75; }
+.trk-bliplbl { font-size: 12px; }
+.trk-out { font-size: 16px; opacity: 0.9; }
+.trk-nofix { font-size: 26px; letter-spacing: 0.2em; opacity: 0.7; }
+.trk-apex { fill: var(--trk); filter: drop-shadow(0 0 4px var(--trk)); }
+
+/* Pulse wave: a ring expanding from the apex to the rim once per pulse. */
+.trk-wave {
+  fill: none; stroke: var(--trk); stroke-width: 2; vector-effect: non-scaling-stroke; opacity: 0;
+  transform-box: view-box; transform-origin: 0 0;
+  animation: trkWave 800ms ease-out forwards;
+}
+@keyframes trkWave {
+  0% { transform: scale(0.02); opacity: 0.9; }
+  85% { opacity: 0.35; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* Blips: flash on the pulse, settle to their strength. */
+.trk-blip circle { fill: var(--trk); opacity: var(--s, 0.8); }
+.trk-blip text { opacity: calc(var(--s, 0.8) + 0.15); }
+.trk-blip circle { transform-box: fill-box; transform-origin: center; animation: trkBlipDot 700ms ease-out; }
+@keyframes trkBlipDot { 0% { transform: scale(1.6); opacity: 1; } 100% { transform: scale(1); opacity: var(--s, 0.8); } }
+
+/* Readout: big seven-segment-ish digits with unlit ghosts behind. */
+.trk-read { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 2px 4px 0; }
+.trk-digits { position: relative; font-family: var(--font-mono); font-size: 3.6rem; line-height: 0.95; font-weight: 700; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+.trk-ghost { color: rgba(125, 255, 162, 0.07); }
+.trk-num { position: absolute; inset: 0; color: var(--trk-dim); }
+.trk-num.trk-hot { color: var(--trk); text-shadow: 0 0 10px var(--trk-dim), 0 0 2px var(--trk); }
+.trk-units { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; font-family: var(--font-mono); color: var(--trk); }
+.trk-units b { font-size: 1.3rem; font-weight: 400; }
+.trk-units small { font-size: 0.68rem; letter-spacing: 0.14em; opacity: 0.8; }
+.trk-hint { margin: 0; min-height: 1.3em; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; color: var(--trk); opacity: 0.85; text-transform: uppercase; }
+.trk-aim { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 8px; }
+.trk-aim .pp-btn { border-color: #2a3a2f; color: var(--trk); background: #0b120d; font-variant-numeric: tabular-nums; }
+.trk-aim .pp-btn[aria-pressed="true"] { border-color: var(--trk-dim); }
+.trk-muted { margin: 0; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em; color: var(--text-dim); text-align: center; }
+
+.trk-off { gap: 12px; }
+.trk-offmsg { margin: 18px 0 4px; font-family: var(--font-display); font-size: 1.05rem; letter-spacing: 0.1em; color: var(--trk); opacity: 0.85; }
+
+/* Reduced FX: no wave, no flashes (blips only). */
+.trk-calm .trk-wave, .trk-calm .trk-blip, .trk-calm .trk-blip circle { animation: none; }
+html.fx-reduced .trk-blip, html.fx-reduced .trk-blip circle, html.fx-reduced .trk-wave { animation: none; }
+@media (prefers-reduced-motion: reduce) { .trk-blip, .trk-blip circle, .trk-wave { animation: none; } }

@@ -1,0 +1,75 @@
+/* Character portraits (F4): monogram / image avatar + the GENERATE PORTRAIT block.
+   Themed only through CSS vars; skin: .pt-square (terminal universes) / .pt-round (painted universes). */
+.pt {
+  --pt-size: 44px;
+  position: relative; flex: none; box-sizing: border-box;
+  width: var(--pt-size); height: var(--pt-size);
+  display: inline-flex; align-items: center; justify-content: center; overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, var(--accent-glow), transparent 70%), var(--bg-input);
+  border: 1.5px solid var(--accent); color: var(--accent);
+}
+.pt.pt-square { border-radius: 4px; }
+.pt.pt-round { border-radius: 50%; box-shadow: 0 0 0 2px var(--bg-dark), 0 0 0 3px var(--accent-dim); }
+.pt img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pt.pt-square.has-img img { filter: saturate(0.85) contrast(1.05); }
+.pt-mono {
+  font-family: var(--font-display); font-weight: 600; letter-spacing: 0.06em; line-height: 1;
+  font-size: calc(var(--pt-size) * 0.36); user-select: none;
+}
+.pt.pt-square:not(.has-img)::after {
+  /* terminal corner brackets */
+  content: ''; position: absolute; inset: 3px; pointer-events: none;
+  background:
+    linear-gradient(var(--accent), var(--accent)) top left / 6px 1px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) top left / 1px 6px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) bottom right / 6px 1px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) bottom right / 1px 6px no-repeat;
+  opacity: 0.6;
+}
+/* GM crew drawer: keep the row's panic / KIA / offline colouring */
+.cd-row.panic .pt, .cd-row.dead .pt { border-color: var(--danger); color: var(--danger); }
+.cd-row.off .pt { border-color: var(--text-dim); color: var(--text-dim); }
+.cd-row.dead .pt.has-img img { filter: grayscale(1) brightness(0.6); }
+/* phone vitals header */
+.pp-idrow > .pt { align-self: center; }
+
+/* ── Generate block (character sheet / builder review) ── */
+.pt-gen { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin: 0 1rem 0.5rem 0; }
+.pt-frame { position: relative; line-height: 0; }
+.pt-side { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; max-width: 16rem; }
+.pt-btn {
+  min-height: 44px; padding: 0.4rem 0.9rem; cursor: pointer;
+  background: var(--bg-input); color: var(--accent); border: 1px solid var(--accent-dim);
+  font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.pt-btn:hover:not(:disabled), .pt-btn:focus-visible { background: var(--accent-glow); border-color: var(--accent); }
+.pt-btn:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
+.pt-btn:disabled { opacity: 0.6; cursor: default; }
+.pt-btn.off { color: var(--warn); border-color: var(--warn-dim); }
+.pt-progress { height: 4px; background: var(--bg-input); border: 1px solid var(--border); }
+.pt-progress i { display: block; height: 100%; background: var(--accent); transition: width 0.5s linear; }
+.pt-msg { margin: 0; min-height: 1em; font-size: 0.7rem; letter-spacing: 0.1em; color: var(--text-dim); }
+.pt-msg.bad { color: var(--warn); }
+.pt-gen.busy .pt { border-color: var(--accent-bright); }
+.pt-scan {
+  position: absolute; left: 0; right: 0; top: 0; height: 30%; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--accent-glow), var(--accent), transparent);
+  opacity: 0.55; animation: pt-scan 1.6s ease-in-out infinite alternate;
+}
+.pt-round ~ .pt-scan, .pt-frame:has(.pt-round) .pt-scan { border-radius: 50%; }
+@keyframes pt-scan { from { transform: translateY(0); } to { transform: translateY(240%); } }
+.pt-gen.still .pt-scan { animation: none; top: auto; bottom: 0; height: 100%; opacity: 0.25; }
+html.fx-reduced .pt-scan { animation: none; }
+@media (prefers-reduced-motion: reduce) { .pt-scan { animation: none; } .pt-progress i { transition: none; } }
+
+/* character sheet header: portrait left, name block grows */
+.char-header-section > .pt-gen + div { flex: 1; min-width: 10rem; }
+@media (max-width: 520px) {
+  .char-header-section > .pt-gen { width: 100%; }
+}
+
+/* phone SHEET tab: the sheet header is hidden there (name lives in the vitals header);
+   keep only the portrait block so a player can generate their own portrait */
+.pp-root .ph-sheet-pane .char-header-section:has(> .pt-gen) { display: flex; }
+.pp-root .ph-sheet-pane .char-header-section:has(> .pt-gen) > :not(.pt-gen) { display: none; }
+.pp-root .ph-sheet-pane .char-header-section > .pt-gen { width: 100%; margin: 0 0 0.25rem; }

@@ -357,6 +357,7 @@ function tableView(game, role, player = null) {
     initiative: publicInitiative(t, pid),
     submission: sub ? { id: sub.id, status: sub.status, reason: sub.reason || '', at: sub.at, name: sub.character?.name || '' } : null,
     rollRequests: t.rollRequests.filter((r) => isOpenRequestFor(r, pid)).map(publicRollRequest),
+    tracker: trackerView(game, player), // F1 motion tracker: bearing/distance/strength only
   };
 }
 
@@ -376,6 +377,80 @@ function addedItems(prev, next) {
   }
   return added;
 }
+
+/* ═══ F1 — MOTION TRACKER (module helpers; handlers at the end of the connection handler) ═══
+   The GM's npc / creature tokens are the signal source. A token is a CONTACT while it has
+   moved in the last TRACKER_MOVE_MS (`token.lastMovedAt`, set by board-token-move) or while
+   the GM flagged it `signal: true` (tracker-signal). Hidden tokens and tokens in fogged
+   rooms count (it is a motion tracker: it sees through walls); other levels do not.
+   The phone never gets positions, ids or names: `table.tracker` (player view only) is
+   { on, source, fix, facing, range, rings, contacts: [{ bearing, distance, strength }], nearest }
+   with bearing in degrees clockwise from map-up, distance in metres (map grid cell = 2 m),
+   strength 0..1. Available when the seat's gear has an item matching /motion tracker/i or
+   the GM granted it (tracker-set); null in universes without `features.tracker`. */
+const TRACKER_MOVE_MS = 6000;
+const TRACKER_RANGE_M = 30;
+const TRACKER_RINGS_M = [5, 10, 20];
+const TRACKER_M_PER_CELL = 2;
+const TRACKER_MAX_CONTACTS = 12;
+const TRACKER_KINDS = new Set(['npc', 'creature', 'threat']);
+const TRACKER_GEAR_RE = /motion tracker/i;
+const TRACKER_UNIVERSES = new Set();
+try {
+  for (const id of listUniverseIds()) {
+    try { if ((await loadUniverseCore(id))?.features?.tracker) TRACKER_UNIVERSES.add(id); } catch { /* universe without a core */ }
+  }
+} catch { /* no universes dir: tracker off */ }
+let trackerTimer = null;
+const trackerSent = new Map(); // playerId -> JSON of the last tracker summary pushed by the ticker
+
+function trackerGrants(game) {
+  const t = tableOf(game);
+  if (!Array.isArray(t.trackerGrants)) t.trackerGrants = [];
+  return t.trackerGrants;
+}
+const trackerInGear = (player) => (Array.isArray(player?.inventory) ? player.inventory : [])
+  .some((g) => TRACKER_GEAR_RE.test(typeof g === 'string' ? g : String(g?.name || '')));
+
+/** The player's tracker summary (see the block comment). */
+function trackerView(game, player, now = Date.now()) {
+  if (!player || !TRACKER_UNIVERSES.has(game.universeId)) return null;
+  const gear = trackerInGear(player);
+  const granted = trackerGrants(game).includes(player.id);
+  if (!gear && !granted) return { on: false };
+  const out = { on: true, source: gear ? 'gear' : 'gm', fix: false, facing: 0, range: TRACKER_RANGE_M, rings: TRACKER_RINGS_M, contacts: [], nearest: null };
+  const b = boardOf(game);
+  const md = game.mapDef;
+  const me = Object.values(b.tokens).find((t) => t.kind === 'pc' && t.ownerPlayerId === player.id);
+  if (!me || !md) return out;
+  out.fix = true;
+  out.facing = Number.isFinite(me.facing) ? me.facing : 0;
+  const [W, H] = Array.isArray(md.size) && md.size.length === 2 ? md.size : [1000, 750];
+  const cell = (Number.isFinite(md.grid) && md.grid > 0 ? md.grid : 1 / 40) * W;
+  const level = me.level || b.level || null;
+  for (const t of Object.values(b.tokens)) {
+    if (t === me || !TRACKER_KINDS.has(t.kind) || (t.level || b.level || null) !== level) continue;
+    const age = now - (Number(t.lastMovedAt) || 0);
+    const moving = age >= 0 && age < TRACKER_MOVE_MS;
+    if (!moving && t.signal !== true) continue;
+    const dx = (t.x - me.x) * W;
+    const dy = (t.y - me.y) * H;
+    const metres = (Math.hypot(dx, dy) / cell) * TRACKER_M_PER_CELL;
+    if (metres > TRACKER_RANGE_M) continue;
+    let strength = moving ? 1 - (age / TRACKER_MOVE_MS) * 0.7 : 0;
+    if (t.signal === true) strength = Math.max(strength, 0.6);
+    out.contacts.push({
+      bearing: Math.round(((Math.atan2(dx, -dy) * 180) / Math.PI + 360) % 360),
+      distance: Math.round(metres * 2) / 2,
+      strength: Math.round(strength * 10) / 10,
+    });
+  }
+  out.contacts.sort((a, b2) => a.distance - b2.distance || a.bearing - b2.bearing);
+  out.contacts = out.contacts.slice(0, TRACKER_MAX_CONTACTS);
+  out.nearest = out.contacts[0]?.distance ?? null;
+  return out;
+}
+/* ═══ end F1 module helpers ═══ */
 
 /** Wire all session socket handlers onto a Socket.io server. */
 export function attachSessions(io) {
@@ -1135,6 +1210,7 @@ export function attachSessions(io) {
       if (!t || !Number.isFinite(payload.x) || !Number.isFinite(payload.y)) return;
       t.x = Math.min(1, Math.max(0, payload.x));
       t.y = Math.min(1, Math.max(0, payload.y));
+      t.lastMovedAt = Date.now(); // F1 motion tracker: a moving npc/creature is a contact
       placeToken(b, game.mapDef, t);
       touch(game);
       emitBoard(game);
@@ -1763,6 +1839,132 @@ export function attachSessions(io) {
       serializePlayers, getPlayerData, tableOf, pcName,
     };
     wireMechanics(socket, mech); // registers through guard.safeOn as well
+
+    /* ═══ F3 — SOUNDBOARD ═══════════════════════════════════════════════
+       table-sfx { cue, phones? } (DM only) → `table-sfx { cue, seed, at, phones }` to the
+       board room, and to every seated phone when phones === true. The server picks the seed
+       so the TV and the phones play the same procedural variant (src/engine/soundboard.js);
+       the cue name is only shape-checked here (unknown cues are ignored client-side).
+       Rate limited per socket (SFX_MIN_GAP_MS) so a held finger cannot flood the table. */
+    const SFX_MIN_GAP_MS = 120;
+    let lastSfxAt = 0;
+    on('table-sfx', (payload, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const cue = typeof payload.cue === 'string' && /^[a-z][a-z0-9.-]{0,39}$/.test(payload.cue) ? payload.cue : null;
+      if (!cue) return callback?.({ error: 'Unknown cue.' });
+      const now = Date.now();
+      if (now - lastSfxAt < SFX_MIN_GAP_MS) return callback?.({ error: 'RATE LIMITED.' });
+      lastSfxAt = now;
+      const phones = payload.phones === true;
+      const evt = { cue, seed: Math.floor(Math.random() * 0x7fffffff), at: now, phones };
+      io.to(boardRoom(game.code)).emit('table-sfx', evt);
+      let sent = 0;
+      if (phones) for (const [, p] of game.players) if (p.socketId) { toPlayer(p, 'table-sfx', evt); sent++; }
+      callback?.({ success: true, seed: evt.seed, boards: boardCount(game.code), phones: sent });
+    });
+    /* ═══ /F3 — SOUNDBOARD ══════════════════════════════════════════════ */
+
+    /* ═══ F1 — MOTION TRACKER ═══════════════════════════════════════════
+       (summary: trackerView, module helpers above attachSessions; player view: table.tracker)
+       tracker-set { playerId, on } (DM only) → { success, on, available }: grants (on:true) or
+         withdraws (on:false) the tracker for a seat that has none in its gear. To be wired into
+         the GM's CrewDrawer later; no GM UI in this wave.
+       tracker-signal { tokenId, on } (DM only) → { success }: an npc/creature token that keeps
+         registering while it stands still (`token.signal`).
+       A 500 ms ticker (one per process) re-sends `table-state` to a tracker-carrying phone only
+       when its summary changed (contacts moving / fading), so the phone needs no new event. */
+    if (!trackerTimer) {
+      trackerTimer = setInterval(() => {
+        try {
+          const now = Date.now();
+          for (const game of games.values()) {
+            if (!TRACKER_UNIVERSES.has(game.universeId)) continue;
+            for (const [, p] of game.players) {
+              if (!p.socketId) continue;
+              const json = JSON.stringify(trackerView(game, p, now));
+              if (trackerSent.get(p.id) === json) continue;
+              trackerSent.set(p.id, json);
+              toPlayer(p, 'table-state', { table: tableView(game, 'player', p) });
+            }
+          }
+        } catch (err) { console.error(`[TRACKER] tick failed: ${err?.stack || err}`); }
+      }, 500);
+      trackerTimer.unref?.();
+    }
+    on('tracker-set', (payload, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      if (!TRACKER_UNIVERSES.has(game.universeId)) return callback?.({ error: 'NO TRACKER IN THIS UNIVERSE.' });
+      const player = isSafeKey(payload.playerId) ? game.players.get(payload.playerId) : null;
+      if (!player) return callback?.({ error: 'Unknown player.' });
+      if (typeof payload.on !== 'boolean') return callback?.({ error: 'on must be true or false.' });
+      const grants = trackerGrants(game);
+      const i = grants.indexOf(player.id);
+      if (payload.on && i < 0) grants.push(player.id);
+      if (!payload.on && i >= 0) grants.splice(i, 1);
+      touch(game);
+      emitTable(game, { dmOnly: true });
+      emitTable(game, { only: player });
+      callback?.({ success: true, on: payload.on, available: !!trackerView(game, player)?.on });
+    });
+    on('tracker-signal', (payload, callback) => {
+      const game = dmBoardGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const t = isTokenId(payload.tokenId) ? boardOf(game).tokens[payload.tokenId] : null;
+      if (!t || !TRACKER_KINDS.has(t.kind)) return callback?.({ error: 'Unknown token.' });
+      if (payload.on === true) t.signal = true; else delete t.signal;
+      touch(game);
+      emitBoard(game);
+      callback?.({ success: true });
+    });
+    /* ═══ /F1 — MOTION TRACKER ══════════════════════════════════════════ */
+
+    /* ═══ F6 — INTRIGUE WEB + PRESCIENCE ═════════════════════════════════
+       vision-send { text, ms?, to?: 'all' | [playerIds] | 'none', board?: bool } (DM only)
+         → { success, id, ms, phones, boards }
+       Broadcasts `vision { vision: { id, text, ms, at, private } }` to the board room (unless
+       board === false) and to each recipient phone (private: true when sent to chosen seats,
+       so the phone can say only they saw it). ms is clamped to 2–30 s (default 9 s); text is
+       one line, ≤ 300 chars. Logged as narration. Nothing is stored in the table: a vision is
+       a one-shot effect (a phone that reconnects later does not replay it).
+       The intrigue web's REVEAL needs no server code of its own: it is a normal ad-hoc
+       `clue-reveal { clueId: <relation id>, clue: { text, source } }`. */
+    const VISION_MIN_MS = 2000;
+    const VISION_MAX_MS = 30000;
+    const VISION_DEFAULT_MS = 9000;
+    const VISION_MIN_GAP_MS = 400;
+    let lastVisionAt = 0;
+    on('vision-send', (payload, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      const text = sstr(payload.text, 300).replace(/\s+/g, ' ').trim();
+      if (!text) return callback?.({ error: 'A vision needs text.' });
+      const n = Number(payload.ms);
+      const ms = payload.ms !== undefined && payload.ms !== null && Number.isFinite(n)
+        ? Math.round(Math.min(VISION_MAX_MS, Math.max(VISION_MIN_MS, n))) : VISION_DEFAULT_MS;
+      const recipients = payload.to === 'none' ? [] : recipientsOf(game, payload.to);
+      if (!recipients) return callback?.({ error: 'No recipients.' });
+      const board = payload.board !== false;
+      if (!board && !recipients.length) return callback?.({ error: 'No recipients.' });
+      const now = Date.now();
+      if (now - lastVisionAt < VISION_MIN_GAP_MS) return callback?.({ error: 'RATE LIMITED.' });
+      lastVisionAt = now;
+      const vision = { id: shortId('vis'), text, ms, at: now };
+      if (board) io.to(boardRoom(game.code)).emit('vision', { vision: { ...vision, private: false } });
+      let phones = 0;
+      for (const [, p] of game.players) {
+        if (!sentTo(recipients, p.id) || !p.socketId) continue;
+        toPlayer(p, 'vision', { vision: { ...vision, private: recipients !== 'all' } });
+        phones++;
+      }
+      const nameOf = (id) => pcName(game.players.get(id));
+      const who = recipients === 'all' ? 'everyone' : (recipients.length ? recipients.map(nameOf).join(', ') : 'no phones');
+      logTo(game, 'narration', `Vision → ${who}${board ? ' + table' : ''}: ${text.slice(0, 160)}`, { visionId: vision.id });
+      touch(game);
+      callback?.({ success: true, id: vision.id, ms, phones, boards: board ? boardCount(game.code) : 0 });
+    });
+    /* ═══ /F6 — INTRIGUE WEB + PRESCIENCE ════════════════════════════════ */
 
     /* ─── Disconnect: never deletes anything — games/players go dormant ─── */
     socket.on('disconnect', () => {

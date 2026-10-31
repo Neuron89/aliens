@@ -4,6 +4,10 @@ import { useUniverse } from '../../UniverseContext';
 import CluesPanel from './CluesPanel';
 import SessionLogPanel from './SessionLogPanel';
 import Confirm from '../Confirm';
+import IntrigueDrawer from './IntrigueDrawer';                    // F6 INTRIGUE
+import { buildRecap, downloadText } from './recap';             // F5 RECAP
+import { docText, formatBurn } from '../player/HandoutDoc';      // F5 RECAP
+import { apiHeaders } from '../../apiToken';                     // F5 RECAP
 
 /* ═══════════════════════════════════════════════════════════════
    MORE drawer (Focus Stage dock): AGENDAS (each seat's agenda for
@@ -21,10 +25,12 @@ export default function MoreDrawer({ pack, act, actIndex, sceneClueIds = [], onR
   const sentOrders = (pid) => (table?.orders?.[pid] || []).some((o) => o.actIndex === actIndex);
   const safety = table?.safety;
   const tabs = [
+    ['intrigue', 'INTRIGUE'], // F6
     ['agendas', 'AGENDAS'],
     ['npcs', `NPCS${pack?.npcs?.length ? ` · ${pack.npcs.length}` : ''}`],
     ['clues', 'CLUES'],
     ['log', 'LOG'],
+    ['recap', 'RECAP'], // F5
     ['safety', table?.pause ? 'SAFETY ●' : 'SAFETY'],
     ['end', 'END'],
   ];
@@ -37,6 +43,8 @@ export default function MoreDrawer({ pack, act, actIndex, sceneClueIds = [], onR
           <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'on' : ''} onClick={() => onTab(id)}>{label}</button>
         ))}
       </div>
+
+      {tab === 'intrigue' && <div role="tabpanel" aria-label="Intrigue"><IntrigueDrawer pack={pack} /></div>/* F6 */}
 
       {tab === 'agendas' && (
         <div className="run-agendas" role="tabpanel" aria-label="Agendas">
@@ -87,6 +95,7 @@ export default function MoreDrawer({ pack, act, actIndex, sceneClueIds = [], onR
 
       {tab === 'clues' && <div role="tabpanel" aria-label="Clues"><CluesPanel highlight={sceneClueIds} /></div>}
       {tab === 'log' && <div role="tabpanel" aria-label="Log"><SessionLogPanel pack={pack} /></div>}
+      {tab === 'recap' && <div role="tabpanel" aria-label="Recap"><RecapSection pack={pack} /></div>}
 
       {tab === 'safety' && (
         <div className="md-safety" role="tabpanel" aria-label="Safety">
@@ -124,6 +133,166 @@ export default function MoreDrawer({ pack, act, actIndex, sceneClueIds = [], onR
             confirmLabel={`END ${terms.session.toUpperCase()}`} cancelLabel="KEEP PLAYING" onConfirm={leaveGame} className="fs-btn danger" />
         </div>
       )}
+    </div>
+  );
+}
+
+/* ═══ F5 — RECAP: the ship's log ════════════════════════════════
+   GENERATE asks the server (POST /api/recap, SSE) for a 150-300 word log
+   in the terminal's voice, written from the PUBLIC session log only
+   (server/recap.js filters it; with ANTHROPIC_API_KEY it is Claude, else a
+   deterministic template). The GM can edit it, SEND TO PHONES as a themed
+   handout document (optional burn-after-reading timer), SHOW ON TV, and
+   EXPORT MD (the LOG tab's recap with the ship's log on top).
+   ═══════════════════════════════════════════════════════════════ */
+const BURN_CHOICES = [0, 30, 60, 120, 300];
+const dmTokenOf = (code) => {
+  try {
+    const map = JSON.parse(localStorage.getItem('muthur.dmTokens') || '{}');
+    if (map?.[code]) return map[code];
+    const s = JSON.parse(localStorage.getItem('muthur.session') || '{}');
+    return s?.code === code ? s.dmToken : '';
+  } catch { return ''; }
+};
+
+/** Minimal SSE reader for a fetch Response: calls on(event, data) per message. */
+async function readSse(res, on) {
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = '';
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let i;
+    while ((i = buf.indexOf('\n\n')) >= 0) {
+      const chunk = buf.slice(0, i);
+      buf = buf.slice(i + 2);
+      let ev = 'message';
+      let data = '';
+      for (const line of chunk.split('\n')) {
+        if (line.startsWith('event:')) ev = line.slice(6).trim();
+        else if (line.startsWith('data:')) data += line.slice(5).trim();
+      }
+      if (data) { try { on(ev, JSON.parse(data)); } catch { /* malformed line */ } }
+    }
+  }
+}
+
+function RecapSection({ pack }) {
+  const { gameCode, players, table, sessionLog, sendHandout, narrate } = useGame();
+  const { universe } = useUniverse();
+  const [status, setStatus] = useState(null);   // { claude, model }
+  const [busy, setBusy] = useState(false);
+  const [text, setText] = useState('');
+  const [doc, setDoc] = useState(null);         // { title, from, to, priority, timestamp }
+  const [source, setSource] = useState('');
+  const [note, setNote] = useState('');
+  const [burn, setBurn] = useState(0);
+  const [sent, setSent] = useState('');
+  const abortRef = React.useRef(null);
+
+  useEffect(() => {
+    let live = true;
+    fetch('/api/recap/status').then((r) => r.json()).then((s) => { if (live) setStatus(s); }).catch(() => {});
+    return () => { live = false; abortRef.current?.abort(); };
+  }, []);
+
+  const generate = async () => {
+    setBusy(true); setNote(''); setSent(''); setText('');
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
+    try {
+      const res = await fetch('/api/recap', {
+        method: 'POST', signal: ctrl.signal,
+        headers: apiHeaders({ 'Content-Type': 'application/json', Accept: 'text/event-stream' }),
+        body: JSON.stringify({ code: gameCode, dmToken: dmTokenOf(gameCode) }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j.message || j.error || `HTTP ${res.status}`);
+      }
+      await readSse(res, (ev, d) => {
+        if (ev === 'status') setSource(d.source);
+        else if (ev === 'delta') setText(d.text);
+        else if (ev === 'done') { setText(d.text); setDoc(d.doc); setSource(d.source); if (d.warning) setNote(d.warning); }
+        else if (ev === 'error') setNote(d.message || 'Recap failed.');
+      });
+    } catch (e) {
+      if (e?.name !== 'AbortError') setNote(e.message || 'Recap failed.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const title = doc?.title || "SHIP'S LOG";
+  const header = {
+    from: doc?.from || universe.terminal?.name || '',
+    to: doc?.to || String(universe.terms?.players || '').toUpperCase(),
+    priority: doc?.priority || universe.terms?.priorities?.[0] || '',
+  };
+  const ready = !!text.trim() && !busy;
+  const playerCount = Object.keys(players || {}).length;
+  const words = (text.match(/\S+/g) || []).length;
+
+  const send = () => {
+    sendHandout({ custom: { title, ...header, text: docText({ timestamp: doc?.timestamp, burnSec: burn, text }) } }, 'all', (r) => {
+      setSent(r?.error ? `NOT SENT: ${r.error}` : `SENT TO ALL ${String(universe.terms?.players || 'players').toUpperCase()}${burn ? ` · BURNS ${formatBurn(burn)} AFTER READING` : ''}`);
+    });
+  };
+  const toTv = () => narrate(docText({ ...header, timestamp: doc?.timestamp, burnSec: burn, text }).slice(0, 4000), { title, mode: 'card' });
+  const exportMd = () => {
+    const base = buildRecap({
+      title: pack?.meta?.title || `${universe.terms?.session || 'Session'} ${gameCode}`,
+      universeName: universe.name, code: gameCode, players, table, log: sessionLog, terms: universe.terms,
+    });
+    const lines = base.split('\n');
+    const meta = [header.from && `From ${header.from}`, header.to && `to ${header.to}`, doc?.timestamp].filter(Boolean).join(' · ');
+    lines.splice(4, 0, `## ${title}`, '', ...(meta ? [`*${meta}*`, ''] : []), text.trim(), ''); // after the title + subtitle lines
+    downloadText(lines.join('\n'), `ships-log-${(pack?.id || 'session')}-${new Date().toISOString().slice(0, 10)}.md`);
+  };
+
+  return (
+    <div className="md-recap">
+      <div className="md-row">
+        <span className="fs-label">{title}</span>
+        <button type="button" className="run-btn primary" onClick={generate} disabled={busy || !gameCode} aria-busy={busy}>
+          {busy ? 'COMPILING…' : text ? 'REGENERATE' : 'GENERATE'}
+        </button>
+      </div>
+      <p className="nd-hint">
+        Written in {universe.terminal?.name || 'the terminal'}'s voice from the public record only: no GM notes, secret rolls, private handouts or clues, hidden clocks, or pauses.
+        {status ? (status.claude ? ` Writer: Claude (${status.model}).` : ' Writer: built-in template (set ANTHROPIC_API_KEY on the server for Claude).') : ''}
+      </p>
+      {(text || busy) && (
+        <textarea className="md-recap-text" value={text} onChange={(e) => setText(e.target.value)} rows={12} readOnly={busy}
+          aria-label={`${title} text`} placeholder="…" style={{ width: '100%', resize: 'vertical', minHeight: '12em', marginBottom: 6 }} />
+      )}
+      {ready && (
+        <p className="run-dim" style={{ margin: '0 0 10px' }}>
+          {words} words · {source === 'claude' ? 'written by Claude' : 'templated'}{doc?.timestamp ? ` · ${doc.timestamp}` : ''}
+        </p>
+      )}
+      {note && <p className="run-warn" role="status">{note}</p>}
+      {ready && (
+        <>
+          <div className="run-row" role="group" aria-label="Burn after reading" style={{ flexWrap: 'wrap' }}>
+            <span className="run-dim">BURN AFTER READING</span>
+            {BURN_CHOICES.map((s) => (
+              <button key={s} type="button" className={`run-chip${burn === s ? ' on' : ''}`} aria-pressed={burn === s} onClick={() => setBurn(s)} style={{ minHeight: 44, minWidth: 44 }}>
+                {s ? formatBurn(s) : 'OFF'}
+              </button>
+            ))}
+          </div>
+          <div className="run-row" style={{ flexWrap: 'wrap' }}>
+            <button type="button" className="run-btn primary" onClick={send} disabled={!playerCount}>SEND TO PHONES</button>
+            <button type="button" className="run-btn" onClick={toTv}>SHOW ON TV</button>
+            <button type="button" className="run-btn" onClick={exportMd}>EXPORT MD</button>
+          </div>
+          {sent && <p className="run-dim" role="status">{sent}</p>}
+        </>
+      )}
+      {!text && !busy && <p className="run-empty">No log compiled yet. GENERATE writes one from what has happened so far; you can edit it before sending.</p>}
     </div>
   );
 }
