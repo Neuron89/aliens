@@ -63,6 +63,9 @@ export const theme = {
   sounds: {
     stingers: ['klaxon', 'hull-groan', 'airlock', 'steam-vent', 'tracker-burst', 'screech', 'lights-out'],
   },
+  /* Narrator voice (server TTS, server/tts.js — Kokoro voice id or blend like 'bm_george(2)+bm_lewis(1)'):
+     a calm, cold British male for MU/TH/UR. The GM can pick another in NARRATE → VOICE. */
+  voice: { narrator: 'bm_george', speed: 0.92 },
   /* Table-board palette (board/*). Maps may override any key via map.palette. */
   board: {
     levelNoun: 'DECK',

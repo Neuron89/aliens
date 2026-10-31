@@ -101,7 +101,7 @@ async function startServer(env = {}) {
   URL_ = `http://127.0.0.1:${PORT}`;
   server = spawn(process.execPath, ['server/index.js'], {
     cwd: ROOT,
-    env: { ...process.env, PORT: String(PORT), DATA_DIR: DATA, COMFY_URL: COMFY, API_TOKEN: '', ...env },
+    env: { ...process.env, PORT: String(PORT), DATA_DIR: DATA, COMFY_URL: COMFY, API_TOKEN: '', GM_URL: '', ...env },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   await new Promise((res, rej) => {

@@ -18,6 +18,8 @@ It is an unofficial fan tool; see [Content and legal](#content-and-legal).
 
 **Friends play-testing:** see [PLAYTEST.md](PLAYTEST.md) to install with one command.
 
+**Remote play:** friends can play from anywhere at https://muthur.kys-media.com (server on CT 107 behind the Cloudflare tunnel, gated by Cloudflare Access) — see [docs/REMOTE_PLAY.md](docs/REMOTE_PLAY.md) for setup, updating (`/opt/muthur/update.sh`) and security notes.
+
 ## Universes
 
 | Universe | Id | Rules | Bundled packs | What it ships |
@@ -136,7 +138,7 @@ Every variable the server reads (`grep process.env "web app/server"`). All are o
 | `SWEEP_INTERVAL_MS` | `600000` | `server/sessions.js` | How often dormant games are swept (also once at start and before refusing a new game at the cap) |
 | `DICE_SEED` | unset | `server/mechanics.js` | Tests only: seeds the server's supply-roll dice so `test-mechanics` is deterministic |
 | `SEAT_CLAIM_MS` | `120000` (min 500) | `server/sessions.js` | How long a seat claim waits for the GM |
-| `API_TOKEN` | unset (open LAN) | `server/index.js` | When set, `PUT`/`DELETE /api/content/...`, `POST /api/generate` and portrait writes (`POST`/`DELETE /api/portrait`) and `POST /api/recap` need header `x-api-token` |
+| `API_TOKEN` | unset (open LAN) | `server/index.js` | When set, `PUT`/`DELETE /api/content/...`, `POST /api/generate` and portrait writes (`POST`/`DELETE /api/portrait`), `POST /api/recap` and `POST /api/tts/speak` need header `x-api-token` |
 | `ANTHROPIC_API_KEY` | unset | `server/generator/env.js` | Claude API key for the generator and the ship's log recap (`/api/recap`; without it the recap uses a built-in template) |
 | `GENERATOR_MODEL` | `claude-opus-5-5` | `server/generator/env.js` | Model id |
 | `GENERATOR_EFFORT` | `high` | `server/generator/env.js` | Reasoning effort |
@@ -148,6 +150,17 @@ Every variable the server reads (`grep process.env "web app/server"`). All are o
 | `COMFY_URL` | `http://192.168.1.37:8188` | `server/portrait.js` | ComfyUI server for GENERATE PORTRAIT (unreachable = the button says so, nothing else breaks) |
 | `PORTRAIT_DIR` | `<DATA_DIR>/art/portraits` | `server/portrait.js` | Where portraits are stored (`<universe>/<characterId>.webp` + `index.json`) |
 | `PORTRAIT_PYTHON` | auto | `server/portrait.js` | Python with Pillow for the WebP convert; `none` keeps PNG |
+| `GM_URL` | unset | `server/gm.js` | OpenAI-compatible chat base for the AI GM (Ollama on the GPU box `http://192.168.1.37:11434/v1`); unset or unreachable = the pack's own text |
+| `GM_MODEL` | `hf.co/unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF:Q4_K_M` | `server/gm.js` | Model name for the AI GM (any `ollama list` entry) |
+| `GM_API_KEY` | unset | `server/gm.js` | Optional bearer for a hosted OpenAI-compatible endpoint |
+| `GM_TIMEOUT_MS` | `240000` | `server/gm.js` | First-byte timeout (a cold 18 GB model takes ~95 s to load) |
+| `TTS_URL` | unset | `server/tts.js` | OpenAI-compatible speech server for the narrator voice, e.g. Kokoro `http://192.168.1.37:8880/v1`; unset or unreachable = the browser's built-in voice |
+| `TTS_API_KEY` | unset | `server/tts.js` | Bearer token for the speech server (only if it needs one) |
+| `TTS_MODEL` | `kokoro` | `server/tts.js` | Model name sent with each speech request |
+| `TTS_FORMAT` | `mp3` | `server/tts.js` | `mp3` or `wav` |
+| `TTS_VOICE` | unset | `server/tts.js` | Fallback voice id when the client sends none (themes set ALIEN `bm_george`, DUNE `bf_emma`) |
+| `TTS_TIMEOUT_MS` | `60000` | `server/tts.js` | Per-clip timeout |
+| `TTS_DIR` / `TTS_CACHE_MAX_FILES` / `TTS_CACHE_MAX_MB` | `<DATA_DIR>/tts` / `500` / `200` | `server/tts.js` | Clip cache folder and its limits (oldest pruned) |
 | `PORTRAIT_TIMEOUT_MS` | `180000` | `server/portrait.js` | A portrait job is abandoned after this |
 
 Tooling-only variables (not read by the server): `API_TARGET` (Vite dev proxy target, `web app/vite.config.js`, default `http://localhost:3002`) and `COMFY` (ComfyUI URL for `scripts/gen-dune-art.py`, default `http://192.168.1.37:8188`).

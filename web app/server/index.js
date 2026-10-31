@@ -45,6 +45,8 @@ app.use('/api/content', requireApiToken, createContentRouter());
 app.use('/api/generate', requireApiToken, createGenerateRouter());
 app.use('/api/recap', requireApiToken, (await import('./recap.js')).createRecapRouter()); // F5 ship's log recap (Claude or template)
 app.use('/api/portrait', requireApiToken, (await import('./portrait.js')).createPortraitRouter()); // F4 portraits (local ComfyUI)
+app.use('/api/tts', requireApiToken, (await import('./tts.js')).createTtsRouter()); // voice: server TTS (Kokoro / OpenAI-compatible), cached clips
+app.use('/api/gm', requireApiToken, (await import('./gm.js')).createGmRouter()); // AI GM narration drafts (local model at GM_URL, or the pack text)
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.' }));
 
 attachSessions(io);

@@ -685,7 +685,75 @@ export function GameProvider({ children }) {
     emitTable('run-set', run, cb);
   }, [emitTable]);
   const advanceAct = useCallback((actIndex, extra, cb) => emitTable('advance-act', { actIndex, ...extra }, cb), [emitTable]);
-  /** narrate(text, { title, mode:'caption'|'card', art }) */
+  /* ─── Voice (server TTS, server/tts.js) ───────────────────────
+     ttsStatus = { provider:'kokoro'|'openai'|'none', ok, model, voices:[{ id, name, lang, gender? }], error? } | null (loading)
+     speak(text, { voice?, speed?, target:'tv'|'gm'|'both', title? }, cb) → `narrate-speak`;
+       ack (at once) { success, id, total, target, boards } | { error }. The audio follows progressively:
+       `table-speak { id, text, title, voice, speed, target, total, at }`, `table-speak-part { id, index, url, ms }`…,
+       `table-speak-done { id, count, error? }` — to the TV (tv/both) and always to this DM socket.
+     speakStop(cb) → `narrate-speak-stop` (the TV and this tablet cut playback; the server stops synthesizing)
+     onSpeak / onSpeakPart / onSpeakDone / onSpeakStop (fn) → unsubscribe. Re-subscribe when `connected` changes.
+     voiceLive = { id, target, title } while a voice sent from this GM is synthesizing or (by its clip lengths)
+       still playing; null otherwise. */
+  const [ttsStatus, setTtsStatus] = useState(null);
+  const [voiceLive, setVoiceLive] = useState(null);
+  const voiceTrack = useRef({ pending: new Map(), end: 0, last: null, timer: null });
+  const refreshTts = useCallback((fresh = true) => {
+    return fetch(`/api/tts/status${fresh ? '?fresh=1' : ''}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((s) => { const v = s && typeof s === 'object' ? s : { provider: 'none', ok: false, voices: [] }; setTtsStatus(v); return v; })
+      .catch(() => { const v = { provider: 'none', ok: false, voices: [], error: 'status unavailable' }; setTtsStatus(v); return v; });
+  }, []);
+  useEffect(() => { if (!isBoardTab()) refreshTts(false); }, [refreshTts]);
+  const subscribe = (event) => (fn) => {
+    const s = socketRef.current;
+    if (!s) return () => {};
+    s.on(event, fn);
+    return () => s.off(event, fn);
+  };
+  const onSpeak = useCallback(subscribe('table-speak'), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const onSpeakPart = useCallback(subscribe('table-speak-part'), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const onSpeakDone = useCallback(subscribe('table-speak-done'), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const onSpeakStop = useCallback(subscribe('table-speak-stop'), []); // eslint-disable-line react-hooks/exhaustive-deps
+  /* DM: follow the speeches (the server echoes every one to the DM) — the TV plays parts back to back
+     (~120 ms apart), so the voice is live until every speech is done and the summed clips have run. */
+  useEffect(() => {
+    const s = socketRef.current;
+    if (!s || role !== 'dm') return undefined;
+    const tr = voiceTrack.current;
+    const settle = () => {
+      clearTimeout(tr.timer);
+      const left = tr.end - Date.now();
+      if (tr.pending.size === 0 && left <= 0) { tr.last = null; setVoiceLive(null); return; }
+      if (tr.pending.size === 0) tr.timer = setTimeout(settle, left + 50);
+    };
+    const start = (e) => {
+      if (!e?.id) return;
+      tr.pending.set(e.id, true);
+      tr.last = { id: e.id, target: e.target, title: e.title || '' };
+      tr.end = Math.max(tr.end, Date.now());
+      clearTimeout(tr.timer);
+      setVoiceLive(tr.last);
+    };
+    const part = (e) => { if (tr.pending.has(e?.id)) tr.end = Math.max(tr.end, Date.now()) + (Number(e.ms) || 0) + 120; };
+    const done = (e) => { tr.pending.delete(e?.id); settle(); };
+    const stop = () => { tr.pending.clear(); tr.end = 0; settle(); };
+    s.on('table-speak', start); s.on('table-speak-part', part); s.on('table-speak-done', done); s.on('table-speak-stop', stop);
+    return () => { s.off('table-speak', start); s.off('table-speak-part', part); s.off('table-speak-done', done); s.off('table-speak-stop', stop); clearTimeout(tr.timer); };
+  }, [connected, role]);
+  const speak = useCallback((text, opts, cb) => {
+    const o = opts || {};
+    const target = ['tv', 'gm', 'both'].includes(o.target) ? o.target : 'tv';
+    emitTable('narrate-speak', { text, voice: o.voice, speed: o.speed, target, title: o.title }, cb);
+  }, [emitTable]);
+  const speakStop = useCallback((cb) => {
+    const tr = voiceTrack.current;
+    tr.pending.clear(); tr.end = 0; clearTimeout(tr.timer);
+    setVoiceLive(null);
+    emitTable('narrate-speak-stop', {}, cb);
+  }, [emitTable]);
+
+  /** narrate(text, { title, mode:'caption'|'card', art, speak?, voice?, speed?, target? }) — speak:true also voices it */
   const narrate = useCallback((text, opts, cb) => emitTable('narrate', { text, ...opts }, cb), [emitTable]);
   const narrateClear = useCallback((cb) => emitTable('narrate-clear', {}, cb), [emitTable]);
   /** setBoardMode('map'|'theatre', { title?, subtitle?, art? }) */
@@ -979,6 +1047,16 @@ export function GameProvider({ children }) {
     advanceAct,
     narrate,
     narrateClear,
+    // Voice (server TTS → TV / GM tablet)
+    ttsStatus,
+    refreshTts,
+    speak,
+    speakStop,
+    onSpeak,
+    onSpeakPart,
+    onSpeakDone,
+    onSpeakStop,
+    voiceLive,
     setBoardMode,
     sendHandout,
     clueUpsert,

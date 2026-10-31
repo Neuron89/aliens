@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useReadAloud } from '../../hooks/useTTS';
 
 /* ═══════════════════════════════════════════════════════════════
    Scene list (Focus Stage): every act with its scenes — done ticks
    (tap to toggle), MANDATORY / ENCOUNTER chips, tap a scene to go
    there; the current act's brief (summary, agenda notes, GM notes,
-   ACT OPENING → TV card / TTS); PREV / NEXT at the foot.
+   ACT OPENING → TV card / TTS — the server voice to the VOICE target
+   when one is set, see hooks/useTTS useReadAloud); PREV / NEXT at the foot.
    Rendered inside a left Drawer (tablet) or as a pinned 280px column
    (≥1400px wide).
    ═══════════════════════════════════════════════════════════════ */
@@ -13,6 +15,7 @@ export default function SceneList({
 }) {
   const [openActs, setOpenActs] = useState(() => new Set([actIndex]));
   const [brief, setBrief] = useState(false);
+  const voice = useReadAloud(tts);
   useEffect(() => { setOpenActs((s) => (s.has(actIndex) ? s : new Set([...s, actIndex]))); }, [actIndex]);
   const toggleAct = (i) => setOpenActs((s) => { const n = new Set(s); if (n.has(i)) n.delete(i); else n.add(i); return n; });
   const act = acts[actIndex];
@@ -45,7 +48,9 @@ export default function SceneList({
                       {act.readAloud?.length > 0 && (
                         <div className="run-row">
                           <button type="button" className="run-btn" onClick={onActOpening}>ACT OPENING → TV CARD</button>
-                          {tts && <button type="button" className="run-btn" onClick={() => tts.speak(act.readAloud)}>▶ TTS</button>}
+                          {tts && (voice.live
+                            ? <button type="button" className="run-btn" onClick={() => voice.stop()}>■ STOP</button>
+                            : <button type="button" className="run-btn" onClick={() => voice.read(act.readAloud, act.title)}>▶ {voice.routed ? 'VOICE' : 'TTS'}</button>)}
                         </div>
                       )}
                     </>

@@ -15,6 +15,7 @@ import PoolCounters from './PoolCounters';
 import CrewDrawer from './CrewDrawer';
 import NarrateDrawer from './NarrateDrawer';
 import MoreDrawer from './MoreDrawer';
+import AiGmDrawer, { useAiGm } from './AiGmDrawer'; // AI GM narration drafts
 import MapController from '../MapController';
 import DiceRoller from '../DiceRoller';
 import { ambientPreset } from '../../mechanicsUtils';
@@ -36,7 +37,7 @@ import Confirm from '../Confirm';
    Scene progress lives in table.run on the server (survives resume).
    ═══════════════════════════════════════════════════════════════ */
 const clampI = (n, lo, hi) => Math.max(lo, Math.min(hi, Number.isInteger(n) ? n : lo));
-const DRAWERS = ['narrate', 'map', 'crew', 'dice', 'clocks', 'handouts', 'threats', 'more'];
+const DRAWERS = ['narrate', 'ai', 'map', 'crew', 'dice', 'clocks', 'handouts', 'threats', 'more'];
 const storeKey = (code) => `gm.run.drawer.${code || 'none'}`;
 const readStore = (code) => {
   try { const v = JSON.parse(localStorage.getItem(storeKey(code)) || 'null'); return v && typeof v === 'object' ? v : {}; } catch { return {}; }
@@ -78,6 +79,7 @@ export default function RunView({ tts, audio, active = true, onNavigate = () => 
   const completed = run.completed || {};
   const key = `${actIndex}-${sceneIndex}`;
   const seeding = useRef(false);
+  const ai = useAiGm({ gameCode, actIndex, sceneIndex, hasScenes: acts.length > 0, sceneTitle: scene?.name || act?.title || '' }); // AUTO watches scene changes even with the drawer closed
   const wide = useMedia('(min-width: 1400px)');
 
   /* ─── Drawer state (one at a time, remembered per session) ─── */
@@ -198,6 +200,7 @@ export default function RunView({ tts, audio, active = true, onNavigate = () => 
   /* ─── Dock ─── */
   const dock = [
     ['narrate', 'NARRATE', 'narrate', narration ? '●' : null],
+    ['ai', 'AI GM', 'ai', ai.autoReady ? 'NEW' : ai.busy ? '…' : null],
     ['map', 'MAP', 'board', null],
     ['crew', terms.players.toUpperCase(), 'crew', crewBadge || null],
     ['dice', 'DICE', 'dice', null],
@@ -206,11 +209,12 @@ export default function RunView({ tts, audio, active = true, onNavigate = () => 
     ['threats', 'THREATS', 'threat', ini?.active ? `R${ini.round}` : null],
     ['more', 'MORE', 'more', table?.pause ? '❚❚' : null],
   ];
-  const drawerTitle = { narrate: 'NARRATE', map: 'MAP', crew: terms.players.toUpperCase(), dice: 'DICE', clocks: 'CLOCKS', handouts: 'HANDOUTS', threats: 'THREATS', more: 'MORE' };
+  const drawerTitle = { narrate: 'NARRATE', ai: 'AI GM', map: 'MAP', crew: terms.players.toUpperCase(), dice: 'DICE', clocks: 'CLOCKS', handouts: 'HANDOUTS', threats: 'THREATS', more: 'MORE' };
 
   const drawerBody = () => {
     switch (drawer) {
       case 'narrate': return <NarrateDrawer onToggleTheatre={toggleTheatre} focusInput={narrateByKey} />;
+      case 'ai': return <AiGmDrawer ai={ai} pack={pack} act={act} scene={scene} />;
       case 'map': return <MapController compact onOpenFull={() => { closeDrawer(); onNavigate('board'); }} />;
       case 'crew': return <CrewDrawer onOpen={openDrawer} onNavigate={onNavigate} />;
       case 'dice': return (

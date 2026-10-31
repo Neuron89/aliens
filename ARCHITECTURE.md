@@ -38,6 +38,8 @@ web app/
     generate.js                 # POST /api/generate (SSE), GET /api/generate/status
     portrait.js                 # /api/portrait: character portraits via the LAN ComfyUI (jobs, status, list, images)
     recap.js                    # /api/recap: the "ship's log" (public log only; Claude when ANTHROPIC_API_KEY is set, else a template)
+    gm.js                       # /api/gm: AI GM narration drafts (local OpenAI-compatible model via GM_URL, else the pack text); gmContext() is pure
+    vram.js                     # GPU hand-off: ComfyUI /free before a narration, Ollama unload before a portrait
     generator/                  # core.js prompt.js params.js params.schema.json outputSchema.js universes.js env.js __mock__.js
     schema/
       content-pack.schema.json  # JSON Schema (draft 2020-12) for content packs
@@ -356,7 +358,7 @@ lists `ambient`.
     `[A-Za-z0-9_-]{1,64}` pack id are skipped; sets `seeded`; pack clue `status:'revealed'` → revealed to all),
     `run-set { actIndex?, sceneIndex?, completed?, actTitle?, sceneTitle? }`, `advance-act { actIndex, actTitle?, sceneTitle?, agendas?: {playerId: text} }`
     (pushes each assigned player's `character.agendaByAct[actIndex+1]` as `new-orders`; ack `{ sent: [ids] }`),
-    `narrate { text, title?, mode: 'caption'|'card', art? }`, `narrate-clear {}`, `board-mode { mode?, title?, subtitle?, art? }`,
+    `narrate { text, title?, mode: 'caption'|'card', art?, speak?, voice?, speed?, target? }` (speak: see Voice below), `narrate-clear {}`, `board-mode { mode?, title?, subtitle?, art? }`,
     `handout-send { handoutId?, handout?|custom?: { title, from, to, priority, text, image? }, to: 'all'|[playerIds] }` (bundled packs are client-side,
     so the DM sends the resolved handout with its pack id; re-send widens recipients, keeps receipts; ack `{ id }`),
     `clue-upsert { clue }`, `clue-reveal { clueId, clue?, to, foundBy? }` (finders default to the `to` list), `clue-hide { clueId }`,
@@ -463,6 +465,30 @@ lists `ambient`.
     private } }` (ms clamped 2-30 s, default 9 s; one line ≤ 300 chars; logged as narration; not stored). The intrigue
     web reads pack `relations[]`; REVEAL is a plain `clue-reveal`. GameContext: `visionSend(text, opts, cb)`,
     `onVision(fn)`. Test: `test-intrigue.mjs`.
+  - **AI GM (V2).** REST `/api/gm` (`server/gm.js`): `GET /status` → `{ ok, provider:'local'|'none', model, url, vram:{comfy,ollama} }`;
+    `POST /narrate` `{ code, dmToken, kind:'scene-open'|'describe'|'npc'|'improv'|'recap-so-far', prompt?, npcId?, maxWords? }` → SSE
+    `status` / `delta {text,chunk}` / `done {text,provider,model,words}` / `error`. Context (`gmContext()`): universe persona, pack
+    meta, current act/scene, PCs and their rooms (revealed only), visible clocks, revealed clues, the public log; never NPC
+    secrets, gmNotes, hidden clues, endings or check mechanics. `server/vram.js`: `releaseForLlm()` (ComfyUI `/free`, ≤ 1/min)
+    before a chat call, `releaseForImages()` (Ollama `keep_alive:0` for every loaded model) before a portrait.
+  - **Voice (server TTS).** REST `/api/tts` (`server/tts.js`, env `TTS_URL` OpenAI-compatible, Kokoro-FastAPI on the
+    GPU box): `GET /status` → `{ provider: 'kokoro'|'openai'|'none', ok, model, format, voices: [{ id, name, lang, gender,
+    grade? }], error? }` (cached 10 min up / 15 s down), `GET /voices`, `POST /speak { text ≤ 4000, voice?, speed? }`
+    (API_TOKEN-guarded like recap) → `{ url, ms, cached, voice, speed, total, parts: [{ url, ms }] }`, or with
+    `Accept: text/event-stream` SSE `start { total }` · `part { index, url, ms, cached }` · `done { parts, … }` ·
+    `error`; `GET /audio/<sha1>.mp3` (immutable). Text is cut into sentence groups of ~12-25 words (the first may be
+    6+) synthesized one after another and cached per group in `<DATA_DIR>/tts` (LRU, 500 files / 200 MB).
+    DM: `narrate-speak { text, voice?, speed?, target: 'tv'|'gm'|'both', title? }` → ack at once
+    `{ success, id, total, target, voice, boards }` | `{ error }` ('NO VOICE SERVER.', 'Invalid voice.', 'Too long…',
+    'VOICE BUSY…'); then `table-speak { id, text, title, voice, speed, target, total, at }`, one
+    `table-speak-part { id, index, url, ms }` per group as it is ready, `table-speak-done { id, count, ms?, error? }`
+    — to the board room for tv/both and ALWAYS to the DM socket (the tablet plays gm/both itself). Speeches of one game
+    are synthesized in order. `narrate { …, speak: true, voice?, speed?, target? }` captions and speaks (ack
+    `{ success, id, speech }`). `narrate-speak-stop {}` → `table-speak-stop { at }` (board + DM); the loop stops
+    before its next group, queued speeches are dropped. Logged as narration `Voice: …`. GameContext: `ttsStatus`,
+    `refreshTts()`, `speak(text, opts, cb)`, `speakStop(cb)`, `onSpeak` / `onSpeakPart` / `onSpeakDone` /
+    `onSpeakStop`, `voiceLive`. Voice prefs: localStorage `muthur.voiceTarget` ('off'|'tv'|'gm'|'both'),
+    `muthur.voice` (`{ [universe]: { voice, speed } }`, default `theme.voice`). Test: `test-tts.mjs` (mock server).
   - Polish wave B: `test-polish-b.mjs` (the CREW drawer's `tracker-set` path, `burnSec` sanitising, ambience aliases,
     recap template non-repetition, content fixes).
 

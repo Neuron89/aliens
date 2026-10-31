@@ -76,6 +76,9 @@ export const theme = {
   sounds: {
     stingers: ['worm', 'wind-gust', 'thumper', 'shield', 'ornithopter', 'crysknife', 'voice'],
   },
+  /* Narrator voice (server TTS, server/tts.js — Kokoro voice id or blend): a measured female chronicler.
+     The GM can pick another in NARRATE → VOICE. */
+  voice: { narrator: 'bf_emma', speed: 0.95 },
   board: {
     levelNoun: 'LEVEL',
     backdrop: 'sand',

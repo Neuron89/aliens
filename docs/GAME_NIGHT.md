@@ -28,6 +28,10 @@ Runtime packs, session snapshots (`data\`) and the generator `.env` belong in th
 
 Development mode (`cd "web app" && npm run dev`) serves the UI on :3000 and the API on :3002 with hot reload; use it for building, not for a game night.
 
+**Narrator voice.** Put `TTS_URL=http://192.168.1.37:8880/v1` in `web app/.env` (the deploy script copies it) for the natural Kokoro voice (the speech server on the GPU box). Check it before the night: the NARRATE drawer's status line reads **VOICE: kokoro · George — British male**, or open `http://localhost:3100/api/tts/status` (`"ok": true`). Without it everything still works with the browser's robotic voice.
+
+**AI GM.** Put `GM_URL=http://192.168.1.37:11434/v1` and `GM_MODEL=hf.co/unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF:Q4_K_M` in `web app/.env` for the AI GM (Ollama on the GPU box; any model `ollama list` shows works). Leave them empty and the AI GM tab uses the pack's own text. See `docs/AI_GM.md`.
+
 ### 1.2 Network and firewall
 
 - Players need the host's LAN address: the deploy script prints it (the first `192.168.*` IPv4 address); otherwise run `ipconfig`.
@@ -149,6 +153,15 @@ Rail **Audio** opens the audio popover:
 - Scenes can name a mood (`ambient` in the pack, for example `ship`, `derelict`, `hive`, `erg`, `keep`; friendly aliases such as `engine`, `drip`, `open-erg` or `interior` work too). Moving to that scene switches the ambience for you and the TV.
 - Ambience and stingers dip while narration is read aloud. The TV only plays sound when opened with `&audio=1` (1.4). Players can mute and reduce effects on their own device (SOUND / REDUCE FX toggles).
 
+**Narrator voice (server TTS).** NARRATE drawer → **VOICE**: **OFF | TV | HERE | BOTH** (remembered on this tablet), the voice (the universe's default is marked ★; ALIEN `bm_george`, DUNE `bf_emma`; grades from the voice server in brackets) and **SPEED** (80-120 %).
+- With VOICE on, **SEND CAPTION** / **SEND AS CARD** also speak the text (marked ◉); **SPEAK ONLY** speaks without a caption; **■ STOP VOICE** cuts it on the TV and here.
+- **READ ALOUD** on the scene (and the act brief's **▶ VOICE**) goes to the same target: the button reads **READ ALOUD ON TV** / **TV + HERE**. With VOICE OFF it reads on this tablet only.
+- Speech starts about a second after you tap: the server speaks sentence by sentence and the TV plays each clip as soon as it is ready, ambience and stingers dipping underneath. A TV voice needs the TV opened with `&audio=1` and tapped once (1.4); while it talks the TV shows a small **VOICE** tag bottom-left. Phones never speak.
+- Every line said is cached on the server (`data/tts`), so repeating a scene's read-aloud is instant. Lines spoken go into the session log as "Voice: …".
+- No voice server: the status line says **NO VOICE SERVER — using the browser voice**; SPEAK and READ ALOUD use the browser voice here, the TV stays silent. Tap **↻** after starting the server.
+
+**AI GM tab** (dock): **OPEN THIS SCENE**, **DESCRIBE WHERE THEY ARE**, **NPC SPEAKS** (pick the NPC), **IMPROVISE** ("they cut the power"), **RECAP SO FAR**; LENGTH short/normal/long. The draft streams into an editable box; then **SEND CAPTION**, **SEND AS CARD**, **SPEAK ON TV** or **SEND + SPEAK**. Turn **AUTO** on and every new scene's opening is drafted for you (never sent by itself; the dock badge says NEW). The first draft of the night can take 1–2 minutes while the model loads; later drafts start at once. The model never sees NPC secrets, GM notes, hidden clues or endings, but it does invent small details, so read before you send. Details: `docs/AI_GM.md`.
+
 ### 3.8 Pause (X-card)
 
 Any player can tap **PAUSE** on their phone (one tap plus confirm). You see a neutral **PAUSE REQUESTED** banner with a chime, the TV shows a calm PAUSE card, and nothing records who pressed it. Stop, check in, then **RESUME PLAY** (the button in the banner).
@@ -230,5 +243,10 @@ The server snapshots every game to `data/sessions/<CODE>.json` after each change
 | "SERVER FULL" on create | `MAX_GAMES` (default 50) live plus dormant games; end old ones. |
 | Stale UI after an update | Hard refresh (Ctrl+F5). The deployed app serves the last built `dist/`. |
 | Text-to-speech silent | Browser voices load lazily; pick a voice in the TTS panel. Works best in Chrome/Edge. |
+| NARRATE says NO VOICE SERVER | `TTS_URL` missing from the server's `.env` (the deployed copy: `..\aliens-deploy\web app\.env`) or the Kokoro container is down: `http://192.168.1.37:8880/v1/audio/voices` should answer. Tap **↻** in the VOICE panel after fixing; the browser voice is used meanwhile. |
+| Voice plays on the tablet but not on the TV | The TV must be open as `?board=CODE&audio=1` and tapped once (TAP FOR SOUND). Check VOICE is **TV** or **BOTH**, not HERE. |
+| AI GM says offline | `GM_URL` not set in the server's `.env`, or Ollama on the GPU box is down: `http://192.168.1.37:11434/v1/models` should answer. The pack's own text is used meanwhile. |
+| First AI GM draft is slow | The model is loading into VRAM (about 95 s cold, longer if ComfyUI must unload first). It stays loaded ~10 min after the last draft. |
+| Voice starts late or cuts off mid-scene | Long text is spoken sentence by sentence; the first clip takes about a second (CPU Kokoro). A red line in the NARRATE drawer ("Voice: VOICE FAILED…") means the speech server dropped a request; send again. STOP VOICE always clears the TV's queue. |
 | Phone screen sleeps | Ask players to keep the screen on; they re-attach to their seat when it wakes. |
 | Everything stopped for one player | Check whether they hit **PAUSE** (the banner shows only "PAUSE REQUESTED"); check in, then RESUME PLAY. |

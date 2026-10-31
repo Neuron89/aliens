@@ -30,6 +30,7 @@ import { tmpdir } from 'os';
 import { randomBytes, randomInt, createHash } from 'crypto';
 import { DATA_DIR } from './persistence.js';
 import { listUniverseIds } from './generator/universes.js';
+import { releaseForImages } from './vram.js'; // VRAM hand-off: Ollama unloads before ComfyUI renders
 
 const comfyUrl = () => String(process.env.COMFY_URL || 'http://192.168.1.37:8188').replace(/\/+$/, '');
 const portraitDir = () => process.env.PORTRAIT_DIR || join(DATA_DIR, 'art', 'portraits');
@@ -358,6 +359,7 @@ async function runJob(job, req) {
     job.model = model;
     const seed = req.seed ?? randomInt(1, 2147483646);
     const prefix = `portraits/${req.universeId}-${fileStem(req.characterId)}-${Date.now().toString(36)}`;
+    await releaseForImages(); // never throws; 3 s timeouts
     const sub = await comfyJson('/prompt', { method: 'POST', body: { prompt: workflow(model, buildPrompt(req), seed, prefix), client_id: 'muthur-portrait' }, signal });
     promptId = sub?.prompt_id;
     if (typeof promptId !== 'string' || !promptId) throw new Error('ComfyUI did not return a prompt id.');

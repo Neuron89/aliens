@@ -1,9 +1,11 @@
 import React from 'react';
+import { useReadAloud } from '../../hooks/useTTS';
 
 /* ═══════════════════════════════════════════════════════════════
    FOCUS STAGE — the current scene in large type (GM run view).
    Title (display font, ~40px), read-aloud (~22px italic, accent rule)
-   with SEND TO TABLE / READ ALOUD (TTS) / AS CARD, the scene's beats,
+   with SEND TO TABLE / READ ALOUD (TTS — the server voice to the VOICE target
+   TV / HERE / BOTH set in NARRATE, else read here) / AS CARD, the scene's beats,
    then CHECKS · STRESS TRIGGERS · OUTCOMES as three cards, encounter,
    NPC guidance, clues findable here (one-tap reveal), GM tip.
    ═══════════════════════════════════════════════════════════════ */
@@ -11,6 +13,7 @@ export default function RunScene({
   scene, act, actIndex, sceneIndex, sceneCount, done, onToggleDone, onNarrate, narrationLive, onClearNarration,
   tts, clues = [], onRevealClue,
 }) {
+  const voice = useReadAloud(tts);
   if (!scene) return null;
   const list = (items, cls, mark) => (
     <ul className={`fs-list ${cls}`}>{items.map((x, i) => <li key={i}><span aria-hidden="true">{mark}</span><span>{x}</span></li>)}</ul>
@@ -20,7 +23,8 @@ export default function RunScene({
     scene.stressTriggers?.length > 0 && { id: 'st', label: 'STRESS TRIGGERS', cls: 'st', body: list(scene.stressTriggers, 'st', '▲') },
     scene.outcomes?.length > 0 && { id: 'oc', label: 'OUTCOMES', cls: 'oc', body: list(scene.outcomes, 'oc', '→') },
   ].filter(Boolean);
-  const speaking = tts?.isSpeaking;
+  const speaking = voice.live;
+  const where = { tv: 'ON TV', gm: '', both: 'TV + HERE' }[voice.target] || '';
   return (
     <article className={`fs-stage${done ? ' done' : ''}`} aria-labelledby="fs-title">
       <header className="fs-head">
@@ -50,8 +54,9 @@ export default function RunScene({
           <div className="fs-actions">
             <button type="button" className="fs-btn primary" onClick={() => onNarrate(scene.narration, 'caption')}>SEND TO TABLE</button>
             {tts && (speaking
-              ? <button type="button" className="fs-btn" onClick={() => tts.stop()}>■ STOP READING</button>
-              : <button type="button" className="fs-btn" onClick={() => tts.speak([scene.narration])}><span aria-hidden="true">▶ </span>READ ALOUD</button>)}
+              ? <button type="button" className="fs-btn" onClick={() => voice.stop()}>■ STOP READING</button>
+              : <button type="button" className="fs-btn" onClick={() => voice.read([scene.narration], scene.name)}
+                  title={voice.routed ? 'Server voice → ' + (where || 'this tablet') : 'Read here'}><span aria-hidden="true">▶ </span>READ ALOUD{voice.routed && where ? ' ' + where : ''}</button>)}
             <button type="button" className="fs-btn" onClick={() => onNarrate(scene.narration, 'card')} title="Full-screen theatre card on the TV">AS CARD</button>
             {narrationLive && (
               <span className="fs-live">

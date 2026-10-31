@@ -14,6 +14,7 @@ const P = {
   audio: <><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" /><path d="M15.5 9q1.6 3 0 6M18 7q3 5 0 10" /></>,
   next: <><path d="M6 5v14l10-7z" /><path d="M18.5 5v14" /></>,
   narrate: <><path d="M4 5h16v11H10l-4.5 3.5V16H4z" /></>,
+  ai: <><path d="M4 5h16v11H10l-4.5 3.5V16H4z" /><path d="M12 7l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z" /></>,
   clock: <><circle cx="12" cy="12" r="8" /><path d="M12 7.5V12l3 2" /></>,
   handout: <><path d="M6 3.5h12v17H6z" /><path d="M9 8h6M9 11.5h6M9 15h4" /></>,
   threat: <><path d="M12 3.5l8.5 15H3.5z" /><path d="M12 9.5v4.5M12 16.5v.5" /></>,

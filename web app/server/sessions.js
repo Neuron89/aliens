@@ -31,6 +31,17 @@ import {
   MAX_ROLLS, emptyInitiative, publicPools, publicInitiative, crewSupply, afterPlayerRoll, wireMechanics, clearPanicIfGone,
   sanitizeDetermination,
 } from './mechanics.js';
+import { speakStream, sentenceParts, ttsStatus, isVoiceId, TTS_MAX_TEXT } from './tts.js';
+
+/* Voice (narrate-speak): per-game generation — narrate-speak-stop bumps it so the synthesis loop
+   stops before its next sentence group and anything queued is dropped. Speeches of one game are
+   synthesized one after another (VOICE_CHAIN): the voice server is sequential anyway, and the first
+   speech gets its first sentence out fastest. */
+const VOICE_GEN = new Map();   // code → generation
+const VOICE_BUSY = new Map();  // code → speeches queued or synthesizing
+const VOICE_CHAIN = new Map(); // code → Promise (tail of the per-game synthesis chain)
+const VOICE_MAX_INFLIGHT = 3;
+const VOICE_TARGETS = ['tv', 'gm', 'both'];
 
 const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const GM = 'GM';
@@ -1416,8 +1427,11 @@ export function attachSessions(io) {
       done(game, callback, { sent });
     });
 
-    /* ─── DM: Narrate { text, title?, mode:'caption'|'card', art? } ─── */
-    on('narrate', (payload, callback) => {
+    /* ─── DM: Narrate { text, title?, mode:'caption'|'card', art?, speak?, voice?, speed?, target? } ───
+       speak:true also voices the text (same as narrate-speak; the caption goes out first, the ack
+       carries the voice's start: { success, id, speech: { success, id, total, … } | { error } };
+       the audio then follows as table-speak-part events, see VOICE below). */
+    on('narrate', async (payload, callback) => {
       const game = dmTableGame(socket, payload);
       if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
       const text = sstr(payload.text, 4000).trim();
@@ -1428,8 +1442,14 @@ export function attachSessions(io) {
         id: shortId('n'), text, title: sstr(payload.title, 160), at: Date.now(),
         mode: NARRATE_MODES.includes(payload.mode) ? payload.mode : 'caption', art,
       };
-      logTo(game, 'narration', `${t.narration.title ? t.narration.title + ': ' : ''}${text || '[image]'}`.slice(0, 400));
-      done(game, callback, { id: t.narration.id });
+      const speak = payload.speak === true && !!text;
+      const line = `${t.narration.title ? t.narration.title + ': ' : ''}${text || '[image]'}`;
+      logTo(game, 'narration', `${speak ? 'Voice: ' : ''}${line}`.slice(0, 400));
+      if (!speak) return done(game, callback, { id: t.narration.id });
+      touch(game);
+      emitTable(game);
+      const speech = await voiceToTable(game, { ...payload, text, title: t.narration.title }, { log: false });
+      callback?.({ success: true, id: t.narration.id, speech });
     });
 
     /* ─── DM: Clear narration {} ─── */
@@ -1439,6 +1459,82 @@ export function attachSessions(io) {
       tableOf(game).narration = null;
       done(game, callback);
     });
+
+    /* ═══ VOICE — server TTS to the TV / GM (server/tts.js) ═══════════════════
+       narrate-speak { text, voice?, speed?, target:'tv'|'gm'|'both' (default tv), title? }   DM only
+         ack (right away, before any audio) { success, id, total, target, voice, boards } | { error, provider? }
+         then, progressively (sentence groups of ~12–25 words, synthesized one after another):
+           `table-speak      { id, text, title, voice, speed, target, total, at }`  first
+           `table-speak-part { id, index, url, ms }`                               as each group is ready
+           `table-speak-done { id, count, ms, error? }`                            after the last (count = parts sent)
+         The board room gets them when target is tv/both. The DM socket ALWAYS gets them (the tablet
+         tracks what is playing; it only plays them itself for gm/both). Logged as narration "Voice: …".
+       narrate-speak-stop {}  DM only → `table-speak-stop { at }` to the board room and the DM; the
+         synthesis loop stops before its next group, queued speeches are dropped. ack { success }
+       Phones never get voice (the TV is the table's speaker). */
+    async function voiceToTable(game, payload, { log = true } = {}) {
+      const code = game.code;
+      const text = typeof payload.text === 'string' ? payload.text.trim() : '';
+      if (!text) return { error: 'Nothing to say.' };
+      if (text.length > TTS_MAX_TEXT) return { error: `Too long (max ${TTS_MAX_TEXT} characters).` };
+      const voice = payload.voice === undefined || payload.voice === null || payload.voice === '' ? undefined : payload.voice;
+      if (voice !== undefined && !isVoiceId(voice)) return { error: 'Invalid voice.' };
+      const target = VOICE_TARGETS.includes(payload.target) ? payload.target : 'tv';
+      const title = sstr(payload.title, 160);
+      if ((VOICE_BUSY.get(code) || 0) >= VOICE_MAX_INFLIGHT) return { error: 'VOICE BUSY — try again in a moment.' };
+      const st = await ttsStatus();
+      if (!st.ok) return { error: 'NO VOICE SERVER.', provider: 'none' };
+      const total = sentenceParts(text).length;
+      if (!total) return { error: 'Nothing to say.' };
+      const gen = VOICE_GEN.get(code) || 0;
+      const id = shortId('v');
+      const toBoard = target !== 'gm';
+      const emit = (event, data) => {
+        if (toBoard) io.to(boardRoom(code)).emit(event, data);
+        toDM(game, event, data);
+      };
+      const stopped = () => (VOICE_GEN.get(code) || 0) !== gen;
+      emit('table-speak', { id, text, title, voice: voice || null, speed: payload.speed ?? null, target, total, at: Date.now() });
+      if (log) logTo(game, 'narration', `Voice: ${title ? title + ': ' : ''}${text}`.slice(0, 400));
+      touch(game);
+      VOICE_BUSY.set(code, (VOICE_BUSY.get(code) || 0) + 1);
+      let count = 0;
+      const run = async () => {
+        if (stopped()) return;
+        try {
+          const r = await speakStream(text, { voice, speed: payload.speed }, {
+            shouldStop: stopped,
+            onPart: (p) => { count++; emit('table-speak-part', { id, index: p.index, url: p.url, ms: p.ms }); },
+          });
+          if (!r.stopped) emit('table-speak-done', { id, count, ms: r.ms });
+        } catch (err) {
+          if (!stopped()) emit('table-speak-done', { id, count, error: err?.code === 'no_voice_server' ? 'NO VOICE SERVER.' : `VOICE FAILED: ${String(err?.message || err).slice(0, 160)}` });
+        }
+      };
+      const tail = (VOICE_CHAIN.get(code) || Promise.resolve()).then(run).finally(() => {
+        const n = (VOICE_BUSY.get(code) || 1) - 1;
+        if (n > 0) VOICE_BUSY.set(code, n); else VOICE_BUSY.delete(code);
+        if (VOICE_CHAIN.get(code) === tail) VOICE_CHAIN.delete(code);
+      });
+      VOICE_CHAIN.set(code, tail);
+      return { success: true, id, total, target, voice: voice || null, boards: boardCount(code) };
+    }
+    on('narrate-speak', async (payload, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      if (typeof payload.text !== 'string' || !payload.text.trim()) return callback?.({ error: 'Nothing to say.' });
+      callback?.(await voiceToTable(game, payload));
+    });
+    on('narrate-speak-stop', (payload, callback) => {
+      const game = dmTableGame(socket, payload);
+      if (!game) return callback?.({ error: 'NOT AUTHORIZED.' });
+      VOICE_GEN.set(game.code, (VOICE_GEN.get(game.code) || 0) + 1);
+      const evt = { at: Date.now() };
+      io.to(boardRoom(game.code)).emit('table-speak-stop', evt);
+      toDM(game, 'table-speak-stop', evt);
+      callback?.({ success: true });
+    });
+    /* ═══ /VOICE ═══════════════════════════════════════════════════════════════ */
 
     /* ─── DM: Board mode { mode:'map'|'theatre', title?, subtitle?, art? } (persists) ─── */
     on('board-mode', (payload, callback) => {

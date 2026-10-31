@@ -44,6 +44,8 @@ export const EVENT_NAMES = Object.freeze([
   'tracker-set', 'tracker-signal',
   // F6 intrigue web + prescience
   'vision-send',
+  // voice (server TTS → TV / GM)
+  'narrate-speak', 'narrate-speak-stop',
 ]);
 
 export const RESERVED_IDS = Object.freeze(new Set(['__proto__', 'constructor', 'prototype']));
