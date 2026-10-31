@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import { apiHeaders } from '../../apiToken';
+import ApiTokenPrompt from '../ApiTokenPrompt';
+const needsToken = (t) => /api token/i.test(String(t || ''));
 import { Glyph } from '../board/TokenChip';
 import './aigm.css';
 
@@ -390,6 +392,7 @@ function NarrateTab({ ai, pack, act, scene }) {
         </div>
       )}
       {ai.note && <p className="run-warn" role="status">{ai.note}</p>}
+      {needsToken(ai.note) && <ApiTokenPrompt />}
 
       {(ready || ai.busy) && (
         <div className="ag-send">
@@ -475,6 +478,7 @@ function BuildTab({ ai }) {
       </div>
 
       {b.error && <p className="run-warn" role="status">{b.error}</p>}
+      {needsToken(b.error) && <ApiTokenPrompt />}
       {b.msg && <p className="ag-ready" role="status">{b.msg}</p>}
       {planOther && <p className="run-warn">This plan was built for another map ({b.plan.mapId}). REBUILD for the map on the table.</p>}
 
@@ -608,6 +612,7 @@ function RoomsTab({ ai }) {
         </span>
       </div>
       {note && <p className="run-dim" role="status">{note}</p>}
+      {needsToken(note) && <ApiTokenPrompt />}
 
       {r.feed.length === 0 ? (
         <p className="run-empty">Room entries show up here — when a player taps ENTER on their phone, or you drag a player's token into another room.</p>

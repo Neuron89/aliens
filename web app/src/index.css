@@ -3033,3 +3033,8 @@ html.fx-reduced .dr { animation: none; }
 @keyframes tv-voice-bar { 0%, 100% { transform: scaleY(0.25); } 50% { transform: scaleY(1); } }
 @media (prefers-reduced-motion: reduce) { .tv-voice-bars i { animation: none; transform: scaleY(0.7); } }
 html[data-universe="dune"] .tv-voice { border-radius: 3px; }
+
+/* Inline API-token prompt (components/ApiTokenPrompt.jsx): shown under a 401 "API token required." */
+.api-token-prompt { margin: 0.5rem 0 0.75rem; padding: 0.6rem; border: 1px solid var(--warn); background: var(--bg-card); }
+.api-token-row { display: flex; gap: 0.4rem; margin-top: 0.3rem; }
+.api-token-row input { flex: 1; min-width: 0; min-height: 40px; padding: 0.3rem 0.5rem; background: var(--bg-input); border: 1px solid var(--border); color: var(--text); font-family: var(--font-mono); }
