@@ -111,7 +111,10 @@ export default function CharacterSheet({
                 <button type="button" className="cs-skill-main" onClick={() => setOpenSkill(open ? null : key)} aria-expanded={open}>
                   <span className="cs-skill-name">{info.label}{isKey && <span className="cs-key">★</span>}</span>
                   <span className="cs-skill-attr">{pool.kind === '2d20' ? (pool.attrKey || '').toUpperCase() : info.attr}</span>
-                  <span className="cs-skill-val">{character.skills?.[key] ?? 0}</span>
+                  {/* 0 = untrained: an empty box (the display font's slashed zero read as "crossed out") */}
+                  {(Number(character.skills?.[key]) || 0) === 0
+                    ? <span className="cs-skill-val is-zero" role="img" aria-label="0" title="0 — untrained"><span className="cs-zero" /></span>
+                    : <span className="cs-skill-val">{character.skills?.[key]}</span>}
                   <span className={`cs-pool ${mod}`}>{pool.label}</span>
                 </button>
                 {onRoll && (

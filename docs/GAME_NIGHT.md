@@ -48,7 +48,7 @@ Development mode (`cd "web app" && npm run dev`) serves the UI on :3000 and the 
 2. The TV shows "waiting" until the GM picks a map. The **TV** dot in the GM status strip (top bar) turns green and reads **TV LINKED** once the TV is attached.
 3. **Orientation** (players sit around all four sides): in **Board** (left rail) use **ROTATE** (90 degrees per tap), **FLIP** and **ZOOM −/+** until the map reads right from the GM seat; labels and tokens stay upright whichever way you turn it. **AS TV** makes the tablet canvas mirror the TV's rotation/flip so you move tokens in the orientation players see. Toggle it off to work upright on the tablet.
 4. No TV? Skip it: everything works from phones and the GM screen; the map shows on the phone **TABLE** tab for revealed rooms.
-5. Optional: add `&audio=1` to the TV URL so the TV speaker plays the ambient track that follows the GM's scene presets; tap the TV once to allow sound.
+5. Optional: open the TV as `/?board=CODE&audio=1` (rail **Audio** shows this link, ready to copy) so the TV speaker plays the scene ambience and the soundboard stingers you fire; tap the TV once to allow sound. Without `&audio=1` the TV stays silent, which is fine if the GM tablet's speaker is enough.
 6. Burn-in safety is automatic: the map drifts a pixel or two every minute and dims after 10 minutes of nothing happening.
 
 ## 2. Start the session
@@ -98,16 +98,16 @@ The current scene fills the screen in large type: title, **MANDATORY** / **ENCOU
 
 **Drawers**
 - **MAP**: the board canvas in compact form: map and level, **FOG**, **REVEAL** (room list with SEEN / FOG toggles, REVEAL ALL / CONCEAL ALL), **PING**, **+ TOKEN** (the palette), tap a token or room for its sheet, and **OPEN FULL BOARD ▸** (the Board section, for rotate / flip / zoom / snap / edit rooms / reset).
-- **CREW** (DUNE **HOUSE AGENTS**): every seat with its track bars, panic / offline / KIA state, unread messages (the last one quoted), **MSG** per seat (with the last few messages) and **MSG ALL**; quick actions **+1 STRESS ALL**, **ASK FOR A ROLL** (pick a skill and who; sent as a priority message to the phone), **SEND HANDOUT** (opens HANDOUTS) and **PRIVATE AGENDA** (opens MORE › AGENDAS); **FULL CREW DASHBOARD ▸** for the editor (tracks, status, supplies, injuries, inventory, kill / replace).
-- **DICE**: the GM roller (SECRET logs privately) and the roll feed: every roll phones report (also the crew dashboard's **ROLLS** panel).
+- **CREW** (DUNE **HOUSE AGENTS**): every seat with its portrait (or monogram), track bars, panic / offline / KIA state, unread messages (the last one quoted), **MSG** per seat (with the last few messages) and **MSG ALL**; ALIEN rows also carry **GRANT TRACKER** / **REVOKE TRACKER** (3.11; a seat that already carries a motion tracker says so instead); quick actions **+1 STRESS ALL**, **ASK FOR A ROLL** (pick a skill and who; sent as a priority message to the phone), **SEND HANDOUT** (opens HANDOUTS) and **PRIVATE AGENDA** (opens MORE › AGENDAS); **FULL CREW DASHBOARD ▸** for the editor (tracks, status, supplies, injuries, inventory, kill / replace).
+- **DICE**: the GM roller and the roll feed (every roll phones report; also the crew dashboard's **ROLLS** panel). While a session is live a three-way switch picks where your roll goes: **TV** (the default: the table sees it tumble on the dice stage, and it is logged), **SECRET** (your feed and the session log only) or **LOCAL** (this screen only, nothing sent or logged).
 - **CLOCKS**: **+ CLOCK** with 4 / 6 / 8 / custom segments, kind *danger* (strikes when full), *racing* (the players' progress) or *tug* (moves both ways), shown to the table or GM-only. Tap + / − to tick; phones chime and the TV clock stack updates. A full clock is tagged FULL (and the dock button shows **!**): decide what happens.
-- **HANDOUTS**: **PUSH TO PHONES** to everyone or chosen players, **SEEN 2/4** receipts (unseen count on the dock button), **SHOW ON TV** for handouts with an image, **+ CUSTOM HANDOUT**. Players get a sealed card ("TAP TO OPEN"); opening it counts as seen and they can re-open it under COMMS › FILES & CLUES. The same push exists in Stories.
+- **HANDOUTS**: **PUSH TO PHONES** to everyone or chosen players, **SEEN 2/4** receipts (unseen count on the dock button), an optional **BURN AFTER READING** timer per send (OFF / 30 SEC / 1 MIN / 2 MIN / 5 MIN), **SHOW ON TV** (the handout as a document card on the TV), **+ CUSTOM HANDOUT** (same timer). Players get a sealed card ("TAP TO OPEN"); opening it shows the handout as an in-world document (ALIEN: a teletype printout that types itself out; DUNE: a parchment leaf with an illuminated letter and a House seal). With a timer, the phone counts down once the text has arrived and then redacts it for good on that device. Opening counts as seen; they can re-open it under COMMS › FILES & CLUES. The same push exists in Stories.
 - **THREATS**: **CREATURES** (3.5) and **INITIATIVE** (3.4); the dock button shows the round while initiative runs.
-- **MORE**: **AGENDAS** (each PC's agenda this act, **SEND AGENDA CARDS**), **NPCS** ("if ignored" behaviour, secrets hidden until **SHOW SECRETS**), **CLUES** (pack clues plus ad-hoc ones; **REVEAL** to all or chosen players, who are credited as finders; FOUND / HIDDEN and who found it; give every important conclusion at least three clues), **LOG** (filterable session log, **ADD NOTE**, mark the ending reached, **EXPORT RECAP**), **SAFETY** (pause state with **RESUME PLAY**, the session-zero answers and who confirmed) and **END** (end the session for everyone, with a confirm).
+- **MORE** (the tab row scrolls sideways when it does not fit): **INTRIGUE** (3.12), **AGENDAS** (each PC's agenda this act, **SEND AGENDA CARDS**), **NPCS** ("if ignored" behaviour, secrets hidden until **SHOW SECRETS**), **CLUES** (pack clues plus ad-hoc ones; **REVEAL** to all or chosen players, who are credited as finders; FOUND / HIDDEN and who found it; give every important conclusion at least three clues), **LOG** (filterable session log, **ADD NOTE**, mark the ending reached, **EXPORT RECAP**), **RECAP** (3.13), **SAFETY** (pause state with **RESUME PLAY**, the session-zero answers and who confirmed) and **END** (end the session for everyone, with a confirm).
 
 ### 3.2 Rolls and pressure mechanics
 
-- **Rolls.** Players roll on their phones. Each settled roll lands in the roll feed (who, skill, pool, dice, flags PANIC / PUSH / CRIT / COMPLICATION) and pops a 4-second toast on the TV. **Secret rolls** (a threat card's ROLL ATTACK (SECRET)) show only to you and the log, never the TV.
+- **Rolls.** Players roll on their phones. Each settled roll lands in the roll feed (who, skill, pool, dice, flags PANIC / PUSH / CRIT / COMPLICATION) and plays on the TV's **dice stage**: the dice fly in (players from the left, the GM from the right), tumble, settle one by one, the hits light up (sixes glow, stress 1s pulse red; on DUNE crits glow and complications pulse red), then a result card names the roller, the skill and the outcome. A pushed ALIEN roll replays as a second pass where the kept sixes stay lit and the rest re-tumble. Rolls that arrive together queue; with REDUCE FX on the TV the dice simply appear on their final faces. Your own rolls follow the DICE drawer's **TV / SECRET / LOCAL** switch. **Secret rolls** (SECRET, or a threat card's ROLL ATTACK (SECRET)) show only to you and the log, never the TV.
 - **ALIEN, push and Panic.** Pushing a roll adds the Stress automatically. When a Stress Die shows 1 the phone shows **PANIC ROLL**: the player taps it (D6 + Stress), sees the effect privately, and the server applies it: PANICKED (plus the action's name for 10+, e.g. FREEZE), stress per the table, a panic ring on their TV token, a "PANIC — name" toast on the TV and the full text in a GM prompt and in the player editor. Remove the status in the player editor to clear the ring.
 - **ALIEN, supplies.** In the player editor set AIR / POWER / FOOD / WATER with −/+. **SUPPLY ROLL** (yours, or the player's on SHEET) rolls Stress Dice equal to the rating (max 6); each 1 drops the rating one step. The TV shows a SUPPLY strip when anyone's air or power is 2 or lower.
 - **DUNE, Momentum and Threat.** Counters with −/+ sit in the Run progress strip and the crew dashboard header. Momentum is capped at 6, generated by player rolls, and shown on every phone and the TV. Threat is GM-only. **RESET** starts both again.
@@ -141,13 +141,45 @@ In **Board** (left rail; most of this also works from the Run view's MAP drawer)
 - **PING** mode drops a pulse on the TV (players can ping from their TABLE tab, one per second). **RESET** clears tokens, reveals and pings. **EDIT ROOMS** draws rooms on an image map that has none.
 - Rooms, doors, levels and spawn points come from the map definition (`docs/BOARD_AND_BUILDER.md`).
 
-### 3.7 Scene audio
+### 3.7 Scene audio and the soundboard
 
-If a scene names an `ambient` mood (ALIEN: ship-hum, tension, alert, dread, space; DUNE: wind, bazaar, sietch, court), moving to that scene switches your ambient preset (rail **Audio**). With the TV opened as `/?board=CODE&audio=1` the TV follows it. Players can mute and reduce effects on their own device (SOUND / REDUCE FX toggles).
+Rail **Audio** opens the audio popover:
+- **STINGERS**: one tap fires a short synthesized sound. ALIEN: klaxon, hull groan, airlock cycle, steam vent, tracker burst, distant screech, lights out. DUNE: worm rumble, wind, thumper, shield hum, ornithopter, crysknife, the Voice. Pick the route first: **TV**, **TV + PHONES** or **HERE** (a preview on your screen only). Every shot is generated fresh, so the same stinger never sounds exactly alike twice; the TV and the phones play the same variant.
+- **AMBIENCE**: the universe's beds (ALIEN: engine hum, derelict silence, hive drip, tension, red alert, deep space, cosmic dread; DUNE: sietch wind, keep interior, open erg, wind, bazaar, court). In a live session your pick also becomes the TV's ambience.
+- Scenes can name a mood (`ambient` in the pack, for example `ship`, `derelict`, `hive`, `erg`, `keep`; friendly aliases such as `engine`, `drip`, `open-erg` or `interior` work too). Moving to that scene switches the ambience for you and the TV.
+- Ambience and stingers dip while narration is read aloud. The TV only plays sound when opened with `&audio=1` (1.4). Players can mute and reduce effects on their own device (SOUND / REDUCE FX toggles).
 
 ### 3.8 Pause (X-card)
 
 Any player can tap **PAUSE** on their phone (one tap plus confirm). You see a neutral **PAUSE REQUESTED** banner with a chime, the TV shows a calm PAUSE card, and nothing records who pressed it. Stop, check in, then **RESUME PLAY** (the button in the banner).
+
+### 3.9 The TV camera and the combat spotlight
+
+In **Board** (and the Run view's MAP drawer) the camera controls choose how the TV frames the map:
+- **FIXED**: the whole plan, as before.
+- **FOLLOW** (the label follows the universe, e.g. FOLLOW CREW): the TV glides to frame the revealed rooms that hold player tokens and re-frames when someone enters a new room or you reveal one; a ping briefly zooms toward the spot.
+- **CINEMATIC**: follow plus a slow drift, a vignette and an edge treatment (a CRT look on ALIEN, heat shimmer on DUNE).
+- **FRAME ROOM** (select a room first) pins the camera on that room once it is revealed; **UNPIN** returns to automatic framing.
+- **SPOTLIGHT**: while initiative runs, the TV dims everything except the acting token's room and shows a turn banner (for example "MILLER — ACT"); NEXT slides it to the next actor.
+With REDUCE FX on the TV every move is an instant cut. The TV never frames a room that is still in fog.
+
+### 3.10 Portraits
+
+A character sheet (GM side, phone SHEET, and the review step of the character builder) has **GENERATE PORTRAIT**: the home image server (ComfyUI on the LAN) paints one in the universe's style (ALIEN: a grainy crew photo; DUNE: a painted portrait). It takes a minute or so; the button shows progress. The portrait then appears on the phone header, the GM's CREW drawer and the TV token; until then each place shows a themed monogram. **NEW PORTRAIT** replaces it. If the image server is off the button says so and nothing else is affected. When the server has `API_TOKEN` set, generating needs the token (as the scenario generator does).
+
+### 3.11 Motion tracker (ALIEN)
+
+ALIEN phones have a fifth tab, **TRACKER**. It works when the seat's gear lists a motion tracker (or you granted one) and shows a 60-degree fan pointing the way their token faces (they can turn it), range rings at 5, 10 and 20 m, and a blip for every contact, the nearest one's distance in big digits, with a ping that speeds up as it closes. Contacts are your npc / creature tokens that are **moving** (you dragged them in the last few seconds) or that you flagged as a standing signal; walls do not block it. The phone never learns names or positions, only bearing and distance. To hand someone a tracker without changing their gear, use **GRANT TRACKER** on their row in the CREW drawer (**REVOKE TRACKER** takes it back). The player needs a token on the map for a fix. Move a hidden creature a little at a time and let the tracker do the talking.
+
+### 3.12 Intrigue web and prescience
+
+Run › **MORE** › **INTRIGUE** (GM only): the pack's people as a web (player characters inside, NPCs around them), one arrow per relation, coloured by kind (ally, rival, owes, fears, loves, serves, hides). Tap a person to light up their ties, tap a tie for its note. Secret ties are dashed until you **REVEAL** one: it reaches the phones as an ordinary clue. **EXPAND** opens the web full screen. Packs without `relations` show an empty web (DUNE packs ship with them; ALIEN packs may add them).
+
+Below the web, **PRESCIENCE** (DUNE) or **SPECIAL ORDER** (ALIEN) sends one line as a vision: the TV shows it as a shimmering overlay (ALIEN: a terminal override screen) for the seconds you choose, and the phones you pick get it as a private flash. Turn **TV** off to send it to phones only, or pick one player for a vision only they see.
+
+### 3.13 Ship's log (RECAP)
+
+Run › **MORE** › **RECAP** › **GENERATE** writes a short log of the session so far in the terminal's voice (ALIEN: the ship's log; DUNE: the House chronicle), from the public record only: no GM notes, secret rolls, private handouts or clues, hidden clocks or pauses. With `ANTHROPIC_API_KEY` set on the server Claude writes it; otherwise a built-in template does (short sessions give a short log). Edit the text if you like, then **SEND TO PHONES** (a handout document, with an optional burn timer), **SHOW ON TV**, or **EXPORT MD** (the LOG tab's recap with the log on top). It is a good "previously on" for next week.
 
 ## 4. Breaks and interruptions
 
@@ -167,7 +199,7 @@ The server snapshots every game to `data/sessions/<CODE>.json` after each change
 
 ## 6. Ending the night
 
-1. In Run › **MORE** › **LOG**, pick the **ending reached** and add any final notes (`ENDING:` notes feed the recap).
+1. In Run › **MORE** › **LOG**, pick the **ending reached** and add any final notes (`ENDING:` notes feed the recap). Optionally write the ship's log (Run › **MORE** › **RECAP**, 3.13) and send it to the phones before people leave.
 2. Press **EXPORT RECAP** to download a Markdown recap (title, universe, the cast and who played whom, a scene-by-scene timeline, clocks, clues found, notes, the ending reached). Keep it for the next session or for the "previously on..." speech.
 3. Press **END SESSION** (Run › **MORE** › **END**, or the red button in the crew dashboard header; the wording follows the universe) only when you are finished. It tells every phone and the TV the game ended, sends everyone to the exit screen and **deletes the snapshot**. Export the recap first.
 4. Optional: save custom characters (Characters tab) or export the pack (library **EXPORT**), then `deploy-local.ps1 -Stop` if you want the server off.
@@ -182,7 +214,9 @@ The server snapshots every game to `data/sessions/<CODE>.json` after each change
 | Name already in use | Someone else (or their old phone) holds that seat. Pick another name, or use **ASK THE GM FOR THIS SEAT** and approve it. |
 | TV shows nothing or "waiting" | Does the status strip show **TV LINKED**? Pick a map (Board, or the Run view's MAP drawer). If NO TV: reopen `http://<LAN IP>:3100/?board=CODE` (the code must be the live one). Tap the TV once for fullscreen. |
 | TV went to sleep | Browsers drop the wake lock when the tab loses focus. Reload `?board=CODE` and tap once; disable the TV's own sleep timer. |
-| TV has no sound | Open it as `?board=CODE&audio=1` and tap the TV once; browsers block autoplay until a tap. |
+| TV has no sound | Open it as `?board=CODE&audio=1` and tap the TV once; browsers block autoplay until a tap. Stingers sent with the **TV** route need that too. |
+| GENERATE PORTRAIT says the image server is offline | The ComfyUI machine (`COMFY_URL`, default `http://192.168.1.37:8188`) is off or busy. Start it and press **RETRY**; nothing else depends on it. |
+| TRACKER tab (ALIEN) says there is no tracker, or shows no fix | The seat needs a motion tracker in its gear or a **GRANT TRACKER** from the CREW drawer, and a token on the map for a fix. |
 | Map is upside down for the players | Board: **ROTATE** / **FLIP** (turn **AS TV** off to keep the tablet upright). |
 | GM tablet died or its browser was wiped | Another device: session screen, **TAKE OVER** with the code and the GM PIN (section 5). Forgot the PIN: the old GM browser still holds it (tap **PIN** in its status strip); there is no other recovery, so write it down at creation. |
 | Server restarted mid-game | Reload the GM page (auto-resume) or use **RESUME** on the session screen; phones and the TV re-attach by themselves within a few seconds. |

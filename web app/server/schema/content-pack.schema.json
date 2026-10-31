@@ -256,7 +256,8 @@
           "type": "array",
           "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "description": "A clue id from clues[]." }
         },
-        "ambient": { "description": "Optional ambient audio cue for the scene: a universe audio preset id or a site path to an audio file.", "type": "string" }
+        "ambient": { "description": "Optional ambient audio cue for the scene: a universe audio preset id or a site path to an audio file.", "type": "string" },
+        "ambience": { "description": "Alias of `ambient` (either spelling is accepted; `ambient` wins when both are set).", "type": "string" }
       }
     },
     "npc": {

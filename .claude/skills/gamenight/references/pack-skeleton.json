@@ -86,7 +86,20 @@
       "secret": "PLACEHOLDER what they hide.",
       "stats": {
         "health": 4
-      }
+      },
+      "relations": [
+        {
+          "to": "placeholder-pc-one",
+          "kind": "owes",
+          "note": "PLACEHOLDER one GM-facing sentence on the debt, safe to read aloud if revealed.",
+          "secret": true
+        },
+        {
+          "to": "PLACEHOLDER Two",
+          "kind": "rival",
+          "note": "PLACEHOLDER what stands between them, known to both."
+        }
+      ]
     }
   ],
   "threats": [
@@ -183,7 +196,14 @@
       },
       "buddy": "PLACEHOLDER Two",
       "rival": "None",
-      "secret": "PLACEHOLDER hidden truth that collides with PLACEHOLDER Two."
+      "secret": "PLACEHOLDER hidden truth that collides with PLACEHOLDER Two.",
+      "relations": [
+        {
+          "to": "PLACEHOLDER NPC",
+          "kind": "fears",
+          "note": "PLACEHOLDER why this PC is afraid of the NPC."
+        }
+      ]
     },
     {
       "id": "placeholder-pc-two",

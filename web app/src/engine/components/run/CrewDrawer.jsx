@@ -17,14 +17,35 @@ import Portrait from '../sheet/Portrait'; // F4 portraits
    request. ROLL REQUESTS lists the last three (answers with their result,
    who is still to roll, CANCEL while open); PICKED UP lists items players took off the board
    (`token-take`) with UNDO (`token-take-undo`).
+   MOTION TRACKER (universes with features.tracker, i.e. ALIEN): each seated
+   row gets GRANT TRACKER / REVOKE TRACKER (`tracker-set { playerId, on }`,
+   DM only; grants live in table.trackerGrants). A seat whose gear already
+   holds a motion tracker shows TRACKER IN GEAR instead.
    ═══════════════════════════════════════════════════════════════ */
+const TRACKER_GEAR_RE = /motion tracker/i; // same test as server/sessions.js (F1)
+const hasTrackerGear = (p) => (Array.isArray(p?.inventory) ? p.inventory : [])
+  .some((g) => TRACKER_GEAR_RE.test(typeof g === 'string' ? g : String(g?.name || '')));
 export default function CrewDrawer({ onOpen, onNavigate }) {
   const {
     players, messages, unreadBy, clearUnreadFor, sendMessage, broadcastMessage, updatePlayer, table,
-    rollRequest, rollRequestCancel, tokenTakeUndo,
+    rollRequest, rollRequestCancel, tokenTakeUndo, trackerSet,
   } = useGame();
   const { universe } = useUniverse();
   const { terms, rules, terminal } = universe;
+  const trackerOn = !!universe.features?.tracker;
+  const grants = Array.isArray(table?.trackerGrants) ? table.trackerGrants : [];
+  const [trackerBusy, setTrackerBusy] = useState(null); // playerId while a tracker-set is in flight
+  const toggleTracker = (p) => {
+    const on = !grants.includes(p.id);
+    const who = (p.character?.name || p.name || '').toUpperCase();
+    if (typeof trackerSet !== 'function') { setStatus('TRACKER CONTROL UNAVAILABLE (UPDATE THE APP)'); return; }
+    setTrackerBusy(p.id);
+    trackerSet(p.id, on, (r) => {
+      setTrackerBusy(null);
+      if (r?.error) setStatus(`TRACKER NOT CHANGED: ${String(r.error).toUpperCase()}`);
+      else setStatus(on ? `MOTION TRACKER → ${who}` : `TRACKER WITHDRAWN FROM ${who}`);
+    });
+  };
   const tracks = rules.tracks || [];
   const stressTrack = tracks.find((t) => t.key === 'stress');
   const priorities = terms.priorities?.length ? terms.priorities : ['STANDARD'];
@@ -172,6 +193,19 @@ export default function CrewDrawer({ onOpen, onNavigate }) {
                   {unread ? `${unread} NEW` : 'MSG'}
                 </button>
               </div>
+              {trackerOn && c && (
+                <div className="cd-tools">
+                  {hasTrackerGear(p)
+                    ? <span className="cd-tracker-gear">MOTION TRACKER IN GEAR</span>
+                    : (
+                      <button type="button" className={`run-btn cd-tracker${grants.includes(p.id) ? ' on' : ''}`} aria-pressed={grants.includes(p.id)}
+                        disabled={trackerBusy === p.id} onClick={() => toggleTracker(p)}
+                        aria-label={`${grants.includes(p.id) ? 'Revoke' : 'Grant'} the motion tracker ${grants.includes(p.id) ? 'from' : 'to'} ${c.name}`}>
+                        {grants.includes(p.id) ? 'REVOKE TRACKER' : 'GRANT TRACKER'}
+                      </button>
+                    )}
+                </div>
+              )}
               {lastIn && to !== p.id && <p className="cd-last">“{lastIn.text}”</p>}
               {to === p.id && composer}
             </li>

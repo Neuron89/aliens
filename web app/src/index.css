@@ -1622,6 +1622,8 @@ textarea.mc-input { resize: vertical; min-height: 44px; }
 .cs-skill-name { color: var(--text); }
 .cs-skill-attr { color: var(--text-dim); font-size: 0.65rem; }
 .cs-skill-val { color: var(--accent); font-family: var(--font-display); text-align: center; }
+.cs-skill-val.is-zero { color: var(--text-dim); line-height: 1; }
+.cs-zero { display: inline-block; width: 0.62em; height: 0.78em; vertical-align: -0.04em; border: 1.5px solid currentColor; border-radius: 2px; opacity: 0.8; }
 .cs-pool { font-size: 0.65rem; letter-spacing: 0.06em; padding: 0.1rem 0.4rem; border: 1px solid var(--border-bright); border-radius: 2px; color: var(--text-bright); white-space: nowrap; }
 .cs-pool.buff { border-color: var(--accent-dim); color: var(--accent); }
 .cs-pool.debuff { border-color: var(--danger-dim); color: var(--danger); }
@@ -2551,6 +2553,28 @@ html[data-universe="dune"] .strip-mark { font-weight: 600; letter-spacing: 0.28e
 @media (max-width: 760px) {
   .strip-ctx, .strip .link-indicator, .strip-code-k { display: none; }
   .strip { padding: 0 6px 0 10px; }
+}
+
+/* Header.jsx phone width: PIN / players / TV / LINK / FX collapse into the ⋯ menu (StripMore). */
+.strip-inline { display: contents; }
+.strip-more { display: none; }
+.strip-more-btn {
+  position: relative; min-width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px;
+  border: 1px solid var(--border); background: transparent; color: var(--text); font: 20px/1 var(--font-mono); cursor: pointer;
+}
+.strip-more-btn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+.strip-more-dot { position: absolute; top: 7px; right: 7px; width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
+.strip-more-pop { width: min(300px, calc(100vw - 16px)); align-items: stretch; }
+.strip-more-pop > .strip-chip, .strip-more-pop > .strip-pin, .strip-more-pop .fx-toggle { height: auto; min-height: 44px; justify-content: flex-start; }
+.strip-more-pop .strip-wide, .strip-more-pop .fx-l { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+.strip-more-pop .fx-toggles { display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 600px) {
+  .strip-inline { display: none; }
+  .strip-more { display: inline-block; }
+  .strip { gap: 4px; padding: 0 4px 0 8px; }
+  .strip-mark { min-width: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; font-size: 14px; letter-spacing: 0.14em; }
+  .strip-code, .strip .header-back { height: 44px; min-height: 44px; }
+  .strip-code { letter-spacing: 0.24em; padding: 0 6px 0 8px; }
 }
 
 /* ── Left rail (Nav.jsx) ── */

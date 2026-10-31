@@ -225,7 +225,7 @@
 
 /* ── Bottom tabs ───────────────────────────────────────── */
 .pp-tabs {
-  flex: 0 0 auto; position: relative; z-index: 5; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex: 0 0 auto; position: relative; z-index: 5; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
   background: var(--bg-panel); border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom);
 }
 .pp-tabs button {
@@ -233,6 +233,7 @@
   padding: 8px 0 10px; background: transparent; border: 0; border-top: 2px solid transparent; color: var(--text-dim);
   font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em; cursor: pointer;
 }
+.pp-tabs:has(> button:nth-child(5)) button { letter-spacing: 0.08em; font-size: 0.66rem; } /* 5 tabs (TRACKER) at 390px */
 .pp-tabs button.active { color: var(--accent); border-top-color: var(--accent); background: var(--accent-glow); }
 .pp-tabs .pp-badge { position: absolute; top: 6px; left: calc(50% + 6px); }
 

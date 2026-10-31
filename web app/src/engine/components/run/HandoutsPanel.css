@@ -1,0 +1,4 @@
+/* HandoutsPanel: burn-after-reading picker (44px targets, wraps on narrow drawers). */
+.ho-burn { gap: 6px; }
+.ho-burn > .run-dim { flex: 1 0 100%; font-size: 11px; letter-spacing: 0.1em; }
+.run-handouts .ho-burn .run-chip, .run-form .ho-burn .run-chip { min-height: 44px; min-width: 44px; padding: 0 10px; font-size: 11px; }

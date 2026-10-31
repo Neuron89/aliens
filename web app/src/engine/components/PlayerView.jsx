@@ -5,7 +5,6 @@ import CharacterSheet from './CharacterSheet';
 import { useFx } from './player/fx';
 import PhoneLayer from './player/PhoneLayer';
 import HandoutsPane from './player/HandoutsPane';
-import HandoutDoc from './player/HandoutDoc'; // F5
 import ClocksRow from './player/ClocksRow';
 import PauseButton from './player/PauseButton';
 import BuildCharacter from './player/BuildCharacter';
@@ -222,12 +221,9 @@ export default function PlayerView() {
   };
 
   const otherPlayers = (connectedPlayers || []).filter(p => p.id !== myId);
-  const layer = (
-    <>
-      <PhoneLayer fx={fx} viewer={viewer} setViewer={setViewer} order={order} setOrder={setOrder}
-        onClockTick={onClockTick} onReply={() => reply('dm')} />
-      {viewer && <HandoutDoc handout={viewer} universe={universe} onClose={() => setViewer(null)} />}{/* F5: themed document reader over PhoneLayer's viewer */}
-    </>
+  const layer = ( /* PhoneLayer also mounts the handout reader (player/HandoutDoc) while `viewer` is set. */
+    <PhoneLayer fx={fx} viewer={viewer} setViewer={setViewer} order={order} setOrder={setOrder}
+      onClockTick={onClockTick} onReply={() => reply('dm')} />
   );
   const lostBanner = !connected && (
     <div className="ph-lost" role="status">

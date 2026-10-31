@@ -432,7 +432,7 @@ export default function BoardView() {
             {role === 'board' && code && <JoinQr code={code} />}
           </div>
         )}
-        {role === 'board' && <Overlays terminalName={terminalName} />}
+        {role === 'board' && <Overlays terminalName={terminalName} hideTurn={!!spotTurn} />}{/* spotlight banner replaces the ROUND box */}
         {role === 'board' && audioOn && <BoardAudio ambient={table?.ambient || null} />}
       </div>
       <div className="bv-strip">
@@ -440,6 +440,7 @@ export default function BoardView() {
         <span>SESSION {code}</span>
         {spotTurn && (
           <span key={`${spotTurn.id}-${table.initiative.round}`} className={`bv-turn k-${spotTurn.kind || 'pc'}`} role="status">
+            {table.initiative.round > 0 && <span className="bv-turn-round">ROUND {table.initiative.round}</span>}
             <b>{String(spotTurn.label || '').toUpperCase()}</b> — {universe?.terms?.turnCall || 'ACT'}
           </span>
         )}

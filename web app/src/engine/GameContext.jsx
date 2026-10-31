@@ -989,6 +989,8 @@ export function GameProvider({ children }) {
     determinationSpend,
     determinationGrant,
     /* ── F3 — Soundboard: DM fires a stinger to the TV (+ phones); any role listens on its live socket ── */
+    /* F1 motion tracker: GM grants / revokes a tracker for a seat (DM-only `tracker-set`). */
+    trackerSet: (playerId, on, cb) => emitTable('tracker-set', { playerId, on: !!on }, cb),
     sfxSend: (cue, opts, cb) => emitTable('table-sfx', { cue, phones: !!opts?.phones }, cb),
     onSfx: (fn) => {
       const s = socketRef.current;

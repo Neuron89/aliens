@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import { getCatalog, itemById } from '../../catalogUtils';
 import { ItemArt } from '../sheet/parts';
-import HandoutViewer from './HandoutViewer';
+import HandoutDoc from './HandoutDoc'; // the single handout reader (themed document, sends the seen receipt once)
 import VisionOverlay from '../board/VisionOverlay'; // F6: private vision flash
 
 /* ═══════════════════════════════════════════════════════════════
@@ -24,6 +24,7 @@ export default function PhoneLayer({ fx, viewer, setViewer, order, setOrder, onC
   const [dismissedNarration, setDismissedNarration] = useState(() => table?.narration?.id || null);
   const firstNarration = useRef(true);
   const play = fx.play;
+  const closeViewer = useCallback(() => setViewer(null), [setViewer]);
 
   const toast = (t) => {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
@@ -125,7 +126,7 @@ export default function PhoneLayer({ fx, viewer, setViewer, order, setOrder, onC
         </div>
       )}
 
-      {viewer && <HandoutViewer handout={viewer} onClose={() => setViewer(null)} onSeen={handoutSeen} />}
+      {viewer && <HandoutDoc handout={viewer} universe={universe} onClose={closeViewer} onSeen={handoutSeen} />}
 
       {showNarration && !needsSafety && !order && !viewer && incoming.length === 0 && (
         <div className="ph-sheet" role="dialog" aria-label="Narration">

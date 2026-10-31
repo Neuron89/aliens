@@ -32,7 +32,7 @@ import Confirm from '../Confirm';
                   remembered per session in localStorage).
    Scene list: left drawer (tablet) or a pinned 280px column (≥1400px).
    Keys (never while typing): [ / ] previous / next scene, n narrate.
-   Scene change → scene.ambient switches the GM's ambient preset.
+   Scene change → scene.ambient (or scene.ambience) switches the GM's ambient preset.
    Scene progress lives in table.run on the server (survives resume).
    ═══════════════════════════════════════════════════════════════ */
 const clampI = (n, lo, hi) => Math.max(lo, Math.min(hi, Number.isInteger(n) ? n : lo));
@@ -100,7 +100,7 @@ export default function RunView({ tts, audio, active = true, onNavigate = () => 
 
   /* Scene ambient → the GM's ambient preset (only when the scene names a known preset). */
   const lastAmbient = useRef(null);
-  const sceneAmbient = scene?.ambient || null;
+  const sceneAmbient = scene?.ambient ?? scene?.ambience ?? null; // packs may spell it either way
   useEffect(() => {
     if (!audio || !sceneAmbient || lastAmbient.current === `${key}:${sceneAmbient}`) return;
     lastAmbient.current = `${key}:${sceneAmbient}`;
@@ -120,7 +120,7 @@ export default function RunView({ tts, audio, active = true, onNavigate = () => 
 
   const goScene = (a, s) => {
     const sc = acts[a]?.scenes?.[s];
-    const amb = ambientPreset(sc?.ambient);
+    const amb = ambientPreset(sc?.ambient ?? sc?.ambience);
     runSet({ actIndex: a, sceneIndex: s, actTitle: actLabel(acts[a]), sceneTitle: sc?.name || '', ambient: amb || null });
     if (table?.boardMode === 'theatre') setBoardMode('theatre', theatreFor(a, s));
   };

@@ -80,5 +80,6 @@ html[data-universe="dune"] .bv-spot-dim { opacity: 0.66; }
   animation: bvTurnIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 .bv-turn b { font-weight: 700; }
+.bv-turn-round { opacity: 0.7; padding-right: 0.5rem; border-right: 1px solid currentColor; }
 .bv-turn.k-creature, .bv-turn.k-npc { background: var(--danger, #d04030); color: #fff; }
 @keyframes bvTurnIn { from { transform: translateX(-28px); opacity: 0; } to { transform: none; opacity: 1; } }

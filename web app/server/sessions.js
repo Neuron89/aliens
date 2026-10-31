@@ -314,9 +314,13 @@ function sanitizeHandout(input) {
   const title = sstr(input.title, 160).trim();
   const image = urlish(input.image);
   if (!title || (!text.trim() && !image)) return null;
+  /* Burn after reading (F5 handout documents): seconds the phone shows the text once it has typed in,
+     clamped 0..600; 0 = no burn (always present so SEND AGAIN with OFF clears an earlier timer). */
+  const burn = Number(input.burnSec);
   return {
     title, text, image,
     from: sstr(input.from, 200), to: sstr(input.to, 200), priority: sstr(input.priority, 40),
+    burnSec: Number.isFinite(burn) ? Math.max(0, Math.min(600, Math.round(burn))) : 0,
   };
 }
 

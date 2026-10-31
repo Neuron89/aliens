@@ -10,7 +10,7 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 1 | GM Run View: scene card, prev/next, act switcher | done | `run/RunView.jsx`, `run/RunScene.jsx`; `run-set` |
 | 2 | Read-aloud to TV/phones (caption, card, optional TTS) | done | RunScene SEND TO TABLE / AS CARD; `narrate`, `narrate-clear`; `board/Overlays.jsx`, `player/PhoneLayer.jsx`; `hooks/useTTS.js` |
 | 3 | Clue/secret objects with one-tap reveal and found-by | done | `run/CluesPanel.jsx`; `clue-upsert`, `clue-reveal`, `clue-hide`, `clue-revealed`; phone FILES (`player/HandoutsPane.jsx`) |
-| 4 | Handouts push with open animation, seen receipts, re-openable | done | `run/HandoutsPanel.jsx`, `player/HandoutViewer.jsx`, `player/HandoutsPane.jsx`; `handout-send`, `handout-seen`, `handout-received` |
+| 4 | Handouts push with open animation, seen receipts, re-openable | done | `run/HandoutsPanel.jsx` (burn-after-reading timer, SHOW ON TV as a document), `player/HandoutViewer.jsx`, `player/HandoutDoc.jsx`, `player/HandoutsPane.jsx`; `handout-send`, `handout-seen`, `handout-received` |
 | 5 | Private GM-player messages, priorities, unread badge, vibrate | done | `DMDashboard.jsx` (messages, log, N NEW), `PlayerView.jsx` COMMS; `send-message`, `broadcast-message`, `player-message`, `player-to-player` |
 | 6 | Progress clocks (danger / racing / tug, public or GM-only) | done | `run/ClocksPanel.jsx`, `run/ClockRing.jsx`, `player/ClocksRow.jsx`, `board/Overlays.jsx`; `clock-upsert`, `clock-tick`, `clock-remove`, `clock-ticked` |
 | 7 | Clocks attached to scenes, full clock prompts the GM | partial | Pack `clocks[]` are seeded into the session once (`session-seed`) and a full clock is tagged FULL in `ClocksPanel.jsx`; a scene cannot spawn a clock and nothing prompts "what happens" |
@@ -58,9 +58,9 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 49 | Personal agenda reveal per act | done | `advance-act`, `new-orders`; SEND AGENDA CARDS; phone FILES |
 | 50 | Act progress with mandatory checklist and pacing | partial | Act switcher with progress, MANDATORY tags and DONE ticks (`table.run.completed`); no playtime pacing |
 | 51 | Pacing nudges | not yet | No code |
-| 52 | Spotlight tracker | not yet | No code |
-| 53 | Ambient audio and stingers on the board speaker | partial | rail AUDIO popover (`Nav.jsx`, per-universe `theme.ambient`), `hooks/useAmbientAudio.js`, `scene.ambient` presets; TV follows with `?board=CODE&audio=1` (`table.ambient`); no stingers |
-| 54 | Alien motion tracker widget | not yet | No code |
+| 52 | Spotlight tracker | not yet | No code for "who has not acted lately" (the TV combat SPOTLIGHT, F2 below, is a different thing) |
+| 53 | Ambient audio and stingers on the board speaker | done | rail AUDIO popover (`Nav.jsx`: STINGERS routed TV / TV + PHONES / HERE, AMBIENCE from `theme.ambient`), `soundboard.js`, `hooks/useAmbientAudio.js`, `board/BoardAudio.jsx`; `table-sfx`; scene `ambient` presets; TV plays with `?board=CODE&audio=1` (F3) |
+| 54 | Alien motion tracker widget | done | On the phone rather than the board: `player/TrackerPane.jsx` (TRACKER tab), contacts from moving / signal-flagged tokens, GM grant in the CREW drawer; `tracker-set`, `tracker-signal` (F1) |
 | 55 | Random/encounter tables in packs | not yet | Pack schema has no `tables[]` |
 | 56 | Name generators and loot tables | not yet | No code |
 | 57 | Generator wizard | done | `GameNightWizard.jsx`, `wizard/generateClient.js`; `POST /api/generate`; emits `clocks[]` and `clues[]` (not tables) |
@@ -77,7 +77,21 @@ Regression coverage: `scripts/test-session-features.mjs` (rows 2-6, 13-16, 34, 4
 | 68 | Physics 3D dice | not yet | Not planned |
 | 69 | In-app voice/chat | not yet | Do not build (per the research) |
 
-Counts: 38 done, 11 partial, 20 not yet (of 69).
+Counts: 40 done, 10 partial, 19 not yet (of 69).
+
+## Feature wave (F1–F7)
+
+Regression tests: `scripts/test-tracker.mjs`, `test-camera.mjs`, `test-sfx.mjs`, `test-portrait.mjs`, `test-recap.mjs`, `test-intrigue.mjs`, `test-dice-stage.mjs`, plus `test-polish-b.mjs` for the follow-up polish.
+
+| # | Feature | Status | Where |
+|---|---|---|---|
+| F1 | Motion tracker (ALIEN): phone TRACKER tab with a 60° fan, range rings, blips, nearest distance and a ping that speeds up; contacts are moving or signal-flagged npc/creature tokens; available from gear or a GM grant | done | `player/TrackerPane.jsx`, `player/tracker.css`, `PlayerView.jsx` (tab), `run/CrewDrawer.jsx` (GRANT / REVOKE TRACKER); `universe.features.tracker`; `tracker-set`, `tracker-signal`, player `table.tracker`, `table.trackerGrants` |
+| F2 | Director camera and combat spotlight on the TV: FIXED / FOLLOW / CINEMATIC, FRAME ROOM, SPOTLIGHT with a turn banner, reduced-FX cuts | done | `board/Camera.js`, `BoardView.jsx`, `board/MapCanvas.jsx`, `MapController.jsx` (camera group); `board.view.camera` via `board-view` |
+| F3 | Soundboard and scene ambience: procedural stingers per universe to the TV (and phones), ambience beds tied to scenes, ducking under TTS | done | `soundboard.js`, `Nav.jsx` AUDIO popover, `hooks/useAmbientAudio.js`, `board/BoardAudio.jsx`, `theme.sounds`, `theme.ambient`; `table-sfx` |
+| F4 | Character portraits from the LAN ComfyUI: GENERATE PORTRAIT on the sheet and the builder review, shown on the phone header, the CREW drawer and TV tokens; monogram until then | done | `server/portrait.js` (`/api/portrait`), `sheet/Portrait.jsx`, `CharacterSheet.jsx`, `board/TokenChip.jsx`, `run/CrewDrawer.jsx`, `PlayerView.jsx` |
+| F5 | Ship's log recap (Claude or a template, public log only; send to phones, show on TV, export Markdown) and handouts as in-world documents with burn after reading | done | `server/recap.js` (`/api/recap`), `run/MoreDrawer.jsx` RECAP, `player/HandoutDoc.jsx`, `board/HandoutCard.jsx`, `run/HandoutsPanel.jsx` (burn picker, SHOW ON TV as a document); `handout.burnSec` |
+| F6 | Intrigue web (GM relationship graph from pack `relations`, secret ties revealed as clues) and prescience / special order visions on the TV and phones | done | `run/IntrigueDrawer.jsx`, `run/intrigueGraph.js`, `board/VisionOverlay.jsx`, pack `relations[]` (schema + the four DUNE packs); `vision-send`, `vision` |
+| F7 | Animated dice on the TV for every public roll (players and GM), with the GM's TV / SECRET / LOCAL route | done | `board/DiceStage.jsx`, `board/dice-stage.css`, `board/Overlays.jsx`, `DiceRoller.jsx`; `gm-roll { secret }`, `board-roll` |
 
 ## Implemented beyond the backlog
 

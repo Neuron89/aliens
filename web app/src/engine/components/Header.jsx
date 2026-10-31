@@ -127,10 +127,50 @@ function PinChip({ terms }) {
   );
 }
 
+/* PIN · players online · TV — inline on wide screens, inside the ⋯ menu at phone width. */
+function SessionChips({ terms, online, total, boardLinked, onNavigate }) {
+  return (
+    <>
+      <PinChip terms={terms} />
+      <button type="button" className="strip-chip" onClick={() => onNavigate?.('session')}
+        title={`${online} of ${total} ${terms.players.toLowerCase()} online — open the ${terms.players.toLowerCase()} dashboard`}>
+        <span className={`strip-dot${online ? ' up' : ''}`} aria-hidden="true" />
+        {online}/{total}<span className="strip-wide"> {terms.players.toUpperCase()}</span>
+      </button>
+      <span className={`strip-chip static${boardLinked ? ' up' : ''}`} title={boardLinked ? 'Table TV linked' : 'No table TV attached'}>
+        <span className={`strip-dot${boardLinked ? ' up' : ''}`} aria-hidden="true" />
+        TV<span className="strip-wide">{boardLinked ? ' LINKED' : ''}</span>
+      </span>
+    </>
+  );
+}
+
+/* ⋯ overflow menu for phone-width GM screens (hidden by CSS above 600px). A fresh PIN or a lost link
+   puts a dot on the button so it is not missed. */
+function StripMore({ children }) {
+  const { pinFresh, connected, reconnecting } = useGame();
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const btn = useRef(null);
+  const close = useCallback(() => { setOpen(false); btn.current?.focus(); }, []);
+  useDismiss(ref, open, close);
+  const alert = pinFresh || !connected || reconnecting;
+  return (
+    <span className="strip-pop-wrap strip-more" ref={ref}>
+      <button type="button" ref={btn} className="strip-more-btn" aria-expanded={open} aria-haspopup="dialog" aria-label="More: PIN, players, TV, link, effects"
+        onClick={() => setOpen((o) => !o)}>
+        <span aria-hidden="true">⋯</span>{alert && <i className="strip-more-dot" aria-hidden="true" />}
+      </button>
+      {open && <div className="strip-pop strip-more-pop" role="dialog" aria-label="Session status">{children}</div>}
+    </span>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════
    STATUS STRIP (44px) — replaces the old 200px header.
    GM with a live session: wordmark · scenario + act · CODE (tap → link/QR)
    · PIN (tap) · crew online · TV · LINK · ◂ UNIVERSES · REDUCE FX · SOUND.
+   ≤ 600px: wordmark · CODE · ◂ UNIVERSES · ⋯ (PIN, players, TV, LINK, FX, SOUND).
    Pre-session (SessionScreen): wordmark · subtitle · LINK · UNIVERSES · FX.
    ═══════════════════════════════════════════════════════════════ */
 export default function Header({ onNavigate }) {
@@ -159,27 +199,24 @@ export default function Header({ onNavigate }) {
         <span className="strip-ctx dim">{terminal.subtitle}</span>
       )}
       <span className="strip-fill" />
-      {dmLive && (
-        <>
-          <CodeButton code={gameCode} terms={terms} />
-          <PinChip terms={terms} />
-          <button type="button" className="strip-chip" onClick={() => onNavigate?.('session')}
-            title={`${online} of ${playerList.length} ${terms.players.toLowerCase()} online — open the ${terms.players.toLowerCase()} dashboard`}>
-            <span className={`strip-dot${online ? ' up' : ''}`} aria-hidden="true" />
-            {online}/{playerList.length}<span className="strip-wide"> {terms.players.toUpperCase()}</span>
-          </button>
-          <span className={`strip-chip static${boardLinked ? ' up' : ''}`} title={boardLinked ? 'Table TV linked' : 'No table TV attached'}>
-            <span className={`strip-dot${boardLinked ? ' up' : ''}`} aria-hidden="true" />
-            TV<span className="strip-wide">{boardLinked ? ' LINKED' : ''}</span>
-          </span>
-        </>
-      )}
-      <span className={`link-indicator strip-chip static ${live ? 'up' : 'down'}`} role="status" aria-live="polite">
-        <span className="link-dot" />
-        {live ? 'LINK' : 'RECONNECTING…'}
+      {dmLive && <CodeButton code={gameCode} terms={terms} />}
+      {/* Wide screens: these sit inline. Phone width (≤ 600px): they collapse into the ⋯ menu (StripMore). */}
+      <span className="strip-inline">
+        {dmLive && <SessionChips terms={terms} online={online} total={playerList.length} boardLinked={boardLinked} onNavigate={onNavigate} />}
+        <span className={`link-indicator strip-chip static ${live ? 'up' : 'down'}`} role="status" aria-live="polite">
+          <span className="link-dot" />
+          {live ? 'LINK' : 'RECONNECTING…'}
+        </span>
       </span>
       <UniversesButton align="right" />
-      <FxToggles className="fx-toggles strip-fx" />
+      <span className="strip-inline"><FxToggles className="fx-toggles strip-fx" /></span>
+      <StripMore>
+        {dmLive && <SessionChips terms={terms} online={online} total={playerList.length} boardLinked={boardLinked} onNavigate={onNavigate} />}
+        <span className={`strip-chip static ${live ? 'up' : 'down'}`}>
+          <span className={`strip-dot${live ? ' up' : ''}`} aria-hidden="true" />{live ? 'LINK UP' : 'RECONNECTING…'}
+        </span>
+        <FxToggles className="fx-toggles strip-fx" />
+      </StripMore>
     </header>
   );
 }

@@ -105,8 +105,17 @@ export function usePortraitUrl({ id, name } = {}) {
   return (id && s.byId.get(id)) || (name && s.byName.get(normName(name))) || null;
 }
 
+/* Leading ranks / honorifics the monogram skips: short forms (Cpl., Dr.) and spelled-out ones. */
+const TITLE_RE = /^(?:reverend\s+mother|capt|cpt|dr|sgt|lt|cpl|pvt|maj|col|cmdr|mr|ms|mrs|the|sergeant|corporal|captain|lieutenant|doctor|lady|lord|duke|duchess|master|private|major|colonel|commander)\.?\s+/i;
+
 export function monogram(name = '') {
-  const words = String(name).replace(/\([^)]*\)/g, ' ').replace(/^(capt|cpt|dr|sgt|lt|cpl|pvt|mr|ms|mrs|the)\.?\s+/i, '').replace(/[^\p{L}\p{N}\s]/gu, ' ').split(/\s+/).filter(Boolean);
+  let s = String(name).replace(/\([^)]*\)/g, ' ').trim();
+  for (let i = 0; i < 4; i++) { // "Captain Dr. Vance", "The Lady Margot"
+    const next = s.replace(TITLE_RE, '');
+    if (next === s || !/[\p{L}\p{N}]/u.test(next)) break; // never strip the whole name
+    s = next;
+  }
+  const words = s.replace(/[^\p{L}\p{N}\s]/gu, ' ').split(/\s+/).filter(Boolean);
   if (!words.length) return '?';
   return (words.length === 1 ? words[0].slice(0, 2) : words[0][0] + words[words.length - 1][0]).toUpperCase();
 }

@@ -35,6 +35,12 @@ loadEnv();
 export const RECAP_MODEL = 'claude-opus-5-5';
 export const MIN_WORDS = 150;
 export const MAX_WORDS = 300;
+/* Template only: a short public log (fewer than SHORT_LOG entries) is not stretched to MIN_WORDS —
+   it gets a "brief log" line and at least SHORT_MIN words. Stock lines are never repeated. */
+export const SHORT_LOG = 8;
+export const SHORT_MIN = 60;
+/** The templated recap's word floor for a public log of `n` entries. */
+export const minWordsFor = (n) => (n >= SHORT_LOG ? MIN_WORDS : SHORT_MIN);
 const MAX_ENTRIES = 400;
 const ENTRY_MAX = 300;
 const ENDING_RE = /^ENDING:\s*/i;
@@ -138,6 +144,7 @@ const VOICES = {
     handouts: (list) => `DOCUMENTS ISSUED: ${list}.`,
     loot: (n) => `${n} ITEM TRANSFER${n === 1 ? '' : 'S'} LOGGED TO CREW INVENTORY.`,
     ending: (x) => `OUTCOME RECORDED: ${x}.`,
+    brief: (n) => (n ? `LOG IS BRIEF: ${n} EVENT${n === 1 ? '' : 'S'} ON RECORD SINCE SESSION START.` : 'NO EVENTS ON RECORD SINCE SESSION START. SENSORS NOMINAL.'),
     filler: [
       'ALL TIMES ARE SHIP TIME. RECORD INTEGRITY VERIFIED.',
       'NO FURTHER ANOMALIES ARE CLASSIFIED FOR CREW DISTRIBUTION AT THIS TIME.',
@@ -167,6 +174,7 @@ const VOICES = {
     handouts: (list) => `Documents passed hand to hand: ${list}.`,
     loot: (n) => `${n} possession${n === 1 ? '' : 's'} changed hands.`,
     ending: (x) => `So it ended: ${x}.`,
+    brief: (n) => (n ? `The audience is young; ${n} event${n === 1 ? '' : 's'} stand${n === 1 ? 's' : ''} in the record so far.` : 'Nothing yet stands in the record of this audience; the chronicle waits.'),
     filler: [
       'A Mentat records what is, not what is wished.',
       'Every plan conceals another; this chronicle records only what the agents themselves witnessed.',
@@ -208,7 +216,8 @@ export function recapDoc(universe, game, entries) {
 
 /**
  * Deterministic recap in the terminal's voice (no API key / API failure).
- * Same game state → same text. Length is kept between MIN_WORDS and MAX_WORDS.
+ * Same game state → same text. At most MAX_WORDS; at least minWordsFor(entries.length) when the
+ * voice has enough distinct stock lines (each is used at most once, so nothing reads twice).
  */
 export function templatedRecap(universe, game, entries = publicLog(game), facts = publicFacts(game)) {
   const v = voiceFor(universe);
@@ -242,12 +251,16 @@ export function templatedRecap(universe, game, entries = publicLog(game), facts 
   if (endings.length) lines.push(v.ending(endings[endings.length - 1]));
 
   const close = v.close(u);
-  let text = lines.join(' ');
-  // Pad with fixed in-voice lines (deterministic order) up to MIN_WORDS.
-  for (let i = 0; wordCount(`${text} ${close}`) < MIN_WORDS && i < v.filler.length * 3; i++) {
-    text += ` ${v.filler[i % v.filler.length]}`;
+  const floor = minWordsFor(entries.length);
+  if (entries.length < SHORT_LOG && v.brief) lines.push(v.brief(entries.length));
+  // Pad with in-voice stock lines, each at most once (start point picked from the session code so
+  // different sessions do not open their padding the same way), up to the floor.
+  const pad = v.filler || [];
+  const start = pad.length ? [...String(game?.code || '')].reduce((s, ch) => s + ch.charCodeAt(0), 0) % pad.length : 0;
+  for (let i = 0; i < pad.length && wordCount(`${lines.join(' ')} ${close}`) < floor; i++) {
+    lines.push(pad[(start + i) % pad.length]);
   }
-  text = `${text} ${close}`;
+  let text = `${lines.join(' ')} ${close}`;
   // Trim from the end of the body (keep the sign-off) down to MAX_WORDS.
   if (wordCount(text) > MAX_WORDS) {
     const closeWords = wordCount(close);

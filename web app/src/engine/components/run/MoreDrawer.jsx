@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGame } from '../../GameContext';
 import { useUniverse } from '../../UniverseContext';
 import CluesPanel from './CluesPanel';
@@ -8,6 +8,7 @@ import IntrigueDrawer from './IntrigueDrawer';                    // F6 INTRIGUE
 import { buildRecap, downloadText } from './recap';             // F5 RECAP
 import { docText, formatBurn } from '../player/HandoutDoc';      // F5 RECAP
 import { apiHeaders } from '../../apiToken';                     // F5 RECAP
+import './MoreDrawer.css';
 
 /* ═══════════════════════════════════════════════════════════════
    MORE drawer (Focus Stage dock): AGENDAS (each seat's agenda for
@@ -35,12 +36,40 @@ export default function MoreDrawer({ pack, act, actIndex, sceneClueIds = [], onR
     ['end', 'END'],
   ];
   useEffect(() => { if (!tabs.some(([id]) => id === tab)) onTab('agendas'); });
+  /* The tab strip scrolls sideways (MoreDrawer.css): keep the selected tab in view. Scrolls the strip
+     only (never the page or the drawer), now and once more after the drawer's open transition. */
+  const stripRef = useRef(null);
+  useEffect(() => {
+    const reveal = () => {
+      const s = stripRef.current;
+      const el = s?.querySelector('[aria-selected="true"]');
+      if (!s || !el) return;
+      const a = s.getBoundingClientRect();
+      const b = el.getBoundingClientRect();
+      if (b.left < a.left) s.scrollLeft -= a.left - b.left + 8;
+      else if (b.right > a.right) s.scrollLeft += b.right - a.right + 8;
+    };
+    reveal();
+    const t = setTimeout(reveal, 350);
+    return () => clearTimeout(t);
+  }, [tab]);
+  /* Arrow keys / Home / End move between tabs (roving focus). */
+  const onTabKey = (e) => {
+    const i = tabs.findIndex(([id]) => id === tab);
+    const n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+    if (n === undefined) return;
+    e.preventDefault();
+    const next = tabs[(n + tabs.length) % tabs.length][0];
+    onTab(next);
+    requestAnimationFrame(() => stripRef.current?.querySelector(`[data-tab="${next}"]`)?.focus());
+  };
 
   return (
     <div className="md">
-      <div className="md-tabs" role="tablist" aria-label="More">
+      <div className="md-tabs md-tabs-scroll" role="tablist" aria-label="More" ref={stripRef} onKeyDown={onTabKey}>
         {tabs.map(([id, label]) => (
-          <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'on' : ''} onClick={() => onTab(id)}>{label}</button>
+          <button key={id} type="button" role="tab" data-tab={id} aria-selected={tab === id} tabIndex={tab === id ? 0 : -1}
+            className={tab === id ? 'on' : ''} onClick={() => onTab(id)}>{label}</button>
         ))}
       </div>
 
@@ -146,6 +175,7 @@ export default function MoreDrawer({ pack, act, actIndex, sceneClueIds = [], onR
    EXPORT MD (the LOG tab's recap with the ship's log on top).
    ═══════════════════════════════════════════════════════════════ */
 const BURN_CHOICES = [0, 30, 60, 120, 300];
+const burnLabel = (s) => (s < 60 ? `${s} SEC` : formatBurn(s)); // "30S" reads as "305" in the ALIEN font
 const dmTokenOf = (code) => {
   try {
     const map = JSON.parse(localStorage.getItem('muthur.dmTokens') || '{}');
@@ -237,7 +267,7 @@ function RecapSection({ pack }) {
 
   const send = () => {
     sendHandout({ custom: { title, ...header, text: docText({ timestamp: doc?.timestamp, burnSec: burn, text }) } }, 'all', (r) => {
-      setSent(r?.error ? `NOT SENT: ${r.error}` : `SENT TO ALL ${String(universe.terms?.players || 'players').toUpperCase()}${burn ? ` · BURNS ${formatBurn(burn)} AFTER READING` : ''}`);
+      setSent(r?.error ? `NOT SENT: ${r.error}` : `SENT TO ALL ${String(universe.terms?.players || 'players').toUpperCase()}${burn ? ` · BURNS ${burnLabel(burn)} AFTER READING` : ''}`);
     });
   };
   const toTv = () => narrate(docText({ ...header, timestamp: doc?.timestamp, burnSec: burn, text }).slice(0, 4000), { title, mode: 'card' });
@@ -280,7 +310,7 @@ function RecapSection({ pack }) {
             <span className="run-dim">BURN AFTER READING</span>
             {BURN_CHOICES.map((s) => (
               <button key={s} type="button" className={`run-chip${burn === s ? ' on' : ''}`} aria-pressed={burn === s} onClick={() => setBurn(s)} style={{ minHeight: 44, minWidth: 44 }}>
-                {s ? formatBurn(s) : 'OFF'}
+                {s ? burnLabel(s) : 'OFF'}
               </button>
             ))}
           </div>

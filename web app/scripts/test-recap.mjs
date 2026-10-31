@@ -2,7 +2,7 @@
 /* F5 — ship's log recap + handout documents.
    1. Unit (in-process): server/recap.js publicLog filtering (GM notes, secret rolls, private
       clues/handouts, GM-only clocks/pools, pauses and safety never leak), the deterministic
-      templated recap (same input → same text, 150-300 words, both universes' voices), and the
+      templated recap (same input → same text, 150-300 words for a full log, a lower floor and no repeated stock line for a short one, both universes' voices), and the
       Claude path with an INJECTED fake client (request shape: claude-opus-5-5, streaming,
       adaptive thinking; the prompt carries only the public record; failure → template).
       The real API is never called.
@@ -113,7 +113,10 @@ const fakeGame = () => ({
   ok(words(d1) >= 150 && words(d1) <= 300, `dune template 150-300 words (${words(d1)})`);
   noSecrets(d1, 'dune template');
   const empty = recap.templatedRecap(alien, { code: 'WXYZ', players: new Map(), table: {}, log: [] });
-  ok(words(empty) >= 150 && words(empty) <= 300, `empty session template still 150-300 words (${words(empty)})`);
+  // A short log is not padded to 150 words (stock lines are used once each): the floor is minWordsFor(0).
+  ok(words(empty) >= recap.minWordsFor(0) && words(empty) <= 300, `empty session template ${recap.minWordsFor(0)}-300 words (${words(empty)})`);
+  const sentences = (s) => s.split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter(Boolean);
+  ok(new Set(sentences(empty)).size === sentences(empty).length, 'empty session template repeats no sentence');
   const big = fakeGame();
   for (let i = 0; i < 300; i++) big.log.push(L('fog', `Revealed: Compartment ${i} with a rather long descriptive room name`), L('scene', `Scene: ACT II — Corridor sweep number ${i}`));
   const b = recap.templatedRecap(alien, big);
@@ -241,7 +244,7 @@ try {
   eq(r.status, 200, 'recap JSON 200');
   const j = await r.json();
   eq(j.source, 'template', 'server falls back to the template without a key');
-  ok(j.words >= 150 && j.words <= 300, `server recap 150-300 words (${j.words})`);
+  ok(j.words >= recap.SHORT_MIN && j.words <= 300, `server recap ${recap.SHORT_MIN}-300 words (short log: not padded) (${j.words})`);
   noSecrets(j.text, 'server recap');
   ok(j.text.includes('Rye') && j.text.includes('airlock log was wiped') && j.text.includes('HULL BREACH'), 'server recap mentions the public facts');
   eq(j.doc.from, 'MU/TH/UR', 'doc header from the universe terminal');

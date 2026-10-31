@@ -1,0 +1,12 @@
+/* MORE drawer tab strip: one row that scrolls sideways instead of wrapping
+   (eight tabs no longer fit a 400px drawer or a phone). Tabs grow to fill
+   the row when there is room and never shrink below their label; 44px tall. */
+.md-tabs.md-tabs-scroll {
+  flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
+  position: relative; scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch;
+}
+.md-tabs.md-tabs-scroll::-webkit-scrollbar { height: 3px; }
+.md-tabs.md-tabs-scroll::-webkit-scrollbar-thumb { background: var(--border); }
+.md-tabs.md-tabs-scroll button { flex: 1 0 auto; min-width: 44px; white-space: nowrap; padding: 0 12px; }
+.md-tabs.md-tabs-scroll button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }

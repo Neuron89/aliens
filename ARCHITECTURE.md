@@ -36,12 +36,16 @@ web app/
     mechanics.js                # rolls, panic, supplies, pools, initiative, injuries (sanitising only; no universe imports)
     content.js                  # runtime pack read/write/validate (REST: /api/content), CONTENT_DIR
     generate.js                 # POST /api/generate (SSE), GET /api/generate/status
+    portrait.js                 # /api/portrait: character portraits via the LAN ComfyUI (jobs, status, list, images)
+    recap.js                    # /api/recap: the "ship's log" (public log only; Claude when ANTHROPIC_API_KEY is set, else a template)
     generator/                  # core.js prompt.js params.js params.schema.json outputSchema.js universes.js env.js __mock__.js
     schema/
       content-pack.schema.json  # JSON Schema (draft 2020-12) for content packs
       validate.js               # ajv wrapper used by content.js, generate.js and the scripts
   scripts/                      # validate-content, smoke, check-art, generate-pack, test-sessions, test-session-features,
-                                #   test-mechanics, test-board, test-hardening, test-table-actions, test-ui-polish (.mjs)
+                                #   test-mechanics, test-board, test-hardening, test-table-actions, test-ui-polish, test-ascii-maps,
+                                #   test-dice-stage, test-tracker, test-camera, test-sfx, test-portrait, test-recap, test-intrigue,
+                                #   test-polish-b (.mjs)
   src/
     main.jsx  App.jsx  index.css
     engine/                     # shared, universe-agnostic
@@ -53,6 +57,7 @@ web app/
       mechanicsUtils.js         # panic/injury range lookups, d66, pool defs/starts, ambient ids
       catalogUtils.js           # normalised catalog access: items, careers, talents, starting gear, encumbrance, armor, skill pools, effects
       sfx.js                    # per-universe synthesized UI/dice sounds (theme.sfx)
+      soundboard.js             # procedural stingers + ambience beds (Web Audio, seeded variation, TTS ducking; theme.sounds / theme.ambient)
       hooks/                    # useAmbientAudio.js useTTS.js
       maps/asciiMap.js          # ASCII schematic parser (JSX-free): box-drawing art → room rects, corridors, doors, hull, crop, spawn; buildAsciiMapDef, mergeRooms
       components/
@@ -63,11 +68,14 @@ web app/
         MapEngine.jsx MapRenderer.jsx Maps.jsx MapController.jsx
         mapGroups.js legendLayout.js   # JSX-free helpers: Maps-tab grouping (images fold under their ship), card plan picker, legend wrap (scripts/test-ui-polish.mjs)
         run/       RunView RunScene ClocksPanel ClockRing CluesPanel HandoutsPanel InitiativePanel ThreatsPanel PoolCounters
-                   RollFeed SessionLogPanel SessionZeroPanel TargetPicker recap.js          # GM RUN tab
-        player/    PhoneLayer PauseButton PanicOverlay HandoutsPane HandoutViewer ClocksRow BuildCharacter fx.js   # phone extras
-        board/     MapCanvas RoomLayer EngineLayer AsciiLayer Overlays TokenChip RoomEditor mapDefs.js qr.js     # TV + controller
+                   RollFeed SessionLogPanel SessionZeroPanel TargetPicker CrewDrawer MoreDrawer IntrigueDrawer
+                   intrigueGraph.js recap.js                                                  # GM RUN tab
+        player/    PhoneLayer PauseButton PanicOverlay HandoutsPane HandoutViewer HandoutDoc TrackerPane ClocksRow
+                   BuildCharacter fx.js                                                       # phone extras
+        board/     MapCanvas RoomLayer EngineLayer AsciiLayer Overlays TokenChip RoomEditor DiceStage HandoutCard
+                   VisionOverlay BoardAudio Camera.js mapDefs.js qr.js                        # TV + controller
         builder/   steps.jsx GearStep.jsx builderState.js                                   # character builder steps
-        sheet/     parts.jsx
+        sheet/     parts.jsx Portrait.jsx (portrait / monogram / GENERATE PORTRAIT; usePortraitUrl)
         wizard/    generateClient.js
         fx/        BootSequence.jsx Motifs.jsx PlanThumb.jsx (library card thumbnail: the pack's first engine plan, rendered once off-screen, cached per pack)
     universes/
@@ -143,7 +151,11 @@ Newer keys, all optional unless noted (full field lists in `docs/ADDING_A_UNIVER
 - `rules`: `panic { die, table, stressAdd, statusAt, actionAt, statusEffect }`, `supplies[]` + `supplyMax` + `supplyDanger` (ALIEN), `pools[]` (DUNE: `key label max initial owner visibleToPlayers playerAdd initialPerPlayer resetOnNewSession`),
   `initiative { mode: 'cards'|'nominate', ... }`, `encumbrance { formula, overFormula } | null`, `creation` caps (`keyAttrMax otherAttrMax skillMin keySkillMax otherSkillMax talents allowGeneralTalents careerKinds`).
 - `terms`: `sessionArticle career attributes skills talent gear` (the builder and sheet use them; DUNE: Archetype, Drives).
-- `theme`: `motif` (`deckplan`|`contours`, landing card art), `overlay` (`crt`|`grain`, sets `html.overlay-<name>`), `overlayCss` (injected as `<style id="universe-overlay">`), `favicon` (inline SVG), `board` (table-board palette, `levelNoun`, `backdrop`), `sfx` (synth recipes per sound id).
+- `theme`: `motif` (`deckplan`|`contours`, landing card art), `overlay` (`crt`|`grain`, sets `html.overlay-<name>`), `overlayCss` (injected as `<style id="universe-overlay">`), `favicon` (inline SVG), `board` (table-board palette, `levelNoun`, `backdrop`; `board.reveal` also picks the cinematic camera's edge: `scan` → CRT, `dust` → heat shimmer), `sfx` (synth recipes per sound id),
+  `ambient` (ordered ambience preset ids shown in the rail AUDIO popover, e.g. ALIEN `['ship','derelict','hive',…]`, DUNE `['erg','wind','sietch','keep',…]`),
+  `sounds` (soundboard: `{ stingers: [ids in button order] }`, ids from `src/engine/soundboard.js` `STINGERS`; ALIEN `klaxon hull-groan airlock steam-vent tracker-burst screech lights-out`, DUNE `worm wind-gust thumper shield ornithopter crysknife voice`),
+  `handoutStyle` (`teletype` | `filmbook`; otherwise derived from `overlay`: `crt` → teletype).
+- `features` (in core): optional engine features, absent = off. `features.tracker: true` (ALIEN) gives phones the TRACKER tab, the GM's CREW drawer the GRANT/REVOKE TRACKER control, and enables the server's `tracker-set` / tracker view for games in that universe (the server reads it from `universe.core.js` at start).
 - `maps[]`: board geometry per `docs/BOARD_AND_BUILDER.md` section 3 (`kind size levels rooms doors spawn grid outline crop levelNoun backdrop palette`).
 
 `theme.vars` must define at least: `--bg-dark --bg-panel --bg-card --bg-input --border --border-bright
@@ -189,7 +201,8 @@ self-contained. Required fields marked with `*`.
       "ambient": "tension"                   // universe audio preset id (or a site audio path); the RUN view switches to it
     } ]
   } ],
-  "npcs": [ { "name", "role", "agenda", "behavior", "secret"?, "stats"?: {} } ],   // name/role/agenda/behavior required
+  "npcs": [ { "name", "role", "agenda", "behavior", "secret"?, "stats"?: {},          // name/role/agenda/behavior required
+              "relations"?: [ { "to", "kind", "note"?, "secret"? } ] } ],            // intrigue web (also on characters[]), see below
   "threats": [ { "name", "ref"?: "bestiary id", "description"?, "stats"?: {}, "tactics"?: "..." } ],
   "keyLocations": [ { "name", "description" } ],
   "handouts": [ { "id", "title", "from", "to", "priority", "text", "when": "Act II, after the logs", "image"?: "/art/handouts/x.webp" } ],
@@ -221,6 +234,14 @@ Custom characters made in the creator are stored in a runtime pack with id `cust
 
 The JSON Schema in `server/schema/content-pack.schema.json` is the source of truth; keep this
 doc and the schema in sync. Validation runs on every save and on every generator response.
+
+`relations[]` (optional, on NPCs and characters, ≤ 12 each): `to` = an NPC name, character name or character id of
+the same pack; `kind` = `ally | rival | owes | fears | loves | serves | hides`; `note` ≤ 300 chars (GM-facing, safe to
+reveal); `secret: true` = drawn dashed in the GM's intrigue web until revealed (the reveal is an ordinary ad-hoc
+`clue-reveal` whose clue id is the relation id). `scripts/validate-content.mjs` checks that every `to` resolves and
+that nobody points at themself. Scenes: `ambient` is the canonical key; the run view also reads `scene.ambience`
+(`scene.ambient ?? scene.ambience`) and maps aliases through `mechanicsUtils.ambientPreset`, but the schema only
+lists `ambient`.
 
 ## Content loading
 
@@ -398,6 +419,52 @@ doc and the schema in sync. Validation runs on every save and on every generator
     TV roll/panic toasts, pool meters, supply strip, turn strip, TokenChip `flash` / `active` props (GM controller adds `showHp` bars).
     Scene `ambient` (ship-hum, tension, alert, dread, space, wind, bazaar, sietch, court) switches the GM ambient (rail AUDIO popover, Nav.jsx; it lists the universe's `theme.ambient` moods); `?board=CODE&audio=1` makes the TV follow it.
   - Regression test: `node scripts/test-mechanics.mjs`.
+- Feature wave (F1–F7). Every new client → server event is in `EVENT_NAMES` (`server/guard.js`) and goes through
+  `safeOn`; each has a regression test.
+  - **Dice stage (F7).** `gm-roll { roll, who, secret? }`: `secret` defaults to `true` (feed + log only, `[SECRET]` log
+    prefix, never the board); `secret: false` logs without the prefix and broadcasts the same `board-roll` phones produce,
+    with `who: 'gm'` and `name = who || 'GM'`. `boardRoll()` forwards `id who name label summary kind dice flags successes
+    stunts pushed panic passed momentum complications difficulty target at` (no player ids). GameContext:
+    `gmRoll(roll, who, cb, { secret })`; the GM DiceRoller's TV / SECRET / LOCAL switch picks `secret:false` / `true` /
+    no emit. TV: `board/DiceStage.jsx`. Test: `test-dice-stage.mjs`.
+  - **Motion tracker (F1, ALIEN).** DM: `tracker-set { playerId, on: boolean }` → `{ success, on, available }` (grants
+    live in `table.trackerGrants`, part of the DM table view; the CREW drawer's GRANT/REVOKE TRACKER reads it) and
+    `tracker-signal { tokenId, on }` → `{ success }` (npc/creature `token.signal`: a contact while standing still).
+    Moves stamp `token.lastMovedAt`. The player table view gains `tracker` = `null` (universe without
+    `features.tracker`) | `{ on:false }` | `{ on:true, source:'gear'|'gm', fix, facing, range, rings, contacts:
+    [{ bearing, distance, strength }], nearest }`: bearings and metres only, never ids, names or positions; contacts see
+    through walls but not across levels. Available when the seat's gear matches `/motion tracker/i` or it was granted.
+    A 500 ms ticker re-sends `table-state` to a tracker-carrying phone only when its summary changed. Test: `test-tracker.mjs`.
+  - **Director camera (F2).** `board.view.camera { mode: 'fixed'|'follow'|'cinematic', spotlight: bool, target: roomId|null }`,
+    set through the existing `board-view` (partial updates merge; `server/board.js` `sanitizeCamera`). Logic in
+    `board/Camera.js` (pure). Test: `test-camera.mjs`.
+  - **Soundboard (F3).** DM: `table-sfx { cue, phones? }` → `{ success, seed, boards, phones }`; server → board room (and
+    every seated phone when `phones === true`): `table-sfx { cue, seed, at, phones }`. The server picks the seed so every
+    device plays the same procedural variant; per-socket rate limit 120 ms. Cues: `theme.sounds.stingers`. Ambience beds:
+    `theme.ambient` + `table.run.ambient` (unchanged `run-set { ambient }`); the TV plays both only with `&audio=1`
+    (`board/BoardAudio.jsx`). GameContext: `sfxSend(cue, { phones }, cb)`, `onSfx(fn)`. Test: `test-sfx.mjs`.
+  - **Portraits (F4).** REST `/api/portrait` (`server/portrait.js`): `POST /` `{ characterId, universeId, name?, career?,
+    appearance?, details?, seed? }` → 202 `{ id, state }` (400 / 404 / 429 busy / 503 `comfy_offline`), `GET /job/:id`,
+    `GET /status` → `{ comfy, busy }`, `GET /list/:universe`, `GET /img/:universe/:file`, `DELETE /:universe/:characterId`.
+    Writes need `API_TOKEN` like `/api/generate` (so does `POST /api/recap`, which also needs the dmToken). Images live under `<DATA_DIR>/art/portraits/<universe>/` (WebP 512 px,
+    PNG without Pillow). Env: `COMFY_URL`, `PORTRAIT_PYTHON`, `PORTRAIT_DIR`, `PORTRAIT_TIMEOUT_MS`. Clients poll the
+    list (no socket event). Test: `test-portrait.mjs` (mock ComfyUI).
+  - **Recap + handout documents (F5).** REST `/api/recap` (`server/recap.js`): `POST /` `{ code, dmToken }` → SSE
+    (`status`, `delta`, `done { text, doc, source, words, warning? }`, `error`) or JSON with `Accept: application/json`;
+    `GET /status` → `{ claude, model }`. Built from `publicLog(game)` only (no GM notes, secret rolls, private
+    handouts/clues, GM-only clocks or pools, pauses, safety). With `ANTHROPIC_API_KEY`: `claude-opus-5-5`, streaming,
+    150-300 words; otherwise a deterministic template in the terminal's voice (each stock line at most once; a short log
+    gets a shorter log). Handouts: `handout-send` content keeps `burnSec` (number, clamped 0-600, 0 = none, always
+    written so a re-send without a timer clears it); the phone and TV render handouts and `card` narrations whose text
+    starts with `FROM:/TO:/PRIORITY:/TIMESTAMP:/BURN AFTER READING:` lines as documents (`player/HandoutDoc.jsx`
+    `docText()` / `parseDoc()`, `board/HandoutCard.jsx`). Test: `test-recap.mjs`.
+  - **Intrigue + prescience (F6).** DM: `vision-send { text, ms?, to?: 'all'|[playerIds]|'none', board?: bool }` →
+    `{ success, id, ms, phones, boards }`; server → board and recipient phones: `vision { vision: { id, text, ms, at,
+    private } }` (ms clamped 2-30 s, default 9 s; one line ≤ 300 chars; logged as narration; not stored). The intrigue
+    web reads pack `relations[]`; REVEAL is a plain `clue-reveal`. GameContext: `visionSend(text, opts, cb)`,
+    `onVision(fn)`. Test: `test-intrigue.mjs`.
+  - Polish wave B: `test-polish-b.mjs` (the CREW drawer's `tracker-set` path, `burnSec` sanitising, ambience aliases,
+    recap template non-repetition, content fixes).
 
 ## Generator
 

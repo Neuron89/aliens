@@ -20,7 +20,8 @@ Extends ARCHITECTURE.md. Same conventions (universe-agnostic engine, data not co
   "level": "deck-a" | null,              // current level (IMPLEMENTED: separate field, not part of mapId)
   "mapRev": 3,                           // bumped on every board-set-map
   "fog": true,                           // when false every room is revealed
-  "view": { "rotation": 0, "flipX": false, "zoom": 1, "pan": [0,0] },   // TV orientation
+  "view": { "rotation": 0, "flipX": false, "zoom": 1, "pan": [0,0],    // TV orientation
+            "camera": { "mode": "fixed", "spotlight": false, "target": null } },  // TV director camera (see §5)
   "rooms": { "<roomId>": { "revealed": false, "entered": false, "name"?: "GM rename", "note"?: "GM-only" } },
   "tokens": {
     "<tokenId>": {
@@ -33,7 +34,9 @@ Extends ARCHITECTURE.md. Same conventions (universe-agnostic engine, data not co
       "locked"?: true,                     // item tokens: players see it, token-take is refused (ask the GM)
       "ownerPlayerId": "p_<hex>" | null,   // stable player id (pc tokens; colour assigned per player)
       "level": "deck-a" | null,            // level the token is on (defaults to board.level)
-      "facing": 0, "note": "..."           // note is GM-only (stripped for board/players)
+      "facing": 0, "note": "...",          // note is GM-only (stripped for board/players)
+      "lastMovedAt"?: 1730000000,          // npc/creature: set on every move (motion tracker contact window)
+      "signal"?: true                      // npc/creature: registers on the motion tracker while standing still (tracker-signal)
     }
   },
   "pings": [ { "x":0.1, "y":0.2, "at": 1730000000, "by": "dm" | "p_<hex>", "color": "#..." } ]   // last 5
@@ -174,6 +177,11 @@ engine map) + a collapsible right/bottom palette.
   ITEMS prefers catalog weapons/armor/gear, else `universe.gear`. Extra top-bar controls: level
   buttons, ZOOM −/+ (TV zoom), SNAP (grid snap on drop), AS TV (tablet canvas mirrors the TV
   rotation/flip), EDIT ROOMS (image maps from a pack). Token sheet also has a level picker.
+- **Camera group** (TV director camera, writes `board.view.camera` through `board-view`):
+  FIXED / FOLLOW <players term> / CINEMATIC (`mode`), SPOTLIGHT (`spotlight`), and FRAME ROOM
+  (pin `target` to the selected room; UNPIN clears it). The server sanitizes the object
+  (`server/board.js` `sanitizeCamera`: unknown modes fall back to `fixed`, `target` must be a room id);
+  partial updates merge with the current camera.
 
 ## 5. Board view (`BoardView.jsx`)
 
@@ -188,6 +196,45 @@ stay upright on the TV. Any tap requests fullscreen. The board remembers `muthur
 { code, role:'board' }` (separate from `muthur.session` so a board tab never steals a GM/player
 seat) and re-sends `join-board` on every socket reconnect; a saved board re-attaches on load only
 when the browser has no other saved session and no `?join=` link.
+
+**Director camera** (`board/Camera.js`, pure and node-testable; `scripts/test-camera.mjs`). The TV
+applies `view.camera` as one CSS transform on the canvas wrapper:
+- `fixed`: the fitted plan (no transform).
+- `follow`: frames the revealed rooms that hold PC tokens (eased, about 900 ms); re-frames when a PC
+  enters another room or the GM reveals one; a ping briefly zooms toward the ping. A pinned `target`
+  is framed instead once it is revealed (a target in fog is ignored, so the camera never leaks a room).
+- `cinematic`: follow plus a slow drift, a vignette and an edge treatment chosen by the palette's
+  reveal style (`scan` → CRT edge on ALIEN, `dust` → heat shimmer on DUNE).
+- `spotlight: true` while initiative runs: everything except the acting token's room is dimmed and the
+  strip shows a turn banner ("MILLER — ACT"); stepping the order slides it to the next actor.
+Framing honours the TV rotation / flip / zoom. Reduced FX on the TV: instant cuts, no drift.
+
+**Dice stage** (`board/DiceStage.jsx` + `board/dice-stage.css`, mounted from `board/Overlays.jsx`;
+`scripts/test-dice-stage.mjs`). Every `board-roll` (phone rolls, and GM rolls sent with the DICE
+drawer's TV route, `gm-roll { secret:false }`) plays over the map, below the panic toast and the strip:
+a dark band fades up, the dice fly in (players from the left, the GM from the right), tumble as CSS 3D
+d6 cubes with pips (ALIEN base dice in the base colour, stress dice amber/black) or d20 faces (DUNE),
+settle one by one (~1.4 s), light the hits (sixes glow, stress 1s pulse red; d20 crits glow,
+complications pulse red), then a result card drops in: ROLLER · LABEL and the outcome line (SUCCESS +2
+STUNTS / FAILED / PANIC / PASSED 3/D2 +1 MOMENTUM / COMPLICATION…). The tumble is seeded from `roll.id`,
+so every TV shows the same throw. A pushed roll (`pushed:true`) re-tumbles only the dice that were not
+sixes. Rolls queue (max 4, oldest dropped; a repeated `roll.id` is ignored). Sounds: the theme's
+`dice.settle` / `dice.crit` / `dice.botch` cues. Reduced FX: dice appear on their final faces and the
+card holds 3 s. Secret GM rolls never reach the board.
+
+**Handout cards** (`board/HandoutCard.jsx`, shared artefact `player/HandoutDoc.jsx` `DocPaper`). A
+narration in `card` mode whose text starts with a document header (`FROM:` / `TO:` / `PRIORITY:` /
+`TIMESTAMP:` / `BURN AFTER READING:` lines, then a blank line; `docText()` writes it) renders on the TV
+as the universe's document: ALIEN a tractor-feed teletype printout typed in with the terminal's key
+sound; DUNE a parchment leaf with an illuminated first letter and a House seal. The GM sends one with
+**SHOW ON TV** in the RUN HANDOUTS drawer (any pack or custom handout, with the chosen burn timer) or
+from MORE › RECAP. Other card narrations keep the plain full-bleed card.
+
+**TV overlays added by the feature wave** (all in `board/Overlays.jsx` or mounted by `BoardView.jsx`):
+the vision overlay (`board/VisionOverlay.jsx`, `vision` event: DUNE spice-blue shimmer, ALIEN terminal
+"special order" override), token chips with character portraits (`board/TokenChip.jsx` via
+`usePortraitUrl`), and TV audio (`board/BoardAudio.jsx`, only with `?board=CODE&audio=1`: scene
+ambience from `table.ambient` and soundboard stingers from `table-sfx`).
 
 **Player TABLE tab** (`player/TablePane.jsx`): no new role or payload. The phone uses the same
 filtered `board-state {board, mapDef}` the server already pushes to every player (viewFor

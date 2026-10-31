@@ -1,3 +1,6 @@
+/* Weapons & armor reference (ALIEN). Display-only: the character builder and validate-content use
+   catalog/*.json. Entries with `notInCatalog: true` (their comment says "Not in the builder catalog")
+   are kept for reference but cannot be picked in the builder; nothing resolves gear against this file. */
 export const weapons = {
   pistols: [
     { name: 'M4A3 Service Pistol', bonus: '+2', damage: 1, range: 'Medium', weight: '1/2', cost: '$200', comment: '', art: '/art/weapons/cropped/m4a3-service-pistol.webp', source: 'CRB',
@@ -10,9 +13,9 @@ export const weapons = {
       description: 'A construction tool that uses expanding bolts for emergency hull repairs. Can be turned into an improvised weapon — firing bolts like a single round shotgun.' },
     { name: 'VP-70MA6 Semi-Automatic Pistol', bonus: '+2', damage: 1, range: 'Medium', weight: '1/2', cost: '$250', comment: 'Full auto (3-round burst)', art: '/art/weapons/cropped/vp70-pistol.webp', source: 'ACM',
       description: 'A selective-fire pistol capable of firing three-round bursts. Popular with officers and pilots who need compact firepower.' },
-    { name: 'M4A4 Pistol', bonus: '+2', damage: 1, range: 'Medium', weight: '1/2', cost: '$250', comment: '', art: '/art/weapons/cropped/m4a4-pistol.webp', source: 'ACM',
+    { name: 'M4A4 Pistol', bonus: '+2', damage: 1, range: 'Medium', weight: '1/2', cost: '$250', comment: 'Not in the builder catalog', notInCatalog: true, art: '/art/weapons/cropped/m4a4-pistol.webp', source: 'ACM',
       description: 'An updated version of the M4A3, the M4A4 features improved ergonomics and reliability.' },
-    { name: 'NSG 23 Assault Pistol', bonus: '+1', damage: 2, range: 'Medium', weight: '1/2', cost: '$350', comment: 'Armor piercing', art: '/art/weapons/cropped/nsg23-assault-pistol.webp', source: 'ACM',
+    { name: 'NSG 23 Assault Pistol', bonus: '+1', damage: 2, range: 'Medium', weight: '1/2', cost: '$350', comment: 'Armor piercing · Not in the builder catalog', notInCatalog: true, art: '/art/weapons/cropped/nsg23-assault-pistol.webp', source: 'ACM',
       description: 'UPP assault pistol. Compact but packs a punch with armor-piercing rounds.' },
   ],
   rifles: [
@@ -28,11 +31,11 @@ export const weapons = {
       description: 'Fires a grappling-hook-tipped harpoon with tether for emergency manual docking maneuvers. Can pull targets or pull yourself toward them.' },
     { name: 'Armat XM99A Phased Plasma Pulse Rifle', bonus: '–', damage: 4, range: 'Extreme', weight: '2', cost: '$20,000', comment: 'Armor piercing, Power Supply 5', art: '/art/weapons/cropped/xm99a-plasma-rifle.webp', source: 'CRB',
       description: 'Extremely potent prototype — can kill a man with a single shot. Has a plasma charge build-up delay. Must be aimed (fast action) before firing.' },
-    { name: 'M41A/2 Pulse Rifle', bonus: '+1', damage: 2, range: 'Long', weight: '1', cost: '$900', comment: 'Armor piercing, full auto', art: '/art/weapons/cropped/m41a2-pulse-rifle.webp', source: 'ACM',
+    { name: 'M41A/2 Pulse Rifle', bonus: '+1', damage: 2, range: 'Long', weight: '1', cost: '$900', comment: 'Armor piercing, full auto · Not in the builder catalog', notInCatalog: true, art: '/art/weapons/cropped/m41a2-pulse-rifle.webp', source: 'ACM',
       description: 'Updated variant of the M41A with improved reliability and slightly higher muzzle velocity.' },
-    { name: 'M41A Pulse Rifle (MK2)', bonus: '+1', damage: 2, range: 'Long', weight: '1', cost: '$850', comment: 'Armor piercing, full auto', art: '/art/weapons/cropped/m41a-mk2-pulse-rifle.webp', source: 'ACM',
+    { name: 'M41A Pulse Rifle (MK2)', bonus: '+1', damage: 2, range: 'Long', weight: '1', cost: '$850', comment: 'Armor piercing, full auto · Not in the builder catalog', notInCatalog: true, art: '/art/weapons/cropped/m41a-mk2-pulse-rifle.webp', source: 'ACM',
       description: 'Second generation M41A with modernized electronics and improved LED ammo counter.' },
-    { name: 'M4RA Battle Rifle', bonus: '+2', damage: 2, range: 'Extreme', weight: '1', cost: '$1,200', comment: 'Armor piercing', art: '/art/weapons/cropped/m4ra-battle-rifle.webp', source: 'ACM',
+    { name: 'M4RA Battle Rifle', bonus: '+2', damage: 2, range: 'Extreme', weight: '1', cost: '$1,200', comment: 'Armor piercing · Not in the builder catalog', notInCatalog: true, art: '/art/weapons/cropped/m4ra-battle-rifle.webp', source: 'ACM',
       description: 'Semi-automatic designated marksman rifle. Increased range and accuracy over the standard M41A.' },
     { name: 'Weyland-Yutani NSG23 Automatic Assault Rifle', bonus: '+2', damage: 2, range: 'Long', weight: '1', cost: '$1,500', comment: 'Full auto', art: '/art/weapons/cropped/nsg23-assault-rifle.webp', source: 'ACM',
       description: 'UPP standard issue assault rifle. Rugged design with full automatic capability.' },
@@ -54,9 +57,9 @@ export const weapons = {
       description: 'Rocket-propelled grenade launcher. Single use disposable tube. Devastating against vehicles and fortifications.' },
     { name: 'M78 PIG', bonus: '+1', damage: 6, range: 'Extreme', weight: '3', cost: '$9,000', comment: 'Armor piercing, full auto', art: '/art/weapons/cropped/m78-pig.webp', source: 'ACM',
       description: 'Phased Infantry Gun — a squad-level support weapon providing heavy suppressive fire.' },
-    { name: 'M83A2 SADAR', bonus: '–', damage: 'Blast 14', range: 'Extreme', weight: '2', cost: '$5,000', comment: 'Armor piercing', art: '/art/weapons/cropped/m83a2-sadar.webp', source: 'ACM',
+    { name: 'M83A2 SADAR', bonus: '–', damage: 'Blast 14', range: 'Extreme', weight: '2', cost: '$5,000', comment: 'Armor piercing · Not in the builder catalog', notInCatalog: true, art: '/art/weapons/cropped/m83a2-sadar.webp', source: 'ACM',
       description: 'Semi-Active Disposable Anti-armor Rocket. Shoulder-fired guided missile system for taking out armored vehicles and fortified positions.' },
-    { name: 'UA 571-D Sentry Gun', bonus: '+3', damage: 4, range: 'Extreme', weight: '–', cost: '$15,000', comment: 'Armor piercing, full auto', art: '/art/weapons/cropped/ua571d-sentry.webp', source: 'ACM',
+    { name: 'UA 571-D Sentry Gun', bonus: '+3', damage: 4, range: 'Extreme', weight: '–', cost: '$15,000', comment: 'Armor piercing, full auto · Not in the builder catalog', notInCatalog: true, art: '/art/weapons/cropped/ua571d-sentry.webp', source: 'ACM',
       description: 'Updated sentry gun with improved targeting AI and heavier ammunition. Deployed in fixed defensive positions.' },
   ],
   closeCombat: [
@@ -76,7 +79,7 @@ export const weapons = {
       description: 'High-Explosive Dual-Purpose fragmentation grenade. Standard issue for USCMC squads.' },
     { name: 'M20 Claymore Mine', bonus: '–', damage: 'Blast 12', range: 'Short', weight: '1/2', cost: '$150', comment: 'Directional', art: '/art/weapons/cropped/m20-claymore.webp', source: 'ACM',
       description: 'Directional anti-personnel mine. "FRONT TOWARD ENEMY." Command or tripwire detonated.' },
-    { name: 'M108 Demolition Charge', bonus: '–', damage: 'Blast 15', range: '–', weight: '1', cost: '$500', comment: 'Timed/remote', art: '/art/weapons/cropped/m108-demolition.webp', source: 'ACM',
+    { name: 'M108 Demolition Charge', bonus: '–', damage: 'Blast 15', range: '–', weight: '1', cost: '$500', comment: 'Timed/remote · Not in the builder catalog', notInCatalog: true, art: '/art/weapons/cropped/m108-demolition.webp', source: 'ACM',
       description: 'Breaching charge for demolition work. Can be set with timer or remote detonator.' },
   ],
   armor: [
@@ -94,7 +97,7 @@ export const weapons = {
       description: 'Mechanized exoskeleton power frame. Amplifies strength tenfold. Equipped with hydraulic claws. "Get away from her, you bitch!"' },
     { name: 'M10 Ballistic Helmet', rating: '–', airSupply: '–', weight: '–', cost: '–', comment: 'No Armor Rating of its own; mounts the lamp and helmet camera', art: '/art/weapons/cropped/m10-ballistic-helmet.webp', source: 'ACM',
       description: 'Standard issue Marine ballistic helmet with HUD mount points and comm integration.' },
-    { name: 'M3A1 Pattern Armor', rating: 8, airSupply: '–', weight: '1', cost: '$2,000', comment: 'Built-in comm, PDT', art: '/art/weapons/cropped/m3a1-pattern-armor.webp', source: 'ACM',
+    { name: 'M3A1 Pattern Armor', rating: 8, airSupply: '–', weight: '1', cost: '$2,000', comment: 'Built-in comm, PDT · Not in the builder catalog', notInCatalog: true, art: '/art/weapons/cropped/m3a1-pattern-armor.webp', source: 'ACM',
       description: 'Updated M3 armor with improved ballistic protection. Standard for front-line Marine combat operations.' },
   ],
 };

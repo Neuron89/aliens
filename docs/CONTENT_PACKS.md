@@ -63,7 +63,8 @@ Only `title` is required. Typical act:
 - `readAloud`: 2-6 paragraphs per the schema (house standard 3-6). The Scenarios tab can read these via text-to-speech, so keep them pure narration.
 - `scenes[]` feed the **scene runner** (`ScenarioPlayer`) and the GM **RUN** view: `name` (required), `mandatory`, `encounter`, `encounterDetail`, `narration`, `checks[]`, `events[]`, `stressTriggers[]`, `npcGuidance`, `gmTip`, `outcomes[]`, plus:
   - `clueRefs[]`: ids of entries in the pack's `clues[]` that can be found here; the RUN scene card lists them with a one-tap reveal.
-  - `ambient`: a universe audio preset id (ALIEN: `ship-hum`, `tension`, `alert`, `dread`, `space`; DUNE: `wind`, `bazaar`, `sietch`, `court`) or a site path to an audio file. Moving to the scene switches the GM's ambient audio (rail AUDIO; and the TV when opened with `&audio=1`).
+  - `ambient`: the scene's ambience, a universe preset id (ALIEN: `ship` engine hum, `derelict` silence, `hive` wet drip, `tension`, `alert`, `space`, `dread`; DUNE: `erg` open erg, `sietch` wind, `keep` interior, `wind`, `bazaar`, `court`). Friendly aliases are accepted and mapped to those ids (`ship-hum`/`engine`/`engine-hum` → `ship`, `drip`/`wet-drip` → `hive`, `open-erg` → `erg`, `interior`/`keep-interior` → `keep`, `desert` → `wind`, `market` → `bazaar`, `palace` → `court`, `red-alert` → `alert`, `deep-space` → `space`, `silence` → off); anything else is ignored. Moving to the scene switches the GM's ambience (rail **Audio**) and the TV's when it was opened with `&audio=1`.
+  - `scene.ambience`: the run view also reads this spelling (`scene.ambient ?? scene.ambience`), for packs written by hand or by older generators. The schema does not list it (scenes allow no extra keys), so a pack that uses it fails validation: write `ambient` in new packs.
 - Check strings: `"OBSERVATION — notice the elongated forearms"` or `"PILOTING at −2 — avoid collision"`; use the universe's skill names in upper case.
 - Stress strings: `"STRESS +1 — all PCs present"`, `"IMMEDIATE PANIC ROLL — witnesses"`.
 
@@ -74,9 +75,24 @@ Only `title` is required. Typical act:
 { "name": "Facehugger", "ref": "facehugger", "description": "...", "tactics": "...", "stats": { } }
 { "name": "Kestrel Nine — Holds A–D", "description": "20-60 words, sensory and gameable." }
 ```
-NPCs require `name`, `role`, `agenda`, `behavior`. Threats require `name`; `ref` is a bestiary id of the universe
+NPCs require `name`, `role`, `agenda`, `behavior`; `relations` is optional (below). Threats require `name`; `ref` is a bestiary id of the universe
 (ALIEN: see `web app/src/universes/alien/reference/bestiary.js`, e.g. `drone`, `facehugger`, `adult-neomorph`) and shows a "REF" tag
 so the GM can open full stats. Locations require `name` and `description`.
+
+### relations[] (NPCs and characters, optional)
+
+```json
+"relations": [
+  { "to": "Lady Senna", "kind": "serves", "note": "Carries her letters and reads none of them." },
+  { "to": "oren-haskell", "kind": "hides", "note": "Knows who moved the body and has said nothing.", "secret": true }
+]
+```
+The intrigue web the GM sees in Run › MORE › **INTRIGUE**: one arrow from the person who carries the entry to `to`.
+- `to` (required): an NPC name, a character name or a character id from the same pack (the validator flags anything else, and a person pointing at themself).
+- `kind` (required): `ally` (works with), `rival` (works against), `owes` (is in debt to), `fears`, `loves` (or bound by blood), `serves` (takes orders from), `hides` (keeps something from).
+- `note` (≤ 300 chars): one sentence the GM can read aloud if the tie comes out; write it so revealing it gives nothing else away.
+- `secret: true`: the players do not know it yet. It is drawn dashed until the GM presses **REVEAL**, which sends the note to the phones as a clue.
+At most 12 per person. Two to four per important NPC is plenty; give each PC at least one tie into the NPC web, ideally a secret one. Every bundled DUNE pack has them; ALIEN packs may add them (the web is empty without).
 
 ## handouts[]
 
@@ -85,7 +101,7 @@ so the GM can open full stats. Locations require `name` and `description`.
   "to": "BOARDING TEAM", "priority": "PRIORITY", "text": "...teletype body, 20-200 words...",
   "when": "Act I, after the crate is found", "image": "/art/handouts/manifest.webp" }
 ```
-Required: `id` (kebab-case, unique in the pack), `title`, `text`. `image` (optional): a site path or `https://` URL shown with the handout on the phone, and full-bleed on the TV when the GM presses **SHOW ON TV** in the RUN handouts tab. `priority` should be one of the universe's `terms.priorities`
+Required: `id` (kebab-case, unique in the pack), `title`, `text`. `image` (optional): a site path or `https://` URL shown with the handout on the phone and on the TV card when the GM presses **SHOW ON TV** in the RUN handouts tab. `priority` should be one of the universe's `terms.priorities`
 (ALIEN: STANDARD, PRIORITY, EYES ONLY, EMERGENCY).
 
 ### How handouts reach players
@@ -94,6 +110,7 @@ In the GM **RUN** view (rail tab **HANDOUTS**) and in the Scenarios tab, each ha
 (socket `handout-send`). Players get a sealed card ("TAP TO OPEN"); opening it counts as seen (`handout-seen`) and the GM sees receipts such as "SEEN 2/4". Handouts can be re-opened from the phone's **FILES** tab; re-sending widens the recipient list and keeps receipts.
 The `priority` is shown on the card; it should be one of the universe's `terms.priorities` (ALIEN: STANDARD, PRIORITY, EYES ONLY, EMERGENCY; DUNE: ROUTINE, URGENT, SEALED, IMPERIAL). `to` is informational: the GM chooses the recipients. Outside a session the buttons are disabled.
 Bundled packs live only in the client, so the GM's browser sends the resolved handout with its pack id.
+On the phone and the TV a handout renders as an in-world document: `from`, `to` and `priority` fill its header block (ALIEN teletype printout; DUNE parchment with an illuminated first letter), so write them as the sender would. The burn-after-reading timer is not part of the pack: the GM picks it when sending (OFF / 30 s / 1 min / 2 min / 5 min; the session stores it as `handout.burnSec`, 0-600). **SHOW ON TV** puts the same document on the TV as a card, for any handout (with or without an image).
 
 ## clues[]
 
@@ -143,7 +160,9 @@ A pack map whose `engine` names a universe engine map uses that map's rooms, lev
 ## characters[]
 
 Required: `id`, `name`, `career`, `appearance`, `attributes`, `skills`, `talent`, `gear[]`, `signatureItem`, `personalAgenda`, `buddy`, `rival`.
-Optional: `agendaByAct` (keys `"1"`..`"99"`), `secret`, `health`, `driveStatements`.
+Optional: `agendaByAct` (keys `"1"`..`"99"`), `secret`, `health`, `driveStatements`, `relations` (as for NPCs, above).
+
+- `buddy` and `rival`: the name of another PC of the pack, or `"None"`. They must be two different people (a PC whose buddy is also their rival reads as a mistake); with only two PCs, one of the two is usually `"None"`.
 
 - `attributes` and `skills` are keyed by the universe's keys (`web app/src/universes/<id>/rules.js`). The schema does not check the keys; `scripts/validate-content.mjs` does (see Validator below).
 - `career` should be a catalog career (`catalog/careers.json`) and `talent` one of that career's talents written `"Name — text"` with the catalog text, so the sheet can resolve its buff. `gear[]` entries that match a catalog item name (a trailing `×N` quantity or `(note)` is allowed) show stats and art; anything else shows as CUSTOM.

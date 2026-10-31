@@ -26,7 +26,8 @@ the rest are craft rules you must check by reading your own output.
 - [ ] (V) Every PC has all required fields, legal attribute/skill keys and ranges, a catalog career and a talent of that career with its catalog text, `buddy`/`rival` naming other PCs, and (DUNE) all five `driveStatements`. `health` omitted. Run the validator with `--warnings` to see gear that is not a catalog item and skills above the builder caps.
 - [ ] Attribute and skill totals computed against `rules.creation` (see SKILL.md step 4); no skill above the allowed max.
 - [ ] Career and talent come from `careers.js`.
-- [ ] No two PCs have the same id, name or signature item. `buddy`/`rival` refer to real PC names (or "None").
+- [ ] No two PCs have the same id, name or signature item. `buddy`/`rival` refer to real PC names (or "None"), and a PC's buddy and rival are two different people.
+- [ ] `relations` (intrigue web, optional but expected for DUNE): 2-4 per important NPC and at least one per PC; each `to` is an NPC name, PC name or PC id of this pack (never the person themself); `kind` is one of ally, rival, owes, fears, loves, serves, hides; the `note` is one sentence the GM could read aloud; mark the ties the players do not know with `"secret": true` (each PC should have at least one secret tie). (V) checks that every `to` resolves.
 
 ## Handouts and endings
 - [ ] 2-6 handouts in terminal voice, 20-200 words, priority from `terms.priorities`, `to`, and a `when` cue.

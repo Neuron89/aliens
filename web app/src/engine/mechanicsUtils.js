@@ -114,7 +114,10 @@ export function attackDice(text) {
 
 /* Scene ambient → useAmbientAudio preset id. Pack scenes name moods; unknown names are ignored. */
 const AMBIENT_ALIASES = {
-  'ship-hum': 'ship', ship: 'ship', hum: 'ship',
+  'ship-hum': 'ship', ship: 'ship', hum: 'ship', engine: 'ship', 'engine-hum': 'ship',
+  derelict: 'derelict', 'derelict-silence': 'derelict',
+  hive: 'hive', drip: 'hive', 'wet-drip': 'hive', 'hive-drip': 'hive',
+  erg: 'erg', 'open-erg': 'erg', 'sietch-wind': 'sietch', keep: 'keep', interior: 'keep', 'keep-interior': 'keep',
   tension: 'tension', alert: 'alert', 'red-alert': 'alert', dread: 'dread', space: 'space', 'deep-space': 'space',
   wind: 'wind', desert: 'wind', bazaar: 'bazaar', market: 'bazaar', sietch: 'sietch', court: 'court', palace: 'court',
   off: 'off', silence: 'off',

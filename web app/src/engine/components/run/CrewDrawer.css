@@ -13,3 +13,8 @@
 .cd-req-wait { margin: 4px 0 0; font-size: 11px; letter-spacing: 0.12em; color: var(--warn); }
 .cd-req.done { border-color: var(--border); opacity: 0.85; }
 .cd-req-done { flex: none; font-size: 11px; letter-spacing: 0.14em; color: var(--success); padding: 0 8px; }
+/* Motion tracker grant (ALIEN, features.tracker): one control under the seat's bars. */
+.cd-tools { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.cd .run-btn.cd-tracker { min-height: 44px; padding: 0 14px; font-size: 11px; letter-spacing: 0.12em; }
+.cd .run-btn.cd-tracker.on { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+.cd-tracker-gear { font-size: 11px; letter-spacing: 0.12em; color: var(--text-dim); min-height: 44px; display: inline-flex; align-items: center; }

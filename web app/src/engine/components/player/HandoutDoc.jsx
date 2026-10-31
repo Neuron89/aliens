@@ -261,17 +261,39 @@ export function DocPaper({ doc, kind = 'teletype', size = 'phone', terminalName 
   );
 }
 
+/* Ids this page has already reported as seen: the receipt goes out once per
+   handout even if the reader re-mounts (StrictMode, reopen from FILES). */
+const seenSent = new Set();
+/** Report `handout` as seen through `onSeen` at most once (exported for tests). */
+export function markSeenOnce(handout, onSeen) {
+  if (!handout?.id || handout.seen || seenSent.has(handout.id) || typeof onSeen !== 'function') return false;
+  seenSent.add(handout.id);
+  onSeen(handout.id);
+  return true;
+}
+
 /**
- * Phone reader (mounted by PlayerView over PhoneLayer's handout viewer while a handout is open).
- * Props: handout (as the phone's table has it), universe, onClose.
+ * Phone reader: the single handout reader, mounted by PhoneLayer while a handout is open.
+ * Opening it is what counts as SEEN (the GM's receipt), sent once.
+ * Props: handout (as the phone's table has it), universe, onClose, onSeen(id).
+ * Focus: moves to CLOSE, Tab/Shift+Tab stay inside, Escape closes, focus returns to the opener.
  */
-export default function HandoutDoc({ handout, universe, onClose }) {
+export default function HandoutDoc({ handout, universe, onClose, onSeen }) {
   const ref = useDialog(onClose);
   const doc = useMemo(() => parseDoc(handout || {}), [handout]);
+  useEffect(() => { markSeenOnce(handout, onSeen); }, [handout, onSeen]);
   if (!handout) return null;
   const kind = docStyle(universe);
+  const trap = (e) => {
+    if (e.key !== 'Tab' || !ref.current) return;
+    const f = [...ref.current.querySelectorAll('button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')];
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && (document.activeElement === first || !ref.current.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && (document.activeElement === last || !ref.current.contains(document.activeElement))) { e.preventDefault(); first.focus(); }
+  };
   return (
-    <div className={`hd-overlay k-${kind}`} role="dialog" aria-modal="true" aria-label={handout.title || 'Handout'} ref={ref}>
+    <div className={`hd-overlay k-${kind}`} role="dialog" aria-modal="true" aria-label={handout.title || 'Handout'} ref={ref} onKeyDown={trap}>
       <div className="hd-scroll">
         <DocPaper doc={doc} kind={kind} size="phone" terminalName={universe?.terminal?.name} burnId={handout.id} seen={!!handout.seen} typeKey={handout.id} />
       </div>

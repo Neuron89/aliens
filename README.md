@@ -38,16 +38,26 @@ Full inventory with honest status (done / partial / not yet) mapped to the resea
 - **Table board controller** ("Board" tab): map and level picker, fog by room with auto-reveal, token palette (crew, threats, NPCs, items, markers; art from the catalog), ROTATE / FLIP / ZOOM / AS TV / SNAP, pings, room editor for image maps, OPEN BOARD with QR.
 - **Packs and characters**: library, import/export, character builder and sheets, per-universe reference tabs, ambient audio presets (scene `ambient` switches them).
 - **Safety and trust**: 6-digit **GM PIN** takeover, seat claims the GM approves, anonymous pause, API token for write endpoints.
+- **Soundboard**: one-tap synthesized stingers (klaxon, hull groan… / worm rumble, thumper…) to the TV and phones, and ambience beds that follow the scene.
+- **Ship's log**: a recap of the session so far in the terminal's voice (Claude with an API key, a template without), sent to phones as a document, shown on the TV or exported.
+- **Handouts as documents**: teletype printouts (ALIEN) or parchment leaves (DUNE) on phones and the TV, with an optional burn-after-reading timer.
+- **Intrigue web and prescience**: a GM relationship graph from the pack's `relations` (secret ties revealed as clues) and one-line visions flashed to the TV and chosen phones.
+- **Portraits**: GENERATE PORTRAIT paints a character in the universe's style on the home ComfyUI server; it shows on the phone, the GM crew drawer and the TV token.
+- **Dice route**: GM rolls go to the TV (animated), stay SECRET (feed and log) or LOCAL.
 
 ### TV (board)
 - Map fitted to the screen with the chosen rotation/flip/zoom, room fog that dissolves when revealed, tokens only in revealed rooms (PCs always), per-player colour rings, status rings (panic, stress, hidden...), pings.
-- Narration lower-third or full card, theatre-of-mind title/scene art, clock stack, roll and panic toasts, pool meters, supply strip (ALIEN), turn strip with a pulsing active token, PAUSE card.
+- Narration lower-third or full card, theatre-of-mind title/scene art, clock stack, panic toasts, pool meters, supply strip (ALIEN), turn strip with a pulsing active token, PAUSE card.
+- **Dice stage**: every public roll tumbles across the TV as 3D dice and lands on a result card (pushes re-roll only the non-sixes).
+- **Director camera**: FIXED / FOLLOW / CINEMATIC framing of the rooms where the players are, and a combat SPOTLIGHT on the acting token's room.
+- Handout documents, vision overlays, character portraits on token chips.
 - Screen wake lock, tap for fullscreen, hidden cursor, burn-in-safe idle drift and dimming, optional scene audio with `?board=CODE&audio=1`.
 
 ### Player (phone)
 - Join with a code and a name; SHEET (tap **ROLL** on a skill), GEAR, COMMS (private replies), FILES (orders, handouts, clues found), MAP (revealed rooms, ping), DICE (the universe's roller: Year Zero or 2d20).
 - **Build your own character** on the phone and submit it to the GM; session-zero card; **PAUSE** (X-card) button.
 - Panic roll overlay, complication flash, Momentum chip, YOUR TURN banner, item-received toast, vibration and sounds, REDUCE FX and MUTE toggles.
+- **Motion tracker** (ALIEN): a TRACKER tab that pings for moving contacts, from the character's gear or a GM grant.
 - Reconnect-safe: offline queue for messages and rolls, CONNECTION LOST banner, seat kept across restarts.
 
 ## Quick start
@@ -124,8 +134,8 @@ Every variable the server reads (`grep process.env "web app/server"`). All are o
 | `SWEEP_INTERVAL_MS` | `600000` | `server/sessions.js` | How often dormant games are swept (also once at start and before refusing a new game at the cap) |
 | `DICE_SEED` | unset | `server/mechanics.js` | Tests only: seeds the server's supply-roll dice so `test-mechanics` is deterministic |
 | `SEAT_CLAIM_MS` | `120000` (min 500) | `server/sessions.js` | How long a seat claim waits for the GM |
-| `API_TOKEN` | unset (open LAN) | `server/index.js` | When set, `PUT`/`DELETE /api/content/...` and `POST /api/generate` need header `x-api-token` |
-| `ANTHROPIC_API_KEY` | unset | `server/generator/env.js` | Claude API key for the generator |
+| `API_TOKEN` | unset (open LAN) | `server/index.js` | When set, `PUT`/`DELETE /api/content/...`, `POST /api/generate` and portrait writes (`POST`/`DELETE /api/portrait`) and `POST /api/recap` need header `x-api-token` |
+| `ANTHROPIC_API_KEY` | unset | `server/generator/env.js` | Claude API key for the generator and the ship's log recap (`/api/recap`; without it the recap uses a built-in template) |
 | `GENERATOR_MODEL` | `claude-opus-5-5` | `server/generator/env.js` | Model id |
 | `GENERATOR_EFFORT` | `high` | `server/generator/env.js` | Reasoning effort |
 | `GENERATOR_MAX_TOKENS` | `64000` | `server/generator/env.js` | Output budget per call |
@@ -133,6 +143,10 @@ Every variable the server reads (`grep process.env "web app/server"`). All are o
 | `GENERATOR_MOCK` | off | `server/generator/env.js` | `1`/`true`/`yes`/`on`: canned pack, no API call |
 | `GENERATOR_MOCK_DELAY` | `350` | `server/generator/env.js` | Mock stream delay in ms |
 | `GENERATOR_MAX_CONCURRENT` | `2` | `server/generate.js` | Simultaneous generations |
+| `COMFY_URL` | `http://192.168.1.37:8188` | `server/portrait.js` | ComfyUI server for GENERATE PORTRAIT (unreachable = the button says so, nothing else breaks) |
+| `PORTRAIT_DIR` | `<DATA_DIR>/art/portraits` | `server/portrait.js` | Where portraits are stored (`<universe>/<characterId>.webp` + `index.json`) |
+| `PORTRAIT_PYTHON` | auto | `server/portrait.js` | Python with Pillow for the WebP convert; `none` keeps PNG |
+| `PORTRAIT_TIMEOUT_MS` | `180000` | `server/portrait.js` | A portrait job is abandoned after this |
 
 Tooling-only variables (not read by the server): `API_TARGET` (Vite dev proxy target, `web app/vite.config.js`, default `http://localhost:3002`) and `COMFY` (ComfyUI URL for `scripts/gen-dune-art.py`, default `http://192.168.1.37:8188`).
 

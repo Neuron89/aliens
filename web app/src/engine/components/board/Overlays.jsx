@@ -23,7 +23,8 @@ import HandoutCard, { isDocNarration } from './HandoutCard'; // F5: document nar
    - board-panic "PANIC — <name>" toast (effect text stays private)
    - pools       visible pool meters (Momentum) in the corner stack
    - crew        air/power strip when any rating is <= rules.supplyDanger
-   - initiative  name strip on the bottom edge (+ ring via TokenChip `active`)
+   - initiative  name strip on the bottom edge (+ ring via TokenChip `active`);
+                hidden (hideTurn) while the F2 SPOTLIGHT banner shows the turn
    Board text sizes follow docs/RESEARCH_GM_PLAYER_EXPERIENCE.md §(d).
    ═══════════════════════════════════════════════════════════════ */
 
@@ -71,7 +72,7 @@ function PanicToast({ t }) {
   );
 }
 
-export default function Overlays({ terminalName }) {
+export default function Overlays({ terminalName, hideTurn = false }) {
   const { table, on } = useGame();
   const { universe } = useUniverse();
   const [toasts, setToasts] = useState([]); // { id, name, effect? } — PANIC toasts
@@ -152,7 +153,7 @@ export default function Overlays({ terminalName }) {
         </div>
       )}
 
-      {ini?.current && (
+      {ini?.current && !hideTurn && ( /* hidden while BoardView's SPOTLIGHT turn banner shows the same turn */
         <div className={`ov-turn k-${ini.current.kind}`} role="status">
           <span className="ov-turn-round">ROUND {ini.round}</span>
           <span className="ov-turn-name">{ini.current.label}</span>
