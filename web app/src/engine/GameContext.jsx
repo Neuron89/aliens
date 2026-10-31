@@ -861,6 +861,20 @@ export function GameProvider({ children }) {
     }
   }, [resetState]);
 
+  /** DM, from the session screen: end a listed (dormant or live) game this browser holds the host key for,
+      WITHOUT resuming it first. The server validates the key, tells every phone and the TV, and deletes the
+      snapshot; the key is forgotten here so the RESUME list drops it. */
+  const endSavedGame = useCallback((code, callback) => {
+    const key = String(code || '').toUpperCase();
+    const dmToken = dmTokenFor(key);
+    if (!dmToken) return callback?.({ error: 'NO HOST KEY FOR THIS SESSION.' });
+    socketRef.current?.emit('end-game', { code: key, dmToken }, (r) => {
+      if (r && !r.error) forgetDmToken(key);
+      callback?.(r);
+    });
+    return undefined;
+  }, []);
+
   /** DM: step away WITHOUT ending — the game goes dormant on the server (players keep their seats,
       the snapshot is kept) and this browser keeps the host key, so RESUME on the session screen lists it.
       Used by the header's UNIVERSES button. */
@@ -918,6 +932,7 @@ export function GameProvider({ children }) {
     // Shared
     leaveGame,
     suspendGame,
+    endSavedGame,
     // Table board (all roles; DM-only actions are rejected server-side for others)
     board,
     mapDef,

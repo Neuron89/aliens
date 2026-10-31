@@ -8,7 +8,7 @@ import { getApiToken, setApiToken } from '../apiToken';
 
 export default function SessionScreen() {
   const {
-    connected, createGame, joinGame, role, listResumable, resumeGame, hasDmToken,
+    connected, createGame, joinGame, role, listResumable, resumeGame, hasDmToken, endSavedGame,
     claimSeat, cancelSeatClaim, seatClaim, sessionNotice, clearSessionNotice,
   } = useGame();
   const { universe, display, chosen, resetUniverse } = useUniverse();
@@ -132,7 +132,7 @@ export default function SessionScreen() {
 
         {!mode && chosen && (
           <ResumableSessions universe={universe} terms={terms} packs={packs} connected={connected}
-            listResumable={listResumable} resumeGame={resumeGame} hasDmToken={hasDmToken} onError={setError} />
+            listResumable={listResumable} resumeGame={resumeGame} hasDmToken={hasDmToken} endSavedGame={endSavedGame} onError={setError} />
         )}
         {!mode && chosen && <TakeoverPanel terms={terms} connected={connected} resumeGame={resumeGame} onError={setError} />}
 
@@ -200,7 +200,7 @@ export default function SessionScreen() {
               </div>
             )}
             <ResumableSessions universe={universe} terms={terms} packs={packs} connected={connected}
-              listResumable={listResumable} resumeGame={resumeGame} hasDmToken={hasDmToken} onError={setError} />
+              listResumable={listResumable} resumeGame={resumeGame} hasDmToken={hasDmToken} endSavedGame={endSavedGame} onError={setError} />
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button onClick={handleCreate} disabled={loading || !connected} style={btnStyle}>
                 {loading ? 'INITIALIZING...' : 'INITIALIZE'}
@@ -335,9 +335,10 @@ function ago(ts) {
   return `${Math.round(s / 3600)}h ago`;
 }
 
-function ResumableSessions({ universe, terms, packs, connected, listResumable, resumeGame, hasDmToken, onError }) {
+function ResumableSessions({ universe, terms, packs, connected, listResumable, resumeGame, hasDmToken, endSavedGame, onError }) {
   const [list, setList] = useState([]);
   const [busy, setBusy] = useState(null);
+  const [confirmEnd, setConfirmEnd] = useState(null); // code awaiting the second END tap
 
   useEffect(() => {
     if (!connected) return undefined;
@@ -362,6 +363,20 @@ function ResumableSessions({ universe, terms, packs, connected, listResumable, r
     });
   };
 
+  /* END without resuming: two taps (END → CONFIRM END, or KEEP). Ends it for every phone and the TV and
+     deletes the server snapshot, then the list refreshes. */
+  const end = (code) => {
+    if (confirmEnd !== code) { setConfirmEnd(code); return; }
+    setBusy(code);
+    setConfirmEnd(null);
+    onError('');
+    endSavedGame(code, (r) => {
+      setBusy(null);
+      if (r?.error) onError(r.error);
+      else { setList((l) => l.filter((g) => g.code !== code)); listResumable(setList); }
+    });
+  };
+
   return (
     <div className="panel resume-panel">
       <h3 className="resume-title">RESUMABLE {terms.session.toUpperCase()}S</h3>
@@ -374,9 +389,25 @@ function ResumableSessions({ universe, terms, packs, connected, listResumable, r
               {' · '}{g.status === 'live' ? (g.dmConnected ? 'OPEN ON ANOTHER TAB' : 'LIVE') : 'DORMANT'}
             </span>
           </div>
-          <button className="resume-btn" disabled={busy === g.code} onClick={() => go(g.code)}>
-            {busy === g.code ? '…' : 'RESUME'}
-          </button>
+          <div className="resume-actions">
+            {confirmEnd === g.code ? (
+              <>
+                <span className="resume-end-ask">END FOR EVERYONE?</span>
+                <button className="resume-btn resume-end confirm" disabled={busy === g.code} onClick={() => end(g.code)}>CONFIRM END</button>
+                <button className="resume-btn resume-keep" onClick={() => setConfirmEnd(null)}>KEEP</button>
+              </>
+            ) : (
+              <>
+                <button className="resume-btn" disabled={busy === g.code} onClick={() => go(g.code)}>
+                  {busy === g.code ? '…' : 'RESUME'}
+                </button>
+                <button className="resume-btn resume-end" disabled={busy === g.code} onClick={() => end(g.code)}
+                  title={`End this ${terms.session.toLowerCase()} for everyone and delete its save`}>
+                  END
+                </button>
+              </>
+            )}
+          </div>
         </div>
       ))}
     </div>

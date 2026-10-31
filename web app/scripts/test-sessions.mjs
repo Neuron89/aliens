@@ -202,6 +202,29 @@ try {
   ok((await call(dm3, 'list-resumable', mine)).every((g) => g.code !== code), 'game gone from list');
   ok((await call(pA2, 'rejoin-game', { code, playerToken: jA.playerToken })).error, 'rejoin after end fails');
 
+  /* ── Phase B2: END from the session screen — a fresh socket that never resumed the game ends a
+     DORMANT game with just code + dmToken (the RESUME list's END button). ── */
+  {
+    const dmX = await connect();
+    const madeX = await call(dmX, 'create-game', { universeId: 'alien', packId: null });
+    ok(/^[A-Z]{4}$/.test(madeX.code) && madeX.dmToken, 'B2 game created');
+    const snapX = join(DATA, 'sessions', `${madeX.code}.json`);
+    await sleep(400);
+    dmX.disconnect();
+    await sleep(100);
+    const dmY = await connect();
+    const mineX = { tokens: { [madeX.code]: madeX.dmToken } };
+    ok((await call(dmY, 'list-resumable', mineX)).find((g) => g.code === madeX.code)?.status === 'dormant', 'B2 game dormant');
+    ok((await call(dmY, 'end-game', { code: madeX.code.toLowerCase(), dmToken: 'nope' })).error, 'B2 end-game rejects a bad key');
+    const endedX = await call(dmY, 'end-game', { code: madeX.code.toLowerCase(), dmToken: madeX.dmToken });
+    ok(endedX.success, 'B2 dormant game ended from a fresh socket (lower-case code accepted)');
+    await sleep(300);
+    ok(!existsSync(snapX), 'B2 snapshot removed');
+    ok((await call(dmY, 'list-resumable', mineX)).every((g) => g.code !== madeX.code), 'B2 game gone from list');
+    ok((await call(dmY, 'end-game', { code: madeX.code, dmToken: madeX.dmToken })).success, 'B2 ending an already-gone game is a no-op success');
+    dmY.disconnect();
+  }
+
   /* ── Phase C: stale snapshot pruning ── */
   dm3.close(); pA2.close();
   await killServer();
