@@ -2,6 +2,7 @@ import React from 'react';
 import { useUniverse } from '../UniverseContext';
 import { useGame } from '../GameContext';
 import { play } from '../sfx';
+import Confirm from './Confirm';
 
 const LINK_RE = /UPLINK|LINK|CHANNEL|COMMS/i;
 
@@ -31,6 +32,28 @@ export function FxToggles({ className = 'fx-toggles' }) {
   );
 }
 
+/** ◂ UNIVERSES — back to the landing from anywhere on the GM terminal. With a live session it asks first
+    and SUSPENDS (the session stays saved and resumable; nothing is ended). */
+export function UniversesButton() {
+  const { chosen, resetUniverse, universe } = useUniverse();
+  const { role, gameCode, suspendGame } = useGame();
+  if (!chosen) return null;
+  const label = <><span aria-hidden="true">◂ </span>UNIVERSES</>;
+  if (role === 'dm' && gameCode) {
+    const session = universe.terms?.session || 'session';
+    return (
+      <Confirm label={label} className="header-back" align="left" title="LEAVE TO THE UNIVERSE SCREEN?"
+        message={`The ${session.toLowerCase()} stays saved and the ${(universe.terms?.players || 'players').toLowerCase()} keep their seats. Come back through RESUME on the session screen (this terminal keeps the host key), or take over from another terminal with the PIN.`}
+        confirmLabel="LEAVE — KEEP SAVED" cancelLabel="STAY"
+        onConfirm={() => { play('ui.confirm'); suspendGame(); resetUniverse(); }} />
+    );
+  }
+  return (
+    <button type="button" className="header-back" onClick={() => { play('ui.confirm'); resetUniverse(); }}
+      title="Back to the universe selection">{label}</button>
+  );
+}
+
 export default function Header() {
   const { display } = useUniverse();
   const { connected, reconnecting } = useGame();
@@ -39,6 +62,7 @@ export default function Header() {
 
   return (
     <header className="header">
+      <UniversesButton />
       <h1>{terminal.name}</h1>
       <p className="subtitle">{terminal.subtitle}</p>
       <div className="status-bar">

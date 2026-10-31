@@ -5,8 +5,15 @@ import DuneReference from './components/DuneReference.jsx';
 import DuneCheatSheets from './components/DuneCheatSheets.jsx';
 import { ResidencyMap } from './maps/residency.jsx';
 import { SietchMap } from './maps/sietch.jsx';
+import { KeepMap } from './maps/keep.jsx';
+import { VarrinMap } from './maps/varrin.jsx';
+import { WreckMap } from './maps/wreck.jsx';
+import { LanternMap } from './maps/lantern.jsx';
 
-const ENGINE_MAPS = { 'arrakeen-residency': ResidencyMap, 'sietch-qarrat': SietchMap };
+const ENGINE_MAPS = {
+  'arrakeen-residency': ResidencyMap, 'sietch-qarrat': SietchMap,
+  'qarrat-keep': KeepMap, 'varrin-residency': VarrinMap, 'saltmothers-due-wreck': WreckMap, 'lantern-ring': LanternMap,
+};
 
 const packs = Object.values(
   import.meta.glob('./content/*.json', { eager: true, import: 'default' }),

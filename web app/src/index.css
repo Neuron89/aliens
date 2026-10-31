@@ -161,6 +161,16 @@ html[data-universe="dune"] .header .subtitle { font-family: var(--font-display);
 .fx-toggle[aria-pressed="true"] { color: var(--warn); border-color: var(--warn); }
 .fx-toggle svg { width: 12px; height: 12px; }
 @media (max-width: 768px) { .fx-toggles { position: static; justify-content: center; margin-top: 0.6rem; } }
+/* ◂ UNIVERSES (top-left twin of the FX toggles): back to the landing; with a live session it confirms + suspends. */
+.header > .header-back, .header > .confirm-wrap { position: absolute; top: 0.75rem; left: 0; }
+.header-back {
+  min-height: 32px; padding: 0.2rem 0.55rem; background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.35rem; white-space: nowrap;
+}
+.header-back:hover, .header-back[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
+.header > .confirm-wrap .confirm-card { text-align: left; }
+@media (max-width: 768px) { .header > .header-back, .header > .confirm-wrap { position: static; margin-bottom: 0.6rem; } }
 
 .header .status-bar .status-dot {
   display: inline-block;

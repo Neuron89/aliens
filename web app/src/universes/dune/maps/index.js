@@ -1,6 +1,8 @@
 /* Universe-level maps for DUNE (data only, no JSX).
-   Entries here are always available in the Maps tab. The bundled scenario
-   "The Water Debt" re-uses 'qarrat-keep' (same id) as its pack map.
+   Entries here are always available in the Maps tab. The four scenario
+   maps (qarrat-keep, varrin-residency, saltmothers-due-wreck, lantern-ring)
+   share their ids with the bundled packs' maps, so the packs inherit the
+   hand-drawn engine plans and their board geometry (fog by room).
    Engine maps carry board data per docs/BOARD_AND_BUILDER.md §3 (kind,
    size, levels, normalized rooms, doors, outline, crop, spawn); ../index.js
    attaches the MapEngine component as `engine`. Image maps carry rooms
@@ -8,59 +10,10 @@
 import * as RES from './residency.geometry.js';
 import * as SIE from './sietch.geometry.js';
 import { imageMaps } from './imageMaps.js';
-
-export const QARRAT_KEEP_ASCII = `
-  ╔══════════════════════════════════════════════════════════════╗
-  ║        QARRAT KEEP — GROUND FLOOR   (House Tessarin)         ║
-  ║        Shield Wall edge, Arrakis · north is up               ║
-  ╠══════════════════════════════════════════════════════════════╣
-  ║                                                              ║
-  ║   ┌──────────────┐   ┌──────────────────┐   ┌─────────────┐  ║
-  ║   │ THOPTER PAD  │   │  GREAT HALL      │   │  STEWARD'S  │  ║
-  ║   │ (roof ramp)  │   │  [dais] [hearth] │   │  COUNTING   │  ║
-  ║   │   ▲ ramp     │   │  audience floor  │   │  ROOM       │  ║
-  ║   └──────┬───────┘   └────────┬─────────┘   │  [ledgers]  │  ║
-  ║          │                    │             └──────┬──────┘  ║
-  ║   ┌──────┴────────────────────┴────────────────────┴──────┐  ║
-  ║   │            COLONNADE  (shield-door every 10 m)        │  ║
-  ║   └──┬─────────────┬───────────────┬──────────────────┬───┘  ║
-  ║      │             │               │                  │      ║
-  ║   ┌──┴────────┐ ┌──┴──────────┐ ┌──┴───────────┐  ┌───┴───┐  ║
-  ║   │ GUARD     │ │ CONSERVATORY│ │ KITCHENS &   │  │ GUEST │  ║
-  ║   │ ROOM      │ │ (date palms,│ │ SERVANTS'    │  │ WING  │  ║
-  ║   │ [armory]  │ │  dew traps) │ │ STAIR  ▼     │  │ (3 rm)│  ║
-  ║   └──┬────────┘ └─────────────┘ └──────┬───────┘  └───────┘  ║
-  ║      │                                 │                     ║
-  ║   ┌──┴──────────────┐          ┌───────┴───────────────┐     ║
-  ║   │ OUTER GATE      │          │ CISTERN VAULT (below) │     ║
-  ║   │ (sand-lock, two │          │ ~~~~~~~~~~~~~~~~~~~~~ │     ║
-  ║   │  doors, seal)   │          │ ~ town water: 41,000 L│     ║
-  ║   └──┬──────────────┘          │ ~~~~~~~~~~~~~~~~~~~~~ │     ║
-  ║      │                         └───────────────────────┘     ║
-  ║   ═══╧═══ to QARRAT TOWN and the spice-yard                  ║
-  ║                                                              ║
-  ╚══════════════════════════════════════════════════════════════╝`;
-
-export const SIETCH_ASCII = `
-  ╔══════════════════════════════════════════════════════════════╗
-  ║        A SIETCH OF THE DEEP DESERT — CUTAWAY (generic)       ║
-  ╠══════════════════════════════════════════════════════════════╣
-  ║   open sand  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ║
-  ║   ▓▓▓▓▓▓▓▓▓▓[hidden entrance]▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓    ║
-  ║   ▓▓  │ door-seals (moisture lock)                     ▓▓    ║
-  ║   ▓▓  ├── WATCH GALLERY ── lookouts, thumper store     ▓▓    ║
-  ║   ▓▓  │                                                ▓▓    ║
-  ║   ▓▓  ├── MEETING CAVERN ── council ledge, rock seats  ▓▓    ║
-  ║   ▓▓  │        │                                       ▓▓    ║
-  ║   ▓▓  │        ├── SAYYADINA'S CHAMBER                 ▓▓    ║
-  ║   ▓▓  │        └── WORKSHOPS (stillsuits, crysknives)  ▓▓    ║
-  ║   ▓▓  ├── LIVINGWARRENS ── family alcoves, hangings    ▓▓    ║
-  ║   ▓▓  └── DEATHSTILL ── water of the dead reclaimed    ▓▓    ║
-  ║   ▓▓            │                                      ▓▓    ║
-  ║   ▓▓        ┌───┴──────────────────────┐               ▓▓    ║
-  ║   ▓▓        │  WATER CATCHBASIN (sealed)│              ▓▓    ║
-  ║   ▓▓        └──────────────────────────┘               ▓▓    ║
-  ╚══════════════════════════════════════════════════════════════╝`;
+import * as WRK from './wreck.geometry.js';
+import * as LAN from './lantern.geometry.js';
+import * as KEEP from './keep.geometry.js';
+import * as VAR from './varrin.geometry.js';
 
 export const maps = [
   {
@@ -101,49 +54,83 @@ export const maps = [
     levelNoun: "LEVEL",
     backdrop: "sand",
   },
-  ...imageMaps,
   {
     id: 'qarrat-keep',
     title: 'QARRAT KEEP',
-    subtitle: 'House Tessarin seat — ground floor',
+    subtitle: 'House Tessarin seat — ground floor, cistern vault and roof',
     scenario: 'The Water Debt',
     description: 'A modest rock-and-plasteel keep on the Shield Wall edge. Its cistern vault holds the town’s water reserve and is the true heart of the House.',
-    ascii: QARRAT_KEEP_ASCII,
+    engine: 'qarrat-keep',
+    kind: 'engine',
+    size: [KEEP.W, KEEP.H],
+    levels: KEEP.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: KEEP.keepBoardRooms,
+    doors: KEEP.keepBoardDoors,
+    outline: KEEP.keepOutline,
+    crop: KEEP.keepCrop,
+    spawn: KEEP.keepSpawn,
+    grid: 1 / 50,
     levelNoun: "FLOOR",
-    backdrop: "none",
-    rooms: [
-      { name: 'Great Hall', note: 'Audience chamber with a raised dais. Where the Assessor will be received in Act III.' },
-      { name: "Steward's Counting Room", note: 'Ledgers, spice tallies and water accounts. A second, hidden ledger sits behind a loose wall panel.' },
-      { name: 'Colonnade', note: 'The keep’s spine; every room opens onto it. Shield-doors can seal any section.' },
-      { name: 'Thopter Pad', note: 'Roof landing reached by a ramp. One serviceable ornithopter and one that is not.' },
-      { name: 'Guard Room', note: 'Armory and duty roster. The roster for the night of the murder has a forged entry.' },
-      { name: 'Conservatory', note: 'Date palms and dew traps — an extravagant show of water wealth for guests.' },
-      { name: "Kitchens & Servants' Stair", note: 'The only internal route down to the cistern that avoids the guard room.' },
-      { name: 'Guest Wing', note: 'Three rooms. The Fremen envoy refuses to sleep here; the Assessor will demand the best one.' },
-      { name: 'Cistern Vault', note: 'Below the kitchens. Forty-one thousand litres of town water. The drowned man was found here.' },
-      { name: 'Outer Gate', note: 'Double-door sand-lock with a water-seal. Logs every opening — or should.' },
-    ],
+    backdrop: "sand",
   },
   {
-    id: 'sietch-cutaway',
-    title: 'SIETCH CUTAWAY',
-    subtitle: 'Generic deep-desert sietch',
-    scenario: 'Custom',
-    description: 'A template for any Fremen sietch: hidden entrance, moisture-sealed passages, council cavern and the deathstill where the water of the dead is reclaimed.',
-    ascii: SIETCH_ASCII,
-    levelNoun: "LEVEL",
-    backdrop: "none",
-    rooms: [
-      { name: 'Hidden Entrance', note: 'Concealed in rock; outsiders brought here blindfolded.' },
-      { name: 'Watch Gallery', note: 'Lookouts and thumpers. Anyone approaching is seen long before they arrive.' },
-      { name: 'Meeting Cavern', note: 'Council and judgment. Duels for leadership are fought here.' },
-      { name: "Sayyadina's Chamber", note: 'The sietch’s religious authority. Visitors are tested here.' },
-      { name: 'Workshops', note: 'Stillsuits, crysknives, maker hooks and dew collectors.' },
-      { name: 'Living Warrens', note: 'Family alcoves separated by hangings.' },
-      { name: 'Deathstill', note: 'Where the water of the dead is reclaimed for the tribe.' },
-      { name: 'Water Catchbasin', note: 'The sietch’s hoard. Showing it to an outsider is the highest trust.' },
-    ],
+    id: 'varrin-residency',
+    title: 'THE VARRIN RESIDENCY',
+    subtitle: 'House Varrin seat — above the Carthag spiceport',
+    scenario: 'The Weighing of House Varrin',
+    description: 'The Varrin family seat above the Carthag spiceport, built round an open dining court: great hall, dining court, conservatory, guest wing, shield-generator vault, servant passages and a roof ornithopter pad.',
+    engine: 'varrin-residency',
+    kind: 'engine',
+    size: [VAR.W, VAR.H],
+    levels: VAR.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: VAR.varrinBoardRooms,
+    doors: VAR.varrinBoardDoors,
+    outline: VAR.varrinOutline,
+    crop: VAR.varrinCrop,
+    spawn: VAR.varrinSpawn,
+    grid: 1 / 50,
+    levelNoun: "FLOOR",
+    backdrop: "sand",
   },
+  {
+    id: 'saltmothers-due-wreck',
+    title: 'SALTMOTHER’S DUE — WRECK SITE',
+    subtitle: 'Split harvester, carryall wreck and the Fremen rock',
+    scenario: 'Silence on the Erg',
+    description: 'The split harvester, the downed carryall, the Fremen rock and the open basin. Only the Thumb is safe from worms; everything else is open sand.',
+    engine: 'saltmothers-due-wreck',
+    kind: 'engine',
+    size: [WRK.W, WRK.H],
+    levels: WRK.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: WRK.wreckBoardRooms,
+    doors: WRK.wreckBoardDoors,
+    outline: WRK.wreckOutline,
+    crop: WRK.wreckCrop,
+    spawn: WRK.wreckSpawn,
+    grid: 1 / 50,
+    levelNoun: "LEVEL",
+    backdrop: "sand",
+  },
+  {
+    id: 'lantern-ring',
+    title: 'THE LANTERN RING',
+    subtitle: 'Guild heighliner passenger ring — six berths',
+    scenario: 'The Nine Days of Silence',
+    description: 'Six berths, each shared by two or three delegations, open onto a curved promenade. The service spine runs behind both rows of berths and meets at the Guild gallery, where the Navigator’s tank fills the far wall.',
+    engine: 'lantern-ring',
+    kind: 'engine',
+    size: [LAN.W, LAN.H],
+    levels: LAN.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: LAN.lanternBoardRooms,
+    doors: LAN.lanternBoardDoors,
+    outline: LAN.lanternOutline,
+    crop: LAN.lanternCrop,
+    spawn: LAN.lanternSpawn,
+    grid: 1 / 50,
+    levelNoun: "LEVEL",
+    backdrop: "space",
+  },
+  ...imageMaps,
 ];
 
 export default maps;

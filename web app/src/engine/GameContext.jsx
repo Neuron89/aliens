@@ -844,6 +844,18 @@ export function GameProvider({ children }) {
     }
   }, [resetState]);
 
+  /** DM: step away WITHOUT ending — the game goes dormant on the server (players keep their seats,
+      the snapshot is kept) and this browser keeps the host key, so RESUME on the session screen lists it.
+      Used by the header's UNIVERSES button. */
+  const suspendGame = useCallback(() => {
+    const socket = socketRef.current;
+    clearSession();
+    resetState();
+    // Drop the link so the server marks the game dormant; reconnect has no saved session to resume.
+    socket?.disconnect();
+    socket?.connect();
+  }, [resetState]);
+
   // Replay queued phone actions whenever the link comes back.
   useEffect(() => { if (connected && role === 'player') flushOutbox(); }, [connected, role, flushOutbox]);
 
@@ -888,6 +900,7 @@ export function GameProvider({ children }) {
     connectedPlayers,
     // Shared
     leaveGame,
+    suspendGame,
     // Table board (all roles; DM-only actions are rejected server-side for others)
     board,
     mapDef,
