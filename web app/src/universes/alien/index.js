@@ -6,9 +6,21 @@ import VehiclesReference from './components/VehiclesReference.jsx';
 import XenoReference from './components/XenoReference.jsx';
 import CheatSheets from './components/CheatSheets.jsx';
 import { MonteroMap } from './maps/montero.jsx';
+import { CronusMap } from './maps/cronus.jsx';
+import { NebraskaMap } from './maps/nebraska.jsx';
+import { PrometheusMap } from './maps/prometheus.jsx';
+import { HadleysMap } from './maps/hadleys.jsx';
+import { KesslersMap } from './maps/kesslers.jsx';
+import { RidgebackMap } from './maps/ridgeback.jsx';
+import { TartarusMap } from './maps/tartarus.jsx';
+import { GenericMap } from './maps/generic.jsx';
+
 import { bestiary } from './reference/bestiary.js';
 
-const ENGINE_MAPS = { 'uscss-montero': MonteroMap };
+const ENGINE_MAPS = {
+  'uscss-montero': MonteroMap,
+  'uscss-cronus': CronusMap, 'fort-nebraska': NebraskaMap, 'station-prometheus': PrometheusMap, 'hadleys-hope': HadleysMap, 'kesslers-landing-hub': KesslersMap, 'ridgeback-station': RidgebackMap, 'tartarus-reach-section': TartarusMap, 'generic-starship': GenericMap,
+};
 
 /* Cropped token thumbnails (public/art/xenomorphs/cropped) for the table board. */
 const XENO_THUMBS = {

@@ -4,6 +4,18 @@ export const terminal = {
   name: 'MU/TH/UR',
   subtitle: 'INTERFACE 2037 — Game Mother Terminal',
   statusLines: ['SYSTEMS NOMINAL', 'CREW MONITORING', 'UPLINK ACTIVE'],
+  /* Boot screen (fx/BootSequence.jsx): typed one character at a time with the terminal key
+     sound, a pause after each line. "…" is typed as a slow run of dots. The last line is held
+     with the cursor before the app fades in. Link lines read STANDBY until the socket is up. */
+  bootLines: [
+    'WEYLAND-YUTANI CORP · MAINFRAME ACCESS',
+    'INTERFACE 2037 … LOADED',
+    'SHIP SYSTEMS CHECK …… NOMINAL',
+    'LIFE SUPPORT …… NOMINAL',
+    'CREW MONITORING …… ONLINE',
+    'UPLINK TO GAME MOTHER …… ACTIVE',
+    'READY FOR INQUIRY',
+  ],
 };
 
 export const terms = {

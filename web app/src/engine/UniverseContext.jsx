@@ -24,6 +24,8 @@ import { setSfxTheme, isMuted, setMuted as setSfxMuted, subscribeMuted } from '.
 const STORAGE_KEY = 'engine.universe';
 const REDUCED_KEY = 'engine.fx.reduced';
 export const BOOT_MS = 900;
+/** How long a universe's boot screen stays up: theme.bootMs, else the style's default. */
+export const bootDuration = (u) => Number(u?.theme?.bootMs) || (u?.theme?.boot === 'sandstorm' ? 1100 : BOOT_MS);
 
 const NEUTRAL_FAVICON = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='#0b0b0d'/><rect x='5' y='7' width='22' height='15' rx='2' fill='none' stroke='#c8ccd4' stroke-width='2'/><path d='M11 26h10' stroke='#c8ccd4' stroke-width='2'/><path d='M9 12h6M9 16h10' stroke='#92959e' stroke-width='1.6'/></svg>";
 
@@ -153,7 +155,7 @@ export function UniverseProvider({ children }) {
     const style = registry[id].theme?.boot || 'terminal';
     if (boot && style !== 'none' && !reduce) {
       setBooting(registry[id]);
-      bootTimer.current = setTimeout(() => setBooting(null), style === 'sandstorm' ? 1100 : BOOT_MS);
+      bootTimer.current = setTimeout(() => setBooting(null), bootDuration(registry[id]));
     } else {
       setBooting(null);
     }

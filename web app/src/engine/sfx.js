@@ -20,7 +20,7 @@
             attack?, filter?: { type, freq, q } }
    ═══════════════════════════════════════════════════════════════ */
 
-export const CUES = ['ui.tap', 'ui.confirm', 'alert.incoming', 'dice.settle', 'dice.crit', 'dice.botch', 'clock.tick', 'reveal'];
+export const CUES = ['ui.tap', 'ui.confirm', 'alert.incoming', 'dice.settle', 'dice.crit', 'dice.botch', 'clock.tick', 'reveal', 'boot.key', 'boot.line', 'boot.ready'];
 
 const MUTE_KEY = 'engine.fx.muted';
 
@@ -34,6 +34,10 @@ const DEFAULT_CUES = {
   'dice.botch': [{ wave: 'triangle', freq: 220, to: 140, dur: 0.4, gain: 0.16 }],
   'clock.tick': [{ wave: 'sine', freq: 1200, dur: 0.025, gain: 0.06 }],
   reveal: [{ wave: 'sine', freq: 440, to: 660, dur: 0.35, gain: 0.08 }],
+  /* Boot typing (fx/BootSequence.jsx): one tick per typed character, a chirp per finished line. */
+  'boot.key': [{ wave: 'sine', freq: 1500, dur: 0.02, gain: 0.04 }],
+  'boot.line': [{ wave: 'sine', freq: 990, dur: 0.06, gain: 0.06 }],
+  'boot.ready': [{ wave: 'sine', freq: 660, dur: 0.08, gain: 0.08 }, { wave: 'sine', freq: 990, at: 0.09, dur: 0.16, gain: 0.08 }],
 };
 
 let cues = DEFAULT_CUES;

@@ -48,6 +48,9 @@ export const theme = {
   overlay: 'crt',
   /* Boot: typed terminal lines from terminal.statusLines (fx/BootSequence.jsx). */
   boot: 'terminal',
+  /* Deliberately slow: the lines in terms.terminal.bootLines type out character by character
+     with the key sound (about 10 s; any tap or key skips it). */
+  bootMs: 10500,
   /* Landing / library art motif (fx/Motifs.jsx). */
   motif: 'deckplan',
   /* Generator wizard log style. */
@@ -84,6 +87,21 @@ export const theme = {
   },
   /* Terminal blips: square waves and short noise ticks. */
   sfx: {
+    /* Boot typing: a short, bright electronic key-click per character (synthesized, no samples),
+       a two-note chirp when a line lands, and a rising "ready" tone at the end. */
+    'boot.key': [
+      { wave: 'square', freq: 2600, to: 1900, dur: 0.022, gain: 0.05, attack: 0.001, filter: { type: 'bandpass', freq: 2300, q: 2.5 } },
+      { wave: 'noise', dur: 0.012, gain: 0.02, filter: { type: 'highpass', freq: 4000 } },
+    ],
+    'boot.line': [
+      { wave: 'square', freq: 1180, dur: 0.05, gain: 0.04, filter: { type: 'lowpass', freq: 2800 } },
+      { wave: 'square', freq: 1760, at: 0.06, dur: 0.08, gain: 0.04, filter: { type: 'lowpass', freq: 2800 } },
+    ],
+    'boot.ready': [
+      { wave: 'square', freq: 880, dur: 0.09, gain: 0.045, filter: { type: 'lowpass', freq: 2600 } },
+      { wave: 'square', freq: 1320, at: 0.1, dur: 0.09, gain: 0.045, filter: { type: 'lowpass', freq: 2600 } },
+      { wave: 'square', freq: 1760, at: 0.2, dur: 0.22, gain: 0.045, filter: { type: 'lowpass', freq: 2600 } },
+    ],
     'ui.tap': [{ wave: 'square', freq: 1760, dur: 0.025, gain: 0.035, filter: { type: 'lowpass', freq: 3200 } }],
     'ui.confirm': [
       { wave: 'square', freq: 1320, dur: 0.04, gain: 0.04, filter: { type: 'lowpass', freq: 3000 } },

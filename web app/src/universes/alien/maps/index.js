@@ -3,6 +3,15 @@
    always available in the Maps tab. 'engine' is filled in by ../index.js
    with an interactive MapEngine component. */
 import { W, H, MONTERO_LEVELS, monteroRooms, monteroOutline, monteroCrop, monteroSpawn } from './montero.geometry.js';
+import * as CRONUS from './cronus.geometry.js';
+import * as NEBRASKA from './nebraska.geometry.js';
+import * as PROMETHEUS from './prometheus.geometry.js';
+import * as HADLEYS from './hadleys.geometry.js';
+import * as KESSLERS from './kesslers.geometry.js';
+import * as RIDGEBACK from './ridgeback.geometry.js';
+import * as TARTARUS from './tartarus.geometry.js';
+import * as GENERIC from './generic.geometry.js';
+
 
 export const maps = [
   {
@@ -26,59 +35,155 @@ export const maps = [
     "backdrop": "space"
   },
   {
-    "id": "generic-starship",
-    "title": "GENERIC COMMERCIAL VESSEL",
-    "subtitle": "Standard Freight/Tow Configuration",
-    "scenario": "Custom",
-    "levelNoun": "DECK",
-    "backdrop": "space",
-    "description": "A standard commercial vessel layout for custom scenarios. Adaptable to various ship types and sizes.",
-    "ascii": "\n    ╔═══════════════════════════════════════════════════════════════╗\n    ║           STANDARD COMMERCIAL VESSEL — DECK PLAN             ║\n    ║                 [CUSTOMIZABLE TEMPLATE]                       ║\n    ╠═══════════════════════════════════════════════════════════════╣\n    ║                                                               ║\n    ║                    ┌───────────┐                              ║\n    ║                    │  BRIDGE   │                              ║\n    ║                    │  [NAV]    │                              ║\n    ║                    │  [COMMS]  │                              ║\n    ║                    └─────┬─────┘                              ║\n    ║               ┌─────────┴─────────┐                          ║\n    ║               │  UPPER CORRIDOR   │                          ║\n    ║         ┌─────┴─────┐  ┌──────────┴─┐                       ║\n    ║         │ OFFICERS  │  │ COMPUTER   │                        ║\n    ║         │ QUARTERS  │  │ CORE       │                        ║\n    ║         └─────┬─────┘  └──────────┬─┘                       ║\n    ║               │  ┌─────────┐      │                          ║\n    ║               ├──┤ GALLEY  ├──────┤                          ║\n    ║               │  └─────────┘      │                          ║\n    ║         ┌─────┴─────┐  ┌──────────┴─┐                       ║\n    ║         │ CREW      │  │ MED BAY    │                        ║\n    ║         │ QUARTERS  │  │            │                        ║\n    ║         └─────┬─────┘  └──────────┬─┘                       ║\n    ║               │  ┌─────────┐      │                          ║\n    ║               ├──┤ ARMORY  ├──────┤                          ║\n    ║               │  └─────────┘      │                          ║\n    ║         ┌─────┴─────┐  ┌──────────┴─┐                       ║\n    ║         │ CRYO      │  │ STORAGE    │                        ║\n    ║         │ CHAMBER   │  │            │                        ║\n    ║         └─────┬─────┘  └──────────┬─┘                       ║\n    ║               └─────────┬─────────┘                          ║\n    ║               ┌─────────┴─────────┐                          ║\n    ║               │   ENGINE ROOM     │                          ║\n    ║               │   [REACTOR]       │                          ║\n    ║               │   [DRIVES]        │                          ║\n    ║               └─────────┬─────────┘                          ║\n    ║               ┌─────────┴─────────┐                          ║\n    ║               │   CARGO BAY       │                          ║\n    ║               │   [AIRLOCK]       │                          ║\n    ║               │   [DOCKING PORT]  │                          ║\n    ║               └───────────────────┘                          ║\n    ║                                                               ║\n    ╚═══════════════════════════════════════════════════════════════╝",
-    "rooms": [
-      {
-        "name": "Bridge",
-        "note": "Ship command. Navigation, communications, MU/TH/UR access. Captain's chair. Forward viewports."
-      },
-      {
-        "name": "Officers Quarters",
-        "note": "Private quarters for command staff. Better amenities than crew quarters."
-      },
-      {
-        "name": "Computer Core",
-        "note": "MU/TH/UR mainframe. Ship AI and data storage. Restricted access."
-      },
-      {
-        "name": "Galley",
-        "note": "Mess hall and kitchen. Communal eating area. Coffee machine."
-      },
-      {
-        "name": "Crew Quarters",
-        "note": "Shared bunks for general crew. Lockers, bunks, minimal privacy."
-      },
-      {
-        "name": "Med Bay",
-        "note": "Medical facility. Autodoc, surgical station, pharmacy."
-      },
-      {
-        "name": "Armory",
-        "note": "Locked weapon storage. Access restricted to authorized personnel."
-      },
-      {
-        "name": "Cryo Chamber",
-        "note": "Hypersleep pods for long-haul transit. Emergency wake procedures."
-      },
-      {
-        "name": "Storage",
-        "note": "General supplies, spare parts, EVA equipment."
-      },
-      {
-        "name": "Engine Room",
-        "note": "Reactor and drive systems. Engineering access. Maintenance crawlways."
-      },
-      {
-        "name": "Cargo Bay",
-        "note": "Main hold. Airlock and docking port for external connections."
-      }
-    ]
-  }
+    id: 'uscss-cronus',
+    title: 'USCSS CRONUS',
+    subtitle: 'Weyland-Yutani Science Vessel — Derelict',
+    scenario: 'Chariot of the Gods',
+    description: 'Derelict Weyland-Yutani science vessel: bridge, labs and containment, crew spaces, and the lower decks where the nest is.',
+    engine: 'uscss-cronus',
+    kind: 'engine',
+    size: [CRONUS.W, CRONUS.H],
+    levels: CRONUS.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: CRONUS.cronusBoardRooms,
+    doors: CRONUS.cronusBoardDoors,
+    outline: CRONUS.cronusOutline,
+    crop: CRONUS.cronusCrop,
+    spawn: CRONUS.cronusSpawn,
+    grid: 1 / 50,
+    levelNoun: "DECK",
+    backdrop: "space",
+  },
+  {
+    id: 'fort-nebraska',
+    title: 'FORT NEBRASKA',
+    subtitle: 'UA Mining Colony & Forward Operating Base — Ariarcus',
+    scenario: 'Destroyer of Worlds',
+    description: 'UA mining colony turned forward operating base on Ariarcus: landing pad, ops, barracks, habitats, power plant, mine admin and the perimeter fence, with the mine entrance and the UPP lab beyond.',
+    engine: 'fort-nebraska',
+    kind: 'engine',
+    size: [NEBRASKA.W, NEBRASKA.H],
+    levels: NEBRASKA.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: NEBRASKA.nebraskaBoardRooms,
+    doors: NEBRASKA.nebraskaBoardDoors,
+    outline: NEBRASKA.nebraskaOutline,
+    crop: NEBRASKA.nebraskaCrop,
+    spawn: NEBRASKA.nebraskaSpawn,
+    grid: 1 / 50,
+    levelNoun: "LEVEL",
+    backdrop: "none",
+  },
+  {
+    id: 'station-prometheus',
+    title: 'STATION PROMETHEUS',
+    subtitle: 'Weyland-Yutani Deep Space Research Station',
+    scenario: 'Heart of Darkness',
+    description: 'Deep-space research station in four levels plus the reactor core and maintenance tunnels; Level 4 primary research is sealed.',
+    engine: 'station-prometheus',
+    kind: 'engine',
+    size: [PROMETHEUS.W, PROMETHEUS.H],
+    levels: PROMETHEUS.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: PROMETHEUS.prometheusBoardRooms,
+    doors: PROMETHEUS.prometheusBoardDoors,
+    outline: PROMETHEUS.prometheusOutline,
+    crop: PROMETHEUS.prometheusCrop,
+    spawn: PROMETHEUS.prometheusSpawn,
+    grid: 1 / 50,
+    levelNoun: "LEVEL",
+    backdrop: "space",
+  },
+  {
+    id: 'hadleys-hope',
+    title: 'HADLEY’S HOPE',
+    subtitle: 'Weyland-Yutani Shake ’n’ Bake Colony — LV-426',
+    scenario: 'Hope’s Last Day',
+    description: 'Shake ’n’ Bake colony on LV-426: operations, landing pad, vehicle bay, med bay, commons, hab modules, school, hydroponics and maintenance, under the atmosphere processor.',
+    engine: 'hadleys-hope',
+    kind: 'engine',
+    size: [HADLEYS.W, HADLEYS.H],
+    levels: HADLEYS.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: HADLEYS.hadleysBoardRooms,
+    doors: HADLEYS.hadleysBoardDoors,
+    outline: HADLEYS.hadleysOutline,
+    crop: HADLEYS.hadleysCrop,
+    spawn: HADLEYS.hadleysSpawn,
+    grid: 1 / 50,
+    levelNoun: "LEVEL",
+    backdrop: "none",
+  },
+  {
+    id: 'kesslers-landing-hub',
+    title: 'KESSLER’S LANDING — HUB',
+    subtitle: 'Independent mining colony, terminator band of Varrow IV',
+    scenario: 'Kessler’s Landing',
+    description: 'Independent mining colony hub: admin block, clinic, union hall, hab stacks, chapel, landing pads and fuel farm, ore processor and the Seam 9 drift.',
+    engine: 'kesslers-landing-hub',
+    kind: 'engine',
+    size: [KESSLERS.W, KESSLERS.H],
+    levels: KESSLERS.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: KESSLERS.kesslersBoardRooms,
+    doors: KESSLERS.kesslersBoardDoors,
+    outline: KESSLERS.kesslersOutline,
+    crop: KESSLERS.kesslersCrop,
+    spawn: KESSLERS.kesslersSpawn,
+    grid: 1 / 50,
+    levelNoun: "LEVEL",
+    backdrop: "none",
+  },
+  {
+    id: 'ridgeback-station',
+    title: 'RIDGEBACK STATION',
+    subtitle: 'Seegson Deep Thermal Survey Outpost — LV-2213 “Cinder”',
+    scenario: 'Ridgeback Station',
+    description: 'Seegson deep thermal survey outpost on Cinder: surface pad and modules, the lift down the Throat, and the hot levels below.',
+    engine: 'ridgeback-station',
+    kind: 'engine',
+    size: [RIDGEBACK.W, RIDGEBACK.H],
+    levels: RIDGEBACK.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: RIDGEBACK.ridgebackBoardRooms,
+    doors: RIDGEBACK.ridgebackBoardDoors,
+    outline: RIDGEBACK.ridgebackOutline,
+    crop: RIDGEBACK.ridgebackCrop,
+    spawn: RIDGEBACK.ridgebackSpawn,
+    grid: 1 / 50,
+    levelNoun: "LEVEL",
+    backdrop: "none",
+  },
+  {
+    id: 'tartarus-reach-section',
+    title: 'TARTARUS REACH',
+    subtitle: 'Helium-3 refinery platform, vertical section',
+    scenario: 'Tartarus Reach',
+    description: 'Helium-3 refinery platform in vertical section: pads and ops above, the fraction column and tank farm, lift cells, reactor crawlway, sump and the escape gondola.',
+    engine: 'tartarus-reach-section',
+    kind: 'engine',
+    size: [TARTARUS.W, TARTARUS.H],
+    levels: TARTARUS.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: TARTARUS.tartarusBoardRooms,
+    doors: TARTARUS.tartarusBoardDoors,
+    outline: TARTARUS.tartarusOutline,
+    crop: TARTARUS.tartarusCrop,
+    spawn: TARTARUS.tartarusSpawn,
+    grid: 1 / 50,
+    levelNoun: "LEVEL",
+    backdrop: "none",
+  },
+  {
+    id: 'generic-starship',
+    title: 'GENERIC COMMERCIAL VESSEL',
+    subtitle: 'Standard Freight/Tow Configuration',
+    scenario: 'Custom',
+    description: 'A standard commercial vessel layout for custom scenarios: bridge, quarters, galley, med bay, armory, cryo, storage, engine room and cargo bay.',
+    engine: 'generic-starship',
+    kind: 'engine',
+    size: [GENERIC.W, GENERIC.H],
+    levels: GENERIC.LEVELS.map(({ id, label }) => ({ id, label })),
+    rooms: GENERIC.genericBoardRooms,
+    doors: GENERIC.genericBoardDoors,
+    outline: GENERIC.genericOutline,
+    crop: GENERIC.genericCrop,
+    spawn: GENERIC.genericSpawn,
+    grid: 1 / 50,
+    levelNoun: "DECK",
+    backdrop: "space",
+  },
 ];

@@ -120,6 +120,13 @@ export default function UniverseSelect() {
         ))}
       </div>
       <div className="us-hint">← → TO CHOOSE · ENTER TO BOOT</div>
+      {/* The flat TV: open this site on it and tap here (or bookmark /tv). It becomes the bare play
+          surface: code entry → map only, tap for fullscreen, no chrome. */}
+      <button type="button" className="us-tv" onClick={() => { play('ui.confirm'); window.location.assign('/?board'); }}
+        title="Turn this screen into the table board (map only, fullscreen)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1" /><path d="M8 20h8M12 16v4" /></svg>
+        THIS SCREEN IS THE TABLE TV — OPEN THE BOARD
+      </button>
     </div>
   );
 }

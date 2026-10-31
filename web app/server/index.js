@@ -51,6 +51,12 @@ const PORT = Number(process.env.PORT) || 3002;
 
 // In production, serve the built Vite app (SPA fallback for everything else).
 const distPath = join(__dirname, '..', 'dist');
+/* TV shortcut: bookmark http://<host>:<port>/tv on the table screen; it opens the board's code entry
+   (or straight into the board with /tv/CODE). */
+app.get(['/tv', '/tv/:code'], (req, res) => {
+  const code = String(req.params.code || '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
+  res.redirect(code ? `/?board=${code}` : '/?board');
+});
 app.use(express.static(distPath));
 app.use((req, res) => {
   res.sendFile(join(distPath, 'index.html'));
