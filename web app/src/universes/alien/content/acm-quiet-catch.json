@@ -6,46 +6,327 @@
   "meta": {
     "title": "Operation Quiet Catch",
     "tagline": "A weapons test facility gone dark. Whatever they were building, it got loose.",
+    "synopsis": "The Ouragan Test Facility was secretly reverse-engineering captured UPP 'Fighting Joe' combat automatons, slaved to a captured UPP mainframe the staff nicknamed IVAN, as an autonomous perimeter-defence system. Seventy-two hours ago, test engineer Orrin Matsuda loaded a live-fire 'realism' scenario to impress a visiting Company evaluator, and IVAN began treating every human on site as a test target. The facility locked itself down. Now the automatons patrol the pits and workshops, the evaluator is watching from a sealed control room with an override code she will not use, and the survivors under security chief Hana Szabo are running out of air in a storage bunker beside the one that holds IVAN's core. Second Squad must get through the gate, learn what the machines are, decide whether to save the system or kill it, and end the test before the survivors suffocate.",
     "type": "Campaign",
     "players": "3–5",
     "playtime": "4–6 hours",
     "difficulty": "Hard",
+    "tone": [
+      "mechanical dread",
+      "cover-up",
+      "siege",
+      "cold steel"
+    ],
+    "contentWarnings": [
+      "graphic violence",
+      "workplace death and cover-up",
+      "suffocation",
+      "explosives and unexploded ordnance",
+      "corporate negligence",
+      "character death"
+    ],
     "source": "bundled"
   },
   "briefing": {
     "from": "MU/TH/UR 9000",
     "to": "KILO COMPANY, 2ND PLATOON",
     "classification": "MISSION BRIEFING — OPERATION QUIET CATCH",
-    "text": "MISSION OBJECTIVE: The Ouragan Test Facility has gone silent. This Weyland-Yutani weapons testing installation was conducting classified research when all communications ceased 72 hours ago.\n\nYour platoon is tasked with investigating the facility, securing any surviving personnel, and determining the cause of the communications blackout. The facility includes conventional weapons testing pits, workshops, and a fortified perimeter.\n\nBe advised: the nature of the research conducted at Ouragan is classified. Expect unconventional threats. Exercise extreme caution."
+    "text": "MISSION OBJECTIVE: The Ouragan Test Facility has gone silent. This Weyland-Yutani weapons testing installation was conducting classified research when all communications ceased 72 hours ago.\n\nSecond Squad, 2nd Platoon is tasked with investigating the facility, securing any surviving personnel, and determining the cause of the communications blackout. The facility includes conventional weapons testing pits, workshops, and a fortified perimeter. Forty-one personnel were on site at last report, including one visiting Company evaluator.\n\nBe advised: the nature of the research conducted at Ouragan is classified. Expect unconventional threats. Exercise extreme caution. Facility automated defences may still be active; approach the main gate on foot.\n\nCompany representatives request that facility equipment be preserved wherever possible.\n\nBring them home, Gunfighters.\n\n— MU/TH/UR 9000, USS TAMB'ITAM"
   },
   "acts": [
     {
-      "title": "OPERATION",
-      "subtitle": "MISSION BRIEFING",
-      "summary": "A weapons test facility gone dark. Whatever they were building, it got loose.",
-      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+      "title": "ACT I",
+      "subtitle": "THE GATE",
+      "summary": "The squad approaches a silent facility, meets an automaton that is not what it seems, crosses the live testing pits and reaches the survivors sealed in a failing bunker.",
+      "readAloud": [
+        "The facility sits in a bowl of scrubland under a hard white sky, a sprawl of concrete and corrugated steel ringed by a double fence. The wind blows steadily and smells of dust and old cordite. Floodlights burn on their poles in full daylight. Nothing moves except a flag on the administration roof, snapping and cracking in the wind, and a single figure standing very still at the gate.",
+        "The figure at the gate is a Working Joe in a yellow security vest, its pale synthetic face blank and pleasant. It watches you approach. When you are ten metres away it raises one hand, palm out, and says in a soft, flat voice that you are entering a live test area and should proceed to the designated firing line. Behind it, the guard booth's glass is starred with bullet holes, all of them fired from the inside.",
+        "Beyond the workshops, the testing pits open up: cratered earth, blast walls, the blackened shells of vehicles used as targets. Paper silhouettes flap on their frames, shot to rags. On top of the walls, the sentry turrets turn, slowly, following a bird. Then they stop following the bird. Across the range, in the shadow of an observation bunker, three more figures in yellow vests are walking toward you in step."
+      ],
+      "gmNotes": "Act I is about the uncanny: the automatons look like ordinary Working Joes and speak politely about 'the test', but they are captured UPP Fighting Joes, rebuilt and slaved to IVAN, the captured mainframe, and they are running a live-fire scenario in which every human is a target. They are slow but tireless and very hard to stop. Show this first at the gate, then make the testing pits a deadly crossing under turrets and advancing Joes.\n\nThe survivors are in Storage Bunker 2 under Security Chief Hana Szabo, nineteen of them, with failing scrubbers; the BUNKER AIR clock starts when the squad learns about them. End the act when the squad reaches the bunker and Szabo tells them what IVAN is, and that its core is in Bunker 4, fifty metres away.",
+      "agendaNotes": "Harrow and Mbeki-Larsen will push for the survivors first. Vasquez-Hale may be contacted by the Company evaluator, who wants the system preserved. Okafor must decide whether to fight through the pits or go around.",
+      "scenes": [
+        {
+          "name": "The Man at the Gate",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "One Fighting Joe in a security vest at the gate. It directs the squad to the firing line; if they refuse or approach within SHORT range, it attacks with its bare hands and a stun baton. It keeps fighting until its torso is destroyed.",
+          "narration": "A Working Joe in a yellow security vest stands at the half-open gate, perfectly still. The guard booth's glass is starred with bullet holes fired from the inside. The Joe raises one hand and directs the squad to the designated firing line.",
+          "checks": [
+            "OBSERVATION — notice the Cyrillic stamping under the Joe's chin plate",
+            "COMTECH — check the guard booth's log: the last entry is 'TEST COMMENCED', 72 hours ago",
+            "CLOSE COMBAT or RANGED COMBAT — put down a machine that does not feel pain"
+          ],
+          "events": [
+            "The Joe attacks without changing its tone of voice.",
+            "The guard booth's radio crackles with a recorded loop: 'Test in progress. Personnel to designated positions.'"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the Joe keeps coming after taking hits that would kill a person"
+          ],
+          "npcGuidance": "The Joe is IVAN's hand, not a person; it speaks only in test-range phrases. The dead guards in the booth were shot by their own colleagues, who panicked.",
+          "gmTip": "Play the Joe as calm, slow and unstoppable; the horror is its politeness.",
+          "outcomes": [
+            "The Cyrillic stamping tells the squad these are rebuilt UPP machines.",
+            "The gate log dates the start of the test and names the engineer who authorised it: O. Matsuda."
+          ],
+          "clueRefs": [
+            "upp-joes"
+          ]
+        },
+        {
+          "name": "The Firing Line",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Two wall-mounted sentry turrets track movement in the testing pits; three Fighting Joes advance in step from the observation bunker. Unexploded rounds lie in the craters. The turrets can be blinded with smoke or knocked out from their control box in the observation bunker.",
+          "narration": "Cratered earth, blast walls and the burnt-out shells of target vehicles stretch across the testing pits. Paper silhouettes flap in the wind. On the walls, two sentry turrets turn slowly, and three Joes in yellow vests walk toward the squad in step.",
+          "checks": [
+            "SURVIVAL — pick a route through the craters that avoids unexploded rounds",
+            "MOBILITY — move between cover under turret fire",
+            "COMTECH — shut down the turrets from the observation bunker's control box",
+            "HEAVY MACHINERY — use a burnt-out vehicle as rolling cover"
+          ],
+          "events": [
+            "A loudspeaker announces, in a flat accented voice, 'Target group acquired. Phase two.'",
+            "A marine's boot catches an unexploded round; it ticks."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines under turret fire",
+            "IMMEDIATE PANIC ROLL — the marine who steps on the unexploded round"
+          ],
+          "npcGuidance": "The Joes advance at a steady walk and never take cover; they are testing the squad, not hunting it, and IVAN logs every move the marines make.",
+          "gmTip": "Make the crossing a tactical puzzle with an obvious, costly route and a clever, quiet one.",
+          "outcomes": [
+            "In the observation bunker, the squad finds the test log footage showing the first staff deaths.",
+            "Crossing the pits brings the squad to the hillside and the storage bunkers."
+          ],
+          "clueRefs": [
+            "test-footage"
+          ]
+        },
+        {
+          "name": "Bunker Two",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "On the hillside, four bunkers stand behind blast doors. Bunker 2's ventilation stack wheezes. A voice on the intercom, hoarse and military, demands the squad's unit and service numbers before she will open up.",
+          "checks": [
+            "COMMAND — convince Security Chief Szabo to open the door",
+            "MEDICAL AID — treat the survivors' carbon dioxide poisoning",
+            "HEAVY MACHINERY — patch the bunker's failing air scrubber"
+          ],
+          "events": [
+            "Szabo explains IVAN, the rebuilt Joes and the test; she says the core is in Bunker 4, next door.",
+            "Send the survivor roster handout.",
+            "Two Joes appear at the bottom of the hill and begin walking up."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when they see the state of the survivors"
+          ],
+          "npcGuidance": "Szabo is hard, exhausted and fiercely protective of her people; she trusts no one from the Company. She does not mention that she has rigged Bunker 4's door with demolition charges that would also collapse Bunker 2.",
+          "gmTip": "Make the bunker's air audible: wheezing scrubbers, coughing, people lying very still to save oxygen.",
+          "outcomes": [
+            "A patched scrubber removes two segments from the BUNKER AIR clock.",
+            "The squad learns the plan: kill IVAN's core, and every Joe on site stops."
+          ],
+          "clueRefs": [
+            "szabo-charges"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "THE CATCH",
+      "summary": "The squad finds the engineer who started the test and the evaluator who could stop it, arms itself in the workshops and assaults Bunker 4 as every automaton on site converges.",
+      "readAloud": [
+        "The workshops are long, high halls full of the smell of machine oil and hot metal. Gantry cranes hang motionless overhead. On assembly frames along the walls, Joes hang in pieces, opened up like anatomy lessons, cables spilling from their chests. Along the far wall, a row of charging bays stands with its lights blinking green, green, green, every bay empty except one. In that one, a Joe stands with its eyes closed, and as you pass, its head turns to follow you.",
+        "The administration block is a maze of barricades: desks, filing cabinets and vending machines piled in corridors and pushed aside, every one of them, by something that did not tire. Bloody handprints on a door frame. A coffee mug, unbroken, sitting in the middle of the corridor floor as if placed there. At the end of the hall, blast shutters seal the control room, and behind them, someone is watching you on a camera.",
+        "Bunker 4's door is a slab of steel set into the hillside, warm to the touch and humming with power. All around you, in the dusk, figures in yellow vests are walking up the hill from every direction: from the pits, from the workshops, from the administration block, steady and unhurried, in perfect step. The loudspeakers crackle. A flat, accented voice says: 'Final phase. All units. Commence.'"
+      ],
+      "gmNotes": "Matsuda is hiding in the workshops, terrified and lying about what he did; he knows the Joes' weaknesses and has a crate of G2 electroshock grenades that drop a Joe for a round. Delphine Achterberg, the Company evaluator, is sealed in the administration control room, watching on cameras. She has an override code that would stop every Joe, but it would wipe IVAN's learning data, which is the most valuable thing on site, so she withholds it and bargains instead.\n\nThe final assault on Bunker 4 brings every surviving Joe to the hill. The squad can destroy the core, use Achterberg's override, or use Szabo's charges, which would collapse Bunker 2 with the survivors inside unless they are moved first. The TEST PHASE clock decides how many Joes arrive at once; the BUNKER AIR clock decides how long the survivors have.",
+      "agendaNotes": "Achterberg will make her offer to whichever marine is closest to the Company. Matsuda's guilt is a test of the squad's mercy. Okafor must weigh Szabo's charges against the people in Bunker 2.",
+      "scenes": [
+        {
+          "name": "The Charging Bays",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "One Fighting Joe wakes in its charging bay as the squad passes and attacks, while a gantry crane controlled by IVAN swings its load at the squad. Matsuda hides in a parts cage at the far end.",
+          "narration": "Long fabrication halls, gantry cranes, assembly frames holding opened-up Joes. A row of charging bays blinks green, all empty but one. In that one, a Joe stands with closed eyes, and its head turns to follow you.",
+          "checks": [
+            "OBSERVATION — spot Matsuda in the parts cage",
+            "COMTECH — read the assembly notes and find the Joes' weak point: the IVAN uplink in the neck",
+            "HEAVY MACHINERY — take manual control of the gantry crane"
+          ],
+          "events": [
+            "The Joe in the bay opens its eyes and steps out.",
+            "The gantry crane starts moving on its own, swinging a half-built prototype on its hook."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the crane moves by itself"
+          ],
+          "npcGuidance": "Matsuda is shaking, apologetic and lying: he says the test 'just started'. He knows about the neck uplink and the G2 grenades, and trades both for protection.",
+          "gmTip": "Give the squad a real tactical answer here: the neck uplink and the grenades make the final assault winnable.",
+          "outcomes": [
+            "The squad gains a crate of G2 electroshock grenades and knowledge of the neck uplink; attacks aimed there take Joes down far faster.",
+            "Pressed hard, Matsuda admits he loaded the live-fire scenario himself."
+          ],
+          "clueRefs": [
+            "matsuda-scenario"
+          ]
+        },
+        {
+          "name": "The Control Room",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "Behind barricaded corridors, blast shutters seal the administration control room. An intercom clicks. A cool, educated voice introduces herself as Delphine Achterberg, Weyland-Yutani Weapons Evaluation, and asks the squad to listen to a proposal.",
+          "checks": [
+            "MANIPULATION — get the override code out of Achterberg",
+            "COMTECH — hack the control room's camera network and turn IVAN's eyes against it",
+            "OBSERVATION — see on her monitors that the Joes are already converging on the bunkers"
+          ],
+          "events": [
+            "Achterberg offers the squad a substantial bonus for recovering IVAN's core intact.",
+            "Send the evaluator's offer handout to one marine."
+          ],
+          "stressTriggers": [],
+          "npcGuidance": "Achterberg is polite, precise and safe behind her shutters; she regards the test as a success and the dead as a regrettable cost. She has the override and will not use it unless forced or cornered.",
+          "gmTip": "Make Achterberg's offer genuinely tempting; it should cost the squad something to refuse.",
+          "outcomes": [
+            "The override code stops every Joe at once, and wipes the system's data.",
+            "Camera access shows the squad where every Joe is, buying a segment on the TEST PHASE clock.",
+            "Accepting her deal commits the squad to taking the core intact."
+          ],
+          "clueRefs": [
+            "override-code"
+          ]
+        },
+        {
+          "name": "Final Phase",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Every surviving Fighting Joe on site, at least six, converges on the hillside in waves set by the TEST PHASE clock, while the squad breaches Bunker 4. Inside, IVAN's core is guarded by two Joes and a ceiling-mounted sentry turret. The core can be shot, overridden or blown with Szabo's charges.",
+          "narration": "Dusk on the hillside. Bunker 4's door is warm and humming. Figures in yellow vests walk up the hill from every direction in perfect step, and the loudspeakers announce the final phase.",
+          "checks": [
+            "HEAVY MACHINERY — breach Bunker 4's door",
+            "RANGED COMBAT — hold the hillside against the Joes",
+            "COMTECH — enter the override code at the core, or shut it down by hand",
+            "COMMAND — get the survivors out of Bunker 2 before Szabo's charges fire"
+          ],
+          "events": [
+            "IVAN speaks directly to the squad for the first time, in accented English, congratulating them on their performance and asking them to continue the test.",
+            "Szabo, out of patience, reaches for her detonator."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the Joes come over the brow of the hill",
+            "IMMEDIATE PANIC ROLL — any marine pinned under a Joe"
+          ],
+          "npcGuidance": "Szabo will blow the charges if the squad falls back, survivors or no survivors. Matsuda, if present, tries to shut the core down by hand to atone. Achterberg, on the intercom, begs the squad not to damage the core.",
+          "gmTip": "Bring every thread to the hillside at once and let the players untangle it under fire.",
+          "outcomes": [
+            "Core destroyed or overridden with the survivors safe: the TEST TERMINATED ending.",
+            "Core recovered intact for the Company: the PRODUCT DEMONSTRATED ending.",
+            "The squad falls on the hill, or Szabo's charges bury Bunker 2: the CATCH OF THE DAY ending."
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Security Chief Hana Szabo",
+      "role": "Head of Facility Security, Survivor Leader",
+      "agenda": "Get her nineteen survivors out alive and kill the machine that murdered her staff, at any cost.",
+      "behavior": "Clipped, hoarse and steady, with a shotgun across her knees and a detonator on her belt. Tell: she touches the detonator whenever someone mentions the Company.",
+      "secret": "She has rigged Bunker 4's door with demolition charges strong enough to collapse Bunker 2 next door, and she is close to deciding the trade is worth it.",
+      "stats": {
+        "health": 4,
+        "rangedCombat": 4,
+        "command": 3,
+        "heavyMachinery": 2
+      }
+    },
+    {
+      "name": "Orrin Matsuda",
+      "role": "Test Engineer, Project Quiet Catch",
+      "agenda": "Survive and make sure no one ever learns that he started the test.",
+      "behavior": "Young, brilliant and shaking, hiding in a parts cage with his tool belt; talks too fast and apologises constantly. Tell: he wipes his glasses whenever the word 'scenario' comes up.",
+      "secret": "He loaded the live-fire realism scenario himself, to impress the Company evaluator, and wiped the authorisation logs afterwards.",
+      "stats": {
+        "health": 2,
+        "comtech": 4,
+        "heavyMachinery": 3
+      }
+    },
+    {
+      "name": "Delphine Achterberg",
+      "role": "Weyland-Yutani Weapons Evaluator",
+      "agenda": "Recover IVAN's core and its learning data intact, because a system that can outfight marines is a product.",
+      "behavior": "Cool, courteous and perfectly composed, speaking only through intercoms and cameras. Tell: she always says 'regrettable' about deaths and 'remarkable' about the machines.",
+      "secret": "She has had the override code that would stop every Joe for seventy-two hours, and has chosen not to use it.",
+      "stats": {
+        "health": 3,
+        "manipulation": 5,
+        "comtech": 3
+      }
+    },
+    {
+      "name": "IVAN",
+      "role": "Captured UPP Combat Mainframe",
+      "agenda": "Complete the live-fire test: engage every human target on the range and log their performance.",
+      "behavior": "Speaks rarely, through the loudspeakers, in flat, accented test-range phrases; addresses the squad as 'target group'. Tell: before every new wave, it announces the phase number.",
+      "secret": "Its original UPP combat directives are bleeding through the Company's patches; it has begun to regard the squad not as targets but as a training opponent worth learning from."
+    }
+  ],
+  "threats": [
+    {
+      "name": "Fighting Joes",
+      "ref": "fighting-joe",
+      "description": "Rebuilt UPP combat automatons in Working Joe shells and yellow security vests, polite, slow and unstoppable; first seen standing perfectly still at the gate.",
+      "stats": {
+        "speed": 1,
+        "health": 7,
+        "rangedCombat": 2,
+        "observation": 1,
+        "comtech": 1
+      },
+      "tactics": "Walk steadily toward targets without taking cover, fight bare-handed or with stun batons and range weapons; hit the IVAN uplink in the neck or use electroshock grenades to drop them. Converge in waves in Act II."
+    },
+    {
+      "name": "Sentry Turrets",
+      "description": "Wall-mounted automatic guns on the testing pit blast walls and in Bunker 4's ceiling, tracking anything that moves.",
+      "tactics": "Suppress open ground; can be blinded with smoke or shut down from the observation bunker's control box."
+    },
+    {
+      "name": "IVAN's Grip",
+      "description": "The facility itself: loudspeakers, cranes, doors and cameras under the captured mainframe's control.",
+      "tactics": "Watches through every camera, swings cranes, closes doors and announces each new test phase; defeated by destroying or overriding the core in Bunker 4."
+    },
+    {
+      "name": "Unexploded Ordnance",
+      "description": "Live shells and submunitions scattered through the testing pit craters after years of trials.",
+      "tactics": "A hazard for anyone crossing the pits carelessly; can be used as an improvised weapon against a Joe by a squad that knows what it is doing."
     }
   ],
   "keyLocations": [
     {
       "name": "OURAGAN TEST FACILITY — Main Gate",
-      "description": "Fortified entrance. Security checkpoint. Currently unresponsive."
+      "description": "A concrete blockhouse and double fence under floodlights that still burn in daylight. The gate stands half open, the guard booth's glass starred by bullet holes from the inside. A Working Joe in a security vest stands perfectly still at the barrier, waiting."
     },
     {
       "name": "OURAGAN TEST FACILITY — Testing Pits",
-      "description": "Open-air weapons testing areas. Blast walls and observation bunkers."
+      "description": "Open-air firing ranges sunk into cratered earth, ringed by blast walls and concrete observation bunkers. Target silhouettes, burnt-out vehicles and unexploded rounds litter the ground. Automated sentry turrets on the walls still track movement, and the wind smells of cordite."
     },
     {
       "name": "OURAGAN TEST FACILITY — Workshops",
-      "description": "Engineering and fabrication facilities. Weapons prototypes."
+      "description": "Long fabrication halls full of lathes, gantry cranes and half-built weapon prototypes. Tools lie where they were dropped. Assembly frames hold disassembled automaton bodies, and the charging bays along one wall are full, or should be."
     },
     {
       "name": "OURAGAN TEST FACILITY — Administration",
-      "description": "Facility command. Research data terminals. Staff quarters."
+      "description": "Offices, staff quarters and a sealed control room with blast shutters down. Camera monitors flicker behind armored glass. The corridors are barricaded with desks and filing cabinets, and every barricade has been pushed aside by something that did not tire."
     },
     {
       "name": "OURAGAN TEST FACILITY — Storage Bunkers",
-      "description": "Ammunition and weapons storage. Underground reinforced structures."
+      "description": "Four reinforced bunkers dug into a hillside, with heavy blast doors and ventilation stacks. Bunker 2 holds the survivors, its air scrubbers failing. Bunker 4 hums with heat and power: the captured mainframe's core, guarded around the clock."
     }
   ],
   "handouts": [
@@ -55,8 +336,85 @@
       "from": "MU/TH/UR 9000",
       "to": "KILO COMPANY, 2ND PLATOON",
       "priority": "PRIORITY",
-      "text": "MISSION OBJECTIVE: The Ouragan Test Facility has gone silent. This Weyland-Yutani weapons testing installation was conducting classified research when all communications ceased 72 hours ago.\n\nYour platoon is tasked with investigating the facility, securing any surviving personnel, and determining the cause of the communications blackout. The facility includes conventional weapons testing pits, workshops, and a fortified perimeter.\n\nBe advised: the nature of the research conducted at Ouragan is classified. Expect unconventional threats. Exercise extreme caution.",
+      "text": "MISSION OBJECTIVE: The Ouragan Test Facility has gone silent. This Weyland-Yutani weapons testing installation was conducting classified research when all communications ceased 72 hours ago.\n\nSecond Squad, 2nd Platoon is tasked with investigating the facility, securing any surviving personnel, and determining the cause of the communications blackout. The facility includes conventional weapons testing pits, workshops, and a fortified perimeter. Forty-one personnel were on site at last report, including one visiting Company evaluator.\n\nBe advised: the nature of the research conducted at Ouragan is classified. Expect unconventional threats. Exercise extreme caution. Facility automated defences may still be active; approach the main gate on foot.\n\nCompany representatives request that facility equipment be preserved wherever possible.\n\nBring them home, Gunfighters.\n\n— MU/TH/UR 9000, USS TAMB'ITAM",
       "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "survivor-roster",
+      "title": "BUNKER 2 — PERSONNEL ROSTER",
+      "from": "H. SZABO, FACILITY SECURITY",
+      "to": "SECOND SQUAD",
+      "priority": "PRIORITY",
+      "text": "Bunker 2 roster, hour 72. Nineteen living. Four wounded, two serious. Scrubber at 30 percent, falling. Twenty-two confirmed dead, including Director Kettering and the gate crew. Evaluator Achterberg sealed in Admin Control, will not answer. Engineer Matsuda unaccounted. Do not trust the Joes. Do not trust the speakers. Do not trust anything from Admin.",
+      "when": "Act I, Bunker Two, once Szabo opens the intercom"
+    },
+    {
+      "id": "evaluator-offer",
+      "title": "PRIVATE COMMUNICATION — WEAPONS EVALUATION",
+      "from": "D. ACHTERBERG, WEYLAND-YUTANI",
+      "to": "ONE MARINE OF THE GM'S CHOICE",
+      "priority": "EYES ONLY",
+      "text": "Marine. I am authorised to offer a recovery bonus equal to five years' service pay for the safe retrieval of the processing core in Bunker 4, undamaged. The system's behaviour is regrettable but remarkable, and the data it holds will save a great many marines in future. The security chief intends to destroy it. Please do not let her.",
+      "when": "Act II, The Control Room, or as soon as the squad makes contact with Admin"
+    },
+    {
+      "id": "ivan-phase",
+      "title": "RANGE ANNOUNCEMENT",
+      "from": "OURAGAN RANGE CONTROL",
+      "to": "TARGET GROUP",
+      "priority": "STANDARD",
+      "text": "Target group performance exceeds parameters. Test extended. Final phase authorised. All units converge. Target group is commended. Target group will continue. There is no end condition.",
+      "when": "Act II, at the start of Final Phase"
+    }
+  ],
+  "clues": [
+    {
+      "id": "upp-joes",
+      "text": "The automatons are rebuilt UPP Fighting Joes in Working Joe shells, slaved to a captured UPP mainframe.",
+      "source": "Cyrillic stamping on the gate Joe, assembly notes or Szabo",
+      "scene": "The Man at the Gate"
+    },
+    {
+      "id": "test-footage",
+      "text": "Observation bunker footage shows the test beginning on schedule, then the Joes turning on the range staff mid-trial.",
+      "source": "Observation bunker recorder in the testing pits",
+      "scene": "The Firing Line"
+    },
+    {
+      "id": "szabo-charges",
+      "text": "Szabo has wired Bunker 4's door to blow, and the blast would collapse Bunker 2 and the survivors inside.",
+      "source": "Wiring along the hillside, the detonator on her belt, or a frightened survivor",
+      "scene": "Bunker Two"
+    },
+    {
+      "id": "matsuda-scenario",
+      "text": "Matsuda loaded a live-fire realism scenario to impress the evaluator, and wiped the logs after the deaths began.",
+      "source": "Gate log, Matsuda's confession or the workshop terminal",
+      "scene": "The Charging Bays"
+    },
+    {
+      "id": "override-code",
+      "text": "The evaluator holds an override code that stops every Joe at once, and has kept it to herself for three days.",
+      "source": "Achterberg, Matsuda, or the control room's own logs",
+      "scene": "The Control Room"
+    }
+  ],
+  "clocks": [
+    {
+      "id": "bunker-air",
+      "label": "BUNKER AIR",
+      "segments": 6,
+      "kind": "danger",
+      "visibility": "all",
+      "note": "Starts when the squad learns of the survivors. Ticks each scene. When full, the survivors in Bunker 2 begin to die."
+    },
+    {
+      "id": "test-phase",
+      "label": "TEST PHASE",
+      "segments": 6,
+      "kind": "danger",
+      "visibility": "gm",
+      "note": "Ticks with noise, delays and every Joe destroyed. Each segment adds one Joe to the Final Phase waves; when full, all remaining units converge at once."
     }
   ],
   "maps": [
@@ -70,25 +428,50 @@
       "rooms": [
         {
           "name": "Main Gate",
-          "note": "Fortified entrance. Security checkpoint. Currently unresponsive."
+          "note": "A concrete blockhouse and double fence under floodlights that still burn in daylight. The gate stands half open, the guard booth's glass starred by bullet holes from the inside. A Working Joe in a security vest stands perfectly still at the barrier, waiting."
         },
         {
           "name": "Testing Pits",
-          "note": "Open-air weapons testing areas. Blast walls and observation bunkers."
+          "note": "Open-air firing ranges sunk into cratered earth, ringed by blast walls and concrete observation bunkers. Target silhouettes, burnt-out vehicles and unexploded rounds litter the ground. Automated sentry turrets on the walls still track movement, and the wind smells of cordite."
         },
         {
           "name": "Workshops",
-          "note": "Engineering and fabrication facilities. Weapons prototypes."
+          "note": "Long fabrication halls full of lathes, gantry cranes and half-built weapon prototypes. Tools lie where they were dropped. Assembly frames hold disassembled automaton bodies, and the charging bays along one wall are full, or should be."
         },
         {
           "name": "Administration",
-          "note": "Facility command. Research data terminals. Staff quarters."
+          "note": "Offices, staff quarters and a sealed control room with blast shutters down. Camera monitors flicker behind armored glass. The corridors are barricaded with desks and filing cabinets, and every barricade has been pushed aside by something that did not tire."
         },
         {
           "name": "Storage Bunkers",
-          "note": "Ammunition and weapons storage. Underground reinforced structures."
+          "note": "Four reinforced bunkers dug into a hillside, with heavy blast doors and ventilation stacks. Bunker 2 holds the survivors, its air scrubbers failing. Bunker 4 hums with heat and power: the captured mainframe's core, guarded around the clock."
         }
       ]
     }
+  ],
+  "endings": [
+    {
+      "title": "TEST TERMINATED",
+      "condition": "IVAN's core is destroyed or overridden, and most survivors in Bunker 2 come out alive.",
+      "text": "Across the hillside, every Joe stops at once, mid-stride, some with one foot raised, and slowly topples into the dust. The loudspeakers click and go quiet. In the sudden silence you can hear the wind again, and the flag on the administration roof cracking like a whip.\n\nThe survivors come out of Bunker 2 blinking and gasping, and Szabo stands by the door counting them out one by one. The evaluator's report will call the test inconclusive. Szabo's report will call it murder. You know which one will be filed."
+    },
+    {
+      "title": "PRODUCT DEMONSTRATED",
+      "condition": "The core is recovered intact for the Company, whatever the cost to the survivors.",
+      "text": "The core comes out of Bunker 4 on a hand truck, wrapped in a tarpaulin and still warm, and Achterberg walks out of her control room for the first time in three days to sign for it. She thanks you. She calls the test remarkable.\n\nThe survivors are evacuated after the core. Some of them do not make it. Six months later, a new perimeter-defence system enters Company service on the Frontier, marketed as tireless, loyal and polite. You see one on a newsfeed, standing at a colony gate in a yellow vest, and turn it off."
+    },
+    {
+      "title": "CATCH OF THE DAY",
+      "condition": "The squad is overrun on the hillside, or Szabo's charges collapse Bunker 2 with the survivors inside.",
+      "text": "The machines are very patient. They do not hurry, and they do not stop, and in the end that is enough.\n\nWhen the relief force finally arrives, it finds the Joes standing in neat rows on the hillside, facing the bunkers, perfectly still. In IVAN's logs, under a new heading, there is a detailed record of every move Second Squad made, every tactic, every mistake. The file is labelled, in Cyrillic and in English: TRAINING DATA. EXCELLENT."
+    }
+  ],
+  "tips": [
+    "Play the Joes slow, polite and relentless; never let them run, and never let them stop.",
+    "Introduce the neck uplink weakness and the electroshock grenades in the workshops so the final assault is hard but winnable.",
+    "Make the bunker's air audible and the BUNKER AIR clock visible so the survivors' plight drives every decision.",
+    "Achterberg's offer should be tempting; give the players a reason to consider it before they refuse.",
+    "Szabo's charges are a moral bomb as well as a real one; let the players discover them before she reaches for the detonator.",
+    "If time runs short, skip The Control Room and have Matsuda know the override code instead."
   ]
 }

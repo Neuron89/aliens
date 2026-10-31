@@ -6,70 +6,484 @@
   "meta": {
     "title": "Operation Octopus Garden",
     "tagline": "Darwin Island. A bioweapon research facility. Xenomorphs, Praetorians, and a rogue general.",
+    "synopsis": "Darwin Island hides Project Life Force, Deep Void's bioweapon programme: cultivated xenomorph hives and Biodrones, xenomorphs bred to obey. General Vaughn, who commands the site, has gone rogue: convinced the Company and the Corps will bury the programme, he is evacuating the Biodrones and their research on Bearcat strikeships to fight the Frontier War his own way. Second Squad storms the beach, fights through jungle hunted by Scouts, takes the helipad's air defences and crosses to the Colonial Rig, an eighty-metre cube hanging over a volcanic caldera. Inside, the squad descends through labs, holding cells and a hive observation level toward Vaughn at the bottom of the rig. The Biodrones answer to a neural harness Vaughn wears; kill him carelessly and they go feral. Above it all, the USS Tamb'Itam counts down to a nuclear strike, while the Company's liaison pleads for the harness to be brought home intact.",
     "type": "Campaign",
     "players": "3–5",
     "playtime": "6–8 hours",
     "difficulty": "Extreme",
+    "tone": [
+      "full-scale assault",
+      "military horror",
+      "corporate betrayal",
+      "ticking clock"
+    ],
+    "contentWarnings": [
+      "graphic violence",
+      "body horror",
+      "parasitic implantation",
+      "human experimentation",
+      "mass casualties",
+      "nuclear destruction",
+      "suicide mission themes",
+      "character death"
+    ],
     "source": "bundled"
   },
   "briefing": {
     "from": "MU/TH/UR 9000",
     "to": "KILO COMPANY, 2ND PLATOON",
     "classification": "MISSION BRIEFING — OPERATION OCTOPUS GARDEN",
-    "text": "MISSION OBJECTIVE: Darwin Island is the home of Deep Void's Project Life Force — a bioweapon research facility where Weyland-Yutani has been cultivating Xenomorph hives and developing the Biodrone program. General Vaughn has gone rogue and is preparing to evacuate with critical research assets.\n\nYour platoon will assault the island, neutralize Vaughn's forces, and secure all biological specimens and research data. The Colonial Rig — an 80-meter cube suspended over a volcanic caldera — is the primary objective.\n\nEXTREME THREAT WARNING: Multiple Xenomorph variants confirmed on site including Soldiers, Scouts, a Praetorian, and Gorebursters. Blackguard commandos. Armed Bearcat Strikeships. This is a full combat operation.\n\nThe Tamb'Itam stands ready to nuke the site from orbit if the mission fails. Do not fail."
+    "text": "MISSION OBJECTIVE: Darwin Island is the home of Deep Void's Project Life Force — a bioweapon research facility where Weyland-Yutani has been cultivating Xenomorph hives and developing the Biodrone program. General Vaughn has gone rogue and is preparing to evacuate with critical research assets.\n\nSecond Squad, 2nd Platoon will assault the island, neutralize Vaughn's forces, and secure all biological specimens and research data. The Colonial Rig — an 80-meter cube suspended over a volcanic caldera — is the primary objective.\n\nEXTREME THREAT WARNING: Multiple Xenomorph variants confirmed on site including Soldiers, Scouts, a Praetorian, and Gorebursters. Blackguard commandos. Armed Bearcat Strikeships. This is a full combat operation.\n\nThe Tamb'Itam stands ready to nuke the site from orbit if the mission fails. Do not fail.\n\n— MU/TH/UR 9000, BY ORDER OF THE COMMANDING OFFICER, USS TAMB'ITAM"
   },
   "acts": [
     {
-      "title": "OPERATION",
-      "subtitle": "MISSION BRIEFING",
-      "summary": "Darwin Island. A bioweapon research facility. Xenomorphs, Praetorians, and a rogue general.",
-      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+      "title": "ACT I",
+      "subtitle": "THE BEACH",
+      "summary": "The squad storms the black-sand beach under fire, pushes through Scout-hunted jungle, takes the helipad's air defences and Bearcats, and crosses the cable bridge to the Colonial Rig.",
+      "readAloud": [
+        "The dropship screams in low over a sea the colour of slate, and Darwin Island rises ahead: a black volcanic cone wreathed in steam, jungle climbing its flanks, a plume of ash leaning in the wind. Tracers reach up from the bluffs in slow, lazy streams that suddenly become very fast. The cabin rocks. The crew chief is shouting something nobody can hear. Then the ramp is down and the beach is right there, black sand, white surf and the bluffs spitting fire.",
+        "The jungle swallows the sound of the beach in fifty paces. Tree ferns arch overhead and the air is so hot and wet it feels like breathing through cloth. Sulphur vents hiss yellow steam between the roots. Your motion tracker blips, blips again, then fills with dots that come and go. On a tree trunk at shoulder height, a smear of something glossy and black has dried into a ridge, and a wild pig hangs in the branches above, opened and empty.",
+        "From the crater rim you see it at last: the Colonial Rig, a black cube eighty metres on a side, hanging on four cable pylons over a caldera that glows like the inside of a furnace. Heat shimmer makes it waver. Ash drifts across it like snow. A single cable bridge runs out to its upper deck, swaying slightly in the rising air, and every port on the rig's flank is a firing slit."
+      ],
+      "gmNotes": "Act I is a war movie. Vaughn's Blackguard hold the beach bluffs and the helipad; his Bearcats strafe anything moving; Scouts, loosed by Vaughn to slow the assault, hunt the jungle. The helipad is the key: its anti-air turrets keep the Tamb'Itam's dropships off the rig, and its Bearcats are Vaughn's escape. Taking or wrecking the helipad stops VAUGHN'S EVACUATION clock and lets reinforcements and extraction reach the rig.\n\nThe NUKE FROM ORBIT clock starts at the drop and is visible to everyone. Tick it every scene. The lieutenant can buy segments back only with clear progress reports. End the act when the squad crosses the cable bridge onto the rig.",
+      "agendaNotes": "Okafor commands a full assault for the first time; Castellan-Wu is on comms demanding speed. Vasquez-Hale may receive Sauvé's request for the harness here. Harrow can fly a captured Bearcat if the helipad is taken intact.",
+      "scenes": [
+        {
+          "name": "Black Sand",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Six Blackguard in two bluff-top pillboxes with a heavy machine gun, supported by one Bearcat strafing run. The pillboxes fall to grenades or flanking through the culvert; the Bearcat breaks off after one pass to defend the helipad.",
+          "narration": "The ramp drops onto black sand under bluffs spitting fire. Surf booms, spray hangs in the air, and wrecked landing craft from some earlier exercise give the only cover between the waterline and the cliff.",
+          "checks": [
+            "MOBILITY — sprint from the ramp to cover under fire",
+            "RANGED COMBAT — suppress the pillbox slits",
+            "OBSERVATION — find the drainage culvert running under the bluffs",
+            "COMMAND — keep the squad moving off the beach instead of dying on it"
+          ],
+          "events": [
+            "A Bearcat strikeship screams along the beach, strafing.",
+            "Vaughn's voice comes over an open channel, calm and fatherly, urging the marines to turn back."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines during the Bearcat strafing run",
+            "STRESS +1 — any marine who sees a squadmate hit on the sand"
+          ],
+          "npcGuidance": "The Blackguard here are disciplined and loyal to Vaughn; they fall back rather than die. Vaughn's broadcast is sincere: he believes he is saving the marines from being used.",
+          "gmTip": "Start at full volume and make the beach a cinematic set piece; the rest of the scenario gets quieter and more frightening.",
+          "outcomes": [
+            "A flank through the culvert takes the bluffs with few casualties.",
+            "A frontal assault takes the bluffs but fills a segment of the NUKE FROM ORBIT clock while the squad regroups."
+          ]
+        },
+        {
+          "name": "The Garden",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Two Scouts hunt the squad through the jungle, using the sulphur vents' heat to blind trackers. They strike, drag a victim off the trail and come back. Fire and tight formation drive them off.",
+          "narration": "Tree ferns arch overhead, sulphur vents hiss yellow steam and the motion tracker fills with ghosts. Glossy black resin smears the tree trunks. A wild pig hangs in the branches above, opened and empty.",
+          "checks": [
+            "SURVIVAL — find a path upslope that avoids the steam vents",
+            "OBSERVATION — tell the tracker's false contacts from real ones",
+            "RANGED COMBAT — hit a Scout in the moment it shows itself"
+          ],
+          "events": [
+            "The squad finds a dead Project Life Force research team, still in hazard suits, their cameras running.",
+            "A Scout takes the last marine in line and is gone."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — the marine a Scout grabs, and anyone who sees it",
+            "STRESS +1 — all marines who watch the research team's camera footage"
+          ],
+          "npcGuidance": "No NPCs; the dead team's footage shows Vaughn himself releasing the Scouts from a transport crate, hand raised, and the creatures obeying.",
+          "gmTip": "Let the footage plant the idea that Vaughn can command these things before the squad meets a Biodrone.",
+          "outcomes": [
+            "The footage reveals that Vaughn controls the creatures with something on his head.",
+            "A grabbed marine can be rescued from a Scout's cache within two scenes, wounded but alive."
+          ],
+          "clueRefs": [
+            "vaughn-harness"
+          ]
+        },
+        {
+          "name": "The Helipad",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Eight Blackguard holding sandbagged anti-air turrets, two Bearcats under netting, one spooling up. Fuel bowsers and ammunition pallets can be detonated. Captain Mara Quill commands and withdraws to the rig if the pad falls.",
+          "narration": "On the crater rim, two Bearcat strikeships sit under camouflage netting behind sandbagged anti-air turrets. Fuel bowsers and ammunition pallets stand everywhere. One Bearcat's engines are spooling up, and crates are being loaded aboard.",
+          "checks": [
+            "RANGED COMBAT — knock out the turret crews",
+            "HEAVY MACHINERY — wreck the turrets or the Bearcats' landing gear",
+            "PILOTING — seize an intact Bearcat",
+            "OBSERVATION — see that the crates going aboard are cryo-pods with something moving inside"
+          ],
+          "events": [
+            "The spooling Bearcat tries to lift off with its cargo.",
+            "Captain Quill calls a ceasefire and offers to talk.",
+            "If the turrets fall, the Tamb'Itam's next dropship can reach the rig: remove one segment from the NUKE FROM ORBIT clock."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines if a fuel bowser goes up"
+          ],
+          "npcGuidance": "Quill is loyal to Vaughn, pragmatic and tired; she offers to stand her people down if the squad lets the wounded evacuate, and she hints that she might trade Vaughn for her team's lives.",
+          "gmTip": "Make the helipad a tactical puzzle with an explosive solution; reward players who think about the fuel and the cargo.",
+          "outcomes": [
+            "Bearcats destroyed or grounded: VAUGHN'S EVACUATION clock stops until he finds another way.",
+            "A Bearcat escapes with specimens: tick VAUGHN'S EVACUATION twice; the Biodrones aboard become another operation's problem.",
+            "A deal with Quill removes her Blackguard from the rig fight."
+          ]
+        },
+        {
+          "name": "The Cable Bridge",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Snipers in the rig's upper ports fire on the bridge; halfway across, a Goreburster bursts out of a cargo container lashed to the bridge rail and attacks at close range before fleeing into the rig.",
+          "narration": "A single cable bridge runs from the crater rim to the rig's upper deck, swaying in the rising heat. Below, the caldera glows. Ash drifts across the walkway like snow, and every port on the rig's flank is a firing slit.",
+          "checks": [
+            "MOBILITY — cross the swaying bridge under fire",
+            "RANGED COMBAT — suppress the snipers",
+            "STAMINA — endure the heat rising from the caldera"
+          ],
+          "events": [
+            "A cargo container on the bridge rail bulges and splits; a Goreburster bursts out in a spray of pink fluid.",
+            "Send the strike authorisation handout as the squad sets foot on the rig."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all marines when the Goreburster attacks",
+            "STRESS +1 — any marine who looks straight down into the caldera"
+          ],
+          "npcGuidance": "The snipers are the last of Vaughn's rearguard; they fall back into the rig once marines reach the deck.",
+          "gmTip": "Keep the bridge short, hot and terrifying, then cut to the silence of the rig's interior.",
+          "outcomes": [
+            "The squad reaches Level 00 and Act II begins.",
+            "The Goreburster's toxic trail leads into the rig and shows which way it fled."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "THE RIG",
+      "summary": "The squad descends through the Colonial Rig, finds the project's lead scientist and the research data, survives the labs, the holding cells and the hive, and confronts Vaughn at the caldera with the nuke counting down.",
+      "readAloud": [
+        "Inside, the rig is quiet in a way that is worse than gunfire. Klaxons pulse without sound, just red light washing over white walls. The decontamination showers are still running, steam curling into the corridor. Blast doors stand half open where people fell back in a hurry, and the floor is scored with long, smoking acid burns. Somewhere below, very deep, something is pounding on metal, slow and patient, like a fist on a door.",
+        "The Biodrone labs are clean and bright and full of horrors. Embryos float in rows of glass tanks, curled and pale. A surgical frame in the middle of the theatre holds a xenomorph head, opened, wired with bundles of fine cable running into a rack of machines. On a monitor, a recorded test plays on a loop: a man in a general's uniform raises his hand, and a black shape the size of a horse sits, like a dog.",
+        "Sublevel 04 is a ring of glass galleries around a cavern of resin. The hive fills it from floor to ceiling, ribbed and dripping, glowing faintly from the volcanic heat below. You can see them moving inside, dozens of them, slow and unhurried. The glass between you and them is sweating, and there is a crack in it, running from floor to ceiling, that was not made by anything human."
+      ],
+      "gmNotes": "The rig is a vertical dungeon with the nuke overhead and Vaughn below. On Sublevel 01, Dr. Marguerite Esslin, the project's lead scientist, hides in the data vault; she wants the hive destroyed and the research erased, and she knows the control harness is failing. Sauvé, on comms from the Tamb'Itam, wants the harness and the data brought home and will argue for delaying the strike. Sublevels 02 and 03 are labs and holding cells breaking open; 04 is the hive and its Praetorian; 05 holds the reactor and the destruct controls; 06 is the caldera platform where Vaughn is loading Biodrones onto a cargo lift to the helipad.\n\nVaughn's harness keeps his Biodrones obedient. If he is killed outright, they go feral and the hive stirs; if the harness is taken from him and worn, someone else commands them, briefly and at terrible cost. The squad's ending depends on three choices: what happens to Vaughn, what happens to the harness and data, and whether the rig is destroyed before the Tamb'Itam destroys everything.",
+      "agendaNotes": "Every marine's Company agenda converges here: the harness is the most valuable object in the war. Brandvold may learn from Vaughn's files what happened to prisoners from Ariarcus. Okafor faces the choice of who stays behind to arm the destruct.",
+      "scenes": [
+        {
+          "name": "The Data Vault",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Sublevel 01 is offices and quarters left in a panic, files burned in bins. Behind the locked data vault, a woman in a lab coat holds a pistol in both hands and a data drive in her teeth. Dr. Marguerite Esslin asks whether the squad is here to save the project or to kill it.",
+          "checks": [
+            "MANIPULATION — win Esslin's trust",
+            "COMTECH — copy, or wipe, the Project Life Force servers",
+            "OBSERVATION — read Esslin's notes on the harness: its failure rate is climbing"
+          ],
+          "events": [
+            "Esslin explains the harness and that killing Vaughn outright will free every Biodrone at once.",
+            "Sauvé's private request arrives for one marine: bring back the harness and the data, intact, whatever the strike clock says."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines who read what the project did to its test subjects"
+          ],
+          "npcGuidance": "Esslin is brilliant, guilty and ruthless about ending what she built. She will lie to the squad about wiping the servers if she thinks they plan to copy them for the Company.",
+          "gmTip": "Esslin is the squad's guide to the rig; through her, they should understand exactly what killing Vaughn will cost.",
+          "outcomes": [
+            "Copied data gives the Company the programme, and gives the squad leverage.",
+            "Wiped servers kill the programme forever, unless the harness survives.",
+            "Esslin joins the squad and can disable the cell locks on Sublevel 03."
+          ],
+          "clueRefs": [
+            "harness-failing",
+            "vaughn-harness"
+          ]
+        },
+        {
+          "name": "Labs and Cells",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "On Sublevel 02, two Biodrones guard the cargo lift for Vaughn, obedient and watchful until attacked. On Sublevel 03, Xenomorph Soldiers batter their way out of the holding cells one by one; use three, released over three rounds, and the Goreburster from the bridge if it survived.",
+          "narration": "The Biodrone labs are clean and bright and full of horrors: embryo tanks, surgical frames, neural rigs. Below, in heavy containment, something pounds on a cell door and the deck shudders with each blow.",
+          "checks": [
+            "OBSERVATION — notice the Biodrones respond to a tone from the lift speakers",
+            "COMTECH — jam the control tone, or reseal the cells, from the containment panel",
+            "RANGED COMBAT — fight Soldiers in narrow corridors"
+          ],
+          "events": [
+            "A cell door gives way; a Soldier comes out fast and low.",
+            "The Biodrones turn their heads toward the lift in unison when Vaughn's tone sounds below."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all marines when the first cell breaks open",
+            "STRESS +1 — all marines who see the Biodrones obey"
+          ],
+          "npcGuidance": "Esslin, if present, knows the containment codes and can reseal cells if protected for two rounds.",
+          "gmTip": "Show the difference between obedient Biodrones and wild Soldiers; it explains what happens if Vaughn dies.",
+          "outcomes": [
+            "Resealed cells buy time and remove one segment from the CONTAINMENT FAILURE clock.",
+            "Jamming the control tone briefly turns the Biodrones against each other and anything near them."
+          ]
+        },
+        {
+          "name": "The Hive Gallery",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "The Praetorian patrols the gallery side of the cracked glass. It hunts the squad deliberately, smashing through observation booths. If the glass breaks, hive drones pour out and the CONTAINMENT FAILURE clock fills.",
+          "narration": "Glass galleries ring a cavern full of resin where the hive grows, glowing faintly from the heat below. Dozens of shapes move inside. A crack runs floor to ceiling through the glass, and a Praetorian paces the gallery on your side of it.",
+          "checks": [
+            "MOBILITY — move through the galleries without drawing the Praetorian",
+            "HEAVY MACHINERY — open the gallery's flame vents into the hive",
+            "RANGED COMBAT — bring down the Praetorian before it breaks the glass"
+          ],
+          "events": [
+            "The Praetorian slams into the cracked glass, and the crack spreads.",
+            "Deep in the hive, something huge shifts and the whole rig groans."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all marines when the Praetorian charges",
+            "STRESS +1 — all marines in the gallery"
+          ],
+          "npcGuidance": "Esslin begs the squad to burn the hive through the flame vents; Sauvé, on comms, forbids it.",
+          "gmTip": "This scene is optional but unforgettable; use it if the squad is strong, skip it by the service stairs if they are battered.",
+          "outcomes": [
+            "A burned hive ends Project Life Force at its root and reduces the NUKE FROM ORBIT pressure: remove one segment.",
+            "A broken glass wall sends the hive up through the rig: CONTAINMENT FAILURE fills and the rig must be destroyed."
+          ]
+        },
+        {
+          "name": "The Reactor",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Captain Quill and four Blackguard hold the reactor catwalks unless a deal was made at the helipad. Firing near the coolant lines risks a breach.",
+          "narration": "Sublevel 05 roars and glows red. Catwalks hang over machinery, coolant hisses from strained pipes, and the self-destruct controls sit behind a cage at the far end.",
+          "checks": [
+            "RANGED COMBAT — fight on catwalks without hitting the coolant lines",
+            "COMTECH — arm the rig's self-destruct and set the timer",
+            "MANIPULATION — turn Quill against Vaughn"
+          ],
+          "events": [
+            "Quill offers to let the squad pass if they swear to let her team leave.",
+            "The destruct console asks for two authorisation keys turned at once."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines if a coolant line ruptures"
+          ],
+          "npcGuidance": "Quill will betray Vaughn to save her people if she believes the marines will honour a deal; she knows Vaughn intends to leave her behind.",
+          "gmTip": "Arming the destruct should require someone to stay or come back; that is the scenario's sacrifice moment.",
+          "outcomes": [
+            "An armed destruct gives the squad a timer of its own, racing the nuke.",
+            "A deal with Quill gives the squad an extra key-holder and safe passage to the lift."
+          ]
+        },
+        {
+          "name": "The Caldera",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "General Vaughn on the caldera platform with three Biodrones loading cryo-pods onto the heavy lift. The Biodrones fight on his command; if he is killed, they go feral and attack everything, including each other. If the harness is torn off, it can be worn by a marine for a few rounds at a cost of STRESS +1 every round.",
+          "narration": "The rig's open underside is a grated platform over the glowing caldera. Heat blisters the paint. General Vaughn stands at the edge in a pressed uniform with a slim harness on his head, his Biodrones loading the lift around him as calmly as dock workers.",
+          "checks": [
+            "MANIPULATION — talk Vaughn down, or into surrender",
+            "RANGED COMBAT — shoot the harness off without killing him",
+            "COMTECH — override the cargo lift so it cannot leave",
+            "STAMINA — endure the caldera heat for another round"
+          ],
+          "events": [
+            "Vaughn makes his case: the Company will bury this weapon and the Corps will lose the war without it; he offers the squad a place beside him.",
+            "The NUKE FROM ORBIT clock nears full and the Tamb'Itam broadcasts its final warning."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines every round on the caldera platform",
+            "IMMEDIATE PANIC ROLL — all marines if the Biodrones go feral"
+          ],
+          "npcGuidance": "Vaughn is dignified, persuasive and certain; he is not a madman, which is what makes him dangerous. He would rather die than surrender the harness, but he will hand it to a marine he believes will use it.",
+          "gmTip": "Give Vaughn a real argument and let the squad answer it. The ending is their answer.",
+          "outcomes": [
+            "Vaughn stopped, the rig destroyed and the squad out: the SCORCHED GARDEN ending.",
+            "Harness and data in Company hands: the LIFE FORCE ENDURES ending.",
+            "Vaughn escapes on the lift with his Biodrones: the VAUGHN'S WAR ending.",
+            "The nuke falls with the squad still on the island: the NUKED FROM ORBIT ending."
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "General Vaughn",
+      "role": "Commanding Officer, Project Life Force (Rogue)",
+      "agenda": "Evacuate the Biodrones and their research and field them against the UPP himself, before the Company and the Corps bury the programme.",
+      "behavior": "Dignified, fatherly and utterly calm, speaking to marines as his own children; never raises his voice. Tell: he touches the harness at his temple before every decision, like a man checking a hearing aid.",
+      "secret": "The Biodrones obey a neural harness on his head; it is failing, and when it does, or when he dies, every Biodrone on the island goes feral.",
+      "stats": {
+        "health": 4,
+        "command": 5,
+        "manipulation": 4,
+        "rangedCombat": 3
+      }
+    },
+    {
+      "name": "Captain Mara Quill",
+      "role": "Blackguard Commander, Vaughn's Guard",
+      "agenda": "Get her people off Darwin Island alive, whoever she has to serve or betray to do it.",
+      "behavior": "Lean, scarred and dry-humoured; fights well and negotiates better. Tell: she counts her people out loud on comms after every exchange of fire.",
+      "secret": "She knows Vaughn's evacuation plan leaves her team behind as a rearguard, and she has already begun to doubt him.",
+      "stats": {
+        "health": 6,
+        "rangedCombat": 5,
+        "closeCombat": 4,
+        "command": 3
+      }
+    },
+    {
+      "name": "Dr. Marguerite Esslin",
+      "role": "Lead Scientist, Project Life Force",
+      "agenda": "Destroy the hive and wipe the research she built, so that no one, Vaughn or the Company, can use it again.",
+      "behavior": "Precise, brittle and fiercely intelligent, with ink-stained fingers and a pistol she holds like a test tube. Tell: she corrects people's terminology when she is frightened.",
+      "secret": "She designed the control harness and knows it is failing, and she quietly kept one backup data drive she cannot bring herself to destroy.",
+      "stats": {
+        "health": 3,
+        "comtech": 5,
+        "medicalAid": 3,
+        "observation": 4
+      }
+    },
+    {
+      "name": "Julian Sauvé",
+      "role": "Civilian Liaison, Deep Void (on comms from the Tamb'Itam)",
+      "agenda": "Recover the harness and the research data intact, and delay the orbital strike until they are safely aboard.",
+      "behavior": "Courteous, warm and urgent, speaking privately to whichever marine he thinks will listen. Tell: his voice drops half a tone when he is about to offer money.",
+      "secret": "Deep Void has already promised the programme to a buyer; if the harness is lost, Sauvé's career ends, and he will lie about the strike timer to keep marines on the island.",
+      "stats": {
+        "health": 3,
+        "manipulation": 5
+      }
+    },
+    {
+      "name": "WARDEN",
+      "role": "Colonial Rig Security Mainframe",
+      "agenda": "Enforce containment protocols on the rig, which means sealing anyone in with whatever breaks loose.",
+      "behavior": "Flat, toneless and literal; announces every door it seals and every protocol it invokes. Tell: it repeats the last word of every sentence it says.",
+      "secret": "Vaughn has given it standing orders to seal every level behind his cargo lift once it starts its ascent."
+    }
+  ],
+  "threats": [
+    {
+      "name": "Vaughn's Blackguard",
+      "ref": "npc-aw-soldiers-blackguard",
+      "description": "Elite marines in black armor holding the beach bluffs, the helipad and the reactor catwalks for their general.",
+      "stats": {
+        "speed": 1,
+        "health": 6,
+        "closeCombat": 4,
+        "rangedCombat": 5,
+        "mobility": 3
+      },
+      "tactics": "Fight disciplined withdrawals; fall back to the helipad, then the rig. Their commander will deal if her people's lives are on the table."
+    },
+    {
+      "name": "Bearcat Strikeships",
+      "description": "Two heavily armed strikeships on the crater-rim helipad, one strafing the beach at the start of the assault.",
+      "tactics": "One strafing run on the beach, then defend the helipad. If not grounded, one escapes with specimens; the other waits for Vaughn's lift."
+    },
+    {
+      "name": "Scouts",
+      "ref": "scout",
+      "description": "Lean, fast xenomorphs glimpsed as a flicker in the steam, leaving resin smears and emptied animals in the trees.",
+      "stats": {
+        "speed": 3,
+        "health": 5,
+        "armor": 8,
+        "mobility": 8,
+        "observation": 10
+      },
+      "tactics": "Hunt the jungle in a pair, using vent heat to blind trackers; grab stragglers and cache them."
+    },
+    {
+      "name": "Biodrones",
+      "ref": "biodrone",
+      "description": "Xenomorphs that sit, wait and work on command, eerily calm until they are told to kill.",
+      "stats": {
+        "speed": 2,
+        "health": 6,
+        "armor": 8,
+        "mobility": 8,
+        "observation": 10
+      },
+      "tactics": "Obey Vaughn's harness: guard, load and fight on command. If he dies or the harness fails, they go feral and attack everything."
+    },
+    {
+      "name": "Xenomorph Soldiers",
+      "ref": "soldier",
+      "description": "Heavy, armored warriors battering their way out of the Sublevel 03 holding cells.",
+      "tactics": "Released one at a time as cells fail; charge the nearest target and fight to the death in narrow corridors."
+    },
+    {
+      "name": "Goreburster",
+      "ref": "goreburster",
+      "description": "A squat, fast creature that bursts from a cargo container on the bridge in a spray of toxic pink fluid.",
+      "stats": {
+        "speed": 3,
+        "health": 6,
+        "armor": 6,
+        "mobility": 8,
+        "observation": 6
+      },
+      "tactics": "Bodyslams and flees into ducts, leaving a toxic trail; returns in the holding cells if not killed."
+    },
+    {
+      "name": "The Praetorian",
+      "ref": "praetorian",
+      "description": "A towering, crested xenomorph pacing the hive gallery on the wrong side of the glass.",
+      "tactics": "Guards the hive; hunts anyone in the galleries and tries to break the cracked glass to free the hive."
     }
   ],
   "keyLocations": [
     {
       "name": "DARWIN ISLAND — OVERVIEW — Beach Landing Zone",
-      "description": "Assault insertion point. Rocky coastline with limited cover."
+      "description": "A crescent of black volcanic sand and jagged lava rock under bluffs crowned with pillboxes. Surf booms, spray hangs in the air and the sand is hot underfoot. Cover is scarce: wrecked landing craft, rock spurs and a drainage culvert running inland."
     },
     {
       "name": "DARWIN ISLAND — OVERVIEW — Jungle Interior",
-      "description": "Dense tropical vegetation. Xenomorph activity reported."
+      "description": "Steaming jungle on the volcano's flanks, thick with tree ferns, vines and sulphur vents that hiss yellow steam. Motion trackers flicker with false contacts. Resin smears on tree trunks and stripped animal carcasses mark the Scouts' hunting ground."
     },
     {
       "name": "DARWIN ISLAND — OVERVIEW — Colonial Rig (External)",
-      "description": "80-meter cube suspended over volcanic caldera. Primary objective."
+      "description": "A vast black cube hanging on four cable pylons over a glowing caldera, reached by a single cable bridge from the crater rim. Heat shimmer rises around it and ash drifts like snow. The bridge is exposed to fire from the rig's upper ports."
     },
     {
       "name": "DARWIN ISLAND — OVERVIEW — Helipad",
-      "description": "Bearcat Strikeship landing area. Anti-air defenses."
+      "description": "A fortified landing platform on the crater rim, with two Bearcat strikeships under camouflage netting and anti-air turrets ringed by sandbags. Fuel bowsers, ammunition pallets and a radar mast make it both a fortress and a powder keg."
     },
     {
       "name": "DARWIN ISLAND — COLONIAL RIG — Level 00 — Surface",
-      "description": "Rig access level. Security, personnel processing, vehicle bay."
+      "description": "The rig's entry level: security checkpoints, decontamination showers, a vehicle bay with cargo lifts dropping into the depths. Klaxons pulse. Blast doors stand half open where Vaughn's people fell back, and the floor is scored with acid burns."
     },
     {
       "name": "DARWIN ISLAND — COLONIAL RIG — Sublevel 01",
-      "description": "Administration, labs, and staff quarters."
+      "description": "Offices, labs and staff quarters left in a panic: files burned in bins, coffee cups, a child's photograph pinned over a bunk. Surviving staff hide behind locked doors. The project's research servers hum in a locked data vault."
     },
     {
       "name": "DARWIN ISLAND — COLONIAL RIG — Sublevel 02",
-      "description": "Research facilities. Specimen containment. Biodrone program labs."
+      "description": "Biodrone programme labs: glass tanks of embryos, surgical theatres with restraint frames, neural-interface rigs hung with cables. The air reeks of antiseptic and ammonia. Some tanks are cracked and empty, and the trail leads toward the cargo lift."
     },
     {
       "name": "DARWIN ISLAND — COLONIAL RIG — Sublevel 03",
-      "description": "Heavy containment. Xenomorph holding cells."
+      "description": "Heavy containment: rows of armored holding cells with thick viewing ports, many cracked or open. The deck vibrates with the thump of something battering a cell door. Emergency foam has sealed some corridors, and acid is eating through it."
     },
     {
       "name": "DARWIN ISLAND — COLONIAL RIG — Sublevel 04",
-      "description": "Hive observation level. Extreme hazard zone."
+      "description": "A ring of observation galleries around a vast chamber full of resin, where the cultivated hive grows in the volcano's heat. Glass walls, sweating and cracked, separate watchers from the hive. A Praetorian patrols the gallery side."
     },
     {
       "name": "DARWIN ISLAND — COLONIAL RIG — Sublevel 05",
-      "description": "Engineering and reactor systems."
+      "description": "Reactor and engineering, roaring and hot, lit red by warning lamps. Catwalks hang over machinery, coolant hisses from strained pipes, and the rig's self-destruct controls sit behind a cage. One wrong shot here is everyone's last."
     },
     {
       "name": "DARWIN ISLAND — COLONIAL RIG — Sublevel 06 / Caldera",
-      "description": "Lowest level. Direct access to volcanic caldera. Emergency destruct access."
+      "description": "The rig's open underside: a grated platform over the glowing caldera, where the heat blisters paint and the air shimmers. Emergency destruct access and a heavy cargo lift to the helipad meet here. Vaughn waits at the edge."
     }
   ],
   "handouts": [
@@ -79,8 +493,75 @@
       "from": "MU/TH/UR 9000",
       "to": "KILO COMPANY, 2ND PLATOON",
       "priority": "PRIORITY",
-      "text": "MISSION OBJECTIVE: Darwin Island is the home of Deep Void's Project Life Force — a bioweapon research facility where Weyland-Yutani has been cultivating Xenomorph hives and developing the Biodrone program. General Vaughn has gone rogue and is preparing to evacuate with critical research assets.\n\nYour platoon will assault the island, neutralize Vaughn's forces, and secure all biological specimens and research data. The Colonial Rig — an 80-meter cube suspended over a volcanic caldera — is the primary objective.\n\nEXTREME THREAT WARNING: Multiple Xenomorph variants confirmed on site including Soldiers, Scouts, a Praetorian, and Gorebursters. Blackguard commandos. Armed Bearcat Strikeships. This is a full combat operation.\n\nThe Tamb'Itam stands ready to nuke the site from orbit if the mission fails. Do not fail.",
+      "text": "MISSION OBJECTIVE: Darwin Island is the home of Deep Void's Project Life Force — a bioweapon research facility where Weyland-Yutani has been cultivating Xenomorph hives and developing the Biodrone program. General Vaughn has gone rogue and is preparing to evacuate with critical research assets.\n\nSecond Squad, 2nd Platoon will assault the island, neutralize Vaughn's forces, and secure all biological specimens and research data. The Colonial Rig — an 80-meter cube suspended over a volcanic caldera — is the primary objective.\n\nEXTREME THREAT WARNING: Multiple Xenomorph variants confirmed on site including Soldiers, Scouts, a Praetorian, and Gorebursters. Blackguard commandos. Armed Bearcat Strikeships. This is a full combat operation.\n\nThe Tamb'Itam stands ready to nuke the site from orbit if the mission fails. Do not fail.\n\n— MU/TH/UR 9000, BY ORDER OF THE COMMANDING OFFICER, USS TAMB'ITAM",
       "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "strike-authorisation",
+      "title": "ORBITAL STRIKE — CONDITIONAL AUTHORISATION",
+      "from": "USS TAMB'ITAM — COMMANDING OFFICER",
+      "to": "ALL GROUND ELEMENTS, DARWIN ISLAND",
+      "priority": "EMERGENCY",
+      "text": "Strike package armed. Target: Darwin Island, Colonial Rig and surrounding grid. Execution on expiry of countdown or on confirmed loss of containment. Countdown may be extended only on positive progress report from ground commander. Ground elements are to be clear of the island by expiry. There will be no further extension. Godspeed.",
+      "when": "End of Act I, The Cable Bridge, as the squad sets foot on the rig"
+    },
+    {
+      "id": "vaughn-broadcast",
+      "title": "OPEN CHANNEL — GENERAL VAUGHN",
+      "from": "GENERAL VAUGHN, PROJECT LIFE FORCE",
+      "to": "THE MARINES ON MY BEACH",
+      "priority": "STANDARD",
+      "text": "Marines. I have commanded men like you for thirty years, and I know who sent you, and I know they did not tell you why. What is on this island can win the war that is killing your friends. The Company wants to sell it. Your generals want to bury it. I want to use it, for you. Turn around. Go home. If you will not, then come down to me, and I will show you what I mean.",
+      "when": "Act I, Black Sand, during the beach assault"
+    },
+    {
+      "id": "sauve-harness",
+      "title": "PRIVATE CHANNEL — LIAISON",
+      "from": "J. SAUVÉ, USS TAMB'ITAM",
+      "to": "ONE MARINE OF THE GM'S CHOICE",
+      "priority": "EYES ONLY",
+      "text": "Listen carefully, there is no time. General Vaughn wears a device on his head. It is the single most valuable object in this war. Bring it back intact, and the data with it, and you will never want for anything again, nor will your family. I can hold the strike for twenty minutes past the countdown, perhaps thirty. Trust me. Do not let the scientist destroy anything.",
+      "when": "Act II, The Data Vault, after Esslin explains the harness"
+    }
+  ],
+  "clues": [
+    {
+      "id": "vaughn-harness",
+      "text": "Vaughn commands the Biodrones and Scouts through a slim neural harness on his head; they obey its tone.",
+      "source": "The dead research team's camera footage, the lab monitor loop, or Esslin",
+      "scene": "The Garden"
+    },
+    {
+      "id": "harness-failing",
+      "text": "The harness is failing; when it fails or Vaughn dies, every Biodrone on the island goes feral at once.",
+      "source": "Esslin's notes in the data vault",
+      "scene": "The Data Vault"
+    }
+  ],
+  "clocks": [
+    {
+      "id": "nuke-from-orbit",
+      "label": "NUKE FROM ORBIT",
+      "segments": 10,
+      "kind": "danger",
+      "visibility": "all",
+      "note": "Starts at the drop and ticks every scene. Clear progress reports can remove a segment. When full, the Tamb'Itam destroys Darwin Island."
+    },
+    {
+      "id": "vaughn-evacuation",
+      "label": "VAUGHN'S EVACUATION",
+      "segments": 6,
+      "kind": "danger",
+      "visibility": "gm",
+      "note": "Ticks each scene unless the helipad is taken. When full, Vaughn's lift and a Bearcat leave with the Biodrones and the harness."
+    },
+    {
+      "id": "containment-failure",
+      "label": "CONTAINMENT FAILURE",
+      "segments": 6,
+      "kind": "danger",
+      "visibility": "all",
+      "note": "Starts in Act II and ticks with each breached cell or broken gallery. When full, the hive pours up through the rig and WARDEN seals the levels."
     }
   ],
   "maps": [
@@ -94,19 +575,19 @@
       "rooms": [
         {
           "name": "Beach Landing Zone",
-          "note": "Assault insertion point. Rocky coastline with limited cover."
+          "note": "A crescent of black volcanic sand and jagged lava rock under bluffs crowned with pillboxes. Surf booms, spray hangs in the air and the sand is hot underfoot. Cover is scarce: wrecked landing craft, rock spurs and a drainage culvert running inland."
         },
         {
           "name": "Jungle Interior",
-          "note": "Dense tropical vegetation. Xenomorph activity reported."
+          "note": "Steaming jungle on the volcano's flanks, thick with tree ferns, vines and sulphur vents that hiss yellow steam. Motion trackers flicker with false contacts. Resin smears on tree trunks and stripped animal carcasses mark the Scouts' hunting ground."
         },
         {
           "name": "Colonial Rig (External)",
-          "note": "80-meter cube suspended over volcanic caldera. Primary objective."
+          "note": "A vast black cube hanging on four cable pylons over a glowing caldera, reached by a single cable bridge from the crater rim. Heat shimmer rises around it and ash drifts like snow. The bridge is exposed to fire from the rig's upper ports."
         },
         {
           "name": "Helipad",
-          "note": "Bearcat Strikeship landing area. Anti-air defenses."
+          "note": "A fortified landing platform on the crater rim, with two Bearcat strikeships under camouflage netting and anti-air turrets ringed by sandbags. Fuel bowsers, ammunition pallets and a radar mast make it both a fortress and a powder keg."
         }
       ]
     },
@@ -120,33 +601,64 @@
       "rooms": [
         {
           "name": "Level 00 — Surface",
-          "note": "Rig access level. Security, personnel processing, vehicle bay."
+          "note": "The rig's entry level: security checkpoints, decontamination showers, a vehicle bay with cargo lifts dropping into the depths. Klaxons pulse. Blast doors stand half open where Vaughn's people fell back, and the floor is scored with acid burns."
         },
         {
           "name": "Sublevel 01",
-          "note": "Administration, labs, and staff quarters."
+          "note": "Offices, labs and staff quarters left in a panic: files burned in bins, coffee cups, a child's photograph pinned over a bunk. Surviving staff hide behind locked doors. The project's research servers hum in a locked data vault."
         },
         {
           "name": "Sublevel 02",
-          "note": "Research facilities. Specimen containment. Biodrone program labs."
+          "note": "Biodrone programme labs: glass tanks of embryos, surgical theatres with restraint frames, neural-interface rigs hung with cables. The air reeks of antiseptic and ammonia. Some tanks are cracked and empty, and the trail leads toward the cargo lift."
         },
         {
           "name": "Sublevel 03",
-          "note": "Heavy containment. Xenomorph holding cells."
+          "note": "Heavy containment: rows of armored holding cells with thick viewing ports, many cracked or open. The deck vibrates with the thump of something battering a cell door. Emergency foam has sealed some corridors, and acid is eating through it."
         },
         {
           "name": "Sublevel 04",
-          "note": "Hive observation level. Extreme hazard zone."
+          "note": "A ring of observation galleries around a vast chamber full of resin, where the cultivated hive grows in the volcano's heat. Glass walls, sweating and cracked, separate watchers from the hive. A Praetorian patrols the gallery side."
         },
         {
           "name": "Sublevel 05",
-          "note": "Engineering and reactor systems."
+          "note": "Reactor and engineering, roaring and hot, lit red by warning lamps. Catwalks hang over machinery, coolant hisses from strained pipes, and the rig's self-destruct controls sit behind a cage. One wrong shot here is everyone's last."
         },
         {
           "name": "Sublevel 06 / Caldera",
-          "note": "Lowest level. Direct access to volcanic caldera. Emergency destruct access."
+          "note": "The rig's open underside: a grated platform over the glowing caldera, where the heat blisters paint and the air shimmers. Emergency destruct access and a heavy cargo lift to the helipad meet here. Vaughn waits at the edge."
         }
       ]
     }
+  ],
+  "endings": [
+    {
+      "title": "SCORCHED GARDEN",
+      "condition": "Vaughn is stopped, the rig's destruct fires or the hive is burned, the harness is destroyed, and the squad escapes before the strike.",
+      "text": "The rig drops. You see it from the dropship's ramp, all eighty metres of it, falling into the caldera with its pylons whipping loose like cut strings. The caldera swallows it in a column of fire and black glass, and the jungle on the crater rim bends flat in the shockwave.\n\nThe Tamb'Itam stands down its strike with eleven seconds left on the clock. The liaison does not come to the hangar to meet you. The lieutenant does, and shakes every hand, and for once he does not say anything at all."
+    },
+    {
+      "title": "LIFE FORCE ENDURES",
+      "condition": "The harness or the research data leaves Darwin Island in Company hands.",
+      "text": "The harness travels home in a padded case on the seat beside you, and nobody touches it. Sauvé meets the dropship personally, takes the case with both hands like something holy, and thanks you all with real tears in his eyes.\n\nThe island burns behind you anyway. On the official record, Project Life Force was destroyed in a volcanic event. Somewhere else, in a cleaner lab on a quieter world, someone is already reading the data, and someone else is already fitting a harness."
+    },
+    {
+      "title": "VAUGHN'S WAR",
+      "condition": "Vaughn escapes on the lift and a Bearcat with his Biodrones and the harness.",
+      "text": "The Bearcat climbs out of the smoke on a pillar of fire and is gone into the clouds before anyone can bring a weapon to bear. Vaughn's voice comes over the open channel one last time, warm and sad, wishing you a long life.\n\nThree weeks later, a UPP garrison on a Frontier moon falls in a single night. The survivors talk about black shapes that moved like soldiers and an old man who walked among them giving orders. Command classifies the report. You read it anyway."
+    },
+    {
+      "title": "NUKED FROM ORBIT",
+      "condition": "The strike countdown expires with the squad still on Darwin Island.",
+      "text": "The light comes first, white and total, through every port and seam of the rig. There is no sound. There is no time for sound.\n\nFrom orbit, the strike is a brief new star on the night side of the world, then a rising mushroom of ash and steam where an island used to be. The after-action report is a single page. Second Squad, 2nd Platoon is listed as killed in action. The mission is listed as complete."
+    }
+  ],
+  "tips": [
+    "Tick the NUKE FROM ORBIT clock openly every scene; it is the heartbeat of the whole operation.",
+    "Play Act I as a war film and Act II as a horror film; the contrast is the point.",
+    "Give Vaughn a real argument; the players should feel the pull of his offer before they refuse it.",
+    "Seed the harness early through the camera footage so the squad understands what killing Vaughn will cost.",
+    "Use Sauvé's private channel to split the squad's loyalties right when Esslin wants to wipe everything.",
+    "If the session is running long, skip The Hive Gallery and let the squad descend by the service stairs.",
+    "This is the campaign's finale; let the squad's earlier choices about the liaison and the Company echo here."
   ]
 }

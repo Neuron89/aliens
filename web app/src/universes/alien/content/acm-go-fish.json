@@ -6,46 +6,406 @@
   "meta": {
     "title": "Operation Go Fish",
     "tagline": "A frontier spaceport. Evacuees, smugglers, and something hunting in the shadows.",
+    "synopsis": "Morgan Bluff Spaceport, perched on a sea cliff, is choked with colonists fleeing the war. Behind the chaos, a smuggling ring run by Rook Delacroix-Tan has been breeding a venomous native predator, the running flatfish, in the spaceport's Mariculture Complex for a Weyland-Yutani buyer, and a Blackguard operative called Sable is here to collect the shipment and silence the xenoanthropologists who stumbled onto it. Several flatfish have escaped into the drains and hunt in the dark. Meanwhile a Marine Special Operations team under Lieutenant Rafe Kilbride wants to lock down every flight until it finds a UPP intelligence officer hidden among the evacuees, who is after a specimen of her own. The squad must keep the evacuation moving, find the missing scientists, and decide who leaves Morgan Bluff with the flatfish, before a rising tide floods the complex or a predator gets aboard an evacuee transport.",
     "type": "Campaign",
     "players": "3–5",
     "playtime": "4–6 hours",
     "difficulty": "Hard",
+    "tone": [
+      "paranoia",
+      "crowded chaos",
+      "creature hunt",
+      "espionage"
+    ],
+    "contentWarnings": [
+      "graphic violence",
+      "venomous creature attacks",
+      "refugees and civilians in danger",
+      "harm to children (threatened)",
+      "drowning",
+      "interrogation",
+      "character death"
+    ],
     "source": "bundled"
   },
   "briefing": {
     "from": "MU/TH/UR 9000",
     "to": "KILO COMPANY, 2ND PLATOON",
     "classification": "MISSION BRIEFING — OPERATION GO FISH",
-    "text": "MISSION OBJECTIVE: Morgan Bluff Spaceport has become an evacuation point for frontier colonists fleeing the war zone. Intelligence reports indicate a Marine Special Ops unit and Blackguard operatives are conducting covert operations in the area.\n\nYour platoon is to secure the spaceport, assist with evacuation operations, and investigate reports of xenoanthropologist disappearances. The Mariculture Complex and surrounding facilities require thorough sweep.\n\nWarning: hostile elements may be embedded among the evacuee population."
+    "text": "MISSION OBJECTIVE: Morgan Bluff Spaceport has become an evacuation point for frontier colonists fleeing the war zone. Intelligence reports indicate a Marine Special Ops unit and Blackguard operatives are conducting covert operations in the area.\n\nSecond Squad, 2nd Platoon is to secure the spaceport, assist with evacuation operations, and investigate reports of xenoanthropologist disappearances. The Mariculture Complex and surrounding facilities require thorough sweep. A university survey team of four has not been seen for six days.\n\nWarning: hostile elements may be embedded among the evacuee population. Approximately 1,900 civilians are awaiting transport. Eight evacuation flights are scheduled before the weather window closes.\n\nCooperate with Special Operations personnel where operationally sound. You are not under their command.\n\nKeep the flights moving, Gunfighters.\n\n— MU/TH/UR 9000, USS TAMB'ITAM"
   },
   "acts": [
     {
-      "title": "OPERATION",
-      "subtitle": "MISSION BRIEFING",
-      "summary": "A frontier spaceport. Evacuees, smugglers, and something hunting in the shadows.",
-      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+      "title": "ACT I",
+      "subtitle": "EVACUATION",
+      "summary": "The squad lands into the evacuation chaos, clashes with a Special Ops lieutenant who wants to halt every flight, and finds the smugglers' warehouses, where the first predator breaks loose.",
+      "readAloud": [
+        "The dropship comes in low over a grey, heaving sea, spray streaking the windows, and the bluff rises out of the haze like the prow of a ship. On top of it, Morgan Bluff Spaceport is a mess of concrete pads, rusting sheds and a single control tower, and every square metre of it is covered in people. Thousands of them. From the air they look like a field of coloured dots. As the ramp drops, the sound reaches you: engines, gulls, the sea, and a crowd's endless anxious roar.",
+        "The terminal is a wall of heat and noise and smell: wet wool, cooking smoke, babies, diesel. Families sit on their luggage under hand-lettered signs with names of missing relatives. A loudspeaker announces a departure and the whole hall surges toward one door. Somewhere a man is shouting in a language you do not speak. Somewhere else, someone is watching your squad come in, and you cannot tell who.",
+        "Out back, the cargo warehouses stand quiet in the drizzle, their doors half open. A forklift sits frozen mid-lift with a container hanging from its forks. Water drips. Inside, the air is cold and smells of brine. A row of crates, drilled with air holes, slosh softly when the wind shakes the building. At the end of the row, one crate has been chewed open from the inside, and a wet, segmented track leads away from it up the wall."
+      ],
+      "gmNotes": "Act I is chaos management with a mystery underneath. Harbourmaster Celeste Amadi needs the squad to keep crowds orderly and flights moving. Lieutenant Rafe Kilbride of Marine Special Operations arrives soon after, wants to lock down the terminal and screen every evacuee for a UPP intelligence officer, and will try to commandeer the squad. The UPP officer, posing as evacuee Lidia Hartmann, is watching the squad and the smugglers.\n\nThe smuggling ring's warehouses hold crated running flatfish waiting for Sable's pickup. One has chewed its way out and is loose. End the act when the squad realises what is in the crates and where they came from: the Mariculture Complex.",
+      "agendaNotes": "Harrow's cousin may be part of the smuggling ring, making Rook Delacroix-Tan uncomfortably familiar. Mbeki-Larsen will be pulled toward the sick and injured in the terminal. Okafor has to decide whether Kilbride's lockdown or Amadi's flights matter more.",
+      "scenes": [
+        {
+          "name": "Pad Three",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The dropship lands on a spray-slick pad beside a transport that is overloaded and still boarding. A crowd surges at the ramp. Harbourmaster Celeste Amadi pushes through with a megaphone and a clipboard and grabs the nearest marine.",
+          "checks": [
+            "COMMAND — get the crowd at the transport ramp back into a line",
+            "OBSERVATION — spot a man forcing his way aboard with a sloshing crate",
+            "MANIPULATION — calm a mother who has lost her son in the crush"
+          ],
+          "events": [
+            "Amadi tells the squad the flight schedule, the missing survey team and that 'someone' has been running cargo flights at night.",
+            "A transport lifts off overloaded and lurches dangerously over the cliff edge before it climbs."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines if the crowd crushes someone at the ramp"
+          ],
+          "npcGuidance": "Amadi is exhausted, efficient and furious at everyone with a uniform; she will cooperate with whoever keeps her flights moving. She lies about how much she knows about the night flights, because she has been paid to look away.",
+          "gmTip": "Start loud and crowded; the players should feel that every minute they spend investigating is a minute the evacuation slips.",
+          "outcomes": [
+            "An orderly ramp earns Amadi's trust and the night flight schedule.",
+            "Stopping the man with the crate gives the squad its first sight of a flatfish, sealed in water and furious."
+          ]
+        },
+        {
+          "name": "The Lockdown",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Four marines in unmarked fatigues walk into the terminal and seal the doors. Lieutenant Rafe Kilbride, Marine Special Operations, announces that no one boards another flight until every evacuee has been screened.",
+          "checks": [
+            "COMMAND — push back on Kilbride's authority without starting a fight between marines",
+            "OBSERVATION — notice the woman in a grey headscarf who moves away from the doors before Kilbride enters",
+            "MANIPULATION — get Kilbride to say who he is looking for"
+          ],
+          "events": [
+            "The crowd panics at the sealed doors; a stampede starts toward the pads.",
+            "Lidia Hartmann approaches a marine and asks, quietly, whether they know anything about the missing scientists."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the crowd stampedes"
+          ],
+          "npcGuidance": "Kilbride is competent, impatient and convinced he is right; he will share his target's description if treated as a peer. Hartmann is warm, plausible and very good; she asks questions disguised as small talk.",
+          "gmTip": "Make Kilbride reasonable enough that the players cannot simply dismiss him; his lockdown might even be right.",
+          "outcomes": [
+            "A compromise lets flights resume with spot checks: the LAST TRANSPORT clock slows.",
+            "A full lockdown fills two segments of the LAST TRANSPORT clock and turns the crowd against all marines.",
+            "Talking to Hartmann gives the squad a lead to the warehouses, which is exactly where she wants them."
+          ],
+          "clueRefs": [
+            "hartmann-mss"
+          ]
+        },
+        {
+          "name": "The Sloshing Crates",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "One running flatfish, two metres of segmented, venomous body, loose in the warehouse rafters. It runs along walls and ceiling, drops on a marine and bites, then flees into the drains. Three smugglers with pistols arrive mid-fight to protect the remaining crates.",
+          "narration": "The cargo warehouses stand half open in the drizzle. A row of crates drilled with air holes slosh softly. One has been chewed open from the inside, and a wet, segmented track leads up the wall into the dark rafters.",
+          "checks": [
+            "OBSERVATION — spot the flatfish on the ceiling before it drops",
+            "RANGED COMBAT — hit something fast moving on the ceiling",
+            "MEDICAL AID — treat a flatfish bite before the venom spreads",
+            "COMTECH — read the repainted crate stencils and the original Mariculture Complex tags underneath"
+          ],
+          "events": [
+            "The flatfish drops from the rafters onto the nearest marine.",
+            "Rook Delacroix-Tan arrives with two armed smugglers, shouting that those crates are licensed seafood."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — any marine bitten by the flatfish",
+            "STRESS +1 — all marines when the flatfish skitters across the ceiling"
+          ],
+          "npcGuidance": "Rook is charming, fast-talking and frightened; he will trade information for a seat on a flight. He lies about the buyer until shown that the flatfish are loose.",
+          "gmTip": "The flatfish's speed on walls and ceilings is its horror; describe it moving where a fish should not move.",
+          "outcomes": [
+            "The crate stencils and Rook's confession point to the Mariculture Complex and a buyer called 'Sable'.",
+            "Rook, flipped, admits two of the survey team came snooping and 'went into the tanks'."
+          ],
+          "clueRefs": [
+            "crate-stencils",
+            "sable-buyer"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "THE HUNT",
+      "summary": "The squad uses the control tower to track the players in the spaceport's shadow war, descends into the flooding Mariculture Complex to find the missing scientist and the flatfish nest, and decides who leaves on the last transport.",
+      "readAloud": [
+        "From the control tower's glass crown you can see everything: the pads strung along the cliff, the terminal swarming with people, the warehouses, and below them the long, low sheds of the Mariculture Complex sprawling down to the sea. The radar sweeps, the radios crackle with pilots begging for slots, and the wind leans on the glass. Out on the water, the tide is turning. Long lines of white foam are racing toward the foot of the bluff.",
+        "The Mariculture Complex is cold, wet and dark, the lights flickering on salt-eaten wiring. The tank halls stretch away in rows, the water inside black and still. Grates in the floor drop straight into the tidal channels, and under your boots you can hear the sea moving, sucking and sighing. The stink of fish is overpowering. Something taps, softly, on the inside of a tank as you pass.",
+        "The last transport sits on Pad One with its engines spooling and its ramp down, lights blazing in the rain. The crowd is pressed against the barriers, hundreds of faces, every one of them desperate to be on it. On the next pad, a black shuttle with no markings sits waiting with its hatch open. And somewhere in the crowd, someone is carrying something in a sealed, sloshing case."
+      ],
+      "gmNotes": "The control tower gives the squad a view of the whole board: Sable's coded traffic with an inbound black shuttle, Kilbride's teams sweeping the terminal, and Hartmann moving toward the Mariculture Complex. In the complex, the surviving xenoanthropologist Dr. Ansel Pike hides in a pump room; the other three are dead. The flatfish nest is in the lower tank hall, flooded twice a day by the tide, and hungry tendrils come in with the water.\n\nThe climax is at the pads: Sable wants the remaining crates loaded on the black shuttle and Pike silenced; Hartmann wants a specimen and a seat; Kilbride wants Hartmann; Amadi wants the last transport to leave. A flatfish hidden in an evacuee's luggage can turn the last flight into a massacre. The squad decides who gets what.",
+      "agendaNotes": "Sable will approach whichever marine has a Company connection and offer them a cut. Brandvold may learn from Hartmann that the UPP holds marines alive on Ariarcus. Harrow is the obvious pilot if the last transport's crew bolt.",
+      "scenes": [
+        {
+          "name": "The Glass Crown",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "The control tower's glass crown overlooks the whole spaceport and the sea. Two exhausted controllers juggle pilots begging for slots. On a side console, a coded data burst repeats every ten minutes to an unregistered shuttle in orbit.",
+          "checks": [
+            "COMTECH — crack the coded burst and read Sable's pickup schedule",
+            "OBSERVATION — track Hartmann through binoculars as she slips toward the Mariculture Complex",
+            "PILOTING — juggle the landing schedule to buy the evacuation an extra flight"
+          ],
+          "events": [
+            "Send the intercepted pickup order once the burst is decoded.",
+            "The tide tables flash an alert: high tide in two hours, storm surge expected."
+          ],
+          "stressTriggers": [],
+          "npcGuidance": "The controllers are grateful for any help and terrified of the black shuttle, which has threatened them twice for asking its registration.",
+          "gmTip": "Use the tower to lay out the whole situation at once; it is a briefing the players earn by climbing.",
+          "outcomes": [
+            "Knowing Sable's schedule lets the squad be waiting at the pad when the black shuttle lands.",
+            "An extra flight removes one segment from the LAST TRANSPORT clock."
+          ],
+          "clueRefs": [
+            "sable-buyer"
+          ]
+        },
+        {
+          "name": "The Tank Halls",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Two running flatfish hunt the upper tank hall along walls and ceilings. If the TIDE clock is half full, hungry tendrils snake up through the floor grates and try to drag marines into the channels.",
+          "narration": "The tank halls are dark rows of black water under flickering lights. Floor grates drop into tidal channels where the sea sucks and sighs. Something taps on the inside of a tank.",
+          "checks": [
+            "SURVIVAL — read the tide marks and find the dry route through the halls",
+            "OBSERVATION — spot movement on the ceiling",
+            "CLOSE COMBAT — break free of a tendril before it drags you under",
+            "MOBILITY — cross a flooded hall on the tank rims"
+          ],
+          "events": [
+            "A flatfish runs across the ceiling and drops into the squad.",
+            "The tide surges through the grates and the lights in the lower hall go out."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the lights fail",
+            "IMMEDIATE PANIC ROLL — any marine dragged into the channel"
+          ],
+          "npcGuidance": "Hartmann, if she arrived first, is hiding on a tank rim with a sample case and will ask the squad to escort her out, offering information in exchange.",
+          "gmTip": "Make the tide audible and rising throughout; the water is as dangerous as anything in it.",
+          "outcomes": [
+            "The squad reaches the pump room and Dr. Pike.",
+            "Hartmann, if escorted, trades what she knows: Sable's buyer, and a name from the UPP's prisoner list."
+          ]
+        },
+        {
+          "name": "The Pump Room",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "In a pump room sealed with a wedged door, a gaunt, bearded man in a torn survey jacket points a flare gun at the squad. Dr. Ansel Pike has been here six days, drinking condensation.",
+          "checks": [
+            "MANIPULATION — convince Pike the squad is not working for Sable",
+            "MEDICAL AID — treat his infected flatfish bite",
+            "OBSERVATION — read Pike's notebook: the flatfish nest, the dead colleagues and photographs of Sable"
+          ],
+          "events": [
+            "Pike tells how his team found the breeding tanks and how Sable's men threw two of them into the lower hall.",
+            "Pike refuses to leave without his notebook, which proves everything."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines who read what happened to the survey team"
+          ],
+          "npcGuidance": "Pike is half mad with thirst and fear, scrupulously honest, and terrified of anyone in black armor. He wants the notebook published more than he wants to live.",
+          "gmTip": "Pike's notebook is the evidence; whoever carries it decides whether the Company's smuggling op stays secret.",
+          "outcomes": [
+            "Pike and his notebook make the squad Sable's top priority.",
+            "The notebook marks the nest in the lower hall; destroying it ends the flatfish threat for good."
+          ],
+          "clueRefs": [
+            "pike-notebook"
+          ]
+        },
+        {
+          "name": "The Last Transport",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Sable and four Blackguard at the black shuttle demand Pike and the crates. Kilbride's team moves on Hartmann in the crowd. A flatfish hidden in an evacuee's sloshing case bursts out at the ramp of the last transport.",
+          "narration": "Rain and engine wash sweep Pad One, where the last transport waits with its ramp down. On the next pad, a black shuttle with no markings sits with its hatch open. Hundreds of evacuees press against the barriers.",
+          "checks": [
+            "COMMAND — hold the crowd when the flatfish appears at the ramp",
+            "MANIPULATION — face down Sable with Pike's notebook as leverage",
+            "RANGED COMBAT — kill the flatfish without hitting the crowd",
+            "PILOTING — fly the last transport out if its crew bolt"
+          ],
+          "events": [
+            "Sable makes her offer: Pike and the crates for the squad's silence and a generous Company bonus.",
+            "Kilbride's team grabs Hartmann; she shouts that she will trade the Ariarcus prisoner list for her freedom.",
+            "A case in the crowd splits open and a flatfish runs up the transport ramp."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all marines when the flatfish gets aboard the transport",
+            "STRESS +1 — all marines in the standoff with the Blackguard"
+          ],
+          "npcGuidance": "Sable is cool and amused and offers money first and bullets second. Kilbride will hand Hartmann over to no one. Amadi screams for the transport to go now, with or without the marines.",
+          "gmTip": "Let every faction act at once, then ask the players what they do first; the order they choose is the ending.",
+          "outcomes": [
+            "The transport leaves safely with Pike aboard: the LAST FLIGHT OUT ending.",
+            "Sable leaves with the crates and Pike's notebook: the GONE FISHING ending.",
+            "A flatfish rides the transport into the sky: THE TIDE COMES IN ending."
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Harbourmaster Celeste Amadi",
+      "role": "Spaceport Harbourmaster, Morgan Bluff",
+      "agenda": "Get every evacuee off the bluff before the weather window closes, whatever any soldier says.",
+      "behavior": "Hoarse, exhausted and blunt, with a megaphone in one hand and a clipboard in the other. Tell: she taps the clipboard against her leg when she is deciding how much to tell you.",
+      "secret": "Rook's ring has paid her for months to log their night cargo flights as 'seafood exports' and look away.",
+      "stats": {
+        "health": 3,
+        "command": 3,
+        "piloting": 2
+      }
+    },
+    {
+      "name": "Lieutenant Rafe Kilbride",
+      "role": "Marine Special Operations Team Leader",
+      "agenda": "Find and capture the UPP intelligence officer hiding among the evacuees, even if it means halting every flight.",
+      "behavior": "Lean, quiet and intense; speaks to Second Squad as subordinates until they prove otherwise. Tell: he rolls a spent cartridge between his fingers while he listens.",
+      "secret": "His orders also tell him to deliver the officer to Sable's shuttle, not to Marine custody, and he does not like it.",
+      "stats": {
+        "health": 5,
+        "rangedCombat": 5,
+        "observation": 4,
+        "command": 3
+      }
+    },
+    {
+      "name": "Lidia Hartmann",
+      "role": "Evacuee (UPP Intelligence Officer)",
+      "agenda": "Steal a live flatfish specimen and evidence of the Company's smuggling, and get off the bluff on an evacuation transport.",
+      "behavior": "Warm, motherly and quietly funny, in a grey headscarf with a battered suitcase. Tell: she always positions herself with a wall at her back and an exit in sight.",
+      "secret": "She is an MSS officer, and she carries a copy of the UPP list of Colonial prisoners held on Ariarcus as a bargaining chip.",
+      "stats": {
+        "health": 4,
+        "manipulation": 5,
+        "observation": 4,
+        "rangedCombat": 3
+      }
+    },
+    {
+      "name": "Rook Delacroix-Tan",
+      "role": "Smuggler, Night Cargo Ring",
+      "agenda": "Ship the last of his flatfish, get paid and get off the bluff before Sable decides he is a loose end.",
+      "behavior": "Charming, fast-talking and always smiling, in an expensive coat ruined by brine. Tell: his smile vanishes for a split second whenever Sable's name is mentioned.",
+      "secret": "He watched Sable's men throw two of the survey team into the flatfish tanks and did nothing; he knows he is next.",
+      "stats": {
+        "health": 3,
+        "manipulation": 4,
+        "rangedCombat": 2
+      }
+    },
+    {
+      "name": "Sable",
+      "role": "Blackguard Operative, Deep Void Collection",
+      "agenda": "Load the flatfish shipment onto her shuttle and silence every witness, starting with the surviving scientist.",
+      "behavior": "Cool, amused and perfectly polite, in black fatigues without insignia. Tell: she always offers money before she offers violence, and never offers twice.",
+      "secret": "Her shuttle's orders include a 'sterilisation option' for the Mariculture Complex if the shipment cannot be secured, and the complex is full of evacuees' families sheltering from the rain.",
+      "stats": {
+        "health": 6,
+        "rangedCombat": 5,
+        "closeCombat": 4,
+        "manipulation": 4
+      }
+    },
+    {
+      "name": "Dr. Ansel Pike",
+      "role": "Xenoanthropologist, Last Survivor of the Survey Team",
+      "agenda": "Get his notebook, and the truth about his colleagues, off the bluff and into the hands of anyone who will publish it.",
+      "behavior": "Gaunt, bearded and shaking with thirst; scrupulously honest and terrified of anyone in black armor. Tell: he hugs his notebook to his chest whenever he is frightened.",
+      "secret": "He is the one who first told Rook what the flatfish were worth, before he understood who was buying.",
+      "stats": {
+        "health": 2,
+        "observation": 4,
+        "survival": 3
+      }
+    }
+  ],
+  "threats": [
+    {
+      "name": "Running Flatfish",
+      "ref": "running-flatfish",
+      "description": "Two metres of segmented, many-legged, venomous body that swims, crawls along walls and runs across ceilings; first seen as a wet track leading up a warehouse wall.",
+      "stats": {
+        "health": 2,
+        "armor": 3,
+        "mobility": 12,
+        "observation": 4
+      },
+      "tactics": "Act I: one loose in the warehouses. Act II: hunting the tank halls in pairs and nesting in the lower hall; one hidden in an evacuee's luggage at the climax. Drops from ceilings, bites and flees."
+    },
+    {
+      "name": "Hungry Tendrils",
+      "ref": "hungry-tendril",
+      "description": "Pale, rubbery seabed tendrils that come up through the floor grates with the tide.",
+      "stats": {
+        "speed": 1,
+        "health": 1,
+        "armor": 1,
+        "mobility": 1
+      },
+      "tactics": "Rise with the TIDE clock in the lower tank halls; grapple and drag a victim into the channels to drown."
+    },
+    {
+      "name": "Sable's Blackguard",
+      "ref": "npc-aw-soldiers-blackguard",
+      "description": "Four elite marines in black armor without insignia, guarding an unmarked shuttle.",
+      "stats": {
+        "speed": 1,
+        "health": 6,
+        "closeCombat": 4,
+        "rangedCombat": 5,
+        "mobility": 3
+      },
+      "tactics": "Hold the black shuttle and enforce Sable's deals; move to silence Pike once they know where he is."
+    },
+    {
+      "name": "Rook's Smugglers",
+      "ref": "npc-mercenary-soldier",
+      "description": "Nervous dockhands with pistols and shotguns, guarding crates they do not want to open.",
+      "stats": {
+        "health": 3,
+        "rangedCombat": 2
+      },
+      "tactics": "Fight to protect the crates in Act I; fold or flee once they realise Sable is cleaning house."
+    },
+    {
+      "name": "The Crowd",
+      "description": "Nearly two thousand frightened evacuees with nowhere to go and one way off the bluff.",
+      "tactics": "A hazard, not an enemy: surges, crushes and stampedes when flights are delayed or a creature appears, and hides whoever wants to be hidden."
     }
   ],
   "keyLocations": [
     {
       "name": "MORGAN BLUFF SPACEPORT — Landing Pads",
-      "description": "Multiple spacecraft berths. Evacuation transports loading."
+      "description": "Six concrete pads on the cliff edge, slick with spray, where battered transports load families with whatever they can carry. Engines howl, gulls scream and the sea booms against the bluff below. Every departure is a riot waiting to happen."
     },
     {
       "name": "MORGAN BLUFF SPACEPORT — Terminal Building",
-      "description": "Main spaceport terminal. Processing center for evacuees."
+      "description": "A grimy prefab hall packed wall to wall with evacuees, bedrolls, crying children and luggage. It smells of wet wool, cooking smoke and fear. Processing desks are overwhelmed, rumours spread faster than announcements, and anyone could be hiding here."
     },
     {
       "name": "MORGAN BLUFF SPACEPORT — Mariculture Complex",
-      "description": "Adjacent aquaculture facility. Reported disappearances in this area."
+      "description": "A low, sprawling sea farm built into the foot of the bluff: tank halls, pump rooms and tidal flood channels open to the sea. The air is cold, salty and stinks of fish. Lights flicker on salt-corroded wiring, and the tide runs in and out under the floor grates."
     },
     {
       "name": "MORGAN BLUFF SPACEPORT — Cargo Warehouses",
-      "description": "Storage facilities. Smuggling operations suspected."
+      "description": "Corrugated sheds stacked with freight containers, some freshly painted over with new stencils. Forklifts sit abandoned mid-lift. Several crates are drilled with air holes and sloshing, and one has been chewed open from the inside."
     },
     {
       "name": "MORGAN BLUFF SPACEPORT — Control Tower",
-      "description": "Air traffic control and communications. Observation point."
+      "description": "A narrow concrete tower with a glass crown overlooking pads, terminal, warehouses and the sea. Radar sweeps, radios crackle with pilots begging for slots. From up here, every movement in the spaceport can be seen, and every transmission overheard."
     }
   ],
   "handouts": [
@@ -55,8 +415,79 @@
       "from": "MU/TH/UR 9000",
       "to": "KILO COMPANY, 2ND PLATOON",
       "priority": "PRIORITY",
-      "text": "MISSION OBJECTIVE: Morgan Bluff Spaceport has become an evacuation point for frontier colonists fleeing the war zone. Intelligence reports indicate a Marine Special Ops unit and Blackguard operatives are conducting covert operations in the area.\n\nYour platoon is to secure the spaceport, assist with evacuation operations, and investigate reports of xenoanthropologist disappearances. The Mariculture Complex and surrounding facilities require thorough sweep.\n\nWarning: hostile elements may be embedded among the evacuee population.",
+      "text": "MISSION OBJECTIVE: Morgan Bluff Spaceport has become an evacuation point for frontier colonists fleeing the war zone. Intelligence reports indicate a Marine Special Ops unit and Blackguard operatives are conducting covert operations in the area.\n\nSecond Squad, 2nd Platoon is to secure the spaceport, assist with evacuation operations, and investigate reports of xenoanthropologist disappearances. The Mariculture Complex and surrounding facilities require thorough sweep. A university survey team of four has not been seen for six days.\n\nWarning: hostile elements may be embedded among the evacuee population. Approximately 1,900 civilians are awaiting transport. Eight evacuation flights are scheduled before the weather window closes.\n\nCooperate with Special Operations personnel where operationally sound. You are not under their command.\n\nKeep the flights moving, Gunfighters.\n\n— MU/TH/UR 9000, USS TAMB'ITAM",
       "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "kilbride-bolo",
+      "title": "BE ON THE LOOKOUT — RESTRICTED",
+      "from": "MARSOC DETACHMENT — LT. R. KILBRIDE",
+      "to": "ALL USCM PERSONNEL, MORGAN BLUFF",
+      "priority": "PRIORITY",
+      "text": "Subject: UPP Ministry of State Security officer, female, approximately 45, travelling under civilian identity among evacuees. Fluent in English and German. Trained in close combat and covert communication. Believed to be seeking biological material and evidence relating to illegal export activity at this site. Do not engage alone. Report sightings on channel 6. Subject is to be taken alive.",
+      "when": "Act I, The Lockdown, once the squad treats Kilbride as a peer or asks who he is hunting"
+    },
+    {
+      "id": "sable-pickup",
+      "title": "DECODED BURST — PICKUP ORDER",
+      "from": "UNREGISTERED SHUTTLE, ORBIT",
+      "to": "SABLE",
+      "priority": "EYES ONLY",
+      "text": "Pickup Pad Two on final evacuation window. Load all live specimens, minimum six. Recover or destroy all survey documentation. Survivor P. remains unaccounted; locate and resolve. Rook D-T to be resolved after loading. Military presence noted. Offer standard incentive to cooperative personnel. If shipment cannot be secured, execute sterilisation option on mariculture site.",
+      "when": "Act II, The Glass Crown, once the coded burst is decoded"
+    },
+    {
+      "id": "pike-page",
+      "title": "TORN NOTEBOOK PAGE",
+      "from": "DR. A. PIKE",
+      "to": "WHOEVER FINDS THIS",
+      "priority": "STANDARD",
+      "text": "Day 6. Water from the pipes, tastes of rust. They took Maren and Joss into the lower hall and closed the door. I heard it for a long time. The woman in black watched. Rook watched. The animals are not fish, they are something far older, and they learn. They nest under the lower tanks where the tide comes in. If I do not get out, please tell Maren's daughter it was quick. It was not quick.",
+      "when": "Act II, The Pump Room, when the squad reads Pike's notebook or finds the page before they find him"
+    }
+  ],
+  "clues": [
+    {
+      "id": "hartmann-mss",
+      "text": "Lidia Hartmann moves like a trained operative and asks too many careful questions; she is the UPP officer Kilbride is hunting.",
+      "source": "Watching her in the terminal, Kilbride's lookout order or her own slip about German",
+      "scene": "The Lockdown"
+    },
+    {
+      "id": "crate-stencils",
+      "text": "The sloshing crates were repainted over Mariculture Complex tags; the flatfish were bred on site, not caught at sea.",
+      "source": "Crate stencils, the warehouse manifest or Rook",
+      "scene": "The Sloshing Crates"
+    },
+    {
+      "id": "sable-buyer",
+      "text": "The buyer is a Blackguard operative called Sable, working for the Company, with an unregistered shuttle due on the final window.",
+      "source": "Rook's confession, the decoded burst or Pike's photographs",
+      "scene": "The Glass Crown"
+    },
+    {
+      "id": "pike-notebook",
+      "text": "Pike's notebook proves the survey team was murdered to protect the Company's smuggling, and shows where the flatfish nest.",
+      "source": "Dr. Pike in the pump room",
+      "scene": "The Pump Room"
+    }
+  ],
+  "clocks": [
+    {
+      "id": "last-transport",
+      "label": "LAST TRANSPORT",
+      "segments": 8,
+      "kind": "danger",
+      "visibility": "all",
+      "note": "Ticks each scene and when flights are delayed. When full, the weather window closes and the last transport leaves, full or not."
+    },
+    {
+      "id": "tide",
+      "label": "TIDE",
+      "segments": 6,
+      "kind": "danger",
+      "visibility": "gm",
+      "note": "Starts in Act II. At half full, tendrils rise through the lower grates. When full, the lower tank halls flood completely."
     }
   ],
   "maps": [
@@ -70,25 +501,50 @@
       "rooms": [
         {
           "name": "Landing Pads",
-          "note": "Multiple spacecraft berths. Evacuation transports loading."
+          "note": "Six concrete pads on the cliff edge, slick with spray, where battered transports load families with whatever they can carry. Engines howl, gulls scream and the sea booms against the bluff below. Every departure is a riot waiting to happen."
         },
         {
           "name": "Terminal Building",
-          "note": "Main spaceport terminal. Processing center for evacuees."
+          "note": "A grimy prefab hall packed wall to wall with evacuees, bedrolls, crying children and luggage. It smells of wet wool, cooking smoke and fear. Processing desks are overwhelmed, rumours spread faster than announcements, and anyone could be hiding here."
         },
         {
           "name": "Mariculture Complex",
-          "note": "Adjacent aquaculture facility. Reported disappearances in this area."
+          "note": "A low, sprawling sea farm built into the foot of the bluff: tank halls, pump rooms and tidal flood channels open to the sea. The air is cold, salty and stinks of fish. Lights flicker on salt-corroded wiring, and the tide runs in and out under the floor grates."
         },
         {
           "name": "Cargo Warehouses",
-          "note": "Storage facilities. Smuggling operations suspected."
+          "note": "Corrugated sheds stacked with freight containers, some freshly painted over with new stencils. Forklifts sit abandoned mid-lift. Several crates are drilled with air holes and sloshing, and one has been chewed open from the inside."
         },
         {
           "name": "Control Tower",
-          "note": "Air traffic control and communications. Observation point."
+          "note": "A narrow concrete tower with a glass crown overlooking pads, terminal, warehouses and the sea. Radar sweeps, radios crackle with pilots begging for slots. From up here, every movement in the spaceport can be seen, and every transmission overheard."
         }
       ]
     }
+  ],
+  "endings": [
+    {
+      "title": "LAST FLIGHT OUT",
+      "condition": "The last transport leaves safely with Pike and his notebook aboard, and no flatfish reaches the evacuees.",
+      "text": "The transport claws its way into the rain, engines screaming, and banks out over the grey sea toward the break in the clouds. Through the porthole, Morgan Bluff shrinks to a dark knuckle of rock with the surf breaking white at its foot.\n\nPike sleeps with the notebook in his arms. In the seat beside him, a little girl has fallen asleep against his shoulder, and he does not move for the whole flight in case he wakes her. The Company will deny everything. But this time somebody wrote it down."
+    },
+    {
+      "title": "GONE FISHING",
+      "condition": "Sable's shuttle leaves with the crates, and Pike or his notebook goes with her or is lost.",
+      "text": "The black shuttle lifts off Pad Two without lights and is swallowed by cloud in seconds. On the radio, a cool voice thanks Second Squad for its cooperation and assures you that a gesture of appreciation will reach your accounts.\n\nThe evacuation finishes on schedule. The survey team is listed as lost at sea. Months later, a news item mentions a new class of Company bioweapon under trial on a Frontier world. It describes the casualties' wounds. You recognise them."
+    },
+    {
+      "title": "THE TIDE COMES IN",
+      "condition": "A flatfish gets aboard the last transport, or the squad is lost in the flooding tank halls.",
+      "text": "The transport's distress call comes forty minutes after take-off, garbled and screaming, from somewhere over the sea. Then it stops. On the bluff, the crowd that did not get a seat stands in the rain and listens to the silence on the harbourmaster's radio.\n\nBelow them, the tide fills the Mariculture Complex to the rafters and drains away again, as it does twice a day, and something in the lower hall tastes the water and waits for it to come back."
+    }
+  ],
+  "tips": [
+    "Keep the crowd present in every scene at the spaceport; noise, crush and desperation should press on every decision.",
+    "Play Kilbride, Hartmann and Sable as competent professionals with conflicting orders, not villains; the squad should need at least one of them.",
+    "Describe the flatfish moving where fish cannot: up walls, along ceilings, across the backs of crates.",
+    "Make the tide audible and visible in the Mariculture Complex so the players feel the window closing.",
+    "Hartmann's prisoner list is a powerful hook for any marine with a stake in Ariarcus; use it to tempt, not to resolve.",
+    "If time runs short, skip The Glass Crown and let Rook give up Sable's schedule in the warehouses."
   ]
 }

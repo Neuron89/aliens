@@ -6,46 +6,406 @@
   "meta": {
     "title": "Operation Deep Shaft",
     "tagline": "A mining operation that dug too deep. Black goo. Infected workers. No way out but down.",
+    "synopsis": "Sonderdatch Mine, secretly run by Weyland-Yutani's Deep Void division, drilled into a pressure pocket of black accelerant. Workers are turning into Anathemas, thirty-seven miners are cut off below, and the mine is flooding with black goo. Second Squad lands beside a quarantine hospital ship whose chief physician wants every infected survivor kept alive for study, while the Blackguard team under Major Silas Crane wants a clean sample and no infected witnesses, and has already wired the upper shafts to blow. Below, shift foreman Ro Calloway holds the trapped miners together while a Children of the Two Divines preacher leads the faithful down toward the breakthrough to be 'remade'. The squad descends through every stage of infection, reaches the Deep Excavation and must climb back out with as many survivors as possible before the goo, the cult or Crane's charges seal the mine forever.",
     "type": "Campaign",
     "players": "3–5",
     "playtime": "4–6 hours",
     "difficulty": "Extreme",
+    "tone": [
+      "claustrophobic",
+      "contagion",
+      "desperate rescue",
+      "betrayal from above"
+    ],
+    "contentWarnings": [
+      "graphic body horror",
+      "infection and transformation",
+      "mercy killing",
+      "drowning and entombment",
+      "claustrophobia",
+      "religious extremism",
+      "corporate and military cover-up",
+      "character death"
+    ],
     "source": "bundled"
   },
   "briefing": {
     "from": "MU/TH/UR 9000",
     "to": "KILO COMPANY, 2ND PLATOON",
     "classification": "MISSION BRIEFING — OPERATION DEEP SHAFT",
-    "text": "MISSION OBJECTIVE: Sonderdatch Mine has broadcast an SOS. The mining operation, secretly controlled by Weyland-Yutani's Deep Void division, broke through to a pressure pocket filled with black accelerant — Engineer biological material.\n\nOver a dozen workers are infected. At least three have become Anathemas. 37 miners are MIA in the tunnels below. A Blackguard team is already on site with their own agenda.\n\nYour platoon will evacuate survivors to the quarantine hospital ship. Expect Anathemas at multiple infection stages, hostile Blackguard operatives, and Children of the Two Divines cultists. The mine is unstable and flooding with black goo."
+    "text": "MISSION OBJECTIVE: Sonderdatch Mine has broadcast an SOS. The mining operation, secretly controlled by Weyland-Yutani's Deep Void division, broke through to a pressure pocket filled with black accelerant — Engineer biological material.\n\nOver a dozen workers are infected. At least three have become Anathemas. 37 miners are MIA in the tunnels below. A Blackguard team is already on site with their own agenda.\n\nSecond Squad, 2nd Platoon will evacuate survivors to the quarantine hospital ship. Expect Anathemas at multiple infection stages, hostile Blackguard operatives, and Children of the Two Divines cultists. The mine is unstable and flooding with black goo.\n\nCompression suits or sealed respirators are mandatory below the surface. Do not touch the infected without protection. Do not allow any fluid contact with open wounds. Incinerator units have been added to your loadout.\n\nEvery survivor counts, Marines. Bring them up.\n\n— MU/TH/UR 9000, USS TAMB'ITAM"
   },
   "acts": [
     {
-      "title": "OPERATION",
-      "subtitle": "MISSION BRIEFING",
-      "summary": "A mining operation that dug too deep. Black goo. Infected workers. No way out but down.",
-      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+      "title": "ACT I",
+      "subtitle": "THE SURFACE",
+      "summary": "The squad lands beside the quarantine ship, faces down the Blackguard at the mine head, deals with the afflicted in the mess hall and rides the cage down into the upper shafts.",
+      "readAloud": [
+        "The dropship sets down in a storm of grey ash that hisses across the pad and rattles on your armor. Sonderdatch is a cluster of prefab sheds, rust-streaked conveyor gantries and a squat processing plant, all crouched around the black mouth of the mine head. A klaxon is still sounding somewhere, a tired, endless whoop. Beside the pad sits a white medical lander glowing blue at its airlocks, and through its windows you can see figures in hazard suits moving like ghosts.",
+        "The mess hall door has been taped shut with red hazard tape, and someone has written INFECTED on it in marker. From inside comes the sound of crying, many voices, constant and soft, like a radio left on. Nobody is guarding it. Across the yard, four soldiers in black armor without unit insignia stand at the mine head. They watch you land. They do not wave.",
+        "The cage drops into the shaft with a jolt that slams your teeth together. Rock walls rush upward past the mesh, lit in stripes by passing lamps. The air turns cold, then damp, then cold again. The cable sings overhead. Somewhere far below, so faint you could imagine it, comes the steady chug of a pump and, under it, a sound like singing."
+      ],
+      "gmNotes": "Act I sets up the three-way pull that drives the scenario: Dr. Aaltonen on the hospital ship wants every infected survivor alive and delivered to him; Major Crane's Blackguard want the infected dead, a sample in hand and no witnesses; Superintendent Halvorsen just wants her miners out. Crane has already wired the upper shafts with charges; if the squad finds them, they know what Crane intends.\n\nThe mess hall is the squad's first encounter with the Anathema stages, from weeping Stage I workers to one about to turn. Make the infection rules clear here: touch without protection means a Sickness Roll. End the act when the cage reaches the upper shafts and the squad meets its first Lusus.",
+      "agendaNotes": "Mbeki-Larsen's agenda collides head-on with Crane's 'no infected leave' order. Vasquez-Hale may be approached by Aaltonen, who knows the liaison. Okafor must decide whether to cooperate with Crane, whose rank and authority are real.",
+      "scenes": [
+        {
+          "name": "The Hospital Ship",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The dropship lands in blowing ash beside a white medical lander. Dr. Benedikt Aaltonen meets the squad at the outer airlock in a hazard suit, already briefing before the ramp is down.",
+          "checks": [
+            "MEDICAL AID — understand Aaltonen's triage protocol and the four stages of infection",
+            "OBSERVATION — notice the Deep Void logo stencilled on a specimen freezer behind him",
+            "MANIPULATION — get him to admit how many berths he really has"
+          ],
+          "events": [
+            "Aaltonen issues each marine a compression seal kit and a field triage card.",
+            "He asks the squad, very politely, to bring the infected up alive, 'whatever their stage'."
+          ],
+          "stressTriggers": [],
+          "npcGuidance": "Aaltonen is calm, kind and entirely sincere about saving lives, and he is also a Deep Void physician who wants the advanced cases for study. He lies about the berth count: he has twenty, and thirty-seven miners below.",
+          "gmTip": "Use Aaltonen to teach the infection stages; the squad should leave knowing what Stage I through IV look like.",
+          "outcomes": [
+            "The squad knows the stages, the rules of contact and that berths are limited.",
+            "Spotting the Deep Void logo tells the squad who really owns the mine and the ship."
+          ],
+          "clueRefs": [
+            "twenty-berths"
+          ]
+        },
+        {
+          "name": "Blackguard at the Mine Head",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Four soldiers in black M3 armor without insignia stand at the mine head. Their leader, Major Silas Crane, steps forward, checks the squad's unit patches and informs them that he has operational command of the site.",
+          "checks": [
+            "COMMAND — stand up to Crane's rank without starting a firefight",
+            "OBSERVATION — notice the detonator spool on a Blackguard's harness",
+            "COMTECH — verify Crane's authority with the Tamb'Itam; the answer comes back 'confirmed, do not interfere'"
+          ],
+          "events": [
+            "Crane orders that no infected individual, of any stage, is to be brought to the surface.",
+            "Superintendent Gretchen Halvorsen storms out of the site office and screams at Crane that he is murdering her people."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when Crane makes clear his orders override theirs"
+          ],
+          "npcGuidance": "Crane is polite, cold and absolutely certain. He will not shoot marines in front of witnesses, yet. Halvorsen is furious and frightened, and she lies about having known about the pressure pocket.",
+          "gmTip": "Do not let this become a firefight; Crane's power is that the chain of command backs him.",
+          "outcomes": [
+            "If the squad accepts Crane's order, he lets them descend with a Blackguard 'observer'.",
+            "If they refuse, he lets them go anyway and starts the DEMOLITION clock with one segment filled."
+          ]
+        },
+        {
+          "name": "The Weeping Hall",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Twelve afflicted workers in the taped-up mess hall: eight Stage I, three Stage II, and one Stage II who turns to Stage III during the scene and attacks. Contact without protection forces a Sickness Roll.",
+          "narration": "Behind red hazard tape, the mess hall is full of workers sitting at tables and lying on the floor, weeping without end. Some have pale worms moving in their eyes. A woman at the back is scratching her own arms, and her skin is splitting.",
+          "checks": [
+            "MEDICAL AID — triage the afflicted by stage, without touching them unprotected",
+            "MANIPULATION — calm the room before the panic spreads",
+            "RANGED COMBAT or CLOSE COMBAT — stop the worker who turns"
+          ],
+          "events": [
+            "One of the Stage II workers convulses and stands up wrong.",
+            "A Blackguard sentry appears at the door with an incinerator unit, waiting to see what the marines do."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines in the hall from the endless weeping",
+            "IMMEDIATE PANIC ROLL — any marine within SHORT range when the worker turns"
+          ],
+          "npcGuidance": "The afflicted are frightened, paranoid and pleading; some insist they feel fine. The Blackguard sentry will burn the room if the squad hesitates and the turned worker gets loose.",
+          "gmTip": "This is the scenario's first moral line: who gets a berth, who gets left, who gets burned. Make the squad say it out loud.",
+          "outcomes": [
+            "Early-stage workers sent to the hospital ship fill berths before the miners below are even found.",
+            "Letting the Blackguard burn the room keeps berths free and leaves a mark on every marine who watched."
+          ]
+        },
+        {
+          "name": "Cage Down",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "A Lusus, a Stage III Anathema that was once a haul driver, waits in the upper shaft among parked carts. It is fast, strong and screams; it fights until burned or put down.",
+          "narration": "The cage drops into cold, lamp-lit tunnels with ore rails and parked haul carts. Demolition charges are taped to the support pillars. Halfway along the rail, a haul cart rocks gently on its wheels, though nothing is pushing it.",
+          "checks": [
+            "OBSERVATION — spot the Lusus crouched in the cart before it leaps",
+            "COMTECH — trace the demolition wiring back to a single receiver",
+            "HEAVY MACHINERY — disable a charge without setting off the others"
+          ],
+          "events": [
+            "The Lusus bursts out of the cart in a spray of ore and black fluid.",
+            "Send the demolition plan handout if the squad examines the charges."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all marines when the Lusus attacks"
+          ],
+          "npcGuidance": "If a Blackguard observer came along, he tries to stop the squad examining the charges and reports any tampering to Crane.",
+          "gmTip": "Finding the charges should be a cold shock: the squad now knows their own side plans to bury them.",
+          "outcomes": [
+            "Disarmed charges buy time: remove two segments from the DEMOLITION clock.",
+            "The squad continues down the ramp tunnels to the mid-levels and Act II."
+          ],
+          "clueRefs": [
+            "demolition-plan"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "THE DEEP",
+      "summary": "The squad finds the trapped miners in the flooded mid-levels, confronts the cult procession heading for the breakthrough, reaches the Deep Excavation and makes the long climb out ahead of the goo and Crane's charges.",
+      "readAloud": [
+        "The mid-level tunnels are low enough that you walk bent double, helmet lamp scraping the ceiling. Black water sloshes around your shins, thick as oil, and steams faintly where it touches warm rock. It clings to your boots in long strings. The emergency lamps flicker in a slow, failing rhythm. Every few minutes the rock groans somewhere close by, deep and patient, like a ship's hull under pressure.",
+        "The singing is louder here. It comes from somewhere ahead and below, many voices, slow and joyful, echoing through the tunnels until it seems to come from the rock itself. Behind a barricade of ore carts, a pump station blazes with work lights, and a voice shouts at you to identify yourselves or get a pickaxe through your visor.",
+        "The Deep Excavation opens in front of you like the inside of a skull. The drill head hangs dead in the middle of a vast, ribbed cavity whose walls are smooth, curved and carved in patterns no human hand made. Black fluid wells up from a crack in the floor and spreads in slow rivers. The air is warm and smells sweet, like overripe fruit. Kneeling at the edge of the black pool, a crowd of miners sing with their arms raised."
+      ],
+      "gmNotes": "Calloway's group holds the pump station with twenty-two miners, several infected. Fifteen more have followed Sister Adaeze Thorne down toward the excavation to be 'remade'. The squad cannot get everyone out, and there are only twenty berths on the hospital ship. Crane's sample team is heading for the excavation too, and when they have their sample, Crane will fire the charges.\n\nThe GOO FLOOD clock ticks steadily through the act; the DEMOLITION clock ticks when Crane gets his sample or learns the squad is disobeying. The climax is the climb back up: carrying wounded and infected, through rising goo and a Nocuous that bursts in the tunnels, with the upper shafts about to come down.",
+      "agendaNotes": "Every agenda that touches the Company or the infected comes due here. Mbeki-Larsen must choose who to carry. Brandvold may see Okafor leave someone behind, again. Vasquez-Hale may be tempted to fill a sample tube for the liaison.",
+      "scenes": [
+        {
+          "name": "The Pump Station",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Behind a barricade of ore carts, the pump station blazes with work lights. Ro Calloway, the shift foreman, holds twenty-two exhausted miners together with a pickaxe and a voice like gravel.",
+          "checks": [
+            "COMMAND — get Calloway to trust the squad and hand over leadership",
+            "MEDICAL AID — triage the miners and find the infected ones hiding their symptoms",
+            "HEAVY MACHINERY — restart the pump to slow the flood"
+          ],
+          "events": [
+            "Calloway tells the squad that fifteen of his people followed 'that preacher' down toward the breakthrough.",
+            "A miner hiding Stage II symptoms is exposed by the others and begs not to be left."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when they count the miners and remember the berths"
+          ],
+          "npcGuidance": "Calloway is tough, honest and terrified of losing more people; he will go down for the fifteen with or without the marines. Miners lie about their symptoms because they have heard about the Blackguard.",
+          "gmTip": "Make the berth math explicit; the squad should feel the weight of every choice from here on.",
+          "outcomes": [
+            "A restarted pump removes two segments from the GOO FLOOD clock.",
+            "Sending the healthy miners up now gets them out, but without escort past the charges.",
+            "Taking Calloway down to the cult splits the squad's attention between two groups of survivors."
+          ]
+        },
+        {
+          "name": "The Procession",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "Fifteen miners in a slow procession, some infected, led by Sister Adaeze Thorne. Most are unarmed; four carry pickaxes and fight to protect her. Violence against the procession splits it in panic, some running deeper.",
+          "narration": "In a long, sloping tunnel, a line of miners walks slowly downhill, singing, holding hands. At the front a woman in a miner's coat with a painted spiral on the back lifts her lamp and turns to face you, smiling.",
+          "checks": [
+            "MANIPULATION — break Thorne's hold on the procession",
+            "OBSERVATION — see the black tears on Thorne's cheeks: she is infected, by choice",
+            "COMMAND — stop the squad firing on unarmed civilians"
+          ],
+          "events": [
+            "Thorne invites the squad to come down and 'be remade' with them.",
+            "One young miner breaks from the line and runs to the marines, sobbing."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines who witness the procession reach the black water"
+          ],
+          "npcGuidance": "Thorne is warm, certain and infectious in every sense. Her followers are frightened people who chose faith over despair; most will leave if given real hope.",
+          "gmTip": "Let persuasion work. A procession peeled away one miner at a time is a far better scene than a massacre.",
+          "outcomes": [
+            "Peeled-away miners join the survivors heading up.",
+            "Thorne and the faithful reach the excavation regardless; she becomes the Nocuous in the next scene."
+          ],
+          "clueRefs": [
+            "thorne-willing"
+          ]
+        },
+        {
+          "name": "The Deep Excavation",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Crane's two-man sample team is filling a cryo case at the black pool. Sister Thorne, now Stage IV, staggers among the kneeling faithful; when she collapses, she releases accelerant into the air, Virulence 8 in her zone and 4 next door. The Blackguard shoot anyone who interferes with the sample.",
+          "narration": "The drill head hangs dead over a vast, ribbed cavity of smooth, carved stone. Black fluid wells up from a crack and spreads in slow rivers. Two Blackguard in sealed suits kneel at the pool with a cryo case. The faithful kneel singing along the edge.",
+          "checks": [
+            "OBSERVATION — see that the walls are carved, and that the carvings move in the lamplight",
+            "RANGED COMBAT — take the sample team down before they seal the case",
+            "SURVIVAL — get the faithful out of the cloud before Thorne bursts",
+            "COMTECH — jam the sample team's radio before they report success to Crane"
+          ],
+          "events": [
+            "Thorne's body disintegrates in a cloud of black mist.",
+            "If the sample team reports success, Crane's voice comes over every radio: 'Package secured. Begin withdrawal.' The DEMOLITION clock ticks twice."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all marines who see Thorne disintegrate",
+            "STRESS +1 — all marines in the excavation"
+          ],
+          "npcGuidance": "The sample team obeys Crane exactly and does not negotiate. The faithful, robbed of their preacher, either break and run for the marines or walk into the pool.",
+          "gmTip": "The sample case is the scenario's hinge: who leaves with it decides who controls the story above.",
+          "outcomes": [
+            "Seizing the sample case gives the squad leverage over Crane, and a Company temptation.",
+            "Letting the team go buys peace with Crane, and starts his withdrawal and the charges."
+          ],
+          "clueRefs": [
+            "demolition-plan"
+          ]
+        },
+        {
+          "name": "The Long Climb",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "A Febrile and a Lusus pursue the column through rising goo; Crane's withdrawing Blackguard hold the cage and refuse to take infected passengers. The charges fire when the DEMOLITION clock fills.",
+          "narration": "The column climbs: marines, miners and the wounded, through tunnels filling with black water. Behind them, something screams. Ahead, the cage at the upper shafts is held by Blackguard with incinerators, and Crane is on the radio counting down.",
+          "checks": [
+            "STAMINA — carry the wounded uphill through the goo",
+            "COMMAND — keep the column moving and the miners from stampeding",
+            "MANIPULATION or RANGED COMBAT — get past the Blackguard at the cage",
+            "COMTECH — cut the detonator's receiver before the charges fire"
+          ],
+          "events": [
+            "Crane offers the squad a deal over the radio: the sample case for cage time.",
+            "The goo reaches the upper shafts; the cage cable starts to slip."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the first charge fires deep below",
+            "IMMEDIATE PANIC ROLL — any marine left in the shaft when the DEMOLITION clock fills"
+          ],
+          "npcGuidance": "Crane keeps his word if it costs him nothing; he will let healthy survivors up and burn the infected. Halvorsen, on the surface, begs on the radio for her miners. Calloway refuses to go up until the last of his crew is in the cage.",
+          "gmTip": "Let the players make the final counting: who is in the cage, who is not, and who decides. Then end on the cable.",
+          "outcomes": [
+            "Most survivors up and the charges disarmed or delayed: the BROUGHT THEM UP ending.",
+            "Charges fire with people still below: the SEALED IN THE DARK ending.",
+            "Infected loose on the surface or the squad infected: THE BLACK RISES ending."
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Major Silas Crane",
+      "role": "Blackguard Team Leader",
+      "agenda": "Recover an accelerant sample for Deep Void and ensure no infected person or unreliable witness leaves Sonderdatch.",
+      "behavior": "Soft-spoken, precise and reasonable, with the patience of a man who knows the chain of command is on his side. Tell: he removes his helmet before he gives an order he knows is monstrous.",
+      "secret": "His orders are to collapse the mine once the sample is secured, with whoever remains inside, and to report the squad as lost in a mining accident if they interfere.",
+      "stats": {
+        "health": 6,
+        "rangedCombat": 5,
+        "command": 4,
+        "closeCombat": 4
+      }
+    },
+    {
+      "name": "Dr. Benedikt Aaltonen",
+      "role": "Chief Physician, Quarantine Hospital Ship",
+      "agenda": "Fill his quarantine berths with infected survivors at every stage, alive, for treatment and study.",
+      "behavior": "Gentle, tired and relentlessly reasonable; calls every patient by name. Tell: he cleans his visor whenever he is asked how many berths he has.",
+      "secret": "He is a Deep Void physician; his ship has twenty berths, and his real orders are to keep the advanced cases, not the healthy miners.",
+      "stats": {
+        "health": 3,
+        "medicalAid": 5,
+        "manipulation": 3
+      }
+    },
+    {
+      "name": "Superintendent Gretchen Halvorsen",
+      "role": "Mine Superintendent, Sonderdatch",
+      "agenda": "Get every one of her miners out alive, whatever Crane or the Company say.",
+      "behavior": "Loud, red-faced and fiercely protective; knows every miner's name and shift. Tell: she looks at the floor when anyone mentions the pressure pocket.",
+      "secret": "Survey scans showed the pocket three weeks ago; she kept drilling for a Deep Void completion bonus.",
+      "stats": {
+        "health": 4,
+        "heavyMachinery": 3,
+        "command": 3
+      }
+    },
+    {
+      "name": "Ro Calloway",
+      "role": "Shift Foreman, Trapped Miners",
+      "agenda": "Bring his crew out, including the fifteen who followed the preacher, even if it costs him his life.",
+      "behavior": "Short, broad and coated in rock dust, with a pickaxe he never puts down and a voice that carries through stone. Tell: he counts heads constantly under his breath.",
+      "secret": "He has a black tear in the corner of one eye that he has been hiding: he is Stage I.",
+      "stats": {
+        "health": 5,
+        "heavyMachinery": 4,
+        "stamina": 3,
+        "closeCombat": 3
+      }
+    },
+    {
+      "name": "Sister Adaeze Thorne",
+      "role": "Children of the Two Divines Preacher",
+      "agenda": "Lead the faithful down to the breakthrough to be 'remade' by what the miners uncovered.",
+      "behavior": "Radiant, warm and utterly calm; sings constantly and touches everyone's face. Tell: she never blinks while she is preaching.",
+      "secret": "She infected herself on purpose the day of the breakthrough and is days, perhaps hours, from Stage IV.",
+      "stats": {
+        "health": 3,
+        "manipulation": 5
+      }
+    }
+  ],
+  "threats": [
+    {
+      "name": "Vitiate 'Afflicted'",
+      "ref": "vitiate-afflicted",
+      "description": "Workers who weep without end, paranoid and frightened, with pale worms moving in their eyes late in the stage.",
+      "tactics": "Not hostile, but contagious on contact. Each shift risks advancing to Stage II; their presence is a constant moral and medical burden."
+    },
+    {
+      "name": "Ague 'Febrile'",
+      "ref": "ague-febrile",
+      "description": "Feverish, sweating workers with black-veined skin who lash out in delirium.",
+      "tactics": "Unpredictable and violent in bursts; turns on rescuers when frightened, and advances toward Stage III under stress."
+    },
+    {
+      "name": "Lusus 'Freak'",
+      "ref": "lusus-freak",
+      "description": "A once-human body split and remade, fast and strong, screaming as it charges out of a haul cart.",
+      "tactics": "Ambushes from carts and side passages, fights until burned or destroyed; one waits in the upper shafts and another follows the climbing column."
+    },
+    {
+      "name": "Nocuous 'Terminal'",
+      "ref": "nocuous-terminal",
+      "description": "A disintegrating body that sheds black mist with every step; Sister Thorne by the end of the scenario.",
+      "tactics": "Loses health every round and bursts at zero, releasing accelerant into the air around it. Keep distance, hold breath, burn it."
+    },
+    {
+      "name": "Blackguard Team",
+      "ref": "npc-aw-soldiers-blackguard",
+      "description": "Six elite marines in black M3 armor without insignia, carrying incinerators and detonators, answering only to Major Crane.",
+      "stats": {
+        "speed": 1,
+        "health": 6,
+        "closeCombat": 4,
+        "rangedCombat": 5,
+        "mobility": 3
+      },
+      "tactics": "Act I: hold the mine head and observe. Act II: secure the sample, hold the cage and burn infected survivors; fight the squad only if it threatens the sample or the withdrawal."
+    },
+    {
+      "name": "The Black Flood",
+      "description": "Oily black water rising through the mid-levels, clinging to boots and steaming on warm rock.",
+      "tactics": "Rises on the GOO FLOOD clock; contact with open wounds is a Sickness Roll, and full immersion is drowning."
     }
   ],
   "keyLocations": [
     {
       "name": "SONDERDATCH MINE — Surface Facilities",
-      "description": "Mine head, processing plant, crew facilities. Blackguard operatives on site."
+      "description": "A huddle of prefab sheds, conveyor gantries and a rusting processing plant under a sky of blowing ash. The mess hall has become a makeshift ward of the afflicted, sobbing behind taped doors. Blackguard sentries in black armor watch the mine head and will not say who sent them."
     },
     {
       "name": "SONDERDATCH MINE — Upper Shafts",
-      "description": "Primary mining tunnels. Equipment and rail systems."
+      "description": "Wide, lamp-lit tunnels with ore rails, parked haul carts and cable runs humming overhead. The air is cold and smells of rock dust and diesel. Fresh demolition charges are taped to the support pillars, wired with military precision, and nobody is guarding them."
     },
     {
       "name": "SONDERDATCH MINE — Mid-Level Tunnels",
-      "description": "Secondary mining operations. Unstable. Some sections flooded."
+      "description": "Narrow, low workings half flooded with black, oily water that clings to boots and steams faintly. Emergency lamps flicker on failing batteries. Groans of shifting rock echo through side passages, and the trapped miners have barricaded a pump station with ore carts."
     },
     {
       "name": "SONDERDATCH MINE — Deep Excavation",
-      "description": "The breakthrough point. Black accelerant seepage. Extreme biological hazard."
+      "description": "A cathedral-sized cavity where the drill head broke through into smooth, ribbed stone that is not natural. Black accelerant wells up from a cracked seam and creeps across the floor. The air is warm, sweet and wrong, and the silence swallows sound."
     },
     {
       "name": "SONDERDATCH MINE — Quarantine Hospital Ship",
-      "description": "Medical vessel on surface. Evacuation point for survivors."
+      "description": "A squat, white medical lander on the surface pad, sealed behind plastic airlocks and blue UV light. Inside, nurses in hazard suits move between rows of isolation pods. It has twenty quarantine berths, and the chief physician wants every one of them filled."
     }
   ],
   "handouts": [
@@ -55,8 +415,73 @@
       "from": "MU/TH/UR 9000",
       "to": "KILO COMPANY, 2ND PLATOON",
       "priority": "PRIORITY",
-      "text": "MISSION OBJECTIVE: Sonderdatch Mine has broadcast an SOS. The mining operation, secretly controlled by Weyland-Yutani's Deep Void division, broke through to a pressure pocket filled with black accelerant — Engineer biological material.\n\nOver a dozen workers are infected. At least three have become Anathemas. 37 miners are MIA in the tunnels below. A Blackguard team is already on site with their own agenda.\n\nYour platoon will evacuate survivors to the quarantine hospital ship. Expect Anathemas at multiple infection stages, hostile Blackguard operatives, and Children of the Two Divines cultists. The mine is unstable and flooding with black goo.",
+      "text": "MISSION OBJECTIVE: Sonderdatch Mine has broadcast an SOS. The mining operation, secretly controlled by Weyland-Yutani's Deep Void division, broke through to a pressure pocket filled with black accelerant — Engineer biological material.\n\nOver a dozen workers are infected. At least three have become Anathemas. 37 miners are MIA in the tunnels below. A Blackguard team is already on site with their own agenda.\n\nSecond Squad, 2nd Platoon will evacuate survivors to the quarantine hospital ship. Expect Anathemas at multiple infection stages, hostile Blackguard operatives, and Children of the Two Divines cultists. The mine is unstable and flooding with black goo.\n\nCompression suits or sealed respirators are mandatory below the surface. Do not touch the infected without protection. Do not allow any fluid contact with open wounds. Incinerator units have been added to your loadout.\n\nEvery survivor counts, Marines. Bring them up.\n\n— MU/TH/UR 9000, USS TAMB'ITAM",
       "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "demolition-plan",
+      "title": "FIELD ORDER — SITE CLOSURE (INTERCEPTED)",
+      "from": "BLACKGUARD DETACHMENT — CRANE",
+      "to": "DETACHMENT ELEMENTS",
+      "priority": "EYES ONLY",
+      "text": "On confirmation of package secure, withdraw all elements to surface. Hold cage. No infected personnel to ascend, all stages. Charges on upper shaft supports are to be fired on my order only. Any personnel remaining below at that time are to be recorded as casualties of structural collapse. This includes non-detachment military personnel. Acknowledge.",
+      "when": "Act I, Cage Down, when the squad examines the charges or captures a Blackguard radio"
+    },
+    {
+      "id": "foreman-call",
+      "title": "SHORT-RANGE RADIO — PUMP STATION",
+      "from": "R. CALLOWAY, SHIFT FOREMAN",
+      "to": "ANYONE ON THIS CHANNEL",
+      "priority": "EMERGENCY",
+      "text": "This is Calloway at Pump Three, mid-level. Twenty-two with me, some sick. Fifteen went down with the preacher. Water is black and coming up fast, maybe a hand an hour. We have lights, no food, one working pump. If you are the Company, I will kill you myself. If you are anyone else, please, we are right here.",
+      "when": "Act I, end of Cage Down, as the squad reaches the ramp tunnels"
+    },
+    {
+      "id": "aaltonen-request",
+      "title": "MEDICAL PRIORITY REQUEST",
+      "from": "DR. B. AALTONEN, QUARANTINE SHIP",
+      "to": "HOSPITAL CORPSMAN OR SQUAD MEDIC",
+      "priority": "EYES ONLY",
+      "text": "Colleague. I understand the situation below is impossible, and I trust your judgement. If you must choose who to bring up, I would ask, as one medical professional to another, that you prioritise the advanced cases. The healthy can wait for the next lift. The advanced cases cannot, and they are the ones who will teach us how to save everyone else. Please.",
+      "when": "Act II, The Pump Station, when the squad counts the miners against the berths"
+    }
+  ],
+  "clues": [
+    {
+      "id": "twenty-berths",
+      "text": "The hospital ship has only twenty quarantine berths, and the chief physician has been ordered to fill them with advanced cases.",
+      "source": "Aaltonen's manifest, a nurse, or the Deep Void freezer logs",
+      "scene": "The Hospital Ship"
+    },
+    {
+      "id": "demolition-plan",
+      "text": "The upper shafts are wired to collapse on Crane's order, with anyone left below written off as an accident, marines included.",
+      "source": "The charges themselves, the intercepted order, or a captured Blackguard",
+      "scene": "Cage Down"
+    },
+    {
+      "id": "thorne-willing",
+      "text": "Sister Thorne infected herself on purpose and is near the final stage; when she bursts, everyone around her will be exposed.",
+      "source": "Her black tears, her own sermon, or miners who saw her at the breakthrough",
+      "scene": "The Procession"
+    }
+  ],
+  "clocks": [
+    {
+      "id": "goo-flood",
+      "label": "GOO FLOOD",
+      "segments": 8,
+      "kind": "danger",
+      "visibility": "all",
+      "note": "Ticks every scene below the surface and when the pump fails. When full, the mid-levels are drowned and the upper shafts are flooding."
+    },
+    {
+      "id": "demolition",
+      "label": "DEMOLITION",
+      "segments": 6,
+      "kind": "danger",
+      "visibility": "gm",
+      "note": "Ticks when the squad defies Crane and twice when he gets his sample. When full, the upper shafts collapse."
     }
   ],
   "maps": [
@@ -70,25 +495,50 @@
       "rooms": [
         {
           "name": "Surface Facilities",
-          "note": "Mine head, processing plant, crew facilities. Blackguard operatives on site."
+          "note": "A huddle of prefab sheds, conveyor gantries and a rusting processing plant under a sky of blowing ash. The mess hall has become a makeshift ward of the afflicted, sobbing behind taped doors. Blackguard sentries in black armor watch the mine head and will not say who sent them."
         },
         {
           "name": "Upper Shafts",
-          "note": "Primary mining tunnels. Equipment and rail systems."
+          "note": "Wide, lamp-lit tunnels with ore rails, parked haul carts and cable runs humming overhead. The air is cold and smells of rock dust and diesel. Fresh demolition charges are taped to the support pillars, wired with military precision, and nobody is guarding them."
         },
         {
           "name": "Mid-Level Tunnels",
-          "note": "Secondary mining operations. Unstable. Some sections flooded."
+          "note": "Narrow, low workings half flooded with black, oily water that clings to boots and steams faintly. Emergency lamps flicker on failing batteries. Groans of shifting rock echo through side passages, and the trapped miners have barricaded a pump station with ore carts."
         },
         {
           "name": "Deep Excavation",
-          "note": "The breakthrough point. Black accelerant seepage. Extreme biological hazard."
+          "note": "A cathedral-sized cavity where the drill head broke through into smooth, ribbed stone that is not natural. Black accelerant wells up from a cracked seam and creeps across the floor. The air is warm, sweet and wrong, and the silence swallows sound."
         },
         {
           "name": "Quarantine Hospital Ship",
-          "note": "Medical vessel on surface. Evacuation point for survivors."
+          "note": "A squat, white medical lander on the surface pad, sealed behind plastic airlocks and blue UV light. Inside, nurses in hazard suits move between rows of isolation pods. It has twenty quarantine berths, and the chief physician wants every one of them filled."
         }
       ]
     }
+  ],
+  "endings": [
+    {
+      "title": "BROUGHT THEM UP",
+      "condition": "Most survivors reach the surface, the charges are disarmed or delayed, and no Nocuous breaks free on the surface.",
+      "text": "The cage rattles into the light with miners packed shoulder to shoulder, black to the waist, blinking at the ash-grey sky like newborns. Some of them are sick. All of them are alive. Halvorsen goes down the line hugging every one and calling them by name.\n\nThe hospital ship lifts with every berth full and people sitting in the corridors. The Blackguard are gone before anyone thinks to stop them. That night, you scrub black grit out of the seams of your armor for an hour, and it never quite comes clean."
+    },
+    {
+      "title": "SEALED IN THE DARK",
+      "condition": "Crane's charges fire with survivors still below, or the squad lets him withdraw with the sample.",
+      "text": "The ground jumps under your boots. Dust blows out of the mine head in a long, rolling cough, and then there is nothing but the klaxon, still whooping, and Halvorsen on her knees in the ash.\n\nCrane's report reaches the Tamb'Itam before you do. It describes a structural collapse, tragic and unavoidable, and commends Second Squad for its efforts. The casualty list has numbers instead of names. Somewhere under a kilometre of rock, the pump at Station Three is still running on its last battery."
+    },
+    {
+      "title": "THE BLACK RISES",
+      "condition": "Infected survivors break loose on the surface, a Nocuous bursts on the hospital ship, or the squad itself is badly infected.",
+      "text": "It starts on the hospital ship, in the corridor, among the people who did not get a berth. A man stops crying. Then the airlocks seal and the blue lights go red.\n\nThe Tamb'Itam holds the dropship at a safe distance for six hours, then quarantines it for six days. When the hatch finally opens, the decontamination team finds fewer of you than went down, and an after-action report written in one marine's careful hand, ending mid-sentence."
+    }
+  ],
+  "tips": [
+    "Make the berth arithmetic visible from the first scene; every rescue choice should cost a seat someone else needed.",
+    "Teach the four Anathema stages in the mess hall so the players recognise the escalation when it comes in the dark.",
+    "Play Crane as the voice of legitimate authority, not a cartoon villain; the horror is that the chain of command backs him.",
+    "Tick the GOO FLOOD clock openly so the players feel the water rising even in quiet scenes.",
+    "Let the cult procession be solved with words; a squad that peels miners away one by one should be rewarded.",
+    "If time runs short, merge The Procession into The Deep Excavation and have Thorne already kneeling at the pool."
   ]
 }

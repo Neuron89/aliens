@@ -6,58 +6,406 @@
   "meta": {
     "title": "Operation Blaze of Glory",
     "tagline": "A crashed UPP ship in hostile jungle. Recover the flight recorder. Trust no one.",
+    "synopsis": "The UPP medical frigate SSV Glory of the Proletariat lies broken in the jungle of O'Bannon's Moon. It was not just a hospital ship: its sealed wards held patients infected with a neomorphic pathogen, among them Colonial prisoners of war used as research subjects, and the crash cracked containment. Spores are spreading through the canopy, a settler family who looted the wreck is falling sick, and a UPP commando team under Starshiy Leytenant Arkady Voronin is racing the squad to destroy the flight recorder that proves it all. Inside the wreck, the frigate's surviving doctor, Yelena Sorokina, wants asylum and is hiding the worst of what she did. The climax is a firefight in the collapsing cargo hold, with an adult neomorph loose in the dark and the recorder in reach.",
     "type": "Campaign",
     "players": "3–5",
     "playtime": "4–6 hours",
     "difficulty": "Hard",
+    "tone": [
+      "jungle paranoia",
+      "contagion",
+      "cold war tension",
+      "trust no one"
+    ],
+    "contentWarnings": [
+      "graphic violence",
+      "body horror",
+      "infection and disease",
+      "medical experimentation on prisoners",
+      "harm to children (threatened)",
+      "character death"
+    ],
     "source": "bundled"
   },
   "briefing": {
     "from": "MU/TH/UR 9000",
     "to": "KILO COMPANY, 2ND PLATOON",
     "classification": "MISSION BRIEFING — OPERATION BLAZE OF GLORY",
-    "text": "MISSION OBJECTIVE: A UPP vessel, the SSV Glory of the Proletariat, has crash-landed on O'Bannon's Moon. Intel suggests it is a medical frigate that was operating in the area during the initial stages of the Frontier War.\n\nYour platoon is to locate the wreck, recover the ship's flight recorder, and investigate the vessel for intelligence value. Be advised: local settlers are hostile to military presence. UPP commando forces may also be operating in the area.\n\nRules of engagement: weapons free on confirmed hostile contacts. Civilian casualties are to be minimized. The flight recorder is priority one."
+    "text": "MISSION OBJECTIVE: A UPP vessel, the SSV Glory of the Proletariat, has crash-landed on O'Bannon's Moon. Intel suggests it is a medical frigate that was operating in the area during the initial stages of the Frontier War.\n\nSecond Squad, 2nd Platoon is to locate the wreck, recover the ship's flight recorder, and investigate the vessel for intelligence value. Be advised: local settlers are hostile to military presence. UPP commando forces may also be operating in the area. Orbital imaging shows a debris field four kilometres long under triple-canopy jungle; the dropship cannot land closer than the river clearing.\n\nRules of engagement: weapons free on confirmed hostile contacts. Civilian casualties are to be minimized. The flight recorder is priority one. Any surviving UPP personnel are to be detained, not engaged, unless they offer resistance.\n\nThe moon's flora is unsurveyed. Keep your seals tight and your water purified.\n\nGood hunting, Gunfighters.\n\n— MU/TH/UR 9000, USS TAMB'ITAM"
   },
   "acts": [
     {
-      "title": "OPERATION",
-      "subtitle": "MISSION BRIEFING",
-      "summary": "A crashed UPP ship in hostile jungle. Recover the flight recorder. Trust no one.",
-      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+      "title": "ACT I",
+      "subtitle": "THE GREEN",
+      "summary": "The squad lands at the river clearing, meets the hostile Fenwick settlers who have already looted the wreck, and pushes through the jungle to the crash site while UPP commandos close in.",
+      "readAloud": [
+        "The dropship's ramp opens on a wall of green. Heat rolls in like a wet towel across your face, and with it the noise: insects screaming in a thousand pitches, birds you cannot see, the river chuckling over stones behind you. Your visor fogs immediately. Trees rise a hundred metres into a canopy so thick the light comes down in green shafts full of drifting pollen. Somewhere up there, something hoots three times and goes quiet.",
+        "Two kilometres in, the jungle changes. Trees lie snapped like matchsticks, their stumps blackened. Shreds of hull plating hang in the branches, painted with a red star. The insects are quieter here. Pale, fist-sized puffballs have grown on every piece of debris, and when your boot brushes one it sighs out a little cloud of grey dust that hangs in the light far longer than it should.",
+        "You smell woodsmoke before you see the homestead: a cluster of tin-roofed huts on stilts above the floodline, rain barrels, a goat pen, laundry. A dog barks. Then a woman steps out onto the porch with a shotgun across her arms and a boy behind her who is coughing, wet and deep, into his sleeve. She looks at your armor and your rifles and your flag, and spits over the rail."
+      ],
+      "gmNotes": "Act I establishes three pressures: the settlers who hate the military and have taken things from the wreck, the spores that are already making them sick, and the UPP commandos who are hunting the same recorder. Voronin's team arrived a day earlier and is sweeping the wreck from the far side; they watch the squad and pick their moment. Odile Fenwick will not help unless the squad helps her coughing son, Teo, who has been inside the wreck. End the act when the squad reaches the forward section of the wreck.\n\nThe puffball spores are the neomorphic motes. Exposure without a sealed mask means a Sickness Roll; most marines will be fine if they are careful, but Teo is already infected.",
+      "agendaNotes": "Harrow's frontier sympathies make the Fenwicks her people; let her be the one who gets through to Odile. Mbeki-Larsen will want to treat Teo. Vasquez-Hale may notice the liaison would pay well for a sample of the spores.",
+      "scenes": [
+        {
+          "name": "River Clearing LZ",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The dropship flares over a gravel bar beside a brown, fast river and settles in a storm of spray. The jungle wall is thirty metres away. The pilot wants the squad off in sixty seconds.",
+          "checks": [
+            "PILOTING — land on the shifting gravel without bogging the skids",
+            "SURVIVAL — pick a trail toward the crash site that avoids the flooded ground",
+            "OBSERVATION — spot fresh cut marks on a trail sign: someone else came this way yesterday"
+          ],
+          "events": [
+            "As the dropship lifts away, a single shot cracks somewhere downriver, aimed at nothing.",
+            "The motion tracker fills with jungle life and becomes nearly useless."
+          ],
+          "stressTriggers": [],
+          "npcGuidance": "No NPCs on screen; the shot was Odile Fenwick warning the soldiers away from her land.",
+          "gmTip": "Describe the jungle as overwhelming: heat, noise, smell. Make the squad feel how far they are from help.",
+          "outcomes": [
+            "A good trail choice brings the squad to the homestead in good order.",
+            "A bad one costs time: tick the COMMANDO SWEEP clock once and give everyone the EXHAUSTED condition until they rest."
+          ]
+        },
+        {
+          "name": "The Fenwick Homestead",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The homestead is five stilt huts, a goat pen and a smokehouse. Odile Fenwick meets the squad on the porch with a shotgun. Behind her, her son Teo coughs into his sleeve. Stacked under a tarp by the smokehouse are crates stencilled in Cyrillic.",
+          "checks": [
+            "MANIPULATION — persuade Odile to lower the gun and talk",
+            "MEDICAL AID — examine Teo and recognise this is no ordinary fever",
+            "OBSERVATION — notice the UPP medical crates under the tarp, and that one is a sealed sample case"
+          ],
+          "events": [
+            "Teo has a coughing fit and brings up grey, dusty phlegm.",
+            "Odile admits they went into the wreck for medicine and food, and that Teo went into 'the room with the beds'.",
+            "Send the settler warning handout if the squad earns Odile's trust."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any marine who examines Teo closely and sees the grey threads in his eyes"
+          ],
+          "npcGuidance": "Odile hates soldiers of every flag and lies about how much they took. If the squad helps Teo, she tells them the shortest route to the wreck and warns them about 'the other soldiers, the quiet ones'. Teo wants to be brave and wants to show the marines the way himself.",
+          "gmTip": "Teo is the scenario's heart and its ticking clock; do not kill him off-screen. His fate should depend on the squad's choices in Act II.",
+          "outcomes": [
+            "Help for Teo earns Odile's trust, her trail directions and a warning that the commandos are already at the wreck.",
+            "Threats or confiscations turn the settlers hostile; they shadow the squad and fire on them later at the worst moment.",
+            "Taking the sealed sample case gives the squad leverage, and a Company temptation."
+          ],
+          "clueRefs": [
+            "spore-sickness"
+          ]
+        },
+        {
+          "name": "Through the Debris Field",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Drifting neomorphic motes burst from puffballs when disturbed, a Sickness Roll for anyone unmasked. A two-man UPP commando picket watches from the canopy and opens fire if the squad lingers or splits.",
+          "narration": "The jungle opens into a long scar of snapped trees and burnt ground, hull plating hanging in the branches. Grey puffballs cover the debris. Commando boot prints criss-cross the mud, all heading downslope toward the stern.",
+          "checks": [
+            "OBSERVATION — spot the commando picket in the canopy before they fire",
+            "SURVIVAL — move through the debris without bursting the puffballs",
+            "RANGED COMBAT — pin the picket while the squad crosses open ground"
+          ],
+          "events": [
+            "A spore cloud drifts across the trail on a breath of hot wind.",
+            "One commando shouts a challenge in Russian, then in English: 'Turn back, Americans. Nothing here for you.'"
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the spore cloud rolls over them",
+            "STRESS +1 — any marine hit by the picket's opening shots"
+          ],
+          "npcGuidance": "The picket's orders are to delay, not to die; they fall back toward the stern once they have counted the squad, and radio Voronin.",
+          "gmTip": "This is where the squad learns it is in a race; make the commandos professional, quick and frightening.",
+          "outcomes": [
+            "A captured picket can be questioned: the commandos are here to destroy the recorder, not recover it.",
+            "Reaching the bow puts the squad at the wreck's forward section and starts Act II."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "THE WRECK",
+      "summary": "Inside the broken frigate the squad uncovers the prisoner research programme, finds the surviving doctor, and fights the commandos and a neomorph for the flight recorder in a collapsing cargo hold.",
+      "readAloud": [
+        "The bow hatch has been cut open with a torch, its edges still bright. Inside, the frigate leans thirty degrees to port, so every corridor is a slope and every hatch hangs at a slant. Emergency strobes pulse red, dark, red, dark. Water drips through cracked seams and runs downhill along the deck in a thin, warm stream. The air is heavy with disinfectant, wet insulation and something sweet and rotten underneath that catches in the back of your throat.",
+        "The medical deck is the worst of it. Beds have broken loose and piled against the low wall. Isolation pods stand cracked open from the inside. Every bed has restraint straps, wide and padded, the kind used on people who do not want to be there. On a clipboard hanging from a pod, a patient chart in two languages lists a name, a rank, a unit you recognise, and a single line: STAGE OF PROGRESSION: 3.",
+        "The cargo hold is open to the jungle through a breach the size of a house. Green light pours in through drifting grey spores, so thick it looks like snowfall. Crates lie tumbled everywhere, carpeted in pale growth. At the far end, behind a security cage, an orange canister chirps softly every few seconds. Between you and it, something in the shadows of the upper gantry shifts its weight, and the gantry creaks."
+      ],
+      "gmNotes": "The wreck tells its story room by room. The bridge log shows the frigate diverted from a frontier hospital run with 'special patients' aboard. The medical bays show those patients were captured Colonial personnel, infected with a neomorphic pathogen for study. Dr. Yelena Sorokina is alive, welded into her cabin in the crew quarters; she wants asylum and will trade her testimony for it, but she hides that she ordered the containment wards vented to save the crew, which released the spores into the jungle.\n\nVoronin's commandos enter the stern from the jungle side and go for the recorder cage. An adult neomorph grown from one of the patients nests in the cargo hold. The climax is a three-way fight in the hold while the engineering deck groans toward collapse; whoever leaves with the recorder decides the ending. Teo's survival depends on Sorokina's knowledge and whether the squad brings her out.",
+      "agendaNotes": "If any marine has a personal link to Ariarcus, the patient charts are where it surfaces; consider putting a familiar name on one chart. Sauvé's interest in samples should be at its strongest here, among broken pods and loose spores.",
+      "scenes": [
+        {
+          "name": "The Tilted Bridge",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The bridge lies on its side, consoles cracked, Cyrillic placards flashing on battery power. The captain hangs dead in his straps. The emergency log terminal still glows.",
+          "checks": [
+            "COMTECH — pull the emergency log and the stowage location of the flight recorder",
+            "COMTECH — translate the captain's last entry about the 'special patients'",
+            "OBSERVATION — find the captain's sidearm and the key card to the cargo cage"
+          ],
+          "events": [
+            "The log plays a short audio clip of the captain ordering the medical wards sealed, then countermanding the order himself.",
+            "Somewhere aft, metal shrieks as the hull settles another few centimetres."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — whoever has to lift the captain's body aside to reach the console"
+          ],
+          "npcGuidance": "No living NPCs; the dead captain's voice in the log is weary and frightened.",
+          "gmTip": "Hand over the stowage location quickly; the bridge is a signpost, not a puzzle.",
+          "outcomes": [
+            "The key card opens the recorder cage without cutting it, saving precious time later.",
+            "The log points to the medical bays and to a survivor: Dr. Sorokina's last check-in came from the crew quarters."
+          ],
+          "clueRefs": [
+            "special-patients"
+          ]
+        },
+        {
+          "name": "The Medical Bays",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "A bloodburster erupts from a corpse in a cracked isolation pod when the squad disturbs it; it flees into the overturned beds and strikes at the nearest marine's legs. It is small, fast and terrifying more than deadly.",
+          "narration": "Rows of beds have broken loose and piled against the low wall. Isolation pods stand cracked open from the inside. The restraint straps are wide and padded. Patient charts hang from every pod.",
+          "checks": [
+            "OBSERVATION — read the patient charts and realise the 'patients' were Colonial prisoners of war",
+            "MEDICAL AID — work out from the charts how the pathogen progresses, and what treatment slowed it",
+            "STAMINA — keep breakfast down in the stench"
+          ],
+          "events": [
+            "A body in a pod twitches; its chest ripples, then bursts.",
+            "Send the patient manifest handout once the charts are read."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — any marine within SHORT range when the bloodburster erupts",
+            "STRESS +1 — all marines who read the charts"
+          ],
+          "npcGuidance": "No living NPCs; the charts are the voice of this room.",
+          "gmTip": "This scene carries the scenario's moral weight. Give the players time to read the charts before the burster comes.",
+          "outcomes": [
+            "Learning the treatment protocol gives Mbeki-Larsen a real chance to save Teo, if they can get Sorokina's notes too.",
+            "Taking a chart or a pod sample is evidence for the Corps, or merchandise for the Company."
+          ],
+          "clueRefs": [
+            "special-patients",
+            "pow-manifest"
+          ]
+        },
+        {
+          "name": "The Welded Door",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "In the crew quarters, among flung-open lockers and propaganda posters, one cabin door has been welded shut from the inside. A thin voice behind it says, in accented English, that she will open it only for an officer.",
+          "checks": [
+            "MANIPULATION — convince Dr. Sorokina to come out without force",
+            "HEAVY MACHINERY — cut the weld quickly and quietly",
+            "OBSERVATION — catch her lying when she says the containment failed on its own"
+          ],
+          "events": [
+            "Sorokina asks for asylum in exchange for testimony and her research notes.",
+            "If asked about the spores, she says 'the jungle was always going to get them'."
+          ],
+          "stressTriggers": [],
+          "npcGuidance": "Sorokina is precise, exhausted and terrified of Voronin, who has orders to leave no witnesses. She is honest about the research and lies about the venting order. She knows how to slow the infection in Teo.",
+          "gmTip": "Sorokina is both a war criminal and the only person who can save a child; let the squad argue about her.",
+          "outcomes": [
+            "Bringing Sorokina along means Voronin targets her first in the hold, and Teo can be treated afterwards.",
+            "Leaving her behind keeps the squad lighter but dooms Teo and leaves her to the commandos."
+          ],
+          "clueRefs": [
+            "venting-order"
+          ]
+        },
+        {
+          "name": "Blaze in the Cargo Hold",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Voronin and four UPP commandos enter through the hull breach and go for the recorder cage. An adult neomorph nesting on the upper gantry attacks whoever makes the most noise. Engineering collapses in stages as the fight shakes the stern.",
+          "narration": "Green light pours through the breach into a two-storey hold choked with spores and tumbled crates. The recorder chirps behind its cage at the far end. On the jungle side, shadows move among the trees. On the gantry above, something pale shifts its weight.",
+          "checks": [
+            "RANGED COMBAT — hold the commandos at the breach",
+            "COMTECH — open the cage with the captain's key card, or cut it with a torch under fire",
+            "MOBILITY — dodge across the hold under the gantry",
+            "HEAVY MACHINERY — bring down a cargo stack to block the breach"
+          ],
+          "events": [
+            "Voronin calls out a truce offer by name if he knows Sorokina is with the squad: give her to him and he will leave the recorder.",
+            "The neomorph drops into the middle of the hold and goes for the commandos first, then the marines.",
+            "Engineering lets go: the deck lurches and the REACTOR COLLAPSE clock begins."
+          ],
+          "stressTriggers": [
+            "IMMEDIATE PANIC ROLL — all marines when the neomorph drops into the hold",
+            "STRESS +1 — all marines when the deck lurches"
+          ],
+          "npcGuidance": "Voronin is a professional, not a monster: he would rather trade than fight in a burning wreck with a monster loose. His men obey him to the letter. Sorokina will try to slip away toward engineering if she thinks the squad will hand her over.",
+          "gmTip": "Let the neomorph break the standoff; the three-way chaos is the point of this scene.",
+          "outcomes": [
+            "Recorder recovered and squad out before the collapse: the RECORDER RECOVERED ending.",
+            "Recorder handed to Voronin in exchange for safe passage: the squad survives but fails the mission.",
+            "Trapped by the collapse or overrun: the LOST IN THE GREEN ending."
+          ]
+        },
+        {
+          "name": "Back to the River",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "The stern groans and folds behind the squad as they run. The dropship is twenty minutes out. At the homestead, Odile Fenwick waits on her porch holding her son.",
+          "checks": [
+            "STAMINA — make the run to the river clearing carrying the wounded",
+            "MEDICAL AID — treat Teo using Sorokina's notes",
+            "COMMAND — decide who goes on the dropship and who stays"
+          ],
+          "events": [
+            "The pilot reports orbital imaging of spore growth spreading along the river; the lieutenant asks whether the area should be sterilised."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any marine who leaves an infected civilian behind"
+          ],
+          "npcGuidance": "Odile begs the marines to take Teo. Sorokina asks to be put on the dropship before anyone else. The lieutenant wants an answer about sterilisation on the record.",
+          "gmTip": "End on the human choice, not the gunfight: who gets on the ship, and what the squad tells the Tamb'Itam about the jungle.",
+          "outcomes": [
+            "Teo evacuated and treated: a small, real victory amid the wreckage.",
+            "Recommending sterilisation saves the moon and dooms the homestead; the squad lives with that."
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Odile Fenwick",
+      "role": "Settler Matriarch, Fenwick Homestead",
+      "agenda": "Keep her family alive and her land free of soldiers, whichever flag they fly.",
+      "behavior": "Hard, sun-creased and blunt, with a shotgun never far from her hands. Tell: she wipes her palms on her apron before she tells a lie.",
+      "secret": "Her family took far more from the wreck than medicine, including a sealed sample case they hoped to sell, and Teo was the one who carried it out.",
+      "stats": {
+        "health": 4,
+        "rangedCombat": 3,
+        "survival": 4
+      }
+    },
+    {
+      "name": "Teo Fenwick",
+      "role": "Settler Boy, Infected",
+      "agenda": "Prove he is brave and get the soldiers to take his mother seriously.",
+      "behavior": "Thin, eager and coughing, desperate to be useful as a guide. Tell: he hides his face when the coughing gets bad so his mother will not see.",
+      "secret": "He has grey threads in his eyes and he knows something is growing in him; he has not told his mother.",
+      "stats": {
+        "health": 2,
+        "mobility": 3,
+        "survival": 2
+      }
+    },
+    {
+      "name": "Starshiy Leytenant Arkady Voronin",
+      "role": "UPP Special Forces Team Leader",
+      "agenda": "Destroy the flight recorder and silence every witness to the prisoner research, including Dr. Sorokina, before the Colonials can use them.",
+      "behavior": "Quiet, courteous and perfectly calm under fire; speaks good English and prefers a deal to a fight. Tell: he removes his glove before he makes an offer he means to keep.",
+      "secret": "He despises the research programme and would defect himself if he believed the Colonials would protect his men; his orders also cover the settlers.",
+      "stats": {
+        "health": 5,
+        "rangedCombat": 5,
+        "mobility": 3,
+        "command": 4
+      }
+    },
+    {
+      "name": "Dr. Yelena Sorokina",
+      "role": "Chief Medical Officer, SSV Glory of the Proletariat",
+      "agenda": "Escape both the UPP and the jungle by trading her research and testimony for Colonial asylum.",
+      "behavior": "Precise, exhausted and coldly honest about everything except herself. Tell: she straightens anything near her, a pen, a sleeve, a chart, when she is afraid.",
+      "secret": "When the frigate began to fall, she vented the containment wards to save the crew's air, releasing the infected patients and the spores that now fill the jungle.",
+      "stats": {
+        "health": 3,
+        "medicalAid": 5,
+        "comtech": 3
+      }
+    }
+  ],
+  "threats": [
+    {
+      "name": "UPP Commando Team",
+      "ref": "npc-upp-sof-commandos",
+      "description": "Five UPP special forces soldiers in mottled jungle armor with suppressed rifles, first seen as boot prints and a two-man picket in the canopy.",
+      "stats": {
+        "health": 5,
+        "rangedCombat": 4,
+        "mobility": 3
+      },
+      "tactics": "Act I: watch, delay and count the squad. Act II: hit the recorder cage through the hull breach; trade if it is cheaper than fighting; retreat if the neomorph turns on them."
+    },
+    {
+      "name": "Spore Puffballs",
+      "ref": "neomorphic-motes",
+      "description": "Pale, fist-sized growths on every piece of debris that sigh out grey dust when touched; the dust hangs in the air far too long.",
+      "tactics": "Exposure without a sealed mask forces a Sickness Roll. Thicker and more numerous closer to the stern; a cloud fills the cargo hold."
+    },
+    {
+      "name": "Bloodburster",
+      "ref": "bloodburster",
+      "description": "A small, pale, eel-like creature that bursts from a corpse in an isolation pod and vanishes among the overturned beds.",
+      "tactics": "Strikes at legs and flees; if left alive, it is the neomorph of a later operation."
+    },
+    {
+      "name": "The Ward Neomorph",
+      "ref": "adult-neomorph",
+      "description": "A tall, pale, translucent biped with a narrow head, grown from one of the frigate's patients and nesting on the cargo hold gantry.",
+      "stats": {
+        "speed": 2,
+        "health": 8,
+        "armor": 2,
+        "mobility": 10,
+        "observation": 6
+      },
+      "tactics": "Attacks whatever makes the most noise, commandos first. Leaps, slashes and drags victims into the jungle; flees from fire."
+    },
+    {
+      "name": "Hostile Settlers",
+      "ref": "npc-outer-rim-colonists",
+      "description": "The Fenwick clan and their neighbours, armed with shotguns and hunting rifles, who know the jungle better than anyone.",
+      "stats": {
+        "health": 3,
+        "rangedCombat": 2,
+        "survival": 3
+      },
+      "tactics": "Only a threat if the squad treats them badly; then they shadow the marines and open fire at the worst possible moment."
     }
   ],
   "keyLocations": [
     {
       "name": "SITE OF THE CRASHED STARSHIP — Crash Site Perimeter",
-      "description": "Impact zone surrounded by dense jungle. Debris scattered across the area."
+      "description": "A long scar of shattered trees, scorched earth and twisted hull plating, already half swallowed by creepers. The air is hot, wet and buzzing with insects, and pale puffball growths cluster on the debris. Commando boot prints criss-cross the mud."
     },
     {
       "name": "SITE OF THE CRASHED STARSHIP — Wreck — Forward Section",
-      "description": "Partially intact bow of the vessel. Bridge and crew quarters accessible."
+      "description": "The frigate's bow lies tilted thirty degrees, nose buried in a riverbank, its red-star markings streaked with soot. Emergency strobes still pulse inside. The deck slopes underfoot, every hatch hangs at an angle, and water drips through cracked seams."
     },
     {
       "name": "SITE OF THE CRASHED STARSHIP — Wreck — Aft Section",
-      "description": "Engineering and cargo areas. Heavily damaged. Flight recorder location."
+      "description": "The broken stern sits a hundred metres downslope, torn open like a tin can. Engineering vents ticking steam and the cargo bay gapes at the jungle. The flight recorder's locator chirps faintly from inside, and something has made a nest of torn insulation near the breach."
     },
     {
       "name": "SSV GLORY OF THE PROLETARIAT — Bridge",
-      "description": "UPP command center. Emergency systems may still be active."
+      "description": "A cramped command deck tilted sideways, consoles cracked, Cyrillic warning placards flashing on battery power. The captain is still strapped in his chair. The emergency log can be read here, and the bridge tells you exactly where the recorder was stowed."
     },
     {
       "name": "SSV GLORY OF THE PROLETARIAT — Medical Bays",
-      "description": "Extensive medical facilities. Evidence of biological research and containment."
+      "description": "Rows of overturned beds, shattered isolation pods and restraint straps that were never meant for willing patients. The floor is tacky with dried fluid and the air smells of disinfectant and rot. Patient charts list names, ranks and 'stages of progression'."
     },
     {
       "name": "SSV GLORY OF THE PROLETARIAT — Crew Quarters",
-      "description": "UPP crew housing. Personal effects may contain intelligence value."
+      "description": "Narrow bunk rooms with family photographs, propaganda posters and personal lockers flung open by the impact. One cabin door is welded shut from the inside. Behind it, someone has been rationing water and listening to the jungle."
     },
     {
       "name": "SSV GLORY OF THE PROLETARIAT — Engineering",
-      "description": "Reactor and drive systems. Unstable. Structural collapse risk."
+      "description": "A cavern of hissing pipes and a cracked reactor housing, lit by orange warning lamps and leaking coolant. The deck groans with every step. One wrong move here brings down a ton of ceiling or vents radioactive steam into the room."
     },
     {
       "name": "SSV GLORY OF THE PROLETARIAT — Cargo Hold",
-      "description": "Cargo storage. Flight recorder and classified materials stored here."
+      "description": "A two-storey bay of tumbled crates and torn cargo nets, open to the jungle through the hull breach. The orange recorder canister sits clamped in a security cage at the far end. Pale growths carpet the crates and the air is thick with drifting spores."
     }
   ],
   "handouts": [
@@ -67,8 +415,79 @@
       "from": "MU/TH/UR 9000",
       "to": "KILO COMPANY, 2ND PLATOON",
       "priority": "PRIORITY",
-      "text": "MISSION OBJECTIVE: A UPP vessel, the SSV Glory of the Proletariat, has crash-landed on O'Bannon's Moon. Intel suggests it is a medical frigate that was operating in the area during the initial stages of the Frontier War.\n\nYour platoon is to locate the wreck, recover the ship's flight recorder, and investigate the vessel for intelligence value. Be advised: local settlers are hostile to military presence. UPP commando forces may also be operating in the area.\n\nRules of engagement: weapons free on confirmed hostile contacts. Civilian casualties are to be minimized. The flight recorder is priority one.",
+      "text": "MISSION OBJECTIVE: A UPP vessel, the SSV Glory of the Proletariat, has crash-landed on O'Bannon's Moon. Intel suggests it is a medical frigate that was operating in the area during the initial stages of the Frontier War.\n\nSecond Squad, 2nd Platoon is to locate the wreck, recover the ship's flight recorder, and investigate the vessel for intelligence value. Be advised: local settlers are hostile to military presence. UPP commando forces may also be operating in the area. Orbital imaging shows a debris field four kilometres long under triple-canopy jungle; the dropship cannot land closer than the river clearing.\n\nRules of engagement: weapons free on confirmed hostile contacts. Civilian casualties are to be minimized. The flight recorder is priority one. Any surviving UPP personnel are to be detained, not engaged, unless they offer resistance.\n\nThe moon's flora is unsurveyed. Keep your seals tight and your water purified.\n\nGood hunting, Gunfighters.\n\n— MU/TH/UR 9000, USS TAMB'ITAM",
       "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "settler-warning",
+      "title": "NOTE IN PENCIL — FENWICK HOMESTEAD",
+      "from": "O. FENWICK",
+      "to": "THE SOLDIERS",
+      "priority": "STANDARD",
+      "text": "Since you are going anyway. Do not go in the back half, the quiet soldiers are in the back half, five of them, the tall one speaks English. Do not touch the white balls on the metal, Teo did. The room with the beds has straps on the beds. There are people in the jungle at night that are not people. If you can do anything for my boy, do it. I will not ask twice.",
+      "when": "Act I, The Fenwick Homestead, once the squad helps Teo or wins Odile's trust"
+    },
+    {
+      "id": "pow-manifest",
+      "title": "PATIENT MANIFEST — WARD 3 (TRANSLATED)",
+      "from": "SSV GLORY OF THE PROLETARIAT MEDICAL RECORDS",
+      "to": "SECOND SQUAD",
+      "priority": "PRIORITY",
+      "text": "WARD 3 SPECIAL SUBJECTS. ORIGIN: ARIARCUS INTERNMENT. TWELVE SUBJECTS, USCM AND COLONIAL CIVILIAN. INOCULATION DATE: 14 DAYS PRIOR TO DEPARTURE. PROGRESSION: STAGE 1, FOUR SUBJECTS. STAGE 2, FIVE SUBJECTS. STAGE 3, THREE SUBJECTS. TREATMENT ARM B SHOWS DELAY OF PROGRESSION. RECOMMEND CONTINUATION. AUTHORISED: Y. SOROKINA, CHIEF MEDICAL OFFICER.",
+      "when": "Act II, The Medical Bays, after the squad reads the patient charts"
+    },
+    {
+      "id": "voronin-hail",
+      "title": "OPEN CHANNEL — UNIDENTIFIED",
+      "from": "UPP SPECIAL FORCES, CALLSIGN BEREZA",
+      "to": "COLONIAL MARINES AT THE WRECK",
+      "priority": "PRIORITY",
+      "text": "Colonial Marines. This is Voronin. You have something of ours and we have something of yours: we are between you and your recorder. Nobody needs to die in this oven. Give me the doctor and walk away, and you will find your little box exactly where you left it, unharmed. You have until the next rain.",
+      "when": "Act II, as the squad approaches the cargo hold, if Dr. Sorokina is with them"
+    }
+  ],
+  "clues": [
+    {
+      "id": "spore-sickness",
+      "text": "Teo's cough brings up grey dust and he has grey threads in his eyes; he caught it from the white growths on the wreck.",
+      "source": "Examining Teo, Odile's confession or the settler note",
+      "scene": "The Fenwick Homestead"
+    },
+    {
+      "id": "special-patients",
+      "text": "The Glory diverted from a frontier hospital run carrying 'special patients' under sealed orders, and the captain tried to dump them before the crash.",
+      "source": "The bridge emergency log",
+      "scene": "The Tilted Bridge"
+    },
+    {
+      "id": "pow-manifest",
+      "text": "The special patients were Colonial prisoners from Ariarcus, deliberately infected and studied.",
+      "source": "Patient charts and the Ward 3 manifest",
+      "scene": "The Medical Bays"
+    },
+    {
+      "id": "venting-order",
+      "text": "The containment wards were vented by manual override from the chief medical officer's console minutes before impact.",
+      "source": "Medical bay console log, or catching Sorokina in her lie",
+      "scene": "The Welded Door"
+    }
+  ],
+  "clocks": [
+    {
+      "id": "commando-sweep",
+      "label": "COMMANDO SWEEP",
+      "segments": 6,
+      "kind": "danger",
+      "visibility": "gm",
+      "note": "Tick for delays and noise. When full, Voronin's team has the recorder and is leaving through the jungle."
+    },
+    {
+      "id": "reactor-collapse",
+      "label": "STERN COLLAPSE",
+      "segments": 4,
+      "kind": "danger",
+      "visibility": "all",
+      "note": "Starts when engineering gives way during the cargo hold fight. When full, the stern folds and anyone still inside is trapped."
     }
   ],
   "maps": [
@@ -82,15 +501,15 @@
       "rooms": [
         {
           "name": "Crash Site Perimeter",
-          "note": "Impact zone surrounded by dense jungle. Debris scattered across the area."
+          "note": "A long scar of shattered trees, scorched earth and twisted hull plating, already half swallowed by creepers. The air is hot, wet and buzzing with insects, and pale puffball growths cluster on the debris. Commando boot prints criss-cross the mud."
         },
         {
           "name": "Wreck — Forward Section",
-          "note": "Partially intact bow of the vessel. Bridge and crew quarters accessible."
+          "note": "The frigate's bow lies tilted thirty degrees, nose buried in a riverbank, its red-star markings streaked with soot. Emergency strobes still pulse inside. The deck slopes underfoot, every hatch hangs at an angle, and water drips through cracked seams."
         },
         {
           "name": "Wreck — Aft Section",
-          "note": "Engineering and cargo areas. Heavily damaged. Flight recorder location."
+          "note": "The broken stern sits a hundred metres downslope, torn open like a tin can. Engineering vents ticking steam and the cargo bay gapes at the jungle. The flight recorder's locator chirps faintly from inside, and something has made a nest of torn insulation near the breach."
         }
       ]
     },
@@ -104,25 +523,50 @@
       "rooms": [
         {
           "name": "Bridge",
-          "note": "UPP command center. Emergency systems may still be active."
+          "note": "A cramped command deck tilted sideways, consoles cracked, Cyrillic warning placards flashing on battery power. The captain is still strapped in his chair. The emergency log can be read here, and the bridge tells you exactly where the recorder was stowed."
         },
         {
           "name": "Medical Bays",
-          "note": "Extensive medical facilities. Evidence of biological research and containment."
+          "note": "Rows of overturned beds, shattered isolation pods and restraint straps that were never meant for willing patients. The floor is tacky with dried fluid and the air smells of disinfectant and rot. Patient charts list names, ranks and 'stages of progression'."
         },
         {
           "name": "Crew Quarters",
-          "note": "UPP crew housing. Personal effects may contain intelligence value."
+          "note": "Narrow bunk rooms with family photographs, propaganda posters and personal lockers flung open by the impact. One cabin door is welded shut from the inside. Behind it, someone has been rationing water and listening to the jungle."
         },
         {
           "name": "Engineering",
-          "note": "Reactor and drive systems. Unstable. Structural collapse risk."
+          "note": "A cavern of hissing pipes and a cracked reactor housing, lit by orange warning lamps and leaking coolant. The deck groans with every step. One wrong move here brings down a ton of ceiling or vents radioactive steam into the room."
         },
         {
           "name": "Cargo Hold",
-          "note": "Cargo storage. Flight recorder and classified materials stored here."
+          "note": "A two-storey bay of tumbled crates and torn cargo nets, open to the jungle through the hull breach. The orange recorder canister sits clamped in a security cage at the far end. Pale growths carpet the crates and the air is thick with drifting spores."
         }
       ]
     }
+  ],
+  "endings": [
+    {
+      "title": "RECORDER RECOVERED",
+      "condition": "The squad extracts with the flight recorder and at least one of Sorokina or Teo alive.",
+      "text": "The dropship lifts out of the river clearing in a spray of brown water, and the jungle closes over the wreck behind you like a hand making a fist. The orange canister sits between your boots, chirping. Across the cabin, a settler boy sleeps with an oxygen mask over his face, and a UPP doctor stares out of the window and does not speak.\n\nThe recorder's contents go up the chain marked TOP SECRET. Whatever it says about Ariarcus and the prisoners in Ward 3, you will not be told. But you saw the straps on those beds, and you will remember them."
+    },
+    {
+      "title": "BURN THE GREEN",
+      "condition": "The squad recovers the recorder but leaves the infected behind, or recommends sterilising the crash zone.",
+      "text": "From orbit the strike is a neat line of orange across the green, following the river for twelve kilometres. The spores will not spread. Neither will anything else.\n\nThe recorder is a success. The lieutenant gets his citation. Somewhere in the after-action report there is a line about 'civilian settlements within the sterilisation corridor', and a number, and nobody in the squad looks at that page twice."
+    },
+    {
+      "title": "LOST IN THE GREEN",
+      "condition": "The squad is overrun in the cargo hold or trapped by the collapse, or the recorder leaves with Voronin.",
+      "text": "The rain comes at last, warm and heavy, drumming on the broken hull and washing the spores into the river. Voronin's team slips away into the trees with an orange canister and a doctor in handcuffs, and the jungle swallows them without a sound.\n\nThe dropship circles the clearing for an hour, calling your callsign. Then it climbs back to the Tamb'Itam with empty seats. On the Fenwick porch, a woman with a shotgun watches it go and does not wave."
+    }
+  ],
+  "tips": [
+    "Make the jungle a character: heat, noise, smell and rot should be in every description so the squad never feels at ease.",
+    "Teo is the scenario's heart; tie his survival to the squad's choices about Sorokina so the moral dilemma has teeth.",
+    "Play Voronin as a professional who prefers a deal; a smart offer at the wrong moment is more dangerous than a firefight.",
+    "Use the spores as a constant low-level threat that rewards discipline with masks rather than random punishment.",
+    "Hold the neomorph back until the cargo hold so the bloodburster in the medical bays feels like a warning, not a sideshow.",
+    "If the squad is badly hurt by Act II, let Voronin's offer be genuine; a lost mission is still a story."
   ]
 }

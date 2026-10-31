@@ -6,74 +6,461 @@
   "meta": {
     "title": "Operation Arcturian Apocalypse",
     "tagline": "A fanatical cult. Ancient Engineer ruins. Nerve gas and alien temples beneath the surface.",
+    "synopsis": "The Children of the Two Divines have seized the Grand Kivas, a ring of half-buried ceremonial halls on Arcturus, with eleven civilian hostages and canisters of CN-20 nerve agent. Second Squad rides an APC through the Guardian Belt, fights through cult ambushes and reaches the Center Kiva, where Prophet Selah Underwood is waiting to bargain. The real prize lies below: Engineer ruins whose urns hold a black accelerant. Underwood has secretly promised an intact ampule to an off-world buyer in exchange for evacuation, while her chemist Brother Tobiah Krell wants a martyr's death and holds the dead-man switch. The climax comes in the Temple of the Engineers, where an Arctura hunts the tunnels and the squad must choose between the hostages, the ampules and getting out before the gas or the cult's 'Communion' kills everyone.",
     "type": "Campaign",
     "players": "3–5",
     "playtime": "4–6 hours",
     "difficulty": "Hard",
+    "tone": [
+      "siege",
+      "fanaticism",
+      "ancient dread",
+      "hostage tension"
+    ],
+    "contentWarnings": [
+      "graphic violence",
+      "chemical weapons and nerve gas",
+      "hostage-taking",
+      "religious extremism",
+      "mass suicide threat",
+      "body horror",
+      "claustrophobia"
+    ],
     "source": "bundled"
   },
   "briefing": {
     "from": "MU/TH/UR 9000",
     "to": "KILO COMPANY, 2ND PLATOON",
     "classification": "MISSION BRIEFING — OPERATION ARCTURIAN APOCALYPSE",
-    "text": "MISSION OBJECTIVE: The Children of the Two Divines — a fanatical cult — have seized the Grand Kivas on Arcturus and taken civilian hostages. Intelligence suggests they have deployed CN-20 nerve agent throughout the area.\n\nYour platoon will insert via APC through the Guardian Belt. Neutralize the cult threat, rescue hostages, and secure the Grand Kivas complex. Be advised: the cult is heavily armed and willing to die for their cause.\n\nAdditional intelligence suggests Engineer ruins — the Arctura Tunnels — exist beneath the Kivas. If encountered, document and report. Do not attempt to explore without authorization."
+    "text": "MISSION OBJECTIVE: The Children of the Two Divines — a fanatical cult — have seized the Grand Kivas on Arcturus and taken civilian hostages. Intelligence suggests they have deployed CN-20 nerve agent throughout the area.\n\nSecond Squad, 2nd Platoon will insert via APC through the Guardian Belt. Neutralize the cult threat, rescue hostages, and secure the Grand Kivas complex. Be advised: the cult is heavily armed and willing to die for their cause. Eleven hostages are believed held inside, including members of a civilian survey team. Respirators are mandatory beyond the APC.\n\nAdditional intelligence suggests Engineer ruins — the Arctura Tunnels — exist beneath the Kivas. If encountered, document and report. Do not attempt to explore without authorization.\n\nA Colonial Marshal deputy familiar with the terrain will meet the APC at the insertion point. Civilian liaison requests that any artefacts recovered be sealed and logged, not discarded.\n\nGood hunting, Gunfighters.\n\n— MU/TH/UR 9000, USS TAMB'ITAM"
   },
   "acts": [
     {
-      "title": "OPERATION",
-      "subtitle": "MISSION BRIEFING",
-      "summary": "A fanatical cult. Ancient Engineer ruins. Nerve gas and alien temples beneath the surface.",
-      "gmNotes": "This operation is run from the Colonial Marines Operations Manual. The pack provides the mission briefing, tactical maps and key locations; a scene-by-scene runner has not been authored yet. Import or generate a detailed pack with the same id to replace it."
+      "title": "ACT I",
+      "subtitle": "THE BELT",
+      "summary": "The squad inserts by APC, meets the local marshal, picks its way through the gas-trapped Guardian Belt and fights across the approach to the Grand Kivas.",
+      "readAloud": [
+        "The APC rocks and grinds over broken ground, and every jolt slams your helmet into the bulkhead. Through the driver's periscope Arcturus is the colour of rust, a flat red plain under a sky too pale to be friendly. Grit rattles on the armor like hail. The cabin smells of hot hydraulics, gun oil and the rubber of the respirator hanging on your chest. Up ahead, the Guardian Belt rises out of the plain: a wall of crooked stone fingers pointing at nothing.",
+        "The ramp drops and the wind hits you, dry and hot, carrying dust that gets behind your goggles in seconds. Somewhere in the rocks a loose sheet of metal bangs, steady as a drum. A battered crawler sits in the lee of a pillar with its lights off, and a figure in a long marshal's coat raises a hand. Far beyond the rocks, on the horizon, the domes of the Grand Kivas glow orange, and you can just hear chanting carried on the wind.",
+        "The trail into the Belt is narrow enough that you walk single file. Rock walls rise on both sides, carved by the wind into ribs and hollows. In a crevice at shoulder height sits a squat steel canister with a hand-painted spiral on its side, a wire running from its valve into the rock. The air around it shimmers slightly. Your respirator suddenly feels very thin."
+      ],
+      "gmNotes": "Act I is about tension and choices, not body count. The cult has scattered six CN-20 canisters through the Belt; only two are live, but the squad cannot know which without checking. Deputy Coyle Ashby guides them and pushes for speed because his daughter is among the hostages. Cult sentries radio every movement back to the Kivas, so a noisy approach costs hostage lives later. End the act when the squad reaches the Main Kiva's doors or roof, and send the cult broadcast handout.\n\nIf the squad takes the Secondary Kivas first, they find the cult's ledger and the tunnel access, which gives them a back route into Act II.",
+      "agendaNotes": "Okafor should feel the pull between speed and caution. Vasquez-Hale may notice the civilian liaison's interest in the tunnels. Mbeki-Larsen will want to treat gassed civilians even under fire. Harrow drives the APC and has to decide how close to bring it.",
+      "scenes": [
+        {
+          "name": "APC Insertion",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The APC stops at the insertion point between two leaning pillars of stone. Deputy Coyle Ashby steps out of his crawler, coat snapping in the wind, and walks straight up to whoever looks like they are in charge.",
+          "checks": [
+            "PILOTING — bring the APC in quietly behind the pillars without raising a dust plume visible from the Kivas",
+            "MANIPULATION — get Ashby to admit why he is so desperate to move fast",
+            "OBSERVATION — spot the glint of a cult spotter's binoculars on a ridge to the east"
+          ],
+          "events": [
+            "Ashby hands over a hand-drawn map of the Belt with three trails marked and one crossed out.",
+            "Lieutenant Castellan-Wu checks in by radio and repeats: hostages first, tunnels are off limits."
+          ],
+          "stressTriggers": [],
+          "npcGuidance": "Ashby is helpful, knows the ground and is lying by omission: he does not say that his daughter Junie is inside, or that she went willingly. He pushes for the shortest route.",
+          "gmTip": "Establish the respirator rule now: anyone who takes their mask off in the Belt is gambling.",
+          "outcomes": [
+            "If the spotter is seen and silenced, the cult does not know the squad's numbers; one fewer ambusher in Ambush on the Approach.",
+            "If the dust plume is seen, start the HOSTAGE DEADLINE clock with one segment filled."
+          ]
+        },
+        {
+          "name": "Through the Guardian Belt",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The trail narrows into gullies where the wind whistles through holes in the rock. Spiral-painted canisters sit wedged into crevices, wires running into the stone. Some sweat a faint oily sheen.",
+          "checks": [
+            "OBSERVATION — trace the wires and tell live canisters from decoys",
+            "COMTECH — disarm a live canister's crude radio trigger",
+            "SURVIVAL — read the wind and pick the gully where gas would blow away from the trail",
+            "MOBILITY — climb over the rocks to bypass a trapped gully entirely"
+          ],
+          "events": [
+            "Halfway through, the wind drops dead calm for a full minute.",
+            "A cultist on a ridge fires a flare; if the squad is spotted, the trigger on the nearest live canister is pulled."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — every marine in a gully when a canister vents",
+            "IMMEDIATE PANIC ROLL — any marine whose respirator is damaged in a gas cloud"
+          ],
+          "npcGuidance": "Ashby knows which gullies flood with gas on a still day and will say so if asked. He is impatient and will try to rush past canisters rather than disarm them.",
+          "gmTip": "CN-20 exposure is a Sickness Roll against high Virulence for anyone without a sealed respirator; make the threat obvious so players can avoid it.",
+          "outcomes": [
+            "Canisters disarmed and kept become a bargaining chip with the cult in Act II.",
+            "A vented canister forces a detour and injures anyone caught unmasked; the cult knows the squad is coming."
+          ],
+          "clueRefs": [
+            "decoy-canisters"
+          ]
+        },
+        {
+          "name": "Ambush on the Approach",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Four to six cult fanatics with hunting rifles and pipe bombs fire from rooftop slits and the prayer-pole line; two charge with machetes when the squad is pinned. They break and retreat into the Kivas when half are down.",
+          "narration": "The rocks end and open ground stretches to the Kivas: dead grain stalks, drainage ditches and a pilgrim road lined with prayer poles hung with bones and ribbons. The chanting stops. Then the rooftops light up with muzzle flashes.",
+          "checks": [
+            "RANGED COMBAT — suppress the rooftop firing slits",
+            "MOBILITY — sprint between ditches under fire",
+            "COMMAND — keep the squad moving instead of digging in"
+          ],
+          "events": [
+            "A cultist with a pipe bomb runs straight at the squad screaming a hymn.",
+            "A loudspeaker on the Main Kiva crackles: a woman's calm voice asks the marines to lay down their arms and 'come and be welcomed'."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the suicide runner detonates within SHORT range"
+          ],
+          "npcGuidance": "The cultists are poorly trained but utterly unafraid; wounded ones keep singing. Ashby refuses to shoot at anyone young until he gets a clear look at their face.",
+          "gmTip": "This is the squad's first real fight; let the smart gun shine, then remind them every cultist is someone's family.",
+          "outcomes": [
+            "A fast assault reaches the Main Kiva's doors; a captured cultist can be questioned about the hostages and the dead-man switch.",
+            "A slow fight lets the cult move the hostages into the Main Chamber around the canisters."
+          ]
+        },
+        {
+          "name": "The Granary Kiva",
+          "mandatory": false,
+          "encounter": true,
+          "encounterDetail": "The sealed granary holds a swarm of Arcturian grain parasites covering one zone; they boil out if the doors are opened and smother the nearest target. Fire disperses them.",
+          "narration": "The Secondary Kivas are barracks and kitchens, cooking fires still warm. One round hall has its doors chained shut, and from inside comes a dry, constant rustling, like wind through wheat.",
+          "checks": [
+            "OBSERVATION — find the cult's ledger of members, supplies and a delivery of 'twelve canisters from the Benefactor'",
+            "SURVIVAL — recognise the rustling as grain parasites before anyone opens the door",
+            "COMTECH — tune a captured cult radio to hear the Main Kiva's channel"
+          ],
+          "events": [
+            "Under a prayer rug in the smallest kiva, the squad finds the trapdoor to the Tunnel Access."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — anyone caught in the swarm"
+          ],
+          "npcGuidance": "Ashby recognises a name in the ledger, Junie Ashby, and goes quiet. If pressed, he admits his daughter is inside.",
+          "gmTip": "This optional scene rewards careful players with intelligence and a back door; do not force it.",
+          "outcomes": [
+            "The ledger proves an outside 'Benefactor' supplied the gas, a lead for the campaign's Deep Void thread.",
+            "The tunnel access lets the squad bypass the Main Chamber and enter Act II from below."
+          ],
+          "clueRefs": [
+            "benefactor-ledger",
+            "junie-willing"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ACT II",
+      "subtitle": "COMMUNION",
+      "summary": "The squad breaches the Center Kiva, faces the Prophet across a ring of hostages and wired canisters, then follows the cult down into the Temple of the Engineers for the final confrontation.",
+      "readAloud": [
+        "Inside, the Center Kiva is a furnace of candlelight. Hundreds of flames gutter in niches up the curved walls, and the heat makes the painted spirals seem to turn. Incense hangs in layers so thick your flashlight beam becomes a solid bar. Below you, in the sunken chamber, people kneel in a ring with sacks over their heads. In the middle of the ring stands a dais stacked with spiral-painted canisters, wired together, a single red light blinking on top.",
+        "The woman on the dais is barefoot, grey-haired and smiling. She does not raise her voice. She says your names as if she has been expecting you, thanks you for coming, and asks you to listen before anyone dies. Behind her, a thin man with a string of beads in one hand and a switch in the other watches you without blinking.",
+        "The stair beneath the Kiva spirals down into warm, breathing dark. The candles run out. Rock gives way to something smoother, colder, carved. Your light finds a glyph taller than you are, then another, then a whole wall of them, and beyond them a hall so vast that your beam simply fades into black. Somewhere far above, something clicks, three times, like a tongue against teeth."
+      ],
+      "gmNotes": "Underwood will negotiate: she wants the squad to stand aside while her inner circle carries an ampule up from the temple to a ship she says is coming. She is lying about the ship being a rescue; it is a buyer. Krell holds the dead-man switch for the Main Chamber canisters, and he wants martyrdom. The squad can save the hostages by separating Krell from Underwood, by disarming the canisters, or by giving Underwood what she wants. Whatever happens, part of the cult flees into the temple with hostages or ampules, and the squad must follow.\n\nIn the temple, the Arctura hunts by sound and the urns are an extreme biohazard. Krell or Underwood tries to open the Inner Sanctum for the 'Communion'. The act ends when the squad gets the survivors back up to the APC, or does not.",
+      "agendaNotes": "This is where the liaison's request can bite: an intact ampule is right there. Brandvold may see Okafor make a call that sacrifices someone. Mbeki-Larsen should face a choice between a gassed hostage and keeping up with the squad.",
+      "scenes": [
+        {
+          "name": "Breaching the Upper Level",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Three cultists with rifles hold the rim gallery; one runs for the chamber below to warn Krell. Plank walkways collapse under heavy weight, dropping a marine into the chamber.",
+          "narration": "Whether through the roof hatch, the smoke-holes or the main doors, the squad comes in on the rim gallery: a ring of plank walkways and firing slits above the candlelit chamber.",
+          "checks": [
+            "MOBILITY — move along creaking planks without alerting the chamber below",
+            "CLOSE COMBAT — silence a sentry before he can shout",
+            "HEAVY MACHINERY — brace a failing walkway under the smart gunner"
+          ],
+          "events": [
+            "If any sentry raises the alarm, Krell lifts the switch over his head and the HOSTAGE DEADLINE clock fills two segments."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — any marine who falls into the chamber among the hostages"
+          ],
+          "npcGuidance": "Sentries are frightened teenagers as often as hardened fanatics; some will surrender if given a reason.",
+          "gmTip": "A quiet breach is the best route to a clean rescue; reward stealth generously.",
+          "outcomes": [
+            "A silent breach gives the squad overwatch on the whole chamber before Underwood knows they are there.",
+            "A loud breach starts the negotiation at gunpoint, with Krell already twitchy."
+          ]
+        },
+        {
+          "name": "The Prophet's Bargain",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Prophet Selah Underwood stands on the dais among the wired canisters and opens her arms. She asks the marines to listen, and offers a bargain: let her faithful go below and return with 'the gift', and every hostage walks free.",
+          "checks": [
+            "MANIPULATION — drive a wedge between Underwood and Krell by exposing her deal with the Benefactor",
+            "OBSERVATION — see that the switch in Krell's hand is wired to the canisters, and that the wire can be cut",
+            "COMTECH — jam the switch's radio link from the gallery",
+            "MEDICAL AID — keep a gas-sick hostage alive through the standoff"
+          ],
+          "events": [
+            "Underwood sends the cult broadcast handout over the loudspeaker so the whole valley hears it.",
+            "One hostage, Junie Ashby, pulls off her own hood and begs the marines to leave.",
+            "If the squad stalls too long, Krell begins the hymn of Communion and the HOSTAGE DEADLINE clock ticks."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines in the chamber when Krell raises the switch",
+            "IMMEDIATE PANIC ROLL — any marine who sees a canister begin to vent while unmasked hostages scream"
+          ],
+          "npcGuidance": "Underwood is calm, warm and lying about the 'ship': it is a buyer, not a rescue. Krell believes absolutely and would rather everyone die than see the Prophet deal with outsiders. Ashby begs the squad not to shoot near Junie.",
+          "gmTip": "Make the ledger or the decoy-canister clue pay off here; players who did the work in Act I should get a real edge.",
+          "outcomes": [
+            "Exposing the Benefactor turns Krell against Underwood; he tries to kill her, and the hostages can be pulled out in the chaos.",
+            "Accepting the bargain frees the hostages but lets the inner circle descend to the temple with time to reach the urns.",
+            "A failed standoff vents the canisters: heavy hostage casualties and the cult survivors flee below."
+          ],
+          "clueRefs": [
+            "decoy-canisters",
+            "benefactor-ledger",
+            "junie-willing"
+          ]
+        },
+        {
+          "name": "The Lower Access",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "A worn stone stair spirals down beneath the dais into a natural tunnel that breathes warm air in slow pulses. Candles mark the way, then stop. Boot prints and drag marks lead on into the dark.",
+          "checks": [
+            "SURVIVAL — follow the cult's trail through a split in the tunnel",
+            "OBSERVATION — notice the scratches on the ceiling, far too high for a person",
+            "COMTECH — relay a signal to the APC through the rock, or lose comms entirely"
+          ],
+          "events": [
+            "Lieutenant Castellan-Wu orders the squad to hold at the threshold; minutes later, the civilian liaison's private request arrives.",
+            "Three clicks echo from far ahead, then silence."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when comms with the APC drop out"
+          ],
+          "npcGuidance": "Ashby insists on coming if Junie went down; he is no use in a fight and will not leave.",
+          "gmTip": "Slow down. Describe the change from rough rock to smooth, carved stone and let the players feel they are trespassing.",
+          "outcomes": [
+            "Following the order to hold leaves the cult's inner circle alone with the urns; the Communion happens off-screen and the temple must be sealed from above.",
+            "Going on brings the squad to the Entry Chamber and the Temple."
+          ]
+        },
+        {
+          "name": "The Temple",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "The Arctura hunts the Central Temple from the ceiling, using echolocation and an ultrasonic shriek to stun marines before pummelling one and dragging them into the dark. Gunfire and shouting draw it; silence and darkness make it hesitate.",
+          "narration": "The tunnel opens into a vaulted hall too tall for flashlights. Alcoves of ampules line the walls; black urns stand in rows, some sweating an oily film. A giant carved head gazes down from the far wall. Cultists are prying the lid off an urn by candlelight.",
+          "checks": [
+            "OBSERVATION — spot the Arctura clinging to the vault before it moves",
+            "MOBILITY — move between urns without knocking one over",
+            "RANGED COMBAT — drive the Arctura off without hitting an urn",
+            "COMTECH — read enough glyphs to guess that the sanctum door is a seal, not an entrance"
+          ],
+          "events": [
+            "An urn tips and cracks; black fluid spreads across the floor toward the squad.",
+            "The Arctura's ultrasonic shriek blows out every candle in the hall."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the Arctura shrieks",
+            "IMMEDIATE PANIC ROLL — any marine dragged into the dark by the Arctura"
+          ],
+          "npcGuidance": "Surviving cultists see the Arctura as a sign and refuse to fight it. Underwood, if alive, wants one sealed ampule and will trade anything for it. Dr. Amara Quist, if freed, wants to photograph everything and touch nothing, except what she already has in her coat.",
+          "gmTip": "The urns are a loaded gun on the table; any stray burst near them should be a terrifying choice, not a footnote.",
+          "outcomes": [
+            "Driving off the Arctura opens the way to the Inner Sanctum, where Krell is already working the door.",
+            "Anyone splashed by the black fluid is INFECTED; their fate is the campaign's next problem."
+          ],
+          "clueRefs": [
+            "quist-ampule"
+          ]
+        },
+        {
+          "name": "The Inner Sanctum",
+          "mandatory": true,
+          "encounter": true,
+          "encounterDetail": "Krell and two fanatics hold the sanctum door; Krell has a second, smaller dead-man switch rigged to the urns in the alcove. If the door opens fully, warm air and spores roll out and every unmasked person makes a Sickness Roll.",
+          "narration": "Behind the giant head, a circular stone door stands half open, grinding slowly wider. Brother Krell stands in the gap with his beads in one hand and a switch in the other, singing. Beyond him, a warm plinth glows faintly in the dark.",
+          "checks": [
+            "MANIPULATION — talk Krell down using whatever the squad learned about the Prophet",
+            "RANGED COMBAT — take a single clean shot before his thumb moves",
+            "HEAVY MACHINERY — jam the door with a canister or a rifle stock before it opens fully"
+          ],
+          "events": [
+            "The HOSTAGE DEADLINE clock is replaced by the SANCTUM DOOR clock; when it fills, the door is open.",
+            "The Arctura returns for one last attack if it was only driven off."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines when the plinth begins to warm and pulse"
+          ],
+          "npcGuidance": "Krell wants martyrdom and an audience. Underwood, if present, tries to get past him to the plinth with an ampule case. Quist pleads for a sample to take home.",
+          "gmTip": "Let the players decide what leaves the temple: survivors, ampules, or nothing. That choice is the ending.",
+          "outcomes": [
+            "Door jammed and survivors out: the HOSTAGES WALK OUT ending; the squad decides whether the temple is reported or buried.",
+            "Ampule taken for the Company: the SEALED AND SOLD ending.",
+            "Door opened or urns released: the COMMUNION ending."
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Prophet Selah Underwood",
+      "role": "Leader, Children of the Two Divines",
+      "agenda": "Carry an intact ampule out of the temple to an off-world buyer who has promised to evacuate her inner circle from Arcturus.",
+      "behavior": "Serene, barefoot and soft-spoken; calls everyone by name and thanks them for their anger. Tell: she touches a pale scar on her throat whenever she lies.",
+      "secret": "She stopped believing years ago. The 'Benefactor' who sent the CN-20 is a Weyland-Yutani buyer, and her bargain with the marines is a stall until his ship lands.",
+      "stats": {
+        "health": 3,
+        "manipulation": 5,
+        "command": 3
+      }
+    },
+    {
+      "name": "Brother Tobiah Krell",
+      "role": "Cult Chemist and Enforcer",
+      "agenda": "Lead the faithful into Communion beneath the Kivas and die a martyr, taking the unbelievers with him.",
+      "behavior": "Gaunt, unblinking and hoarse from chanting; counts prayer beads with his free hand. Tell: the counting speeds up just before he acts.",
+      "secret": "Four of the six canisters in the Belt are decoys filled with dyed water; the Main Chamber canisters are real. He does not know about the Prophet's buyer and would kill her if he found out.",
+      "stats": {
+        "health": 3,
+        "comtech": 3,
+        "closeCombat": 2
+      }
+    },
+    {
+      "name": "Deputy Coyle Ashby",
+      "role": "Colonial Marshal Deputy, Arcturus",
+      "agenda": "Get his daughter Junie out of the Kivas alive, even if it compromises the assault.",
+      "behavior": "Weathered, polite and quick on the trail; answers questions with the minimum. Tell: he checks his watch every time someone suggests waiting.",
+      "secret": "Junie joined the cult willingly six months ago. He has been passing it supplies to keep her fed, and some of the cult's rifles came from his impound.",
+      "stats": {
+        "health": 4,
+        "rangedCombat": 3,
+        "survival": 3,
+        "observation": 2
+      }
+    },
+    {
+      "name": "Dr. Amara Quist",
+      "role": "Xenoarchaeologist, Civilian Survey Team (Hostage)",
+      "agenda": "Document the Temple of the Engineers and get her findings off Arcturus, with or without the marines' permission.",
+      "behavior": "Brisk, sharp and exhausted, with a cracked camera she will not let go. Tell: she keeps one hand pressed flat over the lining of her coat.",
+      "secret": "Her survey found the tunnels first, and she has been carrying a sealed ampule sewn into her coat since the day the cult arrived.",
+      "stats": {
+        "health": 2,
+        "observation": 3,
+        "comtech": 3
+      }
+    },
+    {
+      "name": "Junie Ashby",
+      "role": "Hostage, Secretly a Cult Member",
+      "agenda": "Stay with the Children and protect the Prophet, whatever her father wants.",
+      "behavior": "Young, wide-eyed and tearful; plays the frightened hostage well. Tell: she never looks at Krell, and always looks at the Prophet.",
+      "secret": "She is a willing member of the cult, and if the bargain fails she will try to open a canister herself.",
+      "stats": {
+        "health": 2,
+        "mobility": 2
+      }
+    }
+  ],
+  "threats": [
+    {
+      "name": "Children of the Two Divines",
+      "ref": "npc-cult-fanatics",
+      "description": "Robed cultists in scavenged armor painted with twin spirals, carrying hunting rifles, machetes and pipe bombs, singing hymns under fire.",
+      "stats": {
+        "health": 3,
+        "rangedCombat": 2,
+        "closeCombat": 2
+      },
+      "tactics": "Act I: rooftop snipers, gully ambushes and suicide runners. Act II: human shields, dead-man switches and a fanatical last stand at the sanctum door."
+    },
+    {
+      "name": "CN-20 Nerve Agent",
+      "description": "Squat steel canisters painted with spirals, wired to crude radio triggers; a faint oily shimmer in the air when one leaks.",
+      "tactics": "Unmasked exposure forces a Sickness Roll against high Virulence. The Belt canisters are mostly decoys; the Main Chamber canisters are real and wired to Krell’s switch."
+    },
+    {
+      "name": "The Arctura",
+      "ref": "arctura",
+      "description": "A long, pale, eyeless hunter that clings to the temple vault and clicks to see; first glimpsed as scratches far too high on the tunnel ceiling.",
+      "stats": {
+        "speed": 2,
+        "health": 6,
+        "armor": 0,
+        "mobility": 4,
+        "observation": 2
+      },
+      "tactics": "Hunts by sound. Shrieks to stun, pummels and drags a victim into the dark, then returns for the next. Silence and darkness make it hesitate; fire drives it off."
+    },
+    {
+      "name": "Arcturian Grain Parasites",
+      "ref": "arcturian-grain-parasites",
+      "description": "A rustling, writhing carpet of tiny burrowing grubs filling the chained-up granary kiva.",
+      "stats": {
+        "speed": 1,
+        "health": 3
+      },
+      "tactics": "Boil out of the granary if the doors open and smother the nearest target; disperse under fire or electricity."
+    },
+    {
+      "name": "The Black Urns",
+      "description": "Ribbed stone urns in the Central Temple, some sweating a dark oily film; a cracked one spreads black fluid across the floor.",
+      "tactics": "Contact infects; a ruptured urn makes the whole hall a biohazard. Treat as the scenario’s ticking catastrophe, not a monster."
     }
   ],
   "keyLocations": [
     {
       "name": "THE GUARDIAN BELT — APC Insertion Point",
-      "description": "Designated landing zone for armored personnel carrier."
+      "description": "A wind-scoured shelf of red grit where the APC grinds to a halt between two leaning pillars of stone. Dust hisses against the hull. The marshal's battered crawler waits with its lights off, and the Kivas glow faintly on the horizon like coals."
     },
     {
       "name": "THE GUARDIAN BELT — The Guardian Belt",
-      "description": "Natural rock formations providing cover and concealment. CN-20 nerve agent risk."
+      "description": "A maze of eroded rock fins and narrow gullies that whistle when the wind rises. Cult canisters are wedged into crevices along the trail, some leaking a faint oily shimmer. Good cover, terrible sightlines, and every gully could be a gas trap."
     },
     {
       "name": "THE GUARDIAN BELT — Grand Kivas Approach",
-      "description": "Route to the cult-held complex. Multiple ambush points."
+      "description": "Open ground of packed dust and dead grain stalks leading to the Kivas, crossed by drainage ditches and a pilgrim road lined with prayer poles. Snipers on the rooftops cover it. Ditches and poles offer cover; the road offers speed."
     },
     {
       "name": "THE GRAND KIVAS — Main Kiva",
-      "description": "Central ceremonial structure. Cult leadership present. Hostage location."
+      "description": "A huge, half-buried dome of adobe and ferrocrete, painted with twin spirals, its roof bristling with antennas and sandbagged firing slits. Chanting drifts out of the vents. The only ways in are the main doors, the roof hatch and the smoke-holes."
     },
     {
       "name": "THE GRAND KIVAS — Secondary Kivas",
-      "description": "Surrounding structures used as barracks and storage by the cult."
+      "description": "A ring of smaller round halls used as barracks, kitchens and a granary. Bedrolls, cooking fires still warm, crates of stolen ammunition. The granary hums with something alive in the grain, and nobody has opened it for days."
     },
     {
       "name": "THE GRAND KIVAS — Tunnel Access",
-      "description": "Hidden entrance to the Arctura Tunnels and Engineer ruins below."
+      "description": "A trapdoor under a prayer rug in the smallest kiva drops into a natural fissure, warm air rising from below with a smell of wet stone and old copper. Fresh rope ladders, chalk arrows and boot prints lead down."
     },
     {
       "name": "THE CENTER KIVAS — INTERIOR — Upper Level",
-      "description": "Cult observation posts and defensive positions."
+      "description": "A gallery of firing positions around the rim of the dome, connected by plank walkways and ladders. Cultists in mismatched armor watch the approach through slits. Loose planks creak, and anyone up here can see straight down into the chamber below."
     },
     {
       "name": "THE CENTER KIVAS — INTERIOR — Main Chamber",
-      "description": "Central gathering space. Ritual markings. Hostage holding area."
+      "description": "A sunken circular hall lit by hundreds of candles, walls painted with spirals and towering pale figures. The hostages kneel in a ring around a dais where gas canisters stand wired together. The air is hot, waxy and thick with incense."
     },
     {
       "name": "THE CENTER KIVAS — INTERIOR — Lower Access",
-      "description": "Descending passages toward the Arctura Tunnels."
+      "description": "Stone steps worn smooth by the cult's feet spiral down into the bedrock, then give way to a natural tunnel that breathes warm air in slow pulses. Candles in niches mark the way. Water drips somewhere ahead, and something clicks in the dark."
     },
     {
       "name": "TEMPLE OF THE ENGINEERS — Entry Chamber",
-      "description": "Transition from natural tunnels to engineered stone. Engineer glyphs cover the walls."
+      "description": "The tunnel ends against smooth, dark stone carved with glyphs taller than a person. The air turns cold and dry. Motion trackers stutter here, as if the walls themselves were moving. Cult offerings of food and photographs lie on the threshold."
     },
     {
       "name": "TEMPLE OF THE ENGINEERS — Central Temple",
-      "description": "Massive vaulted chamber with alien technology. Ampules and urns line the walls."
+      "description": "A vaulted hall so tall that flashlights do not reach the ceiling, lined with ribbed alcoves of ampules and black stone urns. A giant carved head looks down from the far wall. Some urns sweat a dark, oily film; the floor around them is sticky."
     },
     {
       "name": "TEMPLE OF THE ENGINEERS — Inner Sanctum",
-      "description": "Deepest chamber. Unknown purpose. Extreme biological hazard."
+      "description": "A narrow, circular chamber behind a sliding stone door, its walls covered in organic-looking relief. A sealed sarcophagus-like plinth stands at the centre, warm to the touch. The silence is total, and every heartbeat sounds loud."
     }
   ],
   "handouts": [
@@ -83,8 +470,79 @@
       "from": "MU/TH/UR 9000",
       "to": "KILO COMPANY, 2ND PLATOON",
       "priority": "PRIORITY",
-      "text": "MISSION OBJECTIVE: The Children of the Two Divines — a fanatical cult — have seized the Grand Kivas on Arcturus and taken civilian hostages. Intelligence suggests they have deployed CN-20 nerve agent throughout the area.\n\nYour platoon will insert via APC through the Guardian Belt. Neutralize the cult threat, rescue hostages, and secure the Grand Kivas complex. Be advised: the cult is heavily armed and willing to die for their cause.\n\nAdditional intelligence suggests Engineer ruins — the Arctura Tunnels — exist beneath the Kivas. If encountered, document and report. Do not attempt to explore without authorization.",
+      "text": "MISSION OBJECTIVE: The Children of the Two Divines — a fanatical cult — have seized the Grand Kivas on Arcturus and taken civilian hostages. Intelligence suggests they have deployed CN-20 nerve agent throughout the area.\n\nSecond Squad, 2nd Platoon will insert via APC through the Guardian Belt. Neutralize the cult threat, rescue hostages, and secure the Grand Kivas complex. Be advised: the cult is heavily armed and willing to die for their cause. Eleven hostages are believed held inside, including members of a civilian survey team. Respirators are mandatory beyond the APC.\n\nAdditional intelligence suggests Engineer ruins — the Arctura Tunnels — exist beneath the Kivas. If encountered, document and report. Do not attempt to explore without authorization.\n\nA Colonial Marshal deputy familiar with the terrain will meet the APC at the insertion point. Civilian liaison requests that any artefacts recovered be sealed and logged, not discarded.\n\nGood hunting, Gunfighters.\n\n— MU/TH/UR 9000, USS TAMB'ITAM",
       "when": "Start of the session, before Act I"
+    },
+    {
+      "id": "cn20-alert",
+      "title": "SENSOR ALERT — ORGANOPHOSPHATE TRACE",
+      "from": "APC ENVIRONMENTAL SUITE",
+      "to": "SECOND SQUAD",
+      "priority": "EMERGENCY",
+      "text": "WARNING. ORGANOPHOSPHATE COMPOUND DETECTED. CLASS: CN-20 OR EQUIVALENT. CONCENTRATION: LOW AND VARIABLE. SOURCE: MULTIPLE POINT SOURCES WITHIN GUARDIAN BELT. NOTE: SIX SIGNATURES DETECTED. TWO SIGNATURES CONSISTENT WITH ACTIVE AGENT. FOUR SIGNATURES INCONCLUSIVE. RESPIRATOR SEALS MANDATORY. WIND SPEED FALLING.",
+      "when": "Act I, Through the Guardian Belt, when the squad first finds a canister"
+    },
+    {
+      "id": "cult-broadcast",
+      "title": "OPEN BROADCAST — GRAND KIVAS",
+      "from": "CHILDREN OF THE TWO DIVINES",
+      "to": "ALL WHO HEAR",
+      "priority": "STANDARD",
+      "text": "Brothers and sisters in armor. You have been sent by people who are afraid of what lies beneath us. We are not afraid. We hold eleven guests, and we hold them gently. We ask only to be allowed to go down and return with the gift our makers left for us. Stand aside and every guest walks out into the light. Come in shooting and we will all go down together. The door is open. Come and be welcomed.",
+      "when": "End of Act I, when the squad reaches the Main Kiva, or at the start of The Prophet's Bargain"
+    },
+    {
+      "id": "liaison-ampule",
+      "title": "PRIVATE CHANNEL — CIVILIAN LIAISON",
+      "from": "J. SAUVÉ, VIA USS TAMB’ITAM RELAY",
+      "to": "ONE MARINE OF THE GM’S CHOICE",
+      "priority": "EYES ONLY",
+      "text": "Marine. The lieutenant has ordered you to hold, and he is right to. But if you find yourself below regardless, there will be sealed vessels of considerable scientific value. One intact vessel, undamaged and unopened, would change a great many lives, including yours. Use the specimen case in the APC’s rear locker. Tell no one. I will take care of the paperwork.",
+      "when": "Act II, The Lower Access, right after the lieutenant orders the squad to hold"
+    }
+  ],
+  "clues": [
+    {
+      "id": "decoy-canisters",
+      "text": "Four of the six canisters in the Belt hold dyed water; their wiring goes nowhere. The cult is bluffing about how much gas it has outside, but not inside.",
+      "source": "Canister inspection in the Belt, the APC sensor alert, or a captured cultist",
+      "scene": "Through the Guardian Belt"
+    },
+    {
+      "id": "benefactor-ledger",
+      "text": "The cult's ledger records 'twelve canisters and the promise of passage from the Benefactor', in the Prophet's handwriting. Someone off-world armed this siege.",
+      "source": "Cult ledger in the Secondary Kivas",
+      "scene": "The Granary Kiva"
+    },
+    {
+      "id": "junie-willing",
+      "text": "Junie Ashby is listed in the ledger as a sworn member, not a captive, and her father has been supplying the cult.",
+      "source": "The cult ledger, Ashby's confession, or Junie's own behavior",
+      "scene": "The Prophet's Bargain"
+    },
+    {
+      "id": "quist-ampule",
+      "text": "Dr. Quist is carrying a sealed ampule sewn into the lining of her coat, taken from the temple before the cult arrived.",
+      "source": "Quist's protective hand, a search, or a careless remark about 'the first one'",
+      "scene": "The Temple"
+    }
+  ],
+  "clocks": [
+    {
+      "id": "hostage-deadline",
+      "label": "HOSTAGE DEADLINE",
+      "segments": 6,
+      "kind": "danger",
+      "visibility": "all",
+      "note": "Tick for noise, delays and failed negotiation. When full, Krell vents the Main Chamber canisters."
+    },
+    {
+      "id": "sanctum-door",
+      "label": "SANCTUM DOOR",
+      "segments": 4,
+      "kind": "danger",
+      "visibility": "gm",
+      "note": "Starts in The Inner Sanctum and ticks every round the door is not jammed. When full, the sanctum is open and the COMMUNION ending is in play."
     }
   ],
   "maps": [
@@ -98,15 +556,15 @@
       "rooms": [
         {
           "name": "APC Insertion Point",
-          "note": "Designated landing zone for armored personnel carrier."
+          "note": "A wind-scoured shelf of red grit where the APC grinds to a halt between two leaning pillars of stone. Dust hisses against the hull. The marshal's battered crawler waits with its lights off, and the Kivas glow faintly on the horizon like coals."
         },
         {
           "name": "The Guardian Belt",
-          "note": "Natural rock formations providing cover and concealment. CN-20 nerve agent risk."
+          "note": "A maze of eroded rock fins and narrow gullies that whistle when the wind rises. Cult canisters are wedged into crevices along the trail, some leaking a faint oily shimmer. Good cover, terrible sightlines, and every gully could be a gas trap."
         },
         {
           "name": "Grand Kivas Approach",
-          "note": "Route to the cult-held complex. Multiple ambush points."
+          "note": "Open ground of packed dust and dead grain stalks leading to the Kivas, crossed by drainage ditches and a pilgrim road lined with prayer poles. Snipers on the rooftops cover it. Ditches and poles offer cover; the road offers speed."
         }
       ]
     },
@@ -120,15 +578,15 @@
       "rooms": [
         {
           "name": "Main Kiva",
-          "note": "Central ceremonial structure. Cult leadership present. Hostage location."
+          "note": "A huge, half-buried dome of adobe and ferrocrete, painted with twin spirals, its roof bristling with antennas and sandbagged firing slits. Chanting drifts out of the vents. The only ways in are the main doors, the roof hatch and the smoke-holes."
         },
         {
           "name": "Secondary Kivas",
-          "note": "Surrounding structures used as barracks and storage by the cult."
+          "note": "A ring of smaller round halls used as barracks, kitchens and a granary. Bedrolls, cooking fires still warm, crates of stolen ammunition. The granary hums with something alive in the grain, and nobody has opened it for days."
         },
         {
           "name": "Tunnel Access",
-          "note": "Hidden entrance to the Arctura Tunnels and Engineer ruins below."
+          "note": "A trapdoor under a prayer rug in the smallest kiva drops into a natural fissure, warm air rising from below with a smell of wet stone and old copper. Fresh rope ladders, chalk arrows and boot prints lead down."
         }
       ]
     },
@@ -142,15 +600,15 @@
       "rooms": [
         {
           "name": "Upper Level",
-          "note": "Cult observation posts and defensive positions."
+          "note": "A gallery of firing positions around the rim of the dome, connected by plank walkways and ladders. Cultists in mismatched armor watch the approach through slits. Loose planks creak, and anyone up here can see straight down into the chamber below."
         },
         {
           "name": "Main Chamber",
-          "note": "Central gathering space. Ritual markings. Hostage holding area."
+          "note": "A sunken circular hall lit by hundreds of candles, walls painted with spirals and towering pale figures. The hostages kneel in a ring around a dais where gas canisters stand wired together. The air is hot, waxy and thick with incense."
         },
         {
           "name": "Lower Access",
-          "note": "Descending passages toward the Arctura Tunnels."
+          "note": "Stone steps worn smooth by the cult's feet spiral down into the bedrock, then give way to a natural tunnel that breathes warm air in slow pulses. Candles in niches mark the way. Water drips somewhere ahead, and something clicks in the dark."
         }
       ]
     },
@@ -164,17 +622,42 @@
       "rooms": [
         {
           "name": "Entry Chamber",
-          "note": "Transition from natural tunnels to engineered stone. Engineer glyphs cover the walls."
+          "note": "The tunnel ends against smooth, dark stone carved with glyphs taller than a person. The air turns cold and dry. Motion trackers stutter here, as if the walls themselves were moving. Cult offerings of food and photographs lie on the threshold."
         },
         {
           "name": "Central Temple",
-          "note": "Massive vaulted chamber with alien technology. Ampules and urns line the walls."
+          "note": "A vaulted hall so tall that flashlights do not reach the ceiling, lined with ribbed alcoves of ampules and black stone urns. A giant carved head looks down from the far wall. Some urns sweat a dark, oily film; the floor around them is sticky."
         },
         {
           "name": "Inner Sanctum",
-          "note": "Deepest chamber. Unknown purpose. Extreme biological hazard."
+          "note": "A narrow, circular chamber behind a sliding stone door, its walls covered in organic-looking relief. A sealed sarcophagus-like plinth stands at the centre, warm to the touch. The silence is total, and every heartbeat sounds loud."
         }
       ]
     }
+  ],
+  "endings": [
+    {
+      "title": "HOSTAGES WALK OUT",
+      "condition": "Most hostages are rescued, the sanctum door is jammed shut and no ampule leaves the temple in Company hands.",
+      "text": "Dawn comes up red over the Guardian Belt as the APC grinds away from the Kivas with every seat full and civilians sitting on the ammunition boxes. Someone is crying. Someone else is laughing at nothing. Behind you, the domes stand silent and empty, their candles burning down.\n\nThe report you file says the tunnels were unstable and collapsed during the assault. It is almost true. You know what is still down there, behind a door wedged with a rifle stock, and you hope very much that nobody ever goes looking."
+    },
+    {
+      "title": "SEALED AND SOLD",
+      "condition": "An intact ampule leaves Arcturus with the squad, whether for the liaison, the Prophet’s buyer or Dr. Quist.",
+      "text": "The specimen case rides home strapped to the APC's floor, and nobody sits next to it. Back aboard the Tamb'Itam it disappears within an hour, signed for in a hand nobody recognises.\n\nThe hostages are grateful. The lieutenant gets his commendation. A month later, a Company survey ship lands on Arcturus with a full research team and no military escort, and the Grand Kivas are fenced off with Weyland-Yutani signage. Whatever the Children were trying to reach, someone else will reach it first."
+    },
+    {
+      "title": "COMMUNION",
+      "condition": "The sanctum door opens or the urns are released, and the squad cannot contain it.",
+      "text": "The hymn rises as the stone door grinds open, and warm air rolls out of the dark smelling of rain and rot. The candles flare. The singing changes, becomes something that is no longer words, and then becomes screaming.\n\nThe Tamb'Itam's orbital log records a single high-yield strike on the Grand Kivas at 0412 ship time, authorised under biohazard protocol. Second Squad is listed as missing in action. On the plain, the wind keeps blowing through the Guardian Belt, whistling through the holes in the rock, the same note it has always played."
+    }
+  ],
+  "tips": [
+    "Make the respirator rule clear early and reward players who take CN-20 seriously; gas should shape tactics, not ambush the table.",
+    "Let the squad's Act I choices pay off in the Prophet's Bargain: every clue they found should give them a real option in the standoff.",
+    "Play the cultists as people, not targets; their calm singing under fire is scarier than any war cry.",
+    "Use the liaison's handout to split the squad's loyalties right when the lieutenant orders them to hold.",
+    "Run the Arctura by sound: describe clicks and shrieks, and let silent, dark movement be a genuine tactic.",
+    "If the session is running long, merge The Lower Access and The Temple and have Krell already at the sanctum door when the squad arrives."
   ]
 }

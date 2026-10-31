@@ -6,50 +6,276 @@
   "meta": {
     "title": "The Marine Campaign",
     "tagline": "USS Tamb'Itam — Conestoga Class Starship. Home of the 33rd MAU \"Gunfighters.\"",
+    "synopsis": "The frame for eight Colonial Marine operations flown out of the Conestoga-class USS Tamb'Itam during the Frontier War. The players are Second Squad, 2nd Platoon, Kilo Company of the 33rd MAU: five marines with their own grudges and secrets. Between drops the ship is home, and the campaign lives in its barracks, ready room, armory and hangar. Above the squad, an ambitious lieutenant chases a citation, a tired gunnery sergeant tries to bring everyone home, and a Weyland-Yutani liaison quietly turns every mission into a collection run for the Company's Deep Void division. The arc ends when the squad decides whether it serves the Corps, the Company, or each other.",
     "type": "Campaign",
     "players": "3–5",
-    "playtime": "Campaign",
-    "difficulty": "Colonial Marines Campaign",
+    "playtime": "Multi-session (8 operations)",
+    "difficulty": "Hard",
+    "tone": [
+      "military horror",
+      "brotherhood under fire",
+      "corporate betrayal",
+      "frontier war"
+    ],
+    "contentWarnings": [
+      "graphic violence",
+      "war and combat death",
+      "character death",
+      "body horror",
+      "chemical weapons",
+      "corporate and military cover-ups",
+      "desertion and abandonment of comrades"
+    ],
     "source": "bundled"
   },
   "briefing": {
     "from": "MU/TH/UR 9000 MAINFRAME",
     "to": "KILO COMPANY, 2ND PLATOON — USS TAMB'ITAM",
     "classification": "OPERATIONAL BRIEFING — FRONTIER WAR",
-    "text": "ATTENTION MARINES. You are part of the 33rd Marine Assault Unit — the \"Gunfighters\" — operating out of the Conestoga Frigate USS Tamb'Itam. A reinforced battalion of 2,200 troops standing ready in the Outer Veil.\n\nThe Frontier War has erupted. The colony on Ariarcus has fallen to UPP forces. Your unit was forward deployed to Orbital Fort Nebraska when the crisis began. The situation is fluid, hostile, and evolving.\n\nThis campaign will take you across multiple operations on the war-torn Frontier. Expect hostile contacts, unreliable intel, and hard choices. The Corps takes care of its own — but out here, you're a long way from home.\n\nSemper Fi, Marines."
+    "text": "ATTENTION MARINES. You are Second Squad, 2nd Platoon, Kilo Company, 33rd Marine Assault Unit — the 'Gunfighters' — operating out of the Conestoga-class frigate USS Tamb'Itam. A reinforced battalion of 2,200 troops standing ready in the Outer Veil.\n\nThe Frontier War has erupted. The colony on Ariarcus has fallen to UPP forces. Your unit was forward deployed to Orbital Fort Nebraska when the crisis began. The situation is fluid, hostile, and evolving.\n\nThis campaign will take you across multiple operations on the war-torn Frontier. Expect hostile contacts, unreliable intel, and hard choices. Civilian liaison personnel are embarked by order of Colonial Administration. Extend them every courtesy. Do not discuss operational details with them unless cleared by your platoon commander.\n\nThe Corps takes care of its own — but out here, you're a long way from home. Draw your kit, check your buddy, and be on the hangar deck when the klaxon sounds.\n\nSemper Fi, Marines.\n\n— MU/TH/UR 9000, BY ORDER OF THE COMMANDING OFFICER, USS TAMB'ITAM"
   },
   "acts": [
     {
       "title": "CAMPAIGN",
       "subtitle": "THE FRONTIER WAR",
-      "summary": "USS Tamb'Itam — Conestoga Class Starship. Home of the 33rd MAU \"Gunfighters.\"",
-      "gmNotes": "Campaign frame for the Colonial Marines Operations Manual. Use this pack to brief the platoon aboard the USS Tamb'Itam between operations; each operation has its own pack. Full rules and mission details are in the sourcebook."
+      "summary": "Life aboard the USS Tamb'Itam between operations: the squad wakes, is briefed, draws kit, drops, and comes home to debrief and settle scores. Run this loop before and after each operation pack.",
+      "readAloud": [
+        "The wake-up tone cuts through the barracks like a dentist's drill. Overhead lights snap from red to white and someone three racks down swears at nobody. The air is cold and tastes of the scrubbers, metal and old coffee. Through the deck plates you feel the deep, slow thrum of the Tamb'Itam's drive, the only heartbeat this ship has. Your boots are where you left them. Your rifle is not, because the armory has it, and the armory opens in ten minutes.",
+        "The ready room is too small for a platoon and too warm for comfort. The tactical display flickers with a world you have never heard of: terrain contours, a blinking objective, a red box that says UNCONFIRMED. The lieutenant has his back to you, reading. The gunnery sergeant leans against the hatch with a cold cigar between his teeth, watching your faces rather than the screen. In the back row, a civilian in a pressed grey suit is taking notes.",
+        "The hangar deck is a storm of noise. Loaders whine, crew chiefs bellow, and the Cheyenne on cradle two hisses and ticks as its turbines spool. Red launch light paints everyone the same colour. You check your buddy's straps, they check yours, and the old jokes come out because they always do. Then the ramp is up, the cradle drops, and your stomach stays behind on the Tamb'Itam while the dark outside fills with fire."
+      ],
+      "gmNotes": "Use this act as a loop, not a story. Before each operation, run Barracks Wake-Up and the Ready Room, then send that operation pack's own briefing. After each operation, run Hot Wash and Liberty to heal, award, punish and let secrets breathe. The campaign's spine is the squad's relationship with three people: Lieutenant Castellan-Wu, who volunteers them for glory; Gunnery Sergeant Odhiambo, who wants them alive; and Julian Sauvé, the civilian liaison whose quiet requests are really Deep Void collection orders.\n\nEscalate Sauvé slowly. On the first operation he asks for photographs. On the third he asks for a sample. By the sixth he has the lieutenant ordering it. Operation Octopus Garden, the last operation, is where the Company's whole programme comes into the open, and where the squad has to choose a side.",
+      "agendaNotes": "Each pre-generated marine carries a long-running agenda and a secret that collides with a squadmate's. Reveal at most one secret per operation, ideally during Liberty, when the squad is safe enough to turn on each other. Escalate agendas between operations rather than within them.",
+      "scenes": [
+        {
+          "name": "Barracks Wake-Up",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The wake-up tone sounds. Racks creak, someone's music player is still playing tinny pre-war rock under a pillow, and the duty corporal is shouting that the platoon musters in fifteen. A rumour is already running down the aisle about where you are going.",
+          "checks": [
+            "MANIPULATION — get the real destination out of the duty corporal before the briefing",
+            "OBSERVATION — notice which squadmate did not sleep, and what they are hiding in their footlocker"
+          ],
+          "events": [
+            "A rumour about the next operation arrives, half true and half wrong; the GM chooses which half.",
+            "Gunnery Sergeant Odhiambo walks the aisle and stops at one marine's rack to ask, quietly, how they are holding up."
+          ],
+          "stressTriggers": [
+            "STRESS −1 — any marine who spends the scene with their buddy (after an operation with losses)"
+          ],
+          "npcGuidance": "Odhiambo is gruff and fond and notices everything. He will not repeat gossip, but he will tell a marine to their face if they look like they are cracking.",
+          "gmTip": "Give every player one line of personal business here before the mission takes over; this is where the squad becomes people.",
+          "outcomes": [
+            "Marines who learn the destination early get one free question answered in the Ready Room.",
+            "A marine who confides in Odhiambo gains an ally who will cover for them once this operation."
+          ]
+        },
+        {
+          "name": "The Ready Room",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Lieutenant Castellan-Wu runs the briefing from a flickering tactical display, all confidence and clean phrases. Julian Sauvé sits in the back row in a grey civilian suit. MU/TH/UR prints the operation's orders to every marine's terminal at once.",
+          "checks": [
+            "OBSERVATION — catch the moment the lieutenant glances at Sauvé before answering a question",
+            "COMMAND — push the lieutenant for rules of engagement in writing",
+            "COMTECH — find the redacted lines in the operation file"
+          ],
+          "events": [
+            "Send the operation pack's opening briefing handout to every player.",
+            "Sauvé asks one 'purely academic' question about the target site that reveals what the Company really wants there."
+          ],
+          "stressTriggers": [],
+          "npcGuidance": "Castellan-Wu wants volunteers and a clean success; he answers hard questions with optimism. Sauvé is polite, curious and never asks for anything directly in front of Odhiambo. Odhiambo asks the practical question nobody else did, usually about extraction.",
+          "gmTip": "Let the players ask as many questions as they like, and answer honestly about what the lieutenant knows, which is less than he pretends.",
+          "outcomes": [
+            "The squad leaves with the operation briefing and, possibly, a sense of what the Company is fishing for.",
+            "Written rules of engagement from the lieutenant can later protect a marine from a court-martial."
+          ]
+        },
+        {
+          "name": "Armory Draw",
+          "mandatory": false,
+          "encounter": false,
+          "narration": "The armory cage rattles open. Staff Sergeant Imani Kowal, the armorer, slides rifles across the counter with a clipboard and a look that says every round is coming back or someone is explaining why.",
+          "checks": [
+            "MANIPULATION — talk Kowal into extra grenades, a second motion tracker or an incinerator unit",
+            "HEAVY MACHINERY — strip and fix a smart gun harness that keeps jamming the feed"
+          ],
+          "events": [
+            "Kowal mentions that a crate of 'special issue' gear was signed out to the civilian liaison yesterday."
+          ],
+          "stressTriggers": [],
+          "npcGuidance": "Kowal is fair, unbending and bored; she bends a rule for a good story, never for rank.",
+          "gmTip": "Use the armory to tune difficulty: hand out extra kit before a brutal operation, hold it back before an easy one.",
+          "outcomes": [
+            "Successful requests add one extra item of gear to the squad for this operation only.",
+            "Learning about the liaison's crate seeds suspicion of Sauvé for later."
+          ]
+        },
+        {
+          "name": "Drop",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "The Cheyenne's cradle lets go and the Tamb'Itam's belly falls away. The cabin shudders through atmosphere, the hull glows, and the pilot's calm voice counts down to the deck.",
+          "checks": [
+            "PILOTING — fly the drop in bad weather or under fire, if a marine is at the stick",
+            "STAMINA — keep breakfast down through a hot insertion"
+          ],
+          "events": [
+            "Hand over to the operation pack's first scene."
+          ],
+          "stressTriggers": [
+            "STRESS +1 — all marines on a hot drop into contested airspace"
+          ],
+          "npcGuidance": "The dropship crew chief jokes; the pilot does not. If Castellan-Wu flies with the squad, he gives a speech nobody hears over the engines.",
+          "gmTip": "Keep the drop short and loud, then cut straight to boots on the ground.",
+          "outcomes": [
+            "The squad arrives at the operation's insertion point; a marine who failed STAMINA starts on the ground with STRESS +1."
+          ]
+        },
+        {
+          "name": "Hot Wash and Liberty",
+          "mandatory": true,
+          "encounter": false,
+          "narration": "Back aboard, still in torn armor, the squad sits for the after-action review. Afterwards there are a few hours of liberty: medbay, mess, the card game, or a quiet corner of engineering.",
+          "checks": [
+            "MANIPULATION — shape the after-action report so a squadmate's mistake disappears, or is put on the record",
+            "MEDICAL AID — tend wounds the autodoc queue will not reach for hours",
+            "COMTECH — read the version of the report the lieutenant actually filed"
+          ],
+          "events": [
+            "Sauvé visits one marine privately and asks what they brought back, and whether they would like to be paid for it.",
+            "The lieutenant announces commendations or reprimands; one of them is not deserved."
+          ],
+          "stressTriggers": [
+            "STRESS −2 — every marine who takes liberty instead of working"
+          ],
+          "npcGuidance": "Castellan-Wu wants a clean story that makes him look decisive. Odhiambo wants the names of the marines who need watching. Sauvé wants specimens, data and loyalty, in that order.",
+          "gmTip": "This is where agendas and secrets come out; let the squad argue, then let the klaxon interrupt them.",
+          "outcomes": [
+            "Accepting Sauvé's offer moves a marine toward the Company and earns the liaison-request handout.",
+            "A marine who reports Sauvé to Odhiambo earns the gunny's protection and the lieutenant's suspicion.",
+            "Run Barracks Wake-Up again to start the next operation."
+          ]
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Lieutenant Abraham Castellan-Wu",
+      "role": "2nd Platoon Commander, Kilo Company",
+      "agenda": "Earn a company command before the war ends by volunteering 2nd Platoon for every high-profile operation, whatever Odhiambo says about the cost.",
+      "behavior": "Bright, articulate and sincerely brave, but he hears casualties as statistics. Tell: he takes off and polishes his glasses when he is about to say something he knows is not true.",
+      "secret": "He has been approving Julian Sauvé's 'secondary objectives' without telling the platoon, in exchange for a recommendation letter from Colonial Administration.",
+      "stats": {
+        "health": 3,
+        "rangedCombat": 2,
+        "command": 3
+      }
+    },
+    {
+      "name": "Gunnery Sergeant Pell Odhiambo",
+      "role": "Platoon Sergeant, 2nd Platoon",
+      "agenda": "Bring every marine in the platoon home, even if that means quietly undermining the lieutenant's orders.",
+      "behavior": "Gravel voice, cold unlit cigar, endless patience until somebody lies to him. Tell: he takes the cigar out of his mouth before he says something he means.",
+      "secret": "He has an early tremor in his right hand that he is hiding from the ship surgeon; if it is found, he will be rotated home and the platoon will lose him.",
+      "stats": {
+        "health": 5,
+        "rangedCombat": 4,
+        "command": 4,
+        "stamina": 3
+      }
+    },
+    {
+      "name": "Julian Sauvé",
+      "role": "Civilian Liaison, Colonial Administration (Weyland-Yutani)",
+      "agenda": "Turn every operation into a Deep Void collection run: specimens, samples and data, delivered quietly and without witnesses who matter.",
+      "behavior": "Courteous, curious and generous with small favours: coffee, real cigarettes, letters forwarded home. Tell: he never writes anything down in front of a marine, and always asks one more question at the door.",
+      "secret": "He is a Deep Void division acquisitions officer, and his standing orders authorise him to 'reprioritise' marine casualties if a specimen is at stake.",
+      "stats": {
+        "health": 3,
+        "manipulation": 4,
+        "comtech": 3
+      }
+    },
+    {
+      "name": "Staff Sergeant Imani Kowal",
+      "role": "Armorer, USS Tamb'Itam",
+      "agenda": "Keep her armory honest and her inventory complete, which puts her at odds with Sauvé's off-manifest gear.",
+      "behavior": "Flat, dry and immovable; bends rules for a good story, never for rank. Tell: drums her pen on the clipboard when she is deciding whether to believe you.",
+      "secret": "She has kept a copy of every off-manifest requisition the liaison has made, and is waiting for a marine she trusts enough to hand it to.",
+      "stats": {
+        "health": 4,
+        "heavyMachinery": 3
+      }
+    },
+    {
+      "name": "Dr. Ilse Varnhagen",
+      "role": "Ship Surgeon, USS Tamb'Itam",
+      "agenda": "Keep the marines fit to fight while protecting her own research arrangement with the Company.",
+      "behavior": "Precise, tired and kind in the small hours. Tell: she hums under her breath when she is lying about test results.",
+      "secret": "Sauvé pays her to store biological samples in the medbay's back lockers and to run 'routine' blood panels on marines returning from contaminated sites.",
+      "stats": {
+        "health": 3,
+        "medicalAid": 4
+      }
+    }
+  ],
+  "threats": [
+    {
+      "name": "UPP Army Forces",
+      "ref": "npc-uppa-soldier",
+      "description": "Disciplined Union of Progressive Peoples infantry in grey-green armor, holding Ariarcus and pushing into the Frontier.",
+      "stats": {
+        "health": 4,
+        "rangedCombat": 3
+      },
+      "tactics": "Early operations: patrols and ambushes. Mid-campaign: commandos sent after the same prizes the Company wants. Late campaign: open battle."
+    },
+    {
+      "name": "Blackguard",
+      "ref": "npc-aw-soldiers-blackguard",
+      "description": "USCMC elite marines in black M3 armor who answer to someone other than the battalion.",
+      "stats": {
+        "speed": 1,
+        "health": 6,
+        "closeCombat": 4,
+        "rangedCombat": 5,
+        "mobility": 3
+      },
+      "tactics": "They appear wherever Deep Void is operating. At first they share intel; later they take the squad's prizes; at the end they shoot marines who know too much."
+    },
+    {
+      "name": "Deep Void Division",
+      "description": "Weyland-Yutani's covert research arm, never seen directly: a liaison, a sample request, a redacted file.",
+      "tactics": "Grows from a rumour into the campaign’s true antagonist. Every operation it gains a specimen or loses one; keep a quiet tally and pay it off in Operation Octopus Garden."
     }
   ],
   "keyLocations": [
     {
       "name": "USS TAMB'ITAM — Bridge",
-      "description": "Ship command and control. Navigation, tactical displays, communications."
+      "description": "A dim, cold horseshoe of consoles under a curved viewport full of the Outer Veil. Officers speak in clipped half-sentences and the air smells of ozone and stale coffee. Marines come here only when summoned, which means something has gone wrong or someone wants a favour."
     },
     {
       "name": "USS TAMB'ITAM — Marine Barrack Section",
-      "description": "Housing for Marine personnel. Barracks, mess, recreation facilities."
+      "description": "Racks stacked four high, footlockers bolted to the deck, a card game that never quite ends. It smells of gun oil, boot polish and recycled sweat. This is where rumours start, grudges simmer, and the squad says the things it cannot say on comms."
     },
     {
       "name": "USS TAMB'ITAM — Dropship Launch Hangar",
-      "description": "Hangar bay for UD-4L Cheyenne Dropships. Launch and recovery operations."
+      "description": "A cathedral of yellow-striped decking, swinging cargo loaders and two hunched UD-4L Cheyennes on their cradles. The klaxon here is loud enough to feel in your teeth. Crew chiefs shout over turbine whine while marines run final checks in the red launch light."
     },
     {
       "name": "USS TAMB'ITAM — Armory",
-      "description": "Weapons storage, ammunition, and equipment distribution."
+      "description": "Caged racks of pulse rifles, smart gun harnesses and incinerator units behind a duty sergeant's counter. Every round is signed for. A well-told story or a favour owed can shake loose extra grenades, a better tracker, or something that is not on the manifest."
     },
     {
       "name": "USS TAMB'ITAM — Medical Bay",
-      "description": "Ship medical facility. Surgical suites, recovery wards, medpod units."
+      "description": "White light, antiseptic sting and the soft chirp of autodoc pods along one bulkhead. Wounded marines heal here between operations, and the ship surgeon keeps careful records. Some of the sealed sample lockers at the back are not on any medical inventory."
     },
     {
       "name": "USS TAMB'ITAM — Engineering",
-      "description": "Reactor core, drive systems, and maintenance access."
+      "description": "Hot, loud and lit orange by the reactor housing, with catwalks over humming drive conduits. Engineers trade contraband and gossip for marine muscle. The best place on the ship for a private conversation, and the worst place to be caught somewhere you should not be."
     }
   ],
   "handouts": [
@@ -59,8 +285,26 @@
       "from": "MU/TH/UR 9000 MAINFRAME",
       "to": "KILO COMPANY, 2ND PLATOON — USS TAMB'ITAM",
       "priority": "PRIORITY",
-      "text": "ATTENTION MARINES. You are part of the 33rd Marine Assault Unit — the \"Gunfighters\" — operating out of the Conestoga Frigate USS Tamb'Itam. A reinforced battalion of 2,200 troops standing ready in the Outer Veil.\n\nThe Frontier War has erupted. The colony on Ariarcus has fallen to UPP forces. Your unit was forward deployed to Orbital Fort Nebraska when the crisis began. The situation is fluid, hostile, and evolving.\n\nThis campaign will take you across multiple operations on the war-torn Frontier. Expect hostile contacts, unreliable intel, and hard choices. The Corps takes care of its own — but out here, you're a long way from home.\n\nSemper Fi, Marines.",
-      "when": "Start of the session, before Act I"
+      "text": "ATTENTION MARINES. You are Second Squad, 2nd Platoon, Kilo Company, 33rd Marine Assault Unit — the 'Gunfighters' — operating out of the Conestoga-class frigate USS Tamb'Itam. A reinforced battalion of 2,200 troops standing ready in the Outer Veil.\n\nThe Frontier War has erupted. The colony on Ariarcus has fallen to UPP forces. Your unit was forward deployed to Orbital Fort Nebraska when the crisis began. The situation is fluid, hostile, and evolving.\n\nThis campaign will take you across multiple operations on the war-torn Frontier. Expect hostile contacts, unreliable intel, and hard choices. Civilian liaison personnel are embarked by order of Colonial Administration. Extend them every courtesy. Do not discuss operational details with them unless cleared by your platoon commander.\n\nThe Corps takes care of its own — but out here, you're a long way from home. Draw your kit, check your buddy, and be on the hangar deck when the klaxon sounds.\n\nSemper Fi, Marines.\n\n— MU/TH/UR 9000, BY ORDER OF THE COMMANDING OFFICER, USS TAMB'ITAM",
+      "when": "Start of the first session, before the squad wakes in the barracks"
+    },
+    {
+      "id": "liaison-request",
+      "title": "COURTESY REQUEST — CIVILIAN LIAISON",
+      "from": "J. SAUVÉ, COLONIAL ADMINISTRATION",
+      "to": "ONE MARINE OF THE GM'S CHOICE",
+      "priority": "EYES ONLY",
+      "text": "Marine. Forgive the private channel. Colonial Administration has an academic interest in biological and archaeological material recovered during Frontier operations. Material is often lost in the confusion of a firefight, and that is a tragedy for science. If you were to bring back a sealed sample, a data drive or even clear photographs, I would consider it a personal favour, and Administration pays its friends. No need to reply. I will know your answer by what you bring home.",
+      "when": "Liberty after the first operation, sent to the marine who seemed most interested in the liaison"
+    },
+    {
+      "id": "armorer-file",
+      "title": "OFF-MANIFEST REQUISITIONS — PRIVATE COPY",
+      "from": "S/SGT I. KOWAL, ARMORY",
+      "to": "SECOND SQUAD",
+      "priority": "EYES ONLY",
+      "text": "Not official. Not from me. Requisitions signed by the civilian liaison this deployment: four sealed specimen cases, rated Class 4 biohazard. Two portable cryo units. One cranial monitoring harness, purpose unlisted. Six M41AE2 rifles with black-anodised furniture, the kind Blackguard carry. Lieutenant Castellan-Wu countersigned every line. Do with this what you think is right. Burn it after.",
+      "when": "Liberty before Operation Octopus Garden, or earlier if the squad has earned Kowal's trust"
     }
   ],
   "maps": [
@@ -74,29 +318,266 @@
       "rooms": [
         {
           "name": "Bridge",
-          "note": "Ship command and control. Navigation, tactical displays, communications."
+          "note": "A dim, cold horseshoe of consoles under a curved viewport full of the Outer Veil. Officers speak in clipped half-sentences and the air smells of ozone and stale coffee. Marines come here only when summoned, which means something has gone wrong or someone wants a favour."
         },
         {
           "name": "Marine Barrack Section",
-          "note": "Housing for Marine personnel. Barracks, mess, recreation facilities."
+          "note": "Racks stacked four high, footlockers bolted to the deck, a card game that never quite ends. It smells of gun oil, boot polish and recycled sweat. This is where rumours start, grudges simmer, and the squad says the things it cannot say on comms."
         },
         {
           "name": "Dropship Launch Hangar",
-          "note": "Hangar bay for UD-4L Cheyenne Dropships. Launch and recovery operations."
+          "note": "A cathedral of yellow-striped decking, swinging cargo loaders and two hunched UD-4L Cheyennes on their cradles. The klaxon here is loud enough to feel in your teeth. Crew chiefs shout over turbine whine while marines run final checks in the red launch light."
         },
         {
           "name": "Armory",
-          "note": "Weapons storage, ammunition, and equipment distribution."
+          "note": "Caged racks of pulse rifles, smart gun harnesses and incinerator units behind a duty sergeant's counter. Every round is signed for. A well-told story or a favour owed can shake loose extra grenades, a better tracker, or something that is not on the manifest."
         },
         {
           "name": "Medical Bay",
-          "note": "Ship medical facility. Surgical suites, recovery wards, medpod units."
+          "note": "White light, antiseptic sting and the soft chirp of autodoc pods along one bulkhead. Wounded marines heal here between operations, and the ship surgeon keeps careful records. Some of the sealed sample lockers at the back are not on any medical inventory."
         },
         {
           "name": "Engineering",
-          "note": "Reactor core, drive systems, and maintenance access."
+          "note": "Hot, loud and lit orange by the reactor housing, with catwalks over humming drive conduits. Engineers trade contraband and gossip for marine muscle. The best place on the ship for a private conversation, and the worst place to be caught somewhere you should not be."
         }
       ]
     }
+  ],
+  "endings": [
+    {
+      "title": "HOME ON THE TAMB'ITAM",
+      "condition": "The squad survives the final operation, exposes or stops the Company's collection programme, and at least three marines come home.",
+      "text": "The Tamb'Itam turns for Fort Nebraska with its flags at half mast and its armory short a lot of ammunition. In the barracks, the card game starts again with too many empty chairs. Someone has taped the names of the dead above the hatch, and nobody is allowed to take them down.\n\nThe lieutenant's company command does not come through. The liaison's cabin is empty and nobody can say which shuttle took him. Odhiambo finally lights the cigar, coughs, and declares it the worst thing he has ever smoked. You laugh harder than it deserves. Out here, that is what winning feels like."
+    },
+    {
+      "title": "PROPERTY OF THE COMPANY",
+      "condition": "The squad hands the Company what it wants, or looks the other way, and survives to be rewarded.",
+      "text": "The commendations arrive in a sealed packet from Colonial Administration, along with new postings, generous back pay and nondisclosure forms already filled out in your names. Sauvé shakes each of your hands and remembers your families' names without being told.\n\nWeeks later, on a different ship, you read a short news item about a 'research facility accident' on a Frontier world you recognise. The casualty list is long. You fold the newsprint very small and put it in your pocket, and you do not take it out again."
+    },
+    {
+      "title": "NUKED FROM ORBIT",
+      "condition": "The squad fails the final operation, or is lost with it, and the Tamb'Itam executes its standing order.",
+      "text": "From orbit it is almost beautiful: a white bloom on the night side of the world, spreading silently across cloud and sea. The bridge crew watches without speaking. The after-action report lists Second Squad, 2nd Platoon, Kilo Company as killed in action, operational details classified.\n\nIn the barracks, someone packs your footlockers into labelled crates. The armorer signs your rifles back in, one by one, and lingers over the last signature longer than regulations require."
+    }
+  ],
+  "characters": [
+    {
+      "id": "acm-okafor",
+      "name": "Sergeant Ruth Okafor",
+      "career": "Officer",
+      "appearance": "Late thirties, broad-shouldered, a burn scar across the back of one hand and close-cropped grey-shot hair. Speaks quietly, never repeats an order, and touches the dog tags at her throat before every drop.",
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 3,
+        "emp": 5
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 2,
+        "closeCombat": 1,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 3,
+        "observation": 2,
+        "comtech": 1,
+        "survival": 1,
+        "manipulation": 2,
+        "medicalAid": 0,
+        "command": 4
+      },
+      "talent": "Field Commander — COMMAND gives +2 (instead of +1).",
+      "gear": [
+        "Armat M41A Pulse Rifle",
+        "M3 Personnel Armor",
+        "Comm Unit",
+        "Personal Terminal",
+        "Spare dog tags (Signature Item)"
+      ],
+      "signatureItem": "A second set of dog tags on her chain — they belonged to the squad leader she replaced on Ariarcus, and she has never said what happened to him.",
+      "personalAgenda": "You lead Second Squad. Bring every one of them home from every drop, and keep the lieutenant from spending them on his career.",
+      "agendaByAct": {
+        "1": "Bring your squad home from every operation and keep Lieutenant Castellan-Wu from volunteering them for suicide runs. If that means bending his orders, bend them quietly, and make sure PFC Brandvold never learns what you did on Ariarcus."
+      },
+      "buddy": "Corporal Mateo Vasquez-Hale",
+      "rival": "Private First Class Lena Brandvold",
+      "secret": "During the fall of Ariarcus you obeyed an order to pull out and leave a cut-off fireteam behind to cover the evacuation. One of the marines you left was Lance Corporal Erik Brandvold, PFC Brandvold's brother. She does not know you were there."
+    },
+    {
+      "id": "acm-vasquez-hale",
+      "name": "Corporal Mateo Vasquez-Hale",
+      "career": "Colonial Marine",
+      "appearance": "Big, easy-going and tattooed to the collar, with a smart gun harness he talks to like a dog. Laughs loudly, eats constantly and goes completely silent when he is scared.",
+      "attributes": {
+        "str": 5,
+        "agi": 3,
+        "wit": 3,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 2,
+        "stamina": 4,
+        "closeCombat": 2,
+        "mobility": 1,
+        "piloting": 0,
+        "rangedCombat": 4,
+        "observation": 1,
+        "comtech": 1,
+        "survival": 1,
+        "manipulation": 1,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "Overkill — Spend extra successes for +2 damage (instead of +1).",
+      "gear": [
+        "M56A2 Smart Gun",
+        "M3 Personnel Armor",
+        "M4A3 Service Pistol",
+        "Knife",
+        "Hand-painted harness plate (Signature Item)"
+      ],
+      "signatureItem": "Hand-painted smart gun harness plate — his little sister painted a cartoon saint on it so he would have someone watching his back.",
+      "personalAgenda": "Your mother's medical bills on Gateway are being paid by a Company 'family support programme'. Keep them paid, keep your squad alive, and do not let anyone find out what the Company asks for in return.",
+      "agendaByAct": {
+        "1": "Send the liaison, Julian Sauvé, a short report on the squad after each operation, as your 'family support' arrangement requires. Keep Doc Mbeki-Larsen from finding out, and protect Sergeant Okafor however you can."
+      },
+      "buddy": "Sergeant Ruth Okafor",
+      "rival": "Hospital Corpsman Isaiah Mbeki-Larsen",
+      "secret": "You have been reporting on the squad to Julian Sauvé for three months: who is wavering, who is wounded, who talks too much. You have never told him anything that got anyone killed. Yet."
+    },
+    {
+      "id": "acm-brandvold",
+      "name": "Private First Class Lena Brandvold",
+      "career": "Colonial Marine",
+      "appearance": "Lean, pale and watchful, with ice-blonde hair shaved at the sides and a motion tracker she never puts down. Speaks rarely, in a flat northern accent, and always takes point.",
+      "attributes": {
+        "str": 4,
+        "agi": 4,
+        "wit": 3,
+        "emp": 2
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 2,
+        "closeCombat": 3,
+        "mobility": 4,
+        "piloting": 0,
+        "rangedCombat": 3,
+        "observation": 3,
+        "comtech": 0,
+        "survival": 2,
+        "manipulation": 0,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "Nerves of Steel — Reduce Stress by 2 when using Signature Item.",
+      "gear": [
+        "Armat M41A Pulse Rifle",
+        "Motion Tracker",
+        "M3 Personnel Armor",
+        "Knife",
+        "Brother's harmonica (Signature Item)"
+      ],
+      "signatureItem": "Battered harmonica — her brother Erik's; she cannot play it, but she turns it over in her fingers when the tracker goes quiet.",
+      "personalAgenda": "Your brother Erik went missing on Ariarcus. You transferred into the 33rd because his last unit flew from the Tamb'Itam. Find out who left him behind.",
+      "agendaByAct": {
+        "1": "Find the after-action records from the fall of Ariarcus and learn who gave the order that left your brother's fireteam behind. Trust Corporal Harrow; watch Sergeant Okafor, who never talks about Ariarcus."
+      },
+      "buddy": "Corporal Yuki Harrow",
+      "rival": "Sergeant Ruth Okafor",
+      "secret": "Before you shipped out, a UPP prisoner-exchange broadcast listed an 'E. Brandvold, USCM' as alive and held on Ariarcus. Command says the list is propaganda. You have told no one, because you plan to desert if a chance comes to reach him."
+    },
+    {
+      "id": "acm-mbeki-larsen",
+      "name": "Hospital Corpsman Isaiah Mbeki-Larsen",
+      "career": "Medic",
+      "appearance": "Slight, bespectacled and unhurried, with a medkit covered in unit patches traded from every ship he has served on. Talks to the wounded the whole time he works, mostly about cooking.",
+      "attributes": {
+        "str": 3,
+        "agi": 3,
+        "wit": 3,
+        "emp": 5
+      },
+      "skills": {
+        "heavyMachinery": 0,
+        "stamina": 2,
+        "closeCombat": 0,
+        "mobility": 2,
+        "piloting": 0,
+        "rangedCombat": 2,
+        "observation": 3,
+        "comtech": 1,
+        "survival": 1,
+        "manipulation": 2,
+        "medicalAid": 4,
+        "command": 0
+      },
+      "talent": "Field Surgeon — Heal an extra point of damage on successful MEDICAL AID.",
+      "gear": [
+        "M4A3 Service Pistol",
+        "Medkit",
+        "M3 Personnel Armor",
+        "Personal Terminal",
+        "Pocket recipe book (Signature Item)"
+      ],
+      "signatureItem": "A greasy pocket recipe book from his grandmother's kitchen — he promises every wounded marine a meal from it.",
+      "personalAgenda": "Keep the squad breathing. You are a corpsman first and a marine second, and you will not let anyone, officer or civilian, treat your patients as test subjects.",
+      "agendaByAct": {
+        "1": "Keep every marine alive, and document every civilian casualty and every 'sample' the Company takes. Someone in the squad is reporting to the liaison; find out who. You suspect Corporal Vasquez-Hale."
+      },
+      "buddy": "Private First Class Lena Brandvold",
+      "rival": "Corporal Mateo Vasquez-Hale",
+      "secret": "You are smuggling copies of your medical logs to an Interstellar Commerce Commission investigator on Fort Nebraska. If the Corps finds out, you will be court-martialled; if the Company finds out, you will have an accident."
+    },
+    {
+      "id": "acm-harrow",
+      "name": "Corporal Yuki Harrow",
+      "career": "Pilot",
+      "appearance": "Small, wiry and restless, with a frontier drawl and a flight jacket covered in grease-pencil marks for every dropship she has 'kept alive'. Chews gum hard enough to hear over comms.",
+      "attributes": {
+        "str": 2,
+        "agi": 5,
+        "wit": 4,
+        "emp": 3
+      },
+      "skills": {
+        "heavyMachinery": 1,
+        "stamina": 1,
+        "closeCombat": 0,
+        "mobility": 3,
+        "piloting": 4,
+        "rangedCombat": 3,
+        "observation": 1,
+        "comtech": 3,
+        "survival": 2,
+        "manipulation": 1,
+        "medicalAid": 0,
+        "command": 0
+      },
+      "talent": "Reckless — +2 PILOTING in dangerous maneuvers.",
+      "gear": [
+        "Armat M41A Pulse Rifle",
+        "Tool Kit",
+        "Comm Unit",
+        "M3 Personnel Armor",
+        "Grandfather's compass (Signature Item)"
+      ],
+      "signatureItem": "Brass prospector's compass — her grandfather carried it across three colony worlds; it still points true, which is more than most instruments out here do.",
+      "personalAgenda": "You fly the squad in and you fly them out. Nobody gets left on the ground while you have fuel.",
+      "agendaByAct": {
+        "1": "Get the squad in and out of every operation alive. Keep your frontier family's sympathies to yourself, keep an eye on Corporal Vasquez-Hale, who asks too many questions, and look out for Brandvold, who is planning something."
+      },
+      "buddy": "Private First Class Lena Brandvold",
+      "rival": "Corporal Mateo Vasquez-Hale",
+      "secret": "Your family are frontier settlers who want independence from Colonial Administration, and last year you passed patrol schedules to your cousin so his smuggling runs could avoid the Navy. If anyone checks the nav logs, you are finished."
+    }
+  ],
+  "tips": [
+    "Run Barracks Wake-Up and the Ready Room before every operation, and Hot Wash and Liberty after it; the loop is what makes the Tamb'Itam feel like home.",
+    "Reveal at most one character secret per operation, preferably during Liberty, so the squad has time to live with it before the next drop.",
+    "Escalate Julian Sauvé one step per operation, from photographs to samples to orders, so the players feel the Company tightening around them.",
+    "When a marine dies, replace them with a marine from the platoon's other squads rather than a stranger; Odhiambo should pick them personally.",
+    "Use the armory to tune difficulty: extra kit before a brutal operation, the bare minimum before an easy one.",
+    "If players turn on each other, let the Corps' structure carry it: Okafor can order, Odhiambo can intervene and the lieutenant can punish, but the squad still has to drop together tomorrow."
   ]
 }
